@@ -1,0 +1,24 @@
+{
+  "name": "formant-3d-sdk-urdf",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/formant-3d-sdk-urdf.umd.js",
+  "module": "./dist/formant-3d-sdk-urdf.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/formant-3d-sdk-urdf.es.js",
+      "require": "./dist/formant-3d-sdk-urdf.umd.js"
+    }
+  },
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  }
+}
