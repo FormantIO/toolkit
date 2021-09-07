@@ -4,7 +4,7 @@ const { defineConfig } = require("vite");
 module.exports = defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, "lib/main.ts"),
+      entry: path.resolve(__dirname, "src/main.ts"),
       name: "Formant3dSDKUrdf",
       fileName: (format) => `formant-3d-sdk-urdf.${format}.js`,
     },
@@ -16,8 +16,8 @@ module.exports = defineConfig({
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {
-          three: "Vue",
-          "urdf-loader": "UrdLoader",
+          three: "ThreeJS",
+          "urdf-loader": "UrdfLoader",
         },
       },
     },
