@@ -26,7 +26,7 @@ You don't need to do anything, the data manager will be able to figure out from 
 
 Using user login or service accounts, you can use the data manager to get access to device data.
 
-```
+```javascript
 import { DataManager } from "@formant/data-manager"
 
 DataManager.login("sam@robot.xyz","passwordsecret")
