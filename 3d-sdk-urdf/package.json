@@ -16,13 +16,14 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc lib/*.ts --declaration --emitDeclarationOnly --outDir dist/types"
+    "types": "tsc lib/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "devDependencies": {
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   },
   "dependencies": {
+    "@types/three": "^0.131.0",
     "three": "^0.132.2",
     "urdf-loader": "^0.10.2"
   },
