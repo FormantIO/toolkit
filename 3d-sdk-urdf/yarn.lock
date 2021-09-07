@@ -75,10 +75,20 @@ source-map-js@^0.6.2:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-0.6.2.tgz#0bb5de631b41cfbda6cfba8bd05a80efdfd2385e"
   integrity sha512-/3GptzWzu0+0MBQFrDKzw/DvvMTUORvgY6k6jd/VS6iCR4RDTKWH6v6WPwQoUO8667uQEf9Oe38DxAYWY5F/Ug==
 
+three@^0.132.2:
+  version "0.132.2"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.132.2.tgz#95eb1856147237c03e887cbbe56f964b6fb40b5e"
+  integrity sha512-0wcR7LxxkXMn6Gi58gEs3QvY8WpTVXA31L2VOvpjm4ZPYFRHCZC13UqynheFoS5OXDYgtBneN0dhbaNBE8iLhQ==
+
 typescript@^4.3.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.2.tgz#6d618640d430e3569a1dfb44f7d7e600ced3ee86"
   integrity sha512-gzP+t5W4hdy4c+68bfcv0t400HVJMMd2+H9B7gae1nQlBzCqvrXX+6GL/b3GAgyTH966pzrZ70/fRjwAtZksSQ==
+
+urdf-loader@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/urdf-loader/-/urdf-loader-0.10.2.tgz#37b5be236e455e1010abe6712e1a427eaa3a9924"
+  integrity sha512-vWR3S7jpweWwdAaSwJY5PsfTVS/lMESAL6FjbCRQUlatTLPlpOvsxC9A/3x9mRC0prEd7ByBQSxbYEbPO+hYWg==
 
 vite@^2.5.4:
   version "2.5.4"

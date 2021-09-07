@@ -16,11 +16,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc dist/formant-3d-sdk-urdf.es.js --declaration --emitDeclarationOnly --allowJs --outDir dist"
+    "types": "tsc lib/*.ts --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "devDependencies": {
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   },
-  "types": "./dist/formant-3d-sdk-urdf.es.d.ts"
+  "dependencies": {
+    "three": "^0.132.2",
+    "urdf-loader": "^0.10.2"
+  },
+  "types": "./dist/types/main.d.ts"
 }

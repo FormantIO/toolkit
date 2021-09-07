@@ -1,9 +1,5 @@
-import { help } from "./help";
-
 export class Thing {
   run() {
-    help();
+    console.log();
   }
 }
-
-export const h = help;
