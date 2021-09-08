@@ -1,6 +1,6 @@
-# Formant 3D SDK
+# Formant Web SDK
 
-A collection of utilities to help make custom 3D experiences on top of Formant using [ThreeJS](https://threejs.org/). Using these SDKs you can created realtime 3D visualizations of your robots and robot fleets.
+A collection of utilities to help make custom web and 3D experiences on top of Formant using [ThreeJS](https://threejs.org/). Using these SDKs you can created realtime 3D visualizations of your robots and robot fleets.
 
 * Embed your own application in Formant
 * Create your own application that uses Formant's APIs and RealtimeSDK for data
