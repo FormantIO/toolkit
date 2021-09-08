@@ -19,11 +19,19 @@ We understand you want complete control over your user experience, so Formant pr
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
-# How do I get data?
+# What do you have for ThreeJS?
+
+## 3d-sdk-urdf
+
+This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
+
+# FAQ
+
+## How do I get data?
 
 This depends on the type of app you're making
 
-## I'm making an application outside of formant
+### I'm making an application outside of formant
 
 Using user login credentials or service accounts, you can use the data manager to get access to device data.
 
@@ -42,7 +50,7 @@ const device = allDevices.find(_ => _.name === "spot");
 const data = await device.getLatestTelemetry();
 ```
 
-## I'm making an application within Formant as a custom view
+### I'm making an application within Formant as a custom view
 
 The data manager will be able to figure out from url the authentication needed to access the current viewing device.
 
@@ -58,11 +66,11 @@ const device = await DataManager.getCurrentDevice();
 const data = await device.getLatestTelemetry();
 ```
 
-# I don't want to use these libraries, how do I use the HTTP API?
+## I don't want to use these libraries, how do I use the HTTP API?
 
 If your just interested in using our APIs, there's two main steps
 
-## 1) Get an authorization token
+### 1) Get an authorization token
 
 ```javascript
 await fetch("https://api.formant.io/v1/admin/auth/login", {
@@ -93,6 +101,48 @@ This will return a [JWT](https://jwt.io) token.
 }
 ```
 
-## 2) Call an API with the token
+### 2) Call an API with the token
 
+```javascript
+// the token from above
+cons token = "abc......xyz"
+
+await fetch("https://api.formant.io/v1/admin/device-details/query", {
+  method: "POST",
+  body: JSON.stringify({{enabled:true, type:"default"}}),
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization: "Bearer "+token
+  }
+});
+```
+
+```console
+curl -X POST "https://api.formant.io/v1/admin/device-details/query" \
+ -H "Accept: application/json" \
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer abc......xyz" \
+ -d '{"enabled":true,"type":"default"}' 
+```
+
+## I don't want to use WebPack/Vite, can I just use plain JavaScript?
+
+Yes, for the DataManager
+
+As a ES6 module:
+
+```html
+<script type="module">
+import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
+...
+</script>
+```
+
+As a non-module:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.umd.js"></script>
+```
+
+## How do I take a URDF and convert it into a zip for Formant?
 
