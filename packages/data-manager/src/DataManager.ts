@@ -15,7 +15,25 @@ export class DataManager {
   static waitingForAuth: ((result: boolean) => void)[] = [];
   static knownContext: WeakRef<Device>[] = [];
 
-  static async login(_user: string, _password: string) {}
+  static async login(email: string, password: string) {
+    debugger;
+    try {
+      const result = await fetch("https://api.formant.io/v1/admin/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const auth = await result.json();
+      DataManager.token = auth.authentication.accessToken as string;
+      DataManager.waitingForAuth.forEach((_) => _(true));
+    } catch (e: any) {
+      console.error(e);
+      DataManager.waitingForAuth.forEach((_) => _(false));
+    }
+    DataManager.waitingForAuth = [];
+  }
 
   static async setDefaultDevice(deviceId: string) {
     DataManager.defaultDeviceId = deviceId;
