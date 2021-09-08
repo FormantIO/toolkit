@@ -1,0 +1,18 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@formant/3d-sdk-urdf": "file:../../3d-sdk-urdf",
+    "three": "^0.132.2",
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  },
+  "dependencies": {
+    "@types/three": "^0.131.0"
+  }
+}

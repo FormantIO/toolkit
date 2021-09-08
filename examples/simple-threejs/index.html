@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formant Realtime Three.js Demo</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+      #controls {
+        position: absolute;
+        top: 5;
+        left: 5;
+        background: rgb(57, 31, 70);
+        width: 300px;
+        height: 100px;
+        color: white;
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      #controls div {
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <button>connect</button>
+      <div id="log"></div>
+    </div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
