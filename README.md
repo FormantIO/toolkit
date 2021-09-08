@@ -29,5 +29,5 @@ Using user login or service accounts, you can use the data manager to get access
 ```javascript
 import { DataManager } from "@formant/data-manager"
 
-DataManager.login("sam@robot.xyz","passwordsecret")
+await DataManager.login("sam@robot.xyz","passwordsecret")
 ```
