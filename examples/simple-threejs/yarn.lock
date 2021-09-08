@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@formant/3d-sdk-urdf@file:../../3d-sdk-urdf":
+"@formant/three-formant-urdf@file:../../three-formant-urdf":
   version "0.0.0"
   dependencies:
     "@types/three" "^0.131.0"

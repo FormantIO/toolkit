@@ -6,7 +6,7 @@ module.exports = defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "Formant3dSDKUrdf",
-      fileName: (format) => `formant-3d-sdk-urdf.${format}.js`,
+      fileName: (format) => `three-formant-urdf.${format}.js`,
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

@@ -21,7 +21,7 @@ We understand you want complete control over your user experience, so Formant pr
 
 # What do you have for ThreeJS?
 
-## 3d-sdk-urdf
+## three-formant-urdf
 
 This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
 
@@ -44,7 +44,7 @@ await DataManager.login("sam@robot.xyz", "12345");
 const allDevices = await DataManager.getDevices();
 
 // find the device(s) you want
-const device = allDevices.find(_ => _.name === "spot");
+const device = allDevices.find((_) => _.name === "spot");
 
 // Get data ...
 const data = await device.getLatestTelemetry();
@@ -86,7 +86,7 @@ await fetch("https://api.formant.io/v1/admin/auth/login", {
 curl -X POST "https://api.formant.io/v1/admin/auth/login" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- -d '{"email":"sam@robot.xyz","password":"12345"}' 
+ -d '{"email":"sam@robot.xyz","password":"12345"}'
 ```
 
 This will return a [JWT](https://jwt.io) token.
@@ -122,7 +122,7 @@ curl -X POST "https://api.formant.io/v1/admin/device-details/query" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
  -H "Authorization: Bearer abc......xyz" \
- -d '{"enabled":true,"type":"default"}' 
+ -d '{"enabled":true,"type":"default"}'
 ```
 
 ## I don't want to use WebPack/Vite, can I just use plain JavaScript?
@@ -133,8 +133,8 @@ As a ES6 module:
 
 ```html
 <script type="module">
-import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
-...
+  import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
+  ...
 </script>
 ```
 
@@ -145,4 +145,3 @@ As a non-module:
 ```
 
 ## How do I take a URDF and convert it into a zip for Formant?
-

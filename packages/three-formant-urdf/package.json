@@ -1,14 +1,14 @@
 {
-  "name": "@formant/3d-sdk-urdf",
+  "name": "@formant/three-formant-urdf",
   "files": [
     "dist"
   ],
-  "main": "./dist/formant-3d-sdk-urdf.umd.js",
-  "module": "./dist/formant-3d-sdk-urdf.es.js",
+  "main": "./dist/three-formant-urdf.umd.js",
+  "module": "./dist/three-formant-urdf.es.js",
   "exports": {
     ".": {
-      "import": "./dist/formant-3d-sdk-urdf.es.js",
-      "require": "./dist/formant-3d-sdk-urdf.umd.js"
+      "import": "./dist/three-formant-urdf.es.js",
+      "require": "./dist/three-formant-urdf.umd.js"
     }
   },
   "version": "0.0.0",

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DeviceURDF } from "@formant/3d-sdk-urdf";
+import { DeviceURDF } from "@formant/three-formant-urdf";
 
 const scene = new THREE.Scene();
 
