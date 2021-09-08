@@ -42,9 +42,9 @@ const device = allDevices.find(_ => _.name === "spot");
 const data = await device.getLatestTelemetry();
 ```
 
-## I'm making an application within Formant
+## I'm making an application within Formant as a custom view
 
-You don't need to do anything, the data manager will be able to figure out from url query strings what the authentication should be to access device data.
+The data manager will be able to figure out from url the authentication needed to access the current viewing device.
 
 ```javascript
 import { DataManager } from "@formant/data-manager";
