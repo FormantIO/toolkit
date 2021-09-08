@@ -30,17 +30,21 @@ Using user login credentials or service accounts, you can use the data manager t
 ```javascript
 import { DataManager } from "@formant/data-manager";
 
-await DataManager.login("sam@robot.xyz", "passwordsecret");
+await DataManager.login("sam@robot.xyz", "12345");
 
 // Get all devices
-const allDevice = DataManager.getDevices();
+const allDevices = await DataManager.getDevices();
+
+// find the device(s) you want
+const device = allDevices.find(_ => _.name === "spot");
 
 // Get data ...
+const data = await device.getLatestTelemetry();
 ```
 
-## I'm making an application within Formant
+## I'm making an application within Formant as a custom view
 
-You don't need to do anything, the data manager will be able to figure out from url query strings what the authentication should be to access device data.
+The data manager will be able to figure out from url the authentication needed to access the current viewing device.
 
 ```javascript
 import { DataManager } from "@formant/data-manager";
@@ -48,9 +52,10 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.waitTilAuthenticated();
 
 // Get the context of a device is passed along as a query string
-const device = DataManager.getCurrentDevice();
+const device = await DataManager.getCurrentDevice();
 
 // Get data ...
+const data = await device.getLatestTelemetry();
 ```
 
 # I don't want to use these libraries, how do I use the HTTP API?
@@ -62,7 +67,7 @@ If your just interested in using our APIs, there's two main steps
 ```javascript
 await fetch("https://api.formant.io/v1/admin/auth/login", {
   method: "POST",
-  body: JSON.stringify({{email:"me@mycompany.com", password:"12345"}}),
+  body: JSON.stringify({{email:"sam@robot.xyz", password:"12345"}}),
   headers: {
     "Content-Type": "application/json"
   }
@@ -73,10 +78,20 @@ await fetch("https://api.formant.io/v1/admin/auth/login", {
 curl -X POST "https://api.formant.io/v1/admin/auth/login" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- -d '{"email":"me@mycompany.com","password":"12345"}' 
+ -d '{"email":"sam@robot.xyz","password":"12345"}' 
 ```
 
 This will return a [JWT](https://jwt.io) token.
+
+```javascript
+{
+   "authentication":{
+      "accessToken": "abc......xyz",
+      ...
+    },
+    ...
+}
+```
 
 ## 2) Call an API with the token
 
