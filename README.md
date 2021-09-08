@@ -44,7 +44,7 @@ await DataManager.login("sam@robot.xyz", "12345");
 const allDevices = await DataManager.getDevices();
 
 // find the device(s) you want
-const device = allDevices.find(d => d.name === "spot");
+const device = allDevices.find((d) => d.name === "spot");
 
 // Get data ...
 const data = await device.getLatestTelemetry();
@@ -133,7 +133,7 @@ As a ES6 module:
 
 ```html
 <script type="module">
-  import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js"
+  import { DataManager } from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js";
   await DataManager.waitTilAuthenticated();
   const devices = await DataManager.getDevices();
   window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
@@ -153,3 +153,7 @@ As a non-module:
 ```
 
 ## How do I take a URDF and convert it into a zip for Formant?
+
+## Can I make an electron app?
+
+Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/examples/simple-electron).
