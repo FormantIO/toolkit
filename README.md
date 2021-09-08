@@ -78,6 +78,16 @@ curl -X POST "https://api.formant.io/v1/admin/auth/login" \
 
 This will return a [JWT](https://jwt.io) token.
 
+```javascript
+{
+   "authentication":{
+      "accessToken": "abc......xyz",
+      ...
+    },
+    ...
+}
+```
+
 ## 2) Call an API with the token
 
 
