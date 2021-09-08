@@ -3,12 +3,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/formant-data-manager.umd.js",
-  "module": "./dist/formant-data-manager.es.js",
+  "main": "./dist/data-manager.umd.js",
+  "module": "./dist/data-manager.es.js",
   "exports": {
     ".": {
-      "import": "./dist/formant-data-manager.es.js",
-      "require": "./dist/formant-data-manager.umd.js"
+      "import": "./dist/data-manager.es.js",
+      "require": "./dist/data-manager.umd.js"
     }
   },
   "version": "0.0.0",

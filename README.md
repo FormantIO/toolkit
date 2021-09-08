@@ -133,7 +133,7 @@ As a ES6 module:
 
 ```html
 <script type="module">
-  import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
+  import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js"
   ...
 </script>
 ```
@@ -141,7 +141,7 @@ As a ES6 module:
 As a non-module:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.umd.js"></script>
 ```
 
 ## How do I take a URDF and convert it into a zip for Formant?
