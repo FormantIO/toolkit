@@ -1,4 +1,4 @@
-import { DeviceContext } from "./DeviceContext";
+import { Device } from "./Device";
 
 export interface User {
   firstName: string;
@@ -8,23 +8,12 @@ export interface User {
   id: string;
 }
 
-export interface Device {
-  /**
-   * A human readable name of a device
-   */
-  name: string;
-  /**
-   *  A unique ID representing a device
-   */
-  id: string;
-}
-
 export class DataManager {
   static token: string | undefined;
   static currentUser: User | undefined;
   static defaultDeviceId: string | undefined;
   static waitingForAuth: ((result: boolean) => void)[] = [];
-  static knownContext: WeakRef<DeviceContext>[] = [];
+  static knownContext: WeakRef<Device>[] = [];
 
   static async login(_user: string, _password: string) {}
 
@@ -63,26 +52,54 @@ export class DataManager {
     return DataManager.currentUser;
   }
 
-  static getCurrentDeviceContext(): DeviceContext {
+  static async getCurrentDevice(): Promise<Device> {
     if (!DataManager.token) {
       throw new Error("Not authenticated");
     }
     if (!DataManager.defaultDeviceId) {
       throw new Error("No known default device");
     }
-    const context = new DeviceContext(
+
+    const data = await fetch(
+      `https://api.formant.io/v1/admin/devices/${DataManager.defaultDeviceId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + DataManager.token,
+        },
+      }
+    );
+    debugger;
+    const device = await data.json();
+    const name = device.name as string;
+    const context = new Device(
       DataManager.token,
-      DataManager.defaultDeviceId
+      DataManager.defaultDeviceId,
+      name
     );
     DataManager.knownContext.push(new WeakRef(context));
     return context;
   }
 
-  static getDeviceContext(deviceId: string): DeviceContext {
+  static async getDevice(deviceId: string): Promise<Device> {
     if (!DataManager.token) {
       throw new Error("Not authenticated");
     }
-    const context = new DeviceContext(DataManager.token, deviceId);
+    const data = await fetch(
+      `https://api.formant.io/v1/admin/devices/${DataManager.defaultDeviceId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + DataManager.token,
+        },
+      }
+    );
+    debugger;
+    const device = await data.json();
+    const name = device.name as string;
+    const context = new Device(DataManager.token, deviceId, name);
     DataManager.knownContext.push(new WeakRef(context));
     return context;
   }
@@ -91,7 +108,27 @@ export class DataManager {
     if (!DataManager.token) {
       throw new Error("Not authenticated");
     }
-    return [];
+    const data = await fetch(
+      `https://api.formant.io/v1/admin/device-details/query`,
+      {
+        method: "POST",
+        body: JSON.stringify({ enabled: true, type: "default" }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + DataManager.token,
+        },
+      }
+    );
+    const devices = await data.json();
+    devices.items;
+    return devices.items.map(
+      (_: any) =>
+        new Device(
+          DataManager.token as string,
+          _.id as string,
+          _.name as string
+        )
+    );
   }
 
   static async waitTilAuthenticated(): Promise<boolean> {

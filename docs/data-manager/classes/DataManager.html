@@ -2726,13 +2726,13 @@ img {
 					<a href="DataManager.html#waitingForAuth" class="tsd-kind-icon">waiting<wbr>For<wbr>Auth</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="DataManager.html#getCurrentDeviceContext" class="tsd-kind-icon">get<wbr>Current<wbr>Device<wbr>Context</a>
+					<a href="DataManager.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="DataManager.html#getCurrentUser" class="tsd-kind-icon">get<wbr>Current<wbr>User</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="DataManager.html#getDeviceContext" class="tsd-kind-icon">get<wbr>Device<wbr>Context</a>
+					<a href="DataManager.html#getDevice" class="tsd-kind-icon">get<wbr>Device</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="DataManager.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a>
@@ -2753,9 +2753,6 @@ img {
 					<a href="DataManager.html#waitTilAuthenticated" class="tsd-kind-icon">wait<wbr>Til<wbr>Authenticated</a>
 				</li>
 			</ul>
-		</li>
-		<li class=" tsd-kind-interface">
-			<a href="../interfaces/Device.html" class="tsd-kind-icon">Device</a>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/User.html" class="tsd-kind-icon">User</a>
@@ -2795,9 +2792,9 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getCurrentDeviceContext" class="tsd-kind-icon">get<wbr>Current<wbr>Device<wbr>Context</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getCurrentUser" class="tsd-kind-icon">get<wbr>Current<wbr>User</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getDeviceContext" class="tsd-kind-icon">get<wbr>Device<wbr>Context</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getDevice" class="tsd-kind-icon">get<wbr>Device</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#isAuthenticated" class="tsd-kind-icon">is<wbr>Authenticated</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="DataManager.html#login" class="tsd-kind-icon">login</a></li>
@@ -2834,7 +2831,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">current<wbr>User<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/User.html" class="tsd-signature-type" data-tsd-kind="Interface">User</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L24">DataManager.ts:24</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L13">DataManager.ts:13</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2844,17 +2841,17 @@ img {
 				<div class="tsd-signature tsd-kind-icon">default<wbr>Device<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L25">DataManager.ts:25</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L14">DataManager.ts:14</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 				<a name="knownContext" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> known<wbr>Context</h3>
-				<div class="tsd-signature tsd-kind-icon">known<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeviceContext</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+				<div class="tsd-signature tsd-kind-icon">known<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakRef</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L27">DataManager.ts:27</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L16">DataManager.ts:16</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2864,7 +2861,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L23">DataManager.ts:23</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L12">DataManager.ts:12</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2874,7 +2871,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">waiting<wbr>For<wbr>Auth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L26">DataManager.ts:26</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L15">DataManager.ts:15</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2882,19 +2879,19 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="getCurrentDeviceContext" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Current<wbr>Device<wbr>Context</h3>
+				<a name="getCurrentDevice" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Current<wbr>Device</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Current<wbr>Device<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DeviceContext</span></li>
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Current<wbr>Device<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L66">DataManager.ts:66</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L55">DataManager.ts:55</a></li>
 							</ul>
 						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DeviceContext</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -2908,7 +2905,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L62">DataManager.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L51">DataManager.ts:51</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/User.html" class="tsd-signature-type" data-tsd-kind="Interface">User</a></h4>
@@ -2916,16 +2913,16 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="getDeviceContext" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Device<wbr>Context</h3>
+				<a name="getDevice" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Device</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Device<wbr>Context<span class="tsd-signature-symbol">(</span>deviceId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DeviceContext</span></li>
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Device<span class="tsd-signature-symbol">(</span>deviceId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L81">DataManager.ts:81</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L85">DataManager.ts:85</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2934,7 +2931,7 @@ img {
 								<h5>deviceId: <span class="tsd-signature-type">string</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DeviceContext</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -2942,16 +2939,16 @@ img {
 				<a name="getDevices" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Devices</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Devices<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Device.html" class="tsd-signature-type" data-tsd-kind="Interface">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Devices<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L90">DataManager.ts:90</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L107">DataManager.ts:107</a></li>
 							</ul>
 						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Device.html" class="tsd-signature-type" data-tsd-kind="Interface">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Device</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -2965,7 +2962,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L58">DataManager.ts:58</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L47">DataManager.ts:47</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -2982,7 +2979,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L29">DataManager.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L18">DataManager.ts:18</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3008,7 +3005,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L35">DataManager.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L24">DataManager.ts:24</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3031,7 +3028,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L31">DataManager.ts:31</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L20">DataManager.ts:20</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3054,7 +3051,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/0c6c5f5/data-manager/src/DataManager.ts#L97">DataManager.ts:97</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/070a50d/data-manager/src/DataManager.ts#L134">DataManager.ts:134</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>

@@ -32,10 +32,8 @@ import { DataManager } from "@formant/data-manager";
 
 await DataManager.login("sam@robot.xyz", "passwordsecret");
 
-// Get the context of a device by it's unique ID
-const device = DataManager.getDeviceContext(
-  "86f61338-eab6-4c9b-8d98-b7b8b1359acd"
-);
+// Get all devices
+const allDevice = DataManager.getDevices();
 
 // Get data ...
 ```
@@ -50,7 +48,7 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.waitTilAuthenticated();
 
 // Get the context of a device is passed along as a query string
-const device = DataManager.getCurrentDeviceContext();
+const device = DataManager.getCurrentDevice();
 
 // Get data ...
 ```
