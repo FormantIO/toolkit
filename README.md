@@ -9,13 +9,13 @@ A collection of open source libraries to help make custom web and 3D experiences
 # Documentation
 
 - [HTTP API](https://formantio.github.io/web-sdk/docs/api/)
-- [Data Manager](https://formantio.github.io/web-sdk/docs/data-sdk/)
+- [Data SDK](https://formantio.github.io/web-sdk/docs/data-sdk/)
 
 # How does it work?
 
 We understand you want complete control over your user experience, so Formant provides:
 
-- An easy device data manager that can help get realtime and historical data
+- A Data SDK to get realtime and historical data
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
@@ -33,7 +33,7 @@ This depends on the type of app you're making
 
 ### I'm making an application outside of formant
 
-Using user login credentials or service accounts, you can use the data manager to get access to device data.
+Using user login credentials or service accounts, you can use the Data SDK to get access to device data.
 
 ```javascript
 import { Fleet } from "@formant/data-sdk";
@@ -52,7 +52,7 @@ const data = await device.getLatestTelemetry();
 
 ### I'm making an application within Formant as a custom view
 
-The data manager will be able to figure out from url the authentication needed to access the current viewing device.
+The Data SDK will be able to figure out from url the authentication needed to access the current viewing device.
 
 ```javascript
 import { Authentication, Fleet } from "@formant/data-sdk";

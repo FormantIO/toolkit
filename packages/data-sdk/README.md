@@ -1,4 +1,4 @@
-# Data Manager
+# Data SDK
 
 A library for easily accessing the devices in your Formant fleet.
 
