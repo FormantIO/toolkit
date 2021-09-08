@@ -19,6 +19,12 @@ We understand you want complete control over your user experience, so Formant pr
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
+# What ThreeJS components do you have?
+
+## 3d-sdk-urdf
+
+This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
+
 # FAQ
 
 ## How do I get data?
