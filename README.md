@@ -33,7 +33,7 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.login("sam@robot.xyz", "12345");
 
 // Get all devices
-const allDevices = DataManager.getDevices();
+const allDevices = await DataManager.getDevices();
 
 // find the device(s) you want
 const device = allDevices.find(_ => _.name === "spot");
@@ -52,7 +52,7 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.waitTilAuthenticated();
 
 // Get the context of a device is passed along as a query string
-const device = DataManager.getCurrentDevice();
+const device = await DataManager.getCurrentDevice();
 
 // Get data ...
 const data = await device.getLatestTelemetry();
