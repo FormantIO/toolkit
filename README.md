@@ -33,9 +33,12 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.login("sam@robot.xyz", "12345");
 
 // Get all devices
-const allDevice = DataManager.getDevices();
+const allDevices = DataManager.getDevices();
+
+const device = allDevices.find(_ => _.name === "spot");
 
 // Get data ...
+const data = await device.getLatestTelemetry();
 ```
 
 ## I'm making an application within Formant
@@ -51,6 +54,7 @@ await DataManager.waitTilAuthenticated();
 const device = DataManager.getCurrentDevice();
 
 // Get data ...
+const data = await device.getLatestTelemetry();
 ```
 
 # I don't want to use these libraries, how do I use the HTTP API?
