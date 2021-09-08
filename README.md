@@ -19,11 +19,13 @@ We understand you want complete control over your user experience, so Formant pr
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
-# How do I get data?
+# FAQ
+
+## How do I get data?
 
 This depends on the type of app you're making
 
-## I'm making an application outside of formant
+### I'm making an application outside of formant
 
 Using user login credentials or service accounts, you can use the data manager to get access to device data.
 
@@ -42,7 +44,7 @@ const device = allDevices.find(_ => _.name === "spot");
 const data = await device.getLatestTelemetry();
 ```
 
-## I'm making an application within Formant as a custom view
+### I'm making an application within Formant as a custom view
 
 The data manager will be able to figure out from url the authentication needed to access the current viewing device.
 
@@ -58,11 +60,11 @@ const device = await DataManager.getCurrentDevice();
 const data = await device.getLatestTelemetry();
 ```
 
-# I don't want to use these libraries, how do I use the HTTP API?
+## I don't want to use these libraries, how do I use the HTTP API?
 
 If your just interested in using our APIs, there's two main steps
 
-## 1) Get an authorization token
+### 1) Get an authorization token
 
 ```javascript
 await fetch("https://api.formant.io/v1/admin/auth/login", {
@@ -93,6 +95,6 @@ This will return a [JWT](https://jwt.io) token.
 }
 ```
 
-## 2) Call an API with the token
+### 2) Call an API with the token
 
 
