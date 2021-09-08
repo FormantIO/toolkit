@@ -18,7 +18,7 @@
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
 
-"@formant/data-manager@file:../../packages/data-manager":
+"@formant/data-sdk@file:../../packages/data-sdk":
   version "0.0.0"
 
 "@sindresorhus/is@^0.14.0":

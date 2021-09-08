@@ -1,0 +1,35 @@
+{
+  "name": "@formant/data-sdk",
+  "description": "A library for getting data from Formant",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formantio/web-sdk.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/formantio/web-sdk",
+  "main": "./dist/data-sdk.umd.js",
+  "module": "./dist/data-sdk.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/data-sdk.es.js",
+      "require": "./dist/data-sdk.umd.js"
+    }
+  },
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --port 4000",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types",
+    "docs": "typedoc src/Fleet.ts --theme minimal --out ../../docs/data-sdk/"
+  },
+  "devDependencies": {
+    "typedoc": "^0.21.9",
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  },
+  "types": "./dist/types/main.d.ts"
+}

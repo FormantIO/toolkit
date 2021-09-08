@@ -5,8 +5,8 @@ module.exports = defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
-      name: "FormantDataManager",
-      fileName: (format) => `data-manager.${format}.js`,
+      name: "FormantDataSDK",
+      fileName: (format) => `data-sdk.${format}.js`,
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

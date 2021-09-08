@@ -8,7 +8,7 @@
     "electron": "tsc && vite build && electron dist/index.html"
   },
   "devDependencies": {
-    "@formant/data-manager": "file:../../packages/data-manager",
+    "@formant/data-sdk": "file:../../packages/data-sdk",
     "electron": "^14.0.0",
     "three": "^0.132.2",
     "typescript": "^4.3.2",

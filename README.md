@@ -9,7 +9,7 @@ A collection of open source libraries to help make custom web and 3D experiences
 # Documentation
 
 - [HTTP API](https://formantio.github.io/web-sdk/docs/api/)
-- [Data Manager](https://formantio.github.io/web-sdk/docs/data-manager/)
+- [Data Manager](https://formantio.github.io/web-sdk/docs/data-sdk/)
 
 # How does it work?
 
@@ -36,12 +36,12 @@ This depends on the type of app you're making
 Using user login credentials or service accounts, you can use the data manager to get access to device data.
 
 ```javascript
-import { DataManager } from "@formant/data-manager";
+import { Fleet } from "@formant/data-sdk";
 
-await DataManager.login("sam@robot.xyz", "12345");
+await Fleet.login("sam@robot.xyz", "12345");
 
 // Get all devices
-const allDevices = await DataManager.getDevices();
+const allDevices = await Fleet.getDevices();
 
 // find the device(s) you want
 const device = allDevices.find((d) => d.name === "spot");
@@ -55,12 +55,12 @@ const data = await device.getLatestTelemetry();
 The data manager will be able to figure out from url the authentication needed to access the current viewing device.
 
 ```javascript
-import { DataManager } from "@formant/data-manager";
+import { Authentication, Fleet } from "@formant/data-sdk";
 
-await DataManager.waitTilAuthenticated();
+await Authentication.waitTilAuthenticated();
 
 // Get the context of a device is passed along as a query string
-const device = await DataManager.getCurrentDevice();
+const device = await Fleet.getCurrentDevice();
 
 // Get data ...
 const data = await device.getLatestTelemetry();
@@ -127,15 +127,18 @@ curl -X POST "https://api.formant.io/v1/admin/device-details/query" \
 
 ## I don't want to use WebPack/Vite, can I just use plain JavaScript?
 
-Yes, for the DataManager
+Yes, for the Fleet
 
 As a ES6 module:
 
 ```html
 <script type="module">
-  import { DataManager } from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js";
-  await DataManager.waitTilAuthenticated();
-  const devices = await DataManager.getDevices();
+  import {
+    Authentication,
+    Fleet,
+  } from "https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.es6.js";
+  await Authentication.waitTilAuthenticated();
+  const devices = await Fleet.getDevices();
   window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
 </script>
 ```
@@ -143,12 +146,14 @@ As a ES6 module:
 As a non-module:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
 <script type="module">
-  const dm = window.FormantDataManager.DataManager;
-  await dm.waitTilAuthenticated();
-  const devices = await dm.getDevices();
-  window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
+  const { Authentication, Fleet } = window.FormantDataSDK;
+  await Authentication.waitTilAuthenticated();
+  const device = await Fleet.getCurrentDevice();
+  window.document.body.innerHTML = JSON.stringify(
+    await device.getLatestTelemetry()
+  );
 </script>
 ```
 

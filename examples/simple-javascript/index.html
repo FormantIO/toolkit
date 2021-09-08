@@ -1,13 +1,15 @@
 <html>
   <head>
-    <script src="../../packages/data-manager/dist/data-manager.umd.js"></script>
+    <script src="../../packages/data-sdk/dist/data-sdk.umd.js"></script>
     <link rel="stylesheet" href="../../css/formant.css" />
   </head>
   <body></body>
   <script type="module">
-    const dm = window.FormantDataManager.DataManager;
-    await dm.waitTilAuthenticated();
-    const devices = await dm.getDevices();
-    window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
+    const { Authentication, Fleet } = window.FormantDataSDK;
+    await Authentication.waitTilAuthenticated();
+    const device = await Fleet.getCurrentDevice();
+    window.document.body.innerHTML = JSON.stringify(
+      await device.getLatestTelemetry()
+    );
   </script>
 </html>

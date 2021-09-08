@@ -1,13 +1,13 @@
-import { DataManager } from "@formant/data-manager";
+import { Authentication, Fleet } from "@formant/data-sdk";
 import "./style.css";
 
 const el = document.querySelector("#app");
 if (el) {
   el.innerHTML = "Connecting";
-  if (await DataManager.waitTilAuthenticated()) {
-    const devices = await DataManager.getDevices();
+  if (await Authentication.waitTilAuthenticated()) {
+    const devices = await Fleet.getDevices();
     el.innerHTML =
-      DataManager.getCurrentUser()?.firstName +
+      Authentication.getCurrentUser()?.firstName +
       " is Authenticated, here's a list of known robots:<br/>" +
       devices.map((_) => _.name).join("<br>");
   } else {
