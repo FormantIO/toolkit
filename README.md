@@ -30,7 +30,7 @@ Using user login credentials or service accounts, you can use the data manager t
 ```javascript
 import { DataManager } from "@formant/data-manager";
 
-await DataManager.login("sam@robot.xyz", "passwordsecret");
+await DataManager.login("sam@robot.xyz", "12345");
 
 // Get all devices
 const allDevice = DataManager.getDevices();
@@ -73,7 +73,7 @@ await fetch("https://api.formant.io/v1/admin/auth/login", {
 curl -X POST "https://api.formant.io/v1/admin/auth/login" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- -d '{"email":"me@mycompany.com","password":"12345"}' 
+ -d '{"email":"sam@roboy.xyz","password":"12345"}' 
 ```
 
 This will return a [JWT](https://jwt.io) token.
