@@ -6,6 +6,10 @@ A collection of open source libraries to help make custom web and 3D experiences
 * Create your own application that uses Formant's APIs and RealtimeSDK for data
 * Create WebView's for mobile applications that show 3D visualization of your fleet
 
+# Documentation
+
+* [Data Manager](https://formantio.github.io/web-sdk/data-manager/docs/)
+
 # How does it work?
 
 We understand you want complete control over your user experience, so Formant provides:
