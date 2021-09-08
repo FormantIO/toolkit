@@ -15,7 +15,7 @@ A collection of open source libraries to help make custom web and 3D experiences
 
 We understand you want complete control over your user experience, so Formant provides:
 
-- An easy device data manager that can help get useful realtime data sources you need
+- An easy device data manager that can help get realtime and historical data
 - Isolated 3D elements that you can import into your project for only the features you want
 - UI elements to make your application fit in to Formant's ecosystem
 
