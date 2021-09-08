@@ -18,8 +18,10 @@
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
 
-"@formant/data-sdk@file:../../packages/data-sdk":
+"@formant/data-sdk@0.0.0":
   version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.0.tgz#984a568a585ad0ea4de661fb942ad8658c731d3e"
+  integrity sha512-y6Pfxw96XxVjQRDjHAVxunk/hGYYGdS1I8yeppmCbid+JsqPDIF16eLWiD/B2b3Jjy6dnWfE/N3P+ni4Cu7Z6w==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
