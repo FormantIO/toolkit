@@ -134,7 +134,9 @@ As a ES6 module:
 ```html
 <script type="module">
   import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js"
-  ...
+  await DataManager.waitTilAuthenticated();
+  const devices = await DataManager.getDevices();
+  window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
 </script>
 ```
 
