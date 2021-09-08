@@ -19,7 +19,7 @@ We understand you want complete control over your user experience, so Formant pr
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
-# What ThreeJS components do you have?
+# What do you have for ThreeJS?
 
 ## 3d-sdk-urdf
 
@@ -122,5 +122,5 @@ As a non-module:
 <script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.umd.js"></script>
 ```
 
-
+## How do I take a URDF and convert it into a zip for Formant?
 
