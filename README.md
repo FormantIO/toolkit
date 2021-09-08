@@ -8,8 +8,8 @@ A collection of open source libraries to help make custom web and 3D experiences
 
 # Documentation
 
-- [HTTP API](https://formantio.github.io/web-sdk/api/)
-- [Data Manager](https://formantio.github.io/web-sdk/data-manager/docs/)
+- [HTTP API](https://formantio.github.io/web-sdk/docs/api/)
+- [Data Manager](https://formantio.github.io/web-sdk/docs/data-manager/)
 
 # How does it work?
 
