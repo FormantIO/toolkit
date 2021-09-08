@@ -61,6 +61,25 @@ If your just interested in using our APIs, there's two main steps
 
 ## 1) Get an authorization token
 
+```javascript
+await fetch("https://api.formant.io/v1/admin/auth/login", {
+  method: "POST",
+  body: JSON.stringify({{email:"me@mycompany.com", password:"12345"}}),
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+```
+
+```console
+curl -X POST "https://api.formant.io/v1/admin/auth/login" \
+ -H "Accept: application/json" \
+ -H "Content-Type: application/json" \
+ -d '{"email":"me@mycompany.com","password":"12345"}' 
+```
+
+This will return a [JWT](https://jwt.io) token.
+
 ## 2) Call an API with the token
 
 
