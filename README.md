@@ -103,13 +103,16 @@ Yes, for the DataManager
 
 As a ES6 module:
 
-```
+```html
+<script type="module">
 import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
+...
+</script>
 ```
 
 As a non-module:
 
-```
+```html
 <script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.umd.js"></script>
 ```
 
