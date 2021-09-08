@@ -36,9 +36,9 @@ This depends on the type of app you're making
 Using user login credentials or service accounts, you can use the Data SDK to get access to device data.
 
 ```javascript
-import { Fleet } from "@formant/data-sdk";
+import { Authentication, Fleet } from "@formant/data-sdk";
 
-await Fleet.login("sam@robot.xyz", "12345");
+await Authentication.login("sam@robot.xyz", "12345");
 
 // Get all devices
 const allDevices = await Fleet.getDevices();
