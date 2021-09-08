@@ -24,10 +24,15 @@ You don't need to do anything, the data manager will be able to figure out from 
 
 ## I'm making an application outside of formant
 
-Using user login or service accounts, you can use the data manager to get access to device data.
+Using user login credentials or service accounts, you can use the data manager to get access to device data.
 
 ```javascript
 import { DataManager } from "@formant/data-manager"
 
 await DataManager.login("sam@robot.xyz","passwordsecret")
+
+// Get the context of a device by it's unique ID
+const device = DataManager.getDeviceContext("86f61338-eab6-4c9b-8d98-b7b8b1359acd")
+
+// Get data ...
 ```
