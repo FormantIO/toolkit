@@ -1,10 +1,5 @@
 # Data SDK
 
-A library for easily accessing the devices in your Formant fleet.
+A library for accessing the devices in your Formant fleet.
 
-```
-import { Fleet } from "@formant/data-sdk";
-
-await Fleet.waitUntilAuthenticated();
-console.log(await Fleet.getDevices());
-```
+Check out the [project website](https://github.com/FormantIO/web-sdk) for more information!
