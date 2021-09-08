@@ -26,13 +26,14 @@ export class DataManager {
         },
       });
       const auth = await result.json();
-      DataManager.token = auth.authentication.accessToken as string;
-      DataManager.waitingForAuth.forEach((_) => _(true));
+      await DataManager.loginWithToken(
+        auth.authentication.accessToken as string
+      );
     } catch (e: any) {
       console.error(e);
       DataManager.waitingForAuth.forEach((_) => _(false));
+      DataManager.waitingForAuth = [];
     }
-    DataManager.waitingForAuth = [];
   }
 
   static async setDefaultDevice(deviceId: string) {
@@ -114,7 +115,6 @@ export class DataManager {
         },
       }
     );
-    debugger;
     const device = await data.json();
     const name = device.name as string;
     const context = new Device(DataManager.token, deviceId, name);
