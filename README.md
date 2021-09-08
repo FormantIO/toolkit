@@ -62,7 +62,7 @@ If your just interested in using our APIs, there's two main steps
 ```javascript
 await fetch("https://api.formant.io/v1/admin/auth/login", {
   method: "POST",
-  body: JSON.stringify({{email:"me@mycompany.com", password:"12345"}}),
+  body: JSON.stringify({{email:"sam@robot.xyz", password:"12345"}}),
   headers: {
     "Content-Type": "application/json"
   }
