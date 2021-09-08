@@ -103,6 +103,28 @@ This will return a [JWT](https://jwt.io) token.
 
 ### 2) Call an API with the token
 
+```javascript
+// the token from above
+cons token = "abc......xyz"
+
+await fetch("https://api.formant.io/v1/admin/device-details/query", {
+  method: "POST",
+  body: JSON.stringify({{enabled:true, type:"default"}}),
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization: "Bearer "+token
+  }
+});
+```
+
+```console
+curl -X POST "https://api.formant.io/v1/admin/device-details/query" \
+ -H "Accept: application/json" \
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer abc......xyz" \
+ -d '{"enabled":true,"type":"default"}' 
+```
+
 ## I don't want to use WebPack/Vite, can I just use plain JavaScript?
 
 Yes, for the DataManager
