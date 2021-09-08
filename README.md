@@ -68,7 +68,7 @@ const data = await device.getLatestTelemetry();
 
 ## I don't want to use these libraries, how do I use the HTTP API?
 
-If your just interested in using our APIs, there's two main steps
+If your just interested in using our [APIs](https://formantio.github.io/web-sdk/docs/api/#overview), there's two main steps
 
 ### 1) Get an authorization token
 
