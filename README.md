@@ -159,6 +159,32 @@ As a non-module:
 
 ## How do I take a URDF and convert it into a zip for Formant?
 
+To prepare a URDF for the web, you must collect the .urdf file from ROS.  You will be consructing a zip that contains the:
+
+* urdf in the root folder
+* meshes referenced by the urdf
+
+Currently formant only supports `.dae` models.  You can easily convert models using `ctmconv`.
+
+Install using ubuntu:
+
+```
+apt-get install openctm-tools
+```
+
+```
+ctmconv leg.stl leg.dae
+```
+
+An example zip layout will look like
+
+* my_arm.zip
+  * my_arm.urdf
+  * meshes/
+    * arm1.dae
+    * arm2.dae   
+
+
 ## Can I make an electron app?
 
 Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/examples/simple-electron).
