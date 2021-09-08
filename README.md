@@ -23,10 +23,6 @@ We understand you want complete control over your user experience, so Formant pr
 
 This depends on the type of app you're making
 
-## I'm making an application within Formant
-
-You don't need to do anything, the data manager will be able to figure out from url query strings what the authentication should be to access device data.
-
 ## I'm making an application outside of formant
 
 Using user login credentials or service accounts, you can use the data manager to get access to device data.
@@ -43,3 +39,19 @@ const device = DataManager.getDeviceContext(
 
 // Get data ...
 ```
+
+## I'm making an application within Formant
+
+You don't need to do anything, the data manager will be able to figure out from url query strings what the authentication should be to access device data.
+
+```javascript
+import { DataManager } from "@formant/data-manager";
+
+await DataManager.waitTilAuthenticated();
+
+// Get the context of a device is passed along as a query string
+const device = DataManager.getDefaultDeviceContext();
+
+// Get data ...
+```
+
