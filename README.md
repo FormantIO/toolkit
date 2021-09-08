@@ -97,4 +97,21 @@ This will return a [JWT](https://jwt.io) token.
 
 ### 2) Call an API with the token
 
+## I don't want to use WebPack/Vite, can I just use plain JavaScript?
+
+Yes, for the DataManager
+
+As a ES6 module:
+
+```
+import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.es6.js"
+```
+
+As a non-module:
+
+```
+<script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/formant-data-manager.umd.js"></script>
+```
+
+
 
