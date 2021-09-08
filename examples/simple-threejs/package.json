@@ -7,7 +7,7 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@formant/3d-sdk-urdf": "file:../../3d-sdk-urdf",
+    "@formant/3d-sdk-urdf": "file:../../packages/3d-sdk-urdf",
     "three": "^0.132.2",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"

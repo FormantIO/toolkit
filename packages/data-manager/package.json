@@ -17,7 +17,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types",
-    "docs": "typedoc src/DataManager.ts --theme minimal --out ../docs/data-manager/"
+    "docs": "typedoc src/DataManager.ts --theme minimal --out ../../docs/data-manager/"
   },
   "devDependencies": {
     "typedoc": "^0.21.9",
