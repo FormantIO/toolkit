@@ -35,6 +35,7 @@ await DataManager.login("sam@robot.xyz", "12345");
 // Get all devices
 const allDevices = DataManager.getDevices();
 
+// find the device(s) you want
 const device = allDevices.find(_ => _.name === "spot");
 
 // Get data ...
