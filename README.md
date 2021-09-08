@@ -73,7 +73,7 @@ await fetch("https://api.formant.io/v1/admin/auth/login", {
 curl -X POST "https://api.formant.io/v1/admin/auth/login" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- -d '{"email":"sam@roboy.xyz","password":"12345"}' 
+ -d '{"email":"sam@robot.xyz","password":"12345"}' 
 ```
 
 This will return a [JWT](https://jwt.io) token.
