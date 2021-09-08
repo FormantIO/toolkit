@@ -44,7 +44,7 @@ await DataManager.login("sam@robot.xyz", "12345");
 const allDevices = await DataManager.getDevices();
 
 // find the device(s) you want
-const device = allDevices.find((_) => _.name === "spot");
+const device = allDevices.find(d => d.name === "spot");
 
 // Get data ...
 const data = await device.getLatestTelemetry();
