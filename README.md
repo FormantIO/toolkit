@@ -134,7 +134,9 @@ As a ES6 module:
 ```html
 <script type="module">
   import {DataManager} from "https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.es6.js"
-  ...
+  await DataManager.waitTilAuthenticated();
+  const devices = await DataManager.getDevices();
+  window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
 </script>
 ```
 
@@ -142,6 +144,12 @@ As a non-module:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@formant/data-manager/dist/data-manager.umd.js"></script>
+<script type="module">
+  const dm = window.FormantDataManager.DataManager;
+  await dm.waitTilAuthenticated();
+  const devices = await dm.getDevices();
+  window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
+</script>
 ```
 
 ## How do I take a URDF and convert it into a zip for Formant?
