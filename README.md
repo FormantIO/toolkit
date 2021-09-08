@@ -54,3 +54,13 @@ const device = DataManager.getCurrentDeviceContext();
 
 // Get data ...
 ```
+
+# I don't want to use these libraries, how do I use the HTTP API?
+
+If your just interested in using our APIs, there's two main steps
+
+## 1) Get an authorization token
+
+## 2) Call an API with the token
+
+
