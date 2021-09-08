@@ -184,6 +184,11 @@ An example zip layout will look like
     * arm1.dae
     * arm2.dae   
 
+It's important that your meshes be referenced by relative links rather than absolute paths that start with "package://".
+
+```
+<mesh filename="meshes/base_link.dae" />
+```
 
 ## Can I make an electron app?
 
