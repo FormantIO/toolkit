@@ -50,8 +50,7 @@ import { DataManager } from "@formant/data-manager";
 await DataManager.waitTilAuthenticated();
 
 // Get the context of a device is passed along as a query string
-const device = DataManager.getDefaultDeviceContext();
+const device = DataManager.getCurrentDeviceContext();
 
 // Get data ...
 ```
-
