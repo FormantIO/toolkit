@@ -14,7 +14,7 @@ export class Authentication {
   static defaultDeviceId: string | undefined;
   static waitingForAuth: ((result: boolean) => void)[] = [];
 
-  static async login(email: string, password: string) {
+  public static async login(email: string, password: string) {
     try {
       const result = await fetch(`${FORMANT_API_URL}/v1/admin/auth/login`, {
         method: "POST",
@@ -34,7 +34,7 @@ export class Authentication {
     }
   }
 
-  static async loginWithToken(token: string) {
+  public static async loginWithToken(token: string) {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       const data = await fetch(

@@ -24,7 +24,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types",
-    "docs": "typedoc src/Fleet.ts --theme minimal --out ../../docs/data-sdk/"
+    "docs": "typedoc src/main.ts --theme minimal --out ../../docs/data-sdk/"
   },
   "devDependencies": {
     "@formant/realtime-sdk": "0.0.3",
