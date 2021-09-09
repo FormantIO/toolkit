@@ -197,7 +197,7 @@ Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/exa
 
 ## Can I make a realtime connection to my device?
 
-```
+```javascript
 const device = await Fleet.getCurrentDevice();
 await device.startRealtimeConnection();
 ```
