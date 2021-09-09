@@ -1,5 +1,6 @@
 import { Device } from "./Device";
 import { Authentication } from "./Authentication";
+import { FORMANT_API_URL } from "./main";
 
 export interface User {
   firstName: string;
@@ -26,7 +27,7 @@ export class Fleet {
     }
 
     const data = await fetch(
-      `https://api.formant.io/v1/admin/devices/${Fleet.defaultDeviceId}`,
+      `${FORMANT_API_URL}/v1/admin/devices/${Fleet.defaultDeviceId}`,
       {
         method: "GET",
         headers: {
@@ -51,7 +52,7 @@ export class Fleet {
       throw new Error("Not authenticated");
     }
     const data = await fetch(
-      `https://api.formant.io/v1/admin/devices/${Fleet.defaultDeviceId}`,
+      `${FORMANT_API_URL}/v1/admin/devices/${Fleet.defaultDeviceId}`,
       {
         method: "GET",
         headers: {
@@ -72,7 +73,7 @@ export class Fleet {
       throw new Error("Not authenticated");
     }
     const data = await fetch(
-      `https://api.formant.io/v1/admin/device-details/query`,
+      `${FORMANT_API_URL}/v1/admin/device-details/query`,
       {
         method: "POST",
         body: JSON.stringify({ enabled: true, type: "default" }),

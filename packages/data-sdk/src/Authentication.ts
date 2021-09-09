@@ -1,3 +1,5 @@
+import { FORMANT_API_URL } from "./main";
+
 export interface User {
   firstName: string;
   lastName: string;
@@ -14,7 +16,7 @@ export class Authentication {
 
   static async login(email: string, password: string) {
     try {
-      const result = await fetch("https://api.formant.io/v1/admin/auth/login", {
+      const result = await fetch(`${FORMANT_API_URL}/v1/admin/auth/login`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -36,7 +38,7 @@ export class Authentication {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       const data = await fetch(
-        `https://api.formant.io/v1/admin/users/${tokenData.sub}`,
+        `${FORMANT_API_URL}/v1/admin/users/${tokenData.sub}`,
         {
           method: "GET",
           headers: {

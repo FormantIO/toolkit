@@ -4,6 +4,8 @@ export { Authentication } from "./Authentication";
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
 
+export const FORMANT_API_URL = "https://api.formant.io";
+
 const urlParams = new URLSearchParams(window.location.search);
 
 const urlDevice = urlParams.get("device");
