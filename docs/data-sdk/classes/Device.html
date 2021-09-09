@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Fleet | @formant/data-sdk</title>
+	<title>Device | @formant/data-sdk</title>
 	<meta name="description" content="Documentation for @formant/data-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2707,34 +2707,55 @@ img {
 		<li class=" tsd-kind-class">
 			<a href="Authentication.html" class="tsd-kind-icon">Authentication</a>
 		</li>
-		<li class=" tsd-kind-class">
-			<a href="Device.html" class="tsd-kind-icon">Device</a>
-		</li>
 		<li class="current tsd-kind-class">
-			<a href="Fleet.html" class="tsd-kind-icon">Fleet</a>
+			<a href="Device.html" class="tsd-kind-icon">Device</a>
 			<ul>
 				<li class=" tsd-kind-constructor tsd-parent-kind-class">
-					<a href="Fleet.html#constructor" class="tsd-kind-icon">constructor</a>
+					<a href="Device.html#constructor" class="tsd-kind-icon">constructor</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#defaultDeviceId" class="tsd-kind-icon">default<wbr>Device<wbr>Id</a>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="Device.html#id" class="tsd-kind-icon">id</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#knownContext" class="tsd-kind-icon">known<wbr>Context</a>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="Device.html#name" class="tsd-kind-icon">name</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="Device.html#realtimeListeners" class="tsd-kind-icon">realtime<wbr>Listeners</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#getDevice" class="tsd-kind-icon">get<wbr>Device</a>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="Device.html#rtcClient" class="tsd-kind-icon">rtc<wbr>Client</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#addRealtimeListener" class="tsd-kind-icon">add<wbr>Realtime<wbr>Listener</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a href="Fleet.html#setDefaultDevice" class="tsd-kind-icon">set<wbr>Default<wbr>Device</a>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a href="Device.html#getAuthToken" class="tsd-kind-icon">get<wbr>Auth<wbr>Token</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#getCurrentConfiguration" class="tsd-kind-icon">get<wbr>Current<wbr>Configuration</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#getFileUrl" class="tsd-kind-icon">get<wbr>File<wbr>Url</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a href="Device.html#handleMessage" class="tsd-kind-icon">handle<wbr>Message</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#removeRealtimeListener" class="tsd-kind-icon">remove<wbr>Realtime<wbr>Listener</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#startRealtimeConnection" class="tsd-kind-icon">start<wbr>Realtime<wbr>Connection</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Device.html#stopRealtimeConnection" class="tsd-kind-icon">stop<wbr>Realtime<wbr>Connection</a>
 				</li>
 			</ul>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="Fleet.html" class="tsd-kind-icon">Fleet</a>
 		</li>
 		<li class=" tsd-kind-variable">
 			<a href="../modules.html#FORMANT_API_URL" class="tsd-kind-icon">FORMANT_<wbr>API_<wbr>URL</a>
@@ -2747,7 +2768,7 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">Fleet</span>
+					<span class="target">Device</span>
 				</li>
 			</ul>
 		</section>
@@ -2758,23 +2779,30 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Constructors</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="Fleet.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="Device.html#constructor" class="tsd-kind-icon">constructor</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#defaultDeviceId" class="tsd-kind-icon">default<wbr>Device<wbr>Id</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#knownContext" class="tsd-kind-icon">known<wbr>Context</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="Device.html#id" class="tsd-kind-icon">id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="Device.html#name" class="tsd-kind-icon">name</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="Device.html#realtimeListeners" class="tsd-kind-icon">realtime<wbr>Listeners</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="Device.html#rtcClient" class="tsd-kind-icon">rtc<wbr>Client</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getDevice" class="tsd-kind-icon">get<wbr>Device</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#setDefaultDevice" class="tsd-kind-icon">set<wbr>Default<wbr>Device</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#addRealtimeListener" class="tsd-kind-icon">add<wbr>Realtime<wbr>Listener</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="Device.html#getAuthToken" class="tsd-kind-icon">get<wbr>Auth<wbr>Token</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#getCurrentConfiguration" class="tsd-kind-icon">get<wbr>Current<wbr>Configuration</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#getFileUrl" class="tsd-kind-icon">get<wbr>File<wbr>Url</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="Device.html#handleMessage" class="tsd-kind-icon">handle<wbr>Message</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#removeRealtimeListener" class="tsd-kind-icon">remove<wbr>Realtime<wbr>Listener</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#startRealtimeConnection" class="tsd-kind-icon">start<wbr>Realtime<wbr>Connection</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Device.html#stopRealtimeConnection" class="tsd-kind-icon">stop<wbr>Realtime<wbr>Connection</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2786,118 +2814,247 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Fleet<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Fleet.html" class="tsd-signature-type" data-tsd-kind="Class">Fleet</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Device<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L13">Device.ts:13</a></li>
+							</ul>
 						</aside>
-						<h4 class="tsd-returns-title">Returns <a href="Fleet.html" class="tsd-signature-type" data-tsd-kind="Class">Fleet</a></h4>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>token: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>id: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>name: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a></h4>
 					</li>
 				</ul>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-				<a name="defaultDeviceId" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> default<wbr>Device<wbr>Id</h3>
-				<div class="tsd-signature tsd-kind-icon">default<wbr>Device<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="id" class="tsd-anchor"></a>
+				<h3>id</h3>
+				<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="name" class="tsd-anchor"></a>
+				<h3>name</h3>
+				<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="realtimeListeners" class="tsd-anchor"></a>
+				<h3>realtime<wbr>Listeners</h3>
+				<div class="tsd-signature tsd-kind-icon">realtime<wbr>Listeners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RealtimeListener</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L14">Fleet.ts:14</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L12">Device.ts:12</a></li>
 					</ul>
 				</aside>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-				<a name="knownContext" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> known<wbr>Context</h3>
-				<div class="tsd-signature tsd-kind-icon">known<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakRef</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="rtcClient" class="tsd-anchor"></a>
+				<h3>rtc<wbr>Client</h3>
+				<div class="tsd-signature tsd-kind-icon">rtc<wbr>Client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RtcClient</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L15">Fleet.ts:15</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L11">Device.ts:11</a></li>
 					</ul>
 				</aside>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="getCurrentDevice" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Current<wbr>Device</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Current<wbr>Device<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="addRealtimeListener" class="tsd-anchor"></a>
+				<h3>add<wbr>Realtime<wbr>Listener</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">add<wbr>Realtime<wbr>Listener<span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RealtimeListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L21">Fleet.ts:21</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="getDevice" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Device</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Device<span class="tsd-signature-symbol">(</span>deviceId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L50">Fleet.ts:50</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L123">Device.ts:123</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>deviceId: <span class="tsd-signature-type">string</span></h5>
+								<h5>listener: <span class="tsd-signature-type">RealtimeListener</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="getDevices" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Devices</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Devices<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+				<a name="getAuthToken" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Auth<wbr>Token</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Auth<wbr>Token<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L71">Fleet.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L75">Device.ts:75</a></li>
 							</ul>
 						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-				<a name="setDefaultDevice" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagStatic">Static</span> set<wbr>Default<wbr>Device</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">set<wbr>Default<wbr>Device<span class="tsd-signature-symbol">(</span>deviceId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="getCurrentConfiguration" class="tsd-anchor"></a>
+				<h3>get<wbr>Current<wbr>Configuration</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Current<wbr>Configuration<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ConfigurationDocument</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Fleet.ts#L17">Fleet.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L32">Device.ts:32</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ConfigurationDocument</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="getFileUrl" class="tsd-anchor"></a>
+				<h3>get<wbr>File<wbr>Url</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>File<wbr>Url<span class="tsd-signature-symbol">(</span>fileId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L56">Device.ts:56</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>deviceId: <span class="tsd-signature-type">string</span></h5>
+								<h5>fileId: <span class="tsd-signature-type">string</span></h5>
 							</li>
 						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="getLatestTelemetry" class="tsd-anchor"></a>
+				<h3>get<wbr>Latest<wbr>Telemetry</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Latest<wbr>Telemetry<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L14">Device.ts:14</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+				<a name="handleMessage" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> handle<wbr>Message</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<li class="tsd-signature tsd-kind-icon">handle<wbr>Message<span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L71">Device.ts:71</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>peerId: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>message: <span class="tsd-signature-type">any</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="removeRealtimeListener" class="tsd-anchor"></a>
+				<h3>remove<wbr>Realtime<wbr>Listener</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">remove<wbr>Realtime<wbr>Listener<span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RealtimeListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L127">Device.ts:127</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>listener: <span class="tsd-signature-type">RealtimeListener</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="startRealtimeConnection" class="tsd-anchor"></a>
+				<h3>start<wbr>Realtime<wbr>Connection</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">start<wbr>Realtime<wbr>Connection<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L79">Device.ts:79</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="stopRealtimeConnection" class="tsd-anchor"></a>
+				<h3>stop<wbr>Realtime<wbr>Connection</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">stop<wbr>Realtime<wbr>Connection<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/28f2797/packages/data-sdk/src/Device.ts#L135">Device.ts:135</a></li>
+							</ul>
+						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
