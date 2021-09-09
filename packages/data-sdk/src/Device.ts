@@ -1,5 +1,5 @@
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
-import { FORMANT_API_URL } from "./main";
+import { FORMANT_API_URL } from "./config";
 import { delay } from "./utils";
 
 export interface ConfigurationDocument {

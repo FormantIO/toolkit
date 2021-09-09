@@ -1,15 +1,17 @@
 <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk@0.0.0/dist/data-sdk.umd.js"></script>
-    <link rel="stylesheet" href="../../css/formant.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/web-sdk/css/formant.css"
+    />
   </head>
   <body></body>
   <script type="module">
     const { Authentication, Fleet } = window.FormantDataSDK;
     await Authentication.waitTilAuthenticated();
     const device = await Fleet.getCurrentDevice();
-    window.document.body.innerHTML = JSON.stringify(
-      await device.getLatestTelemetry()
-    );
+    await device.startRealtimeConnection();
+    document.body.innerHTML = "connected to realtime sdk";
   </script>
 </html>

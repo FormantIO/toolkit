@@ -1,6 +1,6 @@
 import { Device } from "./Device";
 import { Authentication } from "./Authentication";
-import { FORMANT_API_URL } from "./main";
+import { FORMANT_API_URL } from "./config";
 
 export interface User {
   firstName: string;
