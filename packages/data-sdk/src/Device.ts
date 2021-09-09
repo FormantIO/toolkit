@@ -11,7 +11,7 @@ export class Device {
   constructor(private token: string, public id: string, public name: string) {}
   async getLatestTelemetry() {
     const data = await fetch(
-      `https://api.formant.io/v1/queries/stream-current-value`,
+      `${FORMANT_API_URL}/v1/queries/stream-current-value`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -28,20 +28,17 @@ export class Device {
   }
 
   async getCurrentConfiguration(): Promise<ConfigurationDocument> {
-    let result = await fetch(
-      `https://api.formant.io/v1/admin/devices/${this.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.token,
-        },
-      }
-    );
+    let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      },
+    });
     const device = await result.json();
     const version = device.state.reportedConfiguration.version;
     result = await fetch(
-      `https://api.formant.io/v1/admin/devices/${this.id}/configurations/${version}`,
+      `${FORMANT_API_URL}/v1/admin/devices/${this.id}/configurations/${version}`,
       {
         method: "GET",
         headers: {
@@ -55,7 +52,7 @@ export class Device {
   }
 
   async getFileUrl(fileId: string): Promise<string[]> {
-    const result = await fetch(`https://api.formant.io/v1/admin/files/query`, {
+    const result = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
       method: "POST",
       body: JSON.stringify({
         fileId: [fileId],
