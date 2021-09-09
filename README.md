@@ -193,3 +193,11 @@ It's important that your meshes be referenced by relative links rather than abso
 ## Can I make an electron app?
 
 Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/examples/simple-electron).
+
+
+## Can I make a realtime connection to my device?
+
+```
+const device = await Fleet.getCurrentDevice();
+await device.startRealtimeConnection();
+```
