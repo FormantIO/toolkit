@@ -159,12 +159,12 @@ As a non-module:
 
 ## How do I take a URDF and convert it into a zip for Formant?
 
-To prepare a URDF for the web, you must collect the .urdf file from ROS.  You will be consructing a zip that contains the:
+To prepare a URDF for the web, you must collect the .urdf file from ROS. You will be consructing a zip that contains the:
 
-* urdf in the root folder
-* meshes referenced by the urdf
+- urdf in the root folder
+- meshes referenced by the urdf
 
-Currently formant only supports `.dae` models.  You can easily convert models using `ctmconv`.
+Currently formant only supports `.dae` models. You can easily convert models using `ctmconv`.
 
 Install using ubuntu:
 
@@ -178,11 +178,11 @@ ctmconv leg.stl leg.dae
 
 An example zip layout will look like
 
-* my_arm.zip
-  * my_arm.urdf
-  * meshes/
-    * arm1.dae
-    * arm2.dae   
+- my_arm.zip
+  - my_arm.urdf
+  - meshes/
+    - arm1.dae
+    - arm2.dae
 
 It's important that your meshes be referenced by relative links rather than absolute paths that start with "package://".
 
@@ -194,10 +194,20 @@ It's important that your meshes be referenced by relative links rather than abso
 
 Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/examples/simple-electron).
 
-
 ## Can I make a realtime connection to my device?
 
 ```javascript
 const device = await Fleet.getCurrentDevice();
 await device.startRealtimeConnection();
+```
+
+## Is there a simple way to get a Formant look and feel?
+
+When building an embedded app, you might want a quick way to get a website that looks like Formant.
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/formantio/web-sdk/css/formant.css"
+/>
 ```
