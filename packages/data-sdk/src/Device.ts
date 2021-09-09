@@ -6,8 +6,10 @@ export interface ConfigurationDocument {
   urdfFiles: string[];
 }
 
+export type RealtimeListener = (peerId: string, message: any) => void;
 export class Device {
   rtcClient: RtcClient | undefined;
+  realtimeListeners: RealtimeListener[] = [];
   constructor(private token: string, public id: string, public name: string) {}
   async getLatestTelemetry() {
     const data = await fetch(
@@ -67,7 +69,7 @@ export class Device {
   }
 
   private handleMessage = (peerId: string, message: any) => {
-    console.log(peerId, message);
+    this.realtimeListeners.forEach((_) => _(peerId, message));
   };
 
   private getAuthToken = async () => {
@@ -113,9 +115,21 @@ export class Device {
       this.rtcClient = rtcClient;
     } else {
       throw new Error(
-        `Already created realtim connection to device ${this.id}`
+        `Already created realtime connection to device ${this.id}`
       );
     }
+  }
+
+  addRealtimeListener(listener: RealtimeListener) {
+    this.realtimeListeners.push(listener);
+  }
+
+  removeRealtimeListener(listener: RealtimeListener) {
+    const i = this.realtimeListeners.indexOf(listener);
+    if (i === -1) {
+      throw new Error("Could not find realtime listener to remove");
+    }
+    this.realtimeListeners.splice(i, 1);
   }
 
   async stopRealtimeConnection() {
