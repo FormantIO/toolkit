@@ -11,5 +11,8 @@
     "three": "^0.132.2",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
+  },
+  "dependencies": {
+    "@formant/realtime-sdk": "^0.0.3"
   }
 }

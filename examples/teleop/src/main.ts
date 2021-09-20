@@ -5,7 +5,6 @@ import "./style.css";
 import { definedAndNotNull } from "../../../packages/common/defined";
 import "../../../packages/ui-sdk-joystick/src/main";
 import "../../../packages/ui-sdk-realtime-player/src/main";
-import { Authentication, Fleet } from "@formant/data-sdk";
 
 const elBtnConnect = definedAndNotNull(
   document.querySelector("button")
@@ -38,7 +37,7 @@ elBtnConnect.addEventListener("click", async () => {
   }
 
   const device = await Fleet.getCurrentDevice();
-  debugger;
+
   log("Currently looking at <b>" + device.name + "</b>");
   log("Getting a realtime connection ... ");
   await device.startRealtimeConnection();
@@ -50,7 +49,8 @@ elBtnConnect.addEventListener("click", async () => {
   // show joysticks and connec them up
   elJoystick.style.display = "block";
   elJoystick.addEventListener("joystick", (e) => {
-    log(JSON.stringify(e.detail));
+    const ce = e as CustomEvent;
+    log(JSON.stringify(ce.detail));
   });
 });
 

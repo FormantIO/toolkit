@@ -9,6 +9,14 @@
   dependencies:
     "@types/google-protobuf" "^3.15.5"
 
+"@formant/realtime-sdk@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.3.tgz#f1906370f5d2d0054d8830e4c15336963d274331"
+  integrity sha512-JKwcjNFDIwOwSRE2m8DXv02Il4WRC3Ns+t8uLwApIMa9NtGDb3IGWFoZPJ9pXWSmLQuP+fmja8k7XV6oYzc7iw==
+  dependencies:
+    google-protobuf "^3.17.3"
+    grpc-web "^1.2.1"
+
 "@types/google-protobuf@^3.15.5":
   version "3.15.5"
   resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.15.5.tgz#644b2be0f5613b1f822c70c73c6b0e0b5b5fa2ad"
@@ -33,6 +41,16 @@ function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
+
+google-protobuf@^3.17.3:
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.18.0.tgz#687449d8e858305d658dc1145852c306d8222f5a"
+  integrity sha512-WlaQWRkUOo/lm9uTgNH6nk9IQt814RggWPzKBfnAVewOFzSzRUSmS1yUWRT6ixW1vS7er5p6tmLSmwzpPpmc8A==
+
+grpc-web@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.2.1.tgz#860051d705bf5baa7b81fcbd14030060bf16b7b9"
+  integrity sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw==
 
 has@^1.0.3:
   version "1.0.3"
