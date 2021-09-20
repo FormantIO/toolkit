@@ -209,3 +209,5 @@ When building an embedded app, you might want a quick way to get a website that 
   href="https://cdn.jsdelivr.net/gh/formantio/web-sdk/css/formant.css"
 />
 ```
+
+See an example [here](https://cdn.jsdelivr.net/gh/formantio/web-sdk@master/examples/simple-style/index.html).
