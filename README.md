@@ -127,9 +127,7 @@ curl -X POST "https://api.formant.io/v1/admin/device-details/query" \
 
 ## I don't want to use WebPack/Vite, can I just use plain JavaScript?
 
-Yes, for the Fleet
-
-As a ES6 module:
+Yes, you can do it in two ways, first as an ES6 module:
 
 ```html
 <script type="module">
@@ -143,7 +141,7 @@ As a ES6 module:
 </script>
 ```
 
-As a non-module:
+or as a non-module:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
