@@ -1,8 +1,237 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap");
 
+:root {
+  --formant-color-primary-black: #000000;
+  --formant-color-primary-dark: #0a0b10;
+  --formant-color-primary-flagship: #1c1e2d;
+  --formant-color-primary-module: #2d3855;
+  --formant-color-primary-steel01: #282f45;
+  --formant-color-primary-steel02: #3b4668;
+  --formant-color-primary-steel03: #657197;
+  --formant-color-primary-silver: #bac4e2;
+  --formant-color-primary-white: #ffffff;
+  --formant-color-highlights-blue: #18d2ff;
+  --formant-color-highlights-royal-blue: #20a0ff;
+  --formant-color-highlights-purple: #a961e4;
+  --formant-color-highlights-blue-ice: #f0f7fe;
+  --formant-color-highlights-off-white: #f8f9fc;
+  --formant-color-severity-levels-green: #2ec495;
+  --formant-color-severity-levels-royal-blue: #20a0ff;
+  --formant-color-severity-levels-purple: #a961e4;
+  --formant-color-severity-levels-orange: #f89973;
+  --formant-color-severity-levels-red: #ea719d;
+  --formant-color-health-status-active: #18d2ff;
+  --formant-color-health-status-inactive: #bac4e2;
+  --formant-color-health-status-warning: #a961e4;
+  --formant-color-health-status-offline: #f89973;
+  --formant-color-groups-patina: #738e6a;
+  --formant-color-groups-adamantine: #0495a6;
+  --formant-color-groups-mithril: #76a7dc;
+  --formant-color-groups-rhenium: #494db3;
+  --formant-color-groups-palladium: #7565aa;
+  --formant-color-groups-iron: #735478;
+  --formant-color-groups-copper: #6d5058;
+  --formant-color-groups-electrum: #996e81;
+  --formant-color-groups-gold: #a18370;
+  --formant-color-data-green: #2ec495;
+  --formant-color-data-mint: #64d7d4;
+  --formant-color-data-royal-blue: #20a0ff;
+  --formant-color-data-purple: #a961e4;
+  --formant-color-data-red: #ea719d;
+  --formant-color-data-orange: #f89973;
+  --formant-color-data-yellow: #f9c36e;
+  --formant-color-data-green-dark: #2d8376;
+  --formant-color-data-mint-dark: #64d7d4;
+  --formant-color-data-royal-blue-dark: #20a0ff;
+  --formant-color-data-purple-dark: #564a94;
+  --formant-color-data-red-dark: #7f5072;
+  --formant-color-data-orange-dark: #94645f;
+  --formant-color-data-yellow-dark: #9a8261;
+  --formant-color-gradients-g1: linear-gradient(
+    180deg,
+    #ff72cc 0%,
+    #00e4ff 100%
+  );
+  --formant-color-gradients-g2: linear-gradient(
+    180deg,
+    #cd90ff 0%,
+    #18d2ff 100%
+  );
+  --formant-color-gradients-g3: linear-gradient(
+    180deg,
+    #00efc1 0%,
+    #18d2ff 100%
+  );
+  --formant-color-gradients-g4: linear-gradient(
+    180deg,
+    #ffc794 0%,
+    #18d2ff 100%
+  );
+  --formant-color-gradients-g5: linear-gradient(
+    180deg,
+    #ffa3a1 0%,
+    #18d2ff 100%
+  );
+
+  font-size: 62.5%;
+}
+
 body,
 html {
-  background: #3b4668;
-  color: #bac4e2;
-  font-family: "Source Sans Pro", sans-serif;
+  background: var(--formant-color-primary-steel02);
+  font-family: "Moderat", "Source Sans Pro", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.6rem;
+  line-height: 2.7rem;
+  letter-spacing: 0.09rem;
+  font-feature-settings: "zero";
+  user-select: none;
+  color: var(--formant-color-primary-silver);
+  margin: 2rem;
+}
+
+button {
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  position: relative;
+  will-change: background-color, color, border-color, box-shadow;
+  padding: 0.7rem 1.4rem;
+  background: var(--formant-color-primary-silver);
+  color: var(--formant-color-primary-black);
+  border-radius: 1.4rem;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 0 0 var(--formant-color-primary-silver);
+  position: relative;
+  white-space: nowrap;
+  background-color: var(--formant-color-primary-silver);
+  margin: 0 0.4rem;
+  transition: box-shadow 200ms ease-in-out 0ms;
+}
+
+button[primary] {
+  background-color: var(--formant-color-highlights-blue);
+}
+
+button[large] {
+  padding: 1rem 3rem;
+  font-size: 1.6rem;
+  border-radius: 2.6rem;
+}
+
+button:not([disabled]) {
+  cursor: pointer;
+}
+
+button:hover:not([disabled]) {
+  box-shadow: 0 0 0 0.4rem var(--formant-color-primary-silver);
+}
+
+button[primary]:hover:not([disabled]) {
+  box-shadow: 0 0 0 0.4rem var(--formant-color-highlights-blue);
+}
+
+h1 {
+  color: var(--formant-color-primary-white);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 2.8rem;
+  line-height: 4rem;
+  letter-spacing: 0px;
+  user-select: none;
+  display: block;
+}
+
+h2 {
+  color: var(--formant-color-primary-white);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 2rem;
+  line-height: 3rem;
+  letter-spacing: 0.11rem;
+  user-select: none;
+  display: block;
+}
+
+h3 {
+  color: var(--formant-color-primary-white);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.8rem;
+  line-height: 2.7rem;
+  letter-spacing: 0.11rem;
+  user-select: none;
+  display: block;
+}
+
+h4 {
+  color: var(--formant-color-primary-white);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 2.2rem;
+  letter-spacing: 0.11rem;
+  text-transform: uppercase;
+  user-select: none;
+  display: block;
+}
+
+input[type="text"],
+textarea {
+  margin: 0;
+  height: 6rem;
+  min-height: 6rem;
+  box-sizing: border-box;
+  padding: 0 2rem;
+  padding-top: 1.8rem;
+  color: inherit;
+  background: var(--formant-color-primary-steel02);
+  border: 1px solid var(--formant-color-primary-steel02);
+  border-radius: 0.4rem;
+  background: var(--formant-color-primary-steel02);
+  color: var(--formant-color-primary-white);
+  box-shadow: inset 0 0 0 100px var(--formant-color-primary-steel02);
+  border-color: var(--formant-color-primary-steel02);
+  height: 4rem;
+  min-height: 4rem;
+  padding: 0 1.5rem;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+input[type="text"] {
+  border-bottom: 1px dotted var(--formant-color-primary-silver);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+input::placeholder {
+  color: var(--formant-color-primary-silver);
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border: solid 1px var(--formant-color-highlights-blue);
+}
+
+form {
+  max-width: 80rem;
+  padding: 2rem 6rem 6rem 6rem;
+  background: var(--formant-color-primary-steel01);
+  border-radius: 0.6rem;
+}
+
+a {
+  color: var(--formant-color-highlights-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
