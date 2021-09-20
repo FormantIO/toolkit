@@ -210,4 +210,4 @@ When building an embedded app, you might want a quick way to get a website that 
 />
 ```
 
-See an example [here](https://cdn.jsdelivr.net/gh/formantio/web-sdk@master/examples/simple-style/index.html).
+See an example [here](https://formantio.github.io/web-sdk/examples/simple-style).
