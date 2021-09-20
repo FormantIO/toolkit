@@ -222,7 +222,7 @@ textarea:focus {
 
 form {
   max-width: 80rem;
-  padding: 2rem 6rem 6rem 6rem;
+  padding: 2rem 6rem 4rem 6rem;
   background: var(--formant-color-primary-steel01);
   border-radius: 0.6rem;
 }
