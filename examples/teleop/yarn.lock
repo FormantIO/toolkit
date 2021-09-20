@@ -2,10 +2,17 @@
 # yarn lockfile v1
 
 
-"@formant/data-sdk@0.0.0":
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.0.tgz#984a568a585ad0ea4de661fb942ad8658c731d3e"
-  integrity sha512-y6Pfxw96XxVjQRDjHAVxunk/hGYYGdS1I8yeppmCbid+JsqPDIF16eLWiD/B2b3Jjy6dnWfE/N3P+ni4Cu7Z6w==
+"@formant/data-sdk@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.1.tgz#72937d0a7a0ee76e90aab06c6a5555b6c9f5a1d7"
+  integrity sha512-AzE9g7UM48kRkHpRouB1Z6VXeEY61Trc0SLZS832TIzdB8XJj843i2INWtGTH+fXmOy0Io+Kif+lAylZpjKJYg==
+  dependencies:
+    "@types/google-protobuf" "^3.15.5"
+
+"@types/google-protobuf@^3.15.5":
+  version "3.15.5"
+  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.15.5.tgz#644b2be0f5613b1f822c70c73c6b0e0b5b5fa2ad"
+  integrity sha512-6bgv24B+A2bo9AfzReeg5StdiijKzwwnRflA8RLd1V4Yv995LeTmo0z69/MPbBDFSiZWdZHQygLo/ccXhMEDgw==
 
 colorette@^1.2.2:
   version "1.4.0"
