@@ -216,7 +216,7 @@ textarea:focus {
   border: solid 1px var(--formant-color-highlights-blue);
 }
 
-form {
+section {
   max-width: 80rem;
   padding: 2rem 6rem 4rem 6rem;
   background: var(--formant-color-primary-steel01);
