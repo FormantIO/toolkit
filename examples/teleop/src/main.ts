@@ -53,3 +53,5 @@ elBtnConnect.addEventListener("click", async () => {
     log(JSON.stringify(e.detail));
   });
 });
+
+document.body.style.display = "block";
