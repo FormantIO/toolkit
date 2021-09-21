@@ -177,6 +177,7 @@ h4 {
   display: block;
 }
 
+input,
 input[type="text"],
 textarea {
   margin: 0;
@@ -201,6 +202,12 @@ textarea {
   line-height: 1.5;
 }
 
+textarea {
+  width: 100%;
+  height: 12rem;
+}
+
+input,
 input[type="text"] {
   border-bottom: 1px dotted var(--formant-color-primary-silver);
   border-bottom-right-radius: 0;
@@ -211,6 +218,7 @@ input::placeholder {
   color: var(--formant-color-primary-silver);
 }
 
+input:focus,
 input[type="text"]:focus,
 textarea:focus {
   border: solid 1px var(--formant-color-highlights-blue);
