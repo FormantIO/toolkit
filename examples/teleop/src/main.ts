@@ -1,6 +1,4 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
-
-import "../../../css/formant.css";
 import "./style.css";
 import "../../../packages/ui-sdk-joystick/src/main";
 import "../../../packages/ui-sdk-realtime-player/src/main";
