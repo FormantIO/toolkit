@@ -1,6 +1,8 @@
-# Formant Web SDK
+# Formant Toolkit
 
-A collection of open source libraries to help make custom web and 3D experiences on top of Formant using [ThreeJS](https://threejs.org/). Using these SDKs you can get information about your fleet of devices, create realtime 3D visualizations of your robots, and more.
+A collection of open source libraries to help build your custom robot platform on top of Formant APIs.
+
+With this repo's tools you can make custom web and 3D experiences on top of Formant using [ThreeJS](https://threejs.org/), get information about your fleet of devices, create realtime visualizations of your robots, and more.
 
 - Embed your own application in Formant
 - Create your own application that uses Formant's APIs and RealtimeSDK for data
