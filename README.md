@@ -8,8 +8,8 @@ A collection of open source libraries to help make custom web and 3D experiences
 
 # Documentation
 
-- [HTTP API](https://formantio.github.io/web-sdk/docs/api/)
-- [Data SDK](https://formantio.github.io/web-sdk/docs/data-sdk/)
+- [HTTP API](https://formantio.github.io/toolkit/docs/api/)
+- [Data SDK](https://formantio.github.io/toolkit/docs/data-sdk/)
 
 # How does it work?
 
@@ -68,7 +68,7 @@ const data = await device.getLatestTelemetry();
 
 ## I don't want to use these libraries, how do I use the HTTP API?
 
-If your just interested in using our [APIs](https://formantio.github.io/web-sdk/docs/api/#overview), there's two main steps
+If your just interested in using our [APIs](https://formantio.github.io/toolkit/docs/api/#overview), there's two main steps
 
 ### 1) Get an authorization token
 
@@ -190,7 +190,7 @@ It's important that your meshes be referenced by relative links. **Remove absolu
 
 ## Can I make an electron app?
 
-Yep, checkout the [example](https://github.com/FormantIO/web-sdk/tree/master/examples/simple-electron).
+Yep, checkout the [example](https://github.com/FormantIO/toolkit/tree/master/examples/simple-electron).
 
 ## Can I make a realtime connection to my device?
 
@@ -206,8 +206,8 @@ When building an embedded app, you might want a quick way to get a website that 
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/formantio/web-sdk/css/formant.css"
+  href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
 />
 ```
 
-See an example [here](https://formantio.github.io/web-sdk/examples/simple-style).
+See an example [here](https://formantio.github.io/toolkit/examples/simple-style).

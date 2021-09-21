@@ -3,13 +3,13 @@
   "description": "A library for getting data from Formant",
   "repository": {
     "type": "git",
-    "url": "https://github.com/formantio/web-sdk.git"
+    "url": "https://github.com/formantio/toolkit.git"
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/formantio/web-sdk",
+  "homepage": "https://github.com/formantio/toolkit",
   "main": "./dist/data-sdk.umd.js",
   "module": "./dist/data-sdk.es.js",
   "exports": {

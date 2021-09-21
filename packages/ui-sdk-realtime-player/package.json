@@ -1,0 +1,26 @@
+{
+  "name": "@formant/three-formant-urdf",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/three-formant-urdf.umd.js",
+  "module": "./dist/three-formant-urdf.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/three-formant-urdf.es.js",
+      "require": "./dist/three-formant-urdf.umd.js"
+    }
+  },
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  },
+  "types": "./dist/types/main.d.ts"
+}

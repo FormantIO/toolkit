@@ -2,21 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <title>Formant Electron</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example</title>
+    <title>Vite App</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
     />
+    <style>
+      body {
+        text-align: center;
+      }
+      #log {
+        user-select: none;
+      }
+    </style>
   </head>
   <body>
-    Name: <input id="username" /> Password:
-    <input id="password" type="password" />
-    <button>List Devices</button>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <formant-joystick></formant-joystick>
+    <div id="log">log of events ...</div>
+    <script type="module" src="/demo/main.ts"></script>
   </body>
 </html>
