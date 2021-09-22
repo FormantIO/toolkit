@@ -205,6 +205,10 @@ await device.startRealtimeConnection();
 
 When building an embedded app, you might want a quick way to get a website that looks like Formant.
 
+<p align="center">
+  <img src="images/preview_style.png" width="350" title="Formant Look and Feel">
+</p>
+
 ```html
 <link
   rel="stylesheet"
