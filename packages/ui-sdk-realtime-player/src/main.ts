@@ -14,7 +14,12 @@ export class RealtimePlayer extends HTMLElement {
   }
   connectedCallback() {
     this.innerHTML = "<canvas></canvas>";
+    this.drawer.start();
     this.drawer.setCanvas(this.querySelector("canvas") as HTMLCanvasElement);
+  }
+
+  drawVideoFrame(h264Frame: any) {
+    this.drawer.receiveEncodedFrame(h264Frame);
   }
 }
 

@@ -3,6 +3,9 @@ import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./style.css";
+import { delay } from "../../../packages/common/delay";
+
+(el("formant-realtime-player") as RealtimePlayer).drawer.start();
 
 // When the user clicks "connect"
 el("button").addEventListener("click", async () => {
@@ -24,16 +27,15 @@ el("button").addEventListener("click", async () => {
   log("Currently looking at <b>" + device.name + "</b>");
   log("Getting a realtime connection ... ");
   await device.startRealtimeConnection();
-  log("Connected");
-
   device.addRealtimeListener((_peerId: any, message: any) => {
-    debugger;
-    (
-      el("formant-realtime-player") as RealtimePlayer
-    ).drawer.receiveEncodedFrame(message.payload.h264VideoFrame);
+    (el("formant-realtime-player") as RealtimePlayer).drawVideoFrame(
+      message.payload.h264VideoFrame
+    );
   });
   let videoStreams = await device.getRealtimeVideoStreams();
   log("Video streams: " + JSON.stringify(videoStreams));
+  log("waiting...");
+  await delay(1000);
   log("Starting to listen to video stream " + videoStreams[0].name + " ... ");
   device.startListeningToRealtimeVideo(videoStreams[0]);
 
