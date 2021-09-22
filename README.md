@@ -194,6 +194,10 @@ It's important that your meshes be referenced by relative links. **Remove absolu
 
 Yep, checkout the [example](https://github.com/FormantIO/toolkit/tree/master/examples/simple-electron).
 
+<p align="center">
+  <img src="images/preview_electron.png" width="350" title="Formant Electron example">
+</p>
+
 ## Can I make a realtime connection to my device?
 
 ```javascript
