@@ -9,9 +9,9 @@
 </h3>
 <br>
 
-<h2 align="center">About</h2>
-
 A collection of open source libraries to help build your custom robot platform on top of Formant APIs.
+
+<h2 align="center">About</h2>
 
 With this repo's tools you can make custom web and 3D experiences on top of Formant using [ThreeJS](https://threejs.org/), get information about your fleet of devices, create realtime visualizations of your robots, and more.
 
