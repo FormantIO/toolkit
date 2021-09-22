@@ -1,6 +1,6 @@
 import { defined, definedAndNotNull } from "../../common/defined";
 
-class Joystick extends HTMLElement {
+export class Joystick extends HTMLElement {
   ctx?: CanvasRenderingContext2D;
   size = 100;
   x = 0;

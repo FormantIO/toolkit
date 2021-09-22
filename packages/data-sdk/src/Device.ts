@@ -1,12 +1,17 @@
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { FORMANT_API_URL } from "./config";
 import { delay } from "./utils";
+import { defined } from "../../common/defined";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
 }
 
 export type RealtimeListener = (peerId: string, message: any) => void;
+
+export type RealtimeVideoStream = {
+  name: string;
+};
 export class Device {
   rtcClient: RtcClient | undefined;
   realtimeListeners: RealtimeListener[] = [];
@@ -130,6 +135,52 @@ export class Device {
       throw new Error("Could not find realtime listener to remove");
     }
     this.realtimeListeners.splice(i, 1);
+  }
+
+  async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
+    const document = (await this.getCurrentConfiguration()) as any;
+    const streams = [];
+    let videoStream = document.teleop.hardwareStreams[0]?.name as
+      | string
+      | undefined;
+    if (videoStream && videoStream !== "") {
+      streams.push({
+        name: videoStream,
+      });
+    }
+    videoStream = document.teleop.hardwareStreams[1]?.name as
+      | string
+      | undefined;
+    if (videoStream && videoStream !== "") {
+      streams.push({
+        name: videoStream,
+      });
+    }
+    videoStream = document.teleop.hardwareStreams[2]?.name as
+      | string
+      | undefined;
+    if (videoStream && videoStream !== "") {
+      streams.push({
+        name: videoStream,
+      });
+    }
+    return streams;
+  }
+
+  startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    defined(this.rtcClient).controlRemoteStream(this.id, {
+      streamName: stream.name,
+      enable: true,
+      pipeline: "rtc",
+    });
+  }
+
+  stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    defined(this.rtcClient).controlRemoteStream(this.id, {
+      streamName: stream.name,
+      enable: false,
+      pipeline: "rtc",
+    });
   }
 
   async stopRealtimeConnection() {
