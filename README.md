@@ -1,4 +1,13 @@
-# Formant Toolkit
+<p align="center">
+  <a href="https://formant.io" target="_blank" rel="noopener"><img width="200" src="images/formant_toolkit_logo.png" alt="Formant logo"></a>
+</p>
+
+<h3 align="center">
+  <a href="#about">About</a> &nbsp;·&nbsp;
+  <a href="#questions">FAQ</a> &nbsp;·&nbsp;
+  <a href="#partners">Partners</a>
+</h3>
+<br>
 
 <h2 align="center">About</h2>
 
@@ -29,7 +38,7 @@ We understand you want complete control over your user experience, so Formant pr
 
 This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
 
-# FAQ
+<h2 align="center">FAQ</h2>
 
 ## How do I get data?
 
