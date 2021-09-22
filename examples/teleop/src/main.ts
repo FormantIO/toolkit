@@ -1,7 +1,7 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
+import "@formant/ui-sdk-joystick";
 import "./style.css";
-import "../../../packages/ui-sdk-joystick/src/main";
-import "../../../packages/ui-sdk-realtime-player/src/main";
+import "@formant/ui-sdk-realtime-player";
 
 const elBtnConnect = document.querySelector("button") as HTMLElement;
 const elLog = document.querySelector("#log") as HTMLElement;

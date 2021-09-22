@@ -18,6 +18,11 @@
     google-protobuf "^3.17.3"
     grpc-web "^1.2.1"
 
+"@formant/ui-sdk-joystick@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk-joystick/-/ui-sdk-joystick-0.0.0.tgz#95472e3df5d13c68af2a41ef96f8bd097d4b6d2b"
+  integrity sha512-QgWGGmPTlf7dtIaIoBm+IKY48o+qqcVWioiXNSvGWKF+cXk/U4SEVkupRBU9NEB5WFK3pa6fKi4Iiv2UAp0Qhw==
+
 "@types/google-protobuf@^3.15.5":
   version "3.15.5"
   resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.15.5.tgz#644b2be0f5613b1f822c70c73c6b0e0b5b5fa2ad"

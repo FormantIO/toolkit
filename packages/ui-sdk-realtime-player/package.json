@@ -1,14 +1,14 @@
 {
-  "name": "@formant/three-formant-urdf",
+  "name": "@formant/ui-sdk-realtime-player",
   "files": [
     "dist"
   ],
-  "main": "./dist/three-formant-urdf.umd.js",
-  "module": "./dist/three-formant-urdf.es.js",
+  "main": "./dist/ui-sdk-realtime-player.umd.js",
+  "module": "./dist/ui-sdk-realtime-player.es.js",
   "exports": {
     ".": {
-      "import": "./dist/three-formant-urdf.es.js",
-      "require": "./dist/three-formant-urdf.umd.js"
+      "import": "./dist/ui-sdk-realtime-player.es.js",
+      "require": "./dist/ui-sdk-realtime-player.umd.js"
     }
   },
   "version": "0.0.0",
@@ -21,6 +21,10 @@
   "devDependencies": {
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
+  },
+  "dependencies": {
+    "@formant/ui-sdk-realtime-player-core": "0.0.0",
+    "@formant/ui-sdk-realtime-player-core-worker": "0.0.0"
   },
   "types": "./dist/types/main.d.ts"
 }

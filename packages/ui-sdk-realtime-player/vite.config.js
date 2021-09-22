@@ -5,8 +5,8 @@ module.exports = defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
-      name: "Formant3dSDKUrdf",
-      fileName: (format) => `three-formant-urdf.${format}.js`,
+      name: "FormantUISDKRealtimePlayer",
+      fileName: (format) => `ui-sdk-realtime-player.${format}.js`,
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

@@ -10,9 +10,9 @@
     "@formant/data-sdk": "^0.0.3",
     "three": "^0.132.2",
     "typescript": "^4.3.2",
-    "vite": "^2.5.4"
-  },
-  "dependencies": {
-    "@formant/realtime-sdk": "^0.0.3"
+    "vite": "^2.5.4",
+    "@formant/realtime-sdk": "^0.0.3",
+    "@formant/ui-sdk-joystick": "^0.0.0",
+    "@formant/ui-sdk-realtime-player": "^0.0.0"
   }
 }
