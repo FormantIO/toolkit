@@ -159,6 +159,10 @@ or as a non-module:
 
 ## How do I take a URDF and convert it into a zip for Formant?
 
+<p align="center">
+  <img src="images/preview_urdf.png" width="350" title="Formant URDF">
+</p>
+
 To prepare a URDF for the web, you must collect the .urdf file from ROS. You will be consructing a zip that contains the:
 
 - urdf in the root folder
