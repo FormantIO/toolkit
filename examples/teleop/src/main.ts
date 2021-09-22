@@ -1,7 +1,7 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
-import "./style.css";
 import "@formant/ui-sdk-realtime-player";
+import "./style.css";
 
 const elBtnConnect = document.querySelector("button") as HTMLElement;
 const elLog = document.querySelector("#log") as HTMLElement;
@@ -33,6 +33,20 @@ elBtnConnect.addEventListener("click", async () => {
   log("Getting a realtime connection ... ");
   await device.startRealtimeConnection();
   log("Connected");
+
+  const document = (await device.getCurrentConfiguration()) as any;
+  const videoStream = document.teleop.hardwareStreams[0].name as string;
+  device.addRealtimeListener((_peerId, message) => {
+    debugger;
+    (elPlayer as any).drawer.h264BytestreamCanvasDrawer.receiveEncodedFrame(
+      message.payload.h264VideoFrame
+    );
+  });
+  device.rtcClient?.controlRemoteStream(device.id, {
+    streamName: videoStream,
+    enable: true,
+    pipeline: "rtc",
+  });
 
   // show the player
   elPlayer.style.display = "block";
