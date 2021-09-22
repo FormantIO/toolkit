@@ -4,7 +4,7 @@
 
 <h3 align="center">
   <a href="#about">About</a> &nbsp;·&nbsp;
-  <a href="#questions">FAQ</a> &nbsp;·&nbsp;
+  <a href="#faq">FAQ</a> &nbsp;·&nbsp;
   <a href="#partners">Partners</a>
 </h3>
 <br>
