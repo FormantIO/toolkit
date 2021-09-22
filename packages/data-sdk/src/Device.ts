@@ -1,6 +1,6 @@
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { FORMANT_API_URL } from "./config";
-import { delay } from "./utils";
+import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 
 export interface ConfigurationDocument {
@@ -167,16 +167,26 @@ export class Device {
     return streams;
   }
 
-  startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    defined(this.rtcClient).controlRemoteStream(this.id, {
+  async startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    const client = defined(this.rtcClient);
+    const peers = await client.getPeers();
+
+    // Find the device peer corresponding to the device's ID
+    const devicePeer = peers.find((_) => _.deviceId !== undefined);
+    client.controlRemoteStream(defined(devicePeer).id, {
       streamName: stream.name,
       enable: true,
       pipeline: "rtc",
     });
   }
 
-  stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    defined(this.rtcClient).controlRemoteStream(this.id, {
+  async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    const client = defined(this.rtcClient);
+    const peers = await client.getPeers();
+
+    // Find the device peer corresponding to the device's ID
+    const devicePeer = peers.find((_) => _.deviceId !== undefined);
+    client.controlRemoteStream(defined(devicePeer).id, {
       streamName: stream.name,
       enable: false,
       pipeline: "rtc",
