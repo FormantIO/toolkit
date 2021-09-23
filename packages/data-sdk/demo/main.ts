@@ -7,15 +7,8 @@ import "./style.css";
     if (await Authentication.waitTilAuthenticated()) {
       el.innerHTML = "Authenticated";
       const device = await Fleet.getCurrentDevice();
-      el.innerHTML = "Starting realtime connection ...";
-      await device.startRealtimeConnection();
-      el.innerHTML = "Connected to realtime to device";
-      const videoStreams = await device.getRealtimeVideoStreams();
-      device.addRealtimeListener((peer: string, message: any) => {
-        console.log(peer);
-        console.log(message);
-      });
-      await device.startListeningToRealtimeVideo(videoStreams[0]);
+      console.log(await device.getAvailableCommands());
+      await device.sendCommand("test", "bar");
     } else {
       el.innerHTML = "Not Authenticated";
     }

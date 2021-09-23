@@ -7,6 +7,12 @@ export interface ConfigurationDocument {
   urdfFiles: string[];
 }
 
+export interface Command {
+  id: string;
+  name: string;
+  command: string;
+}
+
 export type RealtimeListener = (peerId: string, message: any) => void;
 
 export type RealtimeVideoStream = {
@@ -15,7 +21,12 @@ export type RealtimeVideoStream = {
 export class Device {
   rtcClient: RtcClient | undefined;
   realtimeListeners: RealtimeListener[] = [];
-  constructor(private token: string, public id: string, public name: string) {}
+  constructor(
+    private token: string,
+    public id: string,
+    public name: string,
+    private organizationId: string
+  ) {}
   async getLatestTelemetry() {
     const data = await fetch(
       `${FORMANT_API_URL}/v1/queries/stream-current-value`,
@@ -199,5 +210,53 @@ export class Device {
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
+  }
+
+  async getAvailableCommands(): Promise<Command[]> {
+    const result = await fetch(
+      `${FORMANT_API_URL}/v1/admin/command-templates/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.token,
+        },
+      }
+    );
+    const commands = await result.json();
+    return commands.items.map((i: any) => ({
+      name: i.name,
+      id: i.id,
+      command: i.command,
+    }));
+  }
+
+  async sendCommand(name: string, data: string, time?: Date) {
+    const commands = await this.getAvailableCommands();
+    const command = commands.find((_) => _.name === name);
+    if (!command) {
+      throw new Error(`Could not find command with name "${name}"`);
+    }
+    let parameter = {
+      value: data,
+      scrubberTime: (time || new Date()).toISOString(),
+    };
+
+    const result = await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
+      method: "POST",
+      body: JSON.stringify({
+        commandTemplateId: command.id,
+        organizationId: this.organizationId,
+        deviceId: this.id,
+        command: command.command,
+        parameter: parameter,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      },
+    });
+    const files = await result.json();
+    return files.fileUrls;
   }
 }
