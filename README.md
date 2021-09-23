@@ -4,6 +4,7 @@
 
 <h3 align="center">
   <a href="#about">About</a> &nbsp;·&nbsp;
+  <a href="#data">Data</a> &nbsp;·&nbsp;
   <a href="#faq">FAQ</a> &nbsp;·&nbsp;
   <a href="#partners">Partners</a>
 </h3>
@@ -37,6 +38,12 @@ We understand you want complete control over your user experience, so Formant pr
 ## three-formant-urdf
 
 This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
+
+<h2 align="center">Data</h2>
+
+<p align="center">
+  <img src="images/formant_dataflow.png" title="Formant Dataflow">
+</p>
 
 <h2 align="center">FAQ</h2>
 
