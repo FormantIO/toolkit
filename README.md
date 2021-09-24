@@ -245,11 +245,13 @@ Here's some combinations we find useful
 
 ```
 Reliable TCP-like: `{ ordered: true }`
+- This is the default option `createCustomDataChannel` uses
 
 High Speed UDP-like: `{ ordered: false, maxRetransmits: 0 }`
+- Good for non-critical one shot messages
 
 Time Constrained UDP-like: `{ ordered: false, maxPacketLifeTime: 300 }`
-// Good for things like joysticks
+- Good for things like joysticks
 ```
 
 ## Is there a simple way to get a Formant look and feel?
