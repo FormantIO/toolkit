@@ -3,6 +3,7 @@ import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
+import { DataChannel } from "./DataChannel";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -250,7 +251,6 @@ export class Device {
     }
 
     let d: string;
-    debugger;
 
     if (data === undefined) {
       if (command.parameterEnabled && command.parameterValue) {
@@ -290,5 +290,27 @@ export class Device {
     });
     const files = await result.json();
     return files.fileUrls;
+  }
+
+  async createCustomDataChannel(channelName: string): Promise<DataChannel> {
+    const client = defined(this.rtcClient);
+    const peers = await client.getPeers();
+    const p = new Promise<DataChannel>((resolve) => {
+      // Find the device peer corresponding to the device's ID
+      const devicePeer = peers.find((_) => _.deviceId !== undefined);
+      client.createCustomDataChannel(
+        defined(devicePeer).id,
+        channelName,
+        {
+          ordered: true,
+        },
+        false,
+        (_peerId, channel) => {
+          const dataChannel = new DataChannel(channel);
+          resolve(dataChannel);
+        }
+      );
+    });
+    return p;
   }
 }

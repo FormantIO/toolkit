@@ -7,8 +7,16 @@ import "./style.css";
     if (await Authentication.waitTilAuthenticated()) {
       el.innerHTML = "Authenticated";
       const device = await Fleet.getCurrentDevice();
-      console.log(await device.getAvailableCommands());
-      await device.sendCommand("get_ros_bag", "bar");
+      await device.startRealtimeConnection();
+      const j = await device.createCustomDataChannel("joystick");
+      el.innerHTML = "Data channel created";
+      await j.waitTilReady();
+      el.innerHTML = "Data channel ready!";
+      j.send("konami");
+      j.addListener((message) => {
+        console.log(message);
+      });
+      el.innerHTML = "Sent";
     } else {
       el.innerHTML = "Not Authenticated";
     }

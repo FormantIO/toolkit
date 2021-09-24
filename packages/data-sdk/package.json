@@ -18,9 +18,9 @@
       "require": "./dist/data-sdk.umd.js"
     }
   },
-  "version": "0.0.10",
+  "version": "0.0.11",
   "scripts": {
-    "dev": "vite --port 9144",
+    "dev": "vite --port 9145",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types",
