@@ -1,7 +1,7 @@
 export { Fleet } from "./Fleet";
-export { Authentication } from "./Authentication";
+export * from "./Authentication";
 export * from "./Device";
-export { DataChannel } from "./DataChannel";
+export * from "./DataChannel";
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
