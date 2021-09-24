@@ -292,7 +292,10 @@ export class Device {
     return files.fileUrls;
   }
 
-  async createCustomDataChannel(channelName: string): Promise<DataChannel> {
+  async createCustomDataChannel(
+    channelName: string,
+    rtcConfig?: RTCDataChannelInit
+  ): Promise<DataChannel> {
     const client = defined(this.rtcClient);
     const peers = await client.getPeers();
     const p = new Promise<DataChannel>((resolve) => {
@@ -303,6 +306,7 @@ export class Device {
         channelName,
         {
           ordered: true,
+          ...rtcConfig,
         },
         false,
         (_peerId, channel) => {
