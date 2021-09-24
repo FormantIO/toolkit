@@ -11,19 +11,16 @@
       "require": "./dist/ui-sdk-login.umd.js"
     }
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
+    "types": "tsc src/*.ts -t es5 --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "devDependencies": {
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
-  },
-  "dependencies": {
-    "@formant/data-sdk": "^0.0.15"
   },
   "types": "./dist/types/main.d.ts"
 }
