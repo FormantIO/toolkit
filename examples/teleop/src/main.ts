@@ -42,11 +42,12 @@ el("button").addEventListener("click", async () => {
   // show the player
   el("formant-realtime-player").style.display = "block";
 
-  // show joysticks and connec them up
+  // show joysticks and connect them up
+  let j = await device.createCustomDataChannel("joystick");
   el("formant-joystick").style.display = "block";
   el("formant-joystick").addEventListener("joystick", (e) => {
     const ce = e as CustomEvent;
-    log(JSON.stringify(ce.detail));
+    j.send(JSON.stringify(ce.detail));
   });
 });
 
