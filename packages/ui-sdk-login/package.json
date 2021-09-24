@@ -1,0 +1,26 @@
+{
+  "name": "@formant/ui-sdk-login",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/ui-sdk-login.umd.js",
+  "module": "./dist/ui-sdk-login.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ui-sdk-login.es.js",
+      "require": "./dist/ui-sdk-login.umd.js"
+    }
+  },
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  },
+  "types": "./dist/types/main.d.ts"
+}
