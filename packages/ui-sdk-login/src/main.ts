@@ -1,4 +1,4 @@
-import { Authentication, Fleet } from "@formant/data-sdk";
+import { Authentication } from "@formant/data-sdk";
 
 export class Login extends HTMLElement {
   constructor() {
