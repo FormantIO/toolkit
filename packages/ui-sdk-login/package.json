@@ -22,5 +22,8 @@
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   },
+  "dependencies": {
+    "@formant/data-sdk": "^0.0.15"
+  },
   "types": "./dist/types/main.d.ts"
 }

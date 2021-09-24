@@ -4,6 +4,7 @@ import "./style.css";
   const el = document.querySelector("#app");
   if (el) {
     el.innerHTML = "Connecting";
+    await Authentication.login("ab", "abc");
     if (await Authentication.waitTilAuthenticated()) {
       el.innerHTML = "Authenticated";
       const device = await Fleet.getCurrentDevice();

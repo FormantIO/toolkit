@@ -24,20 +24,23 @@ export class Authentication {
         },
       });
       const auth = await result.json();
+      if (result.status !== 200) {
+        throw new Error(auth.message);
+      }
       await Authentication.loginWithToken(
         auth.authentication.accessToken as string
       );
     } catch (e: any) {
-      console.error(e);
       Authentication.waitingForAuth.forEach((_) => _(false));
       Authentication.waitingForAuth = [];
+      throw e;
     }
   }
 
   public static async loginWithToken(token: string) {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
-      const data = await fetch(
+      const result = await fetch(
         `${FORMANT_API_URL}/v1/admin/users/${tokenData.sub}`,
         {
           method: "GET",
@@ -47,7 +50,11 @@ export class Authentication {
           },
         }
       );
-      Authentication.currentUser = await data.json();
+      const data = await result.json();
+      if (result.status !== 200) {
+        throw new Error(data.message);
+      }
+      Authentication.currentUser = data;
       Authentication.token = token;
       Authentication.waitingForAuth.forEach((_) => _(true));
     } catch (e: any) {
