@@ -30,6 +30,18 @@ export class Login extends HTMLElement {
         })
       );
     });
+    this.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        this.dispatchEvent(
+          new CustomEvent("login", {
+            detail: {
+              username: loginUsername.value,
+              password: loginPassword.value,
+            },
+          })
+        );
+      }
+    });
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     if (name === "message") {
