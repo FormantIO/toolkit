@@ -2,6 +2,7 @@ import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
+import { Authentication } from "./Authentication";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -12,6 +13,11 @@ export interface Command {
   name: string;
   command: string;
   description: string;
+  parameterEnabled: true;
+  parameterValue: string | null;
+  parameterMeta?: {
+    topic?: string;
+  };
 }
 
 export type RealtimeListener = (peerId: string, message: any) => void;
@@ -230,18 +236,41 @@ export class Device {
       id: i.id,
       command: i.command,
       description: i.description,
+      parameterEnabled: i.parameterEnabled,
+      parameterValue: i.parameterValue,
+      parameterMeta: i.parameterMeta,
     }));
   }
 
-  async sendCommand(name: string, data: string, time?: Date) {
+  async sendCommand(name: string, data?: string, time?: Date, metadata?: {}) {
     const commands = await this.getAvailableCommands();
     const command = commands.find((_) => _.name === name);
     if (!command) {
       throw new Error(`Could not find command with name "${name}"`);
     }
+
+    let d: string;
+    debugger;
+
+    if (data === undefined) {
+      if (command.parameterEnabled && command.parameterValue) {
+        d = command.parameterValue;
+      } else {
+        throw new Error(
+          "Command has no default parameter value, you must provide one"
+        );
+      }
+    } else {
+      d = data;
+    }
+
     let parameter = {
-      value: data,
+      value: d,
       scrubberTime: (time || new Date()).toISOString(),
+      meta: {
+        ...command.parameterMeta,
+        ...metadata,
+      },
     };
 
     const result = await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
@@ -252,6 +281,7 @@ export class Device {
         deviceId: this.id,
         command: command.command,
         parameter: parameter,
+        userId: Authentication.currentUser?.id,
       }),
       headers: {
         "Content-Type": "application/json",

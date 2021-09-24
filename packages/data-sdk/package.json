@@ -18,7 +18,7 @@
       "require": "./dist/data-sdk.umd.js"
     }
   },
-  "version": "0.0.9",
+  "version": "0.0.10",
   "scripts": {
     "dev": "vite --port 9144",
     "build": "tsc && vite build",

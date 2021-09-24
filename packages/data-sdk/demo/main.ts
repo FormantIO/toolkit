@@ -8,7 +8,7 @@ import "./style.css";
       el.innerHTML = "Authenticated";
       const device = await Fleet.getCurrentDevice();
       console.log(await device.getAvailableCommands());
-      await device.sendCommand("test", "bar");
+      await device.sendCommand("get_ros_bag", "bar");
     } else {
       el.innerHTML = "Not Authenticated";
     }
