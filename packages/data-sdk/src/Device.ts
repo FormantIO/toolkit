@@ -11,6 +11,7 @@ export interface Command {
   id: string;
   name: string;
   command: string;
+  description: string;
 }
 
 export type RealtimeListener = (peerId: string, message: any) => void;
@@ -228,6 +229,7 @@ export class Device {
       name: i.name,
       id: i.id,
       command: i.command,
+      description: i.description,
     }));
   }
 
