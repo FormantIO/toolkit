@@ -220,11 +220,16 @@ Yep, checkout the [example](https://github.com/FormantIO/toolkit/tree/master/exa
   <img src="images/preview_electron.png" width="350" title="Formant Electron example">
 </p>
 
-## Can I make a realtime connection to my device?
+## Can I make a custom realtime data channel to my device?
 
 ```javascript
-const device = await Fleet.getCurrentDevice();
 await device.startRealtimeConnection();
+const j = await device.createCustomDataChannel("joystick");
+await j.waitTilReady();
+j.send("konami");
+j.addListener((message) => {
+ console.log(message);
+});
 ```
 
 ## Is there a simple way to get a Formant look and feel?
