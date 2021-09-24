@@ -232,6 +232,26 @@ j.addListener((message) => {
 });
 ```
 
+## Can I get high performance data channel connection options?
+
+You can change your connection [network reliability settings]( https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability/ )
+
+```
+const options = { ... };
+const j = await device.createCustomDataChannel("joystick", options);
+```
+
+Here's some combinations we find useful
+
+```
+Reliable TCP-like: `{ ordered: true }`
+
+High Speed UDP-like: `{ ordered: false, maxRetransmits: 0 }`
+
+Time Constrained UDP-like: `{ ordered: false, maxPacketLifeTime: 300 }`
+// Good for things like joysticks
+```
+
 ## Is there a simple way to get a Formant look and feel?
 
 When building an embedded app, you might want a quick way to get a website that looks like Formant.
