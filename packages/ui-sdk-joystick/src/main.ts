@@ -59,11 +59,26 @@ export class Joystick extends HTMLElement {
 
   render() {
     const ctx = defined(this.ctx);
+
     ctx.clearRect(0, 0, this.size, this.size);
-    ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
+    ctx.arc(
+      this.size / 2,
+      this.size / 2,
+      (this.size / 2) * 0.8,
+      0,
+      2 * Math.PI
+    );
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = "black";
     ctx.fill();
+    ctx.globalAlpha = 1;
+    var grad = ctx.createLinearGradient(50, 50, 150, 150);
+    grad.addColorStop(0, "#aa9eff");
+    grad.addColorStop(1, "#14dbff");
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = grad;
+    ctx.stroke();
     ctx.fillStyle = "white";
     ctx.beginPath();
     ctx.arc(
@@ -74,6 +89,15 @@ export class Joystick extends HTMLElement {
       2 * Math.PI
     );
     ctx.fill();
+    if (this.getAttribute("wasd") !== null) {
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#84899b";
+      ctx.fillText("w", this.size / 2, (this.size * 1) / 4);
+      ctx.fillText("a", (this.size * 1) / 4, this.size / 2);
+      ctx.fillText("s", this.size / 2, (this.size * 3) / 4);
+      ctx.fillText("d", (this.size * 3) / 4, this.size / 2);
+    }
   }
 }
 
