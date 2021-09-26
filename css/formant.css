@@ -90,6 +90,10 @@ html {
   margin: 2rem;
 }
 
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="file"]::-webkit-file-upload-button,
 button {
   user-select: none;
   font-weight: 400;
@@ -124,10 +128,17 @@ button[large] {
   border-radius: 2.6rem;
 }
 
+input[type="button"]:not([disabled]),
+input[type="reset"]:not([disabled]),
+input[type="submit"]:not([disabled]),
+input[type="file"]:not([disabled])::-webkit-file-upload-button,
 button:not([disabled]) {
   cursor: pointer;
 }
 
+input[type="button"]:hover:not([disabled]),
+input[type="reset"]:hover:not([disabled]),
+input[type="submit"]:hover:not([disabled]),
 button:hover:not([disabled]) {
   box-shadow: 0 0 0 0.4rem var(--formant-color-primary-silver);
 }
@@ -177,8 +188,18 @@ h4 {
   display: block;
 }
 
-input,
+input[type="url"],
 input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="datetime-local"],
 textarea {
   margin: 0;
   height: 6rem;
@@ -207,7 +228,12 @@ textarea {
   height: 12rem;
 }
 
-input,
+input[type="url"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+input[type="number"],
+input[type="password"],
 input[type="text"] {
   border-bottom: 1px dotted var(--formant-color-primary-silver);
   border-bottom-right-radius: 0;
@@ -231,6 +257,12 @@ select:-webkit-autofill:focus {
 }
 
 input:focus,
+input[type="url"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
 input[type="text"]:focus,
 textarea:focus {
   border: solid 1px var(--formant-color-highlights-blue);
