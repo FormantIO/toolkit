@@ -256,7 +256,7 @@ Time Constrained UDP-like: `{ ordered: false, maxPacketLifeTime: 300 }`
 
 ## Is there a simple way to get a Formant look and feel?
 
-When building an embedded app, you might want a quick way to get a website that looks like Formant.
+When building an embedded app, you might want a quick way to get a website that looks like Formant.  This css augments class-less semantic HTML making it incredibly easy to use.
 
 <p align="center">
   <img src="images/preview_style.png" width="350" title="Formant Look and Feel">
