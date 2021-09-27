@@ -6,8 +6,6 @@ import "./style.css";
     el.innerHTML = "Connecting";
     if (await Authentication.waitTilAuthenticated()) {
       el.innerHTML = "Authenticated";
-      const device = await Fleet.getCurrentDevice();
-      el.innerHTML = "Connected";
     } else {
       el.innerHTML = "Not Authenticated";
     }
