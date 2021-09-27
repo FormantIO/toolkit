@@ -40,8 +40,12 @@ export class Authentication {
   public static async loginWithToken(token: string) {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
+      let userId = tokenData.sub;
+      if (tokenData["formant:claims"] && tokenData["formant:claims"].userId) {
+        userId = tokenData["formant:claims"].userId;
+      }
       const result = await fetch(
-        `${FORMANT_API_URL}/v1/admin/users/${tokenData.sub}`,
+        `${FORMANT_API_URL}/v1/admin/users/${userId}`,
         {
           method: "GET",
           headers: {
