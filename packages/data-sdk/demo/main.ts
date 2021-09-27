@@ -1,4 +1,4 @@
-import { Authentication, Fleet } from "../src/main";
+import { Authentication } from "../src/main";
 import "./style.css";
 (async function () {
   const el = document.querySelector("#app");
