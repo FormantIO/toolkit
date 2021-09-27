@@ -33,12 +33,6 @@ We understand you want complete control over your user experience, so Formant pr
 - Simple 3D elements that you can import into your ThreeJS scene
 - UI custom elements to make your application visually look similar to Formant's ecosystem
 
-# What do you have for ThreeJS?
-
-## three-formant-urdf
-
-This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
-
 <h2 align="center">Data</h2>
 
 <p align="center">
@@ -85,6 +79,13 @@ const device = await Fleet.getCurrentDevice();
 // Get data ...
 const data = await device.getLatestTelemetry();
 ```
+
+## What do you have for ThreeJS?
+
+### three-formant-urdf
+
+This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
+
 
 ## I don't want to use these libraries, how do I use the HTTP API?
 
@@ -256,7 +257,7 @@ Time Constrained UDP-like: `{ ordered: false, maxPacketLifeTime: 300 }`
 
 ## Is there a simple way to get a Formant look and feel?
 
-When building an embedded app, you might want a quick way to get a website that looks like Formant.
+When building an embedded app, you might want a quick way to get a website that looks like Formant.  This css augments class-less semantic HTML making it incredibly easy to use.
 
 <p align="center">
   <img src="images/preview_style.png" width="350" title="Formant Look and Feel">
