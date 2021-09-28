@@ -3,7 +3,6 @@ import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./style.css";
-import { delay } from "../../../packages/common/delay";
 
 (el("formant-realtime-player") as RealtimePlayer).drawer.start();
 
@@ -34,8 +33,6 @@ el("button").addEventListener("click", async () => {
   });
   let videoStreams = await device.getRealtimeVideoStreams();
   log("Video streams: " + JSON.stringify(videoStreams));
-  log("waiting...");
-  await delay(1000);
   log("Starting to listen to video stream " + videoStreams[0].name + " ... ");
   device.startListeningToRealtimeVideo(videoStreams[0]);
 
