@@ -191,10 +191,8 @@ export class Device {
       this.rtcClient,
       "Realtime connection has not been started"
     );
-    const peers = await client.getPeers();
 
-    // Find the device peer corresponding to the device's ID
-    const devicePeer = peers.find((_) => _.deviceId !== undefined);
+    const devicePeer = await this.getRemotePeer();
     client.controlRemoteStream(defined(devicePeer).id, {
       streamName: stream.name,
       enable: true,
@@ -202,15 +200,27 @@ export class Device {
     });
   }
 
+  async getRemotePeer() {
+    // Each online device and user has a peer in the system
+    const peers = await defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    ).getPeers();
+
+    // Find the device peer corresponding to the device's ID
+    const devicePeer = peers.find((_) => _.deviceId === this.id);
+    return defined(
+      devicePeer,
+      "Could not find remote peer for device " + this.id
+    );
+  }
+
   async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"
     );
-    const peers = await client.getPeers();
-
-    // Find the device peer corresponding to the device's ID
-    const devicePeer = peers.find((_) => _.deviceId !== undefined);
+    const devicePeer = await this.getRemotePeer();
     client.controlRemoteStream(defined(devicePeer).id, {
       streamName: stream.name,
       enable: false,
@@ -306,10 +316,9 @@ export class Device {
       this.rtcClient,
       "Realtime connection has not been started"
     );
-    const peers = await client.getPeers();
+
+    const devicePeer = await this.getRemotePeer();
     const p = new Promise<DataChannel>((resolve) => {
-      // Find the device peer corresponding to the device's ID
-      const devicePeer = peers.find((_) => _.deviceId !== undefined);
       client.createCustomDataChannel(
         defined(devicePeer).id,
         channelName,
