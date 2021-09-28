@@ -200,6 +200,34 @@ export class Device {
     });
   }
 
+  async enableRealtimeTelemetryPriorityIngestion(streamName: string) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName: streamName,
+      enablePriorityUpload: true,
+      pipeline: "telemetry",
+    });
+  }
+
+  async disableRealtimeTelemetryPriorityIngestion(streamName: string) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName: streamName,
+      enablePriorityUpload: false,
+      pipeline: "telemetry",
+    });
+  }
+
   async getRemotePeer() {
     // Each online device and user has a peer in the system
     const peers = await defined(

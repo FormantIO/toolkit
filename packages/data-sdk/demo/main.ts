@@ -18,9 +18,7 @@ import "./style.css";
 
       el.innerHTML = JSON.stringify(videoStreams);
       console.log("starting stream");
-      window.setInterval(async () => {
-        await device.startListeningToRealtimeVideo(videoStreams[0]);
-      });
+      await device.startListeningToRealtimeVideo(videoStreams[0]);
       el.innerHTML = "Authenticated";
     } else {
       el.innerHTML = "Not Authenticated";
