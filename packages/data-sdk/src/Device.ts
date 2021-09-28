@@ -120,7 +120,7 @@ export class Device {
       const peers = await rtcClient.getPeers();
 
       // Find the device peer corresponding to the device's ID
-      const devicePeer = peers.find((_) => _.deviceId !== undefined);
+      const devicePeer = peers.find((_) => _.deviceId === this.id);
       if (!devicePeer) {
         // If the device is offline, we won't be able to find its peer.
         console.error("cannot find peer");
@@ -187,7 +187,10 @@ export class Device {
   }
 
   async startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    const client = defined(this.rtcClient);
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
     const peers = await client.getPeers();
 
     // Find the device peer corresponding to the device's ID
@@ -200,7 +203,10 @@ export class Device {
   }
 
   async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    const client = defined(this.rtcClient);
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
     const peers = await client.getPeers();
 
     // Find the device peer corresponding to the device's ID
@@ -296,7 +302,10 @@ export class Device {
     channelName: string,
     rtcConfig?: RTCDataChannelInit
   ): Promise<DataChannel> {
-    const client = defined(this.rtcClient);
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
     const peers = await client.getPeers();
     const p = new Promise<DataChannel>((resolve) => {
       // Find the device peer corresponding to the device's ID
