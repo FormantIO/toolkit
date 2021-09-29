@@ -107,4 +107,22 @@ export class Fleet {
     const allDevices = await Fleet.getDevices();
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
+
+  async getLatestTelemetry(deviceIds?: string[]) {
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/queries/stream-current-value`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          deviceIds,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    const telemetry = await data.json();
+    return telemetry.items;
+  }
 }

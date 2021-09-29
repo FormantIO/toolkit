@@ -15,7 +15,7 @@ l.addEventListener("login", async (e) => {
     return;
   }
   l.remove();
-  const devices = await Fleet.getDevices();
+  const devices = await Fleet.getOnlineDevices();
   console.log(devices);
-  document.body.innerHTML = `Found ${devices.length} devices getting terrain ...`;
+  document.body.innerHTML = `Found ${devices.length} online devices getting terrain ...`;
 });
