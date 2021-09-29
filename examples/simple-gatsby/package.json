@@ -1,0 +1,23 @@
+{
+  "name": "simple-gatsby",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple Gatsby",
+  "author": "Richard Anaya",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "@formant/data-sdk": "0.0.28",
+    "gatsby": "^3.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
