@@ -4,6 +4,7 @@ import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
+import { CaptureStream } from "./CaptureStream";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -366,5 +367,22 @@ export class Device {
       );
     });
     return p;
+  }
+
+  async createCaptureStream(streamName: string) {
+    const result = await fetch(`${FORMANT_API_URL}/v1/admin/capture-sessions`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceId: this.id,
+        streamName,
+        tags: {},
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
+      },
+    });
+    const captureSession = await result.json();
+    return new CaptureStream(captureSession);
   }
 }

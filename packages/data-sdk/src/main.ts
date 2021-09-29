@@ -2,6 +2,7 @@ export { Fleet } from "./Fleet";
 export * from "./Authentication";
 export * from "./Device";
 export * from "./DataChannel";
+export * from "./CaptureStream";
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
