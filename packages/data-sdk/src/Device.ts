@@ -31,7 +31,6 @@ export class Device {
   rtcClient: RtcClient | undefined;
   realtimeListeners: RealtimeListener[] = [];
   constructor(
-    private token: string,
     public id: string,
     public name: string,
     private organizationId: string
@@ -46,7 +45,7 @@ export class Device {
         }),
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.token,
+          Authorization: "Bearer " + Authentication.token,
         },
       }
     );
@@ -59,7 +58,7 @@ export class Device {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this.token,
+        Authorization: "Bearer " + Authentication.token,
       },
     });
     const device = await result.json();
@@ -75,7 +74,7 @@ export class Device {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.token,
+          Authorization: "Bearer " + Authentication.token,
         },
       }
     );
@@ -91,7 +90,7 @@ export class Device {
       }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this.token,
+        Authorization: "Bearer " + Authentication.token,
       },
     });
     const files = await result.json();
@@ -102,10 +101,6 @@ export class Device {
     this.realtimeListeners.forEach((_) => _(peerId, message));
   };
 
-  private getAuthToken = async () => {
-    return this.token;
-  };
-
   async startRealtimeConnection() {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
@@ -114,7 +109,12 @@ export class Device {
           null,
           null
         ),
-        getToken: this.getAuthToken,
+        getToken: async () => {
+          return defined(
+            Authentication.token,
+            "Realtime when user isn't authorized"
+          );
+        },
         receive: this.handleMessage,
       });
 
@@ -276,7 +276,7 @@ export class Device {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.token,
+          Authorization: "Bearer " + Authentication.token,
         },
       }
     );
@@ -334,7 +334,7 @@ export class Device {
       }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this.token,
+        Authorization: "Bearer " + Authentication.token,
       },
     });
     const files = await result.json();
@@ -379,7 +379,7 @@ export class Device {
       }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this.token,
+        Authorization: "Bearer " + Authentication.token,
       },
     });
     const captureSession = await result.json();

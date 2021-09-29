@@ -39,7 +39,6 @@ export class Fleet {
     const device = await data.json();
     const name = device.name as string;
     const context = new Device(
-      Authentication.token,
       Fleet.defaultDeviceId,
       name,
       device.organizationId as string
@@ -64,12 +63,7 @@ export class Fleet {
     );
     const device = await data.json();
     const name = device.name as string;
-    const context = new Device(
-      Authentication.token,
-      deviceId,
-      name,
-      device.organizationId
-    );
+    const context = new Device(deviceId, name, device.organizationId);
     Fleet.knownContext.push(new WeakRef(context));
     return context;
   }
@@ -93,12 +87,24 @@ export class Fleet {
     devices.items;
     return devices.items.map(
       (_: any) =>
-        new Device(
-          Authentication.token as string,
-          _.id as string,
-          _.name as string,
-          _.organizationId as string
-        )
+        new Device(_.id as string, _.name as string, _.organizationId as string)
     );
+  }
+
+  static async getOnlineDevices(): Promise<Device[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/queries/online-devices`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const devices = await data.json();
+    const onlineIds = devices.items as string[];
+    const allDevices = await Fleet.getDevices();
+    return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 }
