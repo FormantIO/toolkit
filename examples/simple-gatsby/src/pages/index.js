@@ -1,14 +1,18 @@
 import * as React from "react";
-import { Authentication, Fleet } from "@formant/data-sdk";
+import { useEffect } from "react";
 
 // markup
 const IndexPage = () => {
-  start();
+  useEffect(() => {
+    start();
+  });
+
   return <div>hello!</div>;
 };
 
 async function start() {
-  await Authentication.login("USERNAME", "SECRET");
+  const { Authentication, Fleet } = require("@formant/data-sdk");
+  await Authentication.login("USERNAME", "PASSWORD");
   console.log(await Fleet.getDevices());
 }
 
