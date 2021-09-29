@@ -15,7 +15,6 @@ videoStreams.forEach((_, i) => {
   const v = new DeviceVideo(device, _.name);
   v.scale.set(2, 2, 2);
   v.position.setX(i * 3);
-  v.rotateX(90);
   scene.add(v);
 });
 

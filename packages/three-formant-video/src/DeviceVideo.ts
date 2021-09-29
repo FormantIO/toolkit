@@ -25,7 +25,7 @@ export class DeviceVideo extends THREE.Object3D {
       map: texture,
     });
 
-    const geometry = new THREE.BoxGeometry(1, 0, 1);
+    const geometry = new THREE.BoxGeometry(1, 1, 0);
     this.mesh = new THREE.Mesh(geometry, material);
     this.add(this.mesh);
 
@@ -63,7 +63,7 @@ export class DeviceVideo extends THREE.Object3D {
 
   drawVideoFrame(h264Frame: any) {
     this.drawer.receiveEncodedFrame(h264Frame);
-    this.mesh.scale.set(1, 0, this.canvas.height / this.canvas.width);
+    this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
     (this.mesh.material as any).map.needsUpdate = true;
     (this.mesh.material as any).needsUpdate = true;
   }
