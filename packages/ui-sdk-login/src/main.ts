@@ -7,7 +7,7 @@ export class Login extends HTMLElement {
   }
   connectedCallback() {
     this.innerHTML = `<div style="position: absolute; background: #1c1e2d; color: white; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-    <div>Username: <input id="formant-login-username"/><br><br>Password: <input type="password" id="formant-login-password"/><br><br><button large style="width: 100%">Login</button><br><br>
+    <div>Username: <input type="text" id="formant-login-username"/><br><br>Password: <input type="password" id="formant-login-password"/><br><br><button large style="width: 100%">Login</button><br><br>
     <div><span id="formant-login-message" style="color: #bac4e2">${
       this.getAttribute("message") ?? ""
     }</span><span id="formant-login-error" style="color: #ea719d">${
