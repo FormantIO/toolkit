@@ -108,7 +108,7 @@ export class Fleet {
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 
-  async getLatestTelemetry(deviceIds?: string[]) {
+  static async getLatestTelemetry(deviceIds?: string[]) {
     const data = await fetch(
       `${FORMANT_API_URL}/v1/queries/stream-current-value`,
       {

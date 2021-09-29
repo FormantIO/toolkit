@@ -2728,9 +2728,6 @@ img {
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a href="Fleet.html#knownContext" class="tsd-kind-icon">known<wbr>Context</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="Fleet.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a>
-				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="Fleet.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a>
 				</li>
@@ -2739,6 +2736,9 @@ img {
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="Fleet.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="Fleet.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="Fleet.html#getOnlineDevices" class="tsd-kind-icon">get<wbr>Online<wbr>Devices</a>
@@ -2801,10 +2801,10 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Fleet.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getCurrentDevice" class="tsd-kind-icon">get<wbr>Current<wbr>Device</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getDevice" class="tsd-kind-icon">get<wbr>Device</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getDevices" class="tsd-kind-icon">get<wbr>Devices</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getLatestTelemetry" class="tsd-kind-icon">get<wbr>Latest<wbr>Telemetry</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#getOnlineDevices" class="tsd-kind-icon">get<wbr>Online<wbr>Devices</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Fleet.html#setDefaultDevice" class="tsd-kind-icon">set<wbr>Default<wbr>Device</a></li>
 						</ul>
@@ -2837,7 +2837,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">default<wbr>Device<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L14">Fleet.ts:14</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L14">Fleet.ts:14</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2847,36 +2847,13 @@ img {
 				<div class="tsd-signature tsd-kind-icon">known<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakRef</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L15">Fleet.ts:15</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L15">Fleet.ts:15</a></li>
 					</ul>
 				</aside>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="getLatestTelemetry" class="tsd-anchor"></a>
-				<h3>get<wbr>Latest<wbr>Telemetry</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Latest<wbr>Telemetry<span class="tsd-signature-symbol">(</span>deviceIds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L111">Fleet.ts:111</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> deviceIds: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 				<a name="getCurrentDevice" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Current<wbr>Device</h3>
@@ -2887,7 +2864,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L21">Fleet.ts:21</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L21">Fleet.ts:21</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -2904,7 +2881,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L50">Fleet.ts:50</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L50">Fleet.ts:50</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2927,10 +2904,33 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L71">Fleet.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L71">Fleet.ts:71</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="getLatestTelemetry" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Latest<wbr>Telemetry</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Latest<wbr>Telemetry<span class="tsd-signature-symbol">(</span>deviceIds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L111">Fleet.ts:111</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> deviceIds: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -2944,7 +2944,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L94">Fleet.ts:94</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L94">Fleet.ts:94</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -2961,7 +2961,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/5f598d6/packages/data-sdk/src/Fleet.ts#L17">Fleet.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f278ac0/packages/data-sdk/src/Fleet.ts#L17">Fleet.ts:17</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>

@@ -16,6 +16,19 @@ l.addEventListener("login", async (e) => {
   }
   l.remove();
   const devices = await Fleet.getOnlineDevices();
-  console.log(devices);
   document.body.innerHTML = `Found ${devices.length} online devices getting terrain ...`;
+
+  const latestData = await Fleet.getLatestTelemetry(devices.map((_) => _.id));
+  const positions = latestData
+    .filter((_) => _.streamType === "location")
+    .map((_) => ({
+      id: _.deviceId,
+      lat: _.currentValue.latitude,
+      long: _.currentValue.longitude,
+    })) as {
+    id: string;
+    lat: number;
+    long: number;
+  }[];
+  document.body.innerHTML = JSON.stringify(positions);
 });
