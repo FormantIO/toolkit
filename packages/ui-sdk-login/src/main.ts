@@ -7,20 +7,25 @@ export class Login extends HTMLElement {
   }
   connectedCallback() {
     this.innerHTML = `<div style="position: absolute; background: #1c1e2d; color: white; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-    <div>Username: <input type="text" autocomplete="username" id="formant-login-username"/><br><br>Password: <input type="password" autocomplete="current-password" id="formant-login-password"/><br><br><button large style="width: 100%">Login</button><br><br>
+    <form action="#" method="post" style="text-align: left">
+    <div style="display: grid; grid-template-columns: 10rem 1fr; margin-bottom: 2rem; row-gap: 1rem;"><label for="email">Email: </label>
+    <input id="email" name="email" type="email" placeholder=" " autocomplete="username" required>
+    <label for="current-password">Password: </label><input id="current-password" name="current-password" type="password" autocomplete="current-password" aria-describedby="password-constraints" required/></div>
+    <button large style="width: 100%" id="signin">Sign in</button><br><br>
     <div><span id="formant-login-message" style="color: #bac4e2">${
       this.getAttribute("message") ?? ""
     }</span><span id="formant-login-error" style="color: #ea719d">${
       this.getAttribute("error") ?? ""
-    }</span></div></div></div>`;
-    const loginUsername = this.querySelector(
-      "#formant-login-username"
-    ) as HTMLInputElement;
+    }</span></div></div></div>
+    </form>
+    `;
+    const loginUsername = this.querySelector("#email") as HTMLInputElement;
     const loginPassword = this.querySelector(
-      "#formant-login-password"
+      "#current-password"
     ) as HTMLInputElement;
-    const loginButton = this.querySelector("button") as HTMLInputElement;
-    loginButton.addEventListener("click", () => {
+    const loginButton = this.querySelector("form") as HTMLFormElement;
+    loginButton.addEventListener("submit", (e) => {
+      (e as Event).preventDefault();
       this.dispatchEvent(
         new CustomEvent("login", {
           detail: {
@@ -42,6 +47,7 @@ export class Login extends HTMLElement {
         );
       }
     });
+    loginUsername.focus();
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     if (name === "message") {
