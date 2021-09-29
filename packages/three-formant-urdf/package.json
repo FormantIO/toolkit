@@ -23,6 +23,7 @@
     "vite": "^2.5.4"
   },
   "dependencies": {
+    "@formant/data-sdk": "0.0.27",
     "@types/three": "^0.131.0",
     "three": "^0.132.2",
     "urdf-loader": "^0.10.2"
