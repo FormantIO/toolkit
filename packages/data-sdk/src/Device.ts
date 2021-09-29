@@ -62,6 +62,11 @@ export class Device {
       },
     });
     const device = await result.json();
+    if (!device.state.reportedConfiguration) {
+      throw new Error(
+        "Device has no configuration, has it ever been turned on?"
+      );
+    }
     const version = device.state.reportedConfiguration.version;
     result = await fetch(
       `${FORMANT_API_URL}/v1/admin/devices/${this.id}/configurations/${version}`,
@@ -123,8 +128,7 @@ export class Device {
       const devicePeer = peers.find((_) => _.deviceId === this.id);
       if (!devicePeer) {
         // If the device is offline, we won't be able to find its peer.
-        console.error("cannot find peer");
-        return;
+        throw new Error("Cannot find peer, is the robot offline?");
       }
 
       // We can connect our real-time communication client to device peers by their ID
