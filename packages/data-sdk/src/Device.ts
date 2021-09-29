@@ -22,7 +22,20 @@ export interface Command {
   };
 }
 
-export type RealtimeListener = (peerId: string, message: any) => void;
+export type RealtimeListener = (
+  peerId: string,
+  message: {
+    header: {
+      created: number;
+      stream: {
+        entityId: string;
+        streamName: string;
+        streamType: string;
+      };
+    };
+    payload: any;
+  }
+) => void;
 
 export type RealtimeVideoStream = {
   name: string;
