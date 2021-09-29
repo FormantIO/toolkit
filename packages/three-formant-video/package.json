@@ -11,7 +11,7 @@
       "require": "./dist/three-formant-video.umd.js"
     }
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",

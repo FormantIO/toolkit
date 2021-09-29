@@ -12,7 +12,7 @@ const videoStreams = await device.getRealtimeVideoStreams();
 
 // Add device URDF using the current device context
 videoStreams.forEach((_, i) => {
-  const v = new DeviceVideo(_.name, device);
+  const v = new DeviceVideo(device, _.name);
   v.scale.set(2, 2, 2);
   v.position.setX(i * 3);
   v.rotateX(90);
