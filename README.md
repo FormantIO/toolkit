@@ -86,6 +86,10 @@ const data = await device.getLatestTelemetry();
 
 This ThreeJS element will show a URDF of a robot using the zipped URDF uploaded for formant and control it's joint states in realtime.
 
+### three-formant-video
+
+This ThreeJS element will show a realtime video stream of your device as a plane.
+
 
 ## I don't want to use these libraries, how do I use the HTTP API?
 
