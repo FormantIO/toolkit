@@ -180,20 +180,20 @@ export class Device {
     for (const _ of document.teleop.hardwareStreams ?? []) {
       streams.push({
         name: _.name
-      })
+      });
     }
     for (const _ of document.teleop.rosStreams ?? []) {
       if (_.topicType !== "formant/H264VideoFrame") {
         streams.push({
           name: _.topicName
-        })
+        });
       }
     }
     for (const _ of document.teleop.customStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name
-        })
+        });
       }
     }
     return streams;
