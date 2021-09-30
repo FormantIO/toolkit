@@ -179,7 +179,7 @@ export class Device {
     const streams = [];
 
     for (const _ of document.teleop.hardwareStreams ?? []) {
-      if (_.topicType === "h264-video-frame") {
+      if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name
         });
