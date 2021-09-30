@@ -5,8 +5,8 @@ import "./style.css";
   if (el) {
     el.innerHTML = "Connecting";
     if (await Authentication.waitTilAuthenticated()) {
-      const devices = await Fleet.getRealtimeDevices();
-      console.log(devices);
+      const device = await Fleet.getCurrentDevice();
+      console.log(await device.getRealtimeVideoStreams());
     }
   }
 })();

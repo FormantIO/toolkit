@@ -7,10 +7,10 @@ export * from "./CaptureStream";
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
 
-const urlParams = new URLSearchParams("");
+let urlParams = new URLSearchParams("");
 
 if (typeof window !== "undefined") {
-  new URLSearchParams(window.location.search);
+  urlParams = new URLSearchParams(window.location.search);
 }
 
 const urlDevice = urlParams.get("device");
