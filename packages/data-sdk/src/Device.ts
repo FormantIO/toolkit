@@ -177,13 +177,16 @@ export class Device {
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
     const document = (await this.getCurrentConfiguration()) as any;
     const streams = [];
+
     for (const _ of document.teleop.hardwareStreams ?? []) {
-      streams.push({
-        name: _.name
-      });
+      if (_.topicType === "h264-video-frame") {
+        streams.push({
+          name: _.name
+        });
+      }
     }
     for (const _ of document.teleop.rosStreams ?? []) {
-      if (_.topicType !== "formant/H264VideoFrame") {
+      if (_.topicType == "formant/H264VideoFrame") {
         streams.push({
           name: _.topicName
         });
