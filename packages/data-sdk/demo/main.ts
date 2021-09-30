@@ -6,7 +6,10 @@ import "./style.css";
     el.innerHTML = "Connecting";
     if (await Authentication.waitTilAuthenticated()) {
       const device = await Fleet.getCurrentDevice();
-      console.log(await device.getRealtimeVideoStreams());
+      await device.startRealtimeConnection();
+      const manipulators = await device.getRealtimeManipulators();
+      console.log(manipulators);
+      //await manipulators[0].synchronize();
     }
   }
 })();

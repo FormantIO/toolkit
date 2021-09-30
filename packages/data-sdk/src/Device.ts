@@ -5,6 +5,7 @@ import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
+import { Manipulator } from "./Manipulator";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -40,6 +41,11 @@ export type RealtimeListener = (
 export type RealtimeVideoStream = {
   name: string;
 };
+
+export type RealtimeDataStream = {
+  name: string;
+};
+
 export class Device {
   rtcClient: RtcClient | undefined;
   realtimeListeners: RealtimeListener[] = [];
@@ -181,22 +187,50 @@ export class Device {
     for (const _ of document.teleop.hardwareStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
-          name: _.name
+          name: _.name,
         });
       }
     }
     for (const _ of document.teleop.rosStreams ?? []) {
       if (_.topicType == "formant/H264VideoFrame") {
         streams.push({
-          name: _.topicName
+          name: _.topicName,
         });
       }
     }
     for (const _ of document.teleop.customStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
-          name: _.name
+          name: _.name,
         });
+      }
+    }
+    return streams;
+  }
+
+  async getRealtimeManipulators(): Promise<Manipulator[]> {
+    const document = (await this.getCurrentConfiguration()) as any;
+    const streams = [];
+
+    for (const _ of document.teleop.rosStreams ?? []) {
+      if (_.topicType == "sensor_msgs/JointState") {
+        streams.push(
+          new Manipulator(this, {
+            currentJointStateStream: { name: _.topicName },
+            plannedJointStateStream: _.plannedTopic
+              ? { name: _.plannedTopic }
+              : undefined,
+            planValidStream: _.planValidTopic
+              ? { name: _.planValidTopic }
+              : undefined,
+            endEffectorStream: _.endEffectorTopic
+              ? { name: _.endEffectorTopic }
+              : undefined,
+            endEffectorLinkName: _.endEffectorLinkName,
+            baseReferenceFrame: _.baseReferenceFrame,
+            localFrame: _.localFrame,
+          })
+        );
       }
     }
     return streams;
@@ -212,6 +246,46 @@ export class Device {
     client.controlRemoteStream(defined(devicePeer).id, {
       streamName: stream.name,
       enable: true,
+      pipeline: "rtc",
+    });
+  }
+
+  async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName: stream.name,
+      enable: false,
+      pipeline: "rtc",
+    });
+  }
+
+  async startListeningToRealtimeDataStream(stream: RealtimeDataStream) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName: stream.name,
+      enable: true,
+      pipeline: "rtc",
+    });
+  }
+
+  async stopListeningToRealtimeDataStream(stream: RealtimeDataStream) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName: stream.name,
+      enable: false,
       pipeline: "rtc",
     });
   }
@@ -257,19 +331,6 @@ export class Device {
       devicePeer,
       "Could not find remote peer for device " + this.id
     );
-  }
-
-  async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
-      streamName: stream.name,
-      enable: false,
-      pipeline: "rtc",
-    });
   }
 
   async stopRealtimeConnection() {
