@@ -177,39 +177,24 @@ export class Device {
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
     const document = (await this.getCurrentConfiguration()) as any;
     const streams = [];
-    let videoStream = (document.teleop.hardwareStreams || [])[0]?.name as
-      | string
-      | undefined;
-    if (videoStream && videoStream !== "") {
+    for (const _ of document.teleop.hardwareStreams ?? []) {
       streams.push({
-        name: videoStream,
-      });
+        name: _.name
+      })
     }
-    videoStream = (document.teleop.hardwareStreams || [])[1]?.name as
-      | string
-      | undefined;
-    if (videoStream && videoStream !== "") {
-      streams.push({
-        name: videoStream,
-      });
-    }
-    videoStream = (document.teleop.hardwareStreams || [])[2]?.name as
-      | string
-      | undefined;
-    if (videoStream && videoStream !== "") {
-      streams.push({
-        name: videoStream,
-      });
-    }
-    if (document.teleop.rosStreams) {
-      const videoRosStreams = document.teleop.rosStreams.filter(
-        (_: any) => _.topicType === "formant/H264VideoFrame"
-      );
-      videoRosStreams.forEach((_: any) => {
+    for (const _ of document.teleop.rosStreams ?? []) {
+      if (_.topicType !== "formant/H264VideoFrame") {
         streams.push({
-          name: _.topicName,
-        });
-      });
+          name: _.topicName
+        })
+      }
+    }
+    for (const _ of document.teleop.customStreams ?? []) {
+      if (_.rtcStreamType === "h264-video-frame") {
+        streams.push({
+          name: _.name
+        })
+      }
     }
     return streams;
   }
