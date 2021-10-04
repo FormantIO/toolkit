@@ -43,7 +43,7 @@ We understand you want complete control over your user experience, so Formant pr
 
 ## How do I get data?
 
-This depends on the type of app you're making
+This depends on the type of app you're making:
 
 ### I'm making an application outside of formant
 
@@ -79,6 +79,16 @@ const device = await Fleet.getCurrentDevice();
 // Get data ...
 const data = await device.getLatestTelemetry();
 ```
+
+## How do I run an example
+
+1. install [NodeJS](https://nodejs.org/en/)
+2. `cd examples/teleop`
+3. `npm install`
+4. `npm run dev`
+5. Add the url indicated in terminal as a custom view with the right query parameters ( most likely "?device={device_id}&auth={auth}")
+6. Go the device page you want to see the custom view on
+7. Select the custom view from the views dropdown
 
 ## What do you have for ThreeJS?
 
