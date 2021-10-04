@@ -90,6 +90,8 @@ const data = await device.getLatestTelemetry();
 6. Go the device page you want to see the custom view on
 7. Select the custom view from the views dropdown
 
+For more detailed instruction on custom views, see our [custom view readme](https://formant.readme.io/reference/creating-a-custom-view).
+
 ## What do you have for ThreeJS?
 
 ### three-formant-urdf
