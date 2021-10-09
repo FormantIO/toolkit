@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+  </head>
+  <body>
+    hey
+  </body>
+  <script>
+    window.addEventListener("message", (event) => {
+      document.body.innerHTML = `Received message: ${JSON.stringify(
+        event.data
+      )}`;
+    });
+  </script>
+</html>
