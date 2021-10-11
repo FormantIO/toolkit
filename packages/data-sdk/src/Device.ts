@@ -6,9 +6,13 @@ import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
 import { Manipulator } from "./Manipulator";
+import { Fleet } from "./Fleet";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
+  telemetry: {
+    streams: { name: string; disabled?: boolean; onDemand?: boolean }[];
+  };
 }
 
 export interface Command {
@@ -21,6 +25,10 @@ export interface Command {
   parameterMeta?: {
     topic?: string;
   };
+}
+
+export interface TelemetryStream {
+  name: string;
 }
 
 export type RealtimeListener = (
@@ -72,7 +80,7 @@ export class Device {
     return telemetry.items;
   }
 
-  async getCurrentConfiguration(): Promise<ConfigurationDocument> {
+  async getConfiguration(): Promise<ConfigurationDocument> {
     let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
       method: "GET",
       headers: {
@@ -181,7 +189,7 @@ export class Device {
   }
 
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
-    const document = (await this.getCurrentConfiguration()) as any;
+    const document = (await this.getConfiguration()) as any;
     const streams = [];
 
     for (const _ of document.teleop.hardwareStreams ?? []) {
@@ -209,7 +217,7 @@ export class Device {
   }
 
   async getRealtimeManipulators(): Promise<Manipulator[]> {
-    const document = (await this.getCurrentConfiguration()) as any;
+    const document = (await this.getConfiguration()) as any;
     const streams = [];
 
     for (const _ of document.teleop.rosStreams ?? []) {
@@ -456,5 +464,47 @@ export class Device {
     });
     const captureSession = await result.json();
     return new CaptureStream(captureSession);
+  }
+
+  async getTelemetry(
+    streamOrStreams: string | string[],
+    start: Date,
+    end: Date,
+    tags?: { [key in string]: string[] }
+  ) {
+    return await Fleet.getTelemetry(this.id, streamOrStreams, start, end, tags);
+  }
+
+  async getTelemetryStreams(): Promise<TelemetryStream[]> {
+    const config = await this.getConfiguration();
+
+    const result = await fetch(
+      `${FORMANT_API_URL}/v1/queries/metadata/stream-names`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          deviceIds: [this.id],
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+
+    const disabledList: string[] = [];
+    config.telemetry.streams.forEach((_) => {
+      if (_.disabled !== true) {
+        disabledList.push(_.name);
+      }
+    });
+
+    const data = await result.json();
+
+    let streamNames = (data.items as string[])
+      .filter((_) => !disabledList.includes(_))
+      .map((_) => ({ name: _ }));
+
+    return streamNames;
   }
 }

@@ -127,7 +127,11 @@ export class Fleet {
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 
-  static async getLatestTelemetry(deviceIds?: string[]) {
+  static async getLatestTelemetry(deviceIdOrDeviceIds?: string | string[]) {
+    let deviceIds = deviceIdOrDeviceIds;
+    if (deviceIdOrDeviceIds && !Array.isArray(deviceIdOrDeviceIds)) {
+      deviceIdOrDeviceIds = [deviceIdOrDeviceIds];
+    }
     const data = await fetch(
       `${FORMANT_API_URL}/v1/queries/stream-current-value`,
       {
@@ -141,6 +145,39 @@ export class Fleet {
         },
       }
     );
+    const telemetry = await data.json();
+    return telemetry.items;
+  }
+
+  static async getTelemetry(
+    deviceIdOrDeviceIds: string | string[],
+    streamOrStreams: string | string[],
+    start: Date,
+    end: Date,
+    tags?: { [key in string]: string[] }
+  ) {
+    let deviceIds = deviceIdOrDeviceIds;
+    if (!Array.isArray(deviceIdOrDeviceIds)) {
+      deviceIdOrDeviceIds = [deviceIdOrDeviceIds];
+    }
+    let streamNames = streamOrStreams;
+    if (!Array.isArray(streamOrStreams)) {
+      streamNames = [streamOrStreams];
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceIds,
+        end: end.toISOString(),
+        names: streamNames,
+        start: start.toISOString(),
+        tags,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const telemetry = await data.json();
     return telemetry.items;
   }
