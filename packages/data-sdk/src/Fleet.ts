@@ -10,6 +10,14 @@ export interface User {
   id: string;
 }
 
+export interface TelemetryResult {
+  deviceId: string;
+  name: string;
+  points: [number, any][];
+  tags: { [key in string]: string | number };
+  type: string;
+}
+
 export class Fleet {
   static defaultDeviceId: string | undefined;
   static knownContext: WeakRef<Device>[] = [];
@@ -151,18 +159,18 @@ export class Fleet {
 
   static async getTelemetry(
     deviceIdOrDeviceIds: string | string[],
-    streamOrStreams: string | string[],
+    streamNameOrStreamNames: string | string[],
     start: Date,
     end: Date,
     tags?: { [key in string]: string[] }
-  ) {
+  ): Promise<TelemetryResult[]> {
     let deviceIds = deviceIdOrDeviceIds;
     if (!Array.isArray(deviceIdOrDeviceIds)) {
-      deviceIdOrDeviceIds = [deviceIdOrDeviceIds];
+      deviceIds = [deviceIdOrDeviceIds];
     }
-    let streamNames = streamOrStreams;
-    if (!Array.isArray(streamOrStreams)) {
-      streamNames = [streamOrStreams];
+    let streamNames = streamNameOrStreamNames;
+    if (!Array.isArray(streamNameOrStreamNames)) {
+      streamNames = [streamNameOrStreamNames];
     }
     const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
       method: "POST",

@@ -6,7 +6,8 @@ import "./style.css";
     el.innerHTML = "Connecting";
     if (await Authentication.waitTilAuthenticated()) {
       const device = await Fleet.getCurrentDevice();
-      console.log(await device.getTelemetryStreams());
+      const streams = await device.getTelemetryStreams();
+      console.log(streams);
     }
   }
 })();

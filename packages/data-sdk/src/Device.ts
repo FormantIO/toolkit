@@ -10,8 +10,8 @@ import { Fleet } from "./Fleet";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
-  telemetry: {
-    streams: { name: string; disabled?: boolean; onDemand?: boolean }[];
+  telemetry?: {
+    streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
   };
 }
 
@@ -29,6 +29,7 @@ export interface Command {
 
 export interface TelemetryStream {
   name: string;
+  onDemand: boolean;
 }
 
 export type RealtimeListener = (
@@ -467,12 +468,18 @@ export class Device {
   }
 
   async getTelemetry(
-    streamOrStreams: string | string[],
+    streamNameOrStreamNames: string | string[],
     start: Date,
     end: Date,
     tags?: { [key in string]: string[] }
   ) {
-    return await Fleet.getTelemetry(this.id, streamOrStreams, start, end, tags);
+    return await Fleet.getTelemetry(
+      this.id,
+      streamNameOrStreamNames,
+      start,
+      end,
+      tags
+    );
   }
 
   async getTelemetryStreams(): Promise<TelemetryStream[]> {
@@ -493,17 +500,22 @@ export class Device {
     );
 
     const disabledList: string[] = [];
-    config.telemetry.streams.forEach((_) => {
+    const onDemandList: string[] = [];
+    config.telemetry?.streams?.forEach((_) => {
       if (_.disabled !== true) {
         disabledList.push(_.name);
       }
+      if (_.onDemand === true) {
+        onDemandList.push(_.name);
+      }
     });
+    console.log(onDemandList);
 
     const data = await result.json();
 
     let streamNames = (data.items as string[])
       .filter((_) => !disabledList.includes(_))
-      .map((_) => ({ name: _ }));
+      .map((_) => ({ name: _, onDemand: onDemandList.includes(_) }));
 
     return streamNames;
   }
