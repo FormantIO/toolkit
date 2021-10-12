@@ -7,7 +7,20 @@ import "./style.css";
     if (await Authentication.waitTilAuthenticated()) {
       const device = await Fleet.getCurrentDevice();
       const streams = await device.getTelemetryStreams();
-      console.log(streams);
+
+      streams.forEach(async (_) => {
+        console.log(
+          await device.getTelemetry(
+            _.name,
+            (() => {
+              var dt = new Date();
+              dt.setHours(dt.getHours() - 1);
+              return dt;
+            })(),
+            new Date()
+          )
+        );
+      });
     }
   }
 })();
