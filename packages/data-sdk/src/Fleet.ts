@@ -60,7 +60,7 @@ export class Fleet {
       throw new Error("Not authenticated");
     }
     const data = await fetch(
-      `${FORMANT_API_URL}/v1/admin/devices/${Fleet.defaultDeviceId}`,
+      `${FORMANT_API_URL}/v1/admin/devices/${deviceId}`,
       {
         method: "GET",
         headers: {
