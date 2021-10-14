@@ -1,0 +1,24 @@
+formant-joystick {
+    position: absolute;
+    right: 4rem;
+    bottom: 4rem;
+    z-index: 1000;
+}
+
+formant-realtime-player {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#log {
+    position: absolute;
+    left: 4rem;
+    top: 4rem;
+    z-index: 1000;
+    height: 400px;
+    overflow: hidden;
+    width: 80%;
+}
