@@ -241,14 +241,26 @@ Yep, checkout the [example](https://github.com/FormantIO/toolkit/tree/master/exa
 
 ```javascript
 await device.startRealtimeConnection();
-const j = await device.createCustomDataChannel("joystick");
+const j = await device.createCustomDataChannel("string_command");
 await j.waitTilReady();
 j.send("konami");
 j.addListener((message) => {
  console.log(message);
 });
 ```
+### To receive this custom realtime data channel on your device:
+```
 
+def string_command_callback(message):
+    print(str(message))
+
+if __name__ == "__main__":
+    c = FormantClient()
+
+    c.register_custom_data_channel_message_callback(
+        string_command_callback, channel_name_filter=["string_command"])
+
+```
 ## Can I get high performance data channel connection options?
 
 You can change your connection [network reliability settings]( https://jameshfisher.com/2017/01/17/webrtc-datachannel-reliability/ )
