@@ -12,14 +12,14 @@ def example_channel_callback(message):
 if __name__ == "__main__":
     fclient = FormantAgentClient()
 
-    # Receive data robot from custom web application
+    # Listen to data from the custom web application
     fclient.register_custom_data_channel_message_callback(
         example_channel_callback, channel_name_filter=["example_channel"]
     )
 
     while True:
         time.sleep(0.1)
-        # Send data robot to custom web application every 100 ms
+        # Send data to custom web application every 100 ms
         fclient.send_on_custom_data_channel(
             "example_channel",
             json.dumps({k: random.randint(1, 10) for k in range(3)}).encode("utf-8"),
