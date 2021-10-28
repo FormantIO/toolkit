@@ -1,5 +1,4 @@
-import { Device } from "./Device";
-import { DataChannel } from "./DataChannel";
+import { Device, DataChannel } from "./main";
 import { delay } from "../../common/delay";
 
 function generateId() {
@@ -47,7 +46,6 @@ export class RequestDataChannel {
         await channel.waitTilReady();
 
         const id = generateId();
-        console.log(id);
 
         // true signifies an active request
         requestIdToResponseMap.set(id, true);
