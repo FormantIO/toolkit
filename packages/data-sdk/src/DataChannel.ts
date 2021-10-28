@@ -6,6 +6,7 @@ export class DataChannel {
   error: string | undefined;
   decoder = new TextDecoder();
   constructor(private dataChannel: RTCDataChannel) {
+    this.dataChannel.binaryType = "arraybuffer";
     this.dataChannel.onopen = () => {
       this.ready = true;
     };
