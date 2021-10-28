@@ -33,7 +33,7 @@ def callback(message):
 
 
 if __name__ == "__main__":
-    fclient = FormantAgentClient(agent_url="unix:///tmp/agent.sock")
+    fclient = FormantAgentClient()
 
     # Listen to data from the custom web application
     fclient.register_custom_data_channel_message_callback(
