@@ -1,6 +1,4 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
-import "@formant/ui-sdk-joystick";
-import "@formant/ui-sdk-realtime-player";
 import "./style.css";
 
 // When the user clicks "connect"
@@ -35,16 +33,17 @@ el("button").addEventListener("click", async () => {
         document.addEventListener("keydown", async (e) => {
             if (e.code === "Space") {
                 try {
+                    const data = {
+                        message: "Hello World",
+                    };
+                    log(`Sending request:  ${data}`);
                     const response = await requestChannel.request(
-                        JSON.stringify({
-                            message: "Hello World",
-                        })
+                        JSON.stringify(data)
                     );
-                    console.log("Response received:", response); // Successfully received response
+                    log(`Response received: ${response}`); // Successfully received response
                 } catch (e: any) {
-                    console.log("Error:", e);
                     if (e.name === "TimeoutError") {
-                        console.log("Handling timeout..."); // Timeout
+                        log("Handling timeout..."); // Timeout
                     } else {
                         throw e; // Non-timeout error; throw again
                     }
@@ -52,7 +51,6 @@ el("button").addEventListener("click", async () => {
             }
         });
     } catch (e) {
-        console.log("Error happened!", e);
         log((e as Error).message);
     }
 });
