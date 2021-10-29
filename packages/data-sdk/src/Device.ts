@@ -451,7 +451,6 @@ export class Device {
     return p;
   }
 
-
   createCustomRequestDataChannel(
     channelName: string,
     timeout: number = 3000 // 3 seconds default timeout

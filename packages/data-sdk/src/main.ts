@@ -4,7 +4,6 @@ export * from "./Device";
 export * from "./DataChannel";
 export * from "./CaptureStream";
 export * from "./Manipulator";
-export * from "./RequestDataChannel";
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
