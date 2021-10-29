@@ -7,6 +7,7 @@ import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
 import { Manipulator } from "./Manipulator";
 import { Fleet } from "./Fleet";
+import { RequestDataChannel } from "./RequestDataChannel";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -448,6 +449,14 @@ export class Device {
       );
     });
     return p;
+  }
+
+
+  createCustomRequestDataChannel(
+    channelName: string,
+    timeout: number = 3000 // 3 seconds default timeout
+  ): RequestDataChannel {
+    return new RequestDataChannel(this, channelName, timeout);
   }
 
   async createCaptureStream(streamName: string) {

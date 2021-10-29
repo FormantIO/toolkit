@@ -15,7 +15,7 @@ export class RequestDataChannel {
     constructor(
         private device: Device,
         private channel_name: string,
-        private timeout: number = 3000 // 3 second default timeout
+        private timeout: number
     ) {}
 
     async initialize() {

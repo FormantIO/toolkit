@@ -1,4 +1,4 @@
-import { Authentication, Fleet, RequestDataChannel } from "@formant/data-sdk";
+import { Authentication, Fleet } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import "./style.css";
@@ -26,8 +26,7 @@ el("button").addEventListener("click", async () => {
         await device.startRealtimeConnection();
 
         // Create RequestChannel for request : response framework
-        const requestChannel = new RequestDataChannel(
-            device,
+        const requestChannel = device.createCustomRequestDataChannel(
             "request_response_channel"
         );
 
