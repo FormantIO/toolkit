@@ -5,14 +5,33 @@
       href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
     />
   </head>
-  <body style="word-break: break-all; background: #3b4668; margin: 4px; font-size: 10px; line-height: 12px; overflow:hidden;">
+  <body
+    style="
+      word-break: break-all;
+      background: #3b4668;
+      margin: 4px;
+      font-size: 10px;
+      line-height: 12px;
+      overflow: hidden;
+    "
+  >
     Welcome to a custom visualization!
   </body>
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const moduleName = urlParams.get("module");
     window.addEventListener("message", (event) => {
       document.body.innerHTML = `Received message: ${JSON.stringify(
         event.data
       )}`;
     });
+    window.parent.postMessage(
+      {
+        type: "setup_module_menus",
+        module: moduleName,
+        menus: [{ label: "Go to home base" }],
+      },
+      "*"
+    );
   </script>
 </html>
