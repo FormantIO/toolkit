@@ -34,9 +34,9 @@ el("button").addEventListener("click", async () => {
             if (e.code === "Space") {
                 try {
                     const data = {
-                        message: "Hello World",
+                        message: "Hello, world.",
                     };
-                    log(`Sending request:  ${data}`);
+                    log(`Sending request: ${JSON.stringify(data)}`);
                     const response = await requestChannel.request(
                         JSON.stringify(data)
                     );
@@ -44,8 +44,12 @@ el("button").addEventListener("click", async () => {
                 } catch (e: any) {
                     if (e.name === "TimeoutError") {
                         log("Handling timeout..."); // Timeout
+                    } else if (e.name === "AdapterError") {
+                        // An error occurred in the adapter, e.g. a Python exception
+                        log("Error in the adapter request handler...");
+                        throw e;
                     } else {
-                        throw e; // Non-timeout error; throw again
+                        throw e;
                     }
                 }
             }
