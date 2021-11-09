@@ -26,7 +26,8 @@ export class RequestDataChannel {
             this.channel_name
         );
         this.channel.addListener((message) => {
-            const { id, data, error } = JSON.parse(message);
+            const response = JSON.parse(message);
+            const { id, data, error } = response;
             if (!id) {
                 throw new Error("Invalid response");
             }
@@ -35,7 +36,7 @@ export class RequestDataChannel {
             }
             // only add to the map if there is an active request
             if (this.requestIdToResponseMap.has(id)) {
-                this.requestIdToResponseMap.set(id, data);
+                this.requestIdToResponseMap.set(id, response);
             }
         });
     }
@@ -70,13 +71,16 @@ export class RequestDataChannel {
                 const response = requestIdToResponseMap.get(id);
                 if (response !== true) {
                     requestIdToResponseMap.delete(id);
-                    if (response.error) {
+                    const { data, error } = response;
+                    if (data) {
+                        return data;
+                    }
+                    if (error) {
                         throw {
                             name: "AdapterError",
-                            message: response.error,
+                            message: error,
                         };
                     }
-                    return response;
                 }
             }
         }
