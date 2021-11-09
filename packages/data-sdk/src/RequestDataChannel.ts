@@ -33,12 +33,6 @@ export class RequestDataChannel {
             if (!data && !error) {
                 throw new Error("Invalid response");
             }
-            if (error) {
-                throw {
-                    name: "AdapterError",
-                    message: error,
-                };
-            }
             // only add to the map if there is an active request
             if (this.requestIdToResponseMap.has(id)) {
                 this.requestIdToResponseMap.set(id, data);
@@ -76,6 +70,12 @@ export class RequestDataChannel {
                 const response = requestIdToResponseMap.get(id);
                 if (response !== true) {
                     requestIdToResponseMap.delete(id);
+                    if (response.error) {
+                        throw {
+                            name: "AdapterError",
+                            message: response.error,
+                        };
+                    }
                     return response;
                 }
             }
