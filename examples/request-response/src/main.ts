@@ -46,7 +46,9 @@ el("button").addEventListener("click", async () => {
                         log("Handling timeout..."); // Timeout
                     } else if (e.name === "AdapterError") {
                         // An error occurred in the adapter, e.g. a Python exception
-                        log("Error in the adapter request handler...");
+                        log(
+                            `Error in the adapter request handler: ${e.message}`
+                        );
                         throw e;
                     } else {
                         throw e;
