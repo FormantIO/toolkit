@@ -9,6 +9,9 @@ function generateId() {
     );
 }
 
+// AdapterError -> An error occurred when handling the request on the adapter.
+// TimeoutError -> The request did not receive a response within the timeout period.
+
 export class RequestDataChannel {
     private channel: undefined | DataChannel;
     private requestIdToResponseMap = new Map<string, any>();
@@ -23,9 +26,18 @@ export class RequestDataChannel {
             this.channel_name
         );
         this.channel.addListener((message) => {
-            const { id, data } = JSON.parse(message);
-            if (!id || !data) {
+            const { id, data, error } = JSON.parse(message);
+            if (!id) {
                 throw new Error("Invalid response");
+            }
+            if (!data && !error) {
+                throw new Error("Invalid response");
+            }
+            if (error) {
+                throw {
+                    name: "AdapterError",
+                    message: error,
+                };
             }
             // only add to the map if there is an active request
             if (this.requestIdToResponseMap.has(id)) {
