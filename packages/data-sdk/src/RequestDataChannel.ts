@@ -1,13 +1,22 @@
 import { Device, DataChannel } from "./main";
 import { delay } from "../../common/delay";
 
-function generateId() {
+function generateTextId() {
     return (
         Math.random().toString(36).substring(2) +
         "-" +
         Math.random().toString(36).substring(2)
     );
 }
+
+// function generateBinaryId() {
+//     // attach binary ID as 16-byte header in binary messages
+//     const id = new Uint8Array(16);
+//     for (let i = 0; i < id.length; i++) {
+//         id[i] = Math.floor(Math.random() * 256);
+//     }
+//     return id;
+// }
 
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.
@@ -18,27 +27,33 @@ export class RequestDataChannel {
     constructor(
         private device: Device,
         private channel_name: string,
-        private timeout: number
+        private timeout: number,
+        private isBinary: boolean
     ) {}
 
     async initialize() {
         this.channel = await this.device.createCustomDataChannel(
             this.channel_name
         );
-        this.channel.addListener((message) => {
-            const response = JSON.parse(message);
-            const { id, data, error } = response;
-            if (!id) {
-                throw new Error("Invalid response");
-            }
-            if (!data && !error) {
-                throw new Error("Invalid response");
-            }
-            // only add to the map if there is an active request
-            if (this.requestIdToResponseMap.has(id)) {
-                this.requestIdToResponseMap.set(id, response);
-            }
-        });
+
+        if (this.isBinary) {
+            throw new Error("Binary request data channel not implemented");
+        } else {
+            this.channel.addListener((message) => {
+                const response = JSON.parse(message);
+                const { id, data, error } = response;
+                if (!id) {
+                    throw new Error("Invalid response");
+                }
+                if (!data && !error) {
+                    throw new Error("Invalid response");
+                }
+                // only add to the map if there is an active request
+                if (this.requestIdToResponseMap.has(id)) {
+                    this.requestIdToResponseMap.set(id, response);
+                }
+            });
+        }
     }
 
     async request(data: any) {
@@ -52,7 +67,7 @@ export class RequestDataChannel {
 
         await channel.waitTilReady();
 
-        const id = generateId();
+        const id = generateTextId();
 
         // true signifies an active request
         requestIdToResponseMap.set(id, true);

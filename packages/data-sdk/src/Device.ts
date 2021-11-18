@@ -453,9 +453,10 @@ export class Device {
 
   createCustomRequestDataChannel(
     channelName: string,
-    timeout: number = 3000 // 3 seconds default timeout
+    timeout: number = 3000, // 3 seconds default timeout
+    isBinary: boolean = false
   ): RequestDataChannel {
-    return new RequestDataChannel(this, channelName, timeout);
+    return new RequestDataChannel(this, channelName, timeout, isBinary);
   }
 
   async createCaptureStream(streamName: string) {
