@@ -2,11 +2,7 @@ import { Authentication, Fleet } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import "./style.css";
-
-// const protobuf = require("protobufjs");
 import * as protobuf from "protobufjs";
-// import protobufCreator = require("protobufjs");
-// const protobuf = protobufCreator();
 
 // When the user clicks "connect"
 el("button").addEventListener("click", async () => {
