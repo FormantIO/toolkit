@@ -23,11 +23,11 @@ export class DataChannel {
       this.dataChannel.onmessage = (m: MessageEvent) => {
       this.listeners.forEach(_ => {
         const d = new Uint8Array(m.data);
-        var s = this.decoder.decode(d);
+        const s = this.decoder.decode(d);
         _(s)
       })
       this.binaryListeners.forEach(_ => {
-        _(m.data)
+        _(new Uint8Array(m.data))
       })
     };
   }
