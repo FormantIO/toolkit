@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@formant/data-sdk@0.0.44":
-  version "0.0.44"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.44.tgz#21d8cdcf37fdeb695a4956a48316d02781187d2c"
-  integrity sha512-HJH2OJoAyJBbm2AZ+30hiztaPo2NbUmiTjzJCX2xmSjsNoIoH5ZvlguJWRTzXfoDf1J2I7cIAHvc66Zr+A5BYw==
+"@formant/data-sdk@0.0.47":
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.47.tgz#e93ad49504d14cfe1c2b154fda8162a4c0b28714"
+  integrity sha512-xVwZMF1yZ3efrjGD7trasjvxWe61zCUWz5ecifpkNmN24CyESiRDcHUv8QUJI7tqvGHBWb/3F5246KUHiwgP5w==
   dependencies:
     "@formant/realtime-sdk" "0.0.4"
     "@types/google-protobuf" "^3.15.5"
@@ -108,9 +108,9 @@
   integrity sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==
 
 "@types/node@>=13.7.0":
-  version "16.11.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.7.tgz#36820945061326978c42a01e56b61cd223dfdc42"
-  integrity sha512-QB5D2sqfSjCmTuWcBWyJ+/44bcjO7VbjSbOE0ucoVbAsSNQc4Lt6QkgkVXkTDwkL4z/beecZNDvVX15D4P8Jbw==
+  version "16.11.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.8.tgz#a1aeb23f0aa33cb111e64ccaa1687b2ae0423b69"
+  integrity sha512-hmT5gfpRkkHr7DZZHMf3jBe/zNcVGN+jXSL2f8nAsYfBPxQFToKwQlS/zES4Sjp488Bi73i+p6bvrNRRGU0x9Q==
 
 "@types/offscreencanvas@^2019.6.4":
   version "2019.6.4"
