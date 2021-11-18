@@ -7,7 +7,7 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@formant/data-sdk": "0.0.44",
+    "@formant/data-sdk": "0.0.47",
     "@formant/ui-sdk-joystick": "latest",
     "@formant/ui-sdk-realtime-player": "latest",
     "typescript": "^4.3.2",
