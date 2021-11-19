@@ -48,8 +48,13 @@ el("button").addEventListener("click", async () => {
             if (e.code === "Space") {
                 try {
                     // Send and receive Uint8Array data
+                    log("Sending protobuf buffer to Python");
+                    console.log("Sending:", Person.decode(buffer));
                     const response = await requestChannel.request(buffer);
-                    console.log(Person.decode(response));
+                    log(
+                        "Console logging response protobuf object back from Python"
+                    );
+                    console.log("Received:", Person.decode(response));
                 } catch (e: any) {
                     if (e.name === "TimeoutError") {
                         log("Handling timeout..."); // Timeout
