@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RequestDataChannel | @formant/data-sdk</title>
+	<title>BinaryRequestDataChannel | @formant/data-sdk</title>
 	<meta name="description" content="Documentation for @formant/data-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2707,6 +2707,44 @@ img {
 		<li class=" tsd-kind-class">
 			<a href="Authentication.html" class="tsd-kind-icon">Authentication</a>
 		</li>
+		<li class="current tsd-kind-class">
+			<a href="BinaryRequestDataChannel.html" class="tsd-kind-icon">Binary<wbr>Request<wbr>Data<wbr>Channel</a>
+			<ul>
+				<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<a href="BinaryRequestDataChannel.html#constructor" class="tsd-kind-icon">constructor</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a href="BinaryRequestDataChannel.html#RESPONSE_SUCCESS_BYTE" class="tsd-kind-icon">RESPONSE_<wbr>SUCCESS_<wbr>BYTE</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a href="BinaryRequestDataChannel.html#channel" class="tsd-kind-icon">channel</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a href="BinaryRequestDataChannel.html#channel_name" class="tsd-kind-icon">channel_<wbr>name</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a href="BinaryRequestDataChannel.html#decoder" class="tsd-kind-icon">decoder</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a href="BinaryRequestDataChannel.html#device" class="tsd-kind-icon">device</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a href="BinaryRequestDataChannel.html#requestIdToResponseMap" class="tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a href="BinaryRequestDataChannel.html#timeout" class="tsd-kind-icon">timeout</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="BinaryRequestDataChannel.html#generateBinaryId" class="tsd-kind-icon">generate<wbr>Binary<wbr>Id</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="BinaryRequestDataChannel.html#initialize" class="tsd-kind-icon">initialize</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="BinaryRequestDataChannel.html#request" class="tsd-kind-icon">request</a>
+				</li>
+			</ul>
+		</li>
 		<li class=" tsd-kind-class">
 			<a href="CaptureStream.html" class="tsd-kind-icon">Capture<wbr>Stream</a>
 		</li>
@@ -2722,25 +2760,8 @@ img {
 		<li class=" tsd-kind-class">
 			<a href="Manipulator.html" class="tsd-kind-icon">Manipulator</a>
 		</li>
-		<li class="current tsd-kind-class">
-			<a href="RequestDataChannel.html" class="tsd-kind-icon">Request<wbr>Data<wbr>Channel</a>
-			<ul>
-				<li class=" tsd-kind-constructor tsd-parent-kind-class">
-					<a href="RequestDataChannel.html#constructor" class="tsd-kind-icon">constructor</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="RequestDataChannel.html#channel" class="tsd-kind-icon">channel</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="RequestDataChannel.html#requestIdToResponseMap" class="tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="RequestDataChannel.html#initialize" class="tsd-kind-icon">initialize</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="RequestDataChannel.html#request" class="tsd-kind-icon">request</a>
-				</li>
-			</ul>
+		<li class=" tsd-kind-class">
+			<a href="TextRequestDataChannel.html" class="tsd-kind-icon">Text<wbr>Request<wbr>Data<wbr>Channel</a>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/CaptureSession.html" class="tsd-kind-icon">Capture<wbr>Session</a>
@@ -2777,7 +2798,12 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">RequestDataChannel</span>
+					<span class="tsd-signature-type">RequestDataChannel</span>
+					<ul class="tsd-hierarchy">
+						<li>
+							<span class="target">BinaryRequestDataChannel</span>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</section>
@@ -2785,42 +2811,49 @@ img {
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-inherited">
 						<h3>Constructors</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="RequestDataChannel.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="BinaryRequestDataChannel.html#constructor" class="tsd-kind-icon">constructor</a></li>
 						</ul>
 					</section>
-					<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+					<section class="tsd-index-section tsd-is-private-protected">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="RequestDataChannel.html#channel" class="tsd-kind-icon">channel</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="RequestDataChannel.html#requestIdToResponseMap" class="tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="BinaryRequestDataChannel.html#RESPONSE_SUCCESS_BYTE" class="tsd-kind-icon">RESPONSE_<wbr>SUCCESS_<wbr>BYTE</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="BinaryRequestDataChannel.html#channel" class="tsd-kind-icon">channel</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="BinaryRequestDataChannel.html#channel_name" class="tsd-kind-icon">channel_<wbr>name</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="BinaryRequestDataChannel.html#decoder" class="tsd-kind-icon">decoder</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="BinaryRequestDataChannel.html#device" class="tsd-kind-icon">device</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="BinaryRequestDataChannel.html#requestIdToResponseMap" class="tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="BinaryRequestDataChannel.html#timeout" class="tsd-kind-icon">timeout</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="RequestDataChannel.html#initialize" class="tsd-kind-icon">initialize</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="RequestDataChannel.html#request" class="tsd-kind-icon">request</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="BinaryRequestDataChannel.html#generateBinaryId" class="tsd-kind-icon">generate<wbr>Binary<wbr>Id</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="BinaryRequestDataChannel.html#initialize" class="tsd-kind-icon">initialize</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="BinaryRequestDataChannel.html#request" class="tsd-kind-icon">request</a></li>
 						</ul>
 					</section>
 				</div>
 			</section>
 		</section>
-		<section class="tsd-panel-group tsd-member-group ">
+		<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 			<h2>Constructors</h2>
-			<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+			<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
-				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Request<wbr>Data<wbr>Channel<span class="tsd-signature-symbol">(</span>device<span class="tsd-signature-symbol">: </span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a>, channel_name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, isBinary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="RequestDataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">RequestDataChannel</a></li>
+				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Binary<wbr>Request<wbr>Data<wbr>Channel<span class="tsd-signature-symbol">(</span>device<span class="tsd-signature-symbol">: </span><a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a>, channel_name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="BinaryRequestDataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">BinaryRequestDataChannel</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
+							<p>Inherited from RequestDataChannel.constructor</p>
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/8e96b66/packages/data-sdk/src/RequestDataChannel.ts#L27">RequestDataChannel.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L10">RequestDataChannel.ts:10</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2834,40 +2867,100 @@ img {
 							<li>
 								<h5>timeout: <span class="tsd-signature-type">number</span></h5>
 							</li>
-							<li>
-								<h5>isBinary: <span class="tsd-signature-type">boolean</span></h5>
-							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="RequestDataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">RequestDataChannel</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="BinaryRequestDataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">BinaryRequestDataChannel</a></h4>
 					</li>
 				</ul>
 			</section>
 		</section>
-		<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+		<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="channel" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> channel</h3>
-				<div class="tsd-signature tsd-kind-icon">channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="DataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">DataChannel</a></div>
+				<a name="RESPONSE_SUCCESS_BYTE" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> RESPONSE_<wbr>SUCCESS_<wbr>BYTE</h3>
+				<div class="tsd-signature tsd-kind-icon">RESPONSE_<wbr>SUCCESS_<wbr>BYTE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/8e96b66/packages/data-sdk/src/RequestDataChannel.ts#L25">RequestDataChannel.ts:25</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L18">RequestDataChannel.ts:18</a></li>
 					</ul>
 				</aside>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<a name="channel" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> channel</h3>
+				<div class="tsd-signature tsd-kind-icon">channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="DataChannel.html" class="tsd-signature-type" data-tsd-kind="Class">DataChannel</a></div>
+				<aside class="tsd-sources">
+					<p>Inherited from RequestDataChannel.channel</p>
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L8">RequestDataChannel.ts:8</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<a name="channel_name" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> channel_<wbr>name</h3>
+				<div class="tsd-signature tsd-kind-icon">channel_<wbr>name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+					<p>Inherited from RequestDataChannel.channel_name</p>
+				</aside>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="requestIdToResponseMap" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> request<wbr>IdTo<wbr>Response<wbr>Map</h3>
-				<div class="tsd-signature tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<a name="decoder" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> decoder</h3>
+				<div class="tsd-signature tsd-kind-icon">decoder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TextDecoder</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/8e96b66/packages/data-sdk/src/RequestDataChannel.ts#L26">RequestDataChannel.ts:26</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L19">RequestDataChannel.ts:19</a></li>
 					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<a name="device" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> device</h3>
+				<div class="tsd-signature tsd-kind-icon">device<span class="tsd-signature-symbol">:</span> <a href="Device.html" class="tsd-signature-type" data-tsd-kind="Class">Device</a></div>
+				<aside class="tsd-sources">
+					<p>Inherited from RequestDataChannel.device</p>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<a name="requestIdToResponseMap" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> request<wbr>IdTo<wbr>Response<wbr>Map</h3>
+				<div class="tsd-signature tsd-kind-icon">request<wbr>IdTo<wbr>Response<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<aside class="tsd-sources">
+					<p>Inherited from RequestDataChannel.requestIdToResponseMap</p>
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L9">RequestDataChannel.ts:9</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<a name="timeout" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> timeout</h3>
+				<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<aside class="tsd-sources">
+					<p>Inherited from RequestDataChannel.timeout</p>
 				</aside>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="generateBinaryId" class="tsd-anchor"></a>
+				<h3>generate<wbr>Binary<wbr>Id</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">generate<wbr>Binary<wbr>Id<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L31">RequestDataChannel.ts:31</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="initialize" class="tsd-anchor"></a>
 				<h3>initialize</h3>
@@ -2878,7 +2971,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/8e96b66/packages/data-sdk/src/RequestDataChannel.ts#L34">RequestDataChannel.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L40">RequestDataChannel.ts:40</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -2889,19 +2982,19 @@ img {
 				<a name="request" class="tsd-anchor"></a>
 				<h3>request</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/8e96b66/packages/data-sdk/src/RequestDataChannel.ts#L59">RequestDataChannel.ts:59</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/d03c82d/packages/data-sdk/src/RequestDataChannel.ts#L65">RequestDataChannel.ts:65</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>data: <span class="tsd-signature-type">any</span></h5>
+								<h5>data: <span class="tsd-signature-type">Uint8Array</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -2928,6 +3021,9 @@ img {
 					</ul>
 					<ul class="tsd-legend">
 						<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 					</ul>
 				</div>
 			</div>

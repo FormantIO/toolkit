@@ -7,7 +7,7 @@ import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
 import { Manipulator } from "./Manipulator";
 import { Fleet } from "./Fleet";
-import { RequestDataChannel } from "./RequestDataChannel";
+import { TextRequestDataChannel, BinaryRequestDataChannel } from "./RequestDataChannel";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -454,9 +454,15 @@ export class Device {
   createCustomRequestDataChannel(
     channelName: string,
     timeout: number = 3000, // 3 seconds default timeout
-    isBinary: boolean = false
-  ): RequestDataChannel {
-    return new RequestDataChannel(this, channelName, timeout, isBinary);
+  ): TextRequestDataChannel {
+    return new TextRequestDataChannel(this, channelName, timeout);
+  }
+
+  createCustomBinaryRequestDataChannel(
+    channelName: string,
+    timeout: number = 3000, // 3 seconds default timeout
+  ): BinaryRequestDataChannel {
+    return new BinaryRequestDataChannel(this, channelName, timeout);
   }
 
   async createCaptureStream(streamName: string) {
