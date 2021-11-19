@@ -1,5 +1,4 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
-// import { Authentication, Fleet } from "./tmp/main";
 import "./style.css";
 import * as protobuf from "protobufjs";
 
@@ -38,10 +37,7 @@ el("button").addEventListener("click", async () => {
         log("Getting a realtime connection ... ");
         await device.startRealtimeConnection();
 
-        // Create RequestChannel for request : response framework
-        // const requestChannel = device.createCustomRequestDataChannel(
-        //     "request_response_channel"
-        // );
+        // Create binary request channel for request : response framework
         const requestChannel = device.createCustomBinaryRequestDataChannel(
             "request_response_channel"
         );
@@ -51,8 +47,8 @@ el("button").addEventListener("click", async () => {
         document.addEventListener("keydown", async (e) => {
             if (e.code === "Space") {
                 try {
+                    // Send and receive Uint8Array data
                     const response = await requestChannel.request(buffer);
-                    log(`Response received: ${response}`); // Successfully received response
                     console.log(Person.decode(response));
                 } catch (e: any) {
                     if (e.name === "TimeoutError") {
