@@ -2705,6 +2705,9 @@ img {
 <nav class="tsd-navigation secondary">
 	<ul>
 		<li class=" tsd-kind-class">
+			<a href="classes/App.html" class="tsd-kind-icon">App</a>
+		</li>
+		<li class=" tsd-kind-class">
 			<a href="classes/Authentication.html" class="tsd-kind-icon">Authentication</a>
 		</li>
 		<li class=" tsd-kind-class">
@@ -2741,6 +2744,9 @@ img {
 			<a href="interfaces/User.html" class="tsd-kind-icon">User</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
+			<a href="modules.html#ModuleData" class="tsd-kind-icon">Module<wbr>Data</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
 			<a href="modules.html#RealtimeDataStream" class="tsd-kind-icon">Realtime<wbr>Data<wbr>Stream</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
@@ -2771,6 +2777,7 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Classes</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-class"><a href="classes/App.html" class="tsd-kind-icon">App</a></li>
 							<li class="tsd-kind-class"><a href="classes/Authentication.html" class="tsd-kind-icon">Authentication</a></li>
 							<li class="tsd-kind-class"><a href="classes/CaptureStream.html" class="tsd-kind-icon">Capture<wbr>Stream</a></li>
 							<li class="tsd-kind-class"><a href="classes/DataChannel.html" class="tsd-kind-icon">Data<wbr>Channel</a></li>
@@ -2793,6 +2800,7 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias"><a href="modules.html#ModuleData" class="tsd-kind-icon">Module<wbr>Data</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeDataStream" class="tsd-kind-icon">Realtime<wbr>Data<wbr>Stream</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeListener" class="tsd-kind-icon">Realtime<wbr>Listener</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeManipulatorConfig" class="tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config</a></li>
@@ -2805,12 +2813,49 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Type aliases</h2>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="ModuleData" class="tsd-anchor"></a>
+				<h3>Module<wbr>Data</h3>
+				<div class="tsd-signature tsd-kind-icon">Module<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>queryRange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>end<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>streams<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>time<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/8e96b66/packages/data-sdk/src/App.ts#L28">App.ts:28</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter">
+							<h5>query<wbr>Range<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>end<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></h5>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>end<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>streams<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span></h5>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-index-signature">
+									<h5><span class="tsd-signature-symbol">[</span>x: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>time<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+						</li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="RealtimeDataStream" class="tsd-anchor"></a>
 				<h3>Realtime<wbr>Data<wbr>Stream</h3>
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Data<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/3d5550e/packages/data-sdk/src/Device.ts#L55">Device.ts:55</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/8e96b66/packages/data-sdk/src/Device.ts#L55">Device.ts:55</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2828,7 +2873,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/3d5550e/packages/data-sdk/src/Device.ts#L36">Device.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/8e96b66/packages/data-sdk/src/Device.ts#L36">Device.ts:36</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2889,7 +2934,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>baseReferenceFrame<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>currentJointStateStream<span class="tsd-signature-symbol">: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>endEffectorLinkName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>endEffectorStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>localFrame<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>planValidStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>plannedJointStateStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/3d5550e/packages/data-sdk/src/Manipulator.ts#L3">Manipulator.ts:3</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/8e96b66/packages/data-sdk/src/Manipulator.ts#L3">Manipulator.ts:3</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2925,7 +2970,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Video<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/toolkit/blob/3d5550e/packages/data-sdk/src/Device.ts#L51">Device.ts:51</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/8e96b66/packages/data-sdk/src/Device.ts#L51">Device.ts:51</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
