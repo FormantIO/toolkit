@@ -92,7 +92,7 @@ export class Authentication {
   static async listenForRefresh() {
     // refresh token every hour
     App.addAccessTokenRefreshListener((token: string) => {
-      Authentication.token = token;
+      this.loginWithToken(token);
     });
     setInterval(async () => {
       App.refreshAuthToken();
