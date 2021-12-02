@@ -1,3 +1,4 @@
+import { App } from "./App";
 import { FORMANT_API_URL } from "./config";
 
 export interface User {
@@ -86,5 +87,15 @@ export class Authentication {
         });
       });
     }
+  }
+
+  static async listenForRefresh() {
+    // refresh token every hour
+    App.addAccessTokenRefreshListener((token: string) => {
+      this.loginWithToken(token);
+    });
+    setInterval(async () => {
+      App.refreshAuthToken();
+    }, 1000 * 60 * 60);
   }
 }

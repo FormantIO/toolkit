@@ -4,7 +4,8 @@ export * from "./Device";
 export * from "./DataChannel";
 export * from "./CaptureStream";
 export * from "./Manipulator";
-export * from "./RequestDataChannel"
+export * from "./RequestDataChannel";
+export * from "./App";
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
@@ -23,4 +24,9 @@ if (urlDevice) {
 const urlAuth = urlParams.get("auth");
 if (urlAuth) {
   Authentication.loginWithToken(urlAuth);
+}
+
+const module = urlParams.get("module");
+if (module) {
+  Authentication.listenForRefresh();
 }
