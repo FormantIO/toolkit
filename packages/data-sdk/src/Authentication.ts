@@ -1,5 +1,5 @@
-import { App } from "./App";
 import { FORMANT_API_URL } from "./config";
+import { App } from "./App";
 
 export interface User {
   firstName: string;
@@ -11,6 +11,7 @@ export interface User {
 
 export class Authentication {
   static token: string | undefined;
+  static refreshToken: string | undefined;
   static currentUser: User | undefined;
   static defaultDeviceId: string | undefined;
   static waitingForAuth: ((result: boolean) => void)[] = [];
@@ -29,7 +30,8 @@ export class Authentication {
         throw new Error(auth.message);
       }
       await Authentication.loginWithToken(
-        auth.authentication.accessToken as string
+        auth.authentication.accessToken as string,
+        auth.authentication.refreshToken as string
       );
     } catch (e: any) {
       Authentication.waitingForAuth.forEach((_) => _(false));
@@ -38,7 +40,7 @@ export class Authentication {
     }
   }
 
-  public static async loginWithToken(token: string) {
+  public static async loginWithToken(token: string, refreshToken?: string) {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       let userId = tokenData.sub;
@@ -67,6 +69,28 @@ export class Authentication {
       Authentication.waitingForAuth.forEach((_) => _(false));
     }
     Authentication.waitingForAuth = [];
+
+    if (refreshToken) {
+      Authentication.refreshToken = refreshToken;
+      setInterval(async () => {
+        if (Authentication.refreshToken) {
+          const result = await fetch(
+            `${FORMANT_API_URL}/v1/admin/auth/refresh`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                refreshToken: Authentication.refreshToken,
+              }),
+            }
+          );
+          const refreshData = await result.json();
+          Authentication.token = refreshData.authentication.accessToken;
+        }
+      }, 1000 * 60 * 60);
+    }
   }
 
   static isAuthenticated(): boolean {
