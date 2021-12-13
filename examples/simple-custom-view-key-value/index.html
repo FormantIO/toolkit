@@ -8,39 +8,13 @@
   </head>
   <body></body>
   <script type="module">
-  const reponse =  await fetch("https://api.formant.io/v1/admin/auth/login", {
-    method: "POST",
-    body: JSON.stringify({email:"sam@robot.xyz", password:"12345"}),
-    headers: {
-      "Content-Type": "application/json"
-    },
-  });
-
-  const token = response.authentication["access_token"];
-  const organizationId = response.authentication["organization_id"];
-
-  const keyValueObj = {
-      organizationId: organizationId,
-      key: "key",
-      value: "value"
-  };
-
-  await fetch("https://api.formant.io/v1/admin/key-value", {
-    method: "POST",
-    body: JSON.stringify({enabled:true, type:"default"}),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer "+token,
-    },
-  });
-
-  const result = await fetch("https://api.formant.io/v1/admin/key-value/key", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer "+token,
-    },
-  });
-    document.body.innerHTML = "set value is" + result.body.value;
+    import {
+      Authentication,
+      KeyValue,
+    } from "https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.es6.js";
+    await Authentication.login("sam@robot.xyz", "12345");
+    await KeyValue.set("key", "value");
+    const value = await KeyValue.get("key");
+    document.body.innerHTML = "set value is" + value;
   </script>
 </html>
