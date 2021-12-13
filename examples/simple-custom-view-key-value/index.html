@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+  </head>
+  <body></body>
+  <script type="module">
+  const reponse =  await fetch("https://api.formant.io/v1/admin/auth/login", {
+    method: "POST",
+    body: JSON.stringify({email:"sam@robot.xyz", password:"12345"}),
+    headers: {
+      "Content-Type": "application/json"
+    },
+  });
+
+  const token = response.authentication["access_token"];
+  const organizationId = response.authentication["organization_id"];
+
+  const keyValueObj = {
+      organizationId: organizationId,
+      key: "key",
+      value: "value"
+  };
+
+  await fetch("https://api.formant.io/v1/admin/key-value", {
+    method: "POST",
+    body: JSON.stringify({enabled:true, type:"default"}),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer "+token,
+    },
+  });
+
+  const result = await fetch("https://api.formant.io/v1/admin/key-value/key", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer "+token,
+    },
+  });
+    document.body.innerHTML = "set value is" + result.body.value;
+  </script>
+</html>
