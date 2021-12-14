@@ -26,7 +26,7 @@ if (urlAuth) {
   Authentication.loginWithToken(urlAuth);
 }
 
-const module = urlParams.get("module");
-if (module) {
+const moduleName = urlParams.get("module");
+if (moduleName) {
   Authentication.listenForRefresh();
 }

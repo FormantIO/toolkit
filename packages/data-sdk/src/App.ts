@@ -43,9 +43,9 @@ export class App {
       urlParams = new URLSearchParams(window.location.search);
     }
 
-    const module = urlParams.get("module");
+    const moduleName = urlParams.get("module");
 
-    return module;
+    return moduleName;
   }
 
   static isModule(): boolean {
@@ -64,35 +64,35 @@ export class App {
   }
 
   static requestModuleData() {
-    const module = this.getCurrentModuleContext();
-    if (!module) {
+    const moduleName = this.getCurrentModuleContext();
+    if (!moduleName) {
       throw new Error("No module context");
     }
     this.sendAppMessage({
       type: "request_module_data",
-      module,
+      module: moduleName,
     });
   }
 
   static refreshAuthToken() {
-    const module = this.getCurrentModuleContext();
-    if (!module) {
+    const moduleName = this.getCurrentModuleContext();
+    if (!moduleName) {
       throw new Error("No module context");
     }
     this.sendAppMessage({
       type: "refresh_auth_token",
-      module,
+      module: moduleName,
     });
   }
 
   static setupModuleMenus(menus: { label: string }[]) {
-    const module = this.getCurrentModuleContext();
-    if (!module) {
+    const moduleName = this.getCurrentModuleContext();
+    if (!moduleName) {
       throw new Error("No module context");
     }
     this.sendAppMessage({
       type: "setup_module_menus",
-      module,
+      module: moduleName,
       menus,
     });
   }
