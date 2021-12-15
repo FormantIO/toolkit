@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&family=Work+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/5af344b3ad.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css"
+      type="text/css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altitude Visualization</title>
+  </head>
+  <body>
+    <div class="altitude__meter__container">
+      <div id="altitude__meter" class="altitude__meter">
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <div class="altitude__grid"></div>
+        <p
+          style="position: absolute; top: 0; left: 10px"
+          class="altitude__text"
+        >
+          400ft
+        </p>
+        <p
+          style="position: absolute; bottom: 0; left: 10px"
+          class="altitude__text"
+        >
+          0ft
+        </p>
+      </div>
+      <div id="alt_cont" class="altitude__meter__arrow">
+        <i style="color: #bac4e2" class="fas fa-caret-left"></i>
+        <p
+          id="alt_val"
+          style="
+            color: #bac4e2;
+            padding-left: 4px;
+            font-weight: 600;
+            letter-spacing: 1px;
+          "
+        ></p>
+      </div>
+    </div>
+    <div id="device__card__container">
+      <div class="device__location__data__container">
+        <div class="device__altitude__container">
+          <p class="device__stat">ALT</p>
+          <p class="device__location__data">345 ft</p>
+        </div>
+        <div class="device__latitude__container">
+          <p class="device__stat">LAT</p>
+          <p class="device__location__data">32.065137</p>
+        </div>
+        <div class="device__longitud__conyainer">
+          <p class="device__stat">LONG</p>
+          <p class="device__location__data">-102.130150</p>
+        </div>
+      </div>
+      <div class="device__card__name">
+        <img class="device__icon" src="src/images/device.svg" />
+        <p class="device__card__name__text">device.name</p>
+      </div>
+    </div>
+
+    <div id="map"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
