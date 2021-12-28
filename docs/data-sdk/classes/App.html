@@ -2738,6 +2738,9 @@ img {
 					<a href="App.html#sendAppMessage" class="tsd-kind-icon">send<wbr>App<wbr>Message</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="App.html#setModuleDateTimeRange" class="tsd-kind-icon">set<wbr>Module<wbr>Date<wbr>Time<wbr>Range</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="App.html#setupModuleMenus" class="tsd-kind-icon">setup<wbr>Module<wbr>Menus</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -2779,13 +2782,28 @@ img {
 			<a href="../interfaces/ConfigurationDocument.html" class="tsd-kind-icon">Configuration<wbr>Document</a>
 		</li>
 		<li class=" tsd-kind-interface">
+			<a href="../interfaces/IAuthentication.html" class="tsd-kind-icon">IAuthentication</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/QueryRange.html" class="tsd-kind-icon">Query<wbr>Range</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/Stream.html" class="tsd-kind-icon">Stream</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/StreamData.html" class="tsd-kind-icon">Stream<wbr>Data</a>
+		</li>
+		<li class=" tsd-kind-interface">
 			<a href="../interfaces/TelemetryStream.html" class="tsd-kind-icon">Telemetry<wbr>Stream</a>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/User.html" class="tsd-kind-icon">User</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
-			<a href="../modules.html#ModuleData" class="tsd-kind-icon">Module<wbr>Data</a>
+			<a href="../modules.html#DataPoint" class="tsd-kind-icon">Data<wbr>Point</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../modules.html#RealtimeDataStream" class="tsd-kind-icon">Realtime<wbr>Data<wbr>Stream</a>
@@ -2833,6 +2851,7 @@ img {
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="App.html#refreshAuthToken" class="tsd-kind-icon">refresh<wbr>Auth<wbr>Token</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="App.html#requestModuleData" class="tsd-kind-icon">request<wbr>Module<wbr>Data</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="App.html#sendAppMessage" class="tsd-kind-icon">send<wbr>App<wbr>Message</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="App.html#setModuleDateTimeRange" class="tsd-kind-icon">set<wbr>Module<wbr>Date<wbr>Time<wbr>Range</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="App.html#setupModuleMenus" class="tsd-kind-icon">setup<wbr>Module<wbr>Menus</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="App.html#showMessage" class="tsd-kind-icon">show<wbr>Message</a></li>
 						</ul>
@@ -2869,7 +2888,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L109">App.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L150">App.ts:150</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2910,7 +2929,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L100">App.ts:100</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L141">App.ts:141</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2945,30 +2964,30 @@ img {
 				<a name="addModuleDataListener" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Module<wbr>Data<wbr>Listener</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">add<wbr>Module<wbr>Data<wbr>Listener<span class="tsd-signature-symbol">(</span>handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules.html#ModuleData" class="tsd-signature-type" data-tsd-kind="Type alias">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">add<wbr>Module<wbr>Data<wbr>Listener<span class="tsd-signature-symbol">(</span>handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../interfaces/ModuleData.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L118">App.ts:118</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L159">App.ts:159</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>handler: <span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules.html#ModuleData" class="tsd-signature-type" data-tsd-kind="Type alias">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>handler: <span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../interfaces/ModuleData.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules.html#ModuleData" class="tsd-signature-type" data-tsd-kind="Type alias">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../interfaces/ModuleData.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>data: <a href="../modules.html#ModuleData" class="tsd-signature-type" data-tsd-kind="Type alias">ModuleData</a></h5>
+														<h5>data: <a href="../interfaces/ModuleData.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleData</a></h5>
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2992,7 +3011,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L39">App.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L64">App.ts:64</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h4>
@@ -3009,7 +3028,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L55">App.ts:55</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L80">App.ts:80</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3032,7 +3051,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L51">App.ts:51</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L76">App.ts:76</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -3049,7 +3068,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L77">App.ts:77</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L118">App.ts:118</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -3066,7 +3085,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L66">App.ts:66</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L91">App.ts:91</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -3083,13 +3102,39 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L35">App.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L60">App.ts:60</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>message: <span class="tsd-signature-type">AppMessage</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="setModuleDateTimeRange" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> set<wbr>Module<wbr>Date<wbr>Time<wbr>Range</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">set<wbr>Module<wbr>Date<wbr>Time<wbr>Range<span class="tsd-signature-symbol">(</span>beforeInMilliseconds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, afterInMilliseconds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L102">App.ts:102</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>beforeInMilliseconds: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> afterInMilliseconds: <span class="tsd-signature-type">number</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -3106,7 +3151,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L88">App.ts:88</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L129">App.ts:129</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3129,7 +3174,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/2fa990a/packages/data-sdk/src/App.ts#L62">App.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L87">App.ts:87</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>

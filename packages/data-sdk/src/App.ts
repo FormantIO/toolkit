@@ -4,6 +4,12 @@ type AppMessage =
   | { type: "show_message"; message: string }
   | { type: "refresh_auth_token"; module: string }
   | {
+      type: "set_module_data_time_range";
+      module: string;
+      before: number;
+      after: number;
+    }
+  | {
       type: "setup_module_menus";
       module: string;
       menus: { label: string }[];
@@ -90,6 +96,22 @@ export class App {
     this.sendAppMessage({
       type: "request_module_data",
       module: moduleName,
+    });
+  }
+
+  static setModuleDateTimeRange(
+    beforeInMilliseconds: number,
+    afterInMilliseconds?: number
+  ) {
+    const moduleName = this.getCurrentModuleContext();
+    if (!moduleName) {
+      throw new Error("No module context");
+    }
+    this.sendAppMessage({
+      type: "set_module_data_time_range",
+      module: moduleName,
+      before: beforeInMilliseconds,
+      after: afterInMilliseconds || 0,
     });
   }
 

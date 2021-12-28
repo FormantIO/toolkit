@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>User | @formant/data-sdk</title>
+	<title>ModuleData | @formant/data-sdk</title>
 	<meta name="description" content="Documentation for @formant/data-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2743,8 +2743,19 @@ img {
 		<li class=" tsd-kind-interface">
 			<a href="IAuthentication.html" class="tsd-kind-icon">IAuthentication</a>
 		</li>
-		<li class=" tsd-kind-interface">
+		<li class="current tsd-kind-interface">
 			<a href="ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a>
+			<ul>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="ModuleData.html#queryRange" class="tsd-kind-icon">query<wbr>Range</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="ModuleData.html#streams" class="tsd-kind-icon">streams</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="ModuleData.html#time" class="tsd-kind-icon">time</a>
+				</li>
+			</ul>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="QueryRange.html" class="tsd-kind-icon">Query<wbr>Range</a>
@@ -2758,25 +2769,8 @@ img {
 		<li class=" tsd-kind-interface">
 			<a href="TelemetryStream.html" class="tsd-kind-icon">Telemetry<wbr>Stream</a>
 		</li>
-		<li class="current tsd-kind-interface">
+		<li class=" tsd-kind-interface">
 			<a href="User.html" class="tsd-kind-icon">User</a>
-			<ul>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#email" class="tsd-kind-icon">email</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#firstName" class="tsd-kind-icon">first<wbr>Name</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#id" class="tsd-kind-icon">id</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#lastName" class="tsd-kind-icon">last<wbr>Name</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a>
-				</li>
-			</ul>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../modules.html#DataPoint" class="tsd-kind-icon">Data<wbr>Point</a>
@@ -2801,7 +2795,7 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">User</span>
+					<span class="target">ModuleData</span>
 				</li>
 			</ul>
 		</section>
@@ -2812,11 +2806,9 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#email" class="tsd-kind-icon">email</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#firstName" class="tsd-kind-icon">first<wbr>Name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#id" class="tsd-kind-icon">id</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#lastName" class="tsd-kind-icon">last<wbr>Name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ModuleData.html#queryRange" class="tsd-kind-icon">query<wbr>Range</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ModuleData.html#streams" class="tsd-kind-icon">streams</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ModuleData.html#time" class="tsd-kind-icon">time</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2825,52 +2817,40 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="email" class="tsd-anchor"></a>
-				<h3>email</h3>
-				<div class="tsd-signature tsd-kind-icon">email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="queryRange" class="tsd-anchor"></a>
+				<h3>query<wbr>Range</h3>
+				<div class="tsd-signature tsd-kind-icon">query<wbr>Range<span class="tsd-signature-symbol">:</span> <a href="QueryRange.html" class="tsd-signature-type" data-tsd-kind="Interface">QueryRange</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L7">Authentication.ts:7</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L34">App.ts:34</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="firstName" class="tsd-anchor"></a>
-				<h3>first<wbr>Name</h3>
-				<div class="tsd-signature tsd-kind-icon">first<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="streams" class="tsd-anchor"></a>
+				<h3>streams</h3>
+				<div class="tsd-signature tsd-kind-icon">streams<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L5">Authentication.ts:5</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L36">App.ts:36</a></li>
 					</ul>
 				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="id" class="tsd-anchor"></a>
-				<h3>id</h3>
-				<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L9">Authentication.ts:9</a></li>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter-index-signature">
+							<h5><span class="tsd-signature-symbol">[</span>stream_name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="Stream.html" class="tsd-signature-type" data-tsd-kind="Interface">Stream</a></h5>
+						</li>
 					</ul>
-				</aside>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="lastName" class="tsd-anchor"></a>
-				<h3>last<wbr>Name</h3>
-				<div class="tsd-signature tsd-kind-icon">last<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="time" class="tsd-anchor"></a>
+				<h3>time</h3>
+				<div class="tsd-signature tsd-kind-icon">time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L6">Authentication.ts:6</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="organizationId" class="tsd-anchor"></a>
-				<h3>organization<wbr>Id</h3>
-				<div class="tsd-signature tsd-kind-icon">organization<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L8">Authentication.ts:8</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/App.ts#L35">App.ts:35</a></li>
 					</ul>
 				</aside>
 			</section>

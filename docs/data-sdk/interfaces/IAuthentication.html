@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>User | @formant/data-sdk</title>
+	<title>IAuthentication | @formant/data-sdk</title>
 	<meta name="description" content="Documentation for @formant/data-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2740,8 +2740,22 @@ img {
 		<li class=" tsd-kind-interface">
 			<a href="ConfigurationDocument.html" class="tsd-kind-icon">Configuration<wbr>Document</a>
 		</li>
-		<li class=" tsd-kind-interface">
+		<li class="current tsd-kind-interface">
 			<a href="IAuthentication.html" class="tsd-kind-icon">IAuthentication</a>
+			<ul>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="IAuthentication.html#accessToken" class="tsd-kind-icon">access<wbr>Token</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="IAuthentication.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="IAuthentication.html#refreshToken" class="tsd-kind-icon">refresh<wbr>Token</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="IAuthentication.html#userId" class="tsd-kind-icon">user<wbr>Id</a>
+				</li>
+			</ul>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a>
@@ -2758,25 +2772,8 @@ img {
 		<li class=" tsd-kind-interface">
 			<a href="TelemetryStream.html" class="tsd-kind-icon">Telemetry<wbr>Stream</a>
 		</li>
-		<li class="current tsd-kind-interface">
+		<li class=" tsd-kind-interface">
 			<a href="User.html" class="tsd-kind-icon">User</a>
-			<ul>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#email" class="tsd-kind-icon">email</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#firstName" class="tsd-kind-icon">first<wbr>Name</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#id" class="tsd-kind-icon">id</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#lastName" class="tsd-kind-icon">last<wbr>Name</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-interface">
-					<a href="User.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a>
-				</li>
-			</ul>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../modules.html#DataPoint" class="tsd-kind-icon">Data<wbr>Point</a>
@@ -2801,7 +2798,7 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">User</span>
+					<span class="target">IAuthentication</span>
 				</li>
 			</ul>
 		</section>
@@ -2812,11 +2809,10 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#email" class="tsd-kind-icon">email</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#firstName" class="tsd-kind-icon">first<wbr>Name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#id" class="tsd-kind-icon">id</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#lastName" class="tsd-kind-icon">last<wbr>Name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="User.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="IAuthentication.html#accessToken" class="tsd-kind-icon">access<wbr>Token</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="IAuthentication.html#organizationId" class="tsd-kind-icon">organization<wbr>Id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="IAuthentication.html#refreshToken" class="tsd-kind-icon">refresh<wbr>Token</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="IAuthentication.html#userId" class="tsd-kind-icon">user<wbr>Id</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2825,42 +2821,12 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="email" class="tsd-anchor"></a>
-				<h3>email</h3>
-				<div class="tsd-signature tsd-kind-icon">email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="accessToken" class="tsd-anchor"></a>
+				<h3>access<wbr>Token</h3>
+				<div class="tsd-signature tsd-kind-icon">access<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L7">Authentication.ts:7</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="firstName" class="tsd-anchor"></a>
-				<h3>first<wbr>Name</h3>
-				<div class="tsd-signature tsd-kind-icon">first<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L5">Authentication.ts:5</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="id" class="tsd-anchor"></a>
-				<h3>id</h3>
-				<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L9">Authentication.ts:9</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-				<a name="lastName" class="tsd-anchor"></a>
-				<h3>last<wbr>Name</h3>
-				<div class="tsd-signature tsd-kind-icon">last<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L6">Authentication.ts:6</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L13">Authentication.ts:13</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2870,7 +2836,27 @@ img {
 				<div class="tsd-signature tsd-kind-icon">organization<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L8">Authentication.ts:8</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L14">Authentication.ts:14</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<a name="refreshToken" class="tsd-anchor"></a>
+				<h3>refresh<wbr>Token</h3>
+				<div class="tsd-signature tsd-kind-icon">refresh<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L15">Authentication.ts:15</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<a name="userId" class="tsd-anchor"></a>
+				<h3>user<wbr>Id</h3>
+				<div class="tsd-signature tsd-kind-icon">user<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/9bbba86/packages/data-sdk/src/Authentication.ts#L16">Authentication.ts:16</a></li>
 					</ul>
 				</aside>
 			</section>
