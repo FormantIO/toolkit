@@ -9,14 +9,22 @@ export interface User {
   id: string;
 }
 
+export interface IAuthentication{
+  accessToken: string;
+  organizationId: string;
+  refreshToken: string;
+  userId: string;
+}
+
 export class Authentication {
   static token: string | undefined;
   static refreshToken: string | undefined;
   static currentUser: User | undefined;
   static defaultDeviceId: string | undefined;
   static waitingForAuth: ((result: boolean) => void)[] = [];
+  
 
-  public static async login(email: string, password: string) {
+  public static async login(email: string, password: string) : Promise<IAuthentication | Error>{
     try {
       const result = await fetch(`${FORMANT_API_URL}/v1/admin/auth/login`, {
         method: "POST",
@@ -33,11 +41,16 @@ export class Authentication {
         auth.authentication.accessToken as string,
         auth.authentication.refreshToken as string
       );
+
+      return auth.authentication
+      
     } catch (e: any) {
       Authentication.waitingForAuth.forEach((_) => _(false));
       Authentication.waitingForAuth = [];
-      throw e;
+
+      return Promise.reject(e)
     }
+
   }
 
   public static async loginWithToken(token: string, refreshToken?: string) {
