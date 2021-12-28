@@ -24,12 +24,31 @@ type EmbeddedAppMessage =
       time: number;
       queryRange: { start: number; end: number };
     };
-
-export type ModuleData = {
-  streams: { [x: string]: any };
+export interface ModuleData {
+  queryRange: QueryRange;
   time: number;
-  queryRange: { start: number; end: number };
-};
+  streams: { [stream_name: string]: Stream };
+}
+export interface QueryRange {
+  start: number;
+  end: number;
+}
+export interface Stream {
+  data: StreamData[];
+  loading: boolean;
+  tooMuchData: boolean;
+  type: string;
+}
+export interface StreamData {
+  points: DataPoint[];
+  deviceId: string;
+  agentId: string;
+  name: string;
+  tags: { [key: string]: string };
+  type: string;
+}
+
+export type DataPoint = [number, any];
 
 export class App {
   private static sendAppMessage(message: AppMessage) {
