@@ -18,12 +18,12 @@
       "require": "./dist/data-sdk.umd.js"
     }
   },
-  "version": "0.0.43",
+  "version": "0.0.53",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types",
+    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme minimal --out ../../docs/data-sdk/"
   },
   "devDependencies": {

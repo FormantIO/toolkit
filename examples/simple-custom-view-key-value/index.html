@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+  </head>
+  <body></body>
+  <script type="module">
+    import {
+      Authentication,
+      KeyValue,
+    } from "https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.es6.js";
+    await Authentication.login("sam@robot.xyz", "12345");
+    await KeyValue.set("key", "value");
+    const value = await KeyValue.get("key");
+    document.body.innerHTML = "set value is" + value;
+  </script>
+</html>
