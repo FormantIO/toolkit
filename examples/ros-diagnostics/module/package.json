@@ -38,6 +38,6 @@
     ]
   },
   "devDependencies": {
-    "@formant/data-sdk": "^0.0.52"
+    "@formant/data-sdk": "latest"
   }
 }
