@@ -1,15 +1,7 @@
-import * as THREE from "three";
-import { Authentication, Device, Fleet, IJointState } from "@formant/data-sdk";
+import { Device, Fleet, IJointState } from "@formant/data-sdk";
 import { defined } from "../../common/defined";
 import * as THREE from "three";
-import {
-  Group,
-  HemisphereLight,
-  LoadingManager,
-  Mesh,
-  PointLight,
-  Scene,
-} from "three";
+import { LoadingManager, Mesh, Scene } from "three";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 import URDFLoader, { URDFRobot } from "urdf-loader";
 import { Object3D } from "three";
@@ -17,15 +9,13 @@ import * as JSZip from "jszip";
 
 export class DeviceURDF extends THREE.Object3D {
   private robot?: URDFRobot;
-  jointStateStream: RealtimeJointStateStream | undefined;
-
   private meshs: Mesh[] = [];
 
   private opacity = 1.0;
   private transparent = false;
   private color = new THREE.Color("white");
 
-  constructor(private device: Device, private jointStateStreamName?: string) {
+  constructor(private device: Device) {
     super();
     this.setup();
   }
@@ -148,27 +138,6 @@ export class DeviceURDF extends THREE.Object3D {
   };
 
   async startListening() {
-    const device = defined(this.device);
-    const joinStateStreams = await device.getRealtimeVideoStreams();
-    if (!this.jointStateStreamName) {
-      if (joinStateStreams.length === 0) {
-        throw new Error(`Device ${device?.name} has no joint state streams`);
-      }
-      this.jointStateStream = joinStateStreams[0];
-    } else {
-      this.jointStateStream = joinStateStreams.find(
-        (_) => _.name === this.jointStateStreamName
-      );
-      if (!this.jointStateStream) {
-        throw new Error(
-          `Device ${device?.name} has no joint state stream ${this.jointStateStreamName}`
-        );
-      }
-    }
-    await this._start();
-  }
-
-  async _start() {
     const device = defined(this.device);
     await device.startRealtimeConnection();
     const manipulators = await device.getRealtimeManipulators();
