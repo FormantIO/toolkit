@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { DeviceURDF } from "@formant/three-formant-urdf";
 import { Object3D } from "three";
+import { Fleet } from "@formant/data-sdk";
 
 const scene = new THREE.Scene();
 
 // Add device URDF using the current device context
 const btn = document.querySelector("button");
-btn?.addEventListener("click", () => {
-  const urdf = new DeviceURDF();
+btn?.addEventListener("click", async () => {
+  const urdf = new DeviceURDF(await Fleet.getCurrentDevice());
   urdf.scale.set(0.2, 0.2, 0.2);
   urdf.rotateX(90);
   scene.add(urdf as Object3D);
