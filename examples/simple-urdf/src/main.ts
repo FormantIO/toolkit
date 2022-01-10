@@ -1,13 +1,18 @@
 import * as THREE from "three";
 import { DeviceURDF } from "@formant/three-formant-urdf";
+import { Object3D } from "three";
 
 const scene = new THREE.Scene();
 
 // Add device URDF using the current device context
-const urdf = new DeviceURDF();
-urdf.scale.set(0.2, 0.2, 0.2);
-urdf.rotateX(90);
-scene.add(urdf);
+const btn = document.querySelector("button");
+btn?.addEventListener("click", () => {
+  const urdf = new DeviceURDF();
+  urdf.scale.set(0.2, 0.2, 0.2);
+  urdf.rotateX(90);
+  scene.add(urdf as Object3D);
+  btn.remove();
+});
 
 const camera = new THREE.PerspectiveCamera(
   75,
