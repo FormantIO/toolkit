@@ -7,7 +7,10 @@ import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
 import { Manipulator } from "./Manipulator";
 import { Fleet } from "./Fleet";
-import { TextRequestDataChannel, BinaryRequestDataChannel } from "./RequestDataChannel";
+import {
+  TextRequestDataChannel,
+  BinaryRequestDataChannel,
+} from "./RequestDataChannel";
 
 export interface ConfigurationDocument {
   urdfFiles: string[];
@@ -28,24 +31,33 @@ export interface Command {
   };
 }
 
+export interface IJointState {
+  name: string[];
+  position: number[];
+  velocity?: number[];
+  effort?: number[];
+}
+
 export interface TelemetryStream {
   name: string;
   onDemand: boolean;
 }
 
+export type RealtimeMessage = {
+  header: {
+    created: number;
+    stream: {
+      entityId: string;
+      streamName: string;
+      streamType: string;
+    };
+  };
+  payload: any;
+};
+
 export type RealtimeListener = (
   peerId: string,
-  message: {
-    header: {
-      created: number;
-      stream: {
-        entityId: string;
-        streamName: string;
-        streamType: string;
-      };
-    };
-    payload: any;
-  }
+  message: RealtimeMessage
 ) => void;
 
 export type RealtimeVideoStream = {
@@ -220,11 +232,11 @@ export class Device {
 
   async getRealtimeManipulators(): Promise<Manipulator[]> {
     const document = (await this.getConfiguration()) as any;
-    const streams = [];
+    const manipulators = [];
 
     for (const _ of document.teleop.rosStreams ?? []) {
       if (_.topicType == "sensor_msgs/JointState") {
-        streams.push(
+        manipulators.push(
           new Manipulator(this, {
             currentJointStateStream: { name: _.topicName },
             plannedJointStateStream: _.plannedTopic
@@ -243,7 +255,7 @@ export class Device {
         );
       }
     }
-    return streams;
+    return manipulators;
   }
 
   async startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
@@ -453,14 +465,14 @@ export class Device {
 
   createCustomRequestDataChannel(
     channelName: string,
-    timeout: number = 3000, // 3 seconds default timeout
+    timeout: number = 3000 // 3 seconds default timeout
   ): TextRequestDataChannel {
     return new TextRequestDataChannel(this, channelName, timeout);
   }
 
   createCustomBinaryRequestDataChannel(
     channelName: string,
-    timeout: number = 3000, // 3 seconds default timeout
+    timeout: number = 3000 // 3 seconds default timeout
   ): BinaryRequestDataChannel {
     return new BinaryRequestDataChannel(this, channelName, timeout);
   }

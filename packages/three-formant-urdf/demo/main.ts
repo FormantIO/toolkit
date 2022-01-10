@@ -10,6 +10,7 @@ Authentication.waitTilAuthenticated().then(async () => {
   const urdf = new DeviceURDF(await Fleet.getCurrentDevice());
   urdf.scale.set(3, 3, 3);
   urdf.rotateX(-90);
+  urdf.rotateZ(-90);
   scene.add(urdf);
 });
 

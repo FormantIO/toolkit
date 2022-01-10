@@ -2734,6 +2734,18 @@ img {
 				<li class=" tsd-kind-constructor tsd-parent-kind-class">
 					<a href="Manipulator.html#constructor" class="tsd-kind-icon">constructor</a>
 				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="Manipulator.html#currentListeners" class="tsd-kind-icon">current<wbr>Listeners</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Manipulator.html#addCurrentJointStateListener" class="tsd-kind-icon">add<wbr>Current<wbr>Joint<wbr>State<wbr>Listener</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Manipulator.html#desynchronize" class="tsd-kind-icon">desynchronize</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="Manipulator.html#onRealtimeMessage" class="tsd-kind-icon">on<wbr>Realtime<wbr>Message</a>
+				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="Manipulator.html#synchronize" class="tsd-kind-icon">synchronize</a>
 				</li>
@@ -2753,6 +2765,9 @@ img {
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/IAuthentication.html" class="tsd-kind-icon">IAuthentication</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/IJointState.html" class="tsd-kind-icon">IJoint<wbr>State</a>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a>
@@ -2785,6 +2800,9 @@ img {
 			<a href="../modules.html#RealtimeManipulatorConfig" class="tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
+			<a href="../modules.html#RealtimeMessage" class="tsd-kind-icon">Realtime<wbr>Message</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
 			<a href="../modules.html#RealtimeVideoStream" class="tsd-kind-icon">Realtime<wbr>Video<wbr>Stream</a>
 		</li>
 	</ul>
@@ -2810,8 +2828,17 @@ img {
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
+						<h3>Properties</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="Manipulator.html#currentListeners" class="tsd-kind-icon">current<wbr>Listeners</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Manipulator.html#addCurrentJointStateListener" class="tsd-kind-icon">add<wbr>Current<wbr>Joint<wbr>State<wbr>Listener</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Manipulator.html#desynchronize" class="tsd-kind-icon">desynchronize</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Manipulator.html#onRealtimeMessage" class="tsd-kind-icon">on<wbr>Realtime<wbr>Message</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="Manipulator.html#synchronize" class="tsd-kind-icon">synchronize</a></li>
 						</ul>
 					</section>
@@ -2830,7 +2857,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Manipulator.ts#L14">Manipulator.ts:14</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L20">Manipulator.ts:20</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2848,7 +2875,104 @@ img {
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Properties</h2>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="currentListeners" class="tsd-anchor"></a>
+				<h3>current<wbr>Listeners</h3>
+				<div class="tsd-signature tsd-kind-icon">current<wbr>Listeners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>js<span class="tsd-signature-symbol">: </span><a href="../interfaces/IJointState.html" class="tsd-signature-type" data-tsd-kind="Interface">IJointState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L19">Manipulator.ts:19</a></li>
+					</ul>
+				</aside>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="addCurrentJointStateListener" class="tsd-anchor"></a>
+				<h3>add<wbr>Current<wbr>Joint<wbr>State<wbr>Listener</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">add<wbr>Current<wbr>Joint<wbr>State<wbr>Listener<span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>js<span class="tsd-signature-symbol">: </span><a href="../interfaces/IJointState.html" class="tsd-signature-type" data-tsd-kind="Interface">IJointState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L47">Manipulator.ts:47</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>listener: <span class="tsd-signature-symbol">(</span>js<span class="tsd-signature-symbol">: </span><a href="../interfaces/IJointState.html" class="tsd-signature-type" data-tsd-kind="Interface">IJointState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>js<span class="tsd-signature-symbol">: </span><a href="../interfaces/IJointState.html" class="tsd-signature-type" data-tsd-kind="Interface">IJointState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>js: <a href="../interfaces/IJointState.html" class="tsd-signature-type" data-tsd-kind="Interface">IJointState</a></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="desynchronize" class="tsd-anchor"></a>
+				<h3>desynchronize</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">desynchronize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L32">Manipulator.ts:32</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="onRealtimeMessage" class="tsd-anchor"></a>
+				<h3>on<wbr>Realtime<wbr>Message</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Realtime<wbr>Message<span class="tsd-signature-symbol">(</span>_peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><a href="../modules.html#RealtimeMessage" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L39">Manipulator.ts:39</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>_peerId: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>message: <a href="../modules.html#RealtimeMessage" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeMessage</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="synchronize" class="tsd-anchor"></a>
 				<h3>synchronize</h3>
@@ -2859,7 +2983,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Manipulator.ts#L19">Manipulator.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L25">Manipulator.ts:25</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>

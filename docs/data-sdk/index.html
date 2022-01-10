@@ -2747,6 +2747,9 @@ img {
 			<a href="interfaces/IAuthentication.html" class="tsd-kind-icon">IAuthentication</a>
 		</li>
 		<li class=" tsd-kind-interface">
+			<a href="interfaces/IJointState.html" class="tsd-kind-icon">IJoint<wbr>State</a>
+		</li>
+		<li class=" tsd-kind-interface">
 			<a href="interfaces/ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a>
 		</li>
 		<li class=" tsd-kind-interface">
@@ -2775,6 +2778,9 @@ img {
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="modules.html#RealtimeManipulatorConfig" class="tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="modules.html#RealtimeMessage" class="tsd-kind-icon">Realtime<wbr>Message</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="modules.html#RealtimeVideoStream" class="tsd-kind-icon">Realtime<wbr>Video<wbr>Stream</a>
@@ -2817,6 +2823,7 @@ img {
 							<li class="tsd-kind-interface"><a href="interfaces/Command.html" class="tsd-kind-icon">Command</a></li>
 							<li class="tsd-kind-interface"><a href="interfaces/ConfigurationDocument.html" class="tsd-kind-icon">Configuration<wbr>Document</a></li>
 							<li class="tsd-kind-interface"><a href="interfaces/IAuthentication.html" class="tsd-kind-icon">IAuthentication</a></li>
+							<li class="tsd-kind-interface"><a href="interfaces/IJointState.html" class="tsd-kind-icon">IJoint<wbr>State</a></li>
 							<li class="tsd-kind-interface"><a href="interfaces/ModuleData.html" class="tsd-kind-icon">Module<wbr>Data</a></li>
 							<li class="tsd-kind-interface"><a href="interfaces/QueryRange.html" class="tsd-kind-icon">Query<wbr>Range</a></li>
 							<li class="tsd-kind-interface"><a href="interfaces/Stream.html" class="tsd-kind-icon">Stream</a></li>
@@ -2832,6 +2839,7 @@ img {
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeDataStream" class="tsd-kind-icon">Realtime<wbr>Data<wbr>Stream</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeListener" class="tsd-kind-icon">Realtime<wbr>Listener</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeManipulatorConfig" class="tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config</a></li>
+							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeMessage" class="tsd-kind-icon">Realtime<wbr>Message</a></li>
 							<li class="tsd-kind-type-alias"><a href="modules.html#RealtimeVideoStream" class="tsd-kind-icon">Realtime<wbr>Video<wbr>Stream</a></li>
 						</ul>
 					</section>
@@ -2846,7 +2854,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Data<wbr>Point<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/App.ts#L57">App.ts:57</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/App.ts#L57">App.ts:57</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2856,7 +2864,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Data<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Device.ts#L55">Device.ts:55</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Device.ts#L67">Device.ts:67</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2871,10 +2879,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="RealtimeListener" class="tsd-anchor"></a>
 				<h3>Realtime<wbr>Listener</h3>
-				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><a href="modules.html#RealtimeMessage" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Device.ts#L36">Device.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Device.ts#L58">Device.ts:58</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2882,7 +2890,7 @@ img {
 					<ul class="tsd-parameters">
 						<li class="tsd-parameter-signature">
 							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>peerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><a href="modules.html#RealtimeMessage" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
@@ -2892,34 +2900,7 @@ img {
 											<h5>peerId: <span class="tsd-signature-type">string</span></h5>
 										</li>
 										<li>
-											<h5>message: <span class="tsd-signature-symbol">{ </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h5>
-											<ul class="tsd-parameters">
-												<li class="tsd-parameter">
-													<h5>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span></h5>
-													<ul class="tsd-parameters">
-														<li class="tsd-parameter">
-															<h5>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-														</li>
-														<li class="tsd-parameter">
-															<h5>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
-															<ul class="tsd-parameters">
-																<li class="tsd-parameter">
-																	<h5>entity<wbr>Id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-																</li>
-																<li class="tsd-parameter">
-																	<h5>stream<wbr>Name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-																</li>
-																<li class="tsd-parameter">
-																	<h5>stream<wbr>Type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-																</li>
-															</ul>
-														</li>
-													</ul>
-												</li>
-												<li class="tsd-parameter">
-													<h5>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-												</li>
-											</ul>
+											<h5>message: <a href="modules.html#RealtimeMessage" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeMessage</a></h5>
 										</li>
 									</ul>
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2935,7 +2916,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Manipulator<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>baseReferenceFrame<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>currentJointStateStream<span class="tsd-signature-symbol">: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>endEffectorLinkName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>endEffectorStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>localFrame<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>planValidStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol">; </span>plannedJointStateStream<span class="tsd-signature-symbol">?: </span><a href="modules.html#RealtimeDataStream" class="tsd-signature-type" data-tsd-kind="Type alias">RealtimeDataStream</a><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Manipulator.ts#L3">Manipulator.ts:3</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Manipulator.ts#L8">Manipulator.ts:8</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2966,12 +2947,52 @@ img {
 				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="RealtimeMessage" class="tsd-anchor"></a>
+				<h3>Realtime<wbr>Message</h3>
+				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Device.ts#L46">Device.ts:46</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter">
+							<h5>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span></h5>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>created<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>stream<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>entityId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>streamType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>entity<wbr>Id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>stream<wbr>Name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>stream<wbr>Type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
+						</li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="RealtimeVideoStream" class="tsd-anchor"></a>
 				<h3>Realtime<wbr>Video<wbr>Stream</h3>
 				<div class="tsd-signature tsd-kind-icon">Realtime<wbr>Video<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/05f7ace/packages/data-sdk/src/Device.ts#L51">Device.ts:51</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/6c127f7/packages/data-sdk/src/Device.ts#L63">Device.ts:63</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">

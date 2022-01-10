@@ -1,10 +1,5 @@
 import * as THREE from "three";
-import {
-  Authentication,
-  Device,
-  Fleet,
-  RealtimeJointStateStream,
-} from "@formant/data-sdk";
+import { Authentication, Device, Fleet, IJointState } from "@formant/data-sdk";
 import { defined } from "../../common/defined";
 import * as THREE from "three";
 import {
@@ -174,33 +169,31 @@ export class DeviceURDF extends THREE.Object3D {
   }
 
   async _start() {
-    defined(this.device).addRealtimeListener((_peer, message) => {
-      if (message.header.stream.streamName === this.jointStateStream?.name) {
-      }
-    });
-    await defined(this.device).startListeningToRealtimeJointState(
-      defined(this.jointStateStream)
-    );
-  }
+    const device = defined(this.device);
+    await device.startRealtimeConnection();
+    const manipulators = await device.getRealtimeManipulators();
+    if (manipulators.length > 0) {
+      const manipulator = manipulators[0];
+      await manipulator.synchronize();
+      await manipulator.addCurrentJointStateListener(
+        (jointState: IJointState) => {
+          const robot = defined(this.robot);
 
-  public set jointState(jointState: IJointState) {
-    const { robot } = this;
-    if (!robot) {
-      return;
+          const { name: names } = jointState;
+
+          Object.keys(robot.joints).forEach((_) => {
+            const joint = robot.joints[_];
+
+            const index = names.indexOf(_);
+
+            const effort = jointState.effort?.[index] ?? 0;
+            const position = jointState.position?.[index] ?? 0;
+            const velocity = jointState.velocity?.[index] ?? 0;
+
+            joint.setJointValue(position, effort, velocity);
+          });
+        }
+      );
     }
-
-    const { name: names } = jointState;
-
-    Object.keys(robot.joints).forEach((_) => {
-      const joint = robot.joints[_];
-
-      const index = names.indexOf(_);
-
-      const effort = jointState.effort?.[index] ?? 0;
-      const position = jointState.position?.[index] ?? 0;
-      const velocity = jointState.velocity?.[index] ?? 0;
-
-      joint.setJointValue(position, effort, velocity);
-    });
   }
 }
