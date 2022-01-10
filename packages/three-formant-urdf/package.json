@@ -19,12 +19,14 @@
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "devDependencies": {
+    "@formant/data-sdk": "latest",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   },
   "dependencies": {
-    "@formant/data-sdk": "0.0.27",
+    "@formant/data-sdk": "latest",
     "@types/three": "^0.131.0",
+    "jszip": "^3.7.1",
     "three": "^0.132.2",
     "urdf-loader": "^0.10.2"
   },

@@ -1,13 +1,17 @@
 import * as THREE from "three";
 import { DeviceURDF } from "../src/DeviceURDF";
+import { Authentication, Fleet } from "@formant/data-sdk";
 
 const scene = new THREE.Scene();
 
 // Add device URDF using the current device context
-const urdf = new DeviceURDF();
-urdf.scale.set(0.2, 0.2, 0.2);
-urdf.rotateX(90);
-scene.add(urdf);
+
+Authentication.waitTilAuthenticated().then(async () => {
+  const urdf = new DeviceURDF(await Fleet.getCurrentDevice());
+  urdf.scale.set(3, 3, 3);
+  urdf.rotateX(-90);
+  scene.add(urdf);
+});
 
 const camera = new THREE.PerspectiveCamera(
   75,
