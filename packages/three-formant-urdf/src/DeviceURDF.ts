@@ -7,7 +7,7 @@ import URDFLoader, { URDFRobot } from "urdf-loader";
 import { Object3D } from "three";
 import * as JSZip from "jszip";
 
-class DeviceURDF extends THREE.Object3D {
+export class DeviceURDF extends THREE.Object3D {
   private robot?: URDFRobot;
   private meshs: Mesh[] = [];
 
