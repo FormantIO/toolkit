@@ -17,58 +17,65 @@ export class DeviceURDF extends THREE.Object3D {
 
   constructor(private device: Device) {
     super();
-    this.setup();
+    return this
   }
 
-  async setup() {
-    const device = defined(this.device);
-    const config = await device.getConfiguration();
-    if (!config.urdfFiles || config.urdfFiles.length === 0) {
-      console.error("No URDF files found for device " + device.name);
-      return;
-    }
-    const zipFileUrl = await Fleet.getFileUrl(config.urdfFiles[0]);
-    let blobUrl = await this.loadURDFIntoBlob(zipFileUrl);
-    if (blobUrl) {
-      const manager = new LoadingManager();
-      const loader = new URDFLoader(manager);
-
-      loader.loadMeshCb = ((
-        path: string,
-        loadingManager: LoadingManager,
-        done: (s: Scene) => void
-      ) => {
-        const daeLoader = new ColladaLoader(loadingManager);
-        daeLoader.load(path, (dae) => {
-          const { opacity, transparent, color } = this;
-          dae.scene.children = dae.scene.children.filter(
-            (_) => !_.type.endsWith("Light")
-          );
-          dae.scene.traverse((_) => {
-            if (_ instanceof Mesh) {
-              this.meshs.push(_);
-              _.geometry.computeVertexNormals();
-
-              _.material = new THREE.MeshPhongMaterial({
-                color,
-                opacity,
-                transparent,
-              });
-            }
+  async setup(): Promise<any>  {
+    try{
+      const device = defined(this.device);
+      const config = await device.getConfiguration();
+      if (!config.urdfFiles || config.urdfFiles.length === 0) {
+        throw new Error("No URDF files found for device " + device.name);
+      }
+      const zipFileUrl = await Fleet.getFileUrl(config.urdfFiles[0]);
+      let blobUrl = await this.loadURDFIntoBlob(zipFileUrl);
+      if (blobUrl) {
+        const manager = new LoadingManager();
+        const loader = new URDFLoader(manager);
+  
+        loader.loadMeshCb = ((
+          path: string,
+          loadingManager: LoadingManager,
+          done: (s: Scene) => void
+        ) => {
+          const daeLoader = new ColladaLoader(loadingManager);
+          daeLoader.load(path, (dae) => {
+            const { opacity, transparent, color } = this;
+            dae.scene.children = dae.scene.children.filter(
+              (_) => !_.type.endsWith("Light")
+            );
+            dae.scene.traverse((_) => {
+              if (_ instanceof Mesh) {
+                this.meshs.push(_);
+                _.geometry.computeVertexNormals();
+  
+                _.material = new THREE.MeshPhongMaterial({
+                  color,
+                  opacity,
+                  transparent,
+                });
+              }
+            });
+  
+            done(dae.scene);
           });
-
-          done(dae.scene);
+        }).bind(loader);
+  
+        loader.load(blobUrl, async (robot) => {
+          this.robot = robot;
+          this.add(robot as unknown as Object3D);
+          this.startListening();
         });
-      }).bind(loader);
 
-      loader.load(blobUrl, async (robot) => {
-        this.robot = robot;
-        this.add(robot as unknown as Object3D);
-        this.startListening();
-      });
-    } else {
-      console.error("URDF file zip was invalid for device " + device.name);
+        return Promise.resolve()
+      } else {
+        throw new Error("URDF file zip was invalid for device " + device.name);
+      }
+    } catch(e: any){
+      console.log(e.message)
+      return Promise.reject(e)
     }
+    
   }
 
   loadURDFIntoBlob = async (zipPath: string): Promise<string | false> => {
@@ -166,3 +173,5 @@ export class DeviceURDF extends THREE.Object3D {
     }
   }
 }
+
+export async function getDeviceURDF (device: Device) {  return await new DeviceURDF(device).setup() }
