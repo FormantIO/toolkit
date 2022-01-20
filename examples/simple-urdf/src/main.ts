@@ -9,8 +9,10 @@ const scene = new THREE.Scene();
 Authentication.waitTilAuthenticated().then(async () => {
   const urdf = new DeviceURDF(await Fleet.getCurrentDevice());
   urdf.scale.set(4, 4, 4);
-  urdf.rotateX(-90);
+  urdf.rotateX(-Math.PI / 2);
+  urdf.rotateZ(-Math.PI / 4);
   scene.add(urdf as Object3D);
+  await urdf.setup();
 });
 
 const camera = new THREE.PerspectiveCamera(
