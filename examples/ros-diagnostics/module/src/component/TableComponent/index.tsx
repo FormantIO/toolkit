@@ -1,52 +1,53 @@
-import { Component } from "react";
+import { Component, ReactNode } from "react";
+import styles from "./index.module.scss";
 import RosTopicStats from "../../types/RosTopicStats";
 import moduleConfig from "../../config/moduleConfig";
-import { Table } from "semantic-ui-react";
+import { Table } from "./Table";
+import { TableHeader } from "./TableHeader";
+import { TableBody } from "./TableBody";
+import { TableRow } from "./TableRow";
+import { TableSection } from "./TableSection";
+import { TableDataCell } from "./TableDataCell";
 
-interface ITableContentsProps {
+interface ITableProps {
+  tableHeaders: string[];
   topicStats: RosTopicStats[];
 }
-
-class TableContents extends Component<ITableContentsProps> {
+export class TableComponent extends Component<ITableProps> {
   public constructor(props: any) {
     super(props);
   }
-  public render() {
+  render(): ReactNode {
     const topicsSplit = splitTopicStatsByConfig(this.props.topicStats);
+
     return (
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Section</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Hz</Table.HeaderCell>
-            <Table.HeaderCell>Health</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
+      <Table columns={this.props.tableHeaders.length}>
+        <TableHeader headers={this.props.tableHeaders} />
+        <TableBody>
           {topicsSplit.map((_) => {
             return _.contents.map((content, index) => {
               return (
-                <Table.Row>
+                <TableRow>
                   {index === 0 && (
-                    <Table.Cell rowSpan={_.contents.length}>
-                      {_.title}
-                    </Table.Cell>
+                    <TableSection title={_.title} rowSpan={_.contents.length} />
                   )}
-                  <Table.Cell>{content.name}</Table.Cell>
-                  <Table.Cell>{content.type}</Table.Cell>
-                  <Table.Cell>{Math.trunc(content.hz)}</Table.Cell>
-                  <Table.Cell>
-                    {minHzForTopic(content.name) <= content.hz
-                      ? "True"
-                      : "False"}
-                  </Table.Cell>
-                </Table.Row>
+                  <TableDataCell
+                    content={content.name}
+                    type={
+                      _.title === "other"
+                        ? "unknown"
+                        : minHzForTopic(content.name) <= content.hz
+                        ? "good"
+                        : "bad"
+                    }
+                  />
+                  <TableDataCell content={content.type} />
+                  <TableDataCell content={Math.trunc(content.hz)} />
+                </TableRow>
               );
             });
           })}
-        </Table.Body>
+        </TableBody>
       </Table>
     );
   }
@@ -90,4 +91,3 @@ function splitTopicStatsByConfig(
   topicsSplitBySection.push({ title: "other", contents: remainingTopics });
   return topicsSplitBySection;
 }
-export default TableContents;
