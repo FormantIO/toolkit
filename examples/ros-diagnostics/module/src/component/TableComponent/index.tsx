@@ -2,18 +2,17 @@ import { Component, ReactNode } from "react";
 import styles from "./index.module.scss";
 import RosTopicStats from "../../types/RosTopicStats";
 import moduleConfig from "../../config/moduleConfig";
+import { Table } from "./Table";
+import { TableHeader } from "./TableHeader";
+import { TableBody } from "./TableBody";
+import { TableRow } from "./TableRow";
+import { TableSection } from "./TableSection";
+import { TableDataCell } from "./TableDataCell";
 
 interface ITableProps {
   tableHeaders: string[];
   topicStats: RosTopicStats[];
 }
-
-enum healthState {
-  unknown,
-  low,
-  good,
-}
-
 export class TableComponent extends Component<ITableProps> {
   public constructor(props: any) {
     super(props);
@@ -22,61 +21,34 @@ export class TableComponent extends Component<ITableProps> {
     const topicsSplit = splitTopicStatsByConfig(this.props.topicStats);
 
     return (
-      <table
-        className={styles.table}
-        style={{
-          gridTemplateColumns: `repeat(${this.props.tableHeaders.length}, 1fr)`,
-        }}
-      >
-        <tr>
-          {/* Header */}
-          {this.props.tableHeaders.map((_) => {
-            return <th className={styles["table-header"]}>{_}</th>;
-          })}
-        </tr>
-        <tbody>
+      <Table columns={this.props.tableHeaders.length}>
+        <TableHeader headers={this.props.tableHeaders} />
+        <TableBody>
           {topicsSplit.map((_) => {
             return _.contents.map((content, index) => {
               return (
-                <tr className={styles["table-row"]}>
+                <TableRow>
                   {index === 0 && (
-                    <td
-                      className={styles["table-section"]}
-                      rowSpan={_.contents.length}
-                    >
-                      {_.title}
-                    </td>
+                    <TableSection title={_.title} rowSpan={_.contents.length} />
                   )}
-                  <td
-                    className={`${styles["table-data-cell"]} 
-                    ${styles["table-data-cell-name"]} 
-                    ${
-                      styles[
-                        _.title === "other"
-                          ? "table-data-cell-unknown"
-                          : minHzForTopic(content.name) <= content.hz
-                          ? "table-data-cell-good"
-                          : "table-data-cell-bad"
-                      ]
-                    }`}
-                  >
-                    {content.name}
-                  </td>
-                  <td className={styles["table-data-cell"]}>{content.type}</td>
-                  <td className={styles["table-data-cell"]}>
-                    {Math.trunc(content.hz)}
-                  </td>
-                  {/* <td className={styles["table-data-cell"]}>
-                    {minHzForTopic(content.name) <= content.hz
-                      ? "True"
-                      : "False"}
-                  </td> */}
-                </tr>
+                  <TableDataCell
+                    content={content.name}
+                    type={
+                      _.title === "other"
+                        ? "unknown"
+                        : minHzForTopic(content.name) <= content.hz
+                        ? "good"
+                        : "bad"
+                    }
+                  />
+                  <TableDataCell content={content.type} />
+                  <TableDataCell content={Math.trunc(content.hz)} />
+                </TableRow>
               );
             });
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     );
   }
 }

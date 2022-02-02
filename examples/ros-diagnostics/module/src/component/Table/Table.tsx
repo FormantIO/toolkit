@@ -3,7 +3,6 @@ import { Component } from "react";
 import { ModuleData, App } from "@formant/data-sdk";
 
 import RosTopicStats from "../../types/RosTopicStats";
-import TableContents from "./TableContents";
 import { TableComponent } from "../TableComponent/index";
 import { ErrorMsg } from "../ErrorMsg/ErrorMsg";
 interface ITableState {
@@ -28,7 +27,6 @@ class Table extends Component<{}, ITableState> {
     const message = errorMessage ?? "Loading...";
     return tableContentsVisible ? (
       <>
-        {/* <TableContents topicStats={latestStats} /> */}
         <TableComponent
           topicStats={latestStats}
           tableHeaders={["Section", "Name", "Type", "Hz"]}

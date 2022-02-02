@@ -1,0 +1,52 @@
+.data-cell {
+  min-height: 30px;
+  border-right: 1px solid #1c1e2d;
+  padding-left: 10px;
+  position: relative;
+  &-name {
+    padding-left: 30px;
+  }
+  &-unknown {
+    padding-left: 30px;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 5px;
+      height: 27px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      background-color: #657197;
+    }
+  }
+
+  &-good {
+    padding-left: 30px;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 5px;
+      height: 27px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      background-color: #18d2ff;
+    }
+  }
+  &-bad {
+    padding-left: 30px;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 5px;
+      height: 27px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      background-color: #f89973;
+    }
+  }
+}

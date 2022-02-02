@@ -20,11 +20,9 @@ export class ErrorMsg extends Component<IErrorMsgProps> {
           <div
             className={`${styles["error-icon"]} ${
               styles[
-                styles[
-                  this.props.msg.includes("Error")
-                    ? "error-icon-show"
-                    : "error-icon-hide"
-                ]
+                this.props.msg.includes("Error")
+                  ? "error-icon-show"
+                  : "error-icon-hide"
               ]
             }`}
           >
