@@ -2,7 +2,7 @@ import { Component } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
 import moduleConfig from "../../config/moduleConfig";
 import { Table } from "semantic-ui-react";
-
+import "./Table.scss";
 interface ITableContentsProps {
   topicStats: RosTopicStats[];
 }
@@ -14,7 +14,7 @@ class TableContents extends Component<ITableContentsProps> {
   public render() {
     const topicsSplit = splitTopicStatsByConfig(this.props.topicStats);
     return (
-      <Table>
+      <Table className="formant-table" celled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Section</Table.HeaderCell>
