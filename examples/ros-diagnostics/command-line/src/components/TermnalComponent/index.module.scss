@@ -1,0 +1,35 @@
+.terminal {
+  width: 100vw;
+  height: 100vh;
+  text-align: left;
+  padding: 10px;
+  &-focused {
+    background-color: black;
+    border: 1px solid #18d2ff;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    span {
+      color: #18d2ff !important ;
+    }
+  }
+  span {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    font-size: 16px;
+  }
+  textarea {
+    background: transparent;
+    outline: none;
+    border: none;
+    color: #fff;
+    padding-left: 10px;
+    width: auto;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    min-height: 100%;
+    min-width: 100%;
+    padding: 10px;
+  }
+}
