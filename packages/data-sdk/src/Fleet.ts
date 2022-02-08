@@ -3,6 +3,7 @@ import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { defined } from "../../common/defined";
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
+import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 export interface User {
   firstName: string;
@@ -122,7 +123,24 @@ export class Fleet {
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 
-  static async getRealtimeSessions() {
+  static async getPeers(): Promise<IRtcPeer[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const rtcClient = new RtcClient({
+      signalingClient: new SignalingPromiseClient(FORMANT_API_URL, null, null),
+      getToken: async () => {
+        return defined(
+          Authentication.token,
+          "Realtime when user isn't authorized"
+        );
+      },
+      receive: () => {},
+    });
+    return await rtcClient.getPeers();
+  }
+
+  static async getRealtimeSessions(): Promise<{ [key in string]: string[] }> {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
@@ -137,6 +155,16 @@ export class Fleet {
       receive: () => {},
     });
     return await rtcClient.getSessions();
+  }
+
+  static async isDeviceInRealtimeSession(deviceId: string): Promise<boolean> {
+    let peers = await Fleet.getPeers();
+    let sessions = await Fleet.getRealtimeSessions();
+    let peer = peers.find((_) => _.deviceId === deviceId);
+    if (peer) {
+      return sessions[peer.id].length > 0;
+    }
+    return false;
   }
 
   static async getRealtimeDevices(): Promise<Device[]> {
