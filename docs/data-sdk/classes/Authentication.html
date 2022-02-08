@@ -2714,10 +2714,16 @@ img {
 					<a href="Authentication.html#constructor" class="tsd-kind-icon">constructor</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a href="Authentication.html#currentOrganization" class="tsd-kind-icon">current<wbr>Organization</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a href="Authentication.html#currentUser" class="tsd-kind-icon">current<wbr>User</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a href="Authentication.html#defaultDeviceId" class="tsd-kind-icon">default<wbr>Device<wbr>Id</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a href="Authentication.html#isShareToken" class="tsd-kind-icon">is<wbr>Share<wbr>Token</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a href="Authentication.html#refreshToken" class="tsd-kind-icon">refresh<wbr>Token</a>
@@ -2848,8 +2854,10 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#currentOrganization" class="tsd-kind-icon">current<wbr>Organization</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#currentUser" class="tsd-kind-icon">current<wbr>User</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#defaultDeviceId" class="tsd-kind-icon">default<wbr>Device<wbr>Id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#isShareToken" class="tsd-kind-icon">is<wbr>Share<wbr>Token</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#refreshToken" class="tsd-kind-icon">refresh<wbr>Token</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#token" class="tsd-kind-icon">token</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Authentication.html#waitingForAuth" class="tsd-kind-icon">waiting<wbr>For<wbr>Auth</a></li>
@@ -2889,12 +2897,22 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<a name="currentOrganization" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> current<wbr>Organization</h3>
+				<div class="tsd-signature tsd-kind-icon">current<wbr>Organization<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L23">Authentication.ts:23</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 				<a name="currentUser" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> current<wbr>User</h3>
 				<div class="tsd-signature tsd-kind-icon">current<wbr>User<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/User.html" class="tsd-signature-type" data-tsd-kind="Interface">User</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L22">Authentication.ts:22</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L22">Authentication.ts:22</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2904,7 +2922,17 @@ img {
 				<div class="tsd-signature tsd-kind-icon">default<wbr>Device<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L23">Authentication.ts:23</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L25">Authentication.ts:25</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<a name="isShareToken" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Share<wbr>Token</h3>
+				<div class="tsd-signature tsd-kind-icon">is<wbr>Share<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L24">Authentication.ts:24</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2914,7 +2942,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">refresh<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L21">Authentication.ts:21</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L21">Authentication.ts:21</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2924,7 +2952,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L20">Authentication.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L20">Authentication.ts:20</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2934,7 +2962,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">waiting<wbr>For<wbr>Auth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L24">Authentication.ts:24</a></li>
+						<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L26">Authentication.ts:26</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2951,7 +2979,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L113">Authentication.ts:113</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L123">Authentication.ts:123</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/User.html" class="tsd-signature-type" data-tsd-kind="Interface">User</a></h4>
@@ -2968,7 +2996,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L109">Authentication.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L119">Authentication.ts:119</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -2985,7 +3013,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L129">Authentication.ts:129</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L139">Authentication.ts:139</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -3002,7 +3030,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L27">Authentication.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L28">Authentication.ts:28</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3028,7 +3056,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L56">Authentication.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L58">Authentication.ts:58</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3054,7 +3082,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/f7efb19/packages/data-sdk/src/Authentication.ts#L117">Authentication.ts:117</a></li>
+								<li>Defined in <a href="https://github.com/FormantIO/web-sdk/blob/af3e451/packages/data-sdk/src/Authentication.ts#L127">Authentication.ts:127</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>

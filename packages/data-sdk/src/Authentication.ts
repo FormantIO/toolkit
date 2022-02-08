@@ -9,7 +9,7 @@ export interface User {
   id: string;
 }
 
-export interface IAuthentication{
+export interface IAuthentication {
   accessToken: string;
   organizationId: string;
   refreshToken: string;
@@ -20,11 +20,15 @@ export class Authentication {
   static token: string | undefined;
   static refreshToken: string | undefined;
   static currentUser: User | undefined;
+  static currentOrganization: string | undefined;
+  static isShareToken: boolean = false;
   static defaultDeviceId: string | undefined;
   static waitingForAuth: ((result: boolean) => void)[] = [];
-  
 
-  public static async login(email: string, password: string) : Promise<IAuthentication | Error>{
+  public static async login(
+    email: string,
+    password: string
+  ): Promise<IAuthentication | Error> {
     try {
       const result = await fetch(`${FORMANT_API_URL}/v1/admin/auth/login`, {
         method: "POST",
@@ -42,39 +46,45 @@ export class Authentication {
         auth.authentication.refreshToken as string
       );
 
-      return auth.authentication
-      
+      return auth.authentication;
     } catch (e: any) {
       Authentication.waitingForAuth.forEach((_) => _(false));
       Authentication.waitingForAuth = [];
 
-      return Promise.reject(e)
+      return Promise.reject(e);
     }
-
   }
 
   public static async loginWithToken(token: string, refreshToken?: string) {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
-      let userId = tokenData.sub;
+      let userId: string | undefined;
+      Authentication.isShareToken = tokenData["formant:claims"].type == "share";
+      Authentication.currentOrganization =
+        tokenData["formant:claims"].organizationId;
+      if (!Authentication.isShareToken) {
+        userId = tokenData.sub;
+      }
       if (tokenData["formant:claims"] && tokenData["formant:claims"].userId) {
         userId = tokenData["formant:claims"].userId;
       }
-      const result = await fetch(
-        `${FORMANT_API_URL}/v1/admin/users/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
+      if (userId) {
+        const result = await fetch(
+          `${FORMANT_API_URL}/v1/admin/users/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        const data = await result.json();
+        if (result.status !== 200) {
+          throw new Error(data.message);
         }
-      );
-      const data = await result.json();
-      if (result.status !== 200) {
-        throw new Error(data.message);
+        Authentication.currentUser = data;
       }
-      Authentication.currentUser = data;
       Authentication.token = token;
       Authentication.waitingForAuth.forEach((_) => _(true));
     } catch (e: any) {

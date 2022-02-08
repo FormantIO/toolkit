@@ -1,6 +1,7 @@
 import { Device } from "./Device";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
+import { defined } from "../../common/defined";
 
 export interface User {
   firstName: string;
@@ -35,21 +36,25 @@ export class Fleet {
     }
 
     const data = await fetch(
-      `${FORMANT_API_URL}/v1/admin/devices/${Fleet.defaultDeviceId}`,
+      `${FORMANT_API_URL}/v1/admin/device-details/query`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + Authentication.token,
         },
       }
     );
-    const device = await data.json();
+
+    const devices = await data.json();
+    const device = devices.items.find(
+      (_: { id: string }) => _.id === Fleet.defaultDeviceId
+    );
     const name = device.name as string;
     const context = new Device(
       Fleet.defaultDeviceId,
       name,
-      device.organizationId as string
+      defined(Authentication.currentOrganization) as string
     );
     Fleet.knownContext.push(new WeakRef(context));
     return context;
