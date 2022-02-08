@@ -157,16 +157,6 @@ export class Fleet {
     return await rtcClient.getSessions();
   }
 
-  static async isDeviceInRealtimeSession(deviceId: string): Promise<boolean> {
-    let peers = await Fleet.getPeers();
-    let sessions = await Fleet.getRealtimeSessions();
-    let peer = peers.find((_) => _.deviceId === deviceId);
-    if (peer) {
-      return sessions[peer.id].length > 0;
-    }
-    return false;
-  }
-
   static async getRealtimeDevices(): Promise<Device[]> {
     if (!Authentication.token) {
       throw new Error("Not authenticated");

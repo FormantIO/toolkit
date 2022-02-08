@@ -363,6 +363,16 @@ export class Device {
     }
   }
 
+  async isInRealtimeSession(): Promise<boolean> {
+    let peers = await Fleet.getPeers();
+    let sessions = await Fleet.getRealtimeSessions();
+    let peer = peers.find((_) => _.deviceId === this.id);
+    if (peer) {
+      return sessions[peer.id].length > 0;
+    }
+    return false;
+  }
+
   async getAvailableCommands(): Promise<Command[]> {
     const result = await fetch(
       `${FORMANT_API_URL}/v1/admin/command-templates/`,
