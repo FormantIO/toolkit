@@ -59,9 +59,17 @@ export class Authentication {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       let userId: string | undefined;
-      Authentication.isShareToken = tokenData["formant:claims"].type == "share";
-      Authentication.currentOrganization =
-        tokenData["formant:claims"].organizationId;
+      Authentication.isShareToken =
+        tokenData["formant:claims"] &&
+        tokenData["formant:claims"].type == "share";
+      if (tokenData["formant:claims"]) {
+        Authentication.currentOrganization =
+          tokenData["formant:claims"].organizationId;
+      }
+      if (tokenData["custom:organization_id"]) {
+        Authentication.currentOrganization =
+          tokenData["custom:organization_id"];
+      }
       if (!Authentication.isShareToken) {
         userId = tokenData.sub;
       }

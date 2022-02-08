@@ -2,6 +2,7 @@ import { Device } from "./Device";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { defined } from "../../common/defined";
+import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 
 export interface User {
   firstName: string;
@@ -119,6 +120,23 @@ export class Fleet {
     const onlineIds = devices.items as string[];
     const allDevices = await Fleet.getDevices();
     return allDevices.filter((_) => onlineIds.includes(_.id));
+  }
+
+  static async getRealtimeSessions() {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const rtcClient = new RtcClient({
+      signalingClient: new SignalingPromiseClient(FORMANT_API_URL, null, null),
+      getToken: async () => {
+        return defined(
+          Authentication.token,
+          "Realtime when user isn't authorized"
+        );
+      },
+      receive: () => {},
+    });
+    return await rtcClient.getSessions();
   }
 
   static async getRealtimeDevices(): Promise<Device[]> {
