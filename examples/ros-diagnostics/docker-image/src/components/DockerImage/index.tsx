@@ -12,7 +12,7 @@ export class Docker extends Component<IDockerProps> {
       <div className={styles.container}>
         <div className={styles["container-comand"]}>
           <p className={styles["container-date"]}>2:09:57 pm</p>
-          <p className={styles["container-text"]}>Latest Image</p>
+          <p className={styles["container-text"]}>{this.props.latestImage}</p>
         </div>
         <button
           className={styles["container-button"]}

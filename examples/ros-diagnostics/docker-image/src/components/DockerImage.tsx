@@ -1,11 +1,5 @@
 import { Component, ReactNode } from "react";
-import {
-  ModuleData,
-  App,
-  Device,
-  Authentication,
-  Fleet,
-} from "@formant/data-sdk";
+import { ModuleData, App, Authentication, Fleet } from "@formant/data-sdk";
 import { Docker } from "./DockerImage/index";
 
 interface IDockerImage {
@@ -37,12 +31,7 @@ export class DockerImage extends Component<{}, IDockerImage> {
   private sendCommand = async () => {
     if (await Authentication.waitTilAuthenticated()) {
       let currentDevice = await Fleet.getCurrentDevice();
-      let cDevice = new Device(
-        currentDevice.id,
-        currentDevice.name,
-        currentDevice.organizationId
-      );
-      await cDevice.sendCommand("Fake update docker", "mydata");
+      currentDevice.sendCommand("Fake update docker", "");
     }
   };
   private receiveModuleData = async (newValue: ModuleData) => {
