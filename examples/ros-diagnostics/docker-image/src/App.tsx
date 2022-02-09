@@ -4,7 +4,7 @@ import { DockerImage } from "./components/DockerImage";
 function App() {
   return (
     <div className="App">
-      <DockerImage />
+      <DockerImage command="Fake update docker" />
     </div>
   );
 }

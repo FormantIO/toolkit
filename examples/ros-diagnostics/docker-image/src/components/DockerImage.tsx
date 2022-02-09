@@ -10,59 +10,70 @@ import { Docker } from "./DockerImage/index";
 
 interface IDockerImage {
   latestImage: string;
-  errorMessage: string;
+  device: Device | undefined;
+  image: string;
+  date: string;
 }
 
-export class DockerImage extends Component<{}, IDockerImage> {
+interface IDockerImageProps {
+  command: string;
+}
+
+export class DockerImage extends Component<IDockerImageProps, IDockerImage> {
   public constructor(props: any) {
     super(props);
     this.state = {
+      device: undefined,
       latestImage: "",
-      errorMessage: "Waiting for data...",
+      image: "first image",
+      date: "8:30:24 am",
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount = async () => {
     App.addModuleDataListener(this.receiveModuleData);
-  }
+    if (await Authentication.waitTilAuthenticated()) {
+      this.setState({ device: await Fleet.getCurrentDevice() });
+    }
+  };
   render(): ReactNode {
     return (
       <Docker
+        date={this.state.date}
         getLatestImage={this.sendCommand}
         latestImage={this.state.latestImage}
+        image={this.state.image}
       />
     );
   }
 
   private sendCommand = async () => {
-    console.log("test");
-    if (await Authentication.waitTilAuthenticated()) {
-      let currentDevice = await Fleet.getCurrentDevice();
-      let cDevice = new Device(
-        currentDevice.id,
-        currentDevice.name,
-        currentDevice.organizationId
-      );
-      console.log(cDevice);
-      await cDevice.sendCommand("Fake update docker", "mydata");
-      // console.log(await cDevice.getAvailableCommands());
-    }
+    // const { device } = this.state;
+    // if (!device) {
+
+    const today = new Date();
+    const time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    this.setState({ image: "Another image", date: `${time} am` });
+    return;
+    // }
+    // device?.sendCommand(this.props.command, "");
   };
+
   private receiveModuleData = async (newValue: ModuleData) => {
     try {
-      const url = getLatestJsonUrl(newValue);
-      if (!url) {
+      const dockerImage = getLatestJsonImage(newValue);
+      if (!dockerImage) {
         return;
       }
-
-      this.setState({ latestImage: url });
+      this.setState({ latestImage: dockerImage });
     } catch (error) {
-      this.setState({ latestImage: "", errorMessage: error as string });
+      this.setState({ latestImage: "" });
     }
   };
 }
 
-function getLatestJsonUrl(moduleData: ModuleData): string | undefined {
+function getLatestJsonImage(moduleData: ModuleData): string | undefined {
   const streams = Object.values(moduleData.streams);
   if (streams.length === 0) {
     throw new Error("No streams.");
