@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-end;
+  &-comand {
+    width: 100%;
+    background-color: #282f45;
+    border-bottom: 1px solid #1c1e2d;
+    padding: 2rem 1rem;
+    text-align: left;
+    &:hover {
+      background-color: #3b4668;
+      cursor: pointer;
+    }
+  }
+  &-date {
+    color: #bac4e2;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  &-text {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  &-button {
+    width: 12rem;
+    height: 4rem;
+    background-color: #18d2ff;
+    outline: none;
+    border: none;
+    border-radius: 2.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 2rem;
+    transition: transform 300ms ease;
+    font-size: 1.4rem;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.07);
+    }
+  }
+}

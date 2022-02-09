@@ -1,24 +1,45 @@
 import { Component, ReactNode } from "react";
 import { TopicBoard } from "./TopicBoard";
-import moduleConfig from "../../config/moduleConfig";
+import nodes from "../../config/moduleConfig";
 import { Header } from "./Header";
 import { Topic } from "./Topic";
+import { rosNodes } from "../../config/types/node";
 
 interface IBoardContentProps {
-  onlineTopics: string[];
+  onlineNodes: rosNodes;
 }
 
 export class BoardContent extends Component<IBoardContentProps> {
+  checkNodeState = (node: string): boolean => {
+    if (this.props.onlineNodes === undefined) return false;
+    console.log(this.props.onlineNodes);
+
+    let idx = this.props.onlineNodes.keys.indexOf(node);
+    return idx >= 0 ? this.props.onlineNodes.values[idx] : false;
+  };
+
   render(): ReactNode {
-    return moduleConfig.sections.map((section) => {
-      return (
-        <TopicBoard>
-          <Header title={section.title} />
-          {section.contents.map((_, idx) => {
+    console.log(this.props.onlineNodes);
+    return (
+      <TopicBoard>
+        <Header title={"Nodes"} />
+        {nodes.map((_, idx) => {
+          return (
+            <Topic
+              key={idx}
+              name={_}
+              topicState={
+                this.checkNodeState(_) ? "good_standing" : "not_found"
+              }
+            />
+          );
+        })}
+
+        {/* {section.contents.map((_, idx) => {
             return (
               <Topic
                 topicState={
-                  this.props.onlineTopics.indexOf(_.topic) >= 0
+                  this.props.onlineNodes.indexOf(_.topic) >= 0
                     ? "good_standing"
                     : "not_found"
                 }
@@ -26,9 +47,8 @@ export class BoardContent extends Component<IBoardContentProps> {
                 name={_.topic}
               />
             );
-          })}
-        </TopicBoard>
-      );
-    });
+          })} */}
+      </TopicBoard>
+    );
   }
 }

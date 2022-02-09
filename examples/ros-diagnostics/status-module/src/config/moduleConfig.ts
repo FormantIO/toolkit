@@ -1,21 +1,8 @@
-import ModuleConfig from "../types/ModuleConfig";
+const nodes = [
+  "/formant_bridge_node",
+  "/ros_diagnostics_collector",
+  "/rosout",
+  "/world_broadcaster",
+];
 
-const moduleConfig: ModuleConfig = {
-  sections: [
-    {
-      title: "navigation",
-      contents: [
-        { topic: "/formant/ingest", minHz: 0 },
-        { topic: "/rosout", minHz: 0 },
-      ],
-    },
-    {
-      title: "info",
-      contents: [
-        { topic: "/formant/command", minHz: 10 },
-        { topic: "/tf", minHz: 10 },
-      ],
-    },
-  ],
-};
-export default moduleConfig;
+export default nodes;
