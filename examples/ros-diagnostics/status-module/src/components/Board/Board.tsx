@@ -1,11 +1,11 @@
 import { Component, ReactNode } from "react";
-import moduleConfig from "../../config/moduleConfig";
 import { ModuleData, App } from "@formant/data-sdk";
 import { BoardContent } from "../BoardContent";
-import RosTopicStats from "../../types/RosTopicStats";
+import { rosNodes } from "../../config/types/node";
+import { ErrorMsg } from "../ErrorMsg/ErrorMsg";
 
 interface IBoardState {
-  onlineTopics: string[];
+  onlineNodes: rosNodes | undefined;
   errorMessage: string;
 }
 
@@ -13,7 +13,7 @@ export class Board extends Component<{}, IBoardState> {
   public constructor(props: any) {
     super(props);
     this.state = {
-      onlineTopics: [],
+      onlineNodes: undefined,
       errorMessage: "Waiting for data...",
     };
   }
@@ -23,31 +23,30 @@ export class Board extends Component<{}, IBoardState> {
   }
 
   render(): ReactNode {
-    return <BoardContent onlineTopics={this.state.onlineTopics} />;
+    const { errorMessage, onlineNodes } = this.state;
+    const tableContentsVisible = !!onlineNodes;
+    const message = errorMessage ?? "Loading...";
+    return tableContentsVisible ? (
+      <BoardContent onlineNodes={this.state.onlineNodes!} />
+    ) : (
+      <ErrorMsg msg={message.toString()} />
+    );
   }
 
   private receiveModuleData = async (newValue: ModuleData) => {
     try {
-      const url = getLatestJsonUrl(newValue);
-      if (!url) {
-        return;
-      }
-      let latestStats = await (await fetch(url)).json();
-      latestStats = latestStats.map((_: RosTopicStats) => _.name);
-
-      console.log(latestStats);
-
-      this.setState({
-        onlineTopics: latestStats,
-      });
+      const nodes = getLatestJson(newValue);
+      if (!nodes) return;
+      this.setState({ onlineNodes: nodes });
     } catch (error) {
-      this.setState({ onlineTopics: [], errorMessage: error as string });
+      this.setState({ onlineNodes: undefined, errorMessage: error as string });
     }
   };
 }
 
-function getLatestJsonUrl(moduleData: ModuleData): string | undefined {
+function getLatestJson(moduleData: ModuleData): rosNodes | undefined {
   const streams = Object.values(moduleData.streams);
+
   if (streams.length === 0) {
     throw new Error("No streams.");
   }
@@ -65,6 +64,7 @@ function getLatestJsonUrl(moduleData: ModuleData): string | undefined {
     throw new Error("No data.");
   }
   const latestPoint = stream.data[0].points.at(-1);
+
   if (!latestPoint) {
     throw new Error("No datapoints.");
   }
