@@ -35,7 +35,6 @@ export class DockerImage extends Component<{}, IDockerImage> {
   }
 
   private sendCommand = async () => {
-    console.log("test");
     if (await Authentication.waitTilAuthenticated()) {
       let currentDevice = await Fleet.getCurrentDevice();
       let cDevice = new Device(
@@ -43,9 +42,7 @@ export class DockerImage extends Component<{}, IDockerImage> {
         currentDevice.name,
         currentDevice.organizationId
       );
-      console.log(cDevice);
       await cDevice.sendCommand("Fake update docker", "mydata");
-      // console.log(await cDevice.getAvailableCommands());
     }
   };
   private receiveModuleData = async (newValue: ModuleData) => {
