@@ -1,0 +1,51 @@
+.App {
+  text-align: center;
+}
+.container {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: #282f45;
+  border-top: 1px solid #1c1e2d;
+  border-bottom: 1px solid #1c1e2d;
+  height: 50px;
+}
+span {
+  color: #bac4e2;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+button {
+  height: 30px;
+  width: 60px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  background-color: #18d2ff;
+  font-weight: 600;
+  transition: 200ms ease;
+  margin: 0 auto;
+}
+
+button:disabled {
+  background-color: #bac4e2;
+}
+
+button:disabled:hover {
+  cursor: default;
+  height: 30px;
+  width: 60px;
+}
+button:hover {
+  cursor: pointer;
+  height: 32px;
+  width: 65px;
+}
+
+.command-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
