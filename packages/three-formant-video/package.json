@@ -11,7 +11,7 @@
       "require": "./dist/three-formant-video.umd.js"
     }
   },
-  "version": "0.0.2",
+  "version": "0.0.4",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -23,7 +23,7 @@
     "vite": "^2.5.4"
   },
   "dependencies": {
-    "@formant/data-sdk": "^0.0.27",
+    "@formant/data-sdk": "latest",
     "@formant/ui-sdk-realtime-player-core": "0.0.0",
     "@formant/ui-sdk-realtime-player-core-worker": "^0.0.0",
     "@types/three": "^0.131.0",
