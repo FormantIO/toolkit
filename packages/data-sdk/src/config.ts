@@ -10,7 +10,12 @@ if (typeof window !== "undefined") {
   urlParams = new URLSearchParams(window.location.search);
 }
 
-const moduleName = urlParams.get("formant_dev");
-if (moduleName) {
+const envDev = urlParams.get("formant_dev");
+if (envDev) {
   FORMANT_API_URL = "https://api-dev.formant.io";
+}
+
+const envStage = urlParams.get("formant_stage");
+if (envStage) {
+  FORMANT_API_URL = "https://api-stage.formant.io";
 }
