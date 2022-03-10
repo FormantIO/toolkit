@@ -11,7 +11,7 @@
       "require": "./dist/ui-sdk-realtime-player.umd.js"
     }
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -23,8 +23,8 @@
     "vite": "^2.5.4"
   },
   "dependencies": {
-    "@formant/ui-sdk-realtime-player-core": "0.0.0",
-    "@formant/ui-sdk-realtime-player-core-worker": "0.0.0"
+    "@formant/ui-sdk-realtime-player-core": "0.0.2",
+    "@formant/ui-sdk-realtime-player-core-worker": "0.0.2"
   },
   "types": "./dist/types/main.d.ts"
 }
