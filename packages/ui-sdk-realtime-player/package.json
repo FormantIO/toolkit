@@ -11,12 +11,12 @@
       "require": "./dist/ui-sdk-realtime-player.umd.js"
     }
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --outDir dist/types"
+    "types": "tsc src/*.ts --module esnext --lib ESNext,DOM --moduleResolution node --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "devDependencies": {
     "typescript": "^4.3.2",
