@@ -1,4 +1,5 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
+import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./index.css";
 
