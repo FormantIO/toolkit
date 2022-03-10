@@ -1,0 +1,33 @@
+import * as UiCore from "@formant/ui-sdk-realtime-player-core";
+
+export class RealtimePlayer extends HTMLElement {
+  drawer: UiCore.H264BytestreamCanvasDrawer;
+
+  constructor() {
+    super();
+    this.drawer = new UiCore.H264BytestreamCanvasDrawer(
+      () =>
+        new Worker(
+          new URL(
+            "../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd.js",
+            import.meta.url
+          )
+        ),
+      () => {},
+      () => {}
+    );
+  }
+
+  connectedCallback() {
+    this.style.background = "black";
+    this.innerHTML = `<canvas style="height: 100%; width: 100%; object-fit: contain;"></canvas>`;
+    this.drawer.start();
+    this.drawer.setCanvas(this.querySelector("canvas") as HTMLCanvasElement);
+  }
+
+  drawVideoFrame(h264Frame: any) {
+    this.drawer.receiveEncodedFrame(h264Frame);
+  }
+}
+
+customElements.define("formant-realtime-player", RealtimePlayer);

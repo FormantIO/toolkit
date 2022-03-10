@@ -16,7 +16,8 @@
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4",
     "@formant/data-sdk": "latest",
-    "@formant/ui-sdk-realtime-player": "latest"
+    "@formant/ui-sdk-realtime-player-core": "0.0.2",
+    "@formant/ui-sdk-realtime-player-core-worker": "0.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
