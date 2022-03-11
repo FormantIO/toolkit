@@ -1,6 +1,6 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
-import "./RealtimePlayer";
-import { RealtimePlayer } from "./RealtimePlayer";
+import "@formant/ui-sdk-realtime-player";
+import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./index.css";
 
 (el("formant-realtime-player") as RealtimePlayer).drawer.start();
