@@ -35,7 +35,7 @@ adapter, and then it compares, the data from the configuration with the data tha
 
 [ROS Diagnostics Module](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics/module)
 
-![App Screenshot](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics/images/table.png)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/ros-diagnostics/images/table.png)
 
 The table displays the topic's health which can be represent in three states: in good standing (blue), bad(orange), or unknown(gray)
 
