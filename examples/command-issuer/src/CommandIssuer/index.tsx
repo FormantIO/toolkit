@@ -27,9 +27,12 @@ export class CommandIssuer extends Component<
   };
 
   private issueCommand = async () => {
-    const { device } = this.state;
-    if (!device) return;
-    device.sendCommand(this.props.command, "");
+    if (Authentication.isAuthenticated()) {
+      let x = await Fleet.getDevice("ac8016df-102e-4e97-b194-2bd6bbfa0e4a");
+      x.sendCommand("fake.update.docker", "reset all");
+    }
+    // const { device } = this.state;
+    // if (!device) return;
   };
 
   render(): ReactNode {
@@ -41,11 +44,9 @@ export class CommandIssuer extends Component<
         <span>{device?.name || "Device.name"}</span>
         <div className="command-name">
           <CommandIcon />
-          <span>{command}</span>
+          <span>{"fake.update.docker"}</span>
         </div>
-        <button disabled={!device} onClick={this.issueCommand}>
-          Send
-        </button>
+        <button onClick={this.issueCommand}>Send</button>
       </div>
     );
   }

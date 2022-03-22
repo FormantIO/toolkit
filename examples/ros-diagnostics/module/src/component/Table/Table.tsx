@@ -38,6 +38,7 @@ class Table extends Component<{}, ITableState> {
   }
 
   private receiveModuleData = async (newValue: ModuleData) => {
+    console.log(newValue);
     try {
       const url = getLatestJsonUrl(newValue);
       if (!url) {
