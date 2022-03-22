@@ -1,10 +1,10 @@
 # ROS Diagnostics
 
-This example is divided in two parts: ROS diagnostics adapter and ROS diagnostics module
+This example is divided in two parts: ROS Diagnostics Adapter and ROS Diagnostics Module
 
 ## Adapter
 
-This adapter reads current online ROS topics and send them to Formant's server
+This adapter reads current online ROS topics and sends them to Formant's server
 
 [ROS Diagnostics Adapter](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics/adapter)
 
@@ -30,14 +30,14 @@ Run the adapter
 
 ## ROS Diagnostics Module
 
-This module, has a configuration which shows what ROS topics are expected. It reads the data that was sent from the
-adapter, and then it compares, the data from the configuration with the data that is being received.
+This module has a configuration that shows which ROS topics are expected. It reads the data that was sent from the
+adapter and then it compares the data from the configuration with the data that is being received.
 
 [ROS Diagnostics Module](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics/module)
 
 ![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/ros-diagnostics/images/table.png)
 
-The table displays the topic's health which can be represent in three states: in good standing (blue), bad(orange), or unknown(gray)
+The table displays the topics health which can be represented in three states:  good standing (blue), bad(orange), or unknown(gray)
 
 ## Run Locally
 
@@ -57,4 +57,4 @@ Run the module
 
 ```bash
   .yarn dev or npm run start
-```
+`
