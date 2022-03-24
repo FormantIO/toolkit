@@ -1,4 +1,4 @@
-type AppMessage =
+export type AppMessage =
   | { type: "go_to_time"; time: number }
   | { type: "request_module_data"; module: string }
   | { type: "show_message"; message: string }
@@ -15,7 +15,7 @@ type AppMessage =
       menus: { label: string }[];
     };
 
-type EmbeddedAppMessage =
+export type EmbeddedAppMessage =
   | {
       type: "module_menu_item_clicked";
       menu: string;
