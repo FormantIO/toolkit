@@ -3,24 +3,15 @@ import "./style.css";
 (async function () {
   const el = document.querySelector("#app");
   if (el) {
-    el.innerHTML = "Connecting";
     if (await Authentication.waitTilAuthenticated()) {
-      const device = await Fleet.getCurrentDevice();
-      const streams = await device.getTelemetryStreams();
-
-      streams.forEach(async (_) => {
-        console.log(
-          await device.getTelemetry(
-            _.name,
-            (() => {
-              var dt = new Date();
-              dt.setHours(dt.getHours() - 1);
-              return dt;
-            })(),
-            new Date()
-          )
-        );
+      const events = await Fleet.queryEvents({});
+      console.log(events);
+      const data = await Fleet.queryTelemetry({
+        start: new Date(Date.now() - 1000 * 60).toISOString(),
+        end: new Date().toISOString(),
+        deviceIds: Fleet.defaultDeviceId ? [Fleet.defaultDeviceId] : [],
       });
+      console.log(data);
     }
   }
 })();

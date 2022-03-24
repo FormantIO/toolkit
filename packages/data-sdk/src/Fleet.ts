@@ -4,6 +4,10 @@ import { FORMANT_API_URL } from "./config";
 import { defined } from "../../common/defined";
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+import { IEventQuery } from "./model/IEventQuery";
+import { IEvent } from "./model/IEvent";
+import { IQuery } from "./model/IQuery";
+import { IStreamData } from "./model/IStreamData";
 
 export interface User {
   firstName: string;
@@ -247,5 +251,37 @@ export class Fleet {
       throw new Error("File not found");
     }
     return result.fileUrls[0] as string;
+  }
+
+  static async queryTelemetry(query: IQuery) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+
+    return (await data.json()).items as IStreamData[];
+  }
+
+  static async queryEvents(query: IEventQuery): Promise<IEvent[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/events/query`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+
+    return (await data.json()).items as IEvent[];
   }
 }
