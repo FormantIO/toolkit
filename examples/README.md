@@ -1,6 +1,12 @@
+# Formant Toolkit Examples
+
+A series of examples about how to extend Formants capabilities; including views, adapters and functionalities.
+
 ## Index
 
 #### Views/Moules
+
+- Examples of what can be built that can be embeded on Formant or individually hosted.
 
 [Represent altitude and orientation on a map](https://github.com/FormantIO/toolkit/tree/master/examples/altitude-on-map) (React)
 
@@ -24,14 +30,26 @@
 
 #### Teleop
 
+- Examples of how to perform a teleoperation using the Data SDK.
+
 [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop-cra) (React)
 
 [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop) (TypeScript)
 
 #### Styling
 
+- Example of components using Formant's CDN, providing the ability to focus on developing while we will handle the design.
+
 [Style components](https://github.com/FormantIO/toolkit/tree/master/examples/simple-style) (HTML / Formant CDN)
 
 #### Desktop
 
+- Example of how to create a Formant desktop application.
+
 [Login and list devices](https://github.com/FormantIO/toolkit/tree/master/examples/simple-electron) (Electron)
+
+#### Adapter
+
+- Examples of how to extend Formant's agent caplabilities to perform communication with our APIs
+
+[ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
