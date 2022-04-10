@@ -34,8 +34,21 @@ export const themeOptions: ThemeOptions = {
       main: "#2ec495",
     },
   },
-  shape: {
-    borderRadius: 30,
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 40,
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "'Source Sans Pro', monospace",

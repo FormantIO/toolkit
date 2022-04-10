@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   Stack,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -60,6 +61,25 @@ function App() {
                 <Typography variant="body1">
                   Something important goes here
                 </Typography>
+                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                  <TextField
+                    id="outlined-basic"
+                    label="Outlined"
+                    variant="outlined"
+                  />
+                  <TextField
+                    id="filled-basic"
+                    label="Filled"
+                    variant="filled"
+                    sx={{ borderRadius: 0.1 }}
+                  />
+                  <TextField
+                    id="standard-basic"
+                    label="Standard"
+                    variant="standard"
+                    sx={{ borderRadius: 0.1 }}
+                  />
+                </Stack>
               </Box>
             </Card>
           </Grid>
