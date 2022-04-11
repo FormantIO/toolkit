@@ -15,11 +15,11 @@ import {
   Typography,
 } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { themeOptions } from "../../../packages/formant-theme-material-ui/src/main";
+import { defaultTheme } from "../../../packages/formant-theme-material-ui/src/main";
 import MenuIcon from "@mui/icons-material/Menu";
 import formantLogo from "./formant.svg";
 
-const theme = createTheme(themeOptions);
+const theme = createTheme(defaultTheme);
 
 function App() {
   return (

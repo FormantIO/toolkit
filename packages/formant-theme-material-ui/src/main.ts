@@ -1,6 +1,27 @@
 import { ThemeOptions } from "@mui/material";
-
-export const themeOptions: ThemeOptions = {
+const commonTheme = {
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 40,
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: "'Moderat','Source Sans Pro', sans-serif",
+  },
+};
+export const darkTheme: ThemeOptions = {
+  ...commonTheme,
   palette: {
     mode: "dark",
     primary: {
@@ -34,23 +55,38 @@ export const themeOptions: ThemeOptions = {
       main: "#2ec495",
     },
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 40,
-        },
-      },
+};
+
+export const lightTheme: ThemeOptions = {
+  ...commonTheme,
+  palette: {
+    success: {
+      main: "#34dea9",
+      dark: "#2d8376",
     },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          borderRadius: 4,
-        },
-      },
+    info: {
+      main: "#297ceb",
+      dark: "#256faf",
+      light: "#3BABFF",
     },
-  },
-  typography: {
-    fontFamily: "'Source Sans Pro', monospace",
+    error: {
+      main: "#fd76a7",
+      dark: "#7f5072",
+    },
+    warning: {
+      main: "#ffb179",
+      dark: "#94645f",
+    },
+    primary: {
+      main: "#e4e7f3",
+      light: "#f1f3f9",
+      dark: "#d6dcee",
+    },
+    secondary: {
+      main: "#3babff",
+      dark: "#76a7dc",
+    },
   },
 };
+
+export const defaultTheme = darkTheme;
