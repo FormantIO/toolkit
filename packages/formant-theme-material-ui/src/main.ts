@@ -113,8 +113,8 @@ const darkComponents: ThemeOptions = {
         containedPrimary: {
           "@media(hover: hover)": {
             "&:hover": {
-              boxShadow: "0 0 0 0.4rem #3b4668",
-              background: "#3b4668",
+              boxShadow: "0 0 0 0.4rem #657197",
+              background: "#657197",
             },
           },
         },
