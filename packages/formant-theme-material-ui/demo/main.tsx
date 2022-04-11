@@ -15,12 +15,12 @@ import {
   Typography,
 } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { defaultTheme } from "../src/main";
+import { lightTheme as componentTheme } from "../src/main";
 import MenuIcon from "@mui/icons-material/Menu";
 import formantLogo from "./formant.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const theme = createTheme(defaultTheme);
+const theme = createTheme(componentTheme);
 
 function App() {
   return (

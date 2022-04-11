@@ -1,10 +1,39 @@
 import { ThemeOptions } from "@mui/material";
+import { deepmerge } from "@mui/utils";
 const commonTheme: ThemeOptions = {
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
+          transitionDuration: "200ms",
+          transitionTimingFunction: "ease-in-out",
           borderRadius: 40,
+        },
+        sizeSmall: {
+          height: 20,
+          fontWeight: 700,
+          fontSize: "10px",
+          lineHeight: "18px",
+          letterSpacing: "1.1px",
+        },
+        sizeMedium: {
+          height: 29,
+          fontWeight: 500,
+          fontSize: "11px",
+          lineHeight: "13px",
+          letterSpacing: "0.75px",
+        },
+        sizeLarge: {
+          height: 41,
+          fontWeight: 500,
+          fontSize: "14px",
+          lineHeight: "17px",
+          letterSpacing: "0.85px",
         },
       },
     },
@@ -76,14 +105,36 @@ const commonTheme: ThemeOptions = {
     },
   },
 };
+
+const darkComponents: ThemeOptions = {
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          "&:hover": {
+            boxShadow: "0 0 0 0.4rem #3b4668",
+            background: "#3b4668",
+          },
+        },
+        containedSecondary: {
+          "&:hover": {
+            boxShadow: "0 0 0 0.4rem #18d2ff",
+            background: "#18d2ff",
+          },
+        },
+      },
+    },
+  },
+};
+
 export const darkTheme: ThemeOptions = {
-  ...commonTheme,
+  ...deepmerge(commonTheme, darkComponents),
   palette: {
     mode: "dark",
     primary: {
-      main: "#3b4668",
-      dark: "#282f45",
-      light: "#657197",
+      main: "#657197",
+      dark: "#3B4668",
+      light: "#BAC4E2",
       contrastText: "#ffffff",
     },
     secondary: {
@@ -113,9 +164,31 @@ export const darkTheme: ThemeOptions = {
   },
 };
 
+const lightComponents: ThemeOptions = {
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          "&:hover": {
+            boxShadow: "0 0 0 0.4rem #657197",
+            background: "#657197",
+          },
+        },
+        containedSecondary: {
+          "&:hover": {
+            boxShadow: "0 0 0 0.4rem #3babff",
+            background: "#3babff",
+          },
+        },
+      },
+    },
+  },
+};
+
 export const lightTheme: ThemeOptions = {
-  ...commonTheme,
+  ...deepmerge(commonTheme, lightComponents),
   palette: {
+    mode: "light",
     success: {
       main: "#34dea9",
       dark: "#2d8376",
@@ -134,13 +207,17 @@ export const lightTheme: ThemeOptions = {
       dark: "#94645f",
     },
     primary: {
-      main: "#e4e7f3",
-      light: "#f1f3f9",
-      dark: "#d6dcee",
+      main: "#657197",
+      light: "#BAC4E2",
+      dark: "#3B4668",
     },
     secondary: {
       main: "#3babff",
       dark: "#76a7dc",
+    },
+    background: {
+      default: "#FFFFFF",
+      paper: "#F1F3F9",
     },
   },
 };
