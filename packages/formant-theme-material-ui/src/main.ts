@@ -1,5 +1,5 @@
 import { ThemeOptions } from "@mui/material";
-const commonTheme = {
+const commonTheme: ThemeOptions = {
   components: {
     MuiButton: {
       styleOverrides: {
@@ -18,6 +18,62 @@ const commonTheme = {
   },
   typography: {
     fontFamily: "'Moderat','Source Sans Pro', sans-serif",
+    h1: {
+      fontSize: "32px",
+      fontWeight: 400,
+      lineHeight: "40px",
+    },
+    h2: {
+      fontSize: "24px",
+      fontWeight: 400,
+      lineHeight: "34px",
+      letterSpacing: "1.1px",
+    },
+    h3: {
+      fontSize: "18px",
+      fontWeight: 500,
+      lineHeight: "27px",
+      letterSpacing: "1.1px",
+    },
+    h4: {
+      fontSize: "13px",
+      fontWeight: 700,
+      lineHeight: "22px",
+      letterSpacing: "1.1px",
+      textTransform: "uppercase",
+    },
+    h5: {
+      fontSize: "13px",
+      fontWeight: 400,
+      lineHeight: "20px",
+      letterSpacing: "0.6px",
+    },
+    h6: {
+      fontSize: "10px",
+      fontWeight: 400,
+      lineHeight: "15px",
+      letterSpacing: "1px",
+      textTransform: "uppercase",
+    },
+    body1: {
+      fontSize: "16px",
+      fontWeight: 400,
+      lineHeight: "27px",
+      letterSpacing: "1px",
+    },
+    body2: {
+      fontSize: "16px",
+      fontWeight: 400,
+      lineHeight: "27px",
+      letterSpacing: "1px",
+    },
+    button: {
+      fontSize: "14px",
+      fontWeight: 500,
+      lineHeight: "17px",
+      letterSpacing: "0.85px",
+      textTransform: "uppercase",
+    },
   },
 };
 export const darkTheme: ThemeOptions = {

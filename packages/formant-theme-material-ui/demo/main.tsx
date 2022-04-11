@@ -39,16 +39,102 @@ function App() {
         </Toolbar>
       </AppBar>
       <Box sx={{ p: 4 }}>
-        <Container maxWidth="sm">
-          <Button variant="text">Text</Button>
-          <Button variant="contained">Contained</Button>
-          <Button variant="contained" color="secondary">
-            Contained
-          </Button>
-          <Button variant="contained" color="error">
-            Contained
-          </Button>
-          <Button variant="outlined">Outlined</Button>
+        <Container maxWidth="lg">
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Typography
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container justifyContent="center" alignItems="center">
+              <Grid item xs={4}>
+                <Typography variant="h4">H1</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h1">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">H2</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h2">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">H3</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h3">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">H4</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h4">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">H5</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h5">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">H6</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h6">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">body1</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">body2</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body2">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h4">caption</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="caption">
+                  The quick brown fox jumps over the lazy dog.
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Buttons
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Button variant="text">Text</Button>
+              <Button variant="contained">Contained</Button>
+              <Button variant="contained" color="secondary">
+                Contained
+              </Button>
+              <Button variant="contained" color="error">
+                Contained
+              </Button>
+              <Button variant="outlined">Outlined</Button>
+            </Grid>
+          </Box>
           <Grid sx={{ pt: 4, pb: 4 }}>
             <Card sx={{ borderRadius: 0.5 }}>
               <Box sx={{ p: 2 }}>
