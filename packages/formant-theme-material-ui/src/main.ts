@@ -111,15 +111,19 @@ const darkComponents: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         containedPrimary: {
-          "&:hover": {
-            boxShadow: "0 0 0 0.4rem #3b4668",
-            background: "#3b4668",
+          "@media(hover: hover)": {
+            "&:hover": {
+              boxShadow: "0 0 0 0.4rem #3b4668",
+              background: "#3b4668",
+            },
           },
         },
         containedSecondary: {
-          "&:hover": {
-            boxShadow: "0 0 0 0.4rem #18d2ff",
-            background: "#18d2ff",
+          "@media(hover: hover)": {
+            "&:hover": {
+              boxShadow: "0 0 0 0.4rem #18d2ff",
+              background: "#18d2ff",
+            },
           },
         },
       },
@@ -169,15 +173,19 @@ const lightComponents: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         containedPrimary: {
-          "&:hover": {
-            boxShadow: "0 0 0 0.4rem #657197",
-            background: "#657197",
+          "@media(hover: hover)": {
+            "&:hover": {
+              boxShadow: "0 0 0 0.4rem #657197",
+              background: "#657197",
+            },
           },
         },
         containedSecondary: {
-          "&:hover": {
-            boxShadow: "0 0 0 0.4rem #3babff",
-            background: "#3babff",
+          "@media(hover: hover)": {
+            "&:hover": {
+              boxShadow: "0 0 0 0.4rem #3babff",
+              background: "#3babff",
+            },
           },
         },
       },

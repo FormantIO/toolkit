@@ -57,72 +57,72 @@ function App() {
               alignItems="center"
               rowGap={2}
             >
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H1</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h1">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H2</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h2">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H3</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h3">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H4</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h4">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H5</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h5">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">H6</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="h6">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">body1</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="body1">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">body2</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="body2">0123456789</Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4">caption</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Typography variant="caption">
                   The quick brown fox jumps over the lazy dog.
                 </Typography>
@@ -378,7 +378,7 @@ function App() {
                 alignItems="center"
               >
                 <VolumeDown />
-                <Slider aria-label="Volume" style={{ width: 300 }} />
+                <Slider aria-label="Volume" style={{ width: 150 }} />
                 <VolumeUp />
               </Stack>
             </Grid>
