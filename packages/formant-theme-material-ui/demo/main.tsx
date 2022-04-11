@@ -13,10 +13,15 @@ import {
   TextField,
   Toolbar,
   Typography,
+  Switch,
+  Stack,
+  Slider,
 } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { lightTheme as componentTheme } from "../src/main";
+import { darkTheme as componentTheme } from "../src/main";
 import MenuIcon from "@mui/icons-material/Menu";
+import VolumeUp from "@mui/icons-material/VolumeUp";
+import VolumeDown from "@mui/icons-material/VolumeDown";
 import formantLogo from "./formant.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -348,6 +353,34 @@ function App() {
                 helperText="Some important text"
                 variant="standard"
               />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Text Fields
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Switch defaultChecked />
+              <Switch />
+              <Switch disabled defaultChecked />
+              <Switch disabled />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Slider
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Stack
+                spacing={2}
+                direction="row"
+                sx={{ mb: 1 }}
+                alignItems="center"
+              >
+                <VolumeDown />
+                <Slider aria-label="Volume" style={{ width: 300 }} />
+                <VolumeUp />
+              </Stack>
             </Grid>
           </Box>
           <Grid sx={{ pt: 4, pb: 4 }}>
