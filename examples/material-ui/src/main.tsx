@@ -16,6 +16,7 @@ import {
   Switch,
   Stack,
   Slider,
+  Drawer,
 } from "@mui/material";
 import { createRoot } from "react-dom/client";
 import { defaultTheme as componentTheme } from "../../../packages/formant-theme-material-ui/src/main";
@@ -28,6 +29,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const theme = createTheme(componentTheme);
 
 function App() {
+  const [drawer, setDrawer] = React.useState<string | null>(null);
   return (
     <div>
       <AppBar position="static">
@@ -383,6 +385,38 @@ function App() {
               </Stack>
             </Grid>
           </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Side Panel
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              {(["left", "right", "top", "bottom"] as const).map((anchor) => (
+                <React.Fragment key={anchor}>
+                  <Button onClick={() => setDrawer(anchor)}>{anchor}</Button>
+                  <Drawer
+                    anchor={anchor}
+                    open={drawer === anchor}
+                    onClose={() => setDrawer(null)}
+                  >
+                    <Box sx={{ width: 300, p: 2 }}>
+                      <Grid container gap={2}>
+                        <Grid item xs={12}>
+                          Skynet
+                        </Grid>
+                        <Grid item xs={12}>
+                          Optimus Prime
+                        </Grid>
+                        <Grid item xs={12}>
+                          Voltron
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </Drawer>
+                </React.Fragment>
+              ))}
+            </Grid>
+          </Box>
+
           <Grid sx={{ pt: 4, pb: 4 }}>
             <Card sx={{ borderRadius: 0.5 }}>
               <Box sx={{ p: 2 }}>
