@@ -1,3 +1,3 @@
 prepublish:
-	yarn build
-	yarn types
+	npm run build
+	npm run types

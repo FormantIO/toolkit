@@ -11,7 +11,18 @@ module.exports = defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: [],
+      external: [
+        "react",
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/material",
+        "@mui/utils",
+        "react",
+        "react-dom",
+        "@mui/material/styles/ThemeProvider",
+        "@mui/material/CssBaseline",
+        "@mui/material/styles",
+      ],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps

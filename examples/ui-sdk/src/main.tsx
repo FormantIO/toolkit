@@ -1,18 +1,4 @@
 import * as React from "react";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import CssBaseline from "@mui/material/CssBaseline";
-import {
-  AppBar,
-  Card,
-  createTheme,
-  IconButton,
-  TextField,
-  Toolbar,
-  Switch,
-  Stack,
-  Slider,
-  Drawer,
-} from "@mui/material";
 import { createRoot } from "react-dom/client";
 import {
   FormantProvider,
@@ -23,10 +9,6 @@ import {
   Typography,
   useFormant,
 } from "@formant/ui-sdk";
-import MenuIcon from "@mui/icons-material/Menu";
-import VolumeUp from "@mui/icons-material/VolumeUp";
-import VolumeDown from "@mui/icons-material/VolumeDown";
-import formantLogo from "./formant.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function App() {
@@ -34,21 +16,6 @@ function App() {
   const [drawer, setDrawer] = React.useState<string | null>(null);
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar variant="regular">
-          <IconButton edge="start" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Box
-            component="img"
-            sx={{
-              height: 30,
-            }}
-            alt="The house from the offer."
-            src={formantLogo}
-          />
-        </Toolbar>
-      </AppBar>
       <Box sx={{ p: 4 }}>
         <Container maxWidth="lg">
           <Typography variant="h2" sx={{ textDecoration: "underline" }}>
@@ -147,12 +114,7 @@ function App() {
               <Button variant="contained" size="small" color="secondary">
                 Contained
               </Button>
-              <Button
-                variant="contained"
-                size="small"
-                color="error"
-                startIcon={<DeleteIcon />}
-              >
+              <Button variant="contained" size="small" color="error">
                 Contained
               </Button>
               <Button variant="outlined" size="small">
@@ -166,11 +128,7 @@ function App() {
               <Button variant="contained" color="secondary">
                 Contained
               </Button>
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<DeleteIcon />}
-              >
+              <Button variant="contained" color="error">
                 Contained
               </Button>
               <Button variant="outlined">Outlined</Button>
@@ -186,12 +144,7 @@ function App() {
               <Button variant="contained" size="large" color="secondary">
                 Contained
               </Button>
-              <Button
-                variant="contained"
-                size="large"
-                color="error"
-                startIcon={<DeleteIcon />}
-              >
+              <Button variant="contained" size="large" color="error">
                 Contained
               </Button>
               <Button variant="outlined" size="large">
@@ -199,235 +152,6 @@ function App() {
               </Button>
             </Grid>
           </Box>
-          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-            Text Fields
-          </Typography>
-          <Box sx={{ p: 2 }}>
-            <Grid container gap={2}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                defaultValue="Hello World"
-              />
-              <TextField
-                disabled
-                id="outlined-disabled"
-                label="Disabled"
-                defaultValue="Hello World"
-              />
-              <TextField
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-              />
-              <TextField
-                id="outlined-read-only-input"
-                label="Read Only"
-                defaultValue="Hello World"
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-              <TextField
-                id="outlined-number"
-                label="Number"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-search"
-                label="Search field"
-                type="search"
-              />
-              <TextField
-                id="outlined-helperText"
-                label="Helper text"
-                defaultValue="Default Value"
-                helperText="Some important text"
-              />
-            </Grid>
-            <Grid container gap={2}>
-              <TextField
-                required
-                id="filled-required"
-                label="Required"
-                defaultValue="Hello World"
-                variant="filled"
-              />
-              <TextField
-                disabled
-                id="filled-disabled"
-                label="Disabled"
-                defaultValue="Hello World"
-                variant="filled"
-              />
-              <TextField
-                id="filled-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                variant="filled"
-              />
-              <TextField
-                id="filled-read-only-input"
-                label="Read Only"
-                defaultValue="Hello World"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="filled"
-              />
-              <TextField
-                id="filled-number"
-                label="Number"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="filled"
-              />
-              <TextField
-                id="filled-search"
-                label="Search field"
-                type="search"
-                variant="filled"
-              />
-              <TextField
-                id="filled-helperText"
-                label="Helper text"
-                defaultValue="Default Value"
-                helperText="Some important text"
-                variant="filled"
-              />
-            </Grid>
-            <Grid container gap={2}>
-              <TextField
-                required
-                id="standard-required"
-                label="Required"
-                defaultValue="Hello World"
-                variant="standard"
-              />
-              <TextField
-                disabled
-                id="standard-disabled"
-                label="Disabled"
-                defaultValue="Hello World"
-                variant="standard"
-              />
-              <TextField
-                id="standard-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                variant="standard"
-              />
-              <TextField
-                id="standard-read-only-input"
-                label="Read Only"
-                defaultValue="Hello World"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-              />
-              <TextField
-                id="standard-number"
-                label="Number"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="standard"
-              />
-              <TextField
-                id="standard-search"
-                label="Search field"
-                type="search"
-                variant="standard"
-              />
-              <TextField
-                id="standard-helperText"
-                label="Helper text"
-                defaultValue="Default Value"
-                helperText="Some important text"
-                variant="standard"
-              />
-            </Grid>
-          </Box>
-          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-            Text Fields
-          </Typography>
-          <Box sx={{ p: 2 }}>
-            <Grid container gap={2}>
-              <Switch defaultChecked />
-              <Switch />
-              <Switch disabled defaultChecked />
-              <Switch disabled />
-            </Grid>
-          </Box>
-          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-            Slider
-          </Typography>
-          <Box sx={{ p: 2 }}>
-            <Grid container gap={2}>
-              <Stack
-                spacing={2}
-                direction="row"
-                sx={{ mb: 1 }}
-                alignItems="center"
-              >
-                <VolumeDown />
-                <Slider aria-label="Volume" style={{ width: 150 }} />
-                <VolumeUp />
-              </Stack>
-            </Grid>
-          </Box>
-          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-            Side Panel
-          </Typography>
-          <Box sx={{ p: 2 }}>
-            <Grid container gap={2}>
-              {(["left", "right", "top", "bottom"] as const).map((anchor) => (
-                <React.Fragment key={anchor}>
-                  <Button onClick={() => setDrawer(anchor)}>{anchor}</Button>
-                  <Drawer
-                    anchor={anchor}
-                    open={drawer === anchor}
-                    onClose={() => setDrawer(null)}
-                  >
-                    <Box sx={{ width: 300, p: 2 }}>
-                      <Grid container gap={2}>
-                        <Grid item xs={12}>
-                          Skynet
-                        </Grid>
-                        <Grid item xs={12}>
-                          Optimus Prime
-                        </Grid>
-                        <Grid item xs={12}>
-                          Voltron
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </Drawer>
-                </React.Fragment>
-              ))}
-            </Grid>
-          </Box>
-
-          <Grid sx={{ pt: 4, pb: 4 }}>
-            <Card sx={{ borderRadius: 0.5 }}>
-              <Box sx={{ p: 2 }}>
-                <Typography variant="body1">
-                  Something important goes here
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
         </Container>
       </Box>
     </div>
