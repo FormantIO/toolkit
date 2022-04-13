@@ -20,11 +20,21 @@
     "build": "vite build",
     "serve": "vite preview",
     "types": "tsc src/* --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
-    "docs": "typedoc src/main.ts --theme default --out ../../docs/ui-sdk/"
+    "docs": "typedoc src/main.ts --theme default --out ../../docs/ui-sdk/",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@storybook/addon-actions": "^6.4.21",
+    "@storybook/addon-essentials": "^6.4.21",
+    "@storybook/addon-interactions": "^6.4.21",
+    "@storybook/addon-links": "^6.4.21",
+    "@storybook/react": "^6.4.21",
+    "@storybook/testing-library": "^0.0.9",
     "@types/react": "^17",
     "@types/react-dom": "^17",
+    "babel-loader": "^8.2.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "typedoc": "^0.22.13",
