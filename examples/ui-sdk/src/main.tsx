@@ -7,13 +7,9 @@ import {
   Container,
   Grid,
   Typography,
-  useFormant,
 } from "@formant/ui-sdk";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 function App() {
-  const formant = useFormant();
-  const [drawer, setDrawer] = React.useState<string | null>(null);
   return (
     <div>
       <Box sx={{ p: 4 }}>
