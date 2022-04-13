@@ -6,7 +6,7 @@ module.exports = defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "FormantDataSDK",
-      fileName: (format) => `formant-theme-material-ui.${format}.js`,
+      fileName: (format) => `ui-sdk.${format}.js`,
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

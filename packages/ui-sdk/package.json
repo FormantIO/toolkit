@@ -1,45 +1,29 @@
 {
-  "name": "@formant/ui-sdk",
-  "description": "A library for building UI with Formant",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/formantio/toolkit.git"
-  },
-  "files": [
-    "dist"
-  ],
+  "name": "ui-sdk",
+  "version": "0.0.0",
+  "main": "dist/index.js",
   "license": "MIT",
-  "homepage": "https://github.com/formantio/toolkit",
-  "main": "./dist/ui-sdk.umd.js",
-  "module": "./dist/ui-sdk.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/ui-sdk.es.js",
-      "require": "./dist/ui-sdk.umd.js"
-    }
-  },
-  "version": "0.0.64",
   "scripts": {
-    "dev": "vite --port 9146",
-    "build": "tsc && vite build",
-    "serve": "vite preview",
-    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
-    "docs": "typedoc src/main.ts --theme default --out ../../docs/ui-sdk/"
+    "build": "webpack --config webpack.config.js",
+    "types": "tsc src/* --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types"
   },
   "devDependencies": {
-    "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.6.0",
-    "@mui/material": "^5.6.0",
-    "typescript": "^4.3.2",
-    "vite": "^2.5.4"
+    "@types/prop-types": "^15.7.5",
+    "ts-loader": "^9.2.8",
+    "typescript": "^4.6.3",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   },
-  "types": "./dist/types/ui-sdk/src/main.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/ui-sdk.js"
+    }
+  },
   "dependencies": {
-    "@mui/material": "^5.6.0",
-    "@types/react": "^18.0.1",
-    "@types/react-dom": "^18.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@emotion/react": "^11.9.0",
+    "@mui/material": "^5.6.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.0.0"
   }
 }
