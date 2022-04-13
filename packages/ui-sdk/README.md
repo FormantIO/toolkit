@@ -1,5 +1,5 @@
-# Data SDK
+# UI SDK
 
-A library for accessing the devices in your Formant fleet.
+A library of UI components from Formant
 
 Check out the [project website](https://github.com/FormantIO/toolkit) for more information!
