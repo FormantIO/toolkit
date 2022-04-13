@@ -1,7 +1,7 @@
 {
   "name": "ui-sdk",
   "version": "0.0.0",
-  "main": "dist/index.js",
+  "main": "dist/ui-sdk.js",
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js",
@@ -16,9 +16,7 @@
     "webpack-cli": "^4.9.2"
   },
   "exports": {
-    ".": {
-      "require": "./dist/ui-sdk.js"
-    }
+    ".": "./dist/ui-sdk.js"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",

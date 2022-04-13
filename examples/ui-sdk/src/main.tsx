@@ -1,34 +1,36 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import {
   AppBar,
-  Box,
   Card,
-  Container,
   createTheme,
-  Grid,
   IconButton,
   TextField,
   Toolbar,
-  Typography,
   Switch,
   Stack,
   Slider,
   Drawer,
 } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { defaultTheme as componentTheme } from "../../../packages/formant-theme-material-ui/src/main";
+import {
+  FormantProvider,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  useFormant,
+} from "@formant/ui-sdk";
 import MenuIcon from "@mui/icons-material/Menu";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import VolumeDown from "@mui/icons-material/VolumeDown";
 import formantLogo from "./formant.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const theme = createTheme(componentTheme);
-
 function App() {
+  const formant = useFormant();
   const [drawer, setDrawer] = React.useState<string | null>(null);
   return (
     <div>
@@ -436,10 +438,8 @@ const container = document.getElementById("app");
 if (container) {
   const root = createRoot(container);
   root.render(
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <App />
-      </CssBaseline>
-    </ThemeProvider>
+    <FormantProvider>
+      <App />
+    </FormantProvider>
   );
 }
