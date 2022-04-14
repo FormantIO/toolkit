@@ -2,6 +2,8 @@
 
 A library of UI components from Formant
 
+[demo](https://formantio.github.io/toolkit/examples/ui-sdk/dist/index.html)
+
 # Developing on UI Sdk
 
 ```
