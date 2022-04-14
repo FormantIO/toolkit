@@ -1,6 +1,8 @@
 # UI SDK
 
-A library of UI components from Formant
+A library of UI components from Formant.  These components are re-exported subset of [`mui`](https://mui.com).  You get the best both worlds:
+* components that look beautiful and fit in within a custom view/module.
+* high quality industry standard component system for React (i.e. your knowledge is re-usable for other projects).
 
 [demo](https://formantio.github.io/toolkit/examples/ui-sdk/dist/index.html)
 
