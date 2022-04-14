@@ -1,6 +1,6 @@
 {
   "name": "@formant/universe",
-  "description": "A library for getting data from Formant",
+  "description": "A library visualizing 3D universes on Formant",
   "repository": {
     "type": "git",
     "url": "https://github.com/formantio/toolkit.git"
@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.64",
+  "version": "0.0.0",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
