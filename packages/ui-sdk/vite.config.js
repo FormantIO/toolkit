@@ -12,7 +12,6 @@ module.exports = defineConfig({
       // make sure to externalize deps that shouldn't be bundled
       // into your library
       external: [
-        "react",
         "@emotion/react",
         "@emotion/styled",
         "@mui/material",

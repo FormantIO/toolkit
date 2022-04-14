@@ -45,6 +45,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@formant/data-sdk": "^0.0.64",
     "@mui/material": "^5.6.1",
     "@mui/utils": "^5.6.1"
   },
