@@ -15,8 +15,20 @@ A library of UI components from Formant.  These components are re-exported subse
 
 You can use the whole suite of components from [`mui`](https://mui.com) that will inherent our styles. The components that are explicitly tested from this packages have styling that is known to be of high quality.
 
+# Setting up in your own project
 
-# Developing on UI Sdk
+```
+yarn add @formant/ui-sdk
+```
+
+or check out our [ViteJS example](https://github.com/FormantIO/toolkit/tree/master/examples/ui-sdk)
+
+# Formant React hooks
+
+Within this project are a number of hooks that make access informationa about your fleet easy to do.
+
+
+# Developing on `ui-sdk`
 
 ```
 yarn
