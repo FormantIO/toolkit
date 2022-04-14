@@ -1,5 +1,5 @@
 {
-  "name": "@formant/data-sdk",
+  "name": "@formant/universe",
   "description": "A library for getting data from Formant",
   "repository": {
     "type": "git",
@@ -10,12 +10,12 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/formantio/toolkit",
-  "main": "./dist/data-sdk.umd.js",
-  "module": "./dist/data-sdk.es.js",
+  "main": "./dist/universe.umd.js",
+  "module": "./dist/universe.es.js",
   "exports": {
     ".": {
-      "import": "./dist/data-sdk.es.js",
-      "require": "./dist/data-sdk.umd.js"
+      "import": "./dist/universe.es.js",
+      "require": "./dist/universe.umd.js"
     }
   },
   "version": "0.0.64",
@@ -23,20 +23,22 @@
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
-    "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
+    "types": "tsc src/* --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/"
   },
   "devDependencies": {
     "@types/react-dom": "^18.0.0",
+    "@types/styled-components": "^5.1.25",
+    "@types/offscreencanvas": "^2019.6.4",
     "@types/three": "^0.125.2",
     "typescript": "^4.6.3",
-    "vite": "^2.9.5"
+    "vite": "^2.9.5",
+    "react-dom": "^18.0.0"
   },
-  "types": "./dist/types/data-sdk/src/main.d.ts",
+  "types": "./dist/types/main.d.ts",
   "dependencies": {
     "@formant/ui-sdk": "^0.0.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
     "react-use-measure": "^2.1.1",
     "styled-components": "^5.3.5",
     "three": "^0.125.2"
