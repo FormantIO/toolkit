@@ -5,6 +5,8 @@
 <h3 align="center">
   <a href="#about">About</a> &nbsp;·&nbsp;
   <a href="#data">Data</a> &nbsp;·&nbsp;
+  <a href="https://github.com/FormantIO/toolkit/blob/master/packages/ui-sdk/">UI</a> &nbsp;·&nbsp;
+  <a href="https://github.com/FormantIO/toolkit/blob/master/packages/universe/">Universe</a> &nbsp;·&nbsp;
   <a href="#faq">FAQ</a> &nbsp;·&nbsp;
   <a href="#partners">Partners</a>
 </h3>
