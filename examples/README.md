@@ -13,7 +13,7 @@ A series of examples about how to extend Formants capabilities; including views,
 
 The Formant agent is able to collect data points that represent the altitude and orientation of a device. This data is collected from the 'Location' stream.
 
-![App Screenshot](https://github.com/FormantIO/toolkit/tree/master/examples/altitude-on-map/blob/main/src/images/orientation.png)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/altitude-on-map/images/orientation.png)
 The altitude is measured in Meters (m), the orientation is measured in Radians (rotation). To use orientation in the map it is necessary to convert Radian to Degrees.
 
 [Issue command](https://github.com/FormantIO/toolkit/tree/master/examples/command-issuer) (React)
