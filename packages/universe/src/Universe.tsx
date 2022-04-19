@@ -1,17 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-import useMeasure from "react-use-measure";
 import * as THREE from "three";
 import styled from "styled-components";
+import { Measure } from "@formant/ui-sdk";
 
-const FullHeightContainer = styled.div`
+const MeasureContainer = styled.div`
   width: 100%;
   height: 100vh;
+
+  > div {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export function Universe() {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const [bounds, setBounds] = useState({ width: 1, height: 1 });
   const [scene] = useState(new THREE.Scene());
-  const [ref, bounds] = useMeasure();
   const [camera] = useState(
     () =>
       new THREE.PerspectiveCamera(75, bounds.width / bounds.height, 0.1, 1000)
@@ -24,12 +30,12 @@ export function Universe() {
       })
   );
 
-  useEffect(() => {
+  useEffect(function () {
     const mount = mountRef.current;
     renderer.xr.enabled = true;
     const { devicePixelRatio } = window;
     renderer.setPixelRatio(devicePixelRatio);
-    renderer.setSize(bounds.bottom, bounds.height);
+    renderer.setSize(bounds.width, bounds.height);
     mount?.appendChild(renderer.domElement);
 
     var geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -55,14 +61,24 @@ export function Universe() {
       done = true;
     };
   }, []);
-  useEffect(() => {
-    camera.aspect = bounds.width / bounds.height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(bounds.width, bounds.height);
-  }, [bounds]);
+
+  useEffect(
+    function () {
+      camera.aspect = bounds.width / bounds.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(bounds.width, bounds.height);
+    },
+    [bounds]
+  );
+  const onResize = (width: number, height: number) => {
+    setBounds({ width, height });
+  };
+
   return (
-    <FullHeightContainer ref={ref}>
-      <div ref={mountRef}></div>
-    </FullHeightContainer>
+    <MeasureContainer>
+      <Measure onResize={onResize}>
+        <div ref={mountRef}></div>
+      </Measure>
+    </MeasureContainer>
   );
 }
