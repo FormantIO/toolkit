@@ -18,21 +18,28 @@ The altitude is measured in Meters (m), the orientation is measured in Radians (
 
 ### [Issue a command](https://github.com/FormantIO/toolkit/tree/master/examples/command-issuer) (React)
 
-This example encapsulates the proccess of sending a command to a device inside a React component. It is a button which takes as a parametere the name of the command, and when you click on it it issue the command to your device.
+This example encapsulates the proccess of sending a command to a device using the data-sdk inside a React component. It is a button which takes as a parametere the name of the command, and when you click on it it issue the command to your device.
  
-![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/command-issuer/images/command-issuer.png)
 
 ```javascript
 import { CommandIssuer } from "./CommandIssuer/index";
 
 function App() {
-  <CommandIssuer command="Start" />
+    <CommandIssuer command="Start" />
 }
 ```
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/command-issuer/images/command-issuer.png)
 
 
 
 [Commands](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (TypeScript)
+
+This custom view is a demonstration of how the data sdk can be used for sending commands to a robot. When you're device is ready, find a command, type its name in the input, and type in a string into the command data input.
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/commands/images/commands.png)
+
+
 
 [Download video with a button](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (React)
 
