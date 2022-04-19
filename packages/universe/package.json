@@ -23,7 +23,7 @@
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/* --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/"
   },
   "devDependencies": {
@@ -35,14 +35,17 @@
     "typescript": "^4.6.3",
     "vite": "^2.9.5"
   },
-  "types": "./dist/types/main.d.ts",
+  "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
     "@formant/ui-sdk": "0.0.3",
     "@types/react": "^18.0.5",
+    "@types/uuid": "^8.3.4",
+    "geolib": "^3.3.3",
     "react": "^18.0.0",
     "react-use-measure": "^2.1.1",
     "styled-components": "^5.3.5",
-    "three": "^0.125.2"
+    "three": "^0.125.2",
+    "uuid": "^8.3.2"
   },
   "resolutions": {
     "styled-components": "^5"

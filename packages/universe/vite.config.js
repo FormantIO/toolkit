@@ -17,6 +17,8 @@ module.exports = defineConfig({
         "@formant/ui-sdk",
         "react-use-measure",
         "styled-components",
+        "geolib",
+        "uuid",
       ],
       output: {
         // Provide global variables to use in the UMD build
