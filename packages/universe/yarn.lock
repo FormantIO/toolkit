@@ -265,6 +265,21 @@
     "@mui/material" "^5.6.1"
     "@mui/utils" "^5.6.1"
 
+"@formant/ui-sdk@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.4.tgz#42a927ce6185264daa70d0a557c4c29515c01d8f"
+  integrity sha512-UNt4FeVKDbdDj72RkxH8w3fuUyJHB7wMuHs9ZUnrlrFlHW3Fk1rm5HwrO1CwjVid/A0VT4bp3Q8kJy8rj1YRLA==
+  dependencies:
+    "@emotion/react" "^11.9.0"
+    "@emotion/styled" "^11.8.1"
+    "@formant/data-sdk" "^0.0.64"
+    "@formant/ui-sdk" "0.0.3"
+    "@mui/material" "^5.6.1"
+    "@mui/utils" "^5.6.1"
+    "@types/styled-components" "^5.1.25"
+    classnames "^2.3.1"
+    styled-components "^5.3.5"
+
 "@mui/base@5.0.0-alpha.77":
   version "5.0.0-alpha.77"
   resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.77.tgz#a88985597708c354520579e4f76e617b29f8f593"
@@ -482,6 +497,11 @@ chalk@^2.0.0:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
+
+classnames@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
 
 clsx@^1.1.1:
   version "1.1.1"
