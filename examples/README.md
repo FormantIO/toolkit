@@ -13,14 +13,14 @@ A series of examples about how to extend Formants capabilities; including views,
 
 The Formant agent is able to collect data points that represent the altitude and orientation of a device. This data is collected from the 'Location' stream.
 
-![App Screenshot](https://github.com/FormantIO/toolkit/tree/master/examples/altitude-on-map/images/orientation.png)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/altitude-on-map/images/orientation.png)
 The altitude is measured in Meters (m), the orientation is measured in Radians (rotation). To use orientation in the map it is necessary to convert Radian to Degrees.
 
 ### [Issue a command](https://github.com/FormantIO/toolkit/tree/master/examples/command-issuer) (React)
 
 This example encapsulates the proccess of sending a command to a device inside a React component. It is a button which takes as a parametere the name of the command, and when you click on it it issue the command to your device.
  
-![App Screenshot](https://github.com/FormantIO/toolkit/tree/master/examples/command-issuer/images/command-issuer.png)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/command-issuer/images/command-issuer.png)
 
 ```javascript
 import { CommandIssuer } from "./CommandIssuer/index";
