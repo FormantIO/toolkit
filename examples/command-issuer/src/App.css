@@ -1,20 +1,10 @@
 .App {
   text-align: center;
-}
-.container {
-  width: 100%;
-  display: grid;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
   align-items: center;
-  grid-template-columns: repeat(3, 1fr);
-  background-color: #282f45;
-  border-top: 1px solid #1c1e2d;
-  border-bottom: 1px solid #1c1e2d;
-  height: 50px;
-}
-span {
-  color: #bac4e2;
-  font-size: 16px;
-  font-weight: 600;
+  justify-content: center;
 }
 
 button {
