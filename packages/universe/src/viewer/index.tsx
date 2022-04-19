@@ -1,7 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import styled from "styled-components";
 import { Measure } from "@formant/ui-sdk";
+import * as React from "react";
+import { Component } from "react";
+import * as THREE from "three";
+import { Vector3, WebGLRenderer } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { TransformControls } from "three/examples/jsm/controls/TransformControls";
+import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
+import { defined, definedAndNotNull } from "../../../common/defined";
+import { LayerRegistry } from "../layers/LayerRegistry";
+import { TransformLayer } from "../layers/TransformLayer";
+import { injectLayerFieldValues } from "../layers/UniverseLayerContent";
+import {
+  findSceneGraphElement,
+  getSceneGraphElementParent,
+  Positioning,
+  SceneGraphElement,
+} from "../SceneGraph";
+import { TreePath, treePathEquals } from "../ITreeElement";
+import { IUniverseData } from "../IUniverseData";
+import styled from "styled-components";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -14,71 +31,219 @@ const MeasureContainer = styled.div`
   }
 `;
 
-export function UniverseViewer() {
-  const mountRef = useRef<HTMLDivElement | null>(null);
-  const [bounds, setBounds] = useState({ width: 1, height: 1 });
-  const [scene] = useState(new THREE.Scene());
-  const [camera] = useState(
-    () =>
-      new THREE.PerspectiveCamera(75, bounds.width / bounds.height, 0.1, 1000)
-  );
-  const [renderer] = useState(
-    () =>
-      new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-      })
-  );
+export interface IUniverseViewerProps {
+  universeData: IUniverseData;
+  sceneGraph: SceneGraphElement[];
+  deviceId: string;
+  onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
+}
 
-  useEffect(function () {
-    const mount = mountRef.current;
-    renderer.xr.enabled = true;
-    const { devicePixelRatio } = window;
-    renderer.setPixelRatio(devicePixelRatio);
-    renderer.setSize(bounds.width, bounds.height);
-    mount?.appendChild(renderer.domElement);
+export class UniverseViewer extends Component<IUniverseViewerProps> {
+  private element: HTMLElement | null = null;
+  private renderer: WebGLRenderer | undefined;
+  private scene: THREE.Scene;
+  private root: THREE.Object3D = new THREE.Object3D();
+  private camera: THREE.PerspectiveCamera;
+  private pathToLayer: Map<SceneGraphElement, TransformLayer<any>> = new Map();
+  private editControls: TransformControls | undefined;
+  private orbitControls: OrbitControls | undefined;
+  private attachedPath: TreePath | undefined;
 
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    var cube = new THREE.Mesh(geometry, material);
+  constructor(props: IUniverseViewerProps) {
+    super(props);
+    this.scene = new THREE.Scene();
+    this.scene.add(this.root);
+    const ninetyDegrees = Math.PI / 2;
+    this.root.rotation.set(-ninetyDegrees, 0, 0);
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    this.camera.position.z = 3;
 
-    scene.add(cube);
-    camera.position.z = 5;
+    this.camera.position.y = 3;
 
-    let done = false;
-    var animate = function () {
-      if (done) {
-        return;
-      }
-      requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    };
+    const light = new THREE.AmbientLight(0x555555);
+    this.scene.add(light);
+  }
 
-    animate();
-    () => {
-      done = true;
-    };
-  }, []);
+  public componentWillUnmount() {
+    window.removeEventListener("keydown", this.onKeyDown);
+  }
 
-  useEffect(
-    function () {
-      camera.aspect = bounds.width / bounds.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(bounds.width, bounds.height);
-    },
-    [bounds]
-  );
-  const onResize = (width: number, height: number) => {
-    setBounds({ width, height });
+  onKeyDown = (event: KeyboardEvent) => {
+    const c = defined(this.editControls);
+    switch (event.key) {
+      case "g":
+        c.setMode("translate");
+        break;
+      case "r":
+        c.setMode("rotate");
+        break;
+      case "s":
+        c.setMode("scale");
+        break;
+    }
   };
 
-  return (
-    <MeasureContainer>
-      <Measure onResize={onResize}>
-        <div ref={mountRef}></div>
-      </Measure>
-    </MeasureContainer>
-  );
+  public componentDidMount() {
+    const { element } = this;
+    if (element) {
+      this.renderer = new WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
+      this.renderer.xr.enabled = true;
+      element.appendChild(this.renderer.domElement);
+      const { devicePixelRatio } = window;
+      const { offsetWidth: width, offsetHeight: height } = element;
+      this.renderer.setPixelRatio(devicePixelRatio);
+      this.renderer.setSize(width, height);
+
+      this.orbitControls = new OrbitControls(
+        this.camera,
+        this.renderer.domElement
+      );
+      this.orbitControls.update();
+      this.editControls = new TransformControls(
+        this.camera,
+        this.renderer.domElement
+      );
+      window.addEventListener("keydown", this.onKeyDown);
+      this.editControls.addEventListener("change", this.onEditControlsChange);
+      this.editControls.addEventListener("dragging-changed", (event) => {
+        if (this.orbitControls) this.orbitControls.enabled = !event.value;
+      });
+      this.scene.add(this.editControls);
+      this.renderer.setAnimationLoop(() => {
+        if (this.renderer && this.orbitControls) {
+          this.renderer.render(this.scene, this.camera);
+          this.orbitControls.update();
+        }
+      });
+      element.appendChild(VRButton.createButton(this.renderer));
+    }
+  }
+
+  private onEditControlsChange = () => {
+    const { editControls } = this;
+    if (editControls) {
+      const { attachedPath } = this;
+      if (attachedPath) {
+        const { object } = editControls;
+        if (object) {
+          const { position } = object;
+
+          this.props.onSceneGraphElementEdited(attachedPath, position);
+        }
+      }
+    }
+  };
+
+  public recenter() {
+    if (this.orbitControls) {
+      this.orbitControls.reset();
+    }
+  }
+
+  getCurrentCamera = () => {
+    return this.camera;
+  };
+
+  public addSceneGraphItem(path: TreePath) {
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+
+    const fields = LayerRegistry.getFields(el.type);
+    injectLayerFieldValues(fields, el.fieldValues);
+    const layer = LayerRegistry.createDefaultLayer(
+      el.type,
+      this.props.universeData,
+      this.props.deviceId,
+      el.dataSources,
+      fields,
+      this.getCurrentCamera
+    );
+    if (el.position.type === "manual") {
+      layer.position.set(el.position.x, el.position.y, el.position.z);
+    }
+    const parent = getSceneGraphElementParent(this.props.sceneGraph, path);
+    if (parent) {
+      const o = defined(this.pathToLayer.get(parent));
+      o.add(layer);
+    } else {
+      this.root.add(layer);
+    }
+    this.pathToLayer.set(el, layer);
+  }
+
+  public removeSceneGraphItem(path: TreePath) {
+    if (this.attachedPath && treePathEquals(path, this.attachedPath)) {
+      this.toggleEditing(path, false);
+    }
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const layer = defined(this.pathToLayer.get(el));
+
+    definedAndNotNull(layer.parent).remove(layer);
+    this.pathToLayer.delete(el);
+  }
+
+  private onResize = (width: number, height: number) => {
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    if (this.orbitControls) {
+      this.orbitControls.update();
+    }
+    this.renderer?.setSize(width, height);
+  };
+
+  public toggleVisible(path: TreePath, visible: boolean) {
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const o = defined(this.pathToLayer.get(el));
+    o.visible = visible;
+    o.traverse((child) => {
+      child.visible = visible;
+    });
+  }
+
+  public toggleEditing(path: TreePath, editing: boolean) {
+    const c = defined(this.editControls);
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const o = defined(this.pathToLayer.get(el));
+    if (editing) {
+      c.setMode("translate");
+      c.attach(o);
+      this.attachedPath = path;
+    } else {
+      c.detach();
+      this.attachedPath = undefined;
+    }
+  }
+
+  public updatePositioning(path: TreePath, position: Positioning) {
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const o = defined(this.pathToLayer.get(el));
+    o.setPositioning(position, this.props.universeData);
+  }
+
+  public render() {
+    return (
+      <MeasureContainer>
+        <Measure onResize={this.onResize}>
+          <div ref={(_) => (this.element = defined(_))} />
+        </Measure>
+      </MeasureContainer>
+    );
+  }
 }

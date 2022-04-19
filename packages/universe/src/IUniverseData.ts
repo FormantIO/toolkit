@@ -49,4 +49,5 @@ export interface IUniverseData {
     streamName: string,
     callback: (data: any) => void
   ): () => void;
+  get deviceId(): string;
 }
