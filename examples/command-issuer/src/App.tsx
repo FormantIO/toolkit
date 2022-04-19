@@ -4,7 +4,7 @@ import { CommandIssuer } from "./CommandIssuer/index";
 function App() {
   return (
     <div className="App">
-      <CommandIssuer command="Feed" />
+      <CommandIssuer command="Start" />
     </div>
   );
 }
