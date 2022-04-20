@@ -1,54 +1,12 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe, IUniverseData, UniverseDataSource } from "../src/main";
-
-class FakeUniverseData implements IUniverseData {
-  async getTransformTrees(): Promise<{ name: string; transformTree: any }[]> {
-    return [];
-  }
-  async getLocations(): Promise<any> {
-    return;
-  }
-  getDeviceContexts(): { deviceName: string; deviceId: string }[] {
-    return [{ deviceName: "My Robot", deviceId: "abc" }];
-  }
-  getDeviceContextName(_deviceId: string): string | undefined {
-    return "My Robot";
-  }
-  getTelemetryStreamType(
-    _deviceId: string,
-    _streamName: string
-  ): string | undefined {
-    return;
-  }
-  subscribeToDataSource(
-    _source: UniverseDataSource,
-    _callback: (data: any) => void
-  ): void {
-    return;
-  }
-  subscribeToTransformTree(
-    _streamName: string,
-    _callback: (data: any) => void
-  ): () => void {
-    return () => {};
-  }
-  subscribeToLocation(
-    _streamName: string,
-    _callback: (data: any) => void
-  ): () => void {
-    return () => {};
-  }
-  get deviceId(): string {
-    return "abc";
-  }
-}
+import { Universe, SimulatedUniverseData } from "../src/main";
 
 function App() {
   return (
     <div>
-      <Universe universeData={new FakeUniverseData()}></Universe>
+      <Universe universeData={new SimulatedUniverseData()}></Universe>
     </div>
   );
 }

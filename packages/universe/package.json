@@ -18,12 +18,12 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.7",
+  "version": "0.0.8",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/"
   },
   "devDependencies": {
