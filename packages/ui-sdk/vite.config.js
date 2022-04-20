@@ -21,6 +21,8 @@ module.exports = defineConfig({
         "@mui/material/styles/ThemeProvider",
         "@mui/material/CssBaseline",
         "@mui/material/styles",
+        "classnames",
+        "styled-components",
       ],
       output: {
         // Provide global variables to use in the UMD build

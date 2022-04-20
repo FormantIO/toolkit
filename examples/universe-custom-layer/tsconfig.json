@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "jsx": "react",
     "lib": ["ESNext", "DOM"],
     "moduleResolution": "node",
     "strict": true,
@@ -15,5 +15,5 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "include": ["./demo"]
+  "include": ["./src"]
 }

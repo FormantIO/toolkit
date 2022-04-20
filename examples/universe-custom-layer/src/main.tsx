@@ -1,7 +1,15 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe, SimulatedUniverseData } from "../src/main";
+import {
+  LayerRegistry,
+  Universe,
+  SimulatedUniverseData,
+} from "@formant/universe";
+
+import { CubeLayer } from "./CubeLayer";
+
+LayerRegistry.register(CubeLayer);
 
 function App() {
   return (

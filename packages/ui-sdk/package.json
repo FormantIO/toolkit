@@ -14,7 +14,7 @@
   "exports": {
     ".": "./dist/ui-sdk.es.js"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "vite build",
@@ -48,7 +48,10 @@
     "@formant/data-sdk": "^0.0.64",
     "@formant/ui-sdk": "0.0.3",
     "@mui/material": "^5.6.1",
-    "@mui/utils": "^5.6.1"
+    "@mui/utils": "^5.6.1",
+    "@types/styled-components": "^5.1.25",
+    "classnames": "^2.3.1",
+    "styled-components": "^5.3.5"
   },
   "peerDependencies": {
     "react": "^18.0.0",
