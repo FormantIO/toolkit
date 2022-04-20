@@ -33,7 +33,7 @@ function App() {
 
 
 
-[Commands](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (TypeScript)
+### [Commands](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (TypeScript)
 
 This custom view is a demonstration of how the data sdk can be used for sending commands to a robot. When you're device is ready, find a command, type its name in the input, and type in a string into the command data input.
 
@@ -41,7 +41,12 @@ This custom view is a demonstration of how the data sdk can be used for sending 
 
 
 
-[Download video with a button](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (React)
+### [Download video with a button](https://github.com/FormantIO/toolkit/tree/master/examples/commands) (React)
+
+This example shows how to download a video from a stream.
+
+![Download button widget](https://github.com/FormantIO/toolkit/tree/master/examples/download-video-stream/images/video.gif)
+
 
 [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (React)
 
