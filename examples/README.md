@@ -126,7 +126,7 @@ You can easily set the default styling of your HTML to something Formant-y with 
 ```
 With this in your html head you will get default colors, appropriate fonts, and very basic elements will be styled.
 
-![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/scatter-plot/images/Screen%20Shot%202022-04-20%20at%202.06.20%20PM.png)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/simple-style/images/style.png)
 
 
 ### Desktop
