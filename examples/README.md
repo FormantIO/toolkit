@@ -106,26 +106,42 @@ This example how you can display different streams in the same graph.
 
 - Examples of how to perform a teleoperation using the Data SDK.
 
-[Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop-cra) (React)
+### [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop-cra) (React)
 
-[Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop) (TypeScript)
+This custom view is a demonstration of how the data sdk can be used with the ui sdk for realtime teleop views. In particular we use ui-sdk-joystick and ui-sdk-realtime-player. Checkout https://github.com/FormantIO/toolkit for more information! 
+
+### [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop) (TypeScript)
+This custom view is a demonstration of how the data sdk can be used with the ui sdk for realtime teleop views. In particular we use ui-sdk-joystick and ui-sdk-realtime-player. Checkout https://github.com/FormantIO/toolkit for more information! 
 
 ### [Binary request response](https://github.com/FormantIO/toolkit/tree/master/examples/binary-request-response) (TypeScript + Python Adapter)
 This custom view demonstrates how RequestDataChannel can be used to write applications with a request-response pattern. This particular example is for binary request data channels, which accept Uint8Array requests in javascript and can be used for protocols like protobuf. Press spacebar to make a request. If the adapter is running, a response will come in. If no adapter is running, the request will time out.
-#### Styling
+### Styling
 
 - Example of components using Formant's CDN, providing the ability to focus on developing while we will handle the design.
 
-[Style components](https://github.com/FormantIO/toolkit/tree/master/examples/simple-style) (HTML / Formant CDN)
+### [Style components](https://github.com/FormantIO/toolkit/tree/master/examples/simple-style) (HTML / Formant CDN)
+You can easily set the default styling of your HTML to something Formant-y with a single line:
+```javascript
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css" />
+```
+With this in your html head you will get default colors, appropriate fonts, and very basic elements will be styled.
 
-#### Desktop
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/scatter-plot/images/Screen%20Shot%202022-04-20%20at%202.06.20%20PM.png)
+
+
+### Desktop
 
 - Example of how to create a Formant desktop application.
 
-[Login and list devices](https://github.com/FormantIO/toolkit/tree/master/examples/simple-electron) (Electron)
+### [Login and list devices](https://github.com/FormantIO/toolkit/tree/master/examples/simple-electron) (Electron)
 
-#### Adapter
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/images/preview_electron.png)
+
+
+### Adapter
 
 - Examples of how to extend Formant's agent caplabilities to perform communication with our APIs
 
 [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
+
+This adapter collects all the online ROS topics and publish them to our API
