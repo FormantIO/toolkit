@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.5",
+  "version": "0.0.7",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -49,5 +49,8 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "peerDependencies": {
+    "three": "^0.125.2"
   }
 }
