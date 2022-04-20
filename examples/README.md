@@ -48,9 +48,21 @@ This example shows how to download a video from a stream.
 ![Download button widget](https://github.com/FormantIO/toolkit/blob/master/examples/download-video-stream/images/video.gif)
 
 
-[ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (React)
+### [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (React + Python Adapter)
 
-[Login Form](https://github.com/FormantIO/toolkit/tree/master/examples/vr) (React)
+This module has a configuration that shows which ROS topics are expected. It reads the data that was sent from the adapter and then it compares the data from the configuration with the data that is being received.
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/ros-diagnostics/images/table.png)
+
+
+### [Login Form](https://github.com/FormantIO/toolkit/tree/master/examples/vr) (React)
+
+We provide a simple component ui-sdk-login to handle authorization for you if you just want to focus on user experience.
+[Try it](https://formantio.github.io/toolkit/examples/simple-login/dist/index.html)
+
+
+![App Screenshot](https://user-images.githubusercontent.com/66638393/134783659-5491c1d2-ea63-4b85-b3ea-22c3de4c5df8.png)
+
 
 [Customizable welcome page](https://github.com/FormantIO/toolkit/tree/master/examples/simple-welcome) (HTML/Formant CDN)
 
