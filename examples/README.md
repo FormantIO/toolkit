@@ -3,7 +3,28 @@
 
 A series of examples about how to extend Formants capabilities; including views, adapters and functionalities.
 
-## Index
+# Index
+- #### [Views/Modules](https://github.com/FormantIO/toolkit/tree/master/examples#viewsmoules)
+  * [Represent altitude and orientation on a map](https://github.com/FormantIO/toolkit/tree/master/examples#represent-altitude-and-orientation-on-a-map-react)(React)
+  * [Issue a command](https://github.com/FormantIO/toolkit/tree/master/examples#issue-a-command-react) (React)
+  * [Commands](https://github.com/FormantIO/toolkit/tree/master/examples#commands-typescript) (TypeScript)
+  * [How to download video stream](https://github.com/FormantIO/toolkit/tree/master/examples#download-video-with-a-button-react) (React)
+  * [ROS Topic diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples#ros-topics-diagnostics-react--python-adapter) (React)
+  * [Login form](https://github.com/FormantIO/toolkit/tree/master/examples#login-form-react) (React)
+  * [Customizable welcome page](https://github.com/FormantIO/toolkit/tree/master/examples#customizable-welcome-page-htmlformant-cdn) (HTML / CDN)
+  * [Weather visualization](https://github.com/FormantIO/toolkit/tree/master/examples#weather-visualization-html-formant-cdn) (HTML/CDN)
+  * [URDF](https://github.com/FormantIO/toolkit/tree/master/examples#urdf-typescript--threejs--data-sdk) (TypeScript / Three.JS / Data-SDK)
+  * [Scatter plot](https://github.com/FormantIO/toolkit/tree/master/examples#visualize-different-streams-in-the-same-graph-typescript--d3) (Typescript / D3)
+- #### [Teleoperation](https://github.com/FormantIO/toolkit/tree/master/examples#teleop)
+  * [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-react) (React)
+  * [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-typescript) (TypeScript)
+  * [Binary request response](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-typescript) (TypeScript + Python Adapter)
+- #### [Styling](https://github.com/FormantIO/toolkit/tree/master/examples#styling)
+  * [Style components](https://github.com/FormantIO/toolkit/tree/master/examples#style-components-html--formant-cdn) (HTML /CDN)
+- #### [Desktop](https://github.com/FormantIO/toolkit/tree/master/examples#desktop)
+  * [Login and list devices](https://github.com/FormantIO/toolkit/tree/master/examples#login-and-list-devices-electron) (Electron)
+- #### [Adapters](https://github.com/FormantIO/toolkit/tree/master/examples#login-and-list-devices-electron)
+  * [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples#adapter) (Python)
 
 ### Views/Moules
 
@@ -142,6 +163,6 @@ With this in your html head you will get default colors, appropriate fonts, and 
 
 - Examples of how to extend Formant's agent caplabilities to perform communication with our APIs
 
-[ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
+### [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
 
 This adapter collects all the online ROS topics and publish them to our API
