@@ -64,15 +64,45 @@ We provide a simple component ui-sdk-login to handle authorization for you if yo
 ![App Screenshot](https://user-images.githubusercontent.com/66638393/134783659-5491c1d2-ea63-4b85-b3ea-22c3de4c5df8.png)
 
 
-[Customizable welcome page](https://github.com/FormantIO/toolkit/tree/master/examples/simple-welcome) (HTML/Formant CDN)
+### [Customizable welcome page](https://github.com/FormantIO/toolkit/tree/master/examples/simple-welcome) (HTML/Formant CDN)
+This is a sample welcome page that can be completely customized to show off your robot's value at your customer's farm.
 
-[Weather visualization](https://github.com/FormantIO/toolkit/tree/master/examples/simple-weather-visualization) (HTML/ Formant CDN)
+Formant CDN:
+```javascript
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+  </head>
+```
 
-[URDF](https://github.com/FormantIO/toolkit/tree/master/examples/simple-urdf) (TypeScript / Three.JS / Data-SDK)
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/simple-welcome/images/farm.png)
 
-[Visualize different streams in the same graph](https://github.com/FormantIO/toolkit/tree/master/examples/scatter-plot) (TypeScript / D3)
+### [Weather visualization](https://github.com/FormantIO/toolkit/tree/master/examples/simple-weather-visualization) (HTML/ Formant CDN)
 
-### Teleop
+Example of a custom module that can be embeded inside Formant
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/simple-weather-visualization/images/weather.png)
+
+
+### [URDF](https://github.com/FormantIO/toolkit/tree/master/examples/simple-urdf) (TypeScript / Three.JS / Data-SDK)
+
+
+
+This exaple shows how to use tranformation tree stream to create visual representation of the robot. 
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/simple-urdf/images/urdf.png)
+
+
+### [Visualize different streams in the same graph](https://github.com/FormantIO/toolkit/tree/master/examples/scatter-plot) (TypeScript / D3)
+
+This example how you can display different streams in the same graph. 
+
+![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/scatter-plot/images/Screen%20Shot%202022-04-20%20at%202.06.20%20PM.png)
+
+
+## Teleop
 
 - Examples of how to perform a teleoperation using the Data SDK.
 
