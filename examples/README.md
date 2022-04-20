@@ -45,7 +45,7 @@ This custom view is a demonstration of how the data sdk can be used for sending 
 
 This example shows how to download a video from a stream.
 
-![Download button widget](https://github.com/FormantIO/toolkit/tree/master/examples/download-video-stream/images/video.gif)
+![Download button widget](https://github.com/FormantIO/toolkit/blob/master/examples/download-video-stream/images/video.gif)
 
 
 [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (React)
