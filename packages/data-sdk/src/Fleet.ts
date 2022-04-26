@@ -9,14 +9,6 @@ import { IEvent } from "./model/IEvent";
 import { IQuery } from "./model/IQuery";
 import { IStreamData } from "./model/IStreamData";
 
-export interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  organizationId: string;
-  id: string;
-}
-
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -283,5 +275,22 @@ export class Fleet {
     });
 
     return (await data.json()).items as IEvent[];
+  }
+
+  static async getInterventions(): Promise<IEvent[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const interventions = await fetch(
+      `${FORMANT_API_URL}/v1/admin/intervention-requests`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await interventions.json()).items as IEvent[];
   }
 }

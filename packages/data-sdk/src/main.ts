@@ -1,4 +1,4 @@
-export { Fleet, TelemetryResult } from "./Fleet";
+export * from "./Fleet";
 export * from "./Authentication";
 export * from "./Device";
 export * from "./DataChannel";

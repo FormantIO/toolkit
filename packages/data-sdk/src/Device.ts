@@ -11,7 +11,9 @@ import {
   TextRequestDataChannel,
   BinaryRequestDataChannel,
 } from "./RequestDataChannel";
-
+import { InterventionType } from "./main";
+import { IInterventionTypeMap } from "./main";
+import { IInterventionResponse } from "./main";
 export interface ConfigurationDocument {
   urdfFiles: string[];
   telemetry?: {
@@ -555,5 +557,59 @@ export class Device {
       .map((_) => ({ name: _, onDemand: onDemandList.includes(_) }));
 
     return streamNames;
+  }
+
+  async createInterventionRequest<T extends InterventionType>(
+    message: string,
+    interventionType: InterventionType,
+    interventionRequest: IInterventionTypeMap[T]["request"],
+    tags?: { [key in string]: string[] }
+  ): Promise<(id: string) => IInterventionTypeMap[T]["response"]> {
+    const intervention = await fetch(
+      `${FORMANT_API_URL}/v1/admin/intervention-requests`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          message,
+          interventionType,
+          time: new Date().toISOString(),
+          deviceId: this.id,
+          tags,
+          data: interventionRequest,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+
+    const interventionJson = await intervention.json();
+
+    return interventionJson;
+  }
+
+  async addInterventionResponse<T extends InterventionType>(
+    interventionId: string,
+    interventionType: InterventionType,
+    data: IInterventionTypeMap[T]["response"]
+  ): Promise<IInterventionResponse> {
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/intervention-responses`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          interventionId,
+          interventionType,
+          data,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    const interventionResponse = await response.json();
+    return interventionResponse;
   }
 }
