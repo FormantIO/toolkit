@@ -470,9 +470,7 @@ export class Device {
         }
       );
     });
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 200);
-    });
+    await p.waitTilReady();
     return p;
   }
 
