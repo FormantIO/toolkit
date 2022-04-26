@@ -7,9 +7,29 @@ import {
   Container,
   Grid,
   Typography,
+  Select,
+  MenuItem,
+  TextField,
+  Tooltip,
+  HelpIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "../src/main";
 
 function App() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Box sx={{ p: 4 }}>
@@ -146,6 +166,83 @@ function App() {
               <Button variant="outlined" size="large">
                 Outlined
               </Button>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Select
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Select label="Age">
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Twenty</MenuItem>
+                <MenuItem value={21}>Twenty one</MenuItem>
+                <MenuItem value={22}>Twenty one and a half</MenuItem>
+              </Select>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Text Input
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <TextField
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Tooltip
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Tooltip title="Delete">
+                <Button>Hover over me</Button>
+              </Tooltip>
+              <HelpIcon
+                description={
+                  <>
+                    You can put a <a href="https://formant.io">link</a> in here
+                    too.
+                  </>
+                }
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Tooltip
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Button variant="outlined" onClick={handleClickOpen}>
+                Open form dialog
+              </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Subscribe</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    To subscribe to this website, please enter your email
+                    address here. We will send updates occasionally.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                    variant="standard"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button onClick={handleClose}>Subscribe</Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
           </Box>
         </Container>
