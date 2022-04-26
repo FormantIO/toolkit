@@ -10,7 +10,7 @@ def example_channel_callback(message):
 
 
 if __name__ == "__main__":
-    fclient = FormantAgentClient()
+    fclient = FormantAgentClient("localhost:5501")
 
     # Listen to data from the custom web application
     fclient.register_custom_data_channel_message_callback(
