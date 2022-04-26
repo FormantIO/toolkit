@@ -14,6 +14,7 @@ export {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Switch,
 } from "@mui/material";
 export { Measure } from "./components/Measure";
 export * from "./Icon";

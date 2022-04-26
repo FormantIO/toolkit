@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Switch,
 } from "../src/main";
 
 function App() {
@@ -243,6 +244,14 @@ function App() {
                   <Button onClick={handleClose}>Subscribe</Button>
                 </DialogActions>
               </Dialog>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Switch
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Switch />
             </Grid>
           </Box>
         </Container>

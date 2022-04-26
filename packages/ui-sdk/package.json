@@ -14,7 +14,7 @@
   "exports": {
     ".": "./dist/ui-sdk.es.js"
   },
-  "version": "0.0.8",
+  "version": "0.0.9",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "vite build",
