@@ -9,14 +9,6 @@ import { IEvent } from "./model/IEvent";
 import { IQuery } from "./model/IQuery";
 import { IStreamData } from "./model/IStreamData";
 
-export interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  organizationId: string;
-  id: string;
-}
-
 export interface TelemetryResult {
   deviceId: string;
   name: string;

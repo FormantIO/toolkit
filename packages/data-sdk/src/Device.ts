@@ -455,7 +455,7 @@ export class Device {
     );
 
     const devicePeer = await this.getRemotePeer();
-    const p = new Promise<DataChannel>((resolve) => {
+    const p = await new Promise<DataChannel>((resolve) => {
       client.createCustomDataChannel(
         defined(devicePeer).id,
         channelName,
@@ -469,6 +469,9 @@ export class Device {
           resolve(dataChannel);
         }
       );
+    });
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 200);
     });
     return p;
   }
