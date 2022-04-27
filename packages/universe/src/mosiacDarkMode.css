@@ -14,3 +14,11 @@
 .mosaic-blueprint-theme {
     background-color: #1C1E2D !important;
 }
+
+.drop-target {
+    border: 2px solid #BAC4E2 !important;
+}
+
+.mosaic-window-body {
+    background: #282F45 !important;
+}
