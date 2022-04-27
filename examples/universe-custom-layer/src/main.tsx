@@ -12,11 +12,7 @@ import { CubeLayer } from "./CubeLayer";
 LayerRegistry.register(CubeLayer);
 
 function App() {
-  return (
-    <div>
-      <Universe universeData={new SimulatedUniverseData()}></Universe>
-    </div>
-  );
+  return <Universe universeData={new SimulatedUniverseData()}></Universe>;
 }
 
 const container = document.getElementById("app");
