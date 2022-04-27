@@ -265,10 +265,10 @@
     "@mui/material" "^5.6.1"
     "@mui/utils" "^5.6.1"
 
-"@formant/ui-sdk@latest":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.9.tgz#199c301f0f3209b92fa39116f49f4b8de064b719"
-  integrity sha512-igogHG4RP5BpWkg+osiBuvJtqhIJOnNk7gI6ZAUqSTLfuA+cLl33INB6IUVkMp8spvOfPW08Tg0g3wNMtH7+ug==
+"@formant/ui-sdk@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.13.tgz#a470b65d3a55f6546128672deaeac2eaed4ceb5a"
+  integrity sha512-L6NvkIP1GTBtRnCCRsy3dMP2Zxf4pvgnt4PTb4n/xjrZnhTB9hVgp645IzzMloe1KiCouIFVu2apKJII5qNA9A==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
