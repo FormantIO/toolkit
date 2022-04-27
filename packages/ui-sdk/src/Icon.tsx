@@ -1,4 +1,4 @@
-import { SvgIcon } from "@mui/material";
+import { SvgIcon, SxProps, Theme } from "@mui/material";
 import * as React from "react";
 
 export const icons = {
@@ -1215,8 +1215,13 @@ export type IconName = keyof typeof icons;
 
 export interface IIconProps {
   name: IconName;
+  sx?: SxProps<Theme>;
 }
 
 export function Icon(props: IIconProps) {
-  return <SvgIcon {...props}>{icons[props.name]()}</SvgIcon>;
+  return (
+    <SvgIcon sx={props.sx} {...props}>
+      {icons[props.name]()}
+    </SvgIcon>
+  );
 }
