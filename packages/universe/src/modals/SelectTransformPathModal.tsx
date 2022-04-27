@@ -4,7 +4,13 @@ import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TreeElement, TreePath } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
-import { Typography, Button } from "@formant/ui-sdk";
+import {
+  Typography,
+  Button,
+  DialogContentText,
+  MenuItem,
+  Select,
+} from "@formant/ui-sdk";
 import { SortableTree } from "../SortableTree";
 import { Modal } from "../modals/Modal";
 
@@ -73,9 +79,9 @@ export class SelectTransformPathModal extends Component<
     });
   };
 
-  onChangeTree = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+  onChangeTree = (target: string) => {
     this.setState({
-      mapName: ev.target.value,
+      mapName: target,
       selected: undefined,
     });
   };
@@ -83,25 +89,36 @@ export class SelectTransformPathModal extends Component<
   public render() {
     const { onCancel } = this.props;
     let items;
-    if (this.state.mapName) {
+    if (this.state?.mapName) {
       items = this.state.items.get(this.state.mapName);
     }
-    const treeNames = Array.from(this.state.items.keys());
+    const treeNames = Array.from(this.state?.items.keys() || []);
 
     return (
-      <Modal>
-        <Typography variant="h1">Select Transform Path</Typography>
-        Select the transform path you'd like to use
-        <hr />
+      <Modal
+        open={true}
+        title="Select Transform Path"
+        acceptText="Select"
+        onAccept={this.onSelectTransform}
+        acceptDisabled={!this.state?.selected || !this.state?.mapName}
+        onClose={onCancel}
+      >
+        <DialogContentText>
+          Select the transform path you'd like to use
+        </DialogContentText>
         {items && (
           <>
-            <select value={this.state.mapName} onChange={this.onChangeTree}>
+            <Select
+              label="TF"
+              value={this.state?.mapName}
+              onChange={this.onChangeTree}
+            >
               {treeNames.map((_) => (
-                <option key={_} value={_}>
+                <MenuItem key={_} value={_}>
                   {_}
-                </option>
+                </MenuItem>
               ))}
-            </select>
+            </Select>
             <SortableTree
               items={[items]}
               onSelected={this.onSelectTransformItem}
@@ -109,15 +126,6 @@ export class SelectTransformPathModal extends Component<
             />
           </>
         )}
-        <div>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            onClick={this.onSelectTransform}
-            disabled={!this.state.selected || !this.state.mapName}
-          >
-            Select
-          </Button>
-        </div>
       </Modal>
     );
   }

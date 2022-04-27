@@ -26,7 +26,7 @@ import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
-import { Button, Icon, Typography } from "@formant/ui-sdk";
+import { Button, Icon, MenuItem, Select, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { Mosaic, MosaicWindow } from "react-mosaic-component";
 import "react-mosaic-component/react-mosaic-component.css";
@@ -393,8 +393,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     });
   };
 
-  private onChangePositionType = (ev: React.ChangeEvent<HTMLSelectElement>) => {
-    const positionType = ev.target.value;
+  private onChangePositionType = (positionType: string) => {
     const element = definedAndNotNull(
       findSceneGraphElement(
         this.sceneGraph,
@@ -599,8 +598,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                         <div>
                           <div>
                             <div>positioning</div>
-
-                            <select
+                            <Select
+                              label="Positioning"
                               value={element.position.type}
                               onChange={this.onChangePositionType}
                             >
@@ -610,11 +609,11 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                                   ? ["transform tree", "gps"]
                                   : []),
                               ].map((_) => (
-                                <option key={_} value={_}>
+                                <MenuItem key={_} value={_}>
                                   {_}
-                                </option>
+                                </MenuItem>
                               ))}
-                            </select>
+                            </Select>
                           </div>
                           {element.position.type === "manual" && (
                             <div>
@@ -638,7 +637,10 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                                 relative to latitude:{" "}
                                 {element.position.relativeToLatitude}
                               </Typography>
-                              <Button onClick={this.showLocationStreamSelect}>
+                              <Button
+                                variant="contained"
+                                onClick={this.showLocationStreamSelect}
+                              >
                                 Select
                               </Button>
                             </div>
@@ -650,7 +652,10 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                                 <br />
                                 transform: {element.position.end}
                               </Typography>
-                              <Button onClick={this.showTransformSelect}>
+                              <Button
+                                variant="contained"
+                                onClick={this.showTransformSelect}
+                              >
                                 Select
                               </Button>
                             </div>
@@ -715,6 +720,7 @@ const Control = styled.div`
   > svg {
     width: 1rem;
     height: 1rem;
+    color: white;
   }
   background: #bac4e2;
   opacity: 0.5;

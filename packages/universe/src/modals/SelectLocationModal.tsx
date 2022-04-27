@@ -2,7 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 import { IUniverseData } from "../IUniverseData";
 import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import { Typography, Button } from "@formant/ui-sdk";
+import {
+  Typography,
+  Button,
+  TextField,
+  DialogContentText,
+  Stack,
+} from "@formant/ui-sdk";
 import { Modal } from "../modals/Modal";
 
 interface ISelectLocationModalProps {
@@ -82,46 +88,50 @@ export class SelectLocationModal extends Component<
     const { onCancel } = this.props;
 
     return (
-      <Modal>
-        <Typography variant="h1">Select Location Posittioning</Typography>
-        Select the location stream you'd like to use and it's relative long lat
-        (this helps provide accuracy).
-        <hr />
-        Relative to Longitude
-        <input
-          type="number"
-          value={this.state.relativeToLong}
-          onChange={this.onChangeLong}
-        />
-        Relative to Latitude
-        <input
-          type="number"
-          value={this.state.relativeToLat}
-          onChange={this.onChangeLat}
-        />
-        {this.state.items && (
-          <>
-            <select
-              value={this.state.locationStreamName}
-              onChange={this.onChangeLocationStream}
-            >
-              {this.state.items.map((_) => (
-                <option key={_.streamName} value={_.streamName}>
-                  _.streamName
-                </option>
-              ))}
-            </select>
-          </>
-        )}
-        <div>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            onClick={this.onSelectLocation}
-            disabled={!this.state.locationStreamName}
-          >
-            Select
-          </Button>
-        </div>
+      <Modal
+        open={true}
+        title="Select Location Positioning"
+        acceptText="Select"
+        onAccept={this.onSelectLocation}
+        acceptDisabled={!this.state.locationStreamName}
+        onClose={onCancel}
+      >
+        <Stack spacing={2}>
+          <DialogContentText>
+            Select the location stream you'd like to use and it's relative
+            longitude and latitude:
+          </DialogContentText>
+          <div>
+            <TextField
+              label="Relative to Longitude"
+              type="number"
+              value={this.state.relativeToLong}
+              onChange={this.onChangeLong}
+            />
+          </div>
+          <div>
+            <TextField
+              label="Relative to Latitude"
+              type="number"
+              value={this.state.relativeToLat}
+              onChange={this.onChangeLat}
+            />
+          </div>
+          {this.state.items && (
+            <>
+              <select
+                value={this.state.locationStreamName}
+                onChange={this.onChangeLocationStream}
+              >
+                {this.state.items.map((_) => (
+                  <option key={_.streamName} value={_.streamName}>
+                    _.streamName
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
+        </Stack>
       </Modal>
     );
   }

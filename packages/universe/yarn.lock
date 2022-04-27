@@ -285,21 +285,10 @@
     google-protobuf "3.17.3"
     grpc-web "1.2.1"
 
-"@formant/ui-sdk@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.3.tgz#1568103f3087e4c60bcb543407be0ef6a6208019"
-  integrity sha512-yxbFSPmj8evuAqL76x5vW5ESOVE2Zh09hOXcGR8V8gondX31dUrJntOhf4XczwSavRGLlz3htlEp17llzsYl0A==
-  dependencies:
-    "@emotion/react" "^11.9.0"
-    "@emotion/styled" "^11.8.1"
-    "@formant/data-sdk" "^0.0.64"
-    "@mui/material" "^5.6.1"
-    "@mui/utils" "^5.6.1"
-
-"@formant/ui-sdk@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.4.tgz#42a927ce6185264daa70d0a557c4c29515c01d8f"
-  integrity sha512-UNt4FeVKDbdDj72RkxH8w3fuUyJHB7wMuHs9ZUnrlrFlHW3Fk1rm5HwrO1CwjVid/A0VT4bp3Q8kJy8rj1YRLA==
+"@formant/ui-sdk@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.11.tgz#db3ce4cd184d8e49525e7d0ec8c119fb74cc8025"
+  integrity sha512-btypyoJc2fspDfim02IO3B4Twb7JRLPQ9FKopxmD+M5wXgx0dgwMHRMiM31kiBUQgfiPWtSyzwMKXamX85/XbQ==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
@@ -310,6 +299,17 @@
     "@types/styled-components" "^5.1.25"
     classnames "^2.3.1"
     styled-components "^5.3.5"
+
+"@formant/ui-sdk@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.3.tgz#1568103f3087e4c60bcb543407be0ef6a6208019"
+  integrity sha512-yxbFSPmj8evuAqL76x5vW5ESOVE2Zh09hOXcGR8V8gondX31dUrJntOhf4XczwSavRGLlz3htlEp17llzsYl0A==
+  dependencies:
+    "@emotion/react" "^11.9.0"
+    "@emotion/styled" "^11.8.1"
+    "@formant/data-sdk" "^0.0.64"
+    "@mui/material" "^5.6.1"
+    "@mui/utils" "^5.6.1"
 
 "@hypnosphi/create-react-context@^0.3.1":
   version "0.3.1"
