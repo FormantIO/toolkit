@@ -712,8 +712,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
 const Controls = styled.div`
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
 `;
 
 const Control = styled.div`

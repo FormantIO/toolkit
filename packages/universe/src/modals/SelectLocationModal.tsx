@@ -2,13 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { IUniverseData } from "../IUniverseData";
 import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import {
-  Typography,
-  Button,
-  TextField,
-  DialogContentText,
-  Stack,
-} from "@formant/ui-sdk";
+import { TextField, DialogContentText, Stack } from "@formant/ui-sdk";
 import { Modal } from "../modals/Modal";
 
 interface ISelectLocationModalProps {

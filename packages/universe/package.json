@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.9",
+  "version": "0.0.10",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.2.1",
     "@blueprintjs/icons": "^4.2.4",
-    "@formant/ui-sdk": "0.0.11",
+    "@formant/ui-sdk": "0.0.12",
     "@types/react": "^18.0.8",
     "@types/uuid": "^8.3.4",
     "classnames": "^2.3.1",

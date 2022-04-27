@@ -4,13 +4,7 @@ import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TreeElement, TreePath } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
-import {
-  Typography,
-  Button,
-  DialogContentText,
-  MenuItem,
-  Select,
-} from "@formant/ui-sdk";
+import { DialogContentText, MenuItem, Select } from "@formant/ui-sdk";
 import { SortableTree } from "../SortableTree";
 import { Modal } from "../modals/Modal";
 

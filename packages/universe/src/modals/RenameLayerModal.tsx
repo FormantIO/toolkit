@@ -1,10 +1,4 @@
-import {
-  Button,
-  DialogContentText,
-  Stack,
-  TextField,
-  Typography,
-} from "@formant/ui-sdk";
+import { DialogContentText, Stack, TextField } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
 import { Modal } from "../modals/Modal";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon } from "@formant/ui-sdk";
+import { Icon, Tooltip } from "@formant/ui-sdk";
 import { Component } from "react";
 import { TreeElement, TreePath } from "./ITreeElement";
 import styled from "styled-components";
@@ -99,17 +99,17 @@ export class SortableTree extends Component<ISortableTreeProps> {
                       "tree_item_icon" + currentPath.join("-") + "-" + iconIndex
                     }
                   >
-                    <Icon
-                      name={icon.icon}
-                      size="18"
-                      data-tooltip={icon.description}
-                      onClick={this.onItemIconClicked.bind(
-                        this,
-                        currentPath,
-                        iconIndex
-                      )}
-                      color={icon.color}
-                    />
+                    <Tooltip title={icon.description}>
+                      <div
+                        onClick={this.onItemIconClicked.bind(
+                          this,
+                          currentPath,
+                          iconIndex
+                        )}
+                      >
+                        <Icon name={icon.icon} sx={{ color: icon.color }} />
+                      </div>
+                    </Tooltip>
                   </IconDiv>
                 ))}
             </IconsDiv>
