@@ -4,11 +4,7 @@ import { FormantProvider } from "@formant/ui-sdk";
 import { Universe, SimulatedUniverseData } from "../src/main";
 
 function App() {
-  return (
-    <div>
-      <Universe universeData={new SimulatedUniverseData()}></Universe>
-    </div>
-  );
+  return <Universe universeData={new SimulatedUniverseData()}></Universe>;
 }
 
 const container = document.getElementById("app");

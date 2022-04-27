@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.8",
+  "version": "0.0.9",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -37,11 +37,15 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
+    "@blueprintjs/core": "^4.2.1",
+    "@blueprintjs/icons": "^4.2.4",
     "@formant/ui-sdk": "0.0.4",
-    "@types/react": "^18.0.5",
+    "@types/react": "^18.0.8",
     "@types/uuid": "^8.3.4",
+    "classnames": "^2.3.1",
     "geolib": "^3.3.3",
     "react": "^18.0.0",
+    "react-mosaic-component": "^5.1.0",
     "react-use-measure": "^2.1.1",
     "styled-components": "^5.3.5",
     "three": "^0.125.2",

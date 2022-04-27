@@ -28,6 +28,17 @@ import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 import { Button, Icon, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
+import { Mosaic, MosaicWindow } from "react-mosaic-component";
+import "react-mosaic-component/react-mosaic-component.css";
+import classNames from "classnames";
+import "./mosiacDarkMode.css";
+
+const MosaicContainer = styled.div`
+  height: 100%;
+  > div {
+    height: 100% !important;
+  }
+`;
 
 export interface IUniverseProps {
   universeData: IUniverseData;
@@ -41,6 +52,13 @@ export interface IUniverseState {
   sidebarOpen: boolean;
   currentlySelectedElement: TreePath | undefined;
 }
+
+export type ViewId = "properties" | "viewer";
+
+const TITLE_MAP: Record<ViewId, string> = {
+  properties: "Properties",
+  viewer: "Viewer",
+};
 
 export class Universe extends Component<IUniverseProps, IUniverseState> {
   constructor(props: IUniverseProps) {
@@ -508,14 +526,151 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }
 
     return (
-      <div>
-        <UniverseViewer
-          ref={this.onViewerLoaded}
-          sceneGraph={this.sceneGraph}
-          onSceneGraphElementEdited={this.onSceneGraphElementEdited}
-          universeData={this.props.universeData}
-          deviceId={this.props.universeData.deviceId}
+      <MosaicContainer>
+        <Mosaic<ViewId>
+          className={classNames("mosaic-blueprint-theme")}
+          renderTile={(id, path) => (
+            // @ts-ignore-next-line
+            <MosaicWindow<ViewId>
+              path={path}
+              toolbarControls={<div></div>}
+              title={TITLE_MAP[id]}
+            >
+              {id === "viewer" && (
+                <>
+                  <UniverseViewer
+                    ref={this.onViewerLoaded}
+                    sceneGraph={this.sceneGraph}
+                    onSceneGraphElementEdited={this.onSceneGraphElementEdited}
+                    universeData={this.props.universeData}
+                    deviceId={this.props.universeData.deviceId}
+                  />
+                  <Controls>
+                    <Control onClick={this.recenter}>
+                      <Icon name="recenter" />
+                    </Control>
+                    <Control onClick={this.toggleSidebar}>
+                      <Icon name="edit" />
+                    </Control>
+                  </Controls>
+                </>
+              )}
+              {id === "properties" && (
+                <UniverseSidebar
+                  onAdd={this.showAddDialog}
+                  onRemove={this.onRemoveItem}
+                  onDuplicate={this.onDuplicateItem}
+                  onRename={this.showRenameDialog}
+                  tree={this.buildTree()}
+                  onIconInteracted={this.onIconInteracted}
+                  onItemSelected={this.onItemSelected}
+                >
+                  {(element === undefined || element === null) && (
+                    <>
+                      <div>Statistics</div>
+                      <div>
+                        <div>Total devices: 1</div>
+                        <div>Bandwidth: 66Kbps</div>
+                        <div>Total Data: 5mb</div>
+                        <div>Total Streams: 3</div>
+                        <div>
+                          Stream Latencies:
+                          <br />
+                          min: 122ms avg: 567ms max: 890ms
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {element !== undefined && element !== null && (
+                    <>
+                      {" "}
+                      <div>Properties</div>
+                      <div>
+                        {currentContext !== undefined && (
+                          <div>
+                            device:{" "}
+                            {currentContext !== undefined
+                              ? this.props.universeData.getDeviceContextName(
+                                  currentContext
+                                )
+                              : "none"}
+                          </div>
+                        )}
+                        <div>
+                          <div>
+                            <div>positioning</div>
+
+                            <select
+                              value={element.position.type}
+                              onChange={this.onChangePositionType}
+                            >
+                              {[
+                                "manual",
+                                ...(element.deviceContext || hasParentContext
+                                  ? ["transform tree", "gps"]
+                                  : []),
+                              ].map((_) => (
+                                <option key={_} value={_}>
+                                  {_}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          {element.position.type === "manual" && (
+                            <div>
+                              <Typography variant="body1">
+                                x: {element.position.x.toFixed(4)}
+                                <br />
+                                y: {element.position.y.toFixed(4)}
+                                <br />
+                                z: {element.position.z.toFixed(4)}
+                              </Typography>
+                            </div>
+                          )}
+                          {element.position.type === "gps" && (
+                            <div>
+                              <Typography variant="body1">
+                                stream: {element.position.stream}
+                                <br />
+                                relative to longitude:{" "}
+                                {element.position.relativeToLongitude}
+                                <br />
+                                relative to latitude:{" "}
+                                {element.position.relativeToLatitude}
+                              </Typography>
+                              <Button onClick={this.showLocationStreamSelect}>
+                                Select
+                              </Button>
+                            </div>
+                          )}
+                          {element.position.type === "transform tree" && (
+                            <div>
+                              <Typography variant="body1">
+                                stream: {element.position.stream}
+                                <br />
+                                transform: {element.position.end}
+                              </Typography>
+                              <Button onClick={this.showTransformSelect}>
+                                Select
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </UniverseSidebar>
+              )}
+            </MosaicWindow>
+          )}
+          initialValue={{
+            direction: "row",
+            first: "properties",
+            second: "viewer",
+            splitPercentage: 20,
+          }}
         />
+
         {this.state.showingAddDialog && (
           <AddLayerModal
             onCancel={this.hideAddDialog}
@@ -545,131 +700,35 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             onSelect={this.onSelectLocationStream}
           />
         )}
-        {this.state.sidebarOpen && (
-          <UniverseSidebar
-            onAdd={this.showAddDialog}
-            onRemove={this.onRemoveItem}
-            onDuplicate={this.onDuplicateItem}
-            onRename={this.showRenameDialog}
-            tree={this.buildTree()}
-            onIconInteracted={this.onIconInteracted}
-            onItemSelected={this.onItemSelected}
-          >
-            {(element === undefined || element === null) && (
-              <>
-                <div>Statistics</div>
-                <div>
-                  <div>Total devices: 1</div>
-                  <div>Bandwidth: 66Kbps</div>
-                  <div>Total Data: 5mb</div>
-                  <div>Total Streams: 3</div>
-                  <div>
-                    Stream Latencies:
-                    <br />
-                    min: 122ms avg: 567ms max: 890ms
-                  </div>
-                </div>
-              </>
-            )}
-            {element !== undefined && element !== null && (
-              <>
-                {" "}
-                <div>Properties</div>
-                <div>
-                  {currentContext !== undefined && (
-                    <div>
-                      device:{" "}
-                      {currentContext !== undefined
-                        ? this.props.universeData.getDeviceContextName(
-                            currentContext
-                          )
-                        : "none"}
-                    </div>
-                  )}
-                  <div>
-                    <div>
-                      <div>positioning</div>
-
-                      <select
-                        value={element.position.type}
-                        onChange={this.onChangePositionType}
-                      >
-                        {[
-                          "manual",
-                          ...(element.deviceContext || hasParentContext
-                            ? ["transform tree", "gps"]
-                            : []),
-                        ].map((_) => (
-                          <option key={_} value={_}>
-                            {_}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {element.position.type === "manual" && (
-                      <div>
-                        <Typography variant="body1">
-                          x: {element.position.x.toFixed(4)}
-                          <br />
-                          y: {element.position.y.toFixed(4)}
-                          <br />
-                          z: {element.position.z.toFixed(4)}
-                        </Typography>
-                      </div>
-                    )}
-                    {element.position.type === "gps" && (
-                      <div>
-                        <Typography variant="body1">
-                          stream: {element.position.stream}
-                          <br />
-                          relative to longitude:{" "}
-                          {element.position.relativeToLongitude}
-                          <br />
-                          relative to latitude:{" "}
-                          {element.position.relativeToLatitude}
-                        </Typography>
-                        <Button onClick={this.showLocationStreamSelect}>
-                          Select
-                        </Button>
-                      </div>
-                    )}
-                    {element.position.type === "transform tree" && (
-                      <div>
-                        <Typography variant="body1">
-                          stream: {element.position.stream}
-                          <br />
-                          transform: {element.position.end}
-                        </Typography>
-                        <Button onClick={this.showTransformSelect}>
-                          Select
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </UniverseSidebar>
-        )}
-        <Controls>
-          <Control onClick={this.recenter}>
-            <Icon name="recenter" />
-          </Control>
-          <Control onClick={this.toggleSidebar}>
-            <Icon name="edit" />
-          </Control>
-        </Controls>
-      </div>
+      </MosaicContainer>
     );
   }
 }
 
 const Controls = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
 `;
 
 const Control = styled.div`
-  background: blue;
+  > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  background: #bac4e2;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
 `;

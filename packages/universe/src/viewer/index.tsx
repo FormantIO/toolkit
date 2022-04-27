@@ -24,6 +24,8 @@ const MeasureContainer = styled.div`
   width: 100%;
   height: 100vh;
 
+  background: #282f45;
+
   > div {
     overflow: hidden;
     width: 100%;
