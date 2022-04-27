@@ -30,7 +30,11 @@ import { Button, Icon, MenuItem, Select, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { Mosaic, MosaicWindow } from "react-mosaic-component";
 import classNames from "classnames";
-import "../universe.css";
+// @ts-ignore-next-line
+import styleInject from "style-inject";
+// @ts-ignore-next-line
+import css from "./universe.css";
+styleInject(css);
 
 const MosaicContainer = styled.div`
   height: 100%;
