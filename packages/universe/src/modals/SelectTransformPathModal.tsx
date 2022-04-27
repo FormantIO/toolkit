@@ -4,7 +4,7 @@ import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TreeElement, TreePath } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
-import { DialogContentText, MenuItem, Select } from "@formant/ui-sdk";
+import { DialogContentText, Select } from "@formant/ui-sdk";
 import { SortableTree } from "../SortableTree";
 import { Modal } from "../modals/Modal";
 
@@ -106,13 +106,8 @@ export class SelectTransformPathModal extends Component<
               label="TF"
               value={this.state?.mapName}
               onChange={this.onChangeTree}
-            >
-              {treeNames.map((_) => (
-                <MenuItem key={_} value={_}>
-                  {_}
-                </MenuItem>
-              ))}
-            </Select>
+              items={treeNames.map((_) => ({ label: _, value: _ }))}
+            ></Select>
             <SortableTree
               items={[items]}
               onSelected={this.onSelectTransformItem}

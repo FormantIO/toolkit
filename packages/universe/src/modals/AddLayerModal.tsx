@@ -1,7 +1,6 @@
 import {
   Button,
   DialogContentText,
-  MenuItem,
   Select,
   Stack,
   TextField,
@@ -203,18 +202,13 @@ export class AddLayerModal extends Component<
                 label="Device"
                 value={this.state.currentDeviceId}
                 onChange={this.onChangeCurrentDeviceId}
-              >
-                {this.props.universeData
+                items={this.props.universeData
                   .getDeviceContexts()
-                  .map((deviceContext) => (
-                    <MenuItem
-                      key={deviceContext.deviceId}
-                      value={deviceContext.deviceId}
-                    >
-                      {deviceContext.deviceName}
-                    </MenuItem>
-                  ))}
-              </Select>
+                  .map((deviceContext) => ({
+                    label: deviceContext.deviceName,
+                    value: deviceContext.deviceId,
+                  }))}
+              />
             </>
           )}
         </Stack>

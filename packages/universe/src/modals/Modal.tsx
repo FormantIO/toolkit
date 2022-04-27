@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
 } from "@formant/ui-sdk";
 
 export interface IModalProps {
@@ -23,19 +24,21 @@ export function Modal(props: IModalProps) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
-      <DialogActions sx={{ m: 2 }}>
-        <Button size="large" variant="contained" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button
-          color="secondary"
-          size="large"
-          variant="contained"
-          onClick={onAccept}
-          disabled={props.acceptDisabled || false}
-        >
-          {acceptText}
-        </Button>
+      <DialogActions>
+        <Stack direction="row" spacing={2}>
+          <Button size="large" variant="contained" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            color="secondary"
+            size="large"
+            variant="contained"
+            onClick={onAccept}
+            disabled={props.acceptDisabled || false}
+          >
+            {acceptText}
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   );

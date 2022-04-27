@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { IUniverseData } from "../IUniverseData";
 import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import { TextField, DialogContentText, Stack } from "@formant/ui-sdk";
+import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
 import { Modal } from "../modals/Modal";
 
 interface ISelectLocationModalProps {
@@ -60,9 +60,9 @@ export class SelectLocationModal extends Component<
     }
   };
 
-  onChangeLocationStream = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+  onChangeLocationStream = (stream: string) => {
     this.setState({
-      locationStreamName: ev.target.value,
+      locationStreamName: stream,
     });
   };
 
@@ -113,16 +113,15 @@ export class SelectLocationModal extends Component<
           </div>
           {this.state.items && (
             <>
-              <select
+              <Select
+                label="Location Stream"
                 value={this.state.locationStreamName}
                 onChange={this.onChangeLocationStream}
-              >
-                {this.state.items.map((_) => (
-                  <option key={_.streamName} value={_.streamName}>
-                    _.streamName
-                  </option>
-                ))}
-              </select>
+                items={this.state.items.map((_) => ({
+                  label: _.streamName,
+                  value: _.streamName,
+                }))}
+              />
             </>
           )}
         </Stack>

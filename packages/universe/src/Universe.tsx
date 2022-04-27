@@ -26,7 +26,7 @@ import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
-import { Button, Icon, MenuItem, Select, Typography } from "@formant/ui-sdk";
+import { Button, Icon, Select, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { Mosaic, MosaicWindow } from "react-mosaic-component";
 import classNames from "classnames";
@@ -605,18 +605,13 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                               label="Positioning"
                               value={element.position.type}
                               onChange={this.onChangePositionType}
-                            >
-                              {[
+                              items={[
                                 "manual",
                                 ...(element.deviceContext || hasParentContext
                                   ? ["transform tree", "gps"]
                                   : []),
-                              ].map((_) => (
-                                <MenuItem key={_} value={_}>
-                                  {_}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                              ].map((_) => ({ label: _, value: _ }))}
+                            />
                           </div>
                           {element.position.type === "manual" && (
                             <div>
