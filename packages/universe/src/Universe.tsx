@@ -29,9 +29,8 @@ import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 import { Button, Icon, MenuItem, Select, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { Mosaic, MosaicWindow } from "react-mosaic-component";
-import "react-mosaic-component/react-mosaic-component.css";
 import classNames from "classnames";
-import "./mosiacDarkMode.css";
+import "../universe.css";
 
 const MosaicContainer = styled.div`
   height: 100%;
