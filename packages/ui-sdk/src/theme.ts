@@ -2,6 +2,34 @@ import { ThemeOptions } from "@mui/material";
 import { deepmerge } from "@mui/utils";
 const commonTheme: ThemeOptions = {
   components: {
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          padding: "1.5rem",
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: "rgba(0, 0, 0, 0.87)",
+          color: "white",
+          padding: ".6rem",
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          // h3
+          fontStyle: "normal",
+          fontWeight: 500,
+          fontSize: "1.125rem",
+          lineHeight: "1.688rem",
+          letterSpacing: "0.069rem",
+        },
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
@@ -118,6 +146,13 @@ const commonTheme: ThemeOptions = {
 
 const darkComponents: ThemeOptions = {
   components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          background: "#2d3855",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         containedPrimary: {
@@ -157,7 +192,7 @@ export const darkTheme: ThemeOptions = {
       dark: "#256faf",
     },
     background: {
-      default: "#1c1e2d",
+      default: "#2d3855",
       paper: "#2d3855",
     },
     text: {

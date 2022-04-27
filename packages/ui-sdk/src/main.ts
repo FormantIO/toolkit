@@ -9,7 +9,6 @@ export {
   Tooltip,
   TextField,
   Dialog,
-  MenuItem,
   DialogTitle,
   DialogContent,
   DialogContentText,

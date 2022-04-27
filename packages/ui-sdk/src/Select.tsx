@@ -1,29 +1,40 @@
 import {
   FormControl,
   InputLabel,
+  MenuItem,
   Select as MuiSelect,
   SelectChangeEvent,
   SxProps,
   Theme,
 } from "@mui/material";
 import React from "react";
-export interface ISelectProps {
+export interface ISelectProps<T> {
   label: string;
-  children: React.ReactNode;
   sx?: SxProps<Theme>;
-  value?: any;
-  onChange?: (value: any) => void;
+  value?: T;
+  onChange?: (value: T) => void;
+  fullWidth?: boolean;
+  items?: { label: string; value: T }[];
 }
 
-export function Select(props: ISelectProps) {
-  const onDidChange = (event: SelectChangeEvent<any>) => {
-    if (props.onChange) props.onChange(event.target.value);
+export function Select<T extends string | number | readonly string[]>(
+  props: ISelectProps<T>
+) {
+  const onDidChange = (event: SelectChangeEvent<T>) => {
+    if (props.onChange) props.onChange(event.target.value as T);
   };
   return (
-    <FormControl sx={props.sx || { width: "100%" }}>
+    <FormControl
+      sx={{ minWidth: "20rem", ...(props.sx || {}) }}
+      fullWidth={props.fullWidth}
+    >
       <InputLabel>{props.label}</InputLabel>
       <MuiSelect value={props.value} label={props.label} onChange={onDidChange}>
-        {props.children}
+        {(props.items || []).map((item) => (
+          <MenuItem key={item.label} value={item.value}>
+            {item.label}
+          </MenuItem>
+        ))}
       </MuiSelect>
     </FormControl>
   );

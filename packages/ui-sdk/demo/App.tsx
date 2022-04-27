@@ -8,7 +8,6 @@ import {
   Grid,
   Typography,
   Select,
-  MenuItem,
   TextField,
   Tooltip,
   HelpIcon,
@@ -18,6 +17,7 @@ import {
   DialogContentText,
   DialogActions,
   Switch,
+  Stack,
 } from "../src/main";
 
 function App() {
@@ -174,14 +174,14 @@ function App() {
           </Typography>
           <Box sx={{ p: 2 }}>
             <Grid container gap={2}>
-              <Select label="Age">
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Twenty</MenuItem>
-                <MenuItem value={21}>Twenty one</MenuItem>
-                <MenuItem value={22}>Twenty one and a half</MenuItem>
-              </Select>
+              <Select
+                label="Age"
+                items={[
+                  { label: "0-10", value: "0-10" },
+                  { label: "11-20", value: "11-20" },
+                  { label: "21-30", value: "21-30" },
+                ]}
+              />
             </Grid>
           </Box>
           <Typography variant="h2" sx={{ textDecoration: "underline" }}>
@@ -225,23 +225,39 @@ function App() {
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
-                  <DialogContentText>
-                    To subscribe to this website, please enter your email
-                    address here. We will send updates occasionally.
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                  />
+                  <Stack spacing={2}>
+                    <DialogContentText>
+                      To subscribe to this website, please enter your email
+                      address here. We will send updates occasionally.
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Email Address"
+                      type="email"
+                      fullWidth
+                    />
+                  </Stack>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <Button onClick={handleClose}>Subscribe</Button>
+                  <Stack direction="row" spacing={2}>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      onClick={handleClose}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleClose}
+                    >
+                      Subscribe
+                    </Button>
+                  </Stack>
                 </DialogActions>
               </Dialog>
             </Grid>
