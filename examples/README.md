@@ -20,11 +20,11 @@ A series of examples about how to extend Formants capabilities; including views,
   - [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-react) (React)
   - [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-typescript) (TypeScript)
   - [Binary request response](https://github.com/FormantIO/toolkit/tree/master/examples#teleoperation-using-data-sdk-typescript) (TypeScript + Python Adapter)
-  - [Custom data channel comminucation](https://github.com/FormantIO/toolkit/tree/master/examples#custom-data-channel-comminucation-typescript) (TypeScript + Python Adapter)
+  - [Custom data channel comminucation](https://github.com/FormantIO/toolkit/tree/master/examples/custom-data-channel-communication) (TypeScript + Python Adapter)
 
-  - [Protobuf communication](https://github.com/FormantIO/toolkit/tree/master/examples#protobuf-comminucation-typescript) (TypeScript + Python Adapter)
+  - [Protobuf communication](https://github.com/FormantIO/toolkit/tree/master/examples/protobufjs-communication) (TypeScript + Python Adapter)
 
-  - [Request response protocol](https://github.com/FormantIO/toolkit/tree/master/examples#request-response-protocol-typescript) (TypeScript + Python Adapter)
+  - [Request response protocol](https://github.com/FormantIO/toolkit/tree/master/examples#request-response-protocol) (TypeScript + Python Adapter)
 
 - #### [Styling](https://github.com/FormantIO/toolkit/tree/master/examples#styling)
   - [Style components](https://github.com/FormantIO/toolkit/tree/master/examples#style-components-html--formant-cdn) (HTML /CDN)
