@@ -173,6 +173,9 @@ function createComponents(theme: Theme) {
         styleOverrides: {
           root: {
             color: theme.palette.primary.light,
+            "&.Mui-focused": {
+              color: theme.palette.secondary.main,
+            },
           },
         },
       },
@@ -180,6 +183,17 @@ function createComponents(theme: Theme) {
         styleOverrides: {
           root: {
             backgroundColor: theme.palette.primary.dark,
+            ":before": {
+              borderBottom: `1px dotted ${theme.palette.primary.light}`,
+            },
+            "&.Mui-focused": {
+              background: theme.palette.common.black,
+              border: `1px solid ${theme.palette.secondary.main}`,
+              borderBottom: "none",
+            },
+            ":after": {
+              borderBottom: `1px solid ${theme.palette.secondary.main}`,
+            },
           },
         },
       },
@@ -217,9 +231,11 @@ function createComponents(theme: Theme) {
       MuiButton: {
         styleOverrides: {
           root: {
-            transitionDuration: "200ms",
-            transitionTimingFunction: "ease-in-out",
+            willChange: "background-color , color , border-color , box-shadow",
+            transition:
+              "background-color 200ms ease-in-out 0ms , color 200ms ease-in-out 0ms , border-color 200ms ease-in-out 0ms , box-shadow 200ms ease-in-out 0ms",
             borderRadius: 40,
+            boxShadow: `0 0 0 0rem ${theme.palette.primary.main}`,
           },
           sizeSmall: {
             height: "1.25rem",
@@ -263,6 +279,13 @@ function createComponents(theme: Theme) {
         styleOverrides: {
           paper: {
             background: theme.palette.background.paper,
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          icon: {
+            color: theme.palette.primary.light,
           },
         },
       },
