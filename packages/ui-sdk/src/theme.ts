@@ -143,15 +143,19 @@ const darkPalette: ThemeOptions = {
     },
     error: {
       main: "#ea719d",
+      dark: "#7F5072",
     },
     warning: {
       main: "#a961e4",
+      dark: "#564A94",
     },
     info: {
       main: "#20a0ff",
+      dark: "#256FAF",
     },
     success: {
       main: "#2ec495",
+      dark: "#2D8376",
     },
   },
 };
@@ -242,6 +246,9 @@ function createComponents(theme: Theme) {
               "background-color 200ms ease-in-out 0ms , color 200ms ease-in-out 0ms , border-color 200ms ease-in-out 0ms , box-shadow 200ms ease-in-out 0ms",
             borderRadius: 40,
             boxShadow: `0 0 0 0rem ${theme.palette.primary.main}`,
+            "&.Mui-disabled": {
+              color: theme.palette.primary.main,
+            },
           },
           sizeSmall: {
             height: "1.25rem",
@@ -262,11 +269,12 @@ function createComponents(theme: Theme) {
             letterSpacing: "0.053rem",
           },
           containedPrimary: {
-            color: theme.palette.common.white,
+            background: theme.palette.primary.light,
+            color: theme.palette.common.black,
             "@media(hover: hover)": {
               "&:hover": {
-                boxShadow: `0 0 0 0.4rem ${theme.palette.primary.main}`,
-                background: theme.palette.primary.main,
+                boxShadow: `0 0 0 0.4rem ${theme.palette.primary.light}`,
+                background: theme.palette.primary.light,
               },
             },
           },
@@ -279,12 +287,26 @@ function createComponents(theme: Theme) {
               },
             },
           },
+          outlinedPrimary: {
+            color: theme.palette.primary.light,
+          },
         },
       },
       MuiDialog: {
         styleOverrides: {
           paper: {
             background: theme.palette.background.paper,
+          },
+        },
+      },
+      MuiNativeSelect: {
+        styleOverrides: {
+          root: {
+            backgroundColor: theme.palette.primary.dark,
+            borderTop: "1px solid transparent",
+          },
+          icon: {
+            color: theme.palette.primary.light,
           },
         },
       },
@@ -306,4 +328,4 @@ export const lightTheme = createComponents(
   createTheme(baseTheme, lightPalette)
 );
 
-export const defaultTheme = lightTheme;
+export const defaultTheme = darkTheme;

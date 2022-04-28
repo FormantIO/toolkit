@@ -169,6 +169,29 @@ function App() {
                 Outlined
               </Button>
             </Grid>
+            <br />
+            <Grid container gap={2}>
+              <Button variant="text" size="large" disabled>
+                Text
+              </Button>
+              <Button variant="contained" size="large" disabled>
+                Contained
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                color="secondary"
+                disabled
+              >
+                Contained
+              </Button>
+              <Button variant="contained" size="large" color="error" disabled>
+                Contained
+              </Button>
+              <Button variant="outlined" size="large" disabled>
+                Outlined
+              </Button>
+            </Grid>
           </Box>
           <Typography variant="h2" sx={{ textDecoration: "underline" }}>
             Select
