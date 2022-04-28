@@ -15,6 +15,7 @@ export interface ISelectProps<T> {
   onChange?: (value: T) => void;
   fullWidth?: boolean;
   items?: { label: string; value: T }[];
+  variant?: "outlined" | "filled" | "standard";
 }
 
 export function Select<T extends string | number | readonly string[]>(
@@ -27,6 +28,7 @@ export function Select<T extends string | number | readonly string[]>(
     <FormControl
       sx={{ minWidth: "20rem", ...(props.sx || {}) }}
       fullWidth={props.fullWidth}
+      variant="filled"
     >
       <InputLabel>{props.label}</InputLabel>
       <MuiSelect value={props.value} label={props.label} onChange={onDidChange}>

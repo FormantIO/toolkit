@@ -2,7 +2,7 @@ import * as React from "react";
 
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import CssBaseline from "@mui/material/CssBaseline";
-import { darkTheme, lightTheme } from "./theme";
+import { darkTheme, lightTheme, defaultTheme } from "./theme";
 import { createTheme } from "@mui/material/styles";
 import { useContext } from "react";
 interface IFormantProviderProps {
@@ -18,12 +18,9 @@ export function useFormant(): UseFormant {
 
 export const FormantContext = React.createContext<UseFormant>(undefined!);
 
-export function FormantProvider({
-  theme = "dark",
-  children,
-}: IFormantProviderProps) {
+export function FormantProvider({ theme, children }: IFormantProviderProps) {
   const muiTheme = createTheme(
-    theme === "dark" ? darkTheme : theme === "light" ? lightTheme : {}
+    theme === "dark" ? darkTheme : theme === "light" ? lightTheme : defaultTheme
   );
 
   // We can put global caches for data here

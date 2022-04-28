@@ -1,77 +1,9 @@
-import { ThemeOptions } from "@mui/material";
-import { deepmerge } from "@mui/utils";
-const commonTheme: ThemeOptions = {
-  components: {
-    MuiDialogActions: {
-      styleOverrides: {
-        root: {
-          padding: "1.5rem",
-        },
-      },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: "rgba(0, 0, 0, 0.87)",
-          color: "white",
-          padding: ".6rem",
-        },
-      },
-    },
-    MuiDialogTitle: {
-      styleOverrides: {
-        root: {
-          // h3
-          fontStyle: "normal",
-          fontWeight: 500,
-          fontSize: "1.125rem",
-          lineHeight: "1.688rem",
-          letterSpacing: "0.069rem",
-        },
-      },
-    },
-    MuiButtonBase: {
-      defaultProps: {
-        disableRipple: true,
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          transitionDuration: "200ms",
-          transitionTimingFunction: "ease-in-out",
-          borderRadius: 40,
-        },
-        sizeSmall: {
-          height: "1.25rem",
-          fontWeight: 500,
-          fontSize: "0.688rem",
-          lineHeight: "0.825rem",
-          letterSpacing: "0.047rem",
-        },
-        sizeMedium: {
-          height: "1.813rem",
-          fontWeight: 500,
-        },
-        sizeLarge: {
-          height: "2.563rem",
-          fontWeight: 500,
-          fontSize: "0.875rem",
-          lineHeight: "1.05rem",
-          letterSpacing: "0.053rem",
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          borderRadius: 4,
-        },
-      },
-    },
-  },
+import { createTheme, Theme, ThemeOptions } from "@mui/material";
+import { Primary } from "./stories/Button.stories";
+
+const baseTheme = createTheme({
   typography: {
-    fontFamily: "'Moderat','Source Sans Pro', sans-serif",
+    fontFamily: "'Moderat', 'Inter', 'Source Sans Pro', sans-serif",
     h1: {
       fontStyle: "normal",
       fontWeight: "normal",
@@ -142,104 +74,9 @@ const commonTheme: ThemeOptions = {
       textTransform: "uppercase",
     },
   },
-};
+});
 
-const darkComponents: ThemeOptions = {
-  components: {
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          background: "#2d3855",
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          "@media(hover: hover)": {
-            "&:hover": {
-              boxShadow: "0 0 0 0.4rem #657197",
-              background: "#657197",
-            },
-          },
-        },
-        containedSecondary: {
-          "@media(hover: hover)": {
-            "&:hover": {
-              boxShadow: "0 0 0 0.4rem #18d2ff",
-              background: "#18d2ff",
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-export const darkTheme: ThemeOptions = {
-  ...deepmerge(commonTheme, darkComponents),
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#657197",
-      dark: "#3B4668",
-      light: "#BAC4E2",
-      contrastText: "#ffffff",
-    },
-    secondary: {
-      main: "#18d2ff",
-      light: "#18d2ff",
-      dark: "#256faf",
-    },
-    background: {
-      default: "#2d3855",
-      paper: "#2d3855",
-    },
-    text: {
-      primary: "#bac4e2",
-    },
-    error: {
-      main: "#ea719d",
-    },
-    warning: {
-      main: "#a961e4",
-    },
-    info: {
-      main: "#20a0ff",
-    },
-    success: {
-      main: "#2ec495",
-    },
-  },
-};
-
-const lightComponents: ThemeOptions = {
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          "@media(hover: hover)": {
-            "&:hover": {
-              boxShadow: "0 0 0 0.4rem #657197",
-              background: "#657197",
-            },
-          },
-        },
-        containedSecondary: {
-          "@media(hover: hover)": {
-            "&:hover": {
-              boxShadow: "0 0 0 0.4rem #3babff",
-              background: "#3babff",
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-export const lightTheme: ThemeOptions = {
-  ...deepmerge(commonTheme, lightComponents),
+const lightPalette: ThemeOptions = {
   palette: {
     mode: "light",
     success: {
@@ -274,5 +111,170 @@ export const lightTheme: ThemeOptions = {
     },
   },
 };
+
+const darkPalette: ThemeOptions = {
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#657197",
+      dark: "#3B4668",
+      light: "#BAC4E2",
+      contrastText: "#ffffff",
+    },
+    secondary: {
+      main: "#18d2ff",
+      light: "#18d2ff",
+      dark: "#256faf",
+    },
+    background: {
+      default: "#2d3855",
+      paper: "#2d3855",
+    },
+    common: {
+      black: "#000000",
+      white: "#ffffff",
+    },
+    text: {
+      primary: "#bac4e2",
+    },
+    error: {
+      main: "#ea719d",
+    },
+    warning: {
+      main: "#a961e4",
+    },
+    info: {
+      main: "#20a0ff",
+    },
+    success: {
+      main: "#2ec495",
+    },
+  },
+};
+
+function createComponents(theme: Theme) {
+  const components: ThemeOptions = {
+    components: {
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            color: theme.palette.secondary.main,
+          },
+        },
+      },
+      MuiDialogActions: {
+        styleOverrides: {
+          root: {
+            padding: baseTheme.spacing(3),
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color: theme.palette.primary.light,
+          },
+        },
+      },
+      MuiFilledInput: {
+        styleOverrides: {
+          root: {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        },
+      },
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: "rgba(0, 0, 0, 0.87)",
+            color: "white",
+            padding: baseTheme.spacing(1.2),
+          },
+        },
+      },
+      MuiDialogTitle: {
+        styleOverrides: {
+          root: {
+            color: theme.palette.common.white,
+            fontStyle: "normal",
+            fontWeight: 500,
+            ...baseTheme.typography.h3,
+          },
+        },
+      },
+      MuiDialogContentText: {
+        styleOverrides: {
+          root: {
+            color: theme.palette.primary.light,
+          },
+        },
+      },
+      MuiButtonBase: {
+        defaultProps: {
+          disableRipple: true,
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            transitionDuration: "200ms",
+            transitionTimingFunction: "ease-in-out",
+            borderRadius: 40,
+          },
+          sizeSmall: {
+            height: "1.25rem",
+            fontWeight: 500,
+            fontSize: "0.688rem",
+            lineHeight: "0.825rem",
+            letterSpacing: "0.047rem",
+          },
+          sizeMedium: {
+            height: "1.813rem",
+            fontWeight: 500,
+          },
+          sizeLarge: {
+            height: "2.563rem",
+            fontWeight: 500,
+            fontSize: "0.875rem",
+            lineHeight: "1.05rem",
+            letterSpacing: "0.053rem",
+          },
+          containedPrimary: {
+            color: theme.palette.common.white,
+            "@media(hover: hover)": {
+              "&:hover": {
+                boxShadow: `0 0 0 0.4rem ${theme.palette.primary.main}`,
+                background: theme.palette.primary.main,
+              },
+            },
+          },
+          containedSecondary: {
+            color: theme.palette.common.black,
+            "@media(hover: hover)": {
+              "&:hover": {
+                boxShadow: `0 0 0 0.4rem ${theme.palette.secondary.main}`,
+                background: theme.palette.secondary.main,
+              },
+            },
+          },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            background: theme.palette.background.paper,
+          },
+        },
+      },
+    },
+  };
+  return createTheme(theme, components);
+}
+
+export const darkTheme = createComponents(createTheme(baseTheme, darkPalette));
+
+export const lightTheme = createComponents(
+  createTheme(baseTheme, lightPalette)
+);
 
 export const defaultTheme = darkTheme;

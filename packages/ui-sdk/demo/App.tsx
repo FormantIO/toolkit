@@ -18,6 +18,7 @@ import {
   DialogActions,
   Switch,
   Stack,
+  Link,
 } from "../src/main";
 
 function App() {
@@ -192,7 +193,7 @@ function App() {
               <TextField
                 id="outlined-basic"
                 label="Outlined"
-                variant="outlined"
+                variant="filled"
               />
             </Grid>
           </Box>
@@ -207,8 +208,8 @@ function App() {
               <HelpIcon
                 description={
                   <>
-                    You can put a <a href="https://formant.io">link</a> in here
-                    too.
+                    You can put a <Link href="https://formant.io">link</Link> in
+                    here too.
                   </>
                 }
               />
@@ -231,8 +232,8 @@ function App() {
                       address here. We will send updates occasionally.
                     </DialogContentText>
                     <TextField
+                      variant="filled"
                       autoFocus
-                      margin="dense"
                       id="name"
                       label="Email Address"
                       type="email"
