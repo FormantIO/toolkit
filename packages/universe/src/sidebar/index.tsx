@@ -15,7 +15,6 @@ const SidebarContainer = styled.div`
 
 const PropertiesSectionDiv = styled.div`
   display: grid;
-  grid-template-rows: 4rem auto;
   margin-bottom: 2rem;
 `;
 

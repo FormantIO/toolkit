@@ -76,7 +76,7 @@ export class SortableTree extends Component<ISortableTreeProps> {
             <span
               style={{
                 marginLeft: `${(currentPath.length - 1) * 2}rem`,
-                color: isSelected ? "blue" : "inherit",
+                color: isSelected ? "#18d2ff" : "inherit",
               }}
             >
               <TitleSpan

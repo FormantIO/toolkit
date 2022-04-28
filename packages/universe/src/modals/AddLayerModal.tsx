@@ -158,7 +158,7 @@ export class AddLayerModal extends Component<
                       backgroundColor:
                         selectedItem === suggestion.layerType &&
                         equals(this.selectedSources, suggestion.sources)
-                          ? "blue"
+                          ? "#18d2ff"
                           : "white",
                     }}
                     onClick={this.onSelect.bind(

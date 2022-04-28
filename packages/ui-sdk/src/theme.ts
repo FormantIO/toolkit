@@ -109,6 +109,10 @@ const lightPalette: ThemeOptions = {
       default: "#FFFFFF",
       paper: "#F1F3F9",
     },
+    common: {
+      black: "#ffffff",
+      white: "#000000",
+    },
   },
 };
 
@@ -302,4 +306,4 @@ export const lightTheme = createComponents(
   createTheme(baseTheme, lightPalette)
 );
 
-export const defaultTheme = darkTheme;
+export const defaultTheme = lightTheme;

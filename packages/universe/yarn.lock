@@ -254,10 +254,10 @@
     google-protobuf "3.17.3"
     grpc-web "1.2.1"
 
-"@formant/ui-sdk@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.13.tgz#a470b65d3a55f6546128672deaeac2eaed4ceb5a"
-  integrity sha512-L6NvkIP1GTBtRnCCRsy3dMP2Zxf4pvgnt4PTb4n/xjrZnhTB9hVgp645IzzMloe1KiCouIFVu2apKJII5qNA9A==
+"@formant/ui-sdk@0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.16.tgz#8499d79b4ff32d484071dcb832c654c59d070ab4"
+  integrity sha512-w9C29dBJXQVYDztLmEgxdJWfX+QMre8xNaSHPq1upNfVqmyaJ1/d66g2jlh7B9YE0SGGzzLNytTxoni55CczXw==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"

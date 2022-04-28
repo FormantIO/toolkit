@@ -26,7 +26,7 @@ import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
-import { Button, Icon, Select, Typography } from "@formant/ui-sdk";
+import { Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { Mosaic, MosaicWindow } from "react-mosaic-component";
 import classNames from "classnames";
@@ -289,7 +289,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         {
           icon: "edit",
           description: "edit",
-          color: element.editing ? "blue" : "white",
+          color: element.editing ? "#18d2ff" : "white",
         },
         {
           icon: "help",
@@ -567,25 +567,9 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                   onIconInteracted={this.onIconInteracted}
                   onItemSelected={this.onItemSelected}
                 >
-                  {(element === undefined || element === null) && (
-                    <>
-                      <div>Statistics</div>
-                      <div>
-                        <div>Total devices: 1</div>
-                        <div>Bandwidth: 66Kbps</div>
-                        <div>Total Data: 5mb</div>
-                        <div>Total Streams: 3</div>
-                        <div>
-                          Stream Latencies:
-                          <br />
-                          min: 122ms avg: 567ms max: 890ms
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  {(element === undefined || element === null) && <></>}
                   {element !== undefined && element !== null && (
                     <>
-                      {" "}
                       <div>Properties</div>
                       <div>
                         {currentContext !== undefined && (
@@ -599,65 +583,67 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                           </div>
                         )}
                         <div>
-                          <div>
-                            <div>positioning</div>
-                            <Select
-                              label="Positioning"
-                              value={element.position.type}
-                              onChange={this.onChangePositionType}
-                              items={[
-                                "manual",
-                                ...(element.deviceContext || hasParentContext
-                                  ? ["transform tree", "gps"]
-                                  : []),
-                              ].map((_) => ({ label: _, value: _ }))}
-                            />
-                          </div>
-                          {element.position.type === "manual" && (
+                          <Stack spacing={2}>
                             <div>
-                              <Typography variant="body1">
-                                x: {element.position.x.toFixed(4)}
-                                <br />
-                                y: {element.position.y.toFixed(4)}
-                                <br />
-                                z: {element.position.z.toFixed(4)}
-                              </Typography>
+                              <div>positioning</div>
+                              <Select
+                                label="Positioning"
+                                value={element.position.type}
+                                onChange={this.onChangePositionType}
+                                items={[
+                                  "manual",
+                                  ...(element.deviceContext || hasParentContext
+                                    ? ["transform tree", "gps"]
+                                    : []),
+                                ].map((_) => ({ label: _, value: _ }))}
+                              />
                             </div>
-                          )}
-                          {element.position.type === "gps" && (
-                            <div>
-                              <Typography variant="body1">
-                                stream: {element.position.stream}
-                                <br />
-                                relative to longitude:{" "}
-                                {element.position.relativeToLongitude}
-                                <br />
-                                relative to latitude:{" "}
-                                {element.position.relativeToLatitude}
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                onClick={this.showLocationStreamSelect}
-                              >
-                                Select
-                              </Button>
-                            </div>
-                          )}
-                          {element.position.type === "transform tree" && (
-                            <div>
-                              <Typography variant="body1">
-                                stream: {element.position.stream}
-                                <br />
-                                transform: {element.position.end}
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                onClick={this.showTransformSelect}
-                              >
-                                Select
-                              </Button>
-                            </div>
-                          )}
+                            {element.position.type === "manual" && (
+                              <div>
+                                <Typography variant="body1">
+                                  x: {element.position.x.toFixed(4)}
+                                  <br />
+                                  y: {element.position.y.toFixed(4)}
+                                  <br />
+                                  z: {element.position.z.toFixed(4)}
+                                </Typography>
+                              </div>
+                            )}
+                            {element.position.type === "gps" && (
+                              <div>
+                                <Typography variant="body1">
+                                  stream: {element.position.stream}
+                                  <br />
+                                  relative to longitude:{" "}
+                                  {element.position.relativeToLongitude}
+                                  <br />
+                                  relative to latitude:{" "}
+                                  {element.position.relativeToLatitude}
+                                </Typography>
+                                <Button
+                                  variant="contained"
+                                  onClick={this.showLocationStreamSelect}
+                                >
+                                  Select
+                                </Button>
+                              </div>
+                            )}
+                            {element.position.type === "transform tree" && (
+                              <div>
+                                <Typography variant="body1">
+                                  stream: {element.position.stream}
+                                  <br />
+                                  transform: {element.position.end}
+                                </Typography>
+                                <Button
+                                  variant="contained"
+                                  onClick={this.showTransformSelect}
+                                >
+                                  Select
+                                </Button>
+                              </div>
+                            )}
+                          </Stack>
                         </div>
                       </div>
                     </>
