@@ -183,6 +183,7 @@ function createComponents(theme: Theme) {
         styleOverrides: {
           root: {
             backgroundColor: theme.palette.primary.dark,
+            borderTop: "1px solid transparent",
             ":before": {
               borderBottom: `1px dotted ${theme.palette.primary.light}`,
             },
@@ -190,6 +191,7 @@ function createComponents(theme: Theme) {
               background: theme.palette.common.black,
               border: `1px solid ${theme.palette.secondary.main}`,
               borderBottom: "none",
+              borderTop: `1px solid ${theme.palette.secondary.main}`,
             },
             ":after": {
               borderBottom: `1px solid ${theme.palette.secondary.main}`,
