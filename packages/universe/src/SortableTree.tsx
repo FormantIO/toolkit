@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon, Tooltip } from "@formant/ui-sdk";
+import { Icon, Tooltip, Typography } from "@formant/ui-sdk";
 import { Component } from "react";
 import { TreeElement, TreePath } from "./ITreeElement";
 import styled from "styled-components";
@@ -30,9 +30,8 @@ const TitleSpan = styled.span`
 const TreeItemDiv = styled.div`
   cursor: pointer;
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-bottom: solid 1px;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0rem;
+  border-bottom: #3b4668 solid 1px;
 `;
 
 const IconsDiv = styled.div`
@@ -75,7 +74,7 @@ export class SortableTree extends Component<ISortableTreeProps> {
           <TreeItemDiv>
             <span
               style={{
-                marginLeft: `${(currentPath.length - 1) * 2}rem`,
+                marginLeft: `${(currentPath.length - 1) * 1}rem`,
                 color: isSelected ? "#18d2ff" : "inherit",
               }}
             >
@@ -83,12 +82,24 @@ export class SortableTree extends Component<ISortableTreeProps> {
                 onClick={this.onItemClicked.bind(this, currentPath)}
                 data-tooltip={e.title}
               >
-                {currentPath.length > 1 && <span>- </span>}
+                <Typography variant="h5">
+                  {currentPath.length > 1 && <span>— </span>}
 
-                {e.title}
-                {e.textColor && (
-                  <span style={{ color: e.textColor }}> &#9675;</span>
-                )}
+                  {e.title}
+                  {e.textColor && (
+                    <>
+                      {" "}
+                      <Icon
+                        name="device"
+                        sx={{
+                          color: e.textColor,
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      />
+                    </>
+                  )}
+                </Typography>
               </TitleSpan>
             </span>
             <IconsDiv>
@@ -107,7 +118,14 @@ export class SortableTree extends Component<ISortableTreeProps> {
                           iconIndex
                         )}
                       >
-                        <Icon name={icon.icon} sx={{ color: icon.color }} />
+                        <Icon
+                          name={icon.icon}
+                          sx={{
+                            color: icon.color,
+                            width: "1rem",
+                            height: "1rem",
+                          }}
+                        />
                       </div>
                     </Tooltip>
                   </IconDiv>

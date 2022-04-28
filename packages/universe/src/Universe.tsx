@@ -38,9 +38,17 @@ styleInject(css);
 
 const MosaicContainer = styled.div`
   height: 100%;
-  > div {
-    height: 100% !important;
-  }
+`;
+
+const PropertiesTitle = styled.div`
+  border-bottom: #3b4668 solid 1px;
+  margin-bottom: 0.5rem;
+`;
+
+const PropertyRow = styled.div`
+  border-bottom: #3b4668 solid 1px;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 export interface IUniverseProps {
@@ -570,17 +578,17 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                   {(element === undefined || element === null) && <></>}
                   {element !== undefined && element !== null && (
                     <>
-                      <div>Properties</div>
+                      <PropertiesTitle>Properties</PropertiesTitle>
                       <div>
                         {currentContext !== undefined && (
-                          <div>
+                          <PropertyRow>
                             device:{" "}
                             {currentContext !== undefined
                               ? this.props.universeData.getDeviceContextName(
                                   currentContext
                                 )
                               : "none"}
-                          </div>
+                          </PropertyRow>
                         )}
                         <div>
                           <Stack spacing={2}>

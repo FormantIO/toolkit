@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.14",
+  "version": "0.0.15",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -37,7 +37,7 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
-    "@formant/ui-sdk": "0.0.16",
+    "@formant/ui-sdk": "0.0.17",
     "@types/react": "^18.0.8",
     "@types/uuid": "^8.3.4",
     "classnames": "^2.3.1",
