@@ -26,17 +26,10 @@ import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
-import { Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
+import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
-import { Mosaic, MosaicWindow } from "react-mosaic-component";
-import classNames from "classnames";
-// @ts-ignore-next-line
-import styleInject from "style-inject";
-// @ts-ignore-next-line
-import css from "./universe.css";
-styleInject(css);
 
-const MosaicContainer = styled.div`
+const UniverseContainer = styled.div`
   height: 100%;
 `;
 
@@ -63,13 +56,6 @@ export interface IUniverseState {
   sidebarOpen: boolean;
   currentlySelectedElement: TreePath | undefined;
 }
-
-export type ViewId = "properties" | "viewer";
-
-const TITLE_MAP: Record<ViewId, string> = {
-  properties: "Properties",
-  viewer: "3D Viewer",
-};
 
 export class Universe extends Component<IUniverseProps, IUniverseState> {
   constructor(props: IUniverseProps) {
@@ -536,137 +522,117 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }
 
     return (
-      <MosaicContainer>
-        <Mosaic<ViewId>
-          className={classNames("mosaic-blueprint-theme")}
-          renderTile={(id, path) => (
-            // @ts-ignore-next-line
-            <MosaicWindow<ViewId>
-              path={path}
-              toolbarControls={<div></div>}
-              title={TITLE_MAP[id]}
-            >
-              {id === "viewer" && (
-                <>
-                  <UniverseViewer
-                    ref={this.onViewerLoaded}
-                    sceneGraph={this.sceneGraph}
-                    onSceneGraphElementEdited={this.onSceneGraphElementEdited}
-                    universeData={this.props.universeData}
-                    deviceId={this.props.universeData.deviceId}
-                  />
-                  <Controls>
-                    <Control onClick={this.recenter}>
-                      <Icon name="recenter" />
-                    </Control>
-                    <Control onClick={this.toggleSidebar}>
-                      <Icon name="edit" />
-                    </Control>
-                  </Controls>
-                </>
-              )}
-              {id === "properties" && (
-                <UniverseSidebar
-                  onAdd={this.showAddDialog}
-                  onRemove={this.onRemoveItem}
-                  onDuplicate={this.onDuplicateItem}
-                  onRename={this.showRenameDialog}
-                  tree={this.buildTree()}
-                  onIconInteracted={this.onIconInteracted}
-                  onItemSelected={this.onItemSelected}
-                >
-                  {(element === undefined || element === null) && <></>}
-                  {element !== undefined && element !== null && (
-                    <>
-                      <PropertiesTitle>Properties</PropertiesTitle>
-                      <div>
-                        {currentContext !== undefined && (
-                          <PropertyRow>
-                            device:{" "}
-                            {currentContext !== undefined
-                              ? this.props.universeData.getDeviceContextName(
-                                  currentContext
-                                )
-                              : "none"}
-                          </PropertyRow>
-                        )}
-                        <div>
-                          <Stack spacing={2}>
-                            <div>
-                              <div>positioning</div>
-                              <Select
-                                label="Positioning"
-                                value={element.position.type}
-                                onChange={this.onChangePositionType}
-                                items={[
-                                  "manual",
-                                  ...(element.deviceContext || hasParentContext
-                                    ? ["transform tree", "gps"]
-                                    : []),
-                                ].map((_) => ({ label: _, value: _ }))}
-                              />
-                            </div>
-                            {element.position.type === "manual" && (
-                              <div>
-                                <Typography variant="body1">
-                                  x: {element.position.x.toFixed(4)}
-                                  <br />
-                                  y: {element.position.y.toFixed(4)}
-                                  <br />
-                                  z: {element.position.z.toFixed(4)}
-                                </Typography>
-                              </div>
-                            )}
-                            {element.position.type === "gps" && (
-                              <div>
-                                <Typography variant="body1">
-                                  stream: {element.position.stream}
-                                  <br />
-                                  relative to longitude:{" "}
-                                  {element.position.relativeToLongitude}
-                                  <br />
-                                  relative to latitude:{" "}
-                                  {element.position.relativeToLatitude}
-                                </Typography>
-                                <Button
-                                  variant="contained"
-                                  onClick={this.showLocationStreamSelect}
-                                >
-                                  Select
-                                </Button>
-                              </div>
-                            )}
-                            {element.position.type === "transform tree" && (
-                              <div>
-                                <Typography variant="body1">
-                                  stream: {element.position.stream}
-                                  <br />
-                                  transform: {element.position.end}
-                                </Typography>
-                                <Button
-                                  variant="contained"
-                                  onClick={this.showTransformSelect}
-                                >
-                                  Select
-                                </Button>
-                              </div>
-                            )}
-                          </Stack>
-                        </div>
-                      </div>
-                    </>
+      <UniverseContainer>
+        <Box display="grid" gridTemplateColumns="340px 1fr" gap={2}>
+          <UniverseSidebar
+            onAdd={this.showAddDialog}
+            onRemove={this.onRemoveItem}
+            onDuplicate={this.onDuplicateItem}
+            onRename={this.showRenameDialog}
+            tree={this.buildTree()}
+            onIconInteracted={this.onIconInteracted}
+            onItemSelected={this.onItemSelected}
+          >
+            {(element === undefined || element === null) && <></>}
+            {element !== undefined && element !== null && (
+              <>
+                <PropertiesTitle>Properties</PropertiesTitle>
+                <div>
+                  {currentContext !== undefined && (
+                    <PropertyRow>
+                      device:{" "}
+                      {currentContext !== undefined
+                        ? this.props.universeData.getDeviceContextName(
+                            currentContext
+                          )
+                        : "none"}
+                    </PropertyRow>
                   )}
-                </UniverseSidebar>
-              )}
-            </MosaicWindow>
-          )}
-          initialValue={{
-            direction: "row",
-            first: "properties",
-            second: "viewer",
-            splitPercentage: 30,
-          }}
-        />
+                  <div>
+                    <Stack spacing={4}>
+                      <div>
+                        <div>positioning</div>
+                        <Select
+                          label="Positioning"
+                          value={element.position.type}
+                          onChange={this.onChangePositionType}
+                          items={[
+                            "manual",
+                            ...(element.deviceContext || hasParentContext
+                              ? ["transform tree", "gps"]
+                              : []),
+                          ].map((_) => ({ label: _, value: _ }))}
+                        />
+                      </div>
+                      {element.position.type === "manual" && (
+                        <div>
+                          <Typography variant="body1">
+                            x: {element.position.x.toFixed(4)}
+                            <br />
+                            y: {element.position.y.toFixed(4)}
+                            <br />
+                            z: {element.position.z.toFixed(4)}
+                          </Typography>
+                        </div>
+                      )}
+                      {element.position.type === "gps" && (
+                        <div>
+                          <Typography variant="body1">
+                            stream: {element.position.stream}
+                            <br />
+                            relative to longitude:{" "}
+                            {element.position.relativeToLongitude}
+                            <br />
+                            relative to latitude:{" "}
+                            {element.position.relativeToLatitude}
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            onClick={this.showLocationStreamSelect}
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      )}
+                      {element.position.type === "transform tree" && (
+                        <div>
+                          <Typography variant="body1">
+                            stream: {element.position.stream}
+                            <br />
+                            transform: {element.position.end}
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            onClick={this.showTransformSelect}
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      )}
+                    </Stack>
+                  </div>
+                </div>
+              </>
+            )}
+          </UniverseSidebar>
+          <Box sx={{ position: "relative", overflow: "hidden" }}>
+            <UniverseViewer
+              ref={this.onViewerLoaded}
+              sceneGraph={this.sceneGraph}
+              onSceneGraphElementEdited={this.onSceneGraphElementEdited}
+              universeData={this.props.universeData}
+              deviceId={this.props.universeData.deviceId}
+            />
+            <Controls>
+              <Control onClick={this.recenter}>
+                <Icon name="recenter" />
+              </Control>
+              <Control onClick={this.toggleSidebar}>
+                <Icon name="edit" />
+              </Control>
+            </Controls>
+          </Box>
+        </Box>
 
         {this.state.showingAddDialog && (
           <AddLayerModal
@@ -697,7 +663,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             onSelect={this.onSelectLocationStream}
           />
         )}
-      </MosaicContainer>
+      </UniverseContainer>
     );
   }
 }

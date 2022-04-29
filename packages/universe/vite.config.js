@@ -19,7 +19,6 @@ module.exports = defineConfig({
         "styled-components",
         "geolib",
         "uuid",
-        "react-mosaic-component",
       ],
       output: {
         // Provide global variables to use in the UMD build
