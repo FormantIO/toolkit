@@ -523,7 +523,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
     return (
       <UniverseContainer>
-        <Box display="grid" gridTemplateColumns="340px 1fr" gap={2}>
+        <Box display="grid" gridTemplateColumns="340px 1fr">
           <UniverseSidebar
             onAdd={this.showAddDialog}
             onRemove={this.onRemoveItem}
