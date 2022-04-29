@@ -68,7 +68,7 @@ export type ViewId = "properties" | "viewer";
 
 const TITLE_MAP: Record<ViewId, string> = {
   properties: "Properties",
-  viewer: "Viewer",
+  viewer: "3D Viewer",
 };
 
 export class Universe extends Component<IUniverseProps, IUniverseState> {
@@ -664,7 +664,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             direction: "row",
             first: "properties",
             second: "viewer",
-            splitPercentage: 20,
+            splitPercentage: 30,
           }}
         />
 

@@ -168,7 +168,7 @@
   -webkit-box-align: center;
           align-items: center;
   flex-shrink: 0;
-  height: 30px;
+  height: 41px;
   background: white;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
@@ -309,12 +309,12 @@
   background: none;
 }
 .mosaic.mosaic-blueprint-theme .mosaic-split:hover .mosaic-split-line {
-  box-shadow: 0 0 0 1px #4c90f0;
+  box-shadow: 0 0 0 1px #BAC4E2;
 }
 .mosaic.mosaic-blueprint-theme.mosaic-drop-target .drop-target-container .drop-target,
 .mosaic.mosaic-blueprint-theme .mosaic-drop-target .drop-target-container .drop-target {
   background: rgba(138, 187, 255, 0.2);
-  border: 2px solid #4c90f0;
+  border: 2px solid #BAC4E2;
   -webkit-transition: opacity 100ms;
   transition: opacity 100ms;
   border-radius: 3px;
@@ -322,7 +322,7 @@
 .mosaic.mosaic-blueprint-theme .mosaic-window,
 .mosaic.mosaic-blueprint-theme .mosaic-preview {
   box-shadow: 0 0 0 1px rgba(17, 20, 24, 0.15), 0 0 0 rgba(17, 20, 24, 0), 0 0 0 rgba(17, 20, 24, 0);
-  border-radius: 3px;
+  border-radius: .375rem;
 }
 .mosaic.mosaic-blueprint-theme .mosaic-window .mosaic-window-toolbar,
 .mosaic.mosaic-blueprint-theme .mosaic-preview .mosaic-window-toolbar {
@@ -470,8 +470,12 @@
 }
 
 .mosaic-window-title {
-  font-weight: 500 !important;
-  color: #BAC4E2 !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 27px !important;
+  letter-spacing: 1px !important;
+  color: white !important;
+  font-family: "Inter", "Moderat", sans-serif !important;
 }
 
 .mosaic-blueprint-theme {
