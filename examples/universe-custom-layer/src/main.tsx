@@ -23,7 +23,7 @@ function App() {
       mode={
         mode === "edit" || mode === "view" || mode === "no-interaction"
           ? mode
-          : undefined
+          : "edit"
       }
       vr={vr === "true"}
     ></Universe>
