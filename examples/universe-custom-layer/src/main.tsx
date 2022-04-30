@@ -7,12 +7,27 @@ import {
   SimulatedUniverseData,
 } from "@formant/universe";
 
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const mode = urlParams.get("mode");
+const vr = urlParams.get("mode");
+
 import { CubeLayer } from "./CubeLayer";
 
 LayerRegistry.register(CubeLayer);
 
 function App() {
-  return <Universe universeData={new SimulatedUniverseData()}></Universe>;
+  return (
+    <Universe
+      universeData={new SimulatedUniverseData()}
+      mode={
+        mode === "edit" || mode === "view" || mode === "no-interaction"
+          ? mode
+          : undefined
+      }
+      vr={vr === "true"}
+    ></Universe>
+  );
 }
 
 const container = document.getElementById("app");
