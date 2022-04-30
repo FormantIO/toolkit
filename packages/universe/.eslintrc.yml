@@ -4,6 +4,8 @@ env:
 extends:
   - plugin:react/recommended
   - airbnb
+  - prettier
+  - "plugin:import/typescript"
 parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaFeatures:
@@ -13,6 +15,7 @@ parserOptions:
 plugins:
   - react
   - "@typescript-eslint"
+  - prettier
 rules:
   "import/extensions":
     ["error", "ignorePackages", { "ts": "never", "tsx": "never" }]

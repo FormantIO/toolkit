@@ -12,7 +12,7 @@ import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { LayerType } from "../layers";
 import { LayerRegistry, LayerSuggestion } from "../layers/LayerRegistry";
 import { LayerFields } from "../layers/UniverseLayerContent";
-import { Modal } from "../modals/Modal";
+import { Modal } from "./Modal";
 
 interface IAddLayerModalProps {
   onAddLayer: (

@@ -3,9 +3,9 @@ import { Component } from "react";
 import {
   TextField, DialogContentText, Stack, Select,
 } from "@formant/ui-sdk";
+import { IStreamCurrentValue } from "@formant/data-sdk/src/model/IStreamCurrentValue";
 import { IUniverseData } from "../IUniverseData";
-import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import { Modal } from "../modals/Modal";
+import { Modal } from "./Modal";
 
 interface ISelectLocationModalProps {
   universeData: IUniverseData;
