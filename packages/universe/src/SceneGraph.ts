@@ -32,7 +32,10 @@ export class SceneGraphElement {
   public editing: boolean = false;
 
   public position: Positioning = {
-    type: "manual", x: 0, y: 0, z: 0,
+    type: "manual",
+    x: 0,
+    y: 0,
+    z: 0,
   };
 
   public fieldValues: LayerFieldValues = {};
@@ -42,14 +45,14 @@ export class SceneGraphElement {
     public type: LayerType,
     public data: any,
     public dataSources?: UniverseDataSource[],
-    public deviceContext?: string,
+    public deviceContext?: string
   ) {
     this.id = uuid();
   }
 }
 
 export function cloneSceneGraph(
-  scenegraph: SceneGraphElement,
+  scenegraph: SceneGraphElement
 ): SceneGraphElement {
   const c = JSON.parse(JSON.stringify(scenegraph)) as SceneGraphElement;
 
@@ -64,7 +67,7 @@ export function cloneSceneGraph(
 export function visitSceneGraphElement(
   sceneGraph: SceneGraphElement,
   visitor: (el: SceneGraphElement, path: TreePath) => boolean | void,
-  pathSoFar?: TreePath,
+  pathSoFar?: TreePath
 ) {
   const p = pathSoFar || [];
   const r = visitor(sceneGraph, p);
@@ -78,7 +81,7 @@ export function visitSceneGraphElement(
 export function visitSceneGraphElementReverse(
   sceneGraph: SceneGraphElement,
   visitor: (el: SceneGraphElement, path: TreePath) => void,
-  pathSoFar?: TreePath,
+  pathSoFar?: TreePath
 ) {
   const p = pathSoFar || [];
   if (sceneGraph.children.length > 0) {
@@ -91,7 +94,7 @@ export function visitSceneGraphElementReverse(
 
 export function findSceneGraphElement(
   sceneGraph: SceneGraphElement[],
-  path: TreePath,
+  path: TreePath
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;
@@ -109,7 +112,7 @@ export function findSceneGraphElement(
 
 export function getSceneGraphElementParent(
   items: SceneGraphElement[],
-  path: TreePath,
+  path: TreePath
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;
@@ -122,7 +125,7 @@ export function getSceneGraphElementParent(
 export function findSceneGraphParentElement(
   sceneGraph: SceneGraphElement[],
   path: TreePath,
-  filter: (el: SceneGraphElement) => boolean,
+  filter: (el: SceneGraphElement) => boolean
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;

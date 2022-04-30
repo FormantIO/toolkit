@@ -5,6 +5,8 @@ import { TransformLayer } from "./layers/TransformLayer";
 import { GroundLayer } from "./layers/GroundLayer";
 import { ImageLayer } from "./layers/ImageLayer";
 import { GltfLayer } from "./layers/GltfLayer";
+import GridMapLayer from "./layers/GridMapLayer";
+import GeometryLayer from "./layers/GeometryLayer";
 
 export * from "./Universe";
 export * from "./IUniverseData";
@@ -12,7 +14,7 @@ export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayerContent";
 export * from "./layers/TransformLayer";
 export * from "./sidebar";
-export * from "./SimulatedUniverseData";
+export { default as SimulatedUniverseData } from "./SimulatedUniverseData";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
@@ -21,5 +23,5 @@ LayerRegistry.register(GroundLayer);
 LayerRegistry.register(ImageLayer);
 LayerRegistry.register(GltfLayer);
 LayerRegistry.register(GroundLayer);
-
-export type LayerType = string;
+LayerRegistry.register(GridMapLayer);
+LayerRegistry.register(GeometryLayer);

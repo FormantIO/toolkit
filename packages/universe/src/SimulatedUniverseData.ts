@@ -1,13 +1,11 @@
 import { IUniverseData, UniverseDataSource } from "./IUniverseData";
 
-export class SimulatedUniverseData implements IUniverseData {
+export default class SimulatedUniverseData implements IUniverseData {
   async getTransformTrees(): Promise<{ name: string; transformTree: any }[]> {
     return [];
   }
 
-  async getLocations(): Promise<any> {
-
-  }
+  async getLocations(): Promise<any> {}
 
   getDeviceContexts(): { deviceName: string; deviceId: string }[] {
     return [{ deviceName: "My Robot", deviceId: "abc" }];
@@ -19,33 +17,39 @@ export class SimulatedUniverseData implements IUniverseData {
 
   getTelemetryStreamType(
     _deviceId: string,
-    _streamName: string,
+    _streamName: string
   ): string | undefined {
-
+    return;
   }
 
   subscribeToDataSource(
     _source: UniverseDataSource,
-    _callback: (data: any) => void,
-  ): void {
-
-  }
+    _callback: (data: any) => void
+  ): void {}
 
   subscribeToTransformTree(
     _streamName: string,
-    _callback: (data: any) => void,
+    _callback: (data: any) => void
   ): () => void {
     return () => {};
   }
 
   subscribeToLocation(
     _streamName: string,
-    _callback: (data: any) => void,
+    _callback: (data: any) => void
   ): () => void {
     return () => {};
   }
 
   get deviceId(): string {
     return "abc";
+  }
+
+  getTelemetryStreams(): any[] {
+    return [];
+  }
+
+  getTeleopRosStreams(): any[] {
+    return [];
   }
 }

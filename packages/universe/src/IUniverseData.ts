@@ -50,4 +50,6 @@ export interface IUniverseData {
     callback: (data: any) => void
   ): () => void;
   get deviceId(): string;
+  getTelemetryStreams(): any[];
+  getTeleopRosStreams(): any[];
 }

@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { Vector3 } from "three";
-import {
-  Box, Button, Icon, Select, Stack, Typography,
-} from "@formant/ui-sdk";
+import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../common/defined";
 import { LayerType } from "./layers";
@@ -104,7 +102,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         },
       },
       "Label",
-      deviceId,
+      deviceId
     );
     this.forceUpdate();
   };
@@ -123,7 +121,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       });
       this.currentPath = currentPath;
       this.currentlyEditingName = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, currentPath),
+        findSceneGraphElement(this.sceneGraph, currentPath)
       ).name;
     }
   };
@@ -145,7 +143,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
     name?: string,
-    deviceContext?: string,
+    deviceContext?: string
   ) => {
     this.hideAddDialog();
     if (this.viewer && this.currentPath) {
@@ -153,7 +151,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         name || LayerRegistry.getCommonName(layerType),
         layerType,
         LayerRegistry.getDescription(layerType),
-        dataSources,
+        dataSources
       );
       newElement.deviceContext = deviceContext;
       newElement.fieldValues = extractLayerFieldValues(fields || {});
@@ -163,7 +161,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         newPath = [this.sceneGraph.length - 1];
       } else {
         const el = definedAndNotNull(
-          findSceneGraphElement(this.sceneGraph, this.currentPath),
+          findSceneGraphElement(this.sceneGraph, this.currentPath)
         );
         el.children.push(newElement);
         newPath = [...this.currentPath, el.children.length - 1];
@@ -183,18 +181,18 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       e,
       (_, epath) => {
         if (
-          this.currentlyEditingElement
-          && treePathEquals(this.currentlyEditingElement, epath)
+          this.currentlyEditingElement &&
+          treePathEquals(this.currentlyEditingElement, epath)
         ) {
           defined(this.viewer).toggleEditing(
             this.currentlyEditingElement,
-            false,
+            false
           );
           this.currentlyEditingElement = undefined;
         }
         defined(this.viewer).removeSceneGraphItem(epath);
       },
-      path,
+      path
     );
     const sgParent = getSceneGraphElementParent(this.sceneGraph, path);
     if (sgParent) {
@@ -212,7 +210,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     const sgParent = getSceneGraphElementParent(this.sceneGraph, path);
     if (sgParent) {
       const newEl = cloneSceneGraph(
-        defined(sgParent.children[path[path.length - 1]]),
+        defined(sgParent.children[path[path.length - 1]])
       );
       sgParent.children.push(newEl);
       path.pop();
@@ -222,11 +220,11 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         (_, epath) => {
           defined(this.viewer).addSceneGraphItem(epath);
         },
-        newPath,
+        newPath
       );
     } else {
       const newEl = cloneSceneGraph(
-        defined(this.sceneGraph[path[path.length - 1]]),
+        defined(this.sceneGraph[path[path.length - 1]])
       );
       this.sceneGraph.push(newEl);
       path.pop();
@@ -236,7 +234,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         (_, epath) => {
           defined(this.viewer).addSceneGraphItem(epath);
         },
-        newPath,
+        newPath
       );
     }
     this.forceUpdate();
@@ -246,7 +244,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     this.hideRenameDialog();
     if (this.currentPath) {
       const el = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, this.currentPath),
+        findSceneGraphElement(this.sceneGraph, this.currentPath)
       );
       el.name = name;
       this.forceUpdate();
@@ -262,7 +260,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     let color = "#";
     for (let i = 0; i < 3; i++) {
       const value = (hash >> (i * 8)) & 0xff;
-      color += (`00${value.toString(16)}`).substr(-2);
+      color += `00${value.toString(16)}`.substr(-2);
     }
     /* tslint:enable:no-bitwise */
     return color;
@@ -271,7 +269,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   private buildSubTree(
     element: SceneGraphElement,
     path: TreePath,
-    inheritedColor?: string,
+    inheritedColor?: string
   ): TreeElement {
     const color = element.deviceContext
       ? this.stringToColor(element.deviceContext)
@@ -294,7 +292,9 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
           description: LayerRegistry.getDescription(element.type),
         },
       ],
-      children: element.children.map((_, i) => this.buildSubTree(_, [...path, i], color)),
+      children: element.children.map((_, i) =>
+        this.buildSubTree(_, [...path, i], color)
+      ),
     };
   }
 
@@ -329,25 +329,26 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             return false;
           }
           if (
-            this.currentlyEditingElement
-            && treePathEquals(this.currentlyEditingElement, epath)
+            this.currentlyEditingElement &&
+            treePathEquals(this.currentlyEditingElement, epath)
           ) {
             defined(this.viewer).toggleEditing(
               this.currentlyEditingElement,
-              false,
+              false
             );
             e.editing = false;
             this.currentlyEditingElement = undefined;
           }
           defined(this.viewer).toggleVisible(epath, el.visible);
+          return false;
         },
-        path,
+        path
       );
     } else if (icon === 1) {
       const isEditing = el.editing;
       if (this.currentlyEditingElement) {
         const editingElement = definedAndNotNull(
-          findSceneGraphElement(this.sceneGraph, this.currentlyEditingElement),
+          findSceneGraphElement(this.sceneGraph, this.currentlyEditingElement)
         );
         editingElement.editing = false;
         this.viewer.toggleEditing(this.currentlyEditingElement, false);
@@ -365,7 +366,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   private onSceneGraphElementEdited = (path: TreePath, transform: Vector3) => {
     if (this.viewer) {
       const el = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, path),
+        findSceneGraphElement(this.sceneGraph, path)
       );
       if (el.position.type === "manual") {
         el.position = {
@@ -395,8 +396,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     const element = definedAndNotNull(
       findSceneGraphElement(
         this.sceneGraph,
-        defined(this.state.currentlySelectedElement),
-      ),
+        defined(this.state.currentlySelectedElement)
+      )
     );
     if (positionType === "manual") {
       element.position = {
@@ -426,8 +427,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     const element = definedAndNotNull(
       findSceneGraphElement(
         this.sceneGraph,
-        defined(this.state.currentlySelectedElement),
-      ),
+        defined(this.state.currentlySelectedElement)
+      )
     );
     element.position = {
       type: "transform tree",
@@ -436,7 +437,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     };
     defined(this.viewer).updatePositioning(
       defined(this.state.currentlySelectedElement),
-      element.position,
+      element.position
     );
     this.forceUpdate();
   };
@@ -444,7 +445,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   private onSelectLocationStream = (
     name: string,
     relativeToLong: number,
-    relativeToLat: number,
+    relativeToLat: number
   ) => {
     this.setState({
       showingLocationStreamSelect: false,
@@ -452,8 +453,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     const element = definedAndNotNull(
       findSceneGraphElement(
         this.sceneGraph,
-        defined(this.state.currentlySelectedElement),
-      ),
+        defined(this.state.currentlySelectedElement)
+      )
     );
     element.position = {
       type: "gps",
@@ -463,7 +464,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     };
     defined(this.viewer).updatePositioning(
       defined(this.state.currentlySelectedElement),
-      element.position,
+      element.position
     );
     this.forceUpdate();
   };
@@ -508,12 +509,12 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     if (this.state.currentlySelectedElement) {
       element = findSceneGraphElement(
         this.sceneGraph,
-        this.state.currentlySelectedElement,
+        this.state.currentlySelectedElement
       );
       const parent = findSceneGraphParentElement(
         this.sceneGraph,
         this.state.currentlySelectedElement,
-        (el) => el.deviceContext !== undefined,
+        (el) => el.deviceContext !== undefined
       );
       if (parent) {
         parentContext = parent.deviceContext;
@@ -547,12 +548,11 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                   <div>
                     {currentContext !== undefined && (
                       <PropertyRow>
-                        device:
-                        {" "}
+                        device:{" "}
                         {currentContext !== undefined
                           ? this.props.universeData.getDeviceContextName(
-                            currentContext,
-                          )
+                              currentContext
+                            )
                           : "none"}
                       </PropertyRow>
                     )}
@@ -575,33 +575,23 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                         {element.position.type === "manual" && (
                           <div>
                             <Typography variant="body1">
-                              x:
-                              {" "}
-                              {element.position.x.toFixed(4)}
+                              x: {element.position.x.toFixed(4)}
                               <br />
-                              y:
-                              {" "}
-                              {element.position.y.toFixed(4)}
+                              y: {element.position.y.toFixed(4)}
                               <br />
-                              z:
-                              {" "}
-                              {element.position.z.toFixed(4)}
+                              z: {element.position.z.toFixed(4)}
                             </Typography>
                           </div>
                         )}
                         {element.position.type === "gps" && (
                           <div>
                             <Typography variant="body1">
-                              stream:
-                              {" "}
-                              {element.position.stream}
+                              stream: {element.position.stream}
                               <br />
-                              relative to longitude:
-                              {" "}
+                              relative to longitude:{" "}
                               {element.position.relativeToLongitude}
                               <br />
-                              relative to latitude:
-                              {" "}
+                              relative to latitude:{" "}
                               {element.position.relativeToLatitude}
                             </Typography>
                             <Button
@@ -615,13 +605,9 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                         {element.position.type === "transform tree" && (
                           <div>
                             <Typography variant="body1">
-                              stream:
-                              {" "}
-                              {element.position.stream}
+                              stream: {element.position.stream}
                               <br />
-                              transform:
-                              {" "}
-                              {element.position.end}
+                              transform: {element.position.end}
                             </Typography>
                             <Button
                               variant="contained"

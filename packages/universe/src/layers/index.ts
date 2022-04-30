@@ -1,0 +1,1 @@
+export type LayerType = string;

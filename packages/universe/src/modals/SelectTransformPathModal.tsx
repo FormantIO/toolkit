@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { DialogContentText, Select } from "@formant/ui-sdk";
-import { ITransformNode } from "@formant/data-sdk/src/model/ITransformNode";
+import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { defined } from "../../../common/defined";
 import { TreeElement, TreePath } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
@@ -34,7 +34,9 @@ export class SelectTransformPathModal extends Component<
   async componentDidMount() {
     const transformTrees = await this.props.universeData.getTransformTrees();
     const trees = new Map<string, TreeElement>();
-    transformTrees.forEach((tree) => trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree)));
+    transformTrees.forEach((tree) =>
+      trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree))
+    );
     this.setState({
       items: trees,
       mapName: Array.from(trees.keys())[0],
@@ -59,8 +61,8 @@ export class SelectTransformPathModal extends Component<
         this.state.mapName,
         this.getSelectedTitle(
           [defined(this.state.items.get(this.state.mapName))],
-          defined(this.state.selected),
-        ),
+          defined(this.state.selected)
+        )
       );
     }
   };

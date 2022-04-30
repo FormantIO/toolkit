@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
-import {
-  TextField, DialogContentText, Stack, Select,
-} from "@formant/ui-sdk";
-import { IStreamCurrentValue } from "@formant/data-sdk/src/model/IStreamCurrentValue";
+import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
+import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
 import { IUniverseData } from "../IUniverseData";
 import { Modal } from "./Modal";
 
@@ -57,7 +55,7 @@ export class SelectLocationModal extends Component<
       this.props.onSelect(
         this.state.locationStreamName,
         this.state.relativeToLong,
-        this.state.relativeToLat,
+        this.state.relativeToLat
       );
     }
   };
