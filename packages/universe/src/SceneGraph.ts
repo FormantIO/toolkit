@@ -1,47 +1,55 @@
-import { UniverseDataSource } from "./IUniverseData";
-import { v4 as uuid } from "uuid";
-import { LayerType } from "./layers";
-import { LayerFieldValues } from "./layers/UniverseLayerContent";
-import { TreePath } from "./ITreeElement";
+import { v4 as uuid } from 'uuid';
+import { UniverseDataSource } from './IUniverseData';
+import { LayerType } from './layers';
+import { LayerFieldValues } from './layers/UniverseLayerContent';
+import { TreePath } from './ITreeElement';
 
 export type Positioning =
   | {
-      type: "manual";
+      type: 'manual';
       x: number;
       y: number;
       z: number;
     }
   | {
-      type: "transform tree";
+      type: 'transform tree';
       stream?: string;
       end?: string;
     }
   | {
-      type: "gps";
+      type: 'gps';
       stream?: string;
       relativeToLongitude: number;
       relativeToLatitude: number;
     };
 export class SceneGraphElement {
   children: SceneGraphElement[] = [];
+
   public id: string;
+
   public visible: boolean = true;
+
   public editing: boolean = false;
-  public position: Positioning = { type: "manual", x: 0, y: 0, z: 0 };
+
+  public position: Positioning = {
+    type: 'manual', x: 0, y: 0, z: 0,
+  };
+
   public fieldValues: LayerFieldValues = {};
+
   constructor(
     public name: string,
     public type: LayerType,
     public data: any,
     public dataSources?: UniverseDataSource[],
-    public deviceContext?: string
+    public deviceContext?: string,
   ) {
     this.id = uuid();
   }
 }
 
 export function cloneSceneGraph(
-  scenegraph: SceneGraphElement
+  scenegraph: SceneGraphElement,
 ): SceneGraphElement {
   const c = JSON.parse(JSON.stringify(scenegraph)) as SceneGraphElement;
 
@@ -56,7 +64,7 @@ export function cloneSceneGraph(
 export function visitSceneGraphElement(
   sceneGraph: SceneGraphElement,
   visitor: (el: SceneGraphElement, path: TreePath) => boolean | void,
-  pathSoFar?: TreePath
+  pathSoFar?: TreePath,
 ) {
   const p = pathSoFar || [];
   const r = visitor(sceneGraph, p);
@@ -70,7 +78,7 @@ export function visitSceneGraphElement(
 export function visitSceneGraphElementReverse(
   sceneGraph: SceneGraphElement,
   visitor: (el: SceneGraphElement, path: TreePath) => void,
-  pathSoFar?: TreePath
+  pathSoFar?: TreePath,
 ) {
   const p = pathSoFar || [];
   if (sceneGraph.children.length > 0) {
@@ -83,7 +91,7 @@ export function visitSceneGraphElementReverse(
 
 export function findSceneGraphElement(
   sceneGraph: SceneGraphElement[],
-  path: TreePath
+  path: TreePath,
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;
@@ -101,7 +109,7 @@ export function findSceneGraphElement(
 
 export function getSceneGraphElementParent(
   items: SceneGraphElement[],
-  path: TreePath
+  path: TreePath,
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;
@@ -114,7 +122,7 @@ export function getSceneGraphElementParent(
 export function findSceneGraphParentElement(
   sceneGraph: SceneGraphElement[],
   path: TreePath,
-  filter: (el: SceneGraphElement) => boolean
+  filter: (el: SceneGraphElement) => boolean,
 ): SceneGraphElement | null {
   if (path.length === 0) {
     return null;

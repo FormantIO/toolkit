@@ -1,9 +1,8 @@
-import { UniverseDataSource } from "../IUniverseData";
-import { PerspectiveCamera } from "three";
-import { LayerType } from ".";
-import { defined } from "../../../common/defined";
-import { IUniverseData } from "../IUniverseData";
-import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
+import { PerspectiveCamera } from 'three';
+import { UniverseDataSource, IUniverseData } from '../IUniverseData';
+import { LayerType } from '.';
+import { defined } from '../../../common/defined';
+import { LayerFields, UniverseLayerContent } from './UniverseLayerContent';
 
 export interface LayerSuggestion {
   sources: UniverseDataSource[];
@@ -12,13 +11,14 @@ export interface LayerSuggestion {
 export class LayerRegistry {
   private static layers: Map<LayerType, typeof UniverseLayerContent> =
     new Map();
+
   static register(layer: typeof UniverseLayerContent) {
     LayerRegistry.layers.set(layer.id, layer);
   }
 
   static getLayerSuggestions(
     universeData: IUniverseData,
-    deviceContext?: string
+    deviceContext?: string,
   ): {
     nonDataLayers: LayerType[];
     dataLayers: LayerSuggestion[];
@@ -28,7 +28,7 @@ export class LayerRegistry {
       if (layer.usesData) {
         const suggestions = layer.getLayerSuggestions(
           universeData,
-          deviceContext
+          deviceContext,
         );
         suggestionsDataLayers = suggestionsDataLayers.concat(suggestions);
       }
@@ -61,7 +61,7 @@ export class LayerRegistry {
     deviceId: string,
     universeDataSources?: UniverseDataSource[],
     fields?: LayerFields,
-    getCurrentCamera?: () => PerspectiveCamera
+    getCurrentCamera?: () => PerspectiveCamera,
   ) {
     const layer = defined(LayerRegistry.layers.get(nodeType));
     return layer.createDefault(
@@ -69,7 +69,7 @@ export class LayerRegistry {
       deviceId,
       universeDataSources,
       fields,
-      getCurrentCamera
+      getCurrentCamera,
     );
   }
 }

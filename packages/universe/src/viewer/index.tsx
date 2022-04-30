@@ -1,24 +1,24 @@
-import { Measure } from "@formant/ui-sdk";
-import * as React from "react";
-import { Component } from "react";
-import * as THREE from "three";
-import { Vector3, WebGLRenderer } from "three";
-import { OrbitControls } from "../three-utils/OrbitControls";
-import { TransformControls } from "../three-utils/TransformControls";
-import { VRButton } from "../three-utils/VRButton";
-import { defined, definedAndNotNull } from "../../../common/defined";
-import { LayerRegistry } from "../layers/LayerRegistry";
-import { TransformLayer } from "../layers/TransformLayer";
-import { injectLayerFieldValues } from "../layers/UniverseLayerContent";
+import { Measure } from '@formant/ui-sdk';
+import * as React from 'react';
+import { Component } from 'react';
+import * as THREE from 'three';
+import { Vector3, WebGLRenderer } from 'three';
+import styled from 'styled-components';
+import { OrbitControls } from '../../three-utils/OrbitControls';
+import { TransformControls } from '../../three-utils/TransformControls';
+import { VRButton } from '../../three-utils/VRButton';
+import { defined, definedAndNotNull } from '../../../common/defined';
+import { LayerRegistry } from '../layers/LayerRegistry';
+import { TransformLayer } from '../layers/TransformLayer';
+import { injectLayerFieldValues } from '../layers/UniverseLayerContent';
 import {
   findSceneGraphElement,
   getSceneGraphElementParent,
   Positioning,
   SceneGraphElement,
-} from "../SceneGraph";
-import { TreePath, treePathEquals } from "../ITreeElement";
-import { IUniverseData } from "../IUniverseData";
-import styled from "styled-components";
+} from '../SceneGraph';
+import { TreePath, treePathEquals } from '../ITreeElement';
+import { IUniverseData } from '../IUniverseData';
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -43,13 +43,21 @@ export interface IUniverseViewerProps {
 
 export class UniverseViewer extends Component<IUniverseViewerProps> {
   private element: HTMLElement | null = null;
+
   private renderer: WebGLRenderer | undefined;
+
   private scene: THREE.Scene;
+
   private root: THREE.Object3D = new THREE.Object3D();
+
   private camera: THREE.PerspectiveCamera;
+
   private pathToLayer: Map<SceneGraphElement, TransformLayer<any>> = new Map();
+
   private editControls: TransformControls | undefined;
+
   private orbitControls: OrbitControls | undefined;
+
   private attachedPath: TreePath | undefined;
 
   constructor(props: IUniverseViewerProps) {
@@ -62,7 +70,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
     this.camera.position.z = 3;
 
@@ -73,20 +81,20 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   }
 
   public componentWillUnmount() {
-    window.removeEventListener("keydown", this.onKeyDown);
+    window.removeEventListener('keydown', this.onKeyDown);
   }
 
   onKeyDown = (event: KeyboardEvent) => {
     const c = defined(this.editControls);
     switch (event.key) {
-      case "g":
-        c.setMode("translate");
+      case 'g':
+        c.setMode('translate');
         break;
-      case "r":
-        c.setMode("rotate");
+      case 'r':
+        c.setMode('rotate');
         break;
-      case "s":
-        c.setMode("scale");
+      case 's':
+        c.setMode('scale');
         break;
     }
   };
@@ -108,16 +116,16 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
       this.orbitControls = new OrbitControls(
         this.camera,
-        this.renderer.domElement
+        this.renderer.domElement,
       );
       this.orbitControls.update();
       this.editControls = new TransformControls(
         this.camera,
-        this.renderer.domElement
+        this.renderer.domElement,
       );
-      window.addEventListener("keydown", this.onKeyDown);
-      this.editControls.addEventListener("change", this.onEditControlsChange);
-      this.editControls.addEventListener("dragging-changed", (event) => {
+      window.addEventListener('keydown', this.onKeyDown);
+      this.editControls.addEventListener('change', this.onEditControlsChange);
+      this.editControls.addEventListener('dragging-changed', (event) => {
         if (this.orbitControls) this.orbitControls.enabled = !event.value;
       });
       this.scene.add(this.editControls);
@@ -152,13 +160,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   }
 
-  getCurrentCamera = () => {
-    return this.camera;
-  };
+  getCurrentCamera = () => this.camera;
 
   public addSceneGraphItem(path: TreePath) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
+      findSceneGraphElement(this.props.sceneGraph, path),
     );
 
     const fields = LayerRegistry.getFields(el.type);
@@ -169,9 +175,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.props.deviceId,
       el.dataSources,
       fields,
-      this.getCurrentCamera
+      this.getCurrentCamera,
     );
-    if (el.position.type === "manual") {
+    if (el.position.type === 'manual') {
       layer.position.set(el.position.x, el.position.y, el.position.z);
     }
     const parent = getSceneGraphElementParent(this.props.sceneGraph, path);
@@ -189,7 +195,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.toggleEditing(path, false);
     }
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
+      findSceneGraphElement(this.props.sceneGraph, path),
     );
     const layer = defined(this.pathToLayer.get(el));
 
@@ -208,7 +214,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public toggleVisible(path: TreePath, visible: boolean) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
+      findSceneGraphElement(this.props.sceneGraph, path),
     );
     const o = defined(this.pathToLayer.get(el));
     o.visible = visible;
@@ -220,11 +226,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   public toggleEditing(path: TreePath, editing: boolean) {
     const c = defined(this.editControls);
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
+      findSceneGraphElement(this.props.sceneGraph, path),
     );
     const o = defined(this.pathToLayer.get(el));
     if (editing) {
-      c.setMode("translate");
+      c.setMode('translate');
       c.attach(o);
       this.attachedPath = path;
     } else {
@@ -235,7 +241,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public updatePositioning(path: TreePath, position: Positioning) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
+      findSceneGraphElement(this.props.sceneGraph, path),
     );
     const o = defined(this.pathToLayer.get(el));
     o.setPositioning(position, this.props.universeData);

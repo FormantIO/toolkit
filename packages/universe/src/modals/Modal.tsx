@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Button,
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
-} from "@formant/ui-sdk";
+} from '@formant/ui-sdk';
 
 export interface IModalProps {
   title: string;
@@ -19,7 +19,9 @@ export interface IModalProps {
 }
 
 export function Modal(props: IModalProps) {
-  const { onClose, children, open, title, onAccept, acceptText } = props;
+  const {
+    onClose, children, open, title, onAccept, acceptText,
+  } = props;
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>

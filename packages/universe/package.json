@@ -24,7 +24,9 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
-    "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/"
+    "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/",
+    "lint": "eslint -c ../../.eslintrc.yml --ignore-pattern src/three-utils/*  --quiet --ext js,ts,tsx src",
+    "lint_fix": "eslint -c ../../.eslintrc.yml --ignore-pattern src/three-utils/* --quiet --ext js,ts,tsx --fix src"
   },
   "devDependencies": {
     "@types/offscreencanvas": "^2019.6.4",

@@ -1,12 +1,12 @@
-import * as React from "react";
-import { Component } from "react";
-import { defined } from "../../../common/defined";
-import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
-import { TreeElement, TreePath } from "../ITreeElement";
-import { IUniverseData } from "../IUniverseData";
-import { DialogContentText, Select } from "@formant/ui-sdk";
-import { SortableTree } from "../SortableTree";
-import { Modal } from "../modals/Modal";
+import * as React from 'react';
+import { Component } from 'react';
+import { DialogContentText, Select } from '@formant/ui-sdk';
+import { defined } from '../../../common/defined';
+import { ITransformNode } from '../../../data-sdk/src/model/ITransformNode';
+import { TreeElement, TreePath } from '../ITreeElement';
+import { IUniverseData } from '../IUniverseData';
+import { SortableTree } from '../SortableTree';
+import { Modal } from '../modals/Modal';
 
 interface ISelectTransformPathModalProps {
   universeData: IUniverseData;
@@ -34,9 +34,7 @@ export class SelectTransformPathModal extends Component<
   async componentDidMount() {
     const transformTrees = await this.props.universeData.getTransformTrees();
     const trees = new Map<string, TreeElement>();
-    transformTrees.forEach((tree) =>
-      trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree))
-    );
+    transformTrees.forEach((tree) => trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree)));
     this.setState({
       items: trees,
       mapName: Array.from(trees.keys())[0],
@@ -46,7 +44,7 @@ export class SelectTransformPathModal extends Component<
   getSelectedTitle(treeElements: TreeElement[], path: TreePath): string {
     const i = path.shift();
     if (i === undefined) {
-      throw new Error("Invalid path");
+      throw new Error('Invalid path');
     }
     const element = defined(treeElements[i]);
     if (path.length === 0) {
@@ -61,8 +59,8 @@ export class SelectTransformPathModal extends Component<
         this.state.mapName,
         this.getSelectedTitle(
           [defined(this.state.items.get(this.state.mapName))],
-          defined(this.state.selected)
-        )
+          defined(this.state.selected),
+        ),
       );
     }
   };
@@ -90,7 +88,7 @@ export class SelectTransformPathModal extends Component<
 
     return (
       <Modal
-        open={true}
+        open
         title="Select Transform Path"
         acceptText="Select"
         onAccept={this.onSelectTransform}
@@ -107,7 +105,7 @@ export class SelectTransformPathModal extends Component<
               value={this.state?.mapName}
               onChange={this.onChangeTree}
               items={treeNames.map((_) => ({ label: _, value: _ }))}
-            ></Select>
+            />
             <SortableTree
               items={[items]}
               onSelected={this.onSelectTransformItem}

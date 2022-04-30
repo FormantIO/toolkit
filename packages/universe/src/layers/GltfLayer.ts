@@ -1,24 +1,28 @@
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
-import { GLTFLoader } from "../three-utils/GLTFLoader";
-import { TransformLayer } from "./TransformLayer";
+import { IUniverseData, UniverseDataSource } from '../IUniverseData';
+import { GLTFLoader } from '../../three-utils/GLTFLoader';
+import { TransformLayer } from './TransformLayer';
 import {
   LayerField,
   LayerFields,
   UniverseLayerContent,
-} from "./UniverseLayerContent";
+} from './UniverseLayerContent';
 
 export class GltfLayer extends UniverseLayerContent {
-  static id = "3dmodel";
-  static commonName = "3D Model";
-  static description = "A 3D model.";
+  static id = '3dmodel';
+
+  static commonName = '3D Model';
+
+  static description = 'A 3D model.';
+
   static usesData = false;
+
   static fields = {
     url: {
-      name: "URL",
-      description: "The URL of the 3D model (*.gltf only)",
-      placeholder: "https://example.com/model.gltf",
-      value: "",
-      type: "text",
+      name: 'URL',
+      description: 'The URL of the 3D model (*.gltf only)',
+      placeholder: 'https://example.com/model.gltf',
+      value: '',
+      type: 'text',
     },
   };
 
@@ -26,14 +30,14 @@ export class GltfLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields
+    fields?: LayerFields,
   ): TransformLayer<GltfLayer> {
     return new TransformLayer(new GltfLayer((fields || {}).url));
   }
 
   constructor(urlField?: LayerField) {
     super();
-    if (urlField && urlField.type === "text" && urlField.value) {
+    if (urlField && urlField.type === 'text' && urlField.value) {
       const loader = new GLTFLoader();
       loader.load(urlField.value, (gltf) => {
         const ninetyDegrees = Math.PI / 2;

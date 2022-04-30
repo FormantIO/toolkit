@@ -1,4 +1,4 @@
-import { IconName } from "@formant/ui-sdk";
+import { IconName } from '@formant/ui-sdk';
 
 export interface TreeElement {
   title: string;

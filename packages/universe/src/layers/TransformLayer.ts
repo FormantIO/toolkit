@@ -1,25 +1,34 @@
-import { getDistance } from "geolib";
-import { Euler, Matrix4, Object3D, Quaternion, Vector3 } from "three";
-import { defined } from "../../../common/defined";
-import { ITransformNode } from "../../../model/ITransformNode";
-import { Positioning } from "../SceneGraph";
-import { TreePath } from "../ITreeElement";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { getDistance } from 'geolib';
+import {
+  Euler, Matrix4, Object3D, Quaternion, Vector3,
+} from 'three';
+import { defined } from '../../../common/defined';
+import { ITransformNode } from '../../../model/ITransformNode';
+import { Positioning } from '../SceneGraph';
+import { TreePath } from '../ITreeElement';
+import { IUniverseData, UniverseDataSource } from '../IUniverseData';
 
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayerContent } from './UniverseLayerContent';
+
 export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
-  static id = "transform_space";
-  static commonName = "Empty";
-  static description = "An empty layer to fit other layers in.";
+  static id = 'transform_space';
+
+  static commonName = 'Empty';
+
+  static description = 'An empty layer to fit other layers in.';
+
   static usesData = false;
+
   static createDefault(
     _universeData: IUniverseData,
     _deviceId: string,
-    _universeDataSources?: UniverseDataSource[]
+    _universeDataSources?: UniverseDataSource[],
   ): TransformLayer<Object3D> {
     return new TransformLayer();
   }
+
   contentNode: T | undefined;
+
   constructor(content?: T) {
     super();
     if (content) {
@@ -31,7 +40,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
   buildTransformList(
     transformNodes: ITransformNode[],
     path: TreePath,
-    transformsSoFar?: { pos: Vector3; rotation: Quaternion }[]
+    transformsSoFar?: { pos: Vector3; rotation: Quaternion }[],
   ): { pos: Vector3; rotation: Quaternion }[] {
     const newTransformsSoFar = transformsSoFar || [];
     const i = path.shift();
@@ -40,20 +49,19 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     }
     const node = transformNodes[i];
     const pos = defined(node.transform).translation;
-    const rotation = defined(node.transform).rotation;
+    const { rotation } = defined(node.transform);
     newTransformsSoFar.push({
       pos: new Vector3(pos.x, pos.y, pos.z),
       rotation: new Quaternion(rotation.x, rotation.y, rotation.z, rotation.w),
     });
-    if (node.children)
-      return this.buildTransformList(node.children, path, newTransformsSoFar);
+    if (node.children) return this.buildTransformList(node.children, path, newTransformsSoFar);
     return newTransformsSoFar;
   }
 
   findPathToName(
     transformNodes: ITransformNode[],
     name: string,
-    pathSoFar?: TreePath
+    pathSoFar?: TreePath,
   ): TreePath {
     const newPathSoFar = pathSoFar || [];
 
@@ -66,7 +74,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
 
     // not found so go down the tree
     for (let i = 0; i < transformNodes.length; i++) {
-      const children = transformNodes[i].children;
+      const { children } = transformNodes[i];
       if (!children || children.length === 0) {
         continue;
       }
@@ -88,10 +96,10 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     }
 
     if (
-      positioning.type === "gps" &&
-      positioning.stream &&
-      positioning.relativeToLongitude !== undefined &&
-      positioning.relativeToLatitude !== undefined
+      positioning.type === 'gps'
+      && positioning.stream
+      && positioning.relativeToLongitude !== undefined
+      && positioning.relativeToLatitude !== undefined
     ) {
       this.positionUnsubsciber = universeData.subscribeToLocation(
         positioning.stream,
@@ -122,18 +130,18 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             new Vector3(
               horizontalDistance,
               verticalDistance,
-              location.altitude || 0
+              location.altitude || 0,
             ),
             quaternion,
-            new Vector3(1, 1, 1)
+            new Vector3(1, 1, 1),
           );
           this.matrixAutoUpdate = false;
-        }
+        },
       );
     } else if (
-      positioning.type === "transform tree" &&
-      positioning.stream &&
-      positioning.end
+      positioning.type === 'transform tree'
+      && positioning.stream
+      && positioning.end
     ) {
       this.positionUnsubsciber = universeData.subscribeToTransformTree(
         positioning.stream,
@@ -143,15 +151,13 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             .then((tree) => {
               const pathToName = this.findPathToName(
                 [tree],
-                defined(positioning.end)
+                defined(positioning.end),
               );
               const transforms = this.buildTransformList([tree], pathToName);
-              const transformMatrices = transforms.map((_) =>
-                new Matrix4().compose(_.pos, _.rotation, new Vector3(1, 1, 1))
-              );
+              const transformMatrices = transforms.map((_) => new Matrix4().compose(_.pos, _.rotation, new Vector3(1, 1, 1)));
               const transformMatrix = transformMatrices.reduce(
                 (acc, curr) => acc.multiply(curr),
-                new Matrix4()
+                new Matrix4(),
               );
 
               this.matrix = transformMatrix;
@@ -160,7 +166,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             .catch((err) => {
               throw err;
             });
-        }
+        },
       );
     }
   }

@@ -1,9 +1,11 @@
-import * as React from "react";
-import { Component } from "react";
-import { IUniverseData } from "../IUniverseData";
-import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
-import { Modal } from "../modals/Modal";
+import * as React from 'react';
+import { Component } from 'react';
+import {
+  TextField, DialogContentText, Stack, Select,
+} from '@formant/ui-sdk';
+import { IUniverseData } from '../IUniverseData';
+import { IStreamCurrentValue } from '../../../data-sdk/src/model/IStreamCurrentValue';
+import { Modal } from '../modals/Modal';
 
 interface ISelectLocationModalProps {
   universeData: IUniverseData;
@@ -19,7 +21,7 @@ interface ISelectLocationModalState {
   relativeToLong: number;
   relativeToLat: number;
   locationStreamName: string | undefined;
-  items: IStreamCurrentValue<"location">[];
+  items: IStreamCurrentValue<'location'>[];
 }
 
 export class SelectLocationModal extends Component<
@@ -55,7 +57,7 @@ export class SelectLocationModal extends Component<
       this.props.onSelect(
         this.state.locationStreamName,
         this.state.relativeToLong,
-        this.state.relativeToLat
+        this.state.relativeToLat,
       );
     }
   };
@@ -83,7 +85,7 @@ export class SelectLocationModal extends Component<
 
     return (
       <Modal
-        open={true}
+        open
         title="Select Location Positioning"
         acceptText="Select"
         onAccept={this.onSelectLocation}
@@ -112,17 +114,15 @@ export class SelectLocationModal extends Component<
             />
           </div>
           {this.state.items && (
-            <>
-              <Select
-                label="Location Stream"
-                value={this.state.locationStreamName}
-                onChange={this.onChangeLocationStream}
-                items={this.state.items.map((_) => ({
-                  label: _.streamName,
-                  value: _.streamName,
-                }))}
-              />
-            </>
+            <Select
+              label="Location Stream"
+              value={this.state.locationStreamName}
+              onChange={this.onChangeLocationStream}
+              items={this.state.items.map((_) => ({
+                label: _.streamName,
+                value: _.streamName,
+              }))}
+            />
           )}
         </Stack>
       </Modal>
