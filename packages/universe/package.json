@@ -25,14 +25,22 @@
     "serve": "vite preview",
     "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/",
-    "lint": "eslint -c ../../.eslintrc.yml --ignore-pattern src/three-utils/*  --quiet --ext js,ts,tsx src",
-    "lint_fix": "eslint -c ../../.eslintrc.yml --ignore-pattern src/three-utils/* --quiet --ext js,ts,tsx --fix src"
+    "lint": "eslint -c .eslintrc.yml --ignore-pattern src/three-utils/*  --quiet --ext js,ts,tsx .",
+    "lint_fix": "eslint -c .eslintrc.yml --ignore-pattern src/three-utils/* --quiet --ext js,ts,tsx --fix ."
   },
   "devDependencies": {
     "@types/offscreencanvas": "^2019.6.4",
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.25",
     "@types/three": "^0.125.2",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "react-dom": "^18.0.0",
     "typescript": "^4.6.3",
     "vite": "^2.9.5"

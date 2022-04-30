@@ -32,7 +32,7 @@ export interface IUniverseData {
   >;
   getLocations(): Promise<any>;
   getDeviceContexts(): { deviceName: string; deviceId: string }[];
-  getDeviceContextName(deviceId: string): string | undefined;
+  getDeviceContextName(string): string | undefined;
   getTelemetryStreamType(
     deviceId: string,
     streamName: string

@@ -9,8 +9,7 @@ export interface LayerSuggestion {
   layerType: LayerType;
 }
 export class LayerRegistry {
-  private static layers: Map<LayerType, typeof UniverseLayerContent> =
-    new Map();
+  private static layers: Map<LayerType, typeof UniverseLayerContent> = new Map();
 
   static register(layer: typeof UniverseLayerContent) {
     LayerRegistry.layers.set(layer.id, layer);
