@@ -1,21 +1,21 @@
-import { getDistance } from 'geolib';
+import { getDistance } from "geolib";
 import {
   Euler, Matrix4, Object3D, Quaternion, Vector3,
-} from 'three';
-import { defined } from '../../../common/defined';
-import { ITransformNode } from '../../../model/ITransformNode';
-import { Positioning } from '../SceneGraph';
-import { TreePath } from '../ITreeElement';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
+} from "three";
+import { defined } from "../../../common/defined";
+import { ITransformNode } from "../../../model/ITransformNode";
+import { Positioning } from "../SceneGraph";
+import { TreePath } from "../ITreeElement";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 
-import { UniverseLayerContent } from './UniverseLayerContent';
+import { UniverseLayerContent } from "./UniverseLayerContent";
 
 export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
-  static id = 'transform_space';
+  static id = "transform_space";
 
-  static commonName = 'Empty';
+  static commonName = "Empty";
 
-  static description = 'An empty layer to fit other layers in.';
+  static description = "An empty layer to fit other layers in.";
 
   static usesData = false;
 
@@ -96,7 +96,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     }
 
     if (
-      positioning.type === 'gps'
+      positioning.type === "gps"
       && positioning.stream
       && positioning.relativeToLongitude !== undefined
       && positioning.relativeToLatitude !== undefined
@@ -139,7 +139,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
         },
       );
     } else if (
-      positioning.type === 'transform tree'
+      positioning.type === "transform tree"
       && positioning.stream
       && positioning.end
     ) {

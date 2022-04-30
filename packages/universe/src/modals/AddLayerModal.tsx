@@ -4,15 +4,15 @@ import {
   Select,
   Stack,
   TextField,
-} from '@formant/ui-sdk';
-import * as React from 'react';
-import { Component } from 'react';
-import { equals } from '../../../common/equals';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
-import { LayerType } from '../layers';
-import { LayerRegistry, LayerSuggestion } from '../layers/LayerRegistry';
-import { LayerFields } from '../layers/UniverseLayerContent';
-import { Modal } from '../modals/Modal';
+} from "@formant/ui-sdk";
+import * as React from "react";
+import { Component } from "react";
+import { equals } from "../../../common/equals";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { LayerType } from "../layers";
+import { LayerRegistry, LayerSuggestion } from "../layers/LayerRegistry";
+import { LayerFields } from "../layers/UniverseLayerContent";
+import { Modal } from "../modals/Modal";
 
 interface IAddLayerModalProps {
   onAddLayer: (
@@ -51,8 +51,8 @@ export class AddLayerModal extends Component<
   constructor(props: IAddLayerModalProps) {
     super(props);
     this.state = {
-      selectedItem: 'data',
-      currentName: '',
+      selectedItem: "data",
+      currentName: "",
       currentDeviceId: this.props.universeData.getDeviceContexts()[0].deviceId,
     };
 
@@ -84,7 +84,7 @@ export class AddLayerModal extends Component<
     });
     this.selectedSources = dataSources;
     this.currentFields = LayerRegistry.getFields(layerType);
-    if (layerType === 'data') {
+    if (layerType === "data") {
       this.setState({
         currentDeviceId:
           this.props.universeData.getDeviceContexts()[0].deviceId,
@@ -133,7 +133,7 @@ export class AddLayerModal extends Component<
           <div>
             {this.layerSuggestions.nonDataLayers.map((layerType) => (
               <Button
-                variant={selectedItem === layerType ? 'contained' : 'outlined'}
+                variant={selectedItem === layerType ? "contained" : "outlined"}
                 key={`nondata-${layerType}`}
                 onClick={this.onSelect.bind(this, layerType, undefined)}
                 sx={{ m: 1 }}
@@ -159,8 +159,8 @@ export class AddLayerModal extends Component<
                       backgroundColor:
                         selectedItem === suggestion.layerType
                         && equals(this.selectedSources, suggestion.sources)
-                          ? '#18d2ff'
-                          : 'white',
+                          ? "#18d2ff"
+                          : "white",
                     }}
                     onClick={this.onSelect.bind(
                       this,
@@ -169,11 +169,11 @@ export class AddLayerModal extends Component<
                     )}
                   >
                     {LayerRegistry.getCommonName(suggestion.layerType)}
-                    {' '}
+                    {" "}
                     [
-                    {suggestion.sources[0].sourceType === 'realtime'
+                    {suggestion.sources[0].sourceType === "realtime"
                       ? suggestion.sources[0].rosTopicName
-                      : suggestion.sources[0].sourceType === 'hardware'
+                      : suggestion.sources[0].sourceType === "hardware"
                         ? suggestion.sources[0].rtcStreamName
                         : suggestion.sources[0].streamName}
                     ]
@@ -187,7 +187,7 @@ export class AddLayerModal extends Component<
               {value.description}
               :
               <TextField
-                value={value.value || ''}
+                value={value.value || ""}
                 placeholder={value.placeholder}
                 onChange={this.onTextFieldChange.bind({
                   fields: this.currentFields,
@@ -197,7 +197,7 @@ export class AddLayerModal extends Component<
               />
             </React.Fragment>
           ))}
-          {selectedItem === 'data' && (
+          {selectedItem === "data" && (
             <>
               <DialogContentText>
                 Select a device you'd like to use a source of data:

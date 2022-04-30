@@ -7,32 +7,32 @@ import {
   ShapeGeometry,
   Texture,
   TextureLoader,
-} from 'three';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
-import { TransformLayer } from './TransformLayer';
+} from "three";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { TransformLayer } from "./TransformLayer";
 import {
   LayerField,
   LayerFields,
   UniverseLayerContent,
-} from './UniverseLayerContent';
-import { SVGLoader } from '../../three-utils/SVGLoader';
+} from "./UniverseLayerContent";
+import { SVGLoader } from "../../three-utils/SVGLoader";
 
 export class ImageLayer extends UniverseLayerContent {
-  static id = 'image';
+  static id = "image";
 
-  static commonName = 'Image';
+  static commonName = "Image";
 
-  static description = 'A image plane model.';
+  static description = "A image plane model.";
 
   static usesData = false;
 
   static fields = {
     url: {
-      name: 'URL',
-      description: 'The URL image to use as a texture',
-      placeholder: 'https://example.com/image.png',
-      value: '',
-      type: 'text',
+      name: "URL",
+      description: "The URL image to use as a texture",
+      placeholder: "https://example.com/image.png",
+      value: "",
+      type: "text",
     },
   };
 
@@ -47,8 +47,8 @@ export class ImageLayer extends UniverseLayerContent {
 
   constructor(urlField?: LayerField) {
     super();
-    if (urlField && urlField.type === 'text' && urlField.value) {
-      const isSvg = urlField.value.toLowerCase().endsWith('.svg');
+    if (urlField && urlField.type === "text" && urlField.value) {
+      const isSvg = urlField.value.toLowerCase().endsWith(".svg");
       if (isSvg) {
         const loader = new SVGLoader();
         loader.load(urlField.value, (data) => {

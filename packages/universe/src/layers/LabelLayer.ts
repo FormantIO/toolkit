@@ -1,12 +1,12 @@
-import { Sprite, SpriteMaterial, Texture } from 'three';
-import { definedAndNotNull } from '../../../common/defined';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
-import { TransformLayer } from './TransformLayer';
+import { Sprite, SpriteMaterial, Texture } from "three";
+import { definedAndNotNull } from "../../../common/defined";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { TransformLayer } from "./TransformLayer";
 import {
   LayerField,
   LayerFields,
   UniverseLayerContent,
-} from './UniverseLayerContent';
+} from "./UniverseLayerContent";
 
 function roundRect(
   ctx: CanvasRenderingContext2D,
@@ -32,21 +32,21 @@ function roundRect(
   ctx.fill();
 }
 export class LabelLayer extends UniverseLayerContent {
-  static id = 'label';
+  static id = "label";
 
-  static commonName = 'Label';
+  static commonName = "Label";
 
-  static description = 'A text label';
+  static description = "A text label";
 
   static usesData = false;
 
   static fields = {
     label_text: {
-      name: 'Label Text',
+      name: "Label Text",
       description: "The text you'd like to show in the label",
-      placeholder: 'hello world',
-      value: '',
-      type: 'text',
+      placeholder: "hello world",
+      value: "",
+      type: "text",
     },
   };
 
@@ -63,16 +63,16 @@ export class LabelLayer extends UniverseLayerContent {
     super();
     if (
       labelTextField
-      && labelTextField.type === 'text'
+      && labelTextField.type === "text"
       && labelTextField.value
     ) {
-      const fontface = 'Arial';
+      const fontface = "Arial";
       const fontsize = 30;
       const message = labelTextField.value;
       const font = `${fontsize}px ${fontface}`;
 
-      const canvas = document.createElement('canvas');
-      const context = definedAndNotNull(canvas.getContext('2d'));
+      const canvas = document.createElement("canvas");
+      const context = definedAndNotNull(canvas.getContext("2d"));
 
       // get size data (height depends only on font size)
       context.font = font;
@@ -82,7 +82,7 @@ export class LabelLayer extends UniverseLayerContent {
       const padding = 20;
       canvas.width = textWidth + padding;
       canvas.height = textHeight + padding;
-      context.fillStyle = '#000000';
+      context.fillStyle = "#000000";
       roundRect(
         context,
         0,
@@ -90,12 +90,12 @@ export class LabelLayer extends UniverseLayerContent {
         textWidth + padding,
         textHeight + padding,
         10,
-        '#000000',
+        "#000000",
       );
 
       // background color
       context.font = font;
-      context.fillStyle = '#bac4e2';
+      context.fillStyle = "#bac4e2";
       context.fillText(message, 0 + 10, fontsize + 10);
 
       // canvas contents will be used for a texture

@@ -1,14 +1,14 @@
-import { GroundPlane } from './GroundPlane';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
-import { TransformLayer } from './TransformLayer';
-import { UniverseLayerContent } from './UniverseLayerContent';
+import { GroundPlane } from "./GroundPlane";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { TransformLayer } from "./TransformLayer";
+import { UniverseLayerContent } from "./UniverseLayerContent";
 
 export class GroundLayer extends UniverseLayerContent {
-  static id = 'ground';
+  static id = "ground";
 
-  static commonName = 'Ground';
+  static commonName = "Ground";
 
-  static description = 'A flat plane to represent the ground.';
+  static description = "A flat plane to represent the ground.";
 
   static usesData = false;
 

@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { DialogContentText, Select } from '@formant/ui-sdk';
-import { defined } from '../../../common/defined';
-import { ITransformNode } from '../../../data-sdk/src/model/ITransformNode';
-import { TreeElement, TreePath } from '../ITreeElement';
-import { IUniverseData } from '../IUniverseData';
-import { SortableTree } from '../SortableTree';
-import { Modal } from '../modals/Modal';
+import * as React from "react";
+import { Component } from "react";
+import { DialogContentText, Select } from "@formant/ui-sdk";
+import { defined } from "../../../common/defined";
+import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
+import { TreeElement, TreePath } from "../ITreeElement";
+import { IUniverseData } from "../IUniverseData";
+import { SortableTree } from "../SortableTree";
+import { Modal } from "../modals/Modal";
 
 interface ISelectTransformPathModalProps {
   universeData: IUniverseData;
@@ -44,7 +44,7 @@ export class SelectTransformPathModal extends Component<
   getSelectedTitle(treeElements: TreeElement[], path: TreePath): string {
     const i = path.shift();
     if (i === undefined) {
-      throw new Error('Invalid path');
+      throw new Error("Invalid path");
     }
     const element = defined(treeElements[i]);
     if (path.length === 0) {

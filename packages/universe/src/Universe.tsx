@@ -1,17 +1,17 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { Vector3 } from 'three';
+import * as React from "react";
+import { Component } from "react";
+import { Vector3 } from "three";
 import {
   Box, Button, Icon, Select, Stack, Typography,
-} from '@formant/ui-sdk';
-import styled from 'styled-components';
-import { defined, definedAndNotNull } from '../../common/defined';
-import { LayerType } from './layers';
-import { LayerRegistry } from './layers/LayerRegistry';
+} from "@formant/ui-sdk";
+import styled from "styled-components";
+import { defined, definedAndNotNull } from "../../common/defined";
+import { LayerType } from "./layers";
+import { LayerRegistry } from "./layers/LayerRegistry";
 import {
   extractLayerFieldValues,
   LayerFields,
-} from './layers/UniverseLayerContent';
+} from "./layers/UniverseLayerContent";
 import {
   cloneSceneGraph,
   findSceneGraphElement,
@@ -20,15 +20,15 @@ import {
   SceneGraphElement,
   visitSceneGraphElement,
   visitSceneGraphElementReverse,
-} from './SceneGraph';
-import { TreeElement, TreePath, treePathEquals } from './ITreeElement';
-import { IUniverseData, UniverseDataSource } from './IUniverseData';
-import { UniverseSidebar } from './sidebar';
-import { UniverseViewer } from './viewer';
-import { AddLayerModal } from './modals/AddLayerModal';
-import { RenameLayerModal } from './modals/RenameLayerModal';
-import { SelectLocationModal } from './modals/SelectLocationModal';
-import { SelectTransformPathModal } from './modals/SelectTransformPathModal';
+} from "./SceneGraph";
+import { TreeElement, TreePath, treePathEquals } from "./ITreeElement";
+import { IUniverseData, UniverseDataSource } from "./IUniverseData";
+import { UniverseSidebar } from "./sidebar";
+import { UniverseViewer } from "./viewer";
+import { AddLayerModal } from "./modals/AddLayerModal";
+import { RenameLayerModal } from "./modals/RenameLayerModal";
+import { SelectLocationModal } from "./modals/SelectLocationModal";
+import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 
 const UniverseContainer = styled.div`
   height: 100%;
@@ -47,7 +47,7 @@ const PropertyRow = styled.div`
 
 export interface IUniverseProps {
   universeData: IUniverseData;
-  mode?: 'edit' | 'view' | 'no-interaction';
+  mode?: "edit" | "view" | "no-interaction";
   vr?: boolean;
 }
 
@@ -73,7 +73,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     };
   }
 
-  private currentlyEditingName: string = '';
+  private currentlyEditingName: string = "";
 
   private viewer: UniverseViewer | undefined;
 
@@ -88,22 +88,22 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     const { deviceId } = this.props.universeData.getDeviceContexts()[0];
     const deviceName = this.props.universeData.getDeviceContextName(deviceId);
     // Add some nice default layers
-    this.onAddLayer('data', undefined, undefined, deviceName, deviceId);
-    this.onAddLayer('ground');
+    this.onAddLayer("data", undefined, undefined, deviceName, deviceId);
+    this.onAddLayer("ground");
     this.currentPath = [0];
     this.onAddLayer(
-      'label',
+      "label",
       undefined,
       {
         label_text: {
-          type: 'text',
+          type: "text",
           value: deviceName,
-          description: '',
-          placeholder: '',
-          name: '',
+          description: "",
+          placeholder: "",
+          name: "",
         },
       },
-      'Label',
+      "Label",
       deviceId,
     );
     this.forceUpdate();
@@ -259,7 +259,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-    let color = '#';
+    let color = "#";
     for (let i = 0; i < 3; i++) {
       const value = (hash >> (i * 8)) & 0xff;
       color += (`00${value.toString(16)}`).substr(-2);
@@ -281,16 +281,16 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       textColor: color,
       icons: [
         {
-          icon: element.visible ? 'eye' : 'eye_closed',
-          description: 'click to toggle visibility',
+          icon: element.visible ? "eye" : "eye_closed",
+          description: "click to toggle visibility",
         },
         {
-          icon: 'edit',
-          description: 'edit',
-          color: element.editing ? '#18d2ff' : 'white',
+          icon: "edit",
+          description: "edit",
+          color: element.editing ? "#18d2ff" : "white",
         },
         {
-          icon: 'help',
+          icon: "help",
           description: LayerRegistry.getDescription(element.type),
         },
       ],
@@ -301,11 +301,11 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   private buildTree(): TreeElement[] {
     return [
       {
-        title: 'Universe',
+        title: "Universe",
         icons: [
           {
-            icon: 'help',
-            description: 'This is your entire collection of layers.',
+            icon: "help",
+            description: "This is your entire collection of layers.",
           },
         ],
         children: this.sceneGraph.map((_, i) => this.buildSubTree(_, [i])),
@@ -367,9 +367,9 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       const el = definedAndNotNull(
         findSceneGraphElement(this.sceneGraph, path),
       );
-      if (el.position.type === 'manual') {
+      if (el.position.type === "manual") {
         el.position = {
-          type: 'manual',
+          type: "manual",
           x: transform.x,
           y: transform.y,
           z: transform.z,
@@ -398,22 +398,22 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         defined(this.state.currentlySelectedElement),
       ),
     );
-    if (positionType === 'manual') {
+    if (positionType === "manual") {
       element.position = {
-        type: 'manual',
+        type: "manual",
         x: 0,
         y: 0,
         z: 0,
       };
-    } else if (positionType === 'gps') {
+    } else if (positionType === "gps") {
       element.position = {
-        type: 'gps',
+        type: "gps",
         relativeToLongitude: 0,
         relativeToLatitude: 0,
       };
-    } else if (positionType === 'transform tree') {
+    } else if (positionType === "transform tree") {
       element.position = {
-        type: 'transform tree',
+        type: "transform tree",
       };
     }
     this.forceUpdate();
@@ -430,7 +430,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       ),
     );
     element.position = {
-      type: 'transform tree',
+      type: "transform tree",
       stream: name,
       end,
     };
@@ -456,7 +456,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       ),
     );
     element.position = {
-      type: 'gps',
+      type: "gps",
       stream: name,
       relativeToLongitude: relativeToLong,
       relativeToLatitude: relativeToLat,
@@ -522,13 +522,13 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       if (element) currentContext = element.deviceContext || parentContext;
     }
 
-    const showSidebar = mode === 'edit' && sidebarOpen;
+    const showSidebar = mode === "edit" && sidebarOpen;
 
     return (
       <UniverseContainer>
         <Box
-          display={showSidebar ? 'grid' : 'block'}
-          gridTemplateColumns={showSidebar ? '370px 1fr' : undefined}
+          display={showSidebar ? "grid" : "block"}
+          gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
         >
           {showSidebar && (
             <UniverseSidebar
@@ -548,12 +548,12 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                     {currentContext !== undefined && (
                       <PropertyRow>
                         device:
-                        {' '}
+                        {" "}
                         {currentContext !== undefined
                           ? this.props.universeData.getDeviceContextName(
                             currentContext,
                           )
-                          : 'none'}
+                          : "none"}
                       </PropertyRow>
                     )}
                     <div>
@@ -565,43 +565,43 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                             value={element.position.type}
                             onChange={this.onChangePositionType}
                             items={[
-                              'manual',
+                              "manual",
                               ...(element.deviceContext || hasParentContext
-                                ? ['transform tree', 'gps']
+                                ? ["transform tree", "gps"]
                                 : []),
                             ].map((_) => ({ label: _, value: _ }))}
                           />
                         </div>
-                        {element.position.type === 'manual' && (
+                        {element.position.type === "manual" && (
                           <div>
                             <Typography variant="body1">
                               x:
-                              {' '}
+                              {" "}
                               {element.position.x.toFixed(4)}
                               <br />
                               y:
-                              {' '}
+                              {" "}
                               {element.position.y.toFixed(4)}
                               <br />
                               z:
-                              {' '}
+                              {" "}
                               {element.position.z.toFixed(4)}
                             </Typography>
                           </div>
                         )}
-                        {element.position.type === 'gps' && (
+                        {element.position.type === "gps" && (
                           <div>
                             <Typography variant="body1">
                               stream:
-                              {' '}
+                              {" "}
                               {element.position.stream}
                               <br />
                               relative to longitude:
-                              {' '}
+                              {" "}
                               {element.position.relativeToLongitude}
                               <br />
                               relative to latitude:
-                              {' '}
+                              {" "}
                               {element.position.relativeToLatitude}
                             </Typography>
                             <Button
@@ -612,15 +612,15 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                             </Button>
                           </div>
                         )}
-                        {element.position.type === 'transform tree' && (
+                        {element.position.type === "transform tree" && (
                           <div>
                             <Typography variant="body1">
                               stream:
-                              {' '}
+                              {" "}
                               {element.position.stream}
                               <br />
                               transform:
-                              {' '}
+                              {" "}
                               {element.position.end}
                             </Typography>
                             <Button
@@ -638,7 +638,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
               )}
             </UniverseSidebar>
           )}
-          <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+          <Box sx={{ position: "relative", overflow: "hidden" }}>
             <UniverseViewer
               ref={this.onViewerLoaded}
               sceneGraph={this.sceneGraph}
@@ -651,7 +651,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
               <Control onClick={this.recenter}>
                 <Icon name="recenter" />
               </Control>
-              {mode === 'edit' && (
+              {mode === "edit" && (
                 <Control onClick={this.toggleSidebar}>
                   <Icon name="edit" />
                 </Control>

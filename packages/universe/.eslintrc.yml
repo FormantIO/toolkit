@@ -17,5 +17,6 @@ rules:
   "import/extensions":
     ["error", "ignorePackages", { "ts": "never", "tsx": "never" }]
   "react/jsx-filename-extension": ["error", { "extensions": [".tsx", ".jsx"] }]
+  "quotes": [2, "double", "avoid-escape"]
   "no-unused-vars": "off"
   "@typescript-eslint/no-unused-vars": ["error"]

@@ -1,8 +1,8 @@
-import { Button } from '@formant/ui-sdk';
-import React from 'react';
-import styled from 'styled-components';
-import { TreeElement, TreePath, treePathEquals } from '../ITreeElement';
-import { SortableTree } from '../SortableTree';
+import { Button } from "@formant/ui-sdk";
+import React from "react";
+import styled from "styled-components";
+import { TreeElement, TreePath, treePathEquals } from "../ITreeElement";
+import { SortableTree } from "../SortableTree";
 
 const SidebarContainer = styled.div`
   background-color: #2d3855;
@@ -80,7 +80,7 @@ export function UniverseSidebar({
 
   return (
     <SidebarContainer>
-      {' '}
+      {" "}
       <div>
         <SortableTree
           items={tree}

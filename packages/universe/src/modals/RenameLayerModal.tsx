@@ -1,7 +1,7 @@
-import { DialogContentText, Stack, TextField } from '@formant/ui-sdk';
-import * as React from 'react';
-import { Component } from 'react';
-import { Modal } from '../modals/Modal';
+import { DialogContentText, Stack, TextField } from "@formant/ui-sdk";
+import * as React from "react";
+import { Component } from "react";
+import { Modal } from "../modals/Modal";
 
 interface IRenameLayerModalProps {
   name: string;

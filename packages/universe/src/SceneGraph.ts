@@ -1,23 +1,23 @@
-import { v4 as uuid } from 'uuid';
-import { UniverseDataSource } from './IUniverseData';
-import { LayerType } from './layers';
-import { LayerFieldValues } from './layers/UniverseLayerContent';
-import { TreePath } from './ITreeElement';
+import { v4 as uuid } from "uuid";
+import { UniverseDataSource } from "./IUniverseData";
+import { LayerType } from "./layers";
+import { LayerFieldValues } from "./layers/UniverseLayerContent";
+import { TreePath } from "./ITreeElement";
 
 export type Positioning =
   | {
-      type: 'manual';
+      type: "manual";
       x: number;
       y: number;
       z: number;
     }
   | {
-      type: 'transform tree';
+      type: "transform tree";
       stream?: string;
       end?: string;
     }
   | {
-      type: 'gps';
+      type: "gps";
       stream?: string;
       relativeToLongitude: number;
       relativeToLatitude: number;
@@ -32,7 +32,7 @@ export class SceneGraphElement {
   public editing: boolean = false;
 
   public position: Positioning = {
-    type: 'manual', x: 0, y: 0, z: 0,
+    type: "manual", x: 0, y: 0, z: 0,
   };
 
   public fieldValues: LayerFieldValues = {};

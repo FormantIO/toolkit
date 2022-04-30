@@ -1,4 +1,4 @@
-import { IUniverseData, UniverseDataSource } from './IUniverseData';
+import { IUniverseData, UniverseDataSource } from "./IUniverseData";
 
 export class SimulatedUniverseData implements IUniverseData {
   async getTransformTrees(): Promise<{ name: string; transformTree: any }[]> {
@@ -10,11 +10,11 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   getDeviceContexts(): { deviceName: string; deviceId: string }[] {
-    return [{ deviceName: 'My Robot', deviceId: 'abc' }];
+    return [{ deviceName: "My Robot", deviceId: "abc" }];
   }
 
   getDeviceContextName(_deviceId: string): string | undefined {
-    return 'My Robot';
+    return "My Robot";
   }
 
   getTelemetryStreamType(
@@ -46,6 +46,6 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   get deviceId(): string {
-    return 'abc';
+    return "abc";
   }
 }

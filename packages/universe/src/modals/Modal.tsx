@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Button,
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
-} from '@formant/ui-sdk';
+} from "@formant/ui-sdk";
 
 export interface IModalProps {
   title: string;

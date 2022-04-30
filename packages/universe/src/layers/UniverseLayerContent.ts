@@ -1,7 +1,7 @@
-import { Object3D, PerspectiveCamera } from 'three';
-import { IUniverseData, UniverseDataSource } from '../IUniverseData';
-import { LayerSuggestion } from './LayerRegistry';
-import { TransformLayer } from './TransformLayer';
+import { Object3D, PerspectiveCamera } from "three";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { LayerSuggestion } from "./LayerRegistry";
+import { TransformLayer } from "./TransformLayer";
 
 export interface TextLayerFieldValue {
   type: string;
@@ -67,6 +67,6 @@ export abstract class UniverseLayerContent extends Object3D {
     _fields?: LayerFields,
     _camera?: () => PerspectiveCamera,
   ): TransformLayer<UniverseLayerContent> {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 }
