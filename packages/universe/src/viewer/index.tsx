@@ -38,6 +38,7 @@ export interface IUniverseViewerProps {
   sceneGraph: SceneGraphElement[];
   deviceId: string;
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
+  vr?: boolean;
 }
 
 export class UniverseViewer extends Component<IUniverseViewerProps> {
@@ -92,6 +93,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public componentDidMount() {
     const { element } = this;
+    const { vr } = this.props;
     if (element) {
       this.renderer = new WebGLRenderer({
         alpha: true,
@@ -125,7 +127,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
           this.orbitControls.update();
         }
       });
-      element.appendChild(VRButton.createButton(this.renderer));
+      if (vr) element.appendChild(VRButton.createButton(this.renderer));
     }
   }
 
