@@ -1,18 +1,18 @@
-import { DataLayer } from "./layers/DataLayer";
-import { LabelLayer } from "./layers/LabelLayer";
-import { LayerRegistry } from "./layers/LayerRegistry";
-import { TransformLayer } from "./layers/TransformLayer";
-import { GroundLayer } from "./layers/GroundLayer";
-import { ImageLayer } from "./layers/ImageLayer";
-import { GltfLayer } from "./layers/GltfLayer";
+import { DataLayer } from './layers/DataLayer';
+import { LabelLayer } from './layers/LabelLayer';
+import { LayerRegistry } from './layers/LayerRegistry';
+import { TransformLayer } from './layers/TransformLayer';
+import { GroundLayer } from './layers/GroundLayer';
+import { ImageLayer } from './layers/ImageLayer';
+import { GltfLayer } from './layers/GltfLayer';
 
-export * from "./Universe";
-export * from "./IUniverseData";
-export * from "./layers/LayerRegistry";
-export * from "./layers/UniverseLayerContent";
-export * from "./layers/TransformLayer";
-export * from "./sidebar";
-export * from "./SimulatedUniverseData";
+export * from './Universe';
+export * from './IUniverseData';
+export * from './layers/LayerRegistry';
+export * from './layers/UniverseLayerContent';
+export * from './layers/TransformLayer';
+export * from './sidebar';
+export * from './SimulatedUniverseData';
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
