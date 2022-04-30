@@ -1,19 +1,19 @@
 export interface UniverseRosDataSource {
   id: string;
-  sourceType: 'realtime';
+  sourceType: "realtime";
   rosTopicName: string;
   rosTopicType: string;
 }
 
 export interface UniverseHardwareDataSource {
   id: string;
-  sourceType: 'hardware';
+  sourceType: "hardware";
   rtcStreamName: string;
 }
 
 export interface UniverseTelemetrySource {
   id: string;
-  sourceType: 'telemetry';
+  sourceType: "telemetry";
   streamName: string;
   streamType: string;
 }
@@ -32,7 +32,7 @@ export interface IUniverseData {
   >;
   getLocations(): Promise<any>;
   getDeviceContexts(): { deviceName: string; deviceId: string }[];
-  getDeviceContextName(string): string | undefined;
+  getDeviceContextName(deviceId: string): string | undefined;
   getTelemetryStreamType(
     deviceId: string,
     streamName: string
