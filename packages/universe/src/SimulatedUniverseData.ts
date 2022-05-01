@@ -52,4 +52,8 @@ export class SimulatedUniverseData implements IUniverseData {
   getTeleopRosStreams(): any[] {
     return [];
   }
+
+  async getUrdfs(_deviceId: string): Promise<any> {
+    return [];
+  }
 }

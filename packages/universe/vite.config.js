@@ -19,6 +19,9 @@ module.exports = defineConfig({
         "styled-components",
         "geolib",
         "uuid",
+        "jszip",
+        "lzfjs",
+        "urdf-loader",
       ],
       output: {
         // Provide global variables to use in the UMD build
