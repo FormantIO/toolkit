@@ -1,4 +1,4 @@
-import { ITransform } from "../../../data-sdk/src/model/ITransform";
+import { ITransform } from "./ITransform";
 
 export interface IRtcPointCloud {
   world_to_local?: ITransform;
