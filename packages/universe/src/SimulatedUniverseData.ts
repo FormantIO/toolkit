@@ -24,7 +24,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   getDeviceContexts(): { deviceName: string; deviceId: string }[] {
-    return [];
+    return [{ deviceName: "My Robot", deviceId: "abc" }];
   }
 
   getDeviceContextName(_deviceId: string): string | undefined {
@@ -49,7 +49,7 @@ export class SimulatedUniverseData implements IUniverseData {
   >(_source: UniverseDataSource, _callback: (data: T) => void): void {}
 
   get deviceId(): string {
-    return "abc123";
+    return "abc";
   }
 
   getTelemetryStreams(): ITelemetryStream[] {
