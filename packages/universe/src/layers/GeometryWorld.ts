@@ -81,6 +81,7 @@ function reifyColor(v: IColorRGBA) {
 
 export class GeometryWorld {
   geometry: Map<string, Map<number, Geometry>> = new Map();
+
   processMarkers(markers: IMarker3DArray) {
     markers.markers.forEach((marker) => {
       let ns = this.geometry.get(marker.ns);
@@ -107,7 +108,7 @@ export class GeometryWorld {
         if (marker.type === "line_list") {
           if (marker.action === "add" || marker.action === "modify") {
             ns.set(marker.id, {
-              id: marker.ns + "_" + marker.id,
+              id: `${marker.ns  }_${  marker.id}`,
               type: marker.type,
               position: marker.pose.translation,
               rotation: marker.pose.rotation,
@@ -122,7 +123,7 @@ export class GeometryWorld {
         } else if (marker.type === "sphere" || marker.type === "cube") {
           if (marker.action === "add" || marker.action === "modify") {
             ns.set(marker.id, {
-              id: marker.ns + "_" + marker.id,
+              id: `${marker.ns  }_${  marker.id}`,
               type: marker.type,
               position: marker.pose.translation,
               rotation: marker.pose.rotation,
@@ -136,7 +137,7 @@ export class GeometryWorld {
         } else if (marker.type === "arrow") {
           if (marker.action === "add" || marker.action === "modify") {
             ns.set(marker.id, {
-              id: marker.ns + "_" + marker.id,
+              id: `${marker.ns  }_${  marker.id}`,
               type: marker.type,
               position: marker.pose.translation,
               rotation: marker.pose.rotation,
@@ -151,7 +152,7 @@ export class GeometryWorld {
         } else if (marker.type === "text_view_facing") {
           if (marker.action === "add" || marker.action === "modify") {
             ns.set(marker.id, {
-              id: marker.ns + "_" + marker.id,
+              id: `${marker.ns  }_${  marker.id}`,
               type: "text",
               position: marker.pose.translation,
               rotation: marker.pose.rotation,

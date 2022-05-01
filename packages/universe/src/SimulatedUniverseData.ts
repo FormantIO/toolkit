@@ -19,7 +19,7 @@ export class SimulatedUniverseData implements IUniverseData {
     _deviceId: string,
     _streamName: string
   ): string | undefined {
-    return;
+    return undefined;
   }
 
   subscribeToDataSource(

@@ -10,14 +10,27 @@ import {
 } from "three";
 import { range } from "../../../common/range";
 
-export class GroundPlane extends Group {
-  constructor(
-    color2: Color = new Color(0x68686a),
-    color3: Color = new Color(0xa8a8a8),
-  ) {
-    super();
-    this.add(polarGrid(color3, color2));
-  }
+function polarGridCircle(
+  radius: number,
+  circleColor: Color,
+  points: number = 36
+) {
+  const curve = new EllipseCurve(
+    0,
+    0,
+    radius,
+    radius,
+    0,
+    2 * Math.PI,
+    false,
+    0
+  );
+  const path = new Path(curve.getPoints(points));
+  const geometry = new BufferGeometry().setFromPoints(path.getPoints());
+  const material = new LineBasicMaterial({
+    color: circleColor,
+  });
+  return new Line(geometry, material);
 }
 
 function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {
@@ -29,7 +42,7 @@ function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {
       const major = i === 10;
       const r = 10 ** magnitude * i;
       mesh.add(
-        polarGridCircle(r, major ? majorCircleColor : minorCircleColor, 36),
+        polarGridCircle(r, major ? majorCircleColor : minorCircleColor, 36)
       );
     });
   });
@@ -37,25 +50,12 @@ function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {
   return mesh;
 }
 
-function polarGridCircle(
-  radius: number,
-  circleColor: Color,
-  points: number = 36,
-) {
-  const curve = new EllipseCurve(
-    0,
-    0,
-    radius,
-    radius,
-    0,
-    2 * Math.PI,
-    false,
-    0,
-  );
-  const path = new Path(curve.getPoints(points));
-  const geometry = new BufferGeometry().setFromPoints(path.getPoints());
-  const material = new LineBasicMaterial({
-    color: circleColor,
-  });
-  return new Line(geometry, material);
+export class GroundPlane extends Group {
+  constructor(
+    color2: Color = new Color(0x68686a),
+    color3: Color = new Color(0xa8a8a8)
+  ) {
+    super();
+    this.add(polarGrid(color3, color2));
+  }
 }
