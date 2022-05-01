@@ -63,7 +63,7 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
           })
         ).replace(`blob:${location.origin}/`, "");
         // replace the reference to the model in the root urdf
-        urdf = urdf.replace(new RegExp("package://" + f, "g"), modelUrl);
+        urdf = urdf.replace(new RegExp(`package://${  f}`, "g"), modelUrl);
 
         urdf = urdf.replace(new RegExp(f, "g"), modelUrl);
       }
