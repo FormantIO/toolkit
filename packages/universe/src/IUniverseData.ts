@@ -1,3 +1,12 @@
+import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
+import { IJointState } from "../../data-sdk/src/model/IJointState";
+import { ILocation } from "../../data-sdk/src/model/ILocation";
+import { IMap } from "../../data-sdk/src/model/IMap";
+import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
+import { IStreamCurrentValue } from "../../data-sdk/src/model/IStreamCurrentValue";
+import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
+import { IRtcPointCloud } from "./layers/IRtcPointCloud";
+
 export interface UniverseRosDataSource {
   id: string;
   sourceType: "realtime";
@@ -23,6 +32,23 @@ export type UniverseDataSource =
   | UniverseTelemetrySource
   | UniverseHardwareDataSource;
 
+export interface ITelemetryStream {
+  name: string;
+  disabled: boolean;
+  configuration: {
+    type: string;
+    mapTopic: string;
+  };
+}
+export interface ITelemetryRosStream {
+  topicName: string;
+  topicType: string;
+}
+export interface IHardwareStream {
+  rtcStreamType: string;
+  name: string;
+}
+
 export interface IUniverseData {
   getTransformTrees(): Promise<
     {
@@ -30,28 +56,36 @@ export interface IUniverseData {
       transformTree: any;
     }[]
   >;
-  getLocations(): Promise<any>;
+  getLocations(): Promise<IStreamCurrentValue<"location">[]>;
   getDeviceContexts(): { deviceName: string; deviceId: string }[];
   getDeviceContextName(deviceId: string): string | undefined;
   getTelemetryStreamType(
     deviceId: string,
     streamName: string
   ): string | undefined;
-  subscribeToDataSource(
+  subscribeToDataSource<
+    T extends
+      | IRtcPointCloud
+      | IMarker3DArray
+      | IJointState
+      | IMap
+      | IH264VideoFrame
+      | ITransformNode
+  >(
     source: UniverseDataSource,
-    callback: (data: any) => void
+    callback: (data: T) => void
   ): void;
+  get deviceId(): string;
+  getTelemetryStreams(): ITelemetryStream[];
+  getTeleopRosStreams(): ITelemetryRosStream[];
+  getUrdfs(deviceId: string): Promise<string[]>;
+  getHardwareStreams(): IHardwareStream[];
   subscribeToTransformTree(
     streamName: string,
-    callback: (data: any) => void
+    callback: (data: ITransformNode) => void
   ): () => void;
   subscribeToLocation(
     streamName: string,
-    callback: (data: any) => void
+    callback: (data: ILocation) => void
   ): () => void;
-  get deviceId(): string;
-  getTelemetryStreams(): any[];
-  getTeleopRosStreams(): any[];
-  getUrdfs(deviceId: string): Promise<any>;
-  getHardwareStreams(): any[];
 }
