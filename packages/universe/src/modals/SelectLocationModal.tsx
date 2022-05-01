@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Component } from "react";
 import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
-import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
 import { IUniverseData } from "../IUniverseData";
 import { Modal } from "./Modal";
+import { ILocation } from "../../../data-sdk/src/model/ILocation";
 
 interface ISelectLocationModalProps {
   universeData: IUniverseData;
@@ -19,7 +19,7 @@ interface ISelectLocationModalState {
   relativeToLong: number;
   relativeToLat: number;
   locationStreamName: string | undefined;
-  items: IStreamCurrentValue<"location">[];
+  items: { streamName: string; location: ILocation }[];
 }
 
 export class SelectLocationModal extends Component<
@@ -39,13 +39,13 @@ export class SelectLocationModal extends Component<
 
   async componentDidMount() {
     this.setState({
-      items: await this.props.universeData.getLocations(),
+      items: await this.props.universeData.getLatestLocations(),
     });
     if (this.state.items.length > 0) {
       this.setState({
         locationStreamName: this.state.items[0].streamName,
-        relativeToLong: this.state.items[0].currentValue.longitude,
-        relativeToLat: this.state.items[0].currentValue.latitude,
+        relativeToLong: this.state.items[0].location.longitude,
+        relativeToLat: this.state.items[0].location.latitude,
       });
     }
   }
@@ -92,7 +92,7 @@ export class SelectLocationModal extends Component<
       >
         <Stack spacing={2}>
           <DialogContentText>
-            Select the location stream you'd like to use and it's relative
+            Select the location stream you would like to use and it's relative
             longitude and latitude:
           </DialogContentText>
           <div>

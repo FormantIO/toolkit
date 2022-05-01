@@ -24,18 +24,15 @@ export class SelectTransformPathModal extends Component<
   ISelectTransformPathModalProps,
   ISelectTransformPathModalState
 > {
-  buildTransformTreeElement(tree: ITransformNode): TreeElement {
-    return {
-      title: defined(tree.name),
-      children: tree.children?.map((_) => this.buildTransformTreeElement(_)),
-    };
-  }
-
   async componentDidMount() {
-    const transformTrees = await this.props.universeData.getTransformTrees();
+    const transformTrees =
+      await this.props.universeData.getLatestTransformTrees();
     const trees = new Map<string, TreeElement>();
     transformTrees.forEach((tree) =>
-      trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree))
+      trees.set(
+        tree.streamName,
+        this.buildTransformTreeElement(tree.transformTree)
+      )
     );
     this.setState({
       items: trees,
@@ -80,6 +77,13 @@ export class SelectTransformPathModal extends Component<
     });
   };
 
+  buildTransformTreeElement(tree: ITransformNode): TreeElement {
+    return {
+      title: defined(tree.name),
+      children: tree.children?.map((_) => this.buildTransformTreeElement(_)),
+    };
+  }
+
   public render() {
     const { onCancel } = this.props;
     let items;
@@ -98,7 +102,7 @@ export class SelectTransformPathModal extends Component<
         onClose={onCancel}
       >
         <DialogContentText>
-          Select the transform path you'd like to use
+          Select the transform path you would like to use
         </DialogContentText>
         {items && (
           <>

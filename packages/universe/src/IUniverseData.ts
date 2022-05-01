@@ -3,7 +3,6 @@ import { IJointState } from "../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMap } from "../../data-sdk/src/model/IMap";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
-import { IStreamCurrentValue } from "../../data-sdk/src/model/IStreamCurrentValue";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { IRtcPointCloud } from "./layers/IRtcPointCloud";
 
@@ -34,10 +33,10 @@ export type UniverseDataSource =
 
 export interface ITelemetryStream {
   name: string;
-  disabled: boolean;
+  disabled?: boolean;
   configuration: {
     type: string;
-    mapTopic: string;
+    mapTopic?: string;
   };
 }
 export interface ITelemetryRosStream {
@@ -50,13 +49,13 @@ export interface IHardwareStream {
 }
 
 export interface IUniverseData {
-  getTransformTrees(): Promise<
+  getLatestTransformTrees(): Promise<
     {
-      name: string;
+      streamName: string;
       transformTree: any;
     }[]
   >;
-  getLocations(): Promise<IStreamCurrentValue<"location">[]>;
+  getLatestLocations(): Promise<{ streamName: string; location: ILocation }[]>;
   getDeviceContexts(): { deviceName: string; deviceId: string }[];
   getDeviceContextName(deviceId: string): string | undefined;
   getTelemetryStreamType(

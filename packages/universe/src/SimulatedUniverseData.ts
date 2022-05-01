@@ -3,7 +3,6 @@ import { IJointState } from "../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMap } from "../../data-sdk/src/model/IMap";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
-import { IStreamCurrentValue } from "../../data-sdk/src/model/IStreamCurrentValue";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import {
   IHardwareStream,
@@ -15,11 +14,25 @@ import {
 import { IRtcPointCloud } from "./layers/IRtcPointCloud";
 
 export class SimulatedUniverseData implements IUniverseData {
-  async getTransformTrees(): Promise<{ name: string; transformTree: any }[]> {
-    return [];
+  async getLatestTransformTrees(): Promise<
+    { streamName: string; transformTree: ITransformNode }[]
+  > {
+    return [
+      {
+        streamName: "spotTf",
+        transformTree: await fetch(
+          "https://upload.formant.io/0d29f656-cc1c-4b9e-baad-199cfa1fcced/b0990d5a-cdff-4c3c-ab71-c6c72be385ad/2022/05/1/af202124-bab3-4191-8948-458dc96efaef"
+        ).then((_) => _.json() as ITransformNode),
+      },
+    ];
   }
 
-  async getLocations(): Promise<IStreamCurrentValue<"location">[]> {
+  async getLatestLocations(): Promise<
+    {
+      streamName: string;
+      location: ILocation;
+    }[]
+  > {
     return [];
   }
 
@@ -50,8 +63,11 @@ export class SimulatedUniverseData implements IUniverseData {
 
   getTelemetryStreamType(
     _deviceId: string,
-    _streamName: string
+    streamName: string
   ): string | undefined {
+    if (streamName === "spotTf") {
+      return "transform tree";
+    }
     return undefined;
   }
 
@@ -130,7 +146,14 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   getTelemetryStreams(): ITelemetryStream[] {
-    return [];
+    return [
+      {
+        name: "spotTf",
+        configuration: {
+          type: "transform tree",
+        },
+      },
+    ];
   }
 
   getTeleopRosStreams(): ITelemetryRosStream[] {
@@ -158,8 +181,11 @@ export class SimulatedUniverseData implements IUniverseData {
 
   subscribeToTransformTree(
     _source: UniverseDataSource,
-    _callback: (data: ITransformNode) => void
+    callback: (data: ITransformNode) => void
   ): () => void {
+    callback({
+      url: "https://upload.formant.io/0d29f656-cc1c-4b9e-baad-199cfa1fcced/b0990d5a-cdff-4c3c-ab71-c6c72be385ad/2022/05/1/af202124-bab3-4191-8948-458dc96efaef",
+    });
     return () => {};
   }
 
