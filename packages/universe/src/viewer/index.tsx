@@ -36,7 +36,6 @@ const MeasureContainer = styled.div`
 export interface IUniverseViewerProps {
   universeData: IUniverseData;
   sceneGraph: SceneGraphElement[];
-  deviceId: string;
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
   vr?: boolean;
 }
@@ -70,7 +69,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000,
+      1000
     );
     this.camera.position.z = 3;
 
@@ -116,12 +115,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
       this.orbitControls = new OrbitControls(
         this.camera,
-        this.renderer.domElement,
+        this.renderer.domElement
       );
       this.orbitControls.update();
       this.editControls = new TransformControls(
         this.camera,
-        this.renderer.domElement,
+        this.renderer.domElement
       );
       window.addEventListener("keydown", this.onKeyDown);
       this.editControls.addEventListener("change", this.onEditControlsChange);
@@ -162,9 +161,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   getCurrentCamera = () => this.camera;
 
-  public addSceneGraphItem(path: TreePath) {
+  public addSceneGraphItem(path: TreePath, deviceId?: string) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path),
+      findSceneGraphElement(this.props.sceneGraph, path)
     );
 
     const fields = LayerRegistry.getFields(el.type);
@@ -172,10 +171,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const layer = LayerRegistry.createDefaultLayer(
       el.type,
       this.props.universeData,
-      this.props.deviceId,
+      deviceId,
       el.dataSources,
       fields,
-      this.getCurrentCamera,
+      this.getCurrentCamera
     );
     if (el.position.type === "manual") {
       layer.position.set(el.position.x, el.position.y, el.position.z);
@@ -195,7 +194,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.toggleEditing(path, false);
     }
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path),
+      findSceneGraphElement(this.props.sceneGraph, path)
     );
     const layer = defined(this.pathToLayer.get(el));
 
@@ -214,7 +213,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public toggleVisible(path: TreePath, visible: boolean) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path),
+      findSceneGraphElement(this.props.sceneGraph, path)
     );
     const o = defined(this.pathToLayer.get(el));
     o.visible = visible;
@@ -226,7 +225,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   public toggleEditing(path: TreePath, editing: boolean) {
     const c = defined(this.editControls);
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path),
+      findSceneGraphElement(this.props.sceneGraph, path)
     );
     const o = defined(this.pathToLayer.get(el));
     if (editing) {
@@ -241,7 +240,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public updatePositioning(path: TreePath, position: Positioning) {
     const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path),
+      findSceneGraphElement(this.props.sceneGraph, path)
     );
     const o = defined(this.pathToLayer.get(el));
     o.setPositioning(position, this.props.universeData);

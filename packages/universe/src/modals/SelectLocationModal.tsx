@@ -6,6 +6,7 @@ import { Modal } from "./Modal";
 import { ILocation } from "../../../data-sdk/src/model/ILocation";
 
 interface ISelectLocationModalProps {
+  deviceContext: string;
   universeData: IUniverseData;
   onSelect: (
     streamName: string,
@@ -39,7 +40,9 @@ export class SelectLocationModal extends Component<
 
   async componentDidMount() {
     this.setState({
-      items: await this.props.universeData.getLatestLocations(),
+      items: await this.props.universeData.getLatestLocations(
+        this.props.deviceContext
+      ),
     });
     if (this.state.items.length > 0) {
       this.setState({

@@ -9,6 +9,7 @@ import { SortableTree } from "../SortableTree";
 import { Modal } from "./Modal";
 
 interface ISelectTransformPathModalProps {
+  deviceContext: string;
   universeData: IUniverseData;
   onSelect: (tree: string, end: string) => void;
   onCancel: () => void;
@@ -26,7 +27,9 @@ export class SelectTransformPathModal extends Component<
 > {
   async componentDidMount() {
     const transformTrees =
-      await this.props.universeData.getLatestTransformTrees();
+      await this.props.universeData.getLatestTransformTrees(
+        this.props.deviceContext
+      );
     const trees = new Map<string, TreeElement>();
     transformTrees.forEach((tree) =>
       trees.set(

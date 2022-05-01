@@ -1,12 +1,9 @@
-import { PerspectiveCamera, Vector2 } from "three";
+import { PerspectiveCamera } from "three";
 import * as JSZip from "jszip";
 import * as uuid from "uuid";
 import { defined } from "../../../../common/defined";
 import { IJointState } from "../../../../data-sdk/src/model/IJointState";
-import { ITransformNode } from "../../../../data-sdk/src/model/ITransformNode";
-import { TransformTree } from "./TransformTree";
 import { Urdf } from "./Urdf";
-import { ITransformTreeNode } from "./transformTreeLoader";
 import { IUniverseData, UniverseDataSource } from "../../IUniverseData";
 import { LayerSuggestion } from "../LayerRegistry";
 import { TransformLayer } from "../TransformLayer";
@@ -78,10 +75,10 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   return false;
 }
 
-export class DeviceVisualLayer extends UniverseLayerContent {
-  static id = "device_visual";
+export class DeviceVisualLayerUrdf extends UniverseLayerContent {
+  static id = "device_visual_urdf";
 
-  static commonName = "Device Visual";
+  static commonName = "URDF";
 
   static description = "A 3D model to represent a robot.";
 
@@ -92,14 +89,13 @@ export class DeviceVisualLayer extends UniverseLayerContent {
     deviceId: string,
     universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
-    getCurrentCamera?: () => PerspectiveCamera
-  ): TransformLayer<DeviceVisualLayer> {
+    _getCurrentCamera?: () => PerspectiveCamera
+  ): TransformLayer<DeviceVisualLayerUrdf> {
     return new TransformLayer(
-      new DeviceVisualLayer(
+      new DeviceVisualLayerUrdf(
         universeData,
         defined(universeDataSources)[0],
-        deviceId,
-        getCurrentCamera
+        deviceId
       )
     );
   }
@@ -111,7 +107,7 @@ export class DeviceVisualLayer extends UniverseLayerContent {
     const suggestions: LayerSuggestion[] = [];
 
     if (deviceContext) {
-      universeData.getTeleopRosStreams().forEach((stream) => {
+      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
         if (stream.topicType === "sensor_msgs/JointState") {
           suggestions.push({
             sources: [
@@ -122,26 +118,7 @@ export class DeviceVisualLayer extends UniverseLayerContent {
                 rosTopicType: stream.topicType,
               },
             ],
-            layerType: DeviceVisualLayer.id,
-          });
-        }
-      });
-
-      universeData.getTelemetryStreams().forEach((stream) => {
-        if (
-          universeData.getTelemetryStreamType(deviceContext, stream.name) ===
-          "transform tree"
-        ) {
-          suggestions.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "telemetry",
-                streamName: stream.name,
-                streamType: "transform tree",
-              },
-            ],
-            layerType: DeviceVisualLayer.id,
+            layerType: DeviceVisualLayerUrdf.id,
           });
         }
       });
@@ -151,15 +128,12 @@ export class DeviceVisualLayer extends UniverseLayerContent {
 
   urdf: Urdf | undefined;
 
-  transformTree: TransformTree | undefined;
-
   loaded: boolean = false;
 
   constructor(
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource,
-    private deviceId?: string,
-    getCamera?: () => PerspectiveCamera
+    private deviceId?: string
   ) {
     super();
     if (dataSource && dataSource.sourceType === "realtime") {
@@ -186,13 +160,6 @@ export class DeviceVisualLayer extends UniverseLayerContent {
         .catch((e) => {
           throw e;
         });
-    } else if (getCamera) {
-      this.transformTree = new TransformTree(getCamera());
-      this.add(this.transformTree);
-      defined(this.universeData).subscribeToTransformTree(
-        defined(dataSource),
-        this.onTransformTreeData
-      );
     }
   }
 
@@ -208,19 +175,6 @@ export class DeviceVisualLayer extends UniverseLayerContent {
   onData = (data: IJointState) => {
     if (this.urdf && this.loaded) {
       this.urdf.jointState = data;
-    }
-  };
-
-  onTransformTreeData = async (data: ITransformNode) => {
-    let transformData: ITransformTreeNode | undefined;
-    if (data.url) {
-      const result = await fetch(data.url);
-      transformData = (await result.json()) as ITransformTreeNode;
-    }
-    if (transformData && this.transformTree) {
-      this.transformTree.nodes = [transformData];
-      this.transformTree.resolution = new Vector2(600, 400);
-      this.transformTree.update();
     }
   };
 }

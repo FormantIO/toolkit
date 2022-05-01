@@ -37,6 +37,9 @@ export interface ITelemetryStream {
   configuration: {
     type: string;
     mapTopic?: string;
+    validation?: {
+      schemaId: string;
+    };
   };
 }
 export interface ITelemetryRosStream {
@@ -49,24 +52,25 @@ export interface IHardwareStream {
 }
 
 export interface IUniverseData {
-  getLatestTransformTrees(): Promise<
+  getLatestTransformTrees(deviceId: string): Promise<
     {
       streamName: string;
       transformTree: any;
     }[]
   >;
-  getLatestLocations(): Promise<{ streamName: string; location: ILocation }[]>;
+  getLatestLocations(
+    deviceId: string
+  ): Promise<{ streamName: string; location: ILocation }[]>;
   getDeviceContexts(): { deviceName: string; deviceId: string }[];
   getDeviceContextName(deviceId: string): string | undefined;
   getTelemetryStreamType(
     deviceId: string,
     streamName: string
   ): string | undefined;
-  get deviceId(): string;
-  getTelemetryStreams(): ITelemetryStream[];
-  getTeleopRosStreams(): ITelemetryRosStream[];
+  getTelemetryStreams(deviceId: string): ITelemetryStream[];
+  getTeleopRosStreams(deviceId: string): ITelemetryRosStream[];
   getUrdfs(deviceId: string): Promise<string[]>;
-  getHardwareStreams(): IHardwareStream[];
+  getHardwareStreams(deviceId: string): IHardwareStream[];
   subscribeToPointCloud(
     source: UniverseDataSource,
     callback: (data: IRtcPointCloud) => void

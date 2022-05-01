@@ -166,7 +166,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         el.children.push(newElement);
         newPath = [...this.currentPath, el.children.length - 1];
       }
-      this.viewer.addSceneGraphItem(newPath);
+      this.viewer.addSceneGraphItem(newPath, deviceContext);
       this.forceUpdate();
     }
   };
@@ -630,7 +630,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
               sceneGraph={this.sceneGraph}
               onSceneGraphElementEdited={this.onSceneGraphElementEdited}
               universeData={this.props.universeData}
-              deviceId={this.props.universeData.deviceId}
               vr={vr}
             />
             <Controls>
@@ -661,15 +660,17 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             onRenameLayer={this.onRenameLayer}
           />
         )}
-        {this.state.showingTransformSelect && (
+        {this.state.showingTransformSelect && currentContext && (
           <SelectTransformPathModal
+            deviceContext={currentContext}
             universeData={this.props.universeData}
             onCancel={this.hideTransformSelect}
             onSelect={this.onSelectTransformPath}
           />
         )}
-        {this.state.showingLocationStreamSelect && (
+        {this.state.showingLocationStreamSelect && currentContext && (
           <SelectLocationModal
+            deviceContext={currentContext}
             universeData={this.props.universeData}
             onCancel={this.hideLocationStreamSelect}
             onSelect={this.onSelectLocationStream}

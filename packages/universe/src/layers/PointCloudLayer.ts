@@ -35,7 +35,7 @@ export class PointCloudLayer extends UniverseLayerContent {
   ): LayerSuggestion[] {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTeleopRosStreams().forEach((stream) => {
+      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
         if (stream.topicType === "sensor_msgs/PointCloud2") {
           dataLayers.push({
             sources: [

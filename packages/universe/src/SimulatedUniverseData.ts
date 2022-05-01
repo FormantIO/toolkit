@@ -145,7 +145,7 @@ export class SimulatedUniverseData implements IUniverseData {
     return "abc";
   }
 
-  getTelemetryStreams(): ITelemetryStream[] {
+  getTelemetryStreams(_deviceId: string): ITelemetryStream[] {
     return [
       {
         name: "spotTf",
@@ -156,7 +156,7 @@ export class SimulatedUniverseData implements IUniverseData {
     ];
   }
 
-  getTeleopRosStreams(): ITelemetryRosStream[] {
+  getTeleopRosStreams(_deviceId: string): ITelemetryRosStream[] {
     return [
       {
         topicType: "sensor_msgs/JointState",
@@ -175,7 +175,7 @@ export class SimulatedUniverseData implements IUniverseData {
     ];
   }
 
-  getHardwareStreams(): IHardwareStream[] {
+  getHardwareStreams(_deviceId: string): IHardwareStream[] {
     return [];
   }
 

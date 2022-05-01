@@ -9,7 +9,8 @@ export interface LayerSuggestion {
   layerType: LayerType;
 }
 export class LayerRegistry {
-  private static layers: Map<LayerType, typeof UniverseLayerContent> = new Map();
+  private static layers: Map<LayerType, typeof UniverseLayerContent> =
+    new Map();
 
   static register(layer: typeof UniverseLayerContent) {
     LayerRegistry.layers.set(layer.id, layer);
@@ -17,7 +18,7 @@ export class LayerRegistry {
 
   static getLayerSuggestions(
     universeData: IUniverseData,
-    deviceContext?: string,
+    deviceContext?: string
   ): {
     nonDataLayers: LayerType[];
     dataLayers: LayerSuggestion[];
@@ -27,7 +28,7 @@ export class LayerRegistry {
       if (layer.usesData) {
         const suggestions = layer.getLayerSuggestions(
           universeData,
-          deviceContext,
+          deviceContext
         );
         suggestionsDataLayers = suggestionsDataLayers.concat(suggestions);
       }
@@ -57,10 +58,10 @@ export class LayerRegistry {
   static createDefaultLayer(
     nodeType: LayerType,
     universeData: IUniverseData,
-    deviceId: string,
+    deviceId?: string,
     universeDataSources?: UniverseDataSource[],
     fields?: LayerFields,
-    getCurrentCamera?: () => PerspectiveCamera,
+    getCurrentCamera?: () => PerspectiveCamera
   ) {
     const layer = defined(LayerRegistry.layers.get(nodeType));
     return layer.createDefault(
@@ -68,7 +69,7 @@ export class LayerRegistry {
       deviceId,
       universeDataSources,
       fields,
-      getCurrentCamera,
+      getCurrentCamera
     );
   }
 }

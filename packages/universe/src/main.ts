@@ -9,7 +9,8 @@ import { GridMapLayer } from "./layers/GridMapLayer";
 import { GeometryLayer } from "./layers/GeometryLayer";
 import { PointCloudLayer } from "./layers/PointCloudLayer";
 import { HardwareVideoLayer } from "./layers/HardwareVideoLayer";
-import { DeviceVisualLayer } from "./layers/DeviceVisualLayer/DeviceVisualLayer";
+import { DeviceVisualLayerUrdf } from "./layers/DeviceVisualLayer/DeviceVisualLayerUrdf";
+import { DeviceVisualLayerTF } from "./layers/DeviceVisualLayer/DeviceVisualLayerTF";
 
 export * from "./Universe";
 export * from "./IUniverseData";
@@ -29,5 +30,6 @@ LayerRegistry.register(GroundLayer);
 LayerRegistry.register(GridMapLayer);
 LayerRegistry.register(GeometryLayer);
 LayerRegistry.register(PointCloudLayer);
-LayerRegistry.register(DeviceVisualLayer);
+LayerRegistry.register(DeviceVisualLayerUrdf);
+LayerRegistry.register(DeviceVisualLayerTF);
 LayerRegistry.register(HardwareVideoLayer);

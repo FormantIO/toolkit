@@ -105,7 +105,9 @@ export class AddLayerModal extends Component<
       this.selectedSources,
       this.currentFields,
       this.state.currentName,
-      this.state.currentDeviceId
+      this.state.selectedItem === "data"
+        ? this.state.currentDeviceId
+        : this.props.deviceContext
     );
   };
 

@@ -33,7 +33,7 @@ export class GridMapLayer extends UniverseLayerContent {
   ): LayerSuggestion[] {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTelemetryStreams().forEach((stream) => {
+      universeData.getTelemetryStreams(deviceContext).forEach((stream) => {
         if (stream.disabled) {
           return;
         }

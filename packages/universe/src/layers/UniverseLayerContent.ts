@@ -21,7 +21,7 @@ export type LayerFields = { [key in string]: LayerField };
 export type LayerFieldValues = { [key: string]: TextLayerFieldValue };
 
 export function extractLayerFieldValues(
-  layerFields: LayerFields,
+  layerFields: LayerFields
 ): LayerFieldValues {
   const values: LayerFieldValues = {};
   for (const [key, field] of Object.entries(layerFields)) {
@@ -35,7 +35,7 @@ export function extractLayerFieldValues(
 
 export function injectLayerFieldValues(
   layerFields: LayerFields,
-  layerFieldValues: LayerFieldValues,
+  layerFieldValues: LayerFieldValues
 ): void {
   Object.entries(layerFieldValues).forEach(([key, value]) => {
     layerFields[key].value = value.value;
@@ -55,17 +55,17 @@ export abstract class UniverseLayerContent extends Object3D {
 
   static getLayerSuggestions(
     _data: IUniverseData,
-    _deviceContext?: string,
+    _deviceContext?: string
   ): LayerSuggestion[] {
     return [];
   }
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    _deviceId?: string,
     _universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
-    _camera?: () => PerspectiveCamera,
+    _camera?: () => PerspectiveCamera
   ): TransformLayer<UniverseLayerContent> {
     throw new Error("Method not implemented.");
   }

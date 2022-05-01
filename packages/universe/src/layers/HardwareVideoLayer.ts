@@ -35,7 +35,7 @@ export class HardwareVideoLayer extends UniverseLayerContent {
   ): LayerSuggestion[] {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getHardwareStreams().forEach((stream) => {
+      universeData.getHardwareStreams(deviceContext).forEach((stream) => {
         if (stream.rtcStreamType === "h264-video-frame") {
           dataLayers.push({
             sources: [

@@ -46,7 +46,7 @@ export class GeometryLayer extends UniverseLayerContent {
   ): LayerSuggestion[] {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTeleopRosStreams().forEach((stream) => {
+      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
         if (stream.topicType === "visualization_msgs/MarkerArray") {
           dataLayers.push({
             sources: [
