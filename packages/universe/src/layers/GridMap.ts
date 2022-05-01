@@ -16,9 +16,9 @@ import { defined } from "../../../common/defined";
 import { fork } from "../../../common/fork";
 import { IMap } from "../../../data-sdk/src/model/IMap";
 import { Color } from "../../../common/Color";
-import transformMatrix from "../math/transformMatrix";
+import { transformMatrix } from "../math/transformMatrix";
 
-export default class GridMap extends Group {
+export class GridMap extends Group {
   public onLoad?: () => void;
 
   private material: ShaderMaterial;

@@ -1,9 +1,9 @@
 import { Matrix4 } from "three";
 import { ITransform } from "../../../data-sdk/src/model/ITransform";
-import quaternion from "./quaternion";
-import vector from "./vector";
+import { quaternion } from "./quaternion";
+import { vector } from "./vector";
 
-export default function transformMatrix({
+export function transformMatrix({
   translation,
   rotation,
 }: ITransform): Matrix4 {

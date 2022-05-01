@@ -1,6 +1,6 @@
 import { IUniverseData, UniverseDataSource } from "./IUniverseData";
 
-export default class SimulatedUniverseData implements IUniverseData {
+export class SimulatedUniverseData implements IUniverseData {
   async getTransformTrees(): Promise<{ name: string; transformTree: any }[]> {
     return [];
   }

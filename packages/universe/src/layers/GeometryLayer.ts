@@ -21,7 +21,7 @@ import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
-export default class GeometryLayer extends UniverseLayerContent {
+export class GeometryLayer extends UniverseLayerContent {
   static id = "geometry";
 
   static commonName = "Geometry";
