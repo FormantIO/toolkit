@@ -56,4 +56,8 @@ export class SimulatedUniverseData implements IUniverseData {
   async getUrdfs(_deviceId: string): Promise<any> {
     return [];
   }
+
+  getHardwareStreams(): any[] {
+    return [];
+  }
 }

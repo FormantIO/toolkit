@@ -53,4 +53,5 @@ export interface IUniverseData {
   getTelemetryStreams(): any[];
   getTeleopRosStreams(): any[];
   getUrdfs(deviceId: string): Promise<any>;
+  getHardwareStreams(): any[];
 }
