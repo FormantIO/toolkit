@@ -2,7 +2,7 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
 import { LayerRegistry, Universe } from "@formant/universe";
-import { SimulatedUniverseData } from "./SimulatedUniverseData";
+import { SimulatedUniverseData } from "../../../packages/universe/demo/SimulatedUniverseData";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
