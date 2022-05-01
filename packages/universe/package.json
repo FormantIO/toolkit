@@ -52,6 +52,7 @@
     "@types/react": "^18.0.8",
     "@types/uuid": "^8.3.4",
     "geolib": "^3.3.3",
+    "lzfjs": "^1.0.1",
     "react": "^18.0.0",
     "react-use-measure": "^2.1.1",
     "styled-components": "^5.3.5",

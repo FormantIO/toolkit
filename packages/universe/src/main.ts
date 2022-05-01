@@ -7,6 +7,7 @@ import { ImageLayer } from "./layers/ImageLayer";
 import { GltfLayer } from "./layers/GltfLayer";
 import { GridMapLayer } from "./layers/GridMapLayer";
 import { GeometryLayer } from "./layers/GeometryLayer";
+import { PointCloudLayer } from "./layers/PointCloudLayer";
 
 export * from "./Universe";
 export * from "./IUniverseData";
@@ -25,3 +26,4 @@ LayerRegistry.register(GltfLayer);
 LayerRegistry.register(GroundLayer);
 LayerRegistry.register(GridMapLayer);
 LayerRegistry.register(GeometryLayer);
+LayerRegistry.register(PointCloudLayer);
