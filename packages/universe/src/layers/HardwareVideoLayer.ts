@@ -71,7 +71,7 @@ export class HardwareVideoLayer extends UniverseLayerContent {
       () => {},
       () => {}
     );
-    defined(this.universeData).subscribeToDataSource(
+    defined(this.universeData).subscribeToVideo(
       defined(this.dataSource),
       this.onData
     );

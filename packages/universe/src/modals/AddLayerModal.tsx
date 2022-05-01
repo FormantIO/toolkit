@@ -7,7 +7,6 @@ import {
 } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
-import { equals } from "../../../common/equals";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { LayerType } from "../layers";
 import { LayerRegistry, LayerSuggestion } from "../layers/LayerRegistry";
@@ -58,7 +57,7 @@ export class AddLayerModal extends Component<
 
     this.layerSuggestions = LayerRegistry.getLayerSuggestions(
       this.props.universeData,
-      this.props.deviceContext,
+      this.props.deviceContext
     );
   }
 
@@ -66,16 +65,6 @@ export class AddLayerModal extends Component<
     this.setState({
       currentName: ev.target.value,
     });
-  };
-
-  private addItemToScene = () => {
-    this.props.onAddLayer(
-      this.state.selectedItem,
-      this.selectedSources,
-      this.currentFields,
-      this.state.currentName,
-      this.state.currentDeviceId,
-    );
   };
 
   onSelect = (layerType: LayerType, dataSources?: UniverseDataSource[]) => {
@@ -109,6 +98,16 @@ export class AddLayerModal extends Component<
     // @ts-ignore
     this.el.forceUpdate();
   }
+
+  private addItemToScene = () => {
+    this.props.onAddLayer(
+      this.state.selectedItem,
+      this.selectedSources,
+      this.currentFields,
+      this.state.currentName,
+      this.state.currentDeviceId
+    );
+  };
 
   public render() {
     const { onCancel } = this.props;
@@ -148,34 +147,25 @@ export class AddLayerModal extends Component<
               <div>
                 {this.layerSuggestions.dataLayers.map((suggestion) => (
                   <Button
-                    variant="contained"
-                    key={
-                      `data-${
-                        suggestion.layerType
-                      }-${
-                        suggestion.sources[0].id}`
+                    variant={
+                      selectedItem === suggestion.layerType
+                        ? "contained"
+                        : "outlined"
                     }
-                    sx={{
-                      backgroundColor:
-                        selectedItem === suggestion.layerType
-                        && equals(this.selectedSources, suggestion.sources)
-                          ? "#18d2ff"
-                          : "white",
-                    }}
+                    key={`data-${suggestion.layerType}-${suggestion.sources[0].id}`}
+                    sx={{ m: 1 }}
                     onClick={this.onSelect.bind(
                       this,
                       suggestion.layerType,
-                      suggestion.sources,
+                      suggestion.sources
                     )}
                   >
-                    {LayerRegistry.getCommonName(suggestion.layerType)}
-                    {" "}
-                    [
+                    {LayerRegistry.getCommonName(suggestion.layerType)} [
                     {suggestion.sources[0].sourceType === "realtime"
                       ? suggestion.sources[0].rosTopicName
                       : suggestion.sources[0].sourceType === "hardware"
-                        ? suggestion.sources[0].rtcStreamName
-                        : suggestion.sources[0].streamName}
+                      ? suggestion.sources[0].rtcStreamName
+                      : suggestion.sources[0].streamName}
                     ]
                   </Button>
                 ))}

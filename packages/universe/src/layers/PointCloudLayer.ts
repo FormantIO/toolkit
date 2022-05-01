@@ -59,7 +59,7 @@ export class PointCloudLayer extends UniverseLayerContent {
     private dataSource?: UniverseDataSource
   ) {
     super();
-    defined(this.universeData).subscribeToDataSource(
+    defined(this.universeData).subscribeToPointCloud(
       defined(this.dataSource),
       this.onData
     );

@@ -63,29 +63,37 @@ export interface IUniverseData {
     deviceId: string,
     streamName: string
   ): string | undefined;
-  subscribeToDataSource<
-    T extends
-      | IRtcPointCloud
-      | IMarker3DArray
-      | IJointState
-      | IMap
-      | IH264VideoFrame
-      | ITransformNode
-  >(
-    source: UniverseDataSource,
-    callback: (data: T) => void
-  ): void;
   get deviceId(): string;
   getTelemetryStreams(): ITelemetryStream[];
   getTeleopRosStreams(): ITelemetryRosStream[];
   getUrdfs(deviceId: string): Promise<string[]>;
   getHardwareStreams(): IHardwareStream[];
+  subscribeToPointCloud(
+    source: UniverseDataSource,
+    callback: (data: IRtcPointCloud) => void
+  ): () => void;
+  subscribeToGeometry(
+    source: UniverseDataSource,
+    callback: (data: IMarker3DArray) => void
+  ): () => void;
+  subscribeToJointState(
+    source: UniverseDataSource,
+    callback: (data: IJointState) => void
+  ): () => void;
+  subscribeToMap(
+    source: UniverseDataSource,
+    callback: (data: IMap) => void
+  ): () => void;
+  subscribeToVideo(
+    source: UniverseDataSource,
+    callback: (data: IH264VideoFrame) => void
+  ): () => void;
   subscribeToTransformTree(
-    streamName: string,
+    source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): () => void;
   subscribeToLocation(
-    streamName: string,
+    source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): () => void;
 }

@@ -163,7 +163,7 @@ export class DeviceVisualLayer extends UniverseLayerContent {
   ) {
     super();
     if (dataSource && dataSource.sourceType === "realtime") {
-      defined(this.universeData).subscribeToDataSource(
+      defined(this.universeData).subscribeToJointState(
         defined(this.dataSource),
         this.onData
       );
@@ -189,7 +189,7 @@ export class DeviceVisualLayer extends UniverseLayerContent {
     } else if (getCamera) {
       this.transformTree = new TransformTree(getCamera());
       this.add(this.transformTree);
-      defined(this.universeData).subscribeToDataSource(
+      defined(this.universeData).subscribeToTransformTree(
         defined(dataSource),
         this.onTransformTreeData
       );

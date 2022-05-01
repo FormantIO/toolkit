@@ -65,7 +65,7 @@ export class GridMapLayer extends UniverseLayerContent {
     private dataSource?: UniverseDataSource
   ) {
     super();
-    defined(this.universeData).subscribeToDataSource(
+    defined(this.universeData).subscribeToMap(
       defined(this.dataSource),
       this.onData
     );

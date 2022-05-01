@@ -74,7 +74,7 @@ export class GeometryLayer extends UniverseLayerContent {
     private dataSource?: UniverseDataSource
   ) {
     super();
-    defined(this.universeData).subscribeToDataSource(
+    defined(this.universeData).subscribeToGeometry(
       defined(this.dataSource),
       this.onData
     );
