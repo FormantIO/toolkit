@@ -23,6 +23,7 @@ export type Positioning =
       relativeToLatitude: number;
     };
 export class SceneGraphElement {
+  // eslint-disable-next-line no-use-before-define
   children: SceneGraphElement[] = [];
 
   public id: string;
@@ -51,6 +52,20 @@ export class SceneGraphElement {
   }
 }
 
+export function visitSceneGraphElement(
+  sceneGraph: SceneGraphElement,
+  visitor: (el: SceneGraphElement, path: TreePath) => boolean | void,
+  pathSoFar?: TreePath
+) {
+  const p = pathSoFar || [];
+  const r = visitor(sceneGraph, p);
+  if (r !== false && sceneGraph.children.length > 0) {
+    sceneGraph.children.forEach((e, i) => {
+      visitSceneGraphElement(e, visitor, [...p, i]);
+    });
+  }
+}
+
 export function cloneSceneGraph(
   scenegraph: SceneGraphElement
 ): SceneGraphElement {
@@ -64,20 +79,6 @@ export function cloneSceneGraph(
   return c as SceneGraphElement;
 }
 
-export function visitSceneGraphElement(
-  sceneGraph: SceneGraphElement,
-  visitor: (el: SceneGraphElement, path: TreePath) => boolean | void,
-  pathSoFar?: TreePath
-) {
-  const p = pathSoFar || [];
-  const r = visitor(sceneGraph, p);
-  if (r !== false && sceneGraph.children.length > 0) {
-    for (const [i, e] of sceneGraph.children.entries()) {
-      visitSceneGraphElement(e, visitor, [...p, i]);
-    }
-  }
-}
-
 export function visitSceneGraphElementReverse(
   sceneGraph: SceneGraphElement,
   visitor: (el: SceneGraphElement, path: TreePath) => void,
@@ -85,9 +86,9 @@ export function visitSceneGraphElementReverse(
 ) {
   const p = pathSoFar || [];
   if (sceneGraph.children.length > 0) {
-    for (const [i, e] of sceneGraph.children.entries()) {
+    sceneGraph.children.forEach((e, i) => {
       visitSceneGraphElementReverse(e, visitor, [...p, i]);
-    }
+    });
   }
   visitor(sceneGraph, p);
 }

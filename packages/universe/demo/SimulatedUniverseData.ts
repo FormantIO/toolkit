@@ -11,7 +11,7 @@ import {
   IUniverseData,
   UniverseDataSource,
 } from "../src/IUniverseData";
-import { IRtcPointCloud } from "../src/layers/IRtcPointCloud";
+import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
 
 export class SimulatedUniverseData implements IUniverseData {
   async getLatestTransformTrees(): Promise<

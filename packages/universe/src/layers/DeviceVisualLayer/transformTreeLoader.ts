@@ -8,5 +8,5 @@ export interface ITransformTreeNode {
 
 export async function load(path: string): Promise<ITransformTreeNode> {
   const response = await fetch(path, { mode: "cors" });
-  return await response.json();
+  return response.json();
 }

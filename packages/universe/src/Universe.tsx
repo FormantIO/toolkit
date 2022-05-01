@@ -28,6 +28,35 @@ import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 
+const Controls = styled.div`
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+`;
+
+const Control = styled.div`
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    color: white;
+  }
+  background: #bac4e2;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 const UniverseContainer = styled.div`
   height: 100%;
 `;
@@ -59,6 +88,16 @@ export interface IUniverseState {
 }
 
 export class Universe extends Component<IUniverseProps, IUniverseState> {
+  private currentlyEditingName: string = "";
+
+  private viewer: UniverseViewer | undefined;
+
+  private sceneGraph: SceneGraphElement[] = [];
+
+  private currentPath: TreePath = [];
+
+  private currentlyEditingElement: TreePath | undefined;
+
   constructor(props: IUniverseProps) {
     super(props);
     this.state = {
@@ -70,16 +109,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       currentlySelectedElement: undefined,
     };
   }
-
-  private currentlyEditingName: string = "";
-
-  private viewer: UniverseViewer | undefined;
-
-  private sceneGraph: SceneGraphElement[] = [];
-
-  private currentPath: TreePath = [];
-
-  private currentlyEditingElement: TreePath | undefined;
 
   onViewerLoaded = (el: UniverseViewer | null) => {
     this.viewer = el || undefined;
@@ -250,68 +279,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       this.forceUpdate();
     }
   };
-
-  stringToColor(str: string) {
-    /* tslint:disable:no-bitwise */
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let color = "#";
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.substr(-2);
-    }
-    /* tslint:enable:no-bitwise */
-    return color;
-  }
-
-  private buildSubTree(
-    element: SceneGraphElement,
-    path: TreePath,
-    inheritedColor?: string
-  ): TreeElement {
-    const color = element.deviceContext
-      ? this.stringToColor(element.deviceContext)
-      : inheritedColor;
-    return {
-      title: element.name,
-      textColor: color,
-      icons: [
-        {
-          icon: element.visible ? "eye" : "eye_closed",
-          description: "click to toggle visibility",
-        },
-        {
-          icon: "edit",
-          description: "edit",
-          color: element.editing ? "#18d2ff" : "white",
-        },
-        {
-          icon: "help",
-          description: LayerRegistry.getDescription(element.type),
-        },
-      ],
-      children: element.children.map((_, i) =>
-        this.buildSubTree(_, [...path, i], color)
-      ),
-    };
-  }
-
-  private buildTree(): TreeElement[] {
-    return [
-      {
-        title: "Universe",
-        icons: [
-          {
-            icon: "help",
-            description: "This is your entire collection of layers.",
-          },
-        ],
-        children: this.sceneGraph.map((_, i) => this.buildSubTree(_, [i])),
-      },
-    ];
-  }
 
   private onIconInteracted = (path: TreePath, icon: number) => {
     if (path.length === 0 || !this.viewer) {
@@ -494,12 +461,76 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   };
 
   private toggleSidebar = () => {
-    this.setState({
-      sidebarOpen: !this.state.sidebarOpen,
-    });
+    this.setState((s) => ({
+      sidebarOpen: !s.sidebarOpen,
+    }));
   };
 
-  public render() {
+  stringToColor(str: string) {
+    /* tslint:disable:no-bitwise */
+    let hash = 0;
+    for (let i = 0; i < str.length; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = "#";
+    for (let i = 0; i < 3; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.substr(-2);
+    }
+    /* tslint:enable:no-bitwise */
+    return color;
+  }
+
+  private buildSubTree(
+    element: SceneGraphElement,
+    path: TreePath,
+    inheritedColor?: string
+  ): TreeElement {
+    const color = element.deviceContext
+      ? this.stringToColor(element.deviceContext)
+      : inheritedColor;
+    return {
+      title: element.name,
+      textColor: color,
+      icons: [
+        {
+          icon: element.visible ? "eye" : "eye_closed",
+          description: "click to toggle visibility",
+        },
+        {
+          icon: "edit",
+          description: "edit",
+          color: element.editing ? "#18d2ff" : "white",
+        },
+        {
+          icon: "help",
+          description: LayerRegistry.getDescription(element.type),
+        },
+      ],
+      children: element.children.map((_, i) =>
+        this.buildSubTree(_, [...path, i], color)
+      ),
+    };
+  }
+
+  private buildTree(): TreeElement[] {
+    return [
+      {
+        title: "Universe",
+        icons: [
+          {
+            icon: "help",
+            description: "This is your entire collection of layers.",
+          },
+        ],
+        children: this.sceneGraph.map((_, i) => this.buildSubTree(_, [i])),
+      },
+    ];
+  }
+
+  render() {
     const { mode, vr } = this.props;
     const { sidebarOpen } = this.state;
     let element: SceneGraphElement | null | undefined;
@@ -541,7 +572,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
               onIconInteracted={this.onIconInteracted}
               onItemSelected={this.onItemSelected}
             >
-              {(element === undefined || element === null) && <></>}
               {element !== undefined && element !== null && (
                 <>
                   <PropertiesTitle>Properties</PropertiesTitle>
@@ -680,32 +710,3 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     );
   }
 }
-
-const Controls = styled.div`
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-`;
-
-const Control = styled.div`
-  > svg {
-    width: 1rem;
-    height: 1rem;
-    color: white;
-  }
-  background: #bac4e2;
-  opacity: 0.5;
-  margin-bottom: 0.5rem;
-  border-radius: 1rem;
-  padding: 0;
-  height: 2rem;
-  width: 2rem;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    opacity: 1;
-  }
-`;

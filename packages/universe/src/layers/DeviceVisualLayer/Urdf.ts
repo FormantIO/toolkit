@@ -37,6 +37,7 @@ export class Urdf extends Group {
 
   private color = new THREE.Color("white");
 
+  // eslint-disable-next-line no-use-before-define
   static urdfMap: { [configJson: string]: Urdf } = {};
 
   static getUrdf(
@@ -98,7 +99,7 @@ export class Urdf extends Group {
             ) {
               let mat: THREE.Material;
               if (Array.isArray(_.material)) {
-                mat = _.material[0];
+                [mat] = _.material;
               } else {
                 mat = _.material;
               }

@@ -26,45 +26,49 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
     );
     // create a map of the images to their urls
     const imageUrls: { [key in string]: string } = {};
-    for (const f of images) {
-      const file = zipFile.files[f];
-      const txt = await zipFile.files[file.name].async("arraybuffer");
-      imageUrls[f] = URL.createObjectURL(
-        new Blob([txt], {
-          type: "image/png",
-        })
-      );
-    }
+    await Promise.all(
+      images.map(async (f) => {
+        const file = zipFile.files[f];
+        const txt = await zipFile.files[file.name].async("arraybuffer");
+        imageUrls[f] = URL.createObjectURL(
+          new Blob([txt], {
+            type: "image/png",
+          })
+        );
+      })
+    );
 
     // for all other files ( should just be models )
     const nonImages = Object.keys(zipFile.files).filter(
       (_) => !_.endsWith(".png") && _ !== urdfRoot
     );
-    for (const f of nonImages) {
-      const file = zipFile.files[f];
-      if (!file.dir) {
-        let txt = await zipFile.files[file.name].async("string");
+    await Promise.all(
+      nonImages.map(async (f) => {
+        const file = zipFile.files[f];
+        if (!file.dir) {
+          let txt = await zipFile.files[file.name].async("string");
 
-        // replace all image references ( non-relative only )
-        for (const imageKey of images) {
-          const keys = imageKey.split("/");
-          const key = keys[keys.length - 1];
-          txt = txt.replace(
-            new RegExp(key, "g"),
-            imageUrls[imageKey].replace(`blob:${location.origin}/`, "")
-          );
+          // replace all image references ( non-relative only )
+          images.forEach((imageKey) => {
+            const keys = imageKey.split("/");
+            const key = keys[keys.length - 1];
+            txt = txt.replace(
+              new RegExp(key, "g"),
+              imageUrls[imageKey].replace(`blob:${window.location.origin}/`, "")
+            );
+          });
+          const modelUrl = URL.createObjectURL(
+            new Blob([txt], {
+              type: "text/plain",
+            })
+          ).replace(`blob:${window.location.origin}/`, "");
+          // replace the reference to the model in the root urdf
+          urdf = urdf.replace(new RegExp(`package://${f}`, "g"), modelUrl);
+
+          urdf = urdf.replace(new RegExp(f, "g"), modelUrl);
         }
-        const modelUrl = URL.createObjectURL(
-          new Blob([txt], {
-            type: "text/plain",
-          })
-        ).replace(`blob:${location.origin}/`, "");
-        // replace the reference to the model in the root urdf
-        urdf = urdf.replace(new RegExp(`package://${f}`, "g"), modelUrl);
-
-        urdf = urdf.replace(new RegExp(f, "g"), modelUrl);
-      }
-    }
+      })
+    );
     // create the urdf blob url
     return URL.createObjectURL(
       new Blob([urdf], {

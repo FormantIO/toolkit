@@ -79,25 +79,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.scene.add(light);
   }
 
-  public componentWillUnmount() {
-    window.removeEventListener("keydown", this.onKeyDown);
-  }
-
-  onKeyDown = (event: KeyboardEvent) => {
-    const c = defined(this.editControls);
-    switch (event.key) {
-      case "g":
-        c.setMode("translate");
-        break;
-      case "r":
-        c.setMode("rotate");
-        break;
-      case "s":
-        c.setMode("scale");
-        break;
-    }
-  };
-
   public componentDidMount() {
     const { element } = this;
     const { vr } = this.props;
@@ -138,6 +119,27 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   }
 
+  public componentWillUnmount() {
+    window.removeEventListener("keydown", this.onKeyDown);
+  }
+
+  onKeyDown = (event: KeyboardEvent) => {
+    const c = defined(this.editControls);
+    switch (event.key) {
+      case "g":
+        c.setMode("translate");
+        break;
+      case "r":
+        c.setMode("rotate");
+        break;
+      case "s":
+        c.setMode("scale");
+        break;
+      default:
+        break;
+    }
+  };
+
   private onEditControlsChange = () => {
     const { editControls } = this;
     if (editControls) {
@@ -153,13 +155,29 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   };
 
-  public recenter() {
-    if (this.orbitControls) {
-      this.orbitControls.reset();
-    }
-  }
-
   getCurrentCamera = () => this.camera;
+
+  private onResize = (width: number, height: number) => {
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    if (this.orbitControls) {
+      this.orbitControls.update();
+    }
+    this.renderer?.setSize(width, height);
+  };
+
+  public removeSceneGraphItem(path: TreePath) {
+    if (this.attachedPath && treePathEquals(path, this.attachedPath)) {
+      this.toggleEditing(path, false);
+    }
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const layer = defined(this.pathToLayer.get(el));
+
+    definedAndNotNull(layer.parent).remove(layer);
+    this.pathToLayer.delete(el);
+  }
 
   public addSceneGraphItem(path: TreePath, deviceId?: string) {
     const el = definedAndNotNull(
@@ -189,27 +207,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.pathToLayer.set(el, layer);
   }
 
-  public removeSceneGraphItem(path: TreePath) {
-    if (this.attachedPath && treePathEquals(path, this.attachedPath)) {
-      this.toggleEditing(path, false);
-    }
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
-    const layer = defined(this.pathToLayer.get(el));
-
-    definedAndNotNull(layer.parent).remove(layer);
-    this.pathToLayer.delete(el);
-  }
-
-  private onResize = (width: number, height: number) => {
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
+  public recenter() {
     if (this.orbitControls) {
-      this.orbitControls.update();
+      this.orbitControls.reset();
     }
-    this.renderer?.setSize(width, height);
-  };
+  }
 
   public toggleVisible(path: TreePath, visible: boolean) {
     const el = definedAndNotNull(
@@ -250,7 +252,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     return (
       <MeasureContainer>
         <Measure onResize={this.onResize}>
-          <div ref={(_) => (this.element = defined(_))} />
+          <div
+            ref={(_) => {
+              this.element = defined(_);
+            }}
+          />
         </Measure>
       </MeasureContainer>
     );

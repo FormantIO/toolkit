@@ -1,7 +1,7 @@
 import { BufferAttribute, BufferGeometry, Points, PointsMaterial } from "three";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
-import { IRtcPointCloud } from "./IRtcPointCloud";
+import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
 import { loadFromBase64 } from "./pcd";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { TransformLayer } from "./TransformLayer";

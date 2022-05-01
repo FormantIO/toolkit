@@ -8,6 +8,7 @@ import { defined } from "../../../common/defined";
 import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
 import { LayerSuggestion } from "./LayerRegistry";
 // @ts-ignore
+// eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
 export class HardwareVideoLayer extends UniverseLayerContent {

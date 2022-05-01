@@ -40,7 +40,7 @@ export class ImageLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields,
+    fields?: LayerFields
   ): TransformLayer<ImageLayer> {
     return new TransformLayer(new ImageLayer((fields || {}).url));
   }
@@ -55,7 +55,7 @@ export class ImageLayer extends UniverseLayerContent {
           const { paths } = data;
           const group = new Group();
 
-          for (const path of paths) {
+          paths.forEach((path) => {
             const material = new MeshBasicMaterial({
               color: path.color,
               side: DoubleSide,
@@ -64,12 +64,12 @@ export class ImageLayer extends UniverseLayerContent {
 
             const shapes = path.toShapes(false);
 
-            for (const shape of shapes) {
+            shapes.forEach((shape) => {
               const geometry = new ShapeGeometry(shape);
               const mesh = new Mesh(geometry, material);
               group.add(mesh);
-            }
-          }
+            });
+          });
           const oneEightyDegrees = Math.PI;
           group.rotation.set(oneEightyDegrees, 0, 0);
           group.scale.set(0.001, 0.001, 0.001);

@@ -18,6 +18,15 @@ export interface IPcdHeader {
   data: Data;
 }
 
+interface IOffsets {
+  x?: number;
+  y?: number;
+  z?: number;
+  rgb?: number;
+  rgba?: number;
+  intensity?: number;
+}
+
 export interface IPcd {
   header: IPcdHeader;
   positions?: Float32Array;
@@ -27,23 +36,167 @@ export interface IPcd {
 
 const littleEndian = true;
 
-export async function loadFromUrl(path: string): Promise<IPcd> {
-  const response = await fetch(path, { mode: "cors" });
-  return parse(await response.arrayBuffer());
-}
-
 function base64ToArrayBuffer(b: string) {
   const binaryString = window.atob(b);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes.buffer;
 }
 
-export function loadFromBase64(data: string): IPcd {
-  return parse(base64ToArrayBuffer(data));
+function extractHeader(buffer: ArrayBuffer): {
+  header: string;
+  body: ArrayBuffer;
+} {
+  const chars = new Uint8Array(buffer);
+  let header = "";
+
+  let i = 0;
+  for (
+    ;
+    i < chars.length && header.search(/[\r\n]DATA\s(\S*)\s/i) === -1;
+    i += 1
+  ) {
+    header += String.fromCharCode(chars[i]);
+  }
+  return {
+    body: buffer.slice(i),
+    header: header.replace(/#.*/gi, ""),
+  };
+}
+
+function decompress(data: ArrayBuffer): ArrayBufferLike {
+  const sizes = new Uint32Array(data, 0, 2);
+  const compressedSize = sizes[0];
+  if (compressedSize === 0) {
+    return new ArrayBuffer(0);
+  }
+  return lzfjs.decompress(new Uint8Array(data, 8, compressedSize)).buffer;
+}
+
+function parseHeader(buffer: ArrayBuffer): {
+  header: IPcdHeader;
+  body: ArrayBuffer;
+} {
+  const { header, body } = extractHeader(buffer);
+
+  const versionMatch = /VERSION (.*)/i.exec(header);
+  if (versionMatch === null) {
+    throw new Error(`Missing version. Header ${header}`);
+  }
+  const version = versionMatch[1];
+
+  const fieldsMatch = /FIELDS (.*)/i.exec(header);
+  if (!fieldsMatch) {
+    throw new Error("Missing fields");
+  }
+  const fields = fieldsMatch[1].split(" ") as Field[];
+
+  const sizeMatch = /SIZE (.*)/i.exec(header);
+  if (!sizeMatch) {
+    throw new Error("Missing size");
+  }
+  const size = sizeMatch[1].split(" ").map((_) => parseInt(_, 10));
+
+  const typeMatch = /TYPE (.*)/i.exec(header);
+  if (!typeMatch) {
+    throw new Error("Missing type");
+  }
+  const type = typeMatch[1].split(" ") as Type[];
+
+  const countMatch = /COUNT (.*)/i.exec(header);
+  let optionalCount: number[] | undefined;
+  if (countMatch) {
+    optionalCount = countMatch[1].split(" ").map((_) => parseInt(_, 10));
+  }
+  const count = optionalCount || fields.map((_) => 1);
+
+  const widthMatch = /WIDTH (.*)/i.exec(header);
+  if (!widthMatch) {
+    throw new Error("Missing width");
+  }
+  const width = parseInt(widthMatch[1], 10);
+
+  const heightMatch = /HEIGHT (.*)/i.exec(header);
+  if (!heightMatch) {
+    throw new Error("Missing height");
+  }
+  const height = parseInt(heightMatch[1], 10);
+
+  const pointsMatch = /POINTS (.*)/i.exec(header);
+  let optionalPoints: number | undefined;
+  if (pointsMatch) {
+    optionalPoints = parseInt(pointsMatch[1], 10);
+  }
+  const points = optionalPoints || width * height;
+
+  const dataMatch = /DATA (.*)/i.exec(header);
+  if (!dataMatch) {
+    throw new Error("Missing data");
+  }
+  const data = dataMatch[1] as Data;
+
+  return {
+    body,
+    header: {
+      count,
+      data,
+      fields,
+      height,
+      points,
+      size,
+      type,
+      version,
+      width,
+    },
+  };
+}
+
+function calculateOffsets(header: IPcdHeader): {
+  offsets: IOffsets;
+  size: number;
+} {
+  const empty: IOffsets = {};
+  return header.fields.reduce(
+    ({ offsets, size }, field, i) => {
+      let newSize = size;
+      if (field === "x") {
+        offsets.x = newSize;
+      }
+      if (field === "y") {
+        offsets.y = newSize;
+      }
+      if (field === "z") {
+        offsets.z = newSize;
+      }
+      if (field === "rgb") {
+        offsets.rgb = newSize;
+      }
+      if (field === "rgba") {
+        offsets.rgba = newSize;
+      }
+      if (field === "intensity") {
+        offsets.intensity = newSize;
+      }
+      if (header.data === "ascii") {
+        newSize += 1;
+      } else if (header.data === "binary") {
+        newSize += header.size[i] * header.count[i];
+      } else if (header.data === "binary_compressed") {
+        newSize += header.size[i] * header.count[i] * header.points;
+      }
+      return {
+        offsets,
+        size: newSize,
+      };
+    },
+    {
+      offsets: empty,
+      size: 0,
+    }
+  );
 }
 
 function parse(buffer: ArrayBuffer): IPcd {
@@ -181,162 +334,11 @@ function parse(buffer: ArrayBuffer): IPcd {
   };
 }
 
-interface IOffsets {
-  x?: number;
-  y?: number;
-  z?: number;
-  rgb?: number;
-  rgba?: number;
-  intensity?: number;
-}
-function calculateOffsets(header: IPcdHeader): {
-  offsets: IOffsets;
-  size: number;
-} {
-  const empty: IOffsets = {};
-  return header.fields.reduce(
-    ({ offsets, size }, field, i) => {
-      if (field === "x") {
-        offsets.x = size;
-      }
-      if (field === "y") {
-        offsets.y = size;
-      }
-      if (field === "z") {
-        offsets.z = size;
-      }
-      if (field === "rgb") {
-        offsets.rgb = size;
-      }
-      if (field === "rgba") {
-        offsets.rgba = size;
-      }
-      if (field === "intensity") {
-        offsets.intensity = size;
-      }
-      if (header.data === "ascii") {
-        size += 1;
-      } else if (header.data === "binary") {
-        size += header.size[i] * header.count[i];
-      } else if (header.data === "binary_compressed") {
-        size += header.size[i] * header.count[i] * header.points;
-      }
-      return {
-        offsets,
-        size,
-      };
-    },
-    {
-      offsets: empty,
-      size: 0,
-    }
-  );
+export async function loadFromUrl(path: string): Promise<IPcd> {
+  const response = await fetch(path, { mode: "cors" });
+  return parse(await response.arrayBuffer());
 }
 
-function parseHeader(buffer: ArrayBuffer): {
-  header: IPcdHeader;
-  body: ArrayBuffer;
-} {
-  const { header, body } = extractHeader(buffer);
-
-  const versionMatch = /VERSION (.*)/i.exec(header);
-  if (versionMatch === null) {
-    throw new Error(`Missing version. Header ${header}`);
-  }
-  const version = versionMatch[1];
-
-  const fieldsMatch = /FIELDS (.*)/i.exec(header);
-  if (!fieldsMatch) {
-    throw new Error("Missing fields");
-  }
-  const fields = fieldsMatch[1].split(" ") as Field[];
-
-  const sizeMatch = /SIZE (.*)/i.exec(header);
-  if (!sizeMatch) {
-    throw new Error("Missing size");
-  }
-  const size = sizeMatch[1].split(" ").map((_) => parseInt(_, 10));
-
-  const typeMatch = /TYPE (.*)/i.exec(header);
-  if (!typeMatch) {
-    throw new Error("Missing type");
-  }
-  const type = typeMatch[1].split(" ") as Type[];
-
-  const countMatch = /COUNT (.*)/i.exec(header);
-  let optionalCount: number[] | undefined;
-  if (countMatch) {
-    optionalCount = countMatch[1].split(" ").map((_) => parseInt(_, 10));
-  }
-  const count = optionalCount || fields.map((_) => 1);
-
-  const widthMatch = /WIDTH (.*)/i.exec(header);
-  if (!widthMatch) {
-    throw new Error("Missing width");
-  }
-  const width = parseInt(widthMatch[1], 10);
-
-  const heightMatch = /HEIGHT (.*)/i.exec(header);
-  if (!heightMatch) {
-    throw new Error("Missing height");
-  }
-  const height = parseInt(heightMatch[1], 10);
-
-  const pointsMatch = /POINTS (.*)/i.exec(header);
-  let optionalPoints: number | undefined;
-  if (pointsMatch) {
-    optionalPoints = parseInt(pointsMatch[1], 10);
-  }
-  const points = optionalPoints || width * height;
-
-  const dataMatch = /DATA (.*)/i.exec(header);
-  if (!dataMatch) {
-    throw new Error("Missing data");
-  }
-  const data = dataMatch[1] as Data;
-
-  return {
-    body,
-    header: {
-      count,
-      data,
-      fields,
-      height,
-      points,
-      size,
-      type,
-      version,
-      width,
-    },
-  };
-}
-
-function extractHeader(buffer: ArrayBuffer): {
-  header: string;
-  body: ArrayBuffer;
-} {
-  const chars = new Uint8Array(buffer);
-  let header = "";
-
-  let i = 0;
-  for (
-    ;
-    i < chars.length && header.search(/[\r\n]DATA\s(\S*)\s/i) === -1;
-    i++
-  ) {
-    header += String.fromCharCode(chars[i]);
-  }
-  return {
-    body: buffer.slice(i),
-    header: header.replace(/\#.*/gi, ""),
-  };
-}
-
-function decompress(data: ArrayBuffer): ArrayBufferLike {
-  const sizes = new Uint32Array(data, 0, 2);
-  const compressedSize = sizes[0];
-  if (compressedSize === 0) {
-    return new ArrayBuffer(0);
-  }
-  return lzfjs.decompress(new Uint8Array(data, 8, compressedSize)).buffer;
+export function loadFromBase64(data: string): IPcd {
+  return parse(base64ToArrayBuffer(data));
 }

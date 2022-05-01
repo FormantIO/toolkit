@@ -24,12 +24,12 @@ export function extractLayerFieldValues(
   layerFields: LayerFields
 ): LayerFieldValues {
   const values: LayerFieldValues = {};
-  for (const [key, field] of Object.entries(layerFields)) {
+  Object.entries(layerFields).forEach(([key, field]) => {
     values[key] = {
       type: field.type,
       value: field.value,
     };
-  }
+  });
   return values;
 }
 

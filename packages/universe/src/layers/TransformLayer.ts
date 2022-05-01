@@ -1,3 +1,4 @@
+import * as uuid from "uuid";
 import { getDistance } from "geolib";
 import { Euler, Matrix4, Object3D, Quaternion, Vector3 } from "three";
 import { defined } from "../../../common/defined";
@@ -5,7 +6,6 @@ import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../SceneGraph";
 import { TreePath } from "../ITreeElement";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
-import * as uuid from "uuid";
 
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
@@ -65,7 +65,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
   ): TreePath {
     const newPathSoFar = pathSoFar || [];
 
-    for (let i = 0; i < transformNodes.length; i++) {
+    for (let i = 0; i < transformNodes.length; i += 1) {
       if (transformNodes[i].name === name) {
         newPathSoFar.push(i);
         return newPathSoFar;
@@ -73,14 +73,13 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     }
 
     // not found so go down the tree
-    for (let i = 0; i < transformNodes.length; i++) {
+    for (let i = 0; i < transformNodes.length; i += 1) {
       const { children } = transformNodes[i];
-      if (!children || children.length === 0) {
-        continue;
-      }
-      const ret = this.findPathToName(children, name, [...newPathSoFar, i]);
-      if (ret.length > 0) {
-        return ret;
+      if (children && children.length > 0) {
+        const ret = this.findPathToName(children, name, [...newPathSoFar, i]);
+        if (ret.length > 0) {
+          return ret;
+        }
       }
     }
 

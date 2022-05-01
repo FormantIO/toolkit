@@ -14,14 +14,14 @@ function calculateEnds(node: ITransformTreeNode): { [name: string]: IVector3 } {
   }
 
   const results: { [name: string]: IVector3 } = {};
-  for (const child of children) {
+  children.forEach((child) => {
     const ends = calculateEnds(child);
-    for (const childName of Object.keys(ends)) {
+    Object.keys(ends).forEach((childName) => {
       results[childName] = vector(ends[childName]).applyMatrix4(
         transformMatrix(transform)
       );
-    }
-  }
+    });
+  });
 
   return results;
 }
@@ -31,13 +31,13 @@ function calculateTrails(nodes: ITransformTreeNode[]): {
 } {
   const results: { [name: string]: IVector3[] } = {};
 
-  for (const node of nodes) {
+  nodes.forEach((node) => {
     const ends = calculateEnds(node);
-    for (const name of Object.keys(ends)) {
+    Object.keys(ends).forEach((name) => {
       results[name] = results[name] || [];
       results[name].push(ends[name]);
-    }
-  }
+    });
+  });
 
   return results;
 }

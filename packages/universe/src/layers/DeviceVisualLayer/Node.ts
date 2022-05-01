@@ -9,7 +9,7 @@ import { Joint } from "./Joint";
 import { Pointer } from "./Pointer";
 
 export class Node extends Group {
-  private _resolution = new Vector2();
+  private nodeResolution = new Vector2();
 
   private lineGeometry = new LineGeometry();
 
@@ -24,6 +24,7 @@ export class Node extends Group {
 
   private line: Line2 = new Line2(this.lineGeometry, this.lineMaterial);
 
+  // eslint-disable-next-line no-use-before-define
   private nodes: { [key: string]: Node } = {};
 
   constructor(private camera: PerspectiveCamera, root?: "root") {
@@ -42,18 +43,18 @@ export class Node extends Group {
     const newNames = (node.children || []).map((_) => _.name);
 
     const removed = currentNames.filter((_) => !newNames.includes(_));
-    for (const name of removed) {
+    removed.forEach((name) => {
       this.remove(this.nodes[name]);
       delete this.nodes[name];
-    }
+    });
 
     const matrix = transformMatrix(transform);
 
-    for (const name of newNames) {
+    newNames.forEach((name) => {
       let child = this.nodes[name];
       if (!child) {
         child = new Node(this.camera);
-        child.resolution = this._resolution;
+        child.resolution = this.nodeResolution;
         this.add(child);
         this.nodes[name] = child;
       }
@@ -62,7 +63,7 @@ export class Node extends Group {
         child.node = childNode;
       }
       child.matrix.copy(matrix);
-    }
+    });
 
     const lineVertices = [new Vector3(), vector(node.transform.translation)];
     this.lineGeometry = new LineGeometry();
@@ -88,13 +89,13 @@ export class Node extends Group {
     }
     if (terminal) {
       this.pointer = new Pointer(this.camera);
-      this.pointer.resolution = this._resolution;
+      this.pointer.resolution = this.nodeResolution;
       this.add(this.pointer);
     }
   }
 
   public set resolution(resolution: Vector2) {
-    this._resolution = resolution;
+    this.nodeResolution = resolution;
     this.lineMaterial.resolution = resolution;
     this.joint.resolution = resolution;
 
@@ -102,9 +103,9 @@ export class Node extends Group {
       this.pointer.resolution = resolution;
     }
 
-    for (const child of Object.values(this.nodes)) {
+    Object.values(this.nodes).forEach((child) => {
       child.resolution = resolution;
-    }
+    });
   }
 
   public update() {
@@ -114,8 +115,8 @@ export class Node extends Group {
       this.pointer.update();
     }
 
-    for (const child of Object.values(this.nodes)) {
+    Object.values(this.nodes).forEach((child) => {
       child.update();
-    }
+    });
   }
 }

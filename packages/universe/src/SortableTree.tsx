@@ -39,18 +39,6 @@ const IconsDiv = styled.div`
 `;
 
 export class SortableTree extends Component<ISortableTreeProps> {
-  select(path: TreePath) {
-    if (this.props.onSelected) {
-      this.props.onSelected(path);
-    }
-  }
-
-  onIconClicked(path: TreePath, iconIndex: number) {
-    if (this.props.onIconSelected) {
-      this.props.onIconSelected(path, iconIndex);
-    }
-  }
-
   private onItemClicked = (p: TreePath) => {
     this.select(p);
   };
@@ -59,14 +47,27 @@ export class SortableTree extends Component<ISortableTreeProps> {
     this.onIconClicked(currentPath, iconIndex);
   };
 
+  onIconClicked(path: TreePath, iconIndex: number) {
+    if (this.props.onIconSelected) {
+      this.props.onIconSelected(path, iconIndex);
+    }
+  }
+
+  select(path: TreePath) {
+    if (this.props.onSelected) {
+      this.props.onSelected(path);
+    }
+  }
+
   renderTree(elements: TreeElement[], pathSoFar: TreePath = []) {
     const { selected } = this.props;
     return elements.map((e: TreeElement, elementIndex: number) => {
       const currentPath = [...pathSoFar, elementIndex];
-      const isSelected = selected
-        && selected.length === currentPath.length
-        && selected.every(
-          (val, selectedIndex) => val === currentPath[selectedIndex],
+      const isSelected =
+        selected &&
+        selected.length === currentPath.length &&
+        selected.every(
+          (val, selectedIndex) => val === currentPath[selectedIndex]
         );
       return (
         <React.Fragment key={`tree_item${currentPath.join("-")}`}>
@@ -102,19 +103,26 @@ export class SortableTree extends Component<ISortableTreeProps> {
               </TitleSpan>
             </span>
             <IconsDiv>
-              {e.icons
-                && e.icons.map((icon, iconIndex) => (
+              {e.icons &&
+                e.icons.map((icon, iconIndex) => (
                   <IconDiv
-                    key={
-                      `tree_item_icon${currentPath.join("-")}-${iconIndex}`
-                    }
+                    key={`tree_item_icon${currentPath.join("-")}-${currentPath
+                      .map((_) => _.toString())
+                      .join("-")}+${icon.icon}`}
                   >
                     <Tooltip title={icon.description}>
                       <div
+                        tabIndex={iconIndex}
+                        role="button"
+                        onKeyDown={this.onItemIconClicked.bind(
+                          this,
+                          currentPath,
+                          iconIndex
+                        )}
                         onClick={this.onItemIconClicked.bind(
                           this,
                           currentPath,
-                          iconIndex,
+                          iconIndex
                         )}
                       >
                         <Icon

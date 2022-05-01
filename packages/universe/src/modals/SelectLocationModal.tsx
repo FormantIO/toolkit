@@ -45,11 +45,11 @@ export class SelectLocationModal extends Component<
       ),
     });
     if (this.state.items.length > 0) {
-      this.setState({
-        locationStreamName: this.state.items[0].streamName,
-        relativeToLong: this.state.items[0].location.longitude,
-        relativeToLat: this.state.items[0].location.latitude,
-      });
+      this.setState((state) => ({
+        locationStreamName: state.items[0].streamName,
+        relativeToLong: state.items[0].location.longitude,
+        relativeToLat: state.items[0].location.latitude,
+      }));
     }
   }
 

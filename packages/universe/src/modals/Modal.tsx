@@ -19,9 +19,7 @@ export interface IModalProps {
 }
 
 export function Modal(props: IModalProps) {
-  const {
-    onClose, children, open, title, onAccept, acceptText,
-  } = props;
+  const { onClose, children, open, title, onAccept, acceptText } = props;
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>

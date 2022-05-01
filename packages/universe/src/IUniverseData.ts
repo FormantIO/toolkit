@@ -4,7 +4,7 @@ import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMap } from "../../data-sdk/src/model/IMap";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
-import { IRtcPointCloud } from "./layers/IRtcPointCloud";
+import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
 
 export interface UniverseRosDataSource {
   id: string;

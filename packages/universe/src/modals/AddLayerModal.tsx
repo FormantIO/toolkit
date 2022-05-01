@@ -147,30 +147,37 @@ export class AddLayerModal extends Component<
             <>
               <DialogContentText>Data derived 3D layers:</DialogContentText>
               <div>
-                {this.layerSuggestions.dataLayers.map((suggestion) => (
-                  <Button
-                    variant={
-                      selectedItem === suggestion.layerType
-                        ? "contained"
-                        : "outlined"
-                    }
-                    key={`data-${suggestion.layerType}-${suggestion.sources[0].id}`}
-                    sx={{ m: 1 }}
-                    onClick={this.onSelect.bind(
-                      this,
-                      suggestion.layerType,
-                      suggestion.sources
-                    )}
-                  >
-                    {LayerRegistry.getCommonName(suggestion.layerType)} [
-                    {suggestion.sources[0].sourceType === "realtime"
-                      ? suggestion.sources[0].rosTopicName
-                      : suggestion.sources[0].sourceType === "hardware"
-                      ? suggestion.sources[0].rtcStreamName
-                      : suggestion.sources[0].streamName}
-                    ]
-                  </Button>
-                ))}
+                {this.layerSuggestions.dataLayers.map((suggestion) => {
+                  let name: string;
+
+                  if (suggestion.sources[0].sourceType === "realtime") {
+                    name = suggestion.sources[0].rosTopicName;
+                  } else if (suggestion.sources[0].sourceType === "hardware") {
+                    name = suggestion.sources[0].rtcStreamName;
+                  } else {
+                    name = suggestion.sources[0].streamName;
+                  }
+
+                  return (
+                    <Button
+                      variant={
+                        selectedItem === suggestion.layerType
+                          ? "contained"
+                          : "outlined"
+                      }
+                      key={`data-${suggestion.layerType}-${suggestion.sources[0].id}`}
+                      sx={{ m: 1 }}
+                      onClick={this.onSelect.bind(
+                        this,
+                        suggestion.layerType,
+                        suggestion.sources
+                      )}
+                    >
+                      {LayerRegistry.getCommonName(suggestion.layerType)} [
+                      {name}]
+                    </Button>
+                  );
+                })}
               </div>
             </>
           )}
