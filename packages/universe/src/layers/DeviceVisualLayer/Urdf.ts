@@ -129,10 +129,10 @@ export class Urdf extends Group {
 
   private onLoad = (robot: URDFRobot) => {
     if (!this.configuration?.endEffectorOnly && !this.configuration?.ghosted) {
-      const accentColor1 = defined(Color.fromString("#00ff00")).toString();
-      const accentColor2 = defined(Color.fromString("#0000ff")).toString();
-      const skyColor = defined(Color.fromString("#ffffff")).toString();
-      const groundColor = defined(Color.fromString("#ff0000")).toString();
+      const accentColor1 = defined(Color.fromString("#18d2ff")).toString();
+      const accentColor2 = defined(Color.fromString("#ea719d")).toString();
+      const skyColor = defined(Color.fromString("#f8f9fc")).toString();
+      const groundColor = defined(Color.fromString("#282f45")).toString();
 
       const accentLight1 = new PointLight(accentColor1, 0.3, 0, 0);
       accentLight1.position.set(1000, 1000, 1000);
