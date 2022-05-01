@@ -5,13 +5,19 @@ import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../SceneGraph";
 import { TreePath } from "../ITreeElement";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import * as uuid from "uuid";
 
 import { UniverseLayerContent } from "./UniverseLayerContent";
+
 export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
   static id = "transform_space";
+
   static commonName = "Empty";
+
   static description = "An empty layer to fit other layers in.";
+
   static usesData = false;
+
   static createDefault(
     _universeData: IUniverseData,
     _deviceId: string,
@@ -19,7 +25,9 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
   ): TransformLayer<Object3D> {
     return new TransformLayer();
   }
+
   contentNode: T | undefined;
+
   constructor(content?: T) {
     super();
     if (content) {
@@ -40,7 +48,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     }
     const node = transformNodes[i];
     const pos = defined(node.transform).translation;
-    const rotation = defined(node.transform).rotation;
+    const { rotation } = defined(node.transform);
     newTransformsSoFar.push({
       pos: new Vector3(pos.x, pos.y, pos.z),
       rotation: new Quaternion(rotation.x, rotation.y, rotation.z, rotation.w),
@@ -66,7 +74,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
 
     // not found so go down the tree
     for (let i = 0; i < transformNodes.length; i++) {
-      const children = transformNodes[i].children;
+      const { children } = transformNodes[i];
       if (!children || children.length === 0) {
         continue;
       }
@@ -94,7 +102,12 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
       positioning.relativeToLatitude !== undefined
     ) {
       this.positionUnsubsciber = universeData.subscribeToLocation(
-        positioning.stream,
+        {
+          id: uuid.v4(),
+          sourceType: "telemetry",
+          streamName: positioning.stream,
+          streamType: "location",
+        },
         (location) => {
           const h1 = {
             longitude: location.longitude,
@@ -136,7 +149,12 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
       positioning.end
     ) {
       this.positionUnsubsciber = universeData.subscribeToTransformTree(
-        positioning.stream,
+        {
+          id: uuid.v4(),
+          sourceType: "telemetry",
+          streamName: positioning.stream,
+          streamType: "transform tree",
+        },
         (transformTree) => {
           fetch(defined(transformTree.url))
             .then((res) => res.json())

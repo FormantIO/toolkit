@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
 import { Vector3 } from "three";
+import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
+import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../common/defined";
 import { LayerType } from "./layers";
 import { LayerRegistry } from "./layers/LayerRegistry";
@@ -21,16 +23,30 @@ import { TreeElement, TreePath, treePathEquals } from "./ITreeElement";
 import { IUniverseData, UniverseDataSource } from "./IUniverseData";
 import { UniverseSidebar } from "./sidebar";
 import { UniverseViewer } from "./viewer";
-import "./layers";
 import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
-import { Button, Icon, Typography } from "@formant/ui-sdk";
-import styled from "styled-components";
+
+const UniverseContainer = styled.div`
+  height: 100%;
+`;
+
+const PropertiesTitle = styled.div`
+  border-bottom: #3b4668 solid 1px;
+  margin-bottom: 0.5rem;
+`;
+
+const PropertyRow = styled.div`
+  border-bottom: #3b4668 solid 1px;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+`;
 
 export interface IUniverseProps {
   universeData: IUniverseData;
+  mode?: "edit" | "view" | "no-interaction";
+  vr?: boolean;
 }
 
 export interface IUniverseState {
@@ -54,6 +70,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       currentlySelectedElement: undefined,
     };
   }
+
   private currentlyEditingName: string = "";
 
   private viewer: UniverseViewer | undefined;
@@ -66,7 +83,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
   onViewerLoaded = (el: UniverseViewer | null) => {
     this.viewer = el || undefined;
-    const deviceId = this.props.universeData.getDeviceContexts()[0].deviceId;
+    const { deviceId } = this.props.universeData.getDeviceContexts()[0];
     const deviceName = this.props.universeData.getDeviceContextName(deviceId);
     // Add some nice default layers
     this.onAddLayer("data", undefined, undefined, deviceName, deviceId);
@@ -149,7 +166,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         el.children.push(newElement);
         newPath = [...this.currentPath, el.children.length - 1];
       }
-      this.viewer.addSceneGraphItem(newPath);
+      this.viewer.addSceneGraphItem(newPath, deviceContext);
       this.forceUpdate();
     }
   };
@@ -243,7 +260,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     let color = "#";
     for (let i = 0; i < 3; i++) {
       const value = (hash >> (i * 8)) & 0xff;
-      color += ("00" + value.toString(16)).substr(-2);
+      color += `00${value.toString(16)}`.substr(-2);
     }
     /* tslint:enable:no-bitwise */
     return color;
@@ -268,7 +285,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         {
           icon: "edit",
           description: "edit",
-          color: element.editing ? "blue" : "white",
+          color: element.editing ? "#18d2ff" : "white",
         },
         {
           icon: "help",
@@ -323,7 +340,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             this.currentlyEditingElement = undefined;
           }
           defined(this.viewer).toggleVisible(epath, el.visible);
-          return;
+          return false;
         },
         path
       );
@@ -375,8 +392,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     });
   };
 
-  private onChangePositionType = (ev: React.ChangeEvent<HTMLSelectElement>) => {
-    const positionType = ev.target.value;
+  private onChangePositionType = (positionType: string) => {
     const element = definedAndNotNull(
       findSceneGraphElement(
         this.sceneGraph,
@@ -484,6 +500,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   };
 
   public render() {
+    const { mode, vr } = this.props;
+    const { sidebarOpen } = this.state;
     let element: SceneGraphElement | null | undefined;
     let hasParentContext = false;
     let parentContext: string | undefined;
@@ -496,9 +514,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       const parent = findSceneGraphParentElement(
         this.sceneGraph,
         this.state.currentlySelectedElement,
-        (el) => {
-          return el.deviceContext !== undefined;
-        }
+        (el) => el.deviceContext !== undefined
       );
       if (parent) {
         parentContext = parent.deviceContext;
@@ -507,15 +523,128 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       if (element) currentContext = element.deviceContext || parentContext;
     }
 
+    const showSidebar = mode === "edit" && sidebarOpen;
+
     return (
-      <div>
-        <UniverseViewer
-          ref={this.onViewerLoaded}
-          sceneGraph={this.sceneGraph}
-          onSceneGraphElementEdited={this.onSceneGraphElementEdited}
-          universeData={this.props.universeData}
-          deviceId={this.props.universeData.deviceId}
-        />
+      <UniverseContainer>
+        <Box
+          display={showSidebar ? "grid" : "block"}
+          gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
+        >
+          {showSidebar && (
+            <UniverseSidebar
+              onAdd={this.showAddDialog}
+              onRemove={this.onRemoveItem}
+              onDuplicate={this.onDuplicateItem}
+              onRename={this.showRenameDialog}
+              tree={this.buildTree()}
+              onIconInteracted={this.onIconInteracted}
+              onItemSelected={this.onItemSelected}
+            >
+              {(element === undefined || element === null) && <></>}
+              {element !== undefined && element !== null && (
+                <>
+                  <PropertiesTitle>Properties</PropertiesTitle>
+                  <div>
+                    {currentContext !== undefined && (
+                      <PropertyRow>
+                        device:{" "}
+                        {currentContext !== undefined
+                          ? this.props.universeData.getDeviceContextName(
+                              currentContext
+                            )
+                          : "none"}
+                      </PropertyRow>
+                    )}
+                    <div>
+                      <Stack spacing={4}>
+                        <div>
+                          <div>positioning</div>
+                          <Select
+                            label="Positioning"
+                            value={element.position.type}
+                            onChange={this.onChangePositionType}
+                            items={[
+                              "manual",
+                              ...(element.deviceContext || hasParentContext
+                                ? ["transform tree", "gps"]
+                                : []),
+                            ].map((_) => ({ label: _, value: _ }))}
+                          />
+                        </div>
+                        {element.position.type === "manual" && (
+                          <div>
+                            <Typography variant="body1">
+                              x: {element.position.x.toFixed(4)}
+                              <br />
+                              y: {element.position.y.toFixed(4)}
+                              <br />
+                              z: {element.position.z.toFixed(4)}
+                            </Typography>
+                          </div>
+                        )}
+                        {element.position.type === "gps" && (
+                          <div>
+                            <Typography variant="body1">
+                              stream: {element.position.stream}
+                              <br />
+                              relative to longitude:{" "}
+                              {element.position.relativeToLongitude}
+                              <br />
+                              relative to latitude:{" "}
+                              {element.position.relativeToLatitude}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              onClick={this.showLocationStreamSelect}
+                            >
+                              Select
+                            </Button>
+                          </div>
+                        )}
+                        {element.position.type === "transform tree" && (
+                          <div>
+                            <Typography variant="body1">
+                              stream: {element.position.stream}
+                              <br />
+                              transform: {element.position.end}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              onClick={this.showTransformSelect}
+                            >
+                              Select
+                            </Button>
+                          </div>
+                        )}
+                      </Stack>
+                    </div>
+                  </div>
+                </>
+              )}
+            </UniverseSidebar>
+          )}
+          <Box sx={{ position: "relative", overflow: "hidden" }}>
+            <UniverseViewer
+              ref={this.onViewerLoaded}
+              sceneGraph={this.sceneGraph}
+              onSceneGraphElementEdited={this.onSceneGraphElementEdited}
+              universeData={this.props.universeData}
+              vr={vr}
+            />
+            <Controls>
+              <Control onClick={this.recenter}>
+                <Icon name="recenter" />
+              </Control>
+              {mode === "edit" && (
+                <Control onClick={this.toggleSidebar}>
+                  <Icon name="edit" />
+                </Control>
+              )}
+            </Controls>
+          </Box>
+        </Box>
+
         {this.state.showingAddDialog && (
           <AddLayerModal
             onCancel={this.hideAddDialog}
@@ -531,145 +660,52 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
             onRenameLayer={this.onRenameLayer}
           />
         )}
-        {this.state.showingTransformSelect && (
+        {this.state.showingTransformSelect && currentContext && (
           <SelectTransformPathModal
+            deviceContext={currentContext}
             universeData={this.props.universeData}
             onCancel={this.hideTransformSelect}
             onSelect={this.onSelectTransformPath}
           />
         )}
-        {this.state.showingLocationStreamSelect && (
+        {this.state.showingLocationStreamSelect && currentContext && (
           <SelectLocationModal
+            deviceContext={currentContext}
             universeData={this.props.universeData}
             onCancel={this.hideLocationStreamSelect}
             onSelect={this.onSelectLocationStream}
           />
         )}
-        {this.state.sidebarOpen && (
-          <UniverseSidebar
-            onAdd={this.showAddDialog}
-            onRemove={this.onRemoveItem}
-            onDuplicate={this.onDuplicateItem}
-            onRename={this.showRenameDialog}
-            tree={this.buildTree()}
-            onIconInteracted={this.onIconInteracted}
-            onItemSelected={this.onItemSelected}
-          >
-            {(element === undefined || element === null) && (
-              <>
-                <div>Statistics</div>
-                <div>
-                  <div>Total devices: 1</div>
-                  <div>Bandwidth: 66Kbps</div>
-                  <div>Total Data: 5mb</div>
-                  <div>Total Streams: 3</div>
-                  <div>
-                    Stream Latencies:
-                    <br />
-                    min: 122ms avg: 567ms max: 890ms
-                  </div>
-                </div>
-              </>
-            )}
-            {element !== undefined && element !== null && (
-              <>
-                {" "}
-                <div>Properties</div>
-                <div>
-                  {currentContext !== undefined && (
-                    <div>
-                      device:{" "}
-                      {currentContext !== undefined
-                        ? this.props.universeData.getDeviceContextName(
-                            currentContext
-                          )
-                        : "none"}
-                    </div>
-                  )}
-                  <div>
-                    <div>
-                      <div>positioning</div>
-
-                      <select
-                        value={element.position.type}
-                        onChange={this.onChangePositionType}
-                      >
-                        {[
-                          "manual",
-                          ...(element.deviceContext || hasParentContext
-                            ? ["transform tree", "gps"]
-                            : []),
-                        ].map((_) => (
-                          <option key={_} value={_}>
-                            {_}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {element.position.type === "manual" && (
-                      <div>
-                        <Typography variant="body1">
-                          x: {element.position.x.toFixed(4)}
-                          <br />
-                          y: {element.position.y.toFixed(4)}
-                          <br />
-                          z: {element.position.z.toFixed(4)}
-                        </Typography>
-                      </div>
-                    )}
-                    {element.position.type === "gps" && (
-                      <div>
-                        <Typography variant="body1">
-                          stream: {element.position.stream}
-                          <br />
-                          relative to longitude:{" "}
-                          {element.position.relativeToLongitude}
-                          <br />
-                          relative to latitude:{" "}
-                          {element.position.relativeToLatitude}
-                        </Typography>
-                        <Button onClick={this.showLocationStreamSelect}>
-                          Select
-                        </Button>
-                      </div>
-                    )}
-                    {element.position.type === "transform tree" && (
-                      <div>
-                        <Typography variant="body1">
-                          stream: {element.position.stream}
-                          <br />
-                          transform: {element.position.end}
-                        </Typography>
-                        <Button onClick={this.showTransformSelect}>
-                          Select
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </UniverseSidebar>
-        )}
-        <Controls>
-          <Control onClick={this.recenter}>
-            <Icon name="recenter" />
-          </Control>
-          <Control onClick={this.toggleSidebar}>
-            <Icon name="edit" />
-          </Control>
-        </Controls>
-      </div>
+      </UniverseContainer>
     );
   }
 }
 
 const Controls = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
+  bottom: 1rem;
+  left: 1rem;
 `;
 
 const Control = styled.div`
-  background: blue;
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    color: white;
+  }
+  background: #bac4e2;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
 `;

@@ -1,5 +1,5 @@
-import { UniverseDataSource } from "./IUniverseData";
 import { v4 as uuid } from "uuid";
+import { UniverseDataSource } from "./IUniverseData";
 import { LayerType } from "./layers";
 import { LayerFieldValues } from "./layers/UniverseLayerContent";
 import { TreePath } from "./ITreeElement";
@@ -24,11 +24,22 @@ export type Positioning =
     };
 export class SceneGraphElement {
   children: SceneGraphElement[] = [];
+
   public id: string;
+
   public visible: boolean = true;
+
   public editing: boolean = false;
-  public position: Positioning = { type: "manual", x: 0, y: 0, z: 0 };
+
+  public position: Positioning = {
+    type: "manual",
+    x: 0,
+    y: 0,
+    z: 0,
+  };
+
   public fieldValues: LayerFieldValues = {};
+
   constructor(
     public name: string,
     public type: LayerType,

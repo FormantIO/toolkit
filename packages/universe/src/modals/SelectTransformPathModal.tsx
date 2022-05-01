@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Component } from "react";
-import { defined } from "../../../common/defined";
+import { DialogContentText, Select } from "@formant/ui-sdk";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
+import { defined } from "../../../common/defined";
 import { TreeElement, TreePath } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
-import { Typography, Button } from "@formant/ui-sdk";
 import { SortableTree } from "../SortableTree";
-import { Modal } from "../modals/Modal";
+import { Modal } from "./Modal";
 
 interface ISelectTransformPathModalProps {
+  deviceContext: string;
   universeData: IUniverseData;
   onSelect: (tree: string, end: string) => void;
   onCancel: () => void;
@@ -24,18 +25,17 @@ export class SelectTransformPathModal extends Component<
   ISelectTransformPathModalProps,
   ISelectTransformPathModalState
 > {
-  buildTransformTreeElement(tree: ITransformNode): TreeElement {
-    return {
-      title: defined(tree.name),
-      children: tree.children?.map((_) => this.buildTransformTreeElement(_)),
-    };
-  }
-
   async componentDidMount() {
-    const transformTrees = await this.props.universeData.getTransformTrees();
+    const transformTrees =
+      await this.props.universeData.getLatestTransformTrees(
+        this.props.deviceContext
+      );
     const trees = new Map<string, TreeElement>();
     transformTrees.forEach((tree) =>
-      trees.set(tree.name, this.buildTransformTreeElement(tree.transformTree))
+      trees.set(
+        tree.streamName,
+        this.buildTransformTreeElement(tree.transformTree)
+      )
     );
     this.setState({
       items: trees,
@@ -73,35 +73,48 @@ export class SelectTransformPathModal extends Component<
     });
   };
 
-  onChangeTree = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+  onChangeTree = (target: string) => {
     this.setState({
-      mapName: ev.target.value,
+      mapName: target,
       selected: undefined,
     });
   };
 
+  buildTransformTreeElement(tree: ITransformNode): TreeElement {
+    return {
+      title: defined(tree.name),
+      children: tree.children?.map((_) => this.buildTransformTreeElement(_)),
+    };
+  }
+
   public render() {
     const { onCancel } = this.props;
     let items;
-    if (this.state.mapName) {
+    if (this.state?.mapName) {
       items = this.state.items.get(this.state.mapName);
     }
-    const treeNames = Array.from(this.state.items.keys());
+    const treeNames = Array.from(this.state?.items.keys() || []);
 
     return (
-      <Modal>
-        <Typography variant="h1">Select Transform Path</Typography>
-        Select the transform path you'd like to use
-        <hr />
+      <Modal
+        open
+        title="Select Transform Path"
+        acceptText="Select"
+        onAccept={this.onSelectTransform}
+        acceptDisabled={!this.state?.selected || !this.state?.mapName}
+        onClose={onCancel}
+      >
+        <DialogContentText>
+          Select the transform path you would like to use
+        </DialogContentText>
         {items && (
           <>
-            <select value={this.state.mapName} onChange={this.onChangeTree}>
-              {treeNames.map((_) => (
-                <option key={_} value={_}>
-                  {_}
-                </option>
-              ))}
-            </select>
+            <Select
+              label="TF"
+              value={this.state?.mapName}
+              onChange={this.onChangeTree}
+              items={treeNames.map((_) => ({ label: _, value: _ }))}
+            />
             <SortableTree
               items={[items]}
               onSelected={this.onSelectTransformItem}
@@ -109,15 +122,6 @@ export class SelectTransformPathModal extends Component<
             />
           </>
         )}
-        <div>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            onClick={this.onSelectTransform}
-            disabled={!this.state.selected || !this.state.mapName}
-          >
-            Select
-          </Button>
-        </div>
       </Modal>
     );
   }

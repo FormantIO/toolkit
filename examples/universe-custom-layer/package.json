@@ -13,8 +13,8 @@
     "vite": "^2.9.1"
   },
   "dependencies": {
-    "@formant/ui-sdk": "0.0.1",
-    "@formant/universe": "0.0.8",
+    "@formant/ui-sdk": "latest",
+    "@formant/universe": "latest",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "three": "^0.125.2"

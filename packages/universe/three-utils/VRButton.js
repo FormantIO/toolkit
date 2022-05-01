@@ -33,7 +33,7 @@ class VRButton {
       button.style.display = "";
 
       button.style.cursor = "pointer";
-      button.style.left = "calc(50% - 50px)";
+      button.style.left = "4rem";
       button.style.width = "100px";
 
       button.textContent = "ENTER VR";
@@ -71,7 +71,7 @@ class VRButton {
       button.style.display = "";
 
       button.style.cursor = "auto";
-      button.style.left = "calc(50% - 75px)";
+      button.style.left = "4rem";
       button.style.width = "150px";
 
       button.onmouseenter = null;
@@ -88,7 +88,7 @@ class VRButton {
 
     function stylizeElement(element) {
       element.style.position = "absolute";
-      element.style.bottom = "20px";
+      element.style.bottom = "2rem";
       element.style.padding = "12px 6px";
       element.style.border = "1px solid #fff";
       element.style.borderRadius = "4px";
@@ -125,7 +125,7 @@ class VRButton {
         message.innerHTML = "WEBXR NOT AVAILABLE";
       }
 
-      message.style.left = "calc(50% - 90px)";
+      message.style.left = "4rem";
       message.style.width = "180px";
       message.style.textDecoration = "none";
 

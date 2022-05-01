@@ -1,10 +1,3 @@
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
-import { TransformLayer } from "./TransformLayer";
-import {
-  LayerField,
-  LayerFields,
-  UniverseLayerContent,
-} from "./UniverseLayerContent";
 import {
   DoubleSide,
   Group,
@@ -15,13 +8,24 @@ import {
   Texture,
   TextureLoader,
 } from "three";
-import { SVGLoader } from "../three-utils/SVGLoader";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { TransformLayer } from "./TransformLayer";
+import {
+  LayerField,
+  LayerFields,
+  UniverseLayerContent,
+} from "./UniverseLayerContent";
+import { SVGLoader } from "../../three-utils/SVGLoader";
 
 export class ImageLayer extends UniverseLayerContent {
   static id = "image";
+
   static commonName = "Image";
+
   static description = "A image plane model.";
+
   static usesData = false;
+
   static fields = {
     url: {
       name: "URL",
@@ -36,7 +40,7 @@ export class ImageLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields
+    fields?: LayerFields,
   ): TransformLayer<ImageLayer> {
     return new TransformLayer(new ImageLayer((fields || {}).url));
   }
@@ -48,7 +52,7 @@ export class ImageLayer extends UniverseLayerContent {
       if (isSvg) {
         const loader = new SVGLoader();
         loader.load(urlField.value, (data) => {
-          const paths = data.paths;
+          const { paths } = data;
           const group = new Group();
 
           for (const path of paths) {
@@ -76,10 +80,10 @@ export class ImageLayer extends UniverseLayerContent {
           let w = texture.image.width;
           let h = texture.image.height;
           if (w > h) {
-            h = h / w;
+            h /= w;
             w = 1;
           } else {
-            w = w / h;
+            w /= h;
             h = 1;
           }
           const geometry = new PlaneBufferGeometry(w, h);

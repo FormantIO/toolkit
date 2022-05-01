@@ -7,11 +7,39 @@ import {
   LayerFields,
   UniverseLayerContent,
 } from "./UniverseLayerContent";
+
+function roundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+  fill: string,
+) {
+  ctx.fillStyle = fill;
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  ctx.fill();
+}
 export class LabelLayer extends UniverseLayerContent {
   static id = "label";
+
   static commonName = "Label";
+
   static description = "A text label";
+
   static usesData = false;
+
   static fields = {
     label_text: {
       name: "Label Text",
@@ -26,7 +54,7 @@ export class LabelLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields
+    fields?: LayerFields,
   ): TransformLayer<LabelLayer> {
     return new TransformLayer(new LabelLayer((fields || {}).label_text));
   }
@@ -34,14 +62,14 @@ export class LabelLayer extends UniverseLayerContent {
   constructor(labelTextField?: LayerField) {
     super();
     if (
-      labelTextField &&
-      labelTextField.type === "text" &&
-      labelTextField.value
+      labelTextField
+      && labelTextField.type === "text"
+      && labelTextField.value
     ) {
       const fontface = "Arial";
       const fontsize = 30;
       const message = labelTextField.value;
-      const font = fontsize + "px " + fontface;
+      const font = `${fontsize}px ${fontface}`;
 
       const canvas = document.createElement("canvas");
       const context = definedAndNotNull(canvas.getContext("2d"));
@@ -51,15 +79,24 @@ export class LabelLayer extends UniverseLayerContent {
       const metrics = context.measureText(message);
       const textWidth = metrics.width;
       const textHeight = fontsize * 1.5;
-      canvas.width = textWidth;
-      canvas.height = textHeight;
-      context.fillStyle = "#2d3855";
-      context.fillRect(0, 0, textWidth, textHeight);
+      const padding = 20;
+      canvas.width = textWidth + padding;
+      canvas.height = textHeight + padding;
+      context.fillStyle = "#000000";
+      roundRect(
+        context,
+        0,
+        0,
+        textWidth + padding,
+        textHeight + padding,
+        10,
+        "#000000",
+      );
 
       // background color
       context.font = font;
       context.fillStyle = "#bac4e2";
-      context.fillText(message, 0, fontsize);
+      context.fillText(message, 0 + 10, fontsize + 10);
 
       // canvas contents will be used for a texture
       const texture = new Texture(canvas);
@@ -76,8 +113,8 @@ export class LabelLayer extends UniverseLayerContent {
       // scale sprite so it isn't stretched
       sprite.scale.set(
         1 / pixelScale,
-        textHeight / textWidth / pixelScale,
-        1.0 / pixelScale
+        (textHeight + padding) / (textWidth + padding) / pixelScale,
+        1.0 / pixelScale,
       );
       this.add(sprite);
       this.renderOrder = 100;

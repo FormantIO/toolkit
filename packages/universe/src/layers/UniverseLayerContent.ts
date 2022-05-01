@@ -2,6 +2,7 @@ import { Object3D, PerspectiveCamera } from "three";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
+
 export interface TextLayerFieldValue {
   type: string;
   value?: string;
@@ -43,19 +44,25 @@ export function injectLayerFieldValues(
 
 export abstract class UniverseLayerContent extends Object3D {
   static id: string;
+
   static commonName: string;
+
   static description: string;
+
   static usesData: boolean;
+
   static fields?: LayerFields;
+
   static getLayerSuggestions(
     _data: IUniverseData,
     _deviceContext?: string
   ): LayerSuggestion[] {
     return [];
   }
+
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    _deviceId?: string,
     _universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
     _camera?: () => PerspectiveCamera

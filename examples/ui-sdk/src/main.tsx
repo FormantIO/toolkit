@@ -7,9 +7,31 @@ import {
   Container,
   Grid,
   Typography,
+  Select,
+  TextField,
+  Tooltip,
+  HelpIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Switch,
+  Stack,
+  Link,
 } from "@formant/ui-sdk";
 
 function App() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Box sx={{ p: 4 }}>
@@ -146,6 +168,107 @@ function App() {
               <Button variant="outlined" size="large">
                 Outlined
               </Button>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Select
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Select
+                label="Age"
+                items={[
+                  { label: "0-10", value: "0-10" },
+                  { label: "11-20", value: "11-20" },
+                  { label: "21-30", value: "21-30" },
+                ]}
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Text Input
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <TextField
+                id="outlined-basic"
+                label="Outlined"
+                variant="filled"
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Tooltip
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Tooltip title="Delete">
+                <Button>Hover over me</Button>
+              </Tooltip>
+              <HelpIcon
+                description={
+                  <>
+                    You can put a <Link href="https://formant.io">link</Link> in
+                    here too.
+                  </>
+                }
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Tooltip
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Button variant="outlined" onClick={handleClickOpen}>
+                Open form dialog
+              </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Subscribe</DialogTitle>
+                <DialogContent>
+                  <Stack spacing={2}>
+                    <DialogContentText>
+                      To subscribe to this website, please enter your email
+                      address here. We will send updates occasionally.
+                    </DialogContentText>
+                    <TextField
+                      variant="filled"
+                      autoFocus
+                      id="name"
+                      label="Email Address"
+                      type="email"
+                      fullWidth
+                    />
+                  </Stack>
+                </DialogContent>
+                <DialogActions>
+                  <Stack direction="row" spacing={2}>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      onClick={handleClose}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleClose}
+                    >
+                      Subscribe
+                    </Button>
+                  </Stack>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Switch
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Switch />
             </Grid>
           </Box>
         </Container>

@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Icon } from "@formant/ui-sdk";
+import { Icon, Tooltip, Typography } from "@formant/ui-sdk";
 import { Component } from "react";
-import { TreeElement, TreePath } from "./ITreeElement";
 import styled from "styled-components";
+import { TreeElement, TreePath } from "./ITreeElement";
 
 interface ISortableTreeProps {
   items: TreeElement[];
@@ -30,9 +30,8 @@ const TitleSpan = styled.span`
 const TreeItemDiv = styled.div`
   cursor: pointer;
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-bottom: solid 1px;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0rem;
+  border-bottom: #3b4668 solid 1px;
 `;
 
 const IconsDiv = styled.div`
@@ -64,52 +63,70 @@ export class SortableTree extends Component<ISortableTreeProps> {
     const { selected } = this.props;
     return elements.map((e: TreeElement, elementIndex: number) => {
       const currentPath = [...pathSoFar, elementIndex];
-      const isSelected =
-        selected &&
-        selected.length === currentPath.length &&
-        selected.every(
-          (val, selectedIndex) => val === currentPath[selectedIndex]
+      const isSelected = selected
+        && selected.length === currentPath.length
+        && selected.every(
+          (val, selectedIndex) => val === currentPath[selectedIndex],
         );
       return (
-        <React.Fragment key={"tree_item" + currentPath.join("-")}>
+        <React.Fragment key={`tree_item${currentPath.join("-")}`}>
           <TreeItemDiv>
             <span
               style={{
-                marginLeft: `${(currentPath.length - 1) * 2}rem`,
-                color: isSelected ? "blue" : "inherit",
+                marginLeft: `${(currentPath.length - 1) * 1}rem`,
+                color: isSelected ? "#18d2ff" : "#BAC4E2",
               }}
             >
               <TitleSpan
                 onClick={this.onItemClicked.bind(this, currentPath)}
                 data-tooltip={e.title}
               >
-                {currentPath.length > 1 && <span>- </span>}
+                <Typography variant="h5">
+                  {currentPath.length > 1 && <span>— </span>}
 
-                {e.title}
-                {e.textColor && (
-                  <span style={{ color: e.textColor }}> &#9675;</span>
-                )}
+                  {e.title}
+                  {e.textColor && (
+                    <>
+                      {" "}
+                      <Icon
+                        name="device"
+                        sx={{
+                          color: e.textColor,
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      />
+                    </>
+                  )}
+                </Typography>
               </TitleSpan>
             </span>
             <IconsDiv>
-              {e.icons &&
-                e.icons.map((icon, iconIndex) => (
+              {e.icons
+                && e.icons.map((icon, iconIndex) => (
                   <IconDiv
                     key={
-                      "tree_item_icon" + currentPath.join("-") + "-" + iconIndex
+                      `tree_item_icon${currentPath.join("-")}-${iconIndex}`
                     }
                   >
-                    <Icon
-                      name={icon.icon}
-                      size="18"
-                      data-tooltip={icon.description}
-                      onClick={this.onItemIconClicked.bind(
-                        this,
-                        currentPath,
-                        iconIndex
-                      )}
-                      color={icon.color}
-                    />
+                    <Tooltip title={icon.description}>
+                      <div
+                        onClick={this.onItemIconClicked.bind(
+                          this,
+                          currentPath,
+                          iconIndex,
+                        )}
+                      >
+                        <Icon
+                          name={icon.icon}
+                          sx={{
+                            color: icon.color,
+                            width: "1rem",
+                            height: "1rem",
+                          }}
+                        />
+                      </div>
+                    </Tooltip>
                   </IconDiv>
                 ))}
             </IconsDiv>

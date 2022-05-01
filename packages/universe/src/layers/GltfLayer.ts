@@ -1,5 +1,5 @@
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
-import { GLTFLoader } from "../three-utils/GLTFLoader";
+import { GLTFLoader } from "../../three-utils/GLTFLoader";
 import { TransformLayer } from "./TransformLayer";
 import {
   LayerField,
@@ -9,9 +9,13 @@ import {
 
 export class GltfLayer extends UniverseLayerContent {
   static id = "3dmodel";
+
   static commonName = "3D Model";
+
   static description = "A 3D model.";
+
   static usesData = false;
+
   static fields = {
     url: {
       name: "URL",
@@ -26,7 +30,7 @@ export class GltfLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields
+    fields?: LayerFields,
   ): TransformLayer<GltfLayer> {
     return new TransformLayer(new GltfLayer((fields || {}).url));
   }

@@ -1,8 +1,7 @@
-import { UniverseDataSource } from "../IUniverseData";
 import { PerspectiveCamera } from "three";
+import { UniverseDataSource, IUniverseData } from "../IUniverseData";
 import { LayerType } from ".";
 import { defined } from "../../../common/defined";
-import { IUniverseData } from "../IUniverseData";
 import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
 
 export interface LayerSuggestion {
@@ -12,6 +11,7 @@ export interface LayerSuggestion {
 export class LayerRegistry {
   private static layers: Map<LayerType, typeof UniverseLayerContent> =
     new Map();
+
   static register(layer: typeof UniverseLayerContent) {
     LayerRegistry.layers.set(layer.id, layer);
   }
@@ -58,7 +58,7 @@ export class LayerRegistry {
   static createDefaultLayer(
     nodeType: LayerType,
     universeData: IUniverseData,
-    deviceId: string,
+    deviceId?: string,
     universeDataSources?: UniverseDataSource[],
     fields?: LayerFields,
     getCurrentCamera?: () => PerspectiveCamera

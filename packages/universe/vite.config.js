@@ -19,6 +19,10 @@ module.exports = defineConfig({
         "styled-components",
         "geolib",
         "uuid",
+        "jszip",
+        "lzfjs",
+        "urdf-loader",
+        "@formant/ui-sdk-realtime-player-core",
       ],
       output: {
         // Provide global variables to use in the UMD build

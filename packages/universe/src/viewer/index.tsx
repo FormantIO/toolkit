@@ -3,9 +3,10 @@ import * as React from "react";
 import { Component } from "react";
 import * as THREE from "three";
 import { Vector3, WebGLRenderer } from "three";
-import { OrbitControls } from "../three-utils/OrbitControls";
-import { TransformControls } from "../three-utils/TransformControls";
-import { VRButton } from "../three-utils/VRButton";
+import styled from "styled-components";
+import { OrbitControls } from "../../three-utils/OrbitControls";
+import { TransformControls } from "../../three-utils/TransformControls";
+import { VRButton } from "../../three-utils/VRButton";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { LayerRegistry } from "../layers/LayerRegistry";
 import { TransformLayer } from "../layers/TransformLayer";
@@ -18,11 +19,12 @@ import {
 } from "../SceneGraph";
 import { TreePath, treePathEquals } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
-import styled from "styled-components";
 
 const MeasureContainer = styled.div`
   width: 100%;
   height: 100vh;
+
+  background: #303030;
 
   > div {
     overflow: hidden;
@@ -34,19 +36,27 @@ const MeasureContainer = styled.div`
 export interface IUniverseViewerProps {
   universeData: IUniverseData;
   sceneGraph: SceneGraphElement[];
-  deviceId: string;
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
+  vr?: boolean;
 }
 
 export class UniverseViewer extends Component<IUniverseViewerProps> {
   private element: HTMLElement | null = null;
+
   private renderer: WebGLRenderer | undefined;
+
   private scene: THREE.Scene;
+
   private root: THREE.Object3D = new THREE.Object3D();
+
   private camera: THREE.PerspectiveCamera;
+
   private pathToLayer: Map<SceneGraphElement, TransformLayer<any>> = new Map();
+
   private editControls: TransformControls | undefined;
+
   private orbitControls: OrbitControls | undefined;
+
   private attachedPath: TreePath | undefined;
 
   constructor(props: IUniverseViewerProps) {
@@ -90,6 +100,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   public componentDidMount() {
     const { element } = this;
+    const { vr } = this.props;
     if (element) {
       this.renderer = new WebGLRenderer({
         alpha: true,
@@ -123,7 +134,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
           this.orbitControls.update();
         }
       });
-      element.appendChild(VRButton.createButton(this.renderer));
+      if (vr) element.appendChild(VRButton.createButton(this.renderer));
     }
   }
 
@@ -148,11 +159,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   }
 
-  getCurrentCamera = () => {
-    return this.camera;
-  };
+  getCurrentCamera = () => this.camera;
 
-  public addSceneGraphItem(path: TreePath) {
+  public addSceneGraphItem(path: TreePath, deviceId?: string) {
     const el = definedAndNotNull(
       findSceneGraphElement(this.props.sceneGraph, path)
     );
@@ -162,7 +171,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const layer = LayerRegistry.createDefaultLayer(
       el.type,
       this.props.universeData,
-      this.props.deviceId,
+      deviceId,
       el.dataSources,
       fields,
       this.getCurrentCamera

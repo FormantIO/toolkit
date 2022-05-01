@@ -5,21 +5,16 @@ import { TreeElement, TreePath, treePathEquals } from "../ITreeElement";
 import { SortableTree } from "../SortableTree";
 
 const SidebarContainer = styled.div`
-  background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 0.5rem;
-  position: absolute;
-  padding: 2rem;
-  left: 3rem;
-  top: 10rem;
-  bottom: 8rem;
+  background-color: #2d3855;
+  padding: 1rem;
   display: grid;
   grid-template-rows: 1fr auto 3rem;
   gap: 0.5rem;
+  height: 100%;
 `;
 
 const PropertiesSectionDiv = styled.div`
   display: grid;
-  grid-template-rows: 4rem auto;
   margin-bottom: 2rem;
 `;
 
@@ -53,7 +48,7 @@ export function UniverseSidebar({
   children,
 }: IUniverseSidebarProps) {
   const [selected, setSelected] = React.useState<TreePath | undefined>(
-    undefined
+    undefined,
   );
 
   const onTreeNodeSelect = (path: TreePath) => {

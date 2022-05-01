@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
+import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
 import { IUniverseData } from "../IUniverseData";
-import { IStreamCurrentValue } from "../../../data-sdk/src/model/IStreamCurrentValue";
-import { Typography, Button } from "@formant/ui-sdk";
-import { Modal } from "../modals/Modal";
+import { Modal } from "./Modal";
+import { ILocation } from "../../../data-sdk/src/model/ILocation";
 
 interface ISelectLocationModalProps {
+  deviceContext: string;
   universeData: IUniverseData;
   onSelect: (
     streamName: string,
@@ -19,7 +20,7 @@ interface ISelectLocationModalState {
   relativeToLong: number;
   relativeToLat: number;
   locationStreamName: string | undefined;
-  items: IStreamCurrentValue<"location">[];
+  items: { streamName: string; location: ILocation }[];
 }
 
 export class SelectLocationModal extends Component<
@@ -39,13 +40,15 @@ export class SelectLocationModal extends Component<
 
   async componentDidMount() {
     this.setState({
-      items: await this.props.universeData.getLocations(),
+      items: await this.props.universeData.getLatestLocations(
+        this.props.deviceContext
+      ),
     });
     if (this.state.items.length > 0) {
       this.setState({
         locationStreamName: this.state.items[0].streamName,
-        relativeToLong: this.state.items[0].currentValue.longitude,
-        relativeToLat: this.state.items[0].currentValue.latitude,
+        relativeToLong: this.state.items[0].location.longitude,
+        relativeToLat: this.state.items[0].location.latitude,
       });
     }
   }
@@ -60,9 +63,9 @@ export class SelectLocationModal extends Component<
     }
   };
 
-  onChangeLocationStream = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+  onChangeLocationStream = (stream: string) => {
     this.setState({
-      locationStreamName: ev.target.value,
+      locationStreamName: stream,
     });
   };
 
@@ -82,46 +85,47 @@ export class SelectLocationModal extends Component<
     const { onCancel } = this.props;
 
     return (
-      <Modal>
-        <Typography variant="h1">Select Location Posittioning</Typography>
-        Select the location stream you'd like to use and it's relative long lat
-        (this helps provide accuracy).
-        <hr />
-        Relative to Longitude
-        <input
-          type="number"
-          value={this.state.relativeToLong}
-          onChange={this.onChangeLong}
-        />
-        Relative to Latitude
-        <input
-          type="number"
-          value={this.state.relativeToLat}
-          onChange={this.onChangeLat}
-        />
-        {this.state.items && (
-          <>
-            <select
+      <Modal
+        open
+        title="Select Location Positioning"
+        acceptText="Select"
+        onAccept={this.onSelectLocation}
+        acceptDisabled={!this.state.locationStreamName}
+        onClose={onCancel}
+      >
+        <Stack spacing={2}>
+          <DialogContentText>
+            Select the location stream you would like to use and it's relative
+            longitude and latitude:
+          </DialogContentText>
+          <div>
+            <TextField
+              label="Relative to Longitude"
+              type="number"
+              value={this.state.relativeToLong}
+              onChange={this.onChangeLong}
+            />
+          </div>
+          <div>
+            <TextField
+              label="Relative to Latitude"
+              type="number"
+              value={this.state.relativeToLat}
+              onChange={this.onChangeLat}
+            />
+          </div>
+          {this.state.items && (
+            <Select
+              label="Location Stream"
               value={this.state.locationStreamName}
               onChange={this.onChangeLocationStream}
-            >
-              {this.state.items.map((_) => (
-                <option key={_.streamName} value={_.streamName}>
-                  _.streamName
-                </option>
-              ))}
-            </select>
-          </>
-        )}
-        <div>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            onClick={this.onSelectLocation}
-            disabled={!this.state.locationStreamName}
-          >
-            Select
-          </Button>
-        </div>
+              items={this.state.items.map((_) => ({
+                label: _.streamName,
+                value: _.streamName,
+              }))}
+            />
+          )}
+        </Stack>
       </Modal>
     );
   }
