@@ -1,12 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe, SimulatedUniverseData } from "../src/main";
+import { Universe } from "../src/main";
+import { SimulatedUniverseData } from "./SimulatedUniverseData";
 
 function App() {
-  return (
-    <Universe universeData={new SimulatedUniverseData()} mode="edit" />
-  );
+  return <Universe universeData={new SimulatedUniverseData()} mode="edit" />;
 }
 
 const container = document.getElementById("app");
@@ -15,6 +14,6 @@ if (container) {
   root.render(
     <FormantProvider>
       <App />
-    </FormantProvider>,
+    </FormantProvider>
   );
 }

@@ -10,8 +10,8 @@ import {
   ITelemetryStream,
   IUniverseData,
   UniverseDataSource,
-} from "./IUniverseData";
-import { IRtcPointCloud } from "./layers/IRtcPointCloud";
+} from "../src/IUniverseData";
+import { IRtcPointCloud } from "../src/layers/IRtcPointCloud";
 
 export class SimulatedUniverseData implements IUniverseData {
   async getLatestTransformTrees(): Promise<

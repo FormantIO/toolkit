@@ -18,7 +18,6 @@ export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayerContent";
 export * from "./layers/TransformLayer";
 export * from "./sidebar";
-export { SimulatedUniverseData } from "./SimulatedUniverseData";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
