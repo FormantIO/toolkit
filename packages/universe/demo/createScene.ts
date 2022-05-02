@@ -18,7 +18,7 @@ export function createScene() {
           deviceContext: "abc",
           children: [],
           visible: true,
-          position: { type: "manual", x: 1, y: 0, z: 0 },
+          position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             label_text: {
               type: "text",

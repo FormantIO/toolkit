@@ -107,7 +107,6 @@ export class Urdf extends Group {
               color,
               opacity,
               transparent,
-              emissive: "0xcccccc",
             });
           }
         });

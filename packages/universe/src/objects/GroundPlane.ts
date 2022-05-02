@@ -52,8 +52,8 @@ function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {
 
 export class GroundPlane extends Group {
   constructor(
-    color2: Color = new Color(0x68686a),
-    color3: Color = new Color(0xa8a8a8)
+    color2: Color = new Color(0x2d3753),
+    color3: Color = new Color(0x3b4569)
   ) {
     super();
     this.add(polarGrid(color3, color2));
