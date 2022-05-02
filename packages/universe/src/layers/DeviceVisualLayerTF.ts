@@ -31,7 +31,8 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
         universeData,
         defined(universeDataSources)[0],
         getCurrentCamera
-      )
+      ),
+      deviceId
     );
   }
 

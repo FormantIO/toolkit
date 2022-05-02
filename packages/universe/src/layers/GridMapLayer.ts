@@ -23,7 +23,8 @@ export class GridMapLayer extends UniverseLayerContent {
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GridMapLayer> {
     return new TransformLayer(
-      new GridMapLayer(deviceId, universeData, defined(universeDataSources)[0])
+      new GridMapLayer(deviceId, universeData, defined(universeDataSources)[0]),
+      deviceId
     );
   }
 

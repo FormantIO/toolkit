@@ -15,7 +15,7 @@ function roundRect(
   width: number,
   height: number,
   radius: number,
-  fill: string,
+  fill: string
 ) {
   ctx.fillStyle = fill;
   ctx.beginPath();
@@ -52,19 +52,22 @@ export class LabelLayer extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields,
+    fields?: LayerFields
   ): TransformLayer<LabelLayer> {
-    return new TransformLayer(new LabelLayer((fields || {}).label_text));
+    return new TransformLayer(
+      new LabelLayer((fields || {}).label_text),
+      deviceId
+    );
   }
 
   constructor(labelTextField?: LayerField) {
     super();
     if (
-      labelTextField
-      && labelTextField.type === "text"
-      && labelTextField.value
+      labelTextField &&
+      labelTextField.type === "text" &&
+      labelTextField.value
     ) {
       const fontface = "Arial";
       const fontsize = 30;
@@ -90,7 +93,7 @@ export class LabelLayer extends UniverseLayerContent {
         textWidth + padding,
         textHeight + padding,
         10,
-        "#000000",
+        "#000000"
       );
 
       // background color
@@ -114,7 +117,7 @@ export class LabelLayer extends UniverseLayerContent {
       sprite.scale.set(
         1 / pixelScale,
         (textHeight + padding) / (textWidth + padding) / pixelScale,
-        1.0 / pixelScale,
+        1.0 / pixelScale
       );
       this.add(sprite);
       this.renderOrder = 100;

@@ -36,7 +36,12 @@ export class GeometryLayer extends UniverseLayerContent {
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GeometryLayer> {
     return new TransformLayer(
-      new GeometryLayer(deviceId, universeData, defined(universeDataSources)[0])
+      new GeometryLayer(
+        deviceId,
+        universeData,
+        defined(universeDataSources)[0]
+      ),
+      deviceId
     );
   }
 

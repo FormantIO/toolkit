@@ -28,11 +28,11 @@ export class GltfLayer extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields,
+    fields?: LayerFields
   ): TransformLayer<GltfLayer> {
-    return new TransformLayer(new GltfLayer((fields || {}).url));
+    return new TransformLayer(new GltfLayer((fields || {}).url), deviceId);
   }
 
   constructor(urlField?: LayerField) {

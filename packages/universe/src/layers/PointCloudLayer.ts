@@ -29,7 +29,8 @@ export class PointCloudLayer extends UniverseLayerContent {
         deviceId,
         universeData,
         defined(universeDataSources)[0]
-      )
+      ),
+      deviceId
     );
   }
 

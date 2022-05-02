@@ -14,10 +14,10 @@ export class GroundLayer extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GroundLayer> {
-    return new TransformLayer(new GroundLayer());
+    return new TransformLayer(new GroundLayer(), deviceId);
   }
 
   constructor() {

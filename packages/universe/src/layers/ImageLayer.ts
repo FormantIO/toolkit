@@ -38,11 +38,11 @@ export class ImageLayer extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[],
     fields?: LayerFields
   ): TransformLayer<ImageLayer> {
-    return new TransformLayer(new ImageLayer((fields || {}).url));
+    return new TransformLayer(new ImageLayer((fields || {}).url), deviceId);
   }
 
   constructor(urlField?: LayerField) {

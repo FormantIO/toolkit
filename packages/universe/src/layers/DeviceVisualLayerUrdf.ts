@@ -100,7 +100,8 @@ export class DeviceVisualLayerUrdf extends UniverseLayerContent {
         universeData,
         defined(universeDataSources)[0],
         deviceId
-      )
+      ),
+      deviceId
     );
   }
 

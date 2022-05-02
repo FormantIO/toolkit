@@ -14,9 +14,9 @@ export class DataLayer extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<Object3D> {
-    return new TransformLayer(new DataLayer());
+    return new TransformLayer(new DataLayer(), deviceId);
   }
 }
