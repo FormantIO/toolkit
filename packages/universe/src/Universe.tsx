@@ -590,6 +590,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         <Box
           display={showSidebar ? "grid" : "block"}
           gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
+          sx={{ height: "100%" }}
         >
           {showSidebar && (
             <UniverseSidebar

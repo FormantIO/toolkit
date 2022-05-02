@@ -34,12 +34,12 @@ export type UniverseDataSource =
 export interface ITelemetryStream {
   name: string;
   disabled?: boolean;
+  validation?: {
+    schemaId: string;
+  };
   configuration: {
     type: string;
     mapTopic?: string;
-    validation?: {
-      schemaId: string;
-    };
   };
 }
 export interface ITelemetryRosStream {
