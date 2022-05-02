@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe, SceneGraphElement } from "../src/main";
+import { Universe } from "../src/main";
 import { SimulatedUniverseData } from "./SimulatedUniverseData";
 import { createScene } from "./createScene";
 

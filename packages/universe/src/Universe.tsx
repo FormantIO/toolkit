@@ -119,15 +119,23 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
   onViewerLoaded = async (el: UniverseViewer | null) => {
     this.viewer = el || undefined;
+    const populateLayer = (e: SceneGraphElement, path: TreePath, i: number) => {
+      this.currentPath = path;
+      const pathThusFar = [...path, i];
+      this.onAddLayer(
+        e.type,
+        e.dataSources,
+        e.fieldValues,
+        e.name,
+        e.deviceContext
+      );
+      if (e.children) {
+        e.children.forEach((c, j) => populateLayer(c, pathThusFar, j));
+      }
+    };
     if (this.props.initialSceneGraph) {
-      this.props.initialSceneGraph.forEach((e) => {
-        this.onAddLayer(
-          e.type,
-          e.dataSources,
-          e.fieldValues,
-          e.name,
-          e.deviceContext
-        );
+      this.props.initialSceneGraph.forEach((e, i) => {
+        populateLayer(e, [], i);
       });
     }
     this.updatingSceneGraph = true;
