@@ -4,6 +4,7 @@ import { Vector3 } from "three";
 import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../common/defined";
+import { throttle } from "../../common/throttle";
 import { LayerType } from "./layers";
 import { LayerRegistry } from "./layers/LayerRegistry";
 import {
@@ -103,6 +104,14 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   private currentlyEditingElement: TreePath | undefined;
 
   private updatingSceneGraph: boolean = false;
+
+  private persist = throttle(() => {
+    if (this.updatingSceneGraph && this.props.onSceneGraphChange) {
+      this.props.onSceneGraphChange(
+        JSON.parse(JSON.stringify(this.sceneGraph)) as SceneGraphElement[]
+      );
+    }
+  }, 1000);
 
   constructor(props: IUniverseProps) {
     super(props);
@@ -537,14 +546,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }
     /* tslint:enable:no-bitwise */
     return color;
-  }
-
-  private persist() {
-    if (this.updatingSceneGraph && this.props.onSceneGraphChange) {
-      this.props.onSceneGraphChange(
-        JSON.parse(JSON.stringify(this.sceneGraph)) as SceneGraphElement[]
-      );
-    }
   }
 
   private buildSubTree(
