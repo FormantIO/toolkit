@@ -141,8 +141,12 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       if (e.children) {
         e.children.forEach((c, j) => populateLayer(c, pathThusFar, j));
       }
-      if (e.position)
+
+      if (e.position) {
+        const element = findSceneGraphElement(this.sceneGraph, pathThusFar);
+        definedAndNotNull(element).position = e.position;
         defined(this.viewer).updatePositioning(pathThusFar, e.position);
+      }
     };
     if (this.props.initialSceneGraph) {
       this.props.initialSceneGraph.forEach((e, i) => {
@@ -605,6 +609,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     let parentContext: string | undefined;
     let currentContext: string | undefined;
     if (this.state.currentlySelectedElement) {
+      console.log(JSON.stringify(this.sceneGraph));
       element = findSceneGraphElement(
         this.sceneGraph,
         this.state.currentlySelectedElement
@@ -620,6 +625,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       }
       if (element) currentContext = element.deviceContext || parentContext;
     }
+
+    console.log(JSON.stringify(element));
 
     const showSidebar = mode === "edit" && sidebarOpen;
 
