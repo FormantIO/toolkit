@@ -9,6 +9,7 @@ import { LayerRegistry } from "./layers/LayerRegistry";
 import {
   extractLayerFieldValues,
   LayerFields,
+  LayerFieldValues,
 } from "./layers/UniverseLayerContent";
 import {
   cloneSceneGraph,
@@ -76,6 +77,8 @@ export interface IUniverseProps {
   universeData: IUniverseData;
   mode?: "edit" | "view" | "no-interaction";
   vr?: boolean;
+  initialSceneGraph?: SceneGraphElement[];
+  onSceneGraphChange?: (sceneGraph: SceneGraphElement[]) => void;
 }
 
 export interface IUniverseState {
@@ -99,6 +102,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
   private currentlyEditingElement: TreePath | undefined;
 
+  private updatingSceneGraph: boolean = false;
+
   constructor(props: IUniverseProps) {
     super(props);
     this.state = {
@@ -114,29 +119,18 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
 
   onViewerLoaded = async (el: UniverseViewer | null) => {
     this.viewer = el || undefined;
-    const { deviceId } = (await this.props.universeData.getDeviceContexts())[0];
-    const deviceName = await this.props.universeData.getDeviceContextName(
-      deviceId
-    );
-    // Add some nice default layers
-    this.onAddLayer("data", undefined, undefined, deviceName, deviceId);
-    this.onAddLayer("ground");
-    this.currentPath = [0];
-    this.onAddLayer(
-      "label",
-      undefined,
-      {
-        label_text: {
-          type: "text",
-          value: deviceName,
-          description: "",
-          placeholder: "",
-          name: "",
-        },
-      },
-      "Label",
-      deviceId
-    );
+    if (this.props.initialSceneGraph) {
+      this.props.initialSceneGraph.forEach((e) => {
+        this.onAddLayer(
+          e.type,
+          e.dataSources,
+          e.fieldValues,
+          e.name,
+          e.deviceContext
+        );
+      });
+    }
+    this.updatingSceneGraph = true;
     this.forceUpdate();
   };
 
@@ -171,10 +165,26 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     });
   };
 
-  private onAddLayer = (
+  private onLayerAdded = (
     layerType: LayerType,
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
+    name?: string,
+    deviceContext?: string
+  ) => {
+    this.onAddLayer(
+      layerType,
+      dataSources,
+      extractLayerFieldValues(fields || {}),
+      name,
+      deviceContext
+    );
+  };
+
+  private onAddLayer = (
+    layerType: LayerType,
+    dataSources?: UniverseDataSource[],
+    fields?: LayerFieldValues,
     name?: string,
     deviceContext?: string
   ) => {
@@ -187,7 +197,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         dataSources
       );
       newElement.deviceContext = deviceContext;
-      newElement.fieldValues = extractLayerFieldValues(fields || {});
+      newElement.fieldValues = fields || {};
       let newPath;
       if (this.currentPath.length === 0) {
         this.sceneGraph.push(newElement);
@@ -202,6 +212,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       this.viewer.addSceneGraphItem(newPath, deviceContext);
       this.forceUpdate();
     }
+    this.persist();
   };
 
   private onRemoveItem = (path: TreePath) => {
@@ -234,6 +245,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       this.sceneGraph.splice(path[path.length - 1], 1);
     }
     this.forceUpdate();
+    this.persist();
   };
 
   private onDuplicateItem = (path: TreePath) => {
@@ -271,6 +283,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       );
     }
     this.forceUpdate();
+    this.persist();
   };
 
   private onRenameLayer = (name: string) => {
@@ -282,6 +295,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       el.name = name;
       this.forceUpdate();
     }
+    this.persist();
   };
 
   private onIconInteracted = (path: TreePath, icon: number) => {
@@ -332,6 +346,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       }
     }
     this.forceUpdate();
+    this.persist();
   };
 
   private onSceneGraphElementEdited = (path: TreePath, transform: Vector3) => {
@@ -349,6 +364,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         this.forceUpdate();
       }
     }
+    this.persist();
   };
 
   private recenter = () => {
@@ -413,6 +429,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       };
     }
     this.forceUpdate();
+    this.persist();
   };
 
   private onSelectTransformPath = (name: string, end: string) => {
@@ -436,6 +453,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     );
 
     this.forceUpdate();
+    this.persist();
   };
 
   private onSelectLocationStream = (
@@ -463,6 +481,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       element.position
     );
     this.forceUpdate();
+    this.persist();
   };
 
   private showTransformSelect = () => {
@@ -510,6 +529,14 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }
     /* tslint:enable:no-bitwise */
     return color;
+  }
+
+  private persist() {
+    if (this.updatingSceneGraph && this.props.onSceneGraphChange) {
+      this.props.onSceneGraphChange(
+        JSON.parse(JSON.stringify(this.sceneGraph)) as SceneGraphElement[]
+      );
+    }
   }
 
   private buildSubTree(
@@ -710,7 +737,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
         {this.state.showingAddDialog && (
           <AddLayerModal
             onCancel={this.hideAddDialog}
-            onAddLayer={this.onAddLayer}
+            onAddLayer={this.onLayerAdded}
             universeData={this.props.universeData}
             deviceContext={element?.deviceContext || parentContext}
           />

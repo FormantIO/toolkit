@@ -18,6 +18,7 @@ export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayerContent";
 export * from "./layers/TransformLayer";
 export * from "./sidebar";
+export * from "./SceneGraph";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

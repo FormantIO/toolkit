@@ -1,11 +1,21 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe } from "../src/main";
+import { Universe, SceneGraphElement } from "../src/main";
 import { SimulatedUniverseData } from "./SimulatedUniverseData";
+import { createScene } from "./createScene";
 
 function App() {
-  return <Universe universeData={new SimulatedUniverseData()} mode="edit" />;
+  return (
+    <Universe
+      initialSceneGraph={createScene()}
+      universeData={new SimulatedUniverseData()}
+      mode="edit"
+      onSceneGraphChange={(_) => {
+        console.log(JSON.stringify(_));
+      }}
+    />
+  );
 }
 
 const container = document.getElementById("app");
