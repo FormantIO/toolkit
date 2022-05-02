@@ -684,7 +684,9 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
               )}
             </UniverseSidebar>
           )}
-          <Box sx={{ position: "relative", overflow: "hidden" }}>
+          <Box
+            sx={{ position: "relative", overflow: "hidden", height: "100%" }}
+          >
             <UniverseViewer
               ref={this.onViewerLoaded}
               sceneGraph={this.sceneGraph}
