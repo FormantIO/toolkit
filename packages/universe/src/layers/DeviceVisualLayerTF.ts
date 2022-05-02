@@ -20,13 +20,14 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
 
   static createDefault(
     universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
     getCurrentCamera?: () => PerspectiveCamera
   ): TransformLayer<DeviceVisualLayerTF> {
     return new TransformLayer(
       new DeviceVisualLayerTF(
+        deviceId,
         universeData,
         defined(universeDataSources)[0],
         getCurrentCamera
@@ -72,6 +73,7 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
   transformTree: TransformTree | undefined;
 
   constructor(
+    deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource,
     getCamera?: () => PerspectiveCamera
@@ -81,6 +83,7 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
       this.transformTree = new TransformTree(getCamera());
       this.add(this.transformTree);
       defined(this.universeData).subscribeToTransformTree(
+        defined(deviceId),
         defined(this.dataSource),
         this.onTransformTreeData
       );

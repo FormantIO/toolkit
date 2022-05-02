@@ -21,11 +21,15 @@ export class PointCloudLayer extends UniverseLayerContent {
 
   static createDefault(
     universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<PointCloudLayer> {
     return new TransformLayer(
-      new PointCloudLayer(universeData, defined(universeDataSources)[0])
+      new PointCloudLayer(
+        deviceId,
+        universeData,
+        defined(universeDataSources)[0]
+      )
     );
   }
 
@@ -57,11 +61,13 @@ export class PointCloudLayer extends UniverseLayerContent {
   }
 
   constructor(
+    deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource
   ) {
     super();
     defined(this.universeData).subscribeToPointCloud(
+      defined(deviceId),
       defined(this.dataSource),
       this.onData
     );

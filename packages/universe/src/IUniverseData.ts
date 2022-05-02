@@ -72,30 +72,37 @@ export interface IUniverseData {
   getUrdfs(deviceId: string): Promise<string[]>;
   getHardwareStreams(deviceId: string): Promise<IHardwareStream[]>;
   subscribeToPointCloud(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: IRtcPointCloud) => void
   ): () => void;
   subscribeToGeometry(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMarker3DArray) => void
   ): () => void;
   subscribeToJointState(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: IJointState) => void
   ): () => void;
   subscribeToMap(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMap) => void
   ): () => void;
   subscribeToVideo(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: IH264VideoFrame) => void
   ): () => void;
   subscribeToTransformTree(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): () => void;
   subscribeToLocation(
+    deviceId: string,
     source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): () => void;

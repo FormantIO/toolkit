@@ -85,6 +85,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToPointCloud(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IRtcPointCloud) => void
   ): () => void {
@@ -92,6 +93,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToGeometry(
+    _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: IMarker3DArray) => void
   ): () => void {
@@ -134,6 +136,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToJointState(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IJointState) => void
   ): () => void {
@@ -141,6 +144,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToMap(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IMap) => void
   ): () => void {
@@ -148,6 +152,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToVideo(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IH264VideoFrame) => void
   ): () => void {
@@ -190,6 +195,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToTransformTree(
+    _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): () => void {
@@ -200,6 +206,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToLocation(
+    _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): () => void {

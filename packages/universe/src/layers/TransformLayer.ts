@@ -20,15 +20,15 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
 
   static createDefault(
     _universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<Object3D> {
-    return new TransformLayer();
+    return new TransformLayer(undefined, deviceId);
   }
 
   contentNode: T | undefined;
 
-  constructor(content?: T) {
+  constructor(content?: T, private deviceId?: string) {
     super();
     if (content) {
       this.contentNode = content;
@@ -89,6 +89,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
   positionUnsubsciber: undefined | (() => void);
 
   setPositioning(positioning: Positioning, universeData: IUniverseData) {
+    const { deviceId } = this;
     if (this.positionUnsubsciber) {
       this.positionUnsubsciber();
       this.positionUnsubsciber = undefined;
@@ -101,6 +102,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
       positioning.relativeToLatitude !== undefined
     ) {
       this.positionUnsubsciber = universeData.subscribeToLocation(
+        defined(deviceId),
         {
           id: uuid.v4(),
           sourceType: "telemetry",
@@ -148,6 +150,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
       positioning.end
     ) {
       this.positionUnsubsciber = universeData.subscribeToTransformTree(
+        defined(deviceId),
         {
           id: uuid.v4(),
           sourceType: "telemetry",

@@ -142,8 +142,9 @@ export class DeviceVisualLayerUrdf extends UniverseLayerContent {
     private deviceId?: string
   ) {
     super();
-    if (dataSource && dataSource.sourceType === "realtime") {
+    if (dataSource && dataSource.sourceType === "realtime" && deviceId) {
       defined(this.universeData).subscribeToJointState(
+        deviceId,
         defined(this.dataSource),
         this.onData
       );

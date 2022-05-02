@@ -22,11 +22,15 @@ export class HardwareVideoLayer extends UniverseLayerContent {
 
   static createDefault(
     universeData: IUniverseData,
-    _deviceId: string,
+    deviceId: string,
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<HardwareVideoLayer> {
     return new TransformLayer(
-      new HardwareVideoLayer(universeData, defined(universeDataSources)[0])
+      new HardwareVideoLayer(
+        deviceId,
+        universeData,
+        defined(universeDataSources)[0]
+      )
     );
   }
 
@@ -65,6 +69,7 @@ export class HardwareVideoLayer extends UniverseLayerContent {
   mesh: Mesh;
 
   constructor(
+    deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource
   ) {
@@ -75,6 +80,7 @@ export class HardwareVideoLayer extends UniverseLayerContent {
       () => {}
     );
     defined(this.universeData).subscribeToVideo(
+      defined(deviceId),
       defined(this.dataSource),
       this.onData
     );
