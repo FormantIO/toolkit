@@ -19,7 +19,12 @@ export function createScene() {
           children: [],
           visible: true,
           position: { type: "manual", x: 0, y: 0, z: 0 },
-          fieldValues: {},
+          fieldValues: {
+            label_text: {
+              type: "text",
+              value: "Skynet-9000",
+            },
+          },
           data: {},
         },
       ],

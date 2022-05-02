@@ -71,9 +71,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       0.1,
       1000
     );
-    this.camera.position.z = 3;
+    this.camera.position.z = 1.5;
 
-    this.camera.position.y = 3;
+    this.camera.position.y = 1.5;
 
     const light = new THREE.AmbientLight(0x555555);
     this.scene.add(light);

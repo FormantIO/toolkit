@@ -64,9 +64,12 @@ export class SelectLocationModal extends Component<
   };
 
   onChangeLocationStream = (stream: string) => {
-    this.setState({
+    const i = this.state.items.findIndex((_) => _.streamName === stream);
+    this.setState((state) => ({
       locationStreamName: stream,
-    });
+      relativeToLong: state.items[i].location.longitude,
+      relativeToLat: state.items[i].location.latitude,
+    }));
   };
 
   onChangeLong = (ev: React.ChangeEvent<HTMLInputElement>) => {

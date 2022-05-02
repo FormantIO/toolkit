@@ -36,7 +36,15 @@ export class SimulatedUniverseData implements IUniverseData {
       location: ILocation;
     }[]
   > {
-    return [];
+    return [
+      {
+        streamName: "spotLocation",
+        location: {
+          latitude: 45.4661989,
+          longitude: -122.5782375,
+        },
+      },
+    ];
   }
 
   async getDeviceContexts(): Promise<
@@ -193,8 +201,15 @@ export class SimulatedUniverseData implements IUniverseData {
 
   subscribeToLocation(
     _source: UniverseDataSource,
-    _callback: (data: ILocation) => void
+    callback: (data: ILocation) => void
   ): () => void {
+    const delta = 0.00001;
+    window.setInterval(() => {
+      callback({
+        latitude: 45.4661989 + 2 * delta * Math.random() - delta,
+        longitude: -122.5782375 + 2 * delta * Math.random() - delta,
+      });
+    }, 1000);
     return () => {};
   }
 }
