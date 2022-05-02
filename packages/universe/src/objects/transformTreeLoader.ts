@@ -1,4 +1,4 @@
-import { ITransform } from "../../../../data-sdk/src/model/ITransform";
+import { ITransform } from "../../../data-sdk/src/model/ITransform";
 
 export interface ITransformTreeNode {
   name: string;

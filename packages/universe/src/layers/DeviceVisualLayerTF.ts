@@ -1,13 +1,13 @@
 import { PerspectiveCamera, Vector2 } from "three";
 import * as uuid from "uuid";
-import { defined } from "../../../../common/defined";
-import { ITransformNode } from "../../../../data-sdk/src/model/ITransformNode";
-import { TransformTree } from "./TransformTree";
-import { ITransformTreeNode } from "./transformTreeLoader";
-import { IUniverseData, UniverseDataSource } from "../../IUniverseData";
-import { LayerSuggestion } from "../LayerRegistry";
-import { TransformLayer } from "../TransformLayer";
-import { LayerFields, UniverseLayerContent } from "../UniverseLayerContent";
+import { defined } from "../../../common/defined";
+import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
+import { TransformTree } from "../objects/TransformTree";
+import { ITransformTreeNode } from "../objects/transformTreeLoader";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { LayerSuggestion } from "./LayerRegistry";
+import { TransformLayer } from "./TransformLayer";
+import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
 
 export class DeviceVisualLayerTF extends UniverseLayerContent {
   static id = "device_visual_tf";

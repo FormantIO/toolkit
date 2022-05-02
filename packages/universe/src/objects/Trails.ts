@@ -1,8 +1,8 @@
 import { Group, Vector2 } from "three";
-import { IVector3 } from "../../../../data-sdk/src/model/IVector3";
+import { IVector3 } from "../../../data-sdk/src/model/IVector3";
 import { Trail } from "./Trail";
-import { Color } from "../../../../common/Color";
-import { defined } from "../../../../common/defined";
+import { Color } from "../../../common/Color";
+import { defined } from "../../../common/defined";
 
 export const colors = [
   "#20a0ff", // royal-blue

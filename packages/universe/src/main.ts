@@ -9,8 +9,8 @@ import { GridMapLayer } from "./layers/GridMapLayer";
 import { GeometryLayer } from "./layers/GeometryLayer";
 import { PointCloudLayer } from "./layers/PointCloudLayer";
 import { HardwareVideoLayer } from "./layers/HardwareVideoLayer";
-import { DeviceVisualLayerUrdf } from "./layers/DeviceVisualLayer/DeviceVisualLayerUrdf";
-import { DeviceVisualLayerTF } from "./layers/DeviceVisualLayer/DeviceVisualLayerTF";
+import { DeviceVisualLayerUrdf } from "./layers/DeviceVisualLayerUrdf";
+import { DeviceVisualLayerTF } from "./layers/DeviceVisualLayerTF";
 
 export * from "./Universe";
 export * from "./IUniverseData";

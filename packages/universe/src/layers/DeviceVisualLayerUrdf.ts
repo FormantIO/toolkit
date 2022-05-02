@@ -1,13 +1,13 @@
 import { PerspectiveCamera } from "three";
 import * as JSZip from "jszip";
 import * as uuid from "uuid";
-import { defined } from "../../../../common/defined";
-import { IJointState } from "../../../../data-sdk/src/model/IJointState";
-import { Urdf } from "./Urdf";
-import { IUniverseData, UniverseDataSource } from "../../IUniverseData";
-import { LayerSuggestion } from "../LayerRegistry";
-import { TransformLayer } from "../TransformLayer";
-import { LayerFields, UniverseLayerContent } from "../UniverseLayerContent";
+import { defined } from "../../../common/defined";
+import { IJointState } from "../../../data-sdk/src/model/IJointState";
+import { Urdf } from "../objects/Urdf";
+import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { LayerSuggestion } from "./LayerRegistry";
+import { TransformLayer } from "./TransformLayer";
+import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
 
 async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   const data = await fetch(zipPath).then((_) => _.arrayBuffer());

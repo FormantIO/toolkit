@@ -1,9 +1,9 @@
 import { Group, Vector2 } from "three";
-import { Line2 } from "../../../three-utils/Line2";
-import { LineGeometry } from "../../../three-utils/LineGeometry";
-import { LineMaterial } from "../../../three-utils/LineMaterial";
-import { IVector3 } from "../../../../data-sdk/src/model/IVector3";
-import { Color } from "../../../../common/Color";
+import { Line2 } from "../../three-utils/Line2";
+import { LineGeometry } from "../../three-utils/LineGeometry";
+import { LineMaterial } from "../../three-utils/LineMaterial";
+import { IVector3 } from "../../../data-sdk/src/model/IVector3";
+import { Color } from "../../../common/Color";
 
 export class Trail extends Group {
   private material = new LineMaterial({

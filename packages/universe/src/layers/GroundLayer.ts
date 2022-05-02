@@ -1,4 +1,4 @@
-import { GroundPlane } from "./GroundPlane";
+import { GroundPlane } from "../objects/GroundPlane";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
@@ -15,7 +15,7 @@ export class GroundLayer extends UniverseLayerContent {
   static createDefault(
     _universeData: IUniverseData,
     _deviceId: string,
-    _universeDataSources?: UniverseDataSource[],
+    _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GroundLayer> {
     return new TransformLayer(new GroundLayer());
   }

@@ -9,12 +9,12 @@ import {
   PointLight,
   Scene,
 } from "three";
-import { ColladaLoader } from "../../../three-utils/ColladaLoader";
-import { defined } from "../../../../common/defined";
-import { IJointState } from "../../../../data-sdk/src/model/IJointState";
-import { ITransform } from "../../../../model/ITransform";
-import { Color } from "../../../../common/Color";
-import { transformMatrix } from "../../math/transformMatrix";
+import { ColladaLoader } from "../../three-utils/ColladaLoader";
+import { defined } from "../../../common/defined";
+import { IJointState } from "../../../data-sdk/src/model/IJointState";
+import { ITransform } from "../../../model/ITransform";
+import { Color } from "../../../common/Color";
+import { transformMatrix } from "../math/transformMatrix";
 
 export interface ILoadedUrdf {
   url: string;
