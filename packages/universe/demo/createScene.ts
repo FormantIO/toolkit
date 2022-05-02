@@ -18,12 +18,7 @@ export function createScene() {
           deviceContext: "abc",
           children: [],
           visible: true,
-          position: {
-            type: "gps",
-            stream: "spotLocation",
-            relativeToLongitude: -122.5782375,
-            relativeToLatitude: 45.4661989,
-          },
+          position: { type: "manual", x: 1, y: 0, z: 0 },
           fieldValues: {
             label_text: {
               type: "text",

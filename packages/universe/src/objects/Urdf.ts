@@ -1,19 +1,10 @@
 import * as THREE from "three";
 
 import URDFLoader, { URDFRobot } from "urdf-loader";
-import {
-  Group,
-  HemisphereLight,
-  LoadingManager,
-  Mesh,
-  PointLight,
-  Scene,
-} from "three";
+import { Group, LoadingManager, Mesh, Scene } from "three";
 import { ColladaLoader } from "../../three-utils/ColladaLoader";
-import { defined } from "../../../common/defined";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ITransform } from "../../../model/ITransform";
-import { Color } from "../../../common/Color";
 import { transformMatrix } from "../math/transformMatrix";
 
 export interface ILoadedUrdf {
@@ -112,10 +103,11 @@ export class Urdf extends Group {
                 color = mat.color;
               }
             }
-            _.material = new THREE.MeshPhongMaterial({
+            _.material = new THREE.MeshStandardMaterial({
               color,
               opacity,
               transparent,
+              emissive: "0xcccccc",
             });
           }
         });
@@ -128,23 +120,6 @@ export class Urdf extends Group {
   }
 
   private onLoad = (robot: URDFRobot) => {
-    if (!this.configuration?.endEffectorOnly && !this.configuration?.ghosted) {
-      const accentColor1 = defined(Color.fromString("#18d2ff")).toString();
-      const accentColor2 = defined(Color.fromString("#ea719d")).toString();
-      const skyColor = defined(Color.fromString("#f8f9fc")).toString();
-      const groundColor = defined(Color.fromString("#282f45")).toString();
-
-      const accentLight1 = new PointLight(accentColor1, 0.3, 0, 0);
-      accentLight1.position.set(1000, 1000, 1000);
-      this.add(accentLight1);
-
-      const accentLight2 = new PointLight(accentColor2, 0.7, 0, 0);
-      accentLight2.position.set(-1000, -1000, 1000);
-      this.add(accentLight2);
-
-      const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5);
-      this.add(ambientLight);
-    }
     this.robot = robot;
     if (this.configuration?.endEffectorOnly) {
       if (this.configuration.endEffectorLink) {

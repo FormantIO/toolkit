@@ -2,7 +2,7 @@ import { Measure } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
 import * as THREE from "three";
-import { Vector3, WebGLRenderer } from "three";
+import { PointLight, Vector3, WebGLRenderer, HemisphereLight } from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../three-utils/OrbitControls";
 import { TransformControls } from "../../three-utils/TransformControls";
@@ -19,6 +19,7 @@ import {
 } from "../SceneGraph";
 import { TreePath, treePathEquals } from "../ITreeElement";
 import { IUniverseData } from "../IUniverseData";
+import { Color } from "../../../common/Color";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -77,6 +78,21 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
     const light = new THREE.AmbientLight(0x555555);
     this.scene.add(light);
+    const accentColor1 = defined(Color.fromString("#18d2ff")).toString();
+    const accentColor2 = defined(Color.fromString("#ea719d")).toString();
+    const skyColor = defined(Color.fromString("#f8f9fc")).toString();
+    const groundColor = defined(Color.fromString("#282f45")).toString();
+
+    const accentLight1 = new PointLight(accentColor1, 0.3, 0, 0);
+    accentLight1.position.set(1000, 1000, 1000);
+    this.scene.add(accentLight1);
+
+    const accentLight2 = new PointLight(accentColor2, 0.7, 0, 0);
+    accentLight2.position.set(-1000, -1000, 1000);
+    this.scene.add(accentLight2);
+
+    const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5);
+    this.scene.add(ambientLight);
   }
 
   public componentDidMount() {

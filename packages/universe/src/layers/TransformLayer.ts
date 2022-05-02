@@ -179,6 +179,8 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             });
         }
       );
+    } else if (positioning.type === "manual") {
+      this.position.set(positioning.x, positioning.y, positioning.z);
     }
   }
 }
