@@ -13,11 +13,16 @@ import { IMarker3DArray } from "@formant/universe/dist/types/data-sdk/src/model/
 import { IRtcPointCloud } from "@formant/universe/dist/types/data-sdk/src/model/IRtcPointCloud";
 import { ITransformNode } from "@formant/universe/dist/types/model/ITransformNode";
 
+export const SPOT_ID = "abc";
+export const ARM1_ID = "asdfadsfas";
+export const ARM2_ID = "124fasd";
+export const ARM3_ID = "77hrtesgdafdsh";
+
 export class SimulatedUniverseData implements IUniverseData {
   async getLatestTransformTrees(
     deviceId: string
   ): Promise<{ streamName: string; transformTree: ITransformNode }[]> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return [
         {
           streamName: "spotTf",
@@ -51,24 +56,24 @@ export class SimulatedUniverseData implements IUniverseData {
     { deviceName: string; deviceId: string }[]
   > {
     return [
-      { deviceName: "Spot-9000", deviceId: "abc" },
-      { deviceName: "Roboarm 1", deviceId: "asdfcsad" },
-      { deviceName: "Roboarm 2", deviceId: "dfhgf" },
-      { deviceName: "Roboarm 3", deviceId: "vbmvb" },
+      { deviceName: "Spot-9000", deviceId: SPOT_ID },
+      { deviceName: "Roboarm 1", deviceId: ARM1_ID },
+      { deviceName: "Roboarm 2", deviceId: ARM2_ID },
+      { deviceName: "Roboarm 3", deviceId: ARM3_ID },
     ];
   }
 
   async getDeviceContextName(deviceId: string): Promise<string | undefined> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return "Spot-9000";
     }
-    if (deviceId === "asdfcsad") {
+    if (deviceId === ARM1_ID) {
       return "Roboarm 1";
     }
-    if (deviceId === "dfhgf") {
+    if (deviceId === ARM2_ID) {
       return "Roboarm 2";
     }
-    if (deviceId === "vbmvb") {
+    if (deviceId === ARM3_ID) {
       return "Roboarm 3";
     }
     return undefined;
@@ -85,6 +90,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToPointCloud(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IRtcPointCloud) => void
   ): () => void {
@@ -92,6 +98,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToGeometry(
+    _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: IMarker3DArray) => void
   ): () => void {
@@ -134,6 +141,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToJointState(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IJointState) => void
   ): () => void {
@@ -141,6 +149,7 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToMap(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IMap) => void
   ): () => void {
@@ -148,38 +157,50 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToVideo(
+    _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IH264VideoFrame) => void
   ): () => void {
     return () => {};
   }
 
-  async getTelemetryStreams(_deviceId: string): Promise<ITelemetryStream[]> {
-    return [
-      {
-        name: "spotTf",
-        configuration: {
-          type: "transform tree",
+  async getTelemetryStreams(deviceId: string): Promise<ITelemetryStream[]> {
+    if (deviceId === SPOT_ID) {
+      return [
+        {
+          name: "spotTf",
+          configuration: {
+            type: "transform tree",
+          },
         },
-      },
-    ];
+      ];
+    }
+    return [];
   }
 
-  async getTeleopRosStreams(_deviceId: string): Promise<ITelemetryRosStream[]> {
+  async getTeleopRosStreams(deviceId: string): Promise<ITelemetryRosStream[]> {
+    if (deviceId === SPOT_ID) {
+      return [
+        {
+          topicType: "sensor_msgs/JointState",
+          topicName: "spotJoints",
+        },
+        {
+          topicType: "visualization_msgs/MarkerArray",
+          topicName: "spotMarkers",
+        },
+      ];
+    }
     return [
       {
         topicType: "sensor_msgs/JointState",
-        topicName: "spotJoints",
-      },
-      {
-        topicType: "visualization_msgs/MarkerArray",
-        topicName: "spotMarkers",
+        topicName: "armJoints",
       },
     ];
   }
 
   async getUrdfs(deviceId: string): Promise<string[]> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/spot.zip"];
     }
     return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/arm.zip"];
@@ -190,26 +211,55 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToTransformTree(
+    deviceId: string,
     _source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): () => void {
-    callback({
-      url: "https://formant-3d-models.s3.us-west-2.amazonaws.com/spotjoint_sit.json",
-    });
+    if (deviceId === SPOT_ID) {
+      callback({
+        url: "https://formant-3d-models.s3.us-west-2.amazonaws.com/spotjoint_sit.json",
+      });
+    }
     return () => {};
   }
 
   subscribeToLocation(
-    _source: UniverseDataSource,
+    deviceId: string,
+    source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): () => void {
-    const delta = 0.00001;
-    window.setInterval(() => {
-      callback({
-        latitude: 45.4661989 + 2 * delta * Math.random() - delta,
-        longitude: -122.5782375 + 2 * delta * Math.random() - delta,
-      });
-    }, 1000);
+    if (source.sourceType === "telemetry") {
+      const delta = 0.00001;
+      if (deviceId === SPOT_ID) {
+        window.setInterval(() => {
+          callback({
+            latitude: 45.4661989,
+            longitude: -122.5782375 + 2 * delta * Math.sin(Date.now() / 1000),
+          });
+        }, 1000);
+      } else if (deviceId === ARM1_ID) {
+        window.setInterval(() => {
+          callback({
+            latitude: 45.4661989 + delta,
+            longitude: -122.5782375,
+          });
+        }, 1000);
+      } else if (deviceId === ARM2_ID) {
+        window.setInterval(() => {
+          callback({
+            latitude: 45.4661989 + delta,
+            longitude: -122.5782375 + delta,
+          });
+        }, 1000);
+      } else if (deviceId === ARM3_ID) {
+        window.setInterval(() => {
+          callback({
+            latitude: 45.4661989 + delta,
+            longitude: -122.5782375 + delta + delta,
+          });
+        }, 1000);
+      }
+    }
     return () => {};
   }
 }

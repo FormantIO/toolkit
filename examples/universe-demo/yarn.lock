@@ -295,9 +295,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.31.tgz#21cb11871a4bbd9d3b41561a58836cfc744313da"
-  integrity sha512-iOV1dClYETo0nOBgFhe5COKQdTcbBmARiczkuT7xHRdqtLG2Rf7hyCSqK8R2YkLqkt/fp6PCNGlHjryqkZuvKg==
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.34.tgz#1c0786a1b4610057a2a040ba5fdf40a5f6f4ff8b"
+  integrity sha512-NkKEirm71hyds75L5L65zQOv/a4I7OdhDIP+CJ4nS+CoL3Y72IFgj7EDFCXsY46B5VuJuSs6ANvwP3aZH0O2fg==
   dependencies:
     "@formant/ui-sdk" "0.0.17"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
