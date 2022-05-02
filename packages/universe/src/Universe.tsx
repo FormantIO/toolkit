@@ -85,6 +85,7 @@ export interface IUniverseState {
   showingLocationStreamSelect: boolean;
   sidebarOpen: boolean;
   currentlySelectedElement: TreePath | undefined;
+  currentContextName: string;
 }
 
 export class Universe extends Component<IUniverseProps, IUniverseState> {
@@ -107,13 +108,16 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       showingLocationStreamSelect: false,
       sidebarOpen: true,
       currentlySelectedElement: undefined,
+      currentContextName: "",
     };
   }
 
-  onViewerLoaded = (el: UniverseViewer | null) => {
+  onViewerLoaded = async (el: UniverseViewer | null) => {
     this.viewer = el || undefined;
-    const { deviceId } = this.props.universeData.getDeviceContexts()[0];
-    const deviceName = this.props.universeData.getDeviceContextName(deviceId);
+    const { deviceId } = (await this.props.universeData.getDeviceContexts())[0];
+    const deviceName = await this.props.universeData.getDeviceContextName(
+      deviceId
+    );
     // Add some nice default layers
     this.onAddLayer("data", undefined, undefined, deviceName, deviceId);
     this.onAddLayer("ground");
@@ -357,6 +361,30 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     this.setState({
       currentlySelectedElement: path,
     });
+    let element: SceneGraphElement | null | undefined;
+    let parentContext: string | undefined;
+    let currentContext: string | undefined;
+    if (path) {
+      element = findSceneGraphElement(this.sceneGraph, path);
+      const parent = findSceneGraphParentElement(
+        this.sceneGraph,
+        path,
+        (el) => el.deviceContext !== undefined
+      );
+      if (parent) {
+        parentContext = parent.deviceContext;
+      }
+      if (element) currentContext = element.deviceContext || parentContext;
+    }
+
+    if (currentContext)
+      this.props.universeData.getDeviceContextName(currentContext).then((_) => {
+        if (_) {
+          this.setState({
+            currentContextName: _,
+          });
+        }
+      });
   };
 
   private onChangePositionType = (positionType: string) => {
@@ -406,6 +434,7 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       defined(this.state.currentlySelectedElement),
       element.position
     );
+
     this.forceUpdate();
   };
 
@@ -578,12 +607,12 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                   <div>
                     {currentContext !== undefined && (
                       <PropertyRow>
-                        device:{" "}
-                        {currentContext !== undefined
-                          ? this.props.universeData.getDeviceContextName(
-                              currentContext
-                            )
-                          : "none"}
+                        <>
+                          device:{" "}
+                          {currentContext !== undefined
+                            ? this.state.currentContextName
+                            : "none"}
+                        </>
                       </PropertyRow>
                     )}
                     <div>

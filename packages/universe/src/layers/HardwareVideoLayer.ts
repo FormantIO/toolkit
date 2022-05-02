@@ -30,26 +30,28 @@ export class HardwareVideoLayer extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getHardwareStreams(deviceContext).forEach((stream) => {
-        if (stream.rtcStreamType === "h264-video-frame") {
-          dataLayers.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "hardware",
-                rtcStreamName: stream.name,
-              },
-            ],
-            layerType: HardwareVideoLayer.id,
-          });
+      (await universeData.getHardwareStreams(deviceContext)).forEach(
+        (stream) => {
+          if (stream.rtcStreamType === "h264-video-frame") {
+            dataLayers.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "hardware",
+                  rtcStreamName: stream.name,
+                },
+              ],
+              layerType: HardwareVideoLayer.id,
+            });
+          }
         }
-      });
+      );
     }
     return dataLayers;
   }

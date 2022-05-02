@@ -39,7 +39,9 @@ export class SimulatedUniverseData implements IUniverseData {
     return [];
   }
 
-  getDeviceContexts(): { deviceName: string; deviceId: string }[] {
+  async getDeviceContexts(): Promise<
+    { deviceName: string; deviceId: string }[]
+  > {
     return [
       { deviceName: "Spot-9000", deviceId: "abc" },
       { deviceName: "Roboarm 1", deviceId: "asdfcsad" },
@@ -48,7 +50,7 @@ export class SimulatedUniverseData implements IUniverseData {
     ];
   }
 
-  getDeviceContextName(deviceId: string): string | undefined {
+  async getDeviceContextName(deviceId: string): Promise<string | undefined> {
     if (deviceId === "abc") {
       return "Spot-9000";
     }
@@ -64,10 +66,10 @@ export class SimulatedUniverseData implements IUniverseData {
     return undefined;
   }
 
-  getTelemetryStreamType(
+  async getTelemetryStreamType(
     _deviceId: string,
     streamName: string
-  ): string | undefined {
+  ): Promise<string | undefined> {
     if (streamName === "spotTf") {
       return "transform tree";
     }
@@ -144,11 +146,7 @@ export class SimulatedUniverseData implements IUniverseData {
     return () => {};
   }
 
-  get deviceId(): string {
-    return "abc";
-  }
-
-  getTelemetryStreams(_deviceId: string): ITelemetryStream[] {
+  async getTelemetryStreams(_deviceId: string): Promise<ITelemetryStream[]> {
     return [
       {
         name: "spotTf",
@@ -159,7 +157,7 @@ export class SimulatedUniverseData implements IUniverseData {
     ];
   }
 
-  getTeleopRosStreams(_deviceId: string): ITelemetryRosStream[] {
+  async getTeleopRosStreams(_deviceId: string): Promise<ITelemetryRosStream[]> {
     return [
       {
         topicType: "sensor_msgs/JointState",
@@ -179,7 +177,7 @@ export class SimulatedUniverseData implements IUniverseData {
     return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/arm.zip"];
   }
 
-  getHardwareStreams(_deviceId: string): IHardwareStream[] {
+  async getHardwareStreams(_deviceId: string): Promise<IHardwareStream[]> {
     return [];
   }
 

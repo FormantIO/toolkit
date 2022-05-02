@@ -61,16 +61,16 @@ export interface IUniverseData {
   getLatestLocations(
     deviceId: string
   ): Promise<{ streamName: string; location: ILocation }[]>;
-  getDeviceContexts(): { deviceName: string; deviceId: string }[];
-  getDeviceContextName(deviceId: string): string | undefined;
+  getDeviceContexts(): Promise<{ deviceName: string; deviceId: string }[]>;
+  getDeviceContextName(deviceId: string): Promise<string | undefined>;
   getTelemetryStreamType(
     deviceId: string,
     streamName: string
-  ): string | undefined;
-  getTelemetryStreams(deviceId: string): ITelemetryStream[];
-  getTeleopRosStreams(deviceId: string): ITelemetryRosStream[];
+  ): Promise<string | undefined>;
+  getTelemetryStreams(deviceId: string): Promise<ITelemetryStream[]>;
+  getTeleopRosStreams(deviceId: string): Promise<ITelemetryRosStream[]>;
   getUrdfs(deviceId: string): Promise<string[]>;
-  getHardwareStreams(deviceId: string): IHardwareStream[];
+  getHardwareStreams(deviceId: string): Promise<IHardwareStream[]>;
   subscribeToPointCloud(
     source: UniverseDataSource,
     callback: (data: IRtcPointCloud) => void

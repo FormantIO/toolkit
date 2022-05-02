@@ -48,7 +48,7 @@ export function UniverseSidebar({
   children,
 }: IUniverseSidebarProps) {
   const [selected, setSelected] = React.useState<TreePath | undefined>(
-    undefined,
+    undefined
   );
 
   const onTreeNodeSelect = (path: TreePath) => {

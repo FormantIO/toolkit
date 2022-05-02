@@ -16,23 +16,25 @@ export class LayerRegistry {
     LayerRegistry.layers.set(layer.id, layer);
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): {
+  ): Promise<{
     nonDataLayers: LayerType[];
     dataLayers: LayerSuggestion[];
-  } {
+  }> {
     let suggestionsDataLayers: LayerSuggestion[] = [];
-    LayerRegistry.layers.forEach((layer) => {
-      if (layer.usesData) {
-        const suggestions = layer.getLayerSuggestions(
-          universeData,
-          deviceContext
-        );
-        suggestionsDataLayers = suggestionsDataLayers.concat(suggestions);
-      }
-    });
+    await Promise.all(
+      Array.from(LayerRegistry.layers.values()).map(async (layer) => {
+        if (layer.usesData) {
+          const suggestions = await layer.getLayerSuggestions(
+            universeData,
+            deviceContext
+          );
+          suggestionsDataLayers = suggestionsDataLayers.concat(suggestions);
+        }
+      })
+    );
 
     return {
       nonDataLayers: Array.from(LayerRegistry.layers.entries())

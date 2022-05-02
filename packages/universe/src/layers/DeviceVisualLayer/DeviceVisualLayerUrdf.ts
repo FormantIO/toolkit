@@ -104,28 +104,30 @@ export class DeviceVisualLayerUrdf extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const suggestions: LayerSuggestion[] = [];
 
     if (deviceContext) {
-      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
-        if (stream.topicType === "sensor_msgs/JointState") {
-          suggestions.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "realtime",
-                rosTopicName: stream.topicName,
-                rosTopicType: stream.topicType,
-              },
-            ],
-            layerType: DeviceVisualLayerUrdf.id,
-          });
+      (await universeData.getTeleopRosStreams(deviceContext)).forEach(
+        (stream) => {
+          if (stream.topicType === "sensor_msgs/JointState") {
+            suggestions.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "realtime",
+                  rosTopicName: stream.topicName,
+                  rosTopicType: stream.topicType,
+                },
+              ],
+              layerType: DeviceVisualLayerUrdf.id,
+            });
+          }
         }
-      });
+      );
     }
     return suggestions;
   }

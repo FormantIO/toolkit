@@ -34,31 +34,37 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const suggestions: LayerSuggestion[] = [];
 
     if (deviceContext) {
-      universeData.getTelemetryStreams(deviceContext).forEach((stream) => {
-        if (
-          universeData.getTelemetryStreamType(deviceContext, stream.name) ===
-          "transform tree"
-        ) {
-          suggestions.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "telemetry",
-                streamName: stream.name,
-                streamType: "transform tree",
-              },
-            ],
-            layerType: DeviceVisualLayerTF.id,
-          });
-        }
-      });
+      await Promise.all(
+        (
+          await universeData.getTelemetryStreams(deviceContext)
+        ).map(async (stream) => {
+          if (
+            (await universeData.getTelemetryStreamType(
+              deviceContext,
+              stream.name
+            )) === "transform tree"
+          ) {
+            suggestions.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "telemetry",
+                  streamName: stream.name,
+                  streamType: "transform tree",
+                },
+              ],
+              layerType: DeviceVisualLayerTF.id,
+            });
+          }
+        })
+      );
     }
     return suggestions;
   }

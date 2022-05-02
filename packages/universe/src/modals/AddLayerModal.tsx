@@ -42,23 +42,37 @@ export class AddLayerModal extends Component<
 
   private currentFields: LayerFields = {};
 
+  private deviceContexts: {
+    deviceName: string;
+    deviceId: string;
+  }[] = [];
+
   layerSuggestions: {
     nonDataLayers: string[];
     dataLayers: LayerSuggestion[];
-  };
+  } = { nonDataLayers: [], dataLayers: [] };
 
   constructor(props: IAddLayerModalProps) {
     super(props);
     this.state = {
       selectedItem: "data",
       currentName: "",
-      currentDeviceId: this.props.universeData.getDeviceContexts()[0].deviceId,
+      currentDeviceId: undefined,
     };
+    this.props.universeData.getDeviceContexts().then((deviceContexts) => {
+      this.deviceContexts = deviceContexts;
+      this.setState({
+        currentDeviceId: deviceContexts[0].deviceId,
+      });
+    });
 
-    this.layerSuggestions = LayerRegistry.getLayerSuggestions(
+    LayerRegistry.getLayerSuggestions(
       this.props.universeData,
       this.props.deviceContext
-    );
+    ).then((layerSuggestions) => {
+      this.layerSuggestions = layerSuggestions;
+      this.forceUpdate();
+    });
   }
 
   private onChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +88,10 @@ export class AddLayerModal extends Component<
     this.selectedSources = dataSources;
     this.currentFields = LayerRegistry.getFields(layerType);
     if (layerType === "data") {
-      this.setState({
-        currentDeviceId:
-          this.props.universeData.getDeviceContexts()[0].deviceId,
+      this.props.universeData.getDeviceContexts().then((deviceContexts) => {
+        this.setState({
+          currentDeviceId: deviceContexts[0].deviceId,
+        });
       });
     } else {
       this.setState({
@@ -205,12 +220,10 @@ export class AddLayerModal extends Component<
                 label="Device"
                 value={this.state.currentDeviceId}
                 onChange={this.onChangeCurrentDeviceId}
-                items={this.props.universeData
-                  .getDeviceContexts()
-                  .map((deviceContext) => ({
-                    label: deviceContext.deviceName,
-                    value: deviceContext.deviceId,
-                  }))}
+                items={this.deviceContexts.map((deviceContext) => ({
+                  label: deviceContext.deviceName,
+                  value: deviceContext.deviceId,
+                }))}
               />
             </>
           )}

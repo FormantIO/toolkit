@@ -40,27 +40,29 @@ export class GeometryLayer extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
-        if (stream.topicType === "visualization_msgs/MarkerArray") {
-          dataLayers.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "realtime",
-                rosTopicName: stream.topicName,
-                rosTopicType: stream.topicType,
-              },
-            ],
-            layerType: GeometryLayer.id,
-          });
+      (await universeData.getTeleopRosStreams(deviceContext)).forEach(
+        (stream) => {
+          if (stream.topicType === "visualization_msgs/MarkerArray") {
+            dataLayers.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "realtime",
+                  rosTopicName: stream.topicName,
+                  rosTopicType: stream.topicType,
+                },
+              ],
+              layerType: GeometryLayer.id,
+            });
+          }
         }
-      });
+      );
     }
     return dataLayers;
   }

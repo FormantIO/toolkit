@@ -53,10 +53,10 @@ export abstract class UniverseLayerContent extends Object3D {
 
   static fields?: LayerFields;
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     _data: IUniverseData,
     _deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     return [];
   }
 

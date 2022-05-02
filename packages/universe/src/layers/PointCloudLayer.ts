@@ -29,27 +29,29 @@ export class PointCloudLayer extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTeleopRosStreams(deviceContext).forEach((stream) => {
-        if (stream.topicType === "sensor_msgs/PointCloud2") {
-          dataLayers.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "realtime",
-                rosTopicName: stream.topicName,
-                rosTopicType: stream.topicType,
-              },
-            ],
-            layerType: PointCloudLayer.id,
-          });
+      (await universeData.getTeleopRosStreams(deviceContext)).forEach(
+        (stream) => {
+          if (stream.topicType === "sensor_msgs/PointCloud2") {
+            dataLayers.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "realtime",
+                  rosTopicName: stream.topicName,
+                  rosTopicType: stream.topicType,
+                },
+              ],
+              layerType: PointCloudLayer.id,
+            });
+          }
         }
-      });
+      );
     }
     return dataLayers;
   }

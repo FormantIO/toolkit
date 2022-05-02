@@ -27,33 +27,35 @@ export class GridMapLayer extends UniverseLayerContent {
     );
   }
 
-  static getLayerSuggestions(
+  static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
-  ): LayerSuggestion[] {
+  ): Promise<LayerSuggestion[]> {
     const dataLayers: LayerSuggestion[] = [];
     if (deviceContext) {
-      universeData.getTelemetryStreams(deviceContext).forEach((stream) => {
-        if (stream.disabled) {
-          return;
+      (await universeData.getTelemetryStreams(deviceContext)).forEach(
+        (stream) => {
+          if (stream.disabled) {
+            return;
+          }
+          if (
+            stream.configuration.type === "ros-localization" &&
+            stream.configuration.mapTopic
+          ) {
+            dataLayers.push({
+              sources: [
+                {
+                  id: uuid.v4(),
+                  sourceType: "telemetry",
+                  streamName: stream.name,
+                  streamType: stream.configuration.type,
+                },
+              ],
+              layerType: GridMapLayer.id,
+            });
+          }
         }
-        if (
-          stream.configuration.type === "ros-localization" &&
-          stream.configuration.mapTopic
-        ) {
-          dataLayers.push({
-            sources: [
-              {
-                id: uuid.v4(),
-                sourceType: "telemetry",
-                streamName: stream.name,
-                streamType: stream.configuration.type,
-              },
-            ],
-            layerType: GridMapLayer.id,
-          });
-        }
-      });
+      );
     }
     return dataLayers;
   }
