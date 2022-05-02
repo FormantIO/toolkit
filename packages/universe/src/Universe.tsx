@@ -141,6 +141,8 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       if (e.children) {
         e.children.forEach((c, j) => populateLayer(c, pathThusFar, j));
       }
+      if (e.position)
+        defined(this.viewer).updatePositioning(pathThusFar, e.position);
     };
     if (this.props.initialSceneGraph) {
       this.props.initialSceneGraph.forEach((e, i) => {
