@@ -19,7 +19,12 @@ export function createScene() {
           deviceContext: "abc",
           children: [],
           visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
+          position: {
+            type: "manual",
+            x: 0,
+            y: 1.6653345369377348e-16,
+            z: 0.9554891467013107,
+          },
           fieldValues: {
             label_text: {
               type: "text",
@@ -83,7 +88,7 @@ export function createScene() {
           fieldValues: {
             label_text: {
               type: "text",
-              value: "RoboArm2",
+              value: "RoboArm1",
             },
           },
           data: {},
@@ -255,6 +260,28 @@ export function createScene() {
       position: { type: "manual", x: 0, y: 0, z: 0 },
       fieldValues: {},
       data: {},
+    },
+    {
+      children: [],
+      id: "ac2dc279-b50a-4c02-b65e-8c545be92b6c",
+      visible: true,
+      editing: true,
+      position: {
+        type: "manual",
+        x: -0.05213157574107391,
+        y: 3.469446951953614e-17,
+        z: 0.18048159900166147,
+      },
+      fieldValues: {
+        url: {
+          type: "text",
+          value:
+            "https://formant-3d-models.s3.us-west-2.amazonaws.com/grass.gltf",
+        },
+      },
+      name: "Grass",
+      type: "3dmodel",
+      data: "A 3D model.",
     },
   ];
   return sg;
