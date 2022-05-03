@@ -295,9 +295,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.37"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.37.tgz#b0542e62303a15153a989acd68dc1a260fcf7e64"
-  integrity sha512-H/dS7RR4GOn5BgLPUAiZGPA025wWSrUn+hxx5txjk5ZxUQcCwhrUGSPWxvFkAk6O7e9Eixgaw6bojV3cXVa2VQ==
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.40.tgz#d63423965e0ed90e3f09a556852fa0f802f87161"
+  integrity sha512-izqasTF/xMkIg4WKKowfIG7hM68K+iaYSJspW1hZiFoaiLmw9CvMgQBBl6h+pqbmquKzZLE6TmPeisu+sawy3w==
   dependencies:
     "@formant/ui-sdk" "0.0.17"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
@@ -926,9 +926,9 @@ ms@2.1.2:
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 nanoid@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.3.tgz#fd8e8b7aa761fe807dba2d1b98fb7241bb724a25"
-  integrity sha512-p1sjXuopFs0xg+fPASzQ28agW1oHD7xDsd9Xkf3T15H3c/cifrFHVwrh74PdoklAPi+i7MdRsE47vm2r6JoB+w==
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
+  integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
 object-assign@^4.1.1:
   version "4.1.1"

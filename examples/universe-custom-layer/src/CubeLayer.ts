@@ -12,6 +12,11 @@ export class CubeLayer extends UniverseLayerContent {
   static description = "A cube.";
   static usesData = false;
 
+  cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 0x20a0ff })
+  );
+
   static createDefault(
     _universeData: IUniverseData,
     _deviceId: string,
@@ -22,10 +27,36 @@ export class CubeLayer extends UniverseLayerContent {
 
   constructor() {
     super();
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0x20a0ff })
-    );
-    this.add(cube);
+    this.add(this.cube);
+  }
+
+  onPointerMove(raycaster: THREE.Raycaster): void {
+    let intersects = false;
+    if (raycaster.intersectObject(this.cube).length > 0) {
+      intersects = true;
+    }
+    let m;
+    if (Array.isArray(this.cube.material)) {
+      m = this.cube.material[0];
+    } else {
+      m = this.cube.material;
+    }
+    if (m instanceof THREE.MeshBasicMaterial) {
+      m.color.set(intersects ? 0x20a0ff : 0xffffff);
+    }
+  }
+
+  onPointerDown(raycaster: THREE.Raycaster): void {
+    if (raycaster.intersectObject(this.cube).length > 0) {
+      let m;
+      if (Array.isArray(this.cube.material)) {
+        m = this.cube.material[0];
+      } else {
+        m = this.cube.material;
+      }
+      if (m instanceof THREE.MeshBasicMaterial) {
+        m.color.set(0xff0000);
+      }
+    }
   }
 }
