@@ -82,7 +82,7 @@ export class SortableTree extends Component<ISortableTreeProps> {
                 onClick={this.onItemClicked.bind(this, currentPath)}
                 data-tooltip={e.title}
               >
-                <Typography variant="h5">
+                <Typography variant="body1">
                   {currentPath.length > 1 && <span>— </span>}
 
                   {e.title}

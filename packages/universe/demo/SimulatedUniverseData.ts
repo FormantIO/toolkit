@@ -1,9 +1,3 @@
-import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
-import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { ILocation } from "../../data-sdk/src/model/ILocation";
-import { IMap } from "../../data-sdk/src/model/IMap";
-import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
-import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import {
   IHardwareStream,
   ITelemetryRosStream,
@@ -12,12 +6,27 @@ import {
   UniverseDataSource,
 } from "../src/IUniverseData";
 import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
+import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
+import { ILocation } from "../../data-sdk/src/model/ILocation";
+import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
+import { IJointState } from "../../data-sdk/src/model/IJointState";
+import { IMap } from "../../data-sdk/src/model/IMap";
+import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
+
+export const SPOT_ID = "abc";
+export const ARM1_ID = "asdfadsfas";
+export const ARM2_ID = "124fasd";
+export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  time = Date.now();
+  setTime(time: number): void {
+    this.time = time;
+  }
   async getLatestTransformTrees(
     deviceId: string
   ): Promise<{ streamName: string; transformTree: ITransformNode }[]> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return [
         {
           streamName: "spotTf",
@@ -51,24 +60,24 @@ export class SimulatedUniverseData implements IUniverseData {
     { deviceName: string; deviceId: string }[]
   > {
     return [
-      { deviceName: "Spot-9000", deviceId: "abc" },
-      { deviceName: "Roboarm 1", deviceId: "asdfcsad" },
-      { deviceName: "Roboarm 2", deviceId: "dfhgf" },
-      { deviceName: "Roboarm 3", deviceId: "vbmvb" },
+      { deviceName: "Spot-9000", deviceId: SPOT_ID },
+      { deviceName: "Roboarm 1", deviceId: ARM1_ID },
+      { deviceName: "Roboarm 2", deviceId: ARM2_ID },
+      { deviceName: "Roboarm 3", deviceId: ARM3_ID },
     ];
   }
 
   async getDeviceContextName(deviceId: string): Promise<string | undefined> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return "Spot-9000";
     }
-    if (deviceId === "asdfcsad") {
+    if (deviceId === ARM1_ID) {
       return "Roboarm 1";
     }
-    if (deviceId === "dfhgf") {
+    if (deviceId === ARM2_ID) {
       return "Roboarm 2";
     }
-    if (deviceId === "vbmvb") {
+    if (deviceId === ARM3_ID) {
       return "Roboarm 3";
     }
     return undefined;
@@ -138,8 +147,108 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToJointState(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IJointState) => void
+    callback: (data: IJointState) => void
   ): () => void {
+    if (_deviceId === SPOT_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "fl.hx",
+            "fl.hy",
+            "fl.kn",
+            "fr.hx",
+            "fr.hy",
+            "fr.kn",
+            "hl.hx",
+            "hl.hy",
+            "hl.kn",
+            "hr.hx",
+            "hr.hy",
+            "hr.kn",
+          ],
+          position: [
+            0,
+            Math.sin(this.time / 1000),
+            Math.cos(this.time / 1000),
+
+            0,
+            Math.cos(this.time / 1000),
+            Math.sin(this.time / 1000),
+
+            0,
+            Math.sin(this.time / 1000),
+            Math.cos(this.time / 1000),
+
+            0,
+            Math.cos(this.time / 1000),
+            Math.sin(this.time / 1000),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM1_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM2_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM3_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    }
     return () => {};
   }
 
@@ -159,32 +268,43 @@ export class SimulatedUniverseData implements IUniverseData {
     return () => {};
   }
 
-  async getTelemetryStreams(_deviceId: string): Promise<ITelemetryStream[]> {
-    return [
-      {
-        name: "spotTf",
-        configuration: {
-          type: "transform tree",
+  async getTelemetryStreams(deviceId: string): Promise<ITelemetryStream[]> {
+    if (deviceId === SPOT_ID) {
+      return [
+        {
+          name: "spotTf",
+          configuration: {
+            type: "transform tree",
+          },
         },
-      },
-    ];
+      ];
+    }
+    return [];
   }
 
-  async getTeleopRosStreams(_deviceId: string): Promise<ITelemetryRosStream[]> {
+  async getTeleopRosStreams(deviceId: string): Promise<ITelemetryRosStream[]> {
+    if (deviceId === SPOT_ID) {
+      return [
+        {
+          topicType: "sensor_msgs/JointState",
+          topicName: "spotJoints",
+        },
+        {
+          topicType: "visualization_msgs/MarkerArray",
+          topicName: "spotMarkers",
+        },
+      ];
+    }
     return [
       {
         topicType: "sensor_msgs/JointState",
-        topicName: "spotJoints",
-      },
-      {
-        topicType: "visualization_msgs/MarkerArray",
-        topicName: "spotMarkers",
+        topicName: "armJoints",
       },
     ];
   }
 
   async getUrdfs(deviceId: string): Promise<string[]> {
-    if (deviceId === "abc") {
+    if (deviceId === SPOT_ID) {
       return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/spot.zip"];
     }
     return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/arm.zip"];
@@ -195,28 +315,51 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   subscribeToTransformTree(
-    _deviceId: string,
+    deviceId: string,
     _source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): () => void {
-    callback({
-      url: "https://formant-3d-models.s3.us-west-2.amazonaws.com/spotjoint_sit.json",
-    });
+    if (deviceId === SPOT_ID) {
+      callback({
+        url: "https://formant-3d-models.s3.us-west-2.amazonaws.com/spotjoint_sit.json",
+      });
+    }
     return () => {};
   }
 
   subscribeToLocation(
-    _deviceId: string,
-    _source: UniverseDataSource,
+    deviceId: string,
+    source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): () => void {
-    const delta = 0.00001;
-    window.setInterval(() => {
-      callback({
-        latitude: 45.4661989 + 2 * delta * Math.random() - delta,
-        longitude: -122.5782375 + 2 * delta * Math.random() - delta,
-      });
-    }, 1000);
+    if (source.sourceType === "telemetry") {
+      const delta = 0.00001;
+      if (deviceId === SPOT_ID) {
+        window.setInterval(() => {
+          const newValue =
+            -122.5782375 + 2 * delta * Math.sin(this.time / 1000 / 3);
+          callback({
+            latitude: 45.4661989,
+            longitude: newValue,
+          });
+        }, 60 / 12);
+      } else if (deviceId === ARM1_ID) {
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375,
+        });
+      } else if (deviceId === ARM2_ID) {
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375 + delta,
+        });
+      } else if (deviceId === ARM3_ID) {
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375 + delta + delta,
+        });
+      }
+    }
     return () => {};
   }
 }

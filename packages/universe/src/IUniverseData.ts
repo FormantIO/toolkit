@@ -52,6 +52,7 @@ export interface IHardwareStream {
 }
 
 export interface IUniverseData {
+  setTime(time: number): void;
   getLatestTransformTrees(deviceId: string): Promise<
     {
       streamName: string;

@@ -118,7 +118,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             longitude: positioning.relativeToLongitude,
             latitude: location.latitude,
           };
-          const horizontalDistance = getDistance(h1, h2);
+          const horizontalDistance = getDistance(h1, h2, 0.000001);
           const l1 = {
             longitude: location.longitude,
             latitude: location.latitude,
@@ -127,7 +127,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
             longitude: location.longitude,
             latitude: positioning.relativeToLatitude,
           };
-          const verticalDistance = getDistance(l1, l2);
+          const verticalDistance = getDistance(l1, l2, 0.000001);
           const euler = new Euler(0, 0, location.orientation);
           const quaternion = new Quaternion();
           quaternion.setFromEuler(euler);
