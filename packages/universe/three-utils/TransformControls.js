@@ -705,10 +705,10 @@ var TransformControlsGizmo = function () {
   matRed.color.set(0xea719d);
 
   var matGreen = gizmoMaterial.clone();
-  matGreen.color.set(0x2ec495);
+  matGreen.color.set(0x18d2ff);
 
   var matBlue = gizmoMaterial.clone();
-  matBlue.color.set(0x18d2ff);
+  matBlue.color.set(0x2ec495);
 
   var matWhiteTransparent = gizmoMaterial.clone();
   matWhiteTransparent.opacity = 0.25;

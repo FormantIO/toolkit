@@ -103,7 +103,7 @@ export class Urdf extends Group {
                 color = mat.color;
               }
             }
-            _.material = new THREE.MeshStandardMaterial({
+            _.material = new THREE.MeshPhongMaterial({
               color,
               opacity,
               transparent,

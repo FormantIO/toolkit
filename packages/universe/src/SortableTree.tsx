@@ -114,11 +114,6 @@ export class SortableTree extends Component<ISortableTreeProps> {
                       <div
                         tabIndex={iconIndex}
                         role="button"
-                        onKeyDown={this.onItemIconClicked.bind(
-                          this,
-                          currentPath,
-                          iconIndex
-                        )}
                         onClick={this.onItemIconClicked.bind(
                           this,
                           currentPath,

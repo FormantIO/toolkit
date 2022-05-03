@@ -1,4 +1,6 @@
 import { GroundPlane } from "../objects/GroundPlane";
+import { Axes } from "../objects/Axes";
+import { AxisLabels } from "../objects/AxisLabels";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
@@ -23,5 +25,8 @@ export class GroundLayer extends UniverseLayerContent {
   constructor() {
     super();
     this.add(new GroundPlane());
+    this.add(new Axes());
+    const axes = new AxisLabels();
+    this.add(axes);
   }
 }

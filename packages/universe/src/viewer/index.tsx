@@ -72,12 +72,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       0.1,
       1000
     );
-    this.camera.position.z = 1.5;
+    this.camera.position.z = -1.5;
+    this.camera.position.x = 1.5;
+    this.camera.position.y = 1;
 
-    this.camera.position.y = 1.5;
-
-    const light = new THREE.AmbientLight(0x555555);
-    this.scene.add(light);
     const accentColor1 = defined(Color.fromString("#18d2ff")).toString();
     const accentColor2 = defined(Color.fromString("#ea719d")).toString();
     const skyColor = defined(Color.fromString("#f8f9fc")).toString();

@@ -42,7 +42,7 @@ function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {
       const major = i === 10;
       const r = 10 ** magnitude * i;
       mesh.add(
-        polarGridCircle(r, major ? majorCircleColor : minorCircleColor, 36)
+        polarGridCircle(r, major ? majorCircleColor : minorCircleColor, 36 * 3)
       );
     });
   });
