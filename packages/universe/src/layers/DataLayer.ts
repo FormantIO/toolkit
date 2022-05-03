@@ -1,4 +1,3 @@
-import { Object3D } from "three";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
@@ -16,7 +15,7 @@ export class DataLayer extends UniverseLayerContent {
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<Object3D> {
+  ): TransformLayer<DataLayer> {
     return new TransformLayer(new DataLayer(), deviceId);
   }
 }

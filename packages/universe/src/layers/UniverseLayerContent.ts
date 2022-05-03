@@ -1,4 +1,4 @@
-import { Object3D, PerspectiveCamera } from "three";
+import { Object3D, PerspectiveCamera, Raycaster } from "three";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
@@ -69,4 +69,6 @@ export abstract class UniverseLayerContent extends Object3D {
   ): TransformLayer<UniverseLayerContent> {
     throw new Error("Method not implemented.");
   }
+
+  onRaycasterChanged(_raycaster: Raycaster): void {}
 }

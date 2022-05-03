@@ -2,7 +2,13 @@ import { Measure } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
 import * as THREE from "three";
-import { PointLight, Vector3, WebGLRenderer, HemisphereLight } from "three";
+import {
+  PointLight,
+  Vector3,
+  WebGLRenderer,
+  HemisphereLight,
+  Raycaster,
+} from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../three-utils/OrbitControls";
 import { TransformControls } from "../../three-utils/TransformControls";
@@ -60,6 +66,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private attachedPath: TreePath | undefined;
 
+  private raycaster = new Raycaster();
+
+  private pointer = new THREE.Vector2();
+
+  private pointerDirty = false;
+
   constructor(props: IUniverseViewerProps) {
     super(props);
     this.scene = new THREE.Scene();
@@ -103,6 +115,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       });
       this.renderer.xr.enabled = true;
       element.appendChild(this.renderer.domElement);
+
+      window.addEventListener("pointermove", this.onPointerMove);
       const { devicePixelRatio } = window;
       const { offsetWidth: width, offsetHeight: height } = element;
       this.renderer.setPixelRatio(devicePixelRatio);
@@ -124,6 +138,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       });
       this.scene.add(this.editControls);
       this.renderer.setAnimationLoop(() => {
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+        if (this.pointerDirty) {
+          this.notifyRaycasterChanged();
+          this.pointerDirty = false;
+        }
         if (this.renderer && this.orbitControls) {
           this.renderer.render(this.scene, this.camera);
           this.orbitControls.update();
@@ -136,6 +155,17 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   public componentWillUnmount() {
     window.removeEventListener("keydown", this.onKeyDown);
   }
+
+  onPointerMove = (event: PointerEvent) => {
+    if (this.renderer) {
+      this.pointer.x =
+        (event.offsetX / this.renderer.domElement.offsetWidth) * 2 - 1;
+      this.pointer.y =
+        -(event.offsetY / this.renderer.domElement.offsetHeight) * 2 + 1;
+      this.pointerDirty = true;
+      console.log(this.pointer.x, this.pointer.y);
+    }
+  };
 
   onKeyDown = (event: KeyboardEvent) => {
     const c = defined(this.editControls);
@@ -179,6 +209,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
     this.renderer?.setSize(width, height);
   };
+
+  private notifyRaycasterChanged() {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onRaycasterChanged(this.raycaster);
+    });
+  }
 
   public removeSceneGraphItem(path: TreePath) {
     if (this.attachedPath && treePathEquals(path, this.attachedPath)) {

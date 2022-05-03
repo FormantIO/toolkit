@@ -1,6 +1,6 @@
 import * as uuid from "uuid";
 import { getDistance } from "geolib";
-import { Euler, Matrix4, Object3D, Quaternion, Vector3 } from "three";
+import { Euler, Matrix4, Quaternion, Raycaster, Vector3 } from "three";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../SceneGraph";
@@ -9,7 +9,9 @@ import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
-export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
+export class TransformLayer<
+  T extends UniverseLayerContent
+> extends UniverseLayerContent {
   static id = "transform_space";
 
   static commonName = "Empty";
@@ -22,7 +24,7 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<Object3D> {
+  ): TransformLayer<UniverseLayerContent> {
     return new TransformLayer(undefined, deviceId);
   }
 
@@ -34,6 +36,10 @@ export class TransformLayer<T extends Object3D> extends UniverseLayerContent {
       this.contentNode = content;
       this.add(content);
     }
+  }
+
+  public onRaycasterChanged(raycaster: Raycaster): void {
+    this.contentNode?.onRaycasterChanged(raycaster);
   }
 
   buildTransformList(
