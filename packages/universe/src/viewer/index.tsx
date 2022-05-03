@@ -116,7 +116,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.renderer.xr.enabled = true;
       element.appendChild(this.renderer.domElement);
 
-      window.addEventListener("pointermove", this.onPointerMove);
+      element.addEventListener("pointermove", this.onPointerMove);
+      element.addEventListener("pointerdown", this.onPointerDown);
+      element.addEventListener("pointerup", this.onPointerUp);
+      element.addEventListener("pointerleave", this.onPointerUp);
+      element.addEventListener("wheel", this.onPointerWheel);
+
       const { devicePixelRatio } = window;
       const { offsetWidth: width, offsetHeight: height } = element;
       this.renderer.setPixelRatio(devicePixelRatio);
@@ -163,8 +168,27 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.pointer.y =
         -(event.offsetY / this.renderer.domElement.offsetHeight) * 2 + 1;
       this.pointerDirty = true;
-      console.log(this.pointer.x, this.pointer.y);
     }
+  };
+
+  onPointerDown = (event: PointerEvent) => {
+    const { button } = event;
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onPointerDown(this.raycaster, button);
+    });
+  };
+
+  onPointerUp = (event: PointerEvent) => {
+    const { button } = event;
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onPointerUp(this.raycaster, button);
+    });
+  };
+
+  onPointerWheel = (event: WheelEvent) => {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onPointerWheel(this.raycaster, event.deltaY);
+    });
   };
 
   onKeyDown = (event: KeyboardEvent) => {
@@ -212,7 +236,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onRaycasterChanged(this.raycaster);
+      _.onPointerMove(this.raycaster);
     });
   }
 

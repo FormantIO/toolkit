@@ -70,5 +70,11 @@ export abstract class UniverseLayerContent extends Object3D {
     throw new Error("Method not implemented.");
   }
 
-  onRaycasterChanged(_raycaster: Raycaster): void {}
+  onPointerMove(_raycaster: Raycaster): void {}
+
+  onPointerDown(_raycaster: Raycaster, _button: number): void {}
+
+  onPointerUp(_raycaster: Raycaster, _button: number): void {}
+
+  onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
 }

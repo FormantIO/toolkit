@@ -38,8 +38,20 @@ export class TransformLayer<
     }
   }
 
-  public onRaycasterChanged(raycaster: Raycaster): void {
-    this.contentNode?.onRaycasterChanged(raycaster);
+  public onPointerMove(raycaster: Raycaster): void {
+    this.contentNode?.onPointerMove(raycaster);
+  }
+
+  public onPointerDown(raycaster: Raycaster, button: number): void {
+    this.contentNode?.onPointerDown(raycaster, button);
+  }
+
+  public onPointerUp(raycaster: Raycaster, button: number): void {
+    this.contentNode?.onPointerUp(raycaster, button);
+  }
+
+  public onPointerWheel(raycaster: Raycaster, delta: number): void {
+    this.contentNode?.onPointerWheel(raycaster, delta);
   }
 
   buildTransformList(
