@@ -19,6 +19,10 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  time = Date.now();
+  setTime(time: number): void {
+    this.time = time;
+  }
   async getLatestTransformTrees(
     deviceId: string
   ): Promise<{ streamName: string; transformTree: ITransformNode }[]> {
@@ -143,8 +147,108 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToJointState(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IJointState) => void
+    callback: (data: IJointState) => void
   ): () => void {
+    if (_deviceId === SPOT_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "fl.hx",
+            "fl.hy",
+            "fl.kn",
+            "fr.hx",
+            "fr.hy",
+            "fr.kn",
+            "hl.hx",
+            "hl.hy",
+            "hl.kn",
+            "hr.hx",
+            "hr.hy",
+            "hr.kn",
+          ],
+          position: [
+            0,
+            Math.sin(this.time / 1000),
+            Math.cos(this.time / 1000),
+
+            0,
+            Math.cos(this.time / 1000),
+            Math.sin(this.time / 1000),
+
+            0,
+            Math.sin(this.time / 1000),
+            Math.cos(this.time / 1000),
+
+            0,
+            Math.cos(this.time / 1000),
+            Math.sin(this.time / 1000),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM1_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM2_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    } else if (_deviceId === ARM3_ID) {
+      window.setInterval(() => {
+        callback({
+          name: [
+            "joint_1",
+            "joint_2",
+            "joint_3",
+            "joint_4",
+            "joint_5",
+            "joint_6",
+          ],
+          position: [
+            Math.sin(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+            Math.cos(this.time / 1000 / 3),
+          ],
+        });
+      }, 60 / 12);
+    }
     return () => {};
   }
 
@@ -232,32 +336,28 @@ export class SimulatedUniverseData implements IUniverseData {
       const delta = 0.00001;
       if (deviceId === SPOT_ID) {
         window.setInterval(() => {
+          const newValue =
+            -122.5782375 + 2 * delta * Math.sin(this.time / 1000 / 3);
           callback({
             latitude: 45.4661989,
-            longitude: -122.5782375 + 2 * delta * Math.sin(Date.now() / 1000),
+            longitude: newValue,
           });
-        }, 1000);
+        }, 60 / 12);
       } else if (deviceId === ARM1_ID) {
-        window.setInterval(() => {
-          callback({
-            latitude: 45.4661989 + delta,
-            longitude: -122.5782375,
-          });
-        }, 1000);
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375,
+        });
       } else if (deviceId === ARM2_ID) {
-        window.setInterval(() => {
-          callback({
-            latitude: 45.4661989 + delta,
-            longitude: -122.5782375 + delta,
-          });
-        }, 1000);
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375 + delta,
+        });
       } else if (deviceId === ARM3_ID) {
-        window.setInterval(() => {
-          callback({
-            latitude: 45.4661989 + delta,
-            longitude: -122.5782375 + delta + delta,
-          });
-        }, 1000);
+        callback({
+          latitude: 45.4661989 + delta,
+          longitude: -122.5782375 + delta + delta,
+        });
       }
     }
     return () => {};
