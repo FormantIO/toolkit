@@ -338,6 +338,33 @@ function createComponents(theme: Theme) {
           },
         },
       },
+      MuiSnackbarContent: {
+        styleOverrides: {
+          root: {
+            backgroundColor: theme.palette.primary.dark,
+            color: theme.palette.primary.light,
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          switchBase: {
+            "&.Mui-checked+.MuiSwitch-track": {
+              backgroundColor: theme.palette.common.black,
+            },
+
+            "&.Mui-checked .MuiSwitch-thumb": {
+              backgroundColor: theme.palette.secondary.main,
+            },
+          },
+          thumb: {
+            backgroundColor: theme.palette.primary.light,
+          },
+          track: {
+            backgroundColor: theme.palette.common.black,
+          },
+        },
+      },
     },
   };
   return createTheme(theme, components);

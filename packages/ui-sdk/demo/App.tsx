@@ -19,17 +19,31 @@ import {
   Switch,
   Stack,
   Link,
+  Snackbar,
+  icons,
+  Icon,
 } from "../src/main";
 
 function App() {
-  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+    setSnackbarMessage("hello " + Math.random());
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -239,14 +253,30 @@ function App() {
             </Grid>
           </Box>
           <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-            Tooltip
+            Snackbar
           </Typography>
           <Box sx={{ p: 2 }}>
             <Grid container gap={2}>
-              <Button variant="outlined" onClick={handleClickOpen}>
+              <Button variant="outlined" onClick={handleOpenSnackbar}>
+                Show Snackbar
+              </Button>
+              <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={snackbarMessage}
+              />
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Dialog
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              <Button variant="outlined" onClick={handleOpenDialog}>
                 Open form dialog
               </Button>
-              <Dialog open={open} onClose={handleClose}>
+              <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
                   <Stack spacing={2}>
@@ -269,7 +299,7 @@ function App() {
                     <Button
                       size="large"
                       variant="contained"
-                      onClick={handleClose}
+                      onClick={handleCloseDialog}
                     >
                       Cancel
                     </Button>
@@ -277,7 +307,7 @@ function App() {
                       size="large"
                       variant="contained"
                       color="secondary"
-                      onClick={handleClose}
+                      onClick={handleCloseDialog}
                     >
                       Subscribe
                     </Button>
@@ -291,7 +321,38 @@ function App() {
           </Typography>
           <Box sx={{ p: 2 }}>
             <Grid container gap={2}>
-              <Switch />
+              <Stack
+                spacing={2}
+                direction="row"
+                alignContent="center"
+                alignItems="center"
+              >
+                <Switch size="small" />
+                <Switch />
+              </Stack>
+            </Grid>
+          </Box>
+          <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+            Icons
+          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Grid container gap={2}>
+              {Array.from(Object.keys(icons)).map((iconName: string) => (
+                <Stack
+                  alignContent="center"
+                  alignItems="center"
+                  sx={{ width: "10rem" }}
+                >
+                  <Icon
+                    key={iconName}
+                    name={iconName as any}
+                    sx={{ margin: "1rem" }}
+                  />
+                  <div>
+                    <Typography variant={"h6"}>{iconName}</Typography>
+                  </div>
+                </Stack>
+              ))}
             </Grid>
           </Box>
         </Container>
