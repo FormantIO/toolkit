@@ -10,22 +10,22 @@ import {
   Raycaster,
 } from "three";
 import styled from "styled-components";
-import { OrbitControls } from "../../three-utils/OrbitControls";
-import { TransformControls } from "../../three-utils/TransformControls";
-import { VRButton } from "../../three-utils/VRButton";
-import { defined, definedAndNotNull } from "../../../common/defined";
-import { LayerRegistry } from "../layers/LayerRegistry";
-import { TransformLayer } from "../layers/TransformLayer";
-import { injectLayerFieldValues } from "../layers/UniverseLayerContent";
+import { OrbitControls } from "../../../three-utils/OrbitControls";
+import { TransformControls } from "../../../three-utils/TransformControls";
+import { VRButton } from "../../../three-utils/VRButton";
+import { defined, definedAndNotNull } from "../../../../common/defined";
+import { LayerRegistry } from "../../layers/LayerRegistry";
+import { TransformLayer } from "../../layers/TransformLayer";
+import { injectLayerFieldValues } from "../../layers/UniverseLayerContent";
 import {
   findSceneGraphElement,
   getSceneGraphElementParent,
   Positioning,
   SceneGraphElement,
-} from "../SceneGraph";
-import { TreePath, treePathEquals } from "../ITreeElement";
-import { IUniverseData } from "../IUniverseData";
-import { Color } from "../../../common/Color";
+} from "../../model/SceneGraph";
+import { TreePath, treePathEquals } from "../../model/ITreeElement";
+import { IUniverseData } from "../../model/IUniverseData";
+import { Color } from "../../../../common/Color";
 
 const MeasureContainer = styled.div`
   width: 100%;

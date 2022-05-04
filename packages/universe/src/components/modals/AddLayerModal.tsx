@@ -7,10 +7,10 @@ import {
 } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
-import { LayerType } from "../layers";
-import { LayerRegistry, LayerSuggestion } from "../layers/LayerRegistry";
-import { LayerFields } from "../layers/UniverseLayerContent";
+import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";
+import { LayerType } from "../../layers";
+import { LayerRegistry, LayerSuggestion } from "../../layers/LayerRegistry";
+import { LayerFields } from "../../layers/UniverseLayerContent";
 import { Modal } from "./Modal";
 
 interface IAddLayerModalProps {
@@ -86,7 +86,7 @@ export class AddLayerModal extends Component<
       selectedItem: layerType,
     });
     this.selectedSources = dataSources;
-    this.currentFields = LayerRegistry.getFields(layerType);
+    this.currentFields = LayerRegistry.getFields(layerType, "create");
     if (layerType === "data") {
       this.props.universeData.getDeviceContexts().then((deviceContexts) => {
         this.setState({

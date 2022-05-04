@@ -48,7 +48,7 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
-    "@formant/ui-sdk": "0.0.17",
+    "@formant/ui-sdk": "0.0.18",
     "@formant/ui-sdk-realtime-player-core": "^0.0.2",
     "@formant/ui-sdk-realtime-player-core-worker": "^0.0.2",
     "@types/react": "^18.0.8",

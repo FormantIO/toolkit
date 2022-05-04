@@ -1,8 +1,11 @@
 import {
+  CloseSubscription,
+  DataSourceState,
   IHardwareStream,
   ITelemetryRosStream,
   ITelemetryStream,
   IUniverseData,
+  IUniverseStatistics,
   UniverseDataSource,
 } from "../src/IUniverseData";
 import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
@@ -19,6 +22,18 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  async getStatistics(): Promise<IUniverseStatistics> {
+    return {
+      rtcDevices: [],
+    };
+  }
+  subscribeDataSourceStateChange(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _onDataSourceStateChange?: (state: DataSourceState) => void
+  ): CloseSubscription {
+    return () => {};
+  }
   time = Date.now();
   setTime(time: number): void {
     this.time = time;

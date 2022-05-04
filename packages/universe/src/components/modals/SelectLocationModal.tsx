@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Component } from "react";
 import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
-import { IUniverseData } from "../IUniverseData";
+import { IUniverseData } from "../../model/IUniverseData";
 import { Modal } from "./Modal";
-import { ILocation } from "../../../data-sdk/src/model/ILocation";
+import { ILocation } from "../../../../data-sdk/src/model/ILocation";
 
 interface ISelectLocationModalProps {
   deviceContext: string;

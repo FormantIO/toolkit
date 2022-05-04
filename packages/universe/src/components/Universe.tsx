@@ -1,17 +1,25 @@
 import * as React from "react";
 import { Component } from "react";
 import { Vector3 } from "three";
-import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
+import {
+  Box,
+  Button,
+  Icon,
+  Select,
+  Stack,
+  Typography,
+  TextField,
+} from "@formant/ui-sdk";
 import styled from "styled-components";
-import { defined, definedAndNotNull } from "../../common/defined";
-import { throttle } from "../../common/throttle";
-import { LayerType } from "./layers";
-import { LayerRegistry } from "./layers/LayerRegistry";
+import { defined, definedAndNotNull } from "../../../common/defined";
+import { throttle } from "../../../common/throttle";
+import { LayerType } from "../layers";
+import { LayerRegistry } from "../layers/LayerRegistry";
 import {
   extractLayerFieldValues,
   LayerFields,
   LayerFieldValues,
-} from "./layers/UniverseLayerContent";
+} from "../layers/UniverseLayerContent";
 import {
   cloneSceneGraph,
   findSceneGraphElement,
@@ -20,15 +28,16 @@ import {
   SceneGraphElement,
   visitSceneGraphElement,
   visitSceneGraphElementReverse,
-} from "./SceneGraph";
-import { TreeElement, TreePath, treePathEquals } from "./ITreeElement";
-import { IUniverseData, UniverseDataSource } from "./IUniverseData";
+} from "../model/SceneGraph";
+import { TreeElement, TreePath, treePathEquals } from "../model/ITreeElement";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { UniverseSidebar } from "./sidebar";
 import { UniverseViewer } from "./viewer";
 import { AddLayerModal } from "./modals/AddLayerModal";
 import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
+import { FieldEditor } from "./FieldEditor";
 
 const Controls = styled.div`
   position: absolute;
@@ -537,6 +546,10 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }));
   };
 
+  private onFieldChanged = (fieldId: string, value: string) => {
+    console.log(fieldId, value);
+  };
+
   stringToColor(str: string) {
     /* tslint:disable:no-bitwise */
     let hash = 0;
@@ -609,7 +622,6 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     let parentContext: string | undefined;
     let currentContext: string | undefined;
     if (this.state.currentlySelectedElement) {
-      console.log(JSON.stringify(this.sceneGraph));
       element = findSceneGraphElement(
         this.sceneGraph,
         this.state.currentlySelectedElement
@@ -626,9 +638,16 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
       if (element) currentContext = element.deviceContext || parentContext;
     }
 
-    console.log(JSON.stringify(element));
-
     const showSidebar = mode === "edit" && sidebarOpen;
+
+    let fields: LayerFields = {};
+    const fieldValues: { [key in string]: string | undefined } = {};
+    if (element) {
+      fields = LayerRegistry.getFields(element.type, "edit");
+      Array.from(Object.keys(fields)).forEach((key) => {
+        fieldValues[key] = element?.fieldValues[key].value;
+      });
+    }
 
     return (
       <UniverseContainer>
@@ -722,6 +741,15 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
                             </Button>
                           </div>
                         )}
+                        {Object.entries(fields).map(([fieldId, field]) => (
+                          <FieldEditor
+                            key={fieldId}
+                            fieldId={fieldId}
+                            field={field}
+                            initialValue={fieldValues[fieldId]}
+                            onChange={this.onFieldChanged}
+                          />
+                        ))}
                       </Stack>
                     </div>
                   </div>

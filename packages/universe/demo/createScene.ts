@@ -24,6 +24,7 @@ export function createScene() {
             label_text: {
               type: "text",
               value: "Spot-9000",
+              location: ["create", "edit"],
             },
           },
           data: {},
@@ -84,6 +85,7 @@ export function createScene() {
             label_text: {
               type: "text",
               value: "RoboArm2",
+              location: ["create", "edit"],
             },
           },
           data: {},
@@ -144,6 +146,7 @@ export function createScene() {
             label_text: {
               type: "text",
               value: "RoboArm2",
+              location: ["create", "edit"],
             },
           },
           data: {},
@@ -204,6 +207,7 @@ export function createScene() {
             label_text: {
               type: "text",
               value: "RoboArm3",
+              location: ["create", "edit"],
             },
           },
           data: {},

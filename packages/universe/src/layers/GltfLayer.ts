@@ -23,6 +23,7 @@ export class GltfLayer extends UniverseLayerContent {
       placeholder: "https://example.com/model.gltf",
       value: "",
       type: "text",
+      location: ["create"],
     },
   };
 

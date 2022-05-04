@@ -1,15 +1,19 @@
 import { Button } from "@formant/ui-sdk";
 import React from "react";
 import styled from "styled-components";
-import { TreeElement, TreePath, treePathEquals } from "../ITreeElement";
+import {
+  TreeElement,
+  TreePath,
+  treePathEquals,
+} from "../../model/ITreeElement";
 import { SortableTree } from "../SortableTree";
 
 const SidebarContainer = styled.div`
   background-color: #2d3855;
   padding: 1rem;
   display: grid;
-  grid-template-rows: 1fr auto 3rem;
-  gap: 0.5rem;
+  grid-template-rows: 25rem auto 3rem;
+  gap: 1rem;
   height: 100%;
 `;
 
@@ -24,6 +28,10 @@ const ButtonsDiv = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+`;
+
+const TreeArea = styled.div`
+  overflow-y: scroll;
 `;
 
 export interface IUniverseSidebarProps {
@@ -81,14 +89,14 @@ export function UniverseSidebar({
   return (
     <SidebarContainer>
       {" "}
-      <div>
+      <TreeArea>
         <SortableTree
           items={tree}
           selected={selected}
           onSelected={onTreeNodeSelect}
           onIconSelected={onTreeNodeIconSelect}
         />
-      </div>
+      </TreeArea>
       <PropertiesSectionDiv>{children}</PropertiesSectionDiv>
       <ButtonsDiv>
         <Button variant="contained" size="small" onClick={onAddClicked}>

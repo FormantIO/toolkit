@@ -1,10 +1,19 @@
-import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
-import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { ILocation } from "../../data-sdk/src/model/ILocation";
-import { IMap } from "../../data-sdk/src/model/IMap";
-import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
-import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
-import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
+import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
+import { IJointState } from "../../../data-sdk/src/model/IJointState";
+import { ILocation } from "../../../data-sdk/src/model/ILocation";
+import { IMap } from "../../../data-sdk/src/model/IMap";
+import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
+import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
+import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
+
+export type DataSourceState =
+  | "missing_data"
+  | "connected"
+  | "disconnected"
+  | "connecting"
+  | "disconnecting";
+
+export type CloseSubscription = () => void;
 
 export interface UniverseRosDataSource {
   id: string;
@@ -51,6 +60,14 @@ export interface IHardwareStream {
   name: string;
 }
 
+export interface IUniverseStatistics {
+  rtcDevices: {
+    deviceId: string;
+    deviceName: string;
+    totalRtcDataBytes: number;
+  }[];
+}
+
 export interface IUniverseData {
   setTime(time: number): void;
   getLatestTransformTrees(deviceId: string): Promise<
@@ -76,35 +93,41 @@ export interface IUniverseData {
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IRtcPointCloud) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToGeometry(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMarker3DArray) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToJointState(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IJointState) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToMap(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMap) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IH264VideoFrame) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToTransformTree(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: ITransformNode) => void
-  ): () => void;
+  ): CloseSubscription;
   subscribeToLocation(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: ILocation) => void
-  ): () => void;
+  ): CloseSubscription;
+  getStatistics(): Promise<IUniverseStatistics>;
+  subscribeDataSourceStateChange(
+    deviceId: string,
+    source: UniverseDataSource,
+    onDataSourceStateChange?: (state: DataSourceState) => void
+  ): CloseSubscription;
 }

@@ -3,7 +3,7 @@ import { getDistance } from "geolib";
 import { Euler, Matrix4, Quaternion, Raycaster, Vector3 } from "three";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
-import { Positioning } from "../SceneGraph";
+import { Positioning } from "../model/SceneGraph";
 import { TreePath } from "../ITreeElement";
 import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 

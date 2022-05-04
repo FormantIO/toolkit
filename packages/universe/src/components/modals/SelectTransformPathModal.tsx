@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Component } from "react";
 import { DialogContentText, Select } from "@formant/ui-sdk";
-import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
-import { defined } from "../../../common/defined";
-import { TreeElement, TreePath } from "../ITreeElement";
-import { IUniverseData } from "../IUniverseData";
+import { ITransformNode } from "../../../../data-sdk/src/model/ITransformNode";
+import { defined } from "../../../../common/defined";
+import { TreeElement, TreePath } from "../../model/ITreeElement";
+import { IUniverseData } from "../../model/IUniverseData";
 import { SortableTree } from "../SortableTree";
 import { Modal } from "./Modal";
 

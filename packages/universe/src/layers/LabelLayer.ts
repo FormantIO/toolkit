@@ -23,6 +23,7 @@ export class LabelLayer extends UniverseLayerContent {
       placeholder: "hello world",
       value: "",
       type: "text",
+      location: ["create", "edit"],
     },
   };
 

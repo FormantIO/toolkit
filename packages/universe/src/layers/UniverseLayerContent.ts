@@ -3,8 +3,10 @@ import { IUniverseData, UniverseDataSource } from "../IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
 
+export type LayerFieldLocation = "create" | "edit";
 export interface TextLayerFieldValue {
   type: string;
+  location: string[];
   value?: string;
 }
 
@@ -28,6 +30,7 @@ export function extractLayerFieldValues(
     values[key] = {
       type: field.type,
       value: field.value,
+      location: field.location,
     };
   });
   return values;

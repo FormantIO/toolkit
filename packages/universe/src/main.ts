@@ -12,13 +12,13 @@ import { HardwareVideoLayer } from "./layers/HardwareVideoLayer";
 import { DeviceVisualLayerUrdf } from "./layers/DeviceVisualLayerUrdf";
 import { DeviceVisualLayerTF } from "./layers/DeviceVisualLayerTF";
 
-export * from "./Universe";
-export * from "./IUniverseData";
+export * from "./components/Universe";
+export * from "./model/IUniverseData";
 export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayerContent";
 export * from "./layers/TransformLayer";
-export * from "./sidebar";
-export * from "./SceneGraph";
+export * from "./components/sidebar";
+export * from "./model/SceneGraph";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

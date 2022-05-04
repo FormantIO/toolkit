@@ -33,6 +33,7 @@ export class ImageLayer extends UniverseLayerContent {
       placeholder: "https://example.com/image.png",
       value: "",
       type: "text",
+      location: ["create"],
     },
   };
 

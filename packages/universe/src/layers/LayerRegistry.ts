@@ -2,7 +2,11 @@ import { PerspectiveCamera } from "three";
 import { UniverseDataSource, IUniverseData } from "../IUniverseData";
 import { LayerType } from ".";
 import { defined } from "../../../common/defined";
-import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
+import {
+  LayerFieldLocation,
+  LayerFields,
+  UniverseLayerContent,
+} from "./UniverseLayerContent";
 
 export interface LayerSuggestion {
   sources: UniverseDataSource[];
@@ -52,9 +56,20 @@ export class LayerRegistry {
     return defined(LayerRegistry.layers.get(type)).description;
   }
 
-  static getFields(type: LayerType): LayerFields {
+  static getFields(
+    type: LayerType,
+    location?: LayerFieldLocation
+  ): LayerFields {
     const fields = LayerRegistry.layers.get(type)?.fields;
-    return JSON.parse(JSON.stringify(fields || {}));
+    const copy = JSON.parse(JSON.stringify(fields || {}));
+    if (location) {
+      Object.keys(copy).forEach((key) => {
+        if (!copy[key].location.includes(location)) {
+          delete copy[key];
+        }
+      });
+    }
+    return copy;
   }
 
   static createDefaultLayer(
