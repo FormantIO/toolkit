@@ -15,7 +15,7 @@ import {
 import * as uuid from "uuid";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { GeometryWorld } from "../objects/GeometryWorld";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";

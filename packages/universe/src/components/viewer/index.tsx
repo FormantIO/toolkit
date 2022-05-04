@@ -16,7 +16,7 @@ import { VRButton } from "../../../three-utils/VRButton";
 import { defined, definedAndNotNull } from "../../../../common/defined";
 import { LayerRegistry } from "../../layers/LayerRegistry";
 import { TransformLayer } from "../../layers/TransformLayer";
-import { injectLayerFieldValues } from "../../layers/UniverseLayerContent";
+import { injectLayerFieldValues } from "../../model/LayerField";
 import {
   findSceneGraphElement,
   getSceneGraphElementParent,
@@ -285,6 +285,14 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     if (this.orbitControls) {
       this.orbitControls.reset();
     }
+  }
+
+  public notifyFieldChanged(path: TreePath, fieldId: string, value: string) {
+    const el = definedAndNotNull(
+      findSceneGraphElement(this.props.sceneGraph, path)
+    );
+    const o = defined(this.pathToLayer.get(el));
+    o.onFieldChanged(fieldId, value);
   }
 
   public toggleVisible(path: TreePath, visible: boolean) {

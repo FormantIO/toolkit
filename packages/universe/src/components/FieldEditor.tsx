@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextField } from "@formant/ui-sdk";
-import { TextLayerField } from "../layers/UniverseLayerContent";
+import { TextLayerField } from "../model/LayerField";
 
 export interface IFieldEditor {
   fieldId: string;

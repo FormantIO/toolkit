@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { UniverseDataSource } from "./IUniverseData";
 import { LayerType } from "../layers";
-import { LayerFieldValues } from "../layers/UniverseLayerContent";
+import { LayerFieldValues } from "./LayerField";
 import { TreePath } from "./ITreeElement";
 
 export type Positioning =

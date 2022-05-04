@@ -1,25 +1,17 @@
 import * as React from "react";
 import { Component } from "react";
 import { Vector3 } from "three";
-import {
-  Box,
-  Button,
-  Icon,
-  Select,
-  Stack,
-  Typography,
-  TextField,
-} from "@formant/ui-sdk";
+import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { throttle } from "../../../common/throttle";
 import { LayerType } from "../layers";
 import { LayerRegistry } from "../layers/LayerRegistry";
 import {
-  extractLayerFieldValues,
   LayerFields,
   LayerFieldValues,
-} from "../layers/UniverseLayerContent";
+  extractLayerFieldValues,
+} from "../model/LayerField";
 import {
   cloneSceneGraph,
   findSceneGraphElement,
@@ -547,7 +539,13 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
   };
 
   private onFieldChanged = (fieldId: string, value: string) => {
-    console.log(fieldId, value);
+    if (this.viewer) {
+      this.viewer.notifyFieldChanged(
+        defined(this.state.currentlySelectedElement),
+        fieldId,
+        value
+      );
+    }
   };
 
   stringToColor(str: string) {

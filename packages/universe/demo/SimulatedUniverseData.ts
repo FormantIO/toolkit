@@ -7,7 +7,7 @@ import {
   IUniverseData,
   IUniverseStatistics,
   UniverseDataSource,
-} from "../src/IUniverseData";
+} from "../src/model/IUniverseData";
 import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";

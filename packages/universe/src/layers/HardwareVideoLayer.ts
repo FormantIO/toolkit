@@ -1,7 +1,7 @@
 import { BoxGeometry, CanvasTexture, Mesh, MeshBasicMaterial } from "three";
 import * as uuid from "uuid";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { defined } from "../../../common/defined";

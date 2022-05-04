@@ -8,14 +8,11 @@ import {
   Texture,
   TextureLoader,
 } from "three";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { TransformLayer } from "./TransformLayer";
-import {
-  LayerField,
-  LayerFields,
-  UniverseLayerContent,
-} from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
 import { SVGLoader } from "../../three-utils/SVGLoader";
+import { LayerFields, LayerField } from "../model/LayerField";
 
 export class ImageLayer extends UniverseLayerContent {
   static id = "image";

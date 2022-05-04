@@ -1,11 +1,8 @@
 import { Label } from "../objects/Label";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { TransformLayer } from "./TransformLayer";
-import {
-  LayerField,
-  LayerFields,
-  UniverseLayerContent,
-} from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
+import { LayerFields, LayerField } from "../model/LayerField";
 
 export class LabelLayer extends UniverseLayerContent {
   static id = "label";
@@ -39,6 +36,8 @@ export class LabelLayer extends UniverseLayerContent {
     );
   }
 
+  label: Label | undefined;
+
   constructor(labelTextField?: LayerField) {
     super();
     if (
@@ -46,7 +45,20 @@ export class LabelLayer extends UniverseLayerContent {
       labelTextField.type === "text" &&
       labelTextField.value
     ) {
-      this.add(new Label(labelTextField.value));
+      this.createLabel(labelTextField.value);
     }
+  }
+
+  createLabel(text: string): void {
+    if (this.label) {
+      this.remove(this.label);
+      this.label.dispose();
+    }
+    this.label = new Label(text);
+    this.add(this.label);
+  }
+
+  onFieldChanged(_field: string, value: string): void {
+    this.createLabel(value);
   }
 }

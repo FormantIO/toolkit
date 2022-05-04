@@ -1,49 +1,8 @@
 import { Object3D, PerspectiveCamera, Raycaster } from "three";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
-
-export type LayerFieldLocation = "create" | "edit";
-export interface TextLayerFieldValue {
-  type: string;
-  location: string[];
-  value?: string;
-}
-
-export interface TextLayerField extends TextLayerFieldValue {
-  name: string;
-  description: string;
-  placeholder: string;
-}
-
-export type LayerField = TextLayerField;
-export type LayerFieldValue = TextLayerFieldValue;
-
-export type LayerFields = { [key in string]: LayerField };
-export type LayerFieldValues = { [key: string]: TextLayerFieldValue };
-
-export function extractLayerFieldValues(
-  layerFields: LayerFields
-): LayerFieldValues {
-  const values: LayerFieldValues = {};
-  Object.entries(layerFields).forEach(([key, field]) => {
-    values[key] = {
-      type: field.type,
-      value: field.value,
-      location: field.location,
-    };
-  });
-  return values;
-}
-
-export function injectLayerFieldValues(
-  layerFields: LayerFields,
-  layerFieldValues: LayerFieldValues
-): void {
-  Object.entries(layerFieldValues).forEach(([key, value]) => {
-    layerFields[key].value = value.value;
-  });
-}
+import { LayerFields } from "../model/LayerField";
 
 export abstract class UniverseLayerContent extends Object3D {
   static id: string;
@@ -80,4 +39,6 @@ export abstract class UniverseLayerContent extends Object3D {
   onPointerUp(_raycaster: Raycaster, _button: number): void {}
 
   onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
+
+  onFieldChanged(_field: string, _value: string): void {}
 }

@@ -4,12 +4,13 @@ import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TransformTree } from "../objects/TransformTree";
 import { ITransformTreeNode } from "../objects/transformTreeLoader";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
-import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
+import { LayerFields } from "../model/LayerField";
 
-export class DeviceVisualLayerTF extends UniverseLayerContent {
+export class DeviceVisualTFLayer extends UniverseLayerContent {
   static id = "device_visual_tf";
 
   static commonName = "Transform Tree";
@@ -24,9 +25,9 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
     universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
     getCurrentCamera?: () => PerspectiveCamera
-  ): TransformLayer<DeviceVisualLayerTF> {
+  ): TransformLayer<DeviceVisualTFLayer> {
     return new TransformLayer(
-      new DeviceVisualLayerTF(
+      new DeviceVisualTFLayer(
         deviceId,
         universeData,
         defined(universeDataSources)[0],
@@ -62,7 +63,7 @@ export class DeviceVisualLayerTF extends UniverseLayerContent {
                   streamType: "transform tree",
                 },
               ],
-              layerType: DeviceVisualLayerTF.id,
+              layerType: DeviceVisualTFLayer.id,
             });
           }
         })

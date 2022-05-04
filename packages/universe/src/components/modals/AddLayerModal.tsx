@@ -10,7 +10,7 @@ import { Component } from "react";
 import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";
 import { LayerType } from "../../layers";
 import { LayerRegistry, LayerSuggestion } from "../../layers/LayerRegistry";
-import { LayerFields } from "../../layers/UniverseLayerContent";
+import { LayerFields } from "../../model/LayerField";
 import { Modal } from "./Modal";
 
 interface IAddLayerModalProps {

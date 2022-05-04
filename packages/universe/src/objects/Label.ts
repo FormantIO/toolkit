@@ -26,6 +26,12 @@ function roundRect(
 }
 
 export class Label extends Group {
+  sprite: Sprite | undefined;
+
+  texture: Texture | undefined;
+
+  material: SpriteMaterial | undefined;
+
   constructor(text: string, sizeAttenuate: boolean = true, scale: number = 1) {
     super();
 
@@ -64,6 +70,7 @@ export class Label extends Group {
 
     // canvas contents will be used for a texture
     const texture = new Texture(canvas);
+    this.texture = texture;
     texture.needsUpdate = true;
 
     const spriteMaterial = new SpriteMaterial({
@@ -71,6 +78,7 @@ export class Label extends Group {
       depthTest: false,
       sizeAttenuation: sizeAttenuate,
     });
+    this.material = spriteMaterial;
 
     const sprite = new Sprite(spriteMaterial);
     // make things less blurrier
@@ -82,6 +90,16 @@ export class Label extends Group {
       1.0 / pixelScale
     );
     this.add(sprite);
+    this.sprite = sprite;
     this.renderOrder = 100;
+  }
+
+  dispose() {
+    if (this.texture) {
+      this.texture.dispose();
+    }
+    if (this.material) {
+      this.material.dispose();
+    }
   }
 }

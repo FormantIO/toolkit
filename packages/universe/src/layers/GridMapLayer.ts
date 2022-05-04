@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IMap } from "../../../data-sdk/src/model/IMap";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { GridMap } from "../objects/GridMap";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";

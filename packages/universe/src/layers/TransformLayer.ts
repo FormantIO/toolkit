@@ -4,8 +4,8 @@ import { Euler, Matrix4, Quaternion, Raycaster, Vector3 } from "three";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../model/SceneGraph";
-import { TreePath } from "../ITreeElement";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { TreePath } from "../model/ITreeElement";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
@@ -52,6 +52,10 @@ export class TransformLayer<
 
   public onPointerWheel(raycaster: Raycaster, delta: number): void {
     this.contentNode?.onPointerWheel(raycaster, delta);
+  }
+
+  public onFieldChanged(field: string, value: string): void {
+    this.contentNode?.onFieldChanged(field, value);
   }
 
   buildTransformList(

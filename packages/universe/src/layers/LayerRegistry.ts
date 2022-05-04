@@ -1,12 +1,9 @@
 import { PerspectiveCamera } from "three";
-import { UniverseDataSource, IUniverseData } from "../IUniverseData";
+import { UniverseDataSource, IUniverseData } from "../model/IUniverseData";
 import { LayerType } from ".";
 import { defined } from "../../../common/defined";
-import {
-  LayerFieldLocation,
-  LayerFields,
-  UniverseLayerContent,
-} from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
+import { LayerFields, LayerFieldLocation } from "../model/LayerField";
 
 export interface LayerSuggestion {
   sources: UniverseDataSource[];

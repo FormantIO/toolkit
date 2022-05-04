@@ -4,10 +4,11 @@ import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { Urdf } from "../objects/Urdf";
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
-import { LayerFields, UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
+import { LayerFields } from "../model/LayerField";
 
 async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   const data = await fetch(zipPath).then((_) => _.arrayBuffer());
@@ -79,7 +80,7 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   return false;
 }
 
-export class DeviceVisualLayerUrdf extends UniverseLayerContent {
+export class DeviceVisualUrdfLayer extends UniverseLayerContent {
   static id = "device_visual_urdf";
 
   static commonName = "URDF";
@@ -94,9 +95,9 @@ export class DeviceVisualLayerUrdf extends UniverseLayerContent {
     universeDataSources?: UniverseDataSource[],
     _fields?: LayerFields,
     _getCurrentCamera?: () => PerspectiveCamera
-  ): TransformLayer<DeviceVisualLayerUrdf> {
+  ): TransformLayer<DeviceVisualUrdfLayer> {
     return new TransformLayer(
-      new DeviceVisualLayerUrdf(
+      new DeviceVisualUrdfLayer(
         universeData,
         defined(universeDataSources)[0],
         deviceId
@@ -124,7 +125,7 @@ export class DeviceVisualLayerUrdf extends UniverseLayerContent {
                   rosTopicType: stream.topicType,
                 },
               ],
-              layerType: DeviceVisualLayerUrdf.id,
+              layerType: DeviceVisualUrdfLayer.id,
             });
           }
         }

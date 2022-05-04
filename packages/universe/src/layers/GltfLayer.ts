@@ -1,11 +1,8 @@
-import { IUniverseData, UniverseDataSource } from "../IUniverseData";
+import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { GLTFLoader } from "../../three-utils/GLTFLoader";
 import { TransformLayer } from "./TransformLayer";
-import {
-  LayerField,
-  LayerFields,
-  UniverseLayerContent,
-} from "./UniverseLayerContent";
+import { UniverseLayerContent } from "./UniverseLayerContent";
+import { LayerFields, LayerField } from "../model/LayerField";
 
 export class GltfLayer extends UniverseLayerContent {
   static id = "3dmodel";
