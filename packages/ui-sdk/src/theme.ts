@@ -1,5 +1,4 @@
 import { createTheme, Theme, ThemeOptions } from "@mui/material";
-import { Primary } from "./stories/Button.stories";
 
 const baseTheme = createTheme({
   typography: {
@@ -163,6 +162,28 @@ const darkPalette: ThemeOptions = {
 function createComponents(theme: Theme) {
   const components: ThemeOptions = {
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+              background: "transparent",
+              width: "0.5rem",
+              height: "0.5rem",
+            },
+            "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+              background: theme.palette.primary.light,
+              borderRadius: "0.25rem",
+            },
+            "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover":
+              {
+                backgroundColor: theme.palette.primary.light,
+              },
+            "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+              backgroundColor: theme.palette.primary.light,
+            },
+          },
+        },
+      },
       MuiLink: {
         styleOverrides: {
           root: {
