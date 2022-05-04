@@ -3,6 +3,7 @@ import { GLTFLoader } from "../../three-utils/GLTFLoader";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { LayerFields, LayerField } from "../model/LayerField";
+import { defined } from "../../../common/defined";
 
 export class GltfLayer extends UniverseLayerContent {
   static id = "3dmodel";
@@ -25,16 +26,21 @@ export class GltfLayer extends UniverseLayerContent {
   };
 
   static createDefault(
+    layerId: string,
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[],
     fields?: LayerFields
   ): TransformLayer<GltfLayer> {
-    return new TransformLayer(new GltfLayer((fields || {}).url), deviceId);
+    return new TransformLayer(
+      layerId,
+      new GltfLayer(layerId, (fields || {}).url),
+      deviceId
+    );
   }
 
-  constructor(urlField?: LayerField) {
-    super();
+  constructor(layerId?: string, urlField?: LayerField) {
+    super(defined(layerId));
     if (urlField && urlField.type === "text" && urlField.value) {
       const loader = new GLTFLoader();
       loader.load(urlField.value, (gltf) => {

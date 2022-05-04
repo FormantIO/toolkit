@@ -4,6 +4,7 @@ import { AxisLabels } from "../objects/AxisLabels";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
+import { defined } from "../../../common/defined";
 
 export class GroundLayer extends UniverseLayerContent {
   static id = "ground";
@@ -15,15 +16,16 @@ export class GroundLayer extends UniverseLayerContent {
   static usesData = false;
 
   static createDefault(
+    layerId: string,
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GroundLayer> {
-    return new TransformLayer(new GroundLayer(), deviceId);
+    return new TransformLayer(layerId, new GroundLayer(layerId), deviceId);
   }
 
-  constructor() {
-    super();
+  constructor(layerId?: string) {
+    super(defined(layerId));
     this.add(new GroundPlane());
     this.add(new Axes());
     const axes = new AxisLabels();

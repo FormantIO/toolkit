@@ -21,12 +21,15 @@ export class HardwareVideoLayer extends UniverseLayerContent {
   static usesData = true;
 
   static createDefault(
+    layerId: string,
     universeData: IUniverseData,
     deviceId: string,
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<HardwareVideoLayer> {
     return new TransformLayer(
+      layerId,
       new HardwareVideoLayer(
+        layerId,
         deviceId,
         universeData,
         defined(universeDataSources)[0]
@@ -70,11 +73,12 @@ export class HardwareVideoLayer extends UniverseLayerContent {
   mesh: Mesh;
 
   constructor(
+    layerId?: string,
     deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource
   ) {
-    super();
+    super(defined(layerId));
     this.drawer = new H264BytestreamCanvasDrawer(
       () => new RealtimePlayerWorker(),
       () => {},

@@ -70,6 +70,7 @@ export class LayerRegistry {
   }
 
   static createDefaultLayer(
+    layerId: string,
     nodeType: LayerType,
     universeData: IUniverseData,
     deviceId?: string,
@@ -79,6 +80,7 @@ export class LayerRegistry {
   ) {
     const layer = defined(LayerRegistry.layers.get(nodeType));
     return layer.createDefault(
+      layerId,
       universeData,
       deviceId,
       universeDataSources,

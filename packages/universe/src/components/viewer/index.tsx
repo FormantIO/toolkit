@@ -261,6 +261,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const fields = LayerRegistry.getFields(el.type);
     injectLayerFieldValues(fields, el.fieldValues);
     const layer = LayerRegistry.createDefaultLayer(
+      el.id,
       el.type,
       this.props.universeData,
       deviceId,

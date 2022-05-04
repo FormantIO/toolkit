@@ -23,7 +23,7 @@
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "types": "tsc src/*.tsx src/*.ts src/**/*.tsx src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "types": "tsc src/*.ts src/**/*.tsx src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/universe/",
     "lint": "eslint -c .eslintrc.yml --ignore-pattern src/three-utils/*  --quiet --ext ts,tsx .",
     "lint_fix": "eslint -c .eslintrc.yml --ignore-pattern src/three-utils/* --quiet --ext ts,tsx --fix ."

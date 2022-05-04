@@ -3,6 +3,7 @@ import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { LayerFields, LayerField } from "../model/LayerField";
+import { defined } from "../../../common/defined";
 
 export class LabelLayer extends UniverseLayerContent {
   static id = "label";
@@ -25,21 +26,23 @@ export class LabelLayer extends UniverseLayerContent {
   };
 
   static createDefault(
+    layerId: string,
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[],
     fields?: LayerFields
   ): TransformLayer<LabelLayer> {
     return new TransformLayer(
-      new LabelLayer((fields || {}).label_text),
+      layerId,
+      new LabelLayer(layerId, (fields || {}).label_text),
       deviceId
     );
   }
 
   label: Label | undefined;
 
-  constructor(labelTextField?: LayerField) {
-    super();
+  constructor(layerId?: string, labelTextField?: LayerField) {
+    super(defined(layerId));
     if (
       labelTextField &&
       labelTextField.type === "text" &&

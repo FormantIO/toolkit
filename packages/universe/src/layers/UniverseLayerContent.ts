@@ -15,6 +15,8 @@ export abstract class UniverseLayerContent extends Object3D {
 
   static fields?: LayerFields;
 
+  layerId: string;
+
   static async getLayerSuggestions(
     _data: IUniverseData,
     _deviceContext?: string
@@ -23,6 +25,7 @@ export abstract class UniverseLayerContent extends Object3D {
   }
 
   static createDefault(
+    _layerId: string,
     _universeData: IUniverseData,
     _deviceId?: string,
     _universeDataSources?: UniverseDataSource[],
@@ -30,6 +33,11 @@ export abstract class UniverseLayerContent extends Object3D {
     _camera?: () => PerspectiveCamera
   ): TransformLayer<UniverseLayerContent> {
     throw new Error("Method not implemented.");
+  }
+
+  constructor(layerId: string) {
+    super();
+    this.layerId = layerId;
   }
 
   onPointerMove(_raycaster: Raycaster): void {}

@@ -21,17 +21,18 @@ export class TransformLayer<
   static usesData = false;
 
   static createDefault(
+    layerId: string,
     _universeData: IUniverseData,
     deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<UniverseLayerContent> {
-    return new TransformLayer(undefined, deviceId);
+    return new TransformLayer(layerId, undefined, deviceId);
   }
 
   contentNode: T | undefined;
 
-  constructor(content?: T, private deviceId?: string) {
-    super();
+  constructor(layerId?: string, content?: T, private deviceId?: string) {
+    super(defined(layerId));
     if (content) {
       this.contentNode = content;
       this.add(content);

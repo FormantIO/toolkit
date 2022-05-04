@@ -18,12 +18,19 @@ export class GridMapLayer extends UniverseLayerContent {
   static usesData = true;
 
   static createDefault(
+    layerId: string,
     universeData: IUniverseData,
     deviceId: string,
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GridMapLayer> {
     return new TransformLayer(
-      new GridMapLayer(deviceId, universeData, defined(universeDataSources)[0]),
+      layerId,
+      new GridMapLayer(
+        layerId,
+        deviceId,
+        universeData,
+        defined(universeDataSources)[0]
+      ),
       deviceId
     );
   }
@@ -64,11 +71,12 @@ export class GridMapLayer extends UniverseLayerContent {
   map = new GridMap();
 
   constructor(
+    layerId?: string,
     deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource
   ) {
-    super();
+    super(defined(layerId));
     defined(this.universeData).subscribeToMap(
       defined(deviceId),
       defined(this.dataSource),

@@ -31,12 +31,15 @@ export class GeometryLayer extends UniverseLayerContent {
   static usesData = true;
 
   static createDefault(
+    layerId: string,
     universeData: IUniverseData,
     deviceId: string,
     universeDataSources?: UniverseDataSource[]
   ): TransformLayer<GeometryLayer> {
     return new TransformLayer(
+      layerId,
       new GeometryLayer(
+        layerId,
         deviceId,
         universeData,
         defined(universeDataSources)[0]
@@ -77,11 +80,12 @@ export class GeometryLayer extends UniverseLayerContent {
   private worldGeometry: Map<string, Mesh | Line | Sprite> = new Map();
 
   constructor(
+    layerId?: string,
     deviceId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource
   ) {
-    super();
+    super(defined(layerId));
     defined(this.universeData).subscribeToGeometry(
       defined(deviceId),
       defined(this.dataSource),

@@ -90,6 +90,7 @@ export class DeviceVisualUrdfLayer extends UniverseLayerContent {
   static usesData = true;
 
   static createDefault(
+    layerId: string,
     universeData: IUniverseData,
     deviceId: string,
     universeDataSources?: UniverseDataSource[],
@@ -97,7 +98,9 @@ export class DeviceVisualUrdfLayer extends UniverseLayerContent {
     _getCurrentCamera?: () => PerspectiveCamera
   ): TransformLayer<DeviceVisualUrdfLayer> {
     return new TransformLayer(
+      layerId,
       new DeviceVisualUrdfLayer(
+        layerId,
         universeData,
         defined(universeDataSources)[0],
         deviceId
@@ -139,11 +142,12 @@ export class DeviceVisualUrdfLayer extends UniverseLayerContent {
   loaded: boolean = false;
 
   constructor(
+    layerId?: string,
     private universeData?: IUniverseData,
     private dataSource?: UniverseDataSource,
     private deviceId?: string
   ) {
-    super();
+    super(defined(layerId));
     if (dataSource && dataSource.sourceType === "realtime" && deviceId) {
       defined(this.universeData).subscribeToJointState(
         deviceId,
