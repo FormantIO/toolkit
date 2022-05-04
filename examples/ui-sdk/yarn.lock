@@ -266,9 +266,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/ui-sdk@latest":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.18.tgz#cc212fcc907c778b803b7b433a61664e1675d393"
-  integrity sha512-a+sZKH+Vyd3z3rYbvBucgyQlwy/iS3X5Hz/ixnF0nKndBD/sCrWpC4x8t1Yveu3Tzz9mcZ4LmuBpYVp+OOswNw==
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.19.tgz#b3c2bf78f93f90c8a69e594e1d029c1d4532ec6a"
+  integrity sha512-UVo6BxV1j8tycEadgBU+oZIpHdaQk59hhltfc7tEwez/vRKM+ev7tencvPlV5VMqc0Ku7Itauxm/9Kr8JoQ82A==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
