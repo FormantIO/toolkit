@@ -62,7 +62,7 @@ export function AddLayerModal(props: IAddLayerModalProps) {
     ).then((_) => {
       setLayerSuggestions(_);
     });
-  });
+  }, []);
 
   const onChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentName(ev.target.value);
@@ -171,13 +171,18 @@ export function AddLayerModal(props: IAddLayerModalProps) {
               value={value.value || ""}
               placeholder={value.placeholder}
               onChange={(ev) => {
-                currentFields[key].value = ev.target.value;
-                setCurrentFields(currentFields);
+                setCurrentFields({
+                  ...currentFields,
+                  [key]: {
+                    ...currentFields[key],
+                    value: ev.target.value,
+                  },
+                });
               }}
             />
           </React.Fragment>
         ))}
-        {selectedItem === "data" && (
+        {selectedItem === "data" && currentDeviceId && (
           <>
             <DialogContentText>
               Select a device you'd like to use a source of data:

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Component } from "react";
+import { Component, useEffect } from "react";
 import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Modal } from "./Modal";
 import { ILocation } from "../../../../data-sdk/src/model/ILocation";
+import { fork } from "../../../../common/fork";
 
 interface ISelectLocationModalProps {
   deviceContext: string;
@@ -16,120 +17,96 @@ interface ISelectLocationModalProps {
   onCancel: () => void;
 }
 
-interface ISelectLocationModalState {
-  relativeToLong: number;
-  relativeToLat: number;
-  locationStreamName: string | undefined;
-  items: { streamName: string; location: ILocation }[];
-}
+export function SelectLocationModal(props: ISelectLocationModalProps) {
+  const [relativeToLong, setRelativeToLong] = React.useState(0);
+  const [relativeToLat, setRelativeToLat] = React.useState(0);
+  const [locationStreamName, setLocationStreamName] = React.useState<
+    string | undefined
+  >(undefined);
+  const [items, setItems] = React.useState<
+    { streamName: string; location: ILocation }[]
+  >([]);
 
-export class SelectLocationModal extends Component<
-  ISelectLocationModalProps,
-  ISelectLocationModalState
-> {
-  constructor(props: ISelectLocationModalProps) {
-    super(props);
-
-    this.state = {
-      relativeToLong: 0,
-      relativeToLat: 0,
-      locationStreamName: undefined,
-      items: [],
-    };
-  }
-
-  async componentDidMount() {
-    this.setState({
-      items: await this.props.universeData.getLatestLocations(
-        this.props.deviceContext
-      ),
-    });
-    if (this.state.items.length > 0) {
-      this.setState((state) => ({
-        locationStreamName: state.items[0].streamName,
-        relativeToLong: state.items[0].location.longitude,
-        relativeToLat: state.items[0].location.latitude,
-      }));
-    }
-  }
-
-  onSelectLocation = () => {
-    if (this.state.locationStreamName) {
-      this.props.onSelect(
-        this.state.locationStreamName,
-        this.state.relativeToLong,
-        this.state.relativeToLat
-      );
-    }
-  };
-
-  onChangeLocationStream = (stream: string) => {
-    const i = this.state.items.findIndex((_) => _.streamName === stream);
-    this.setState((state) => ({
-      locationStreamName: stream,
-      relativeToLong: state.items[i].location.longitude,
-      relativeToLat: state.items[i].location.latitude,
-    }));
-  };
-
-  onChangeLong = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      relativeToLong: parseFloat(ev.target.value) || 0,
-    });
-  };
-
-  onChangeLat = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      relativeToLat: parseFloat(ev.target.value) || 0,
-    });
-  };
-
-  public render() {
-    const { onCancel } = this.props;
-
-    return (
-      <Modal
-        open
-        title="Select Location Positioning"
-        acceptText="Select"
-        onAccept={this.onSelectLocation}
-        acceptDisabled={!this.state.locationStreamName}
-        onClose={onCancel}
-      >
-        <Stack spacing={2}>
-          <DialogContentText>
-            Select the location stream you would like to use and it's relative
-            longitude and latitude:
-          </DialogContentText>
-          <div>
-            <TextField
-              label="Relative to Longitude"
-              type="number"
-              value={this.state.relativeToLong}
-              onChange={this.onChangeLong}
-            />
-          </div>
-          <div>
-            <TextField
-              label="Relative to Latitude"
-              type="number"
-              value={this.state.relativeToLat}
-              onChange={this.onChangeLat}
-            />
-          </div>
-          {this.state.items && (
-            <Select
-              label="Location Stream"
-              value={this.state.locationStreamName}
-              onChange={this.onChangeLocationStream}
-              items={this.state.items.map((_) => ({
-                label: _.streamName,
-                value: _.streamName,
-              }))}
-            />
-          )}
-        </Stack>
-      </Modal>
+  useEffect((): void => {
+    fork(
+      (async () => {
+        setItems(
+          await props.universeData.getLatestLocations(props.deviceContext)
+        );
+        if (items.length > 0) {
+          setLocationStreamName(items[0].streamName);
+          setRelativeToLong(items[0].location.longitude);
+          setRelativeToLat(items[0].location.latitude);
+        }
+      })()
     );
-  }
+  }, []);
+
+  const onSelectLocation = () => {
+    if (locationStreamName) {
+      props.onSelect(locationStreamName, relativeToLong, relativeToLat);
+    }
+  };
+
+  const onChangeLocationStream = (stream: string) => {
+    const i = items.findIndex((_) => _.streamName === stream);
+    setLocationStreamName(stream);
+    setRelativeToLong(items[i].location.longitude);
+    setRelativeToLat(items[i].location.latitude);
+  };
+
+  const onChangeLong = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setRelativeToLong(Number(ev.target.value));
+  };
+
+  const onChangeLat = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setRelativeToLat(Number(ev.target.value));
+  };
+
+  const { onCancel } = props;
+
+  return (
+    <Modal
+      open
+      title="Select Location Positioning"
+      acceptText="Select"
+      onAccept={onSelectLocation}
+      acceptDisabled={!locationStreamName}
+      onClose={onCancel}
+    >
+      <Stack spacing={2}>
+        <DialogContentText>
+          Select the location stream you would like to use and it's relative
+          longitude and latitude:
+        </DialogContentText>
+        <div>
+          <TextField
+            label="Relative to Longitude"
+            type="number"
+            value={relativeToLong}
+            onChange={onChangeLong}
+          />
+        </div>
+        <div>
+          <TextField
+            label="Relative to Latitude"
+            type="number"
+            value={relativeToLat}
+            onChange={onChangeLat}
+          />
+        </div>
+        {items && (
+          <Select
+            label="Location Stream"
+            value={locationStreamName}
+            onChange={onChangeLocationStream}
+            items={items.map((_) => ({
+              label: _.streamName,
+              value: _.streamName,
+            }))}
+          />
+        )}
+      </Stack>
+    </Modal>
+  );
 }
