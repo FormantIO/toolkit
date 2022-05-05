@@ -5,8 +5,9 @@ import {
   Stack,
   TextField,
 } from "@formant/ui-sdk";
+import produce, { castDraft } from "immer";
 import * as React from "react";
-import { Component } from "react";
+import { useEffect } from "react";
 import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";
 import { LayerType } from "../../layers";
 import { LayerRegistry, LayerSuggestion } from "../../layers/LayerRegistry";
@@ -26,209 +27,173 @@ interface IAddLayerModalProps {
   deviceContext?: string;
 }
 
-interface IAddLayerModalState {
-  selectedItem: LayerType;
-
-  currentName: string;
-
-  currentDeviceId: string | undefined;
-}
-
-export class AddLayerModal extends Component<
-  IAddLayerModalProps,
-  IAddLayerModalState
-> {
-  private selectedSources?: UniverseDataSource[];
-
-  private currentFields: LayerFields = {};
-
-  private deviceContexts: {
-    deviceName: string;
-    deviceId: string;
-  }[] = [];
-
-  layerSuggestions: {
+export function AddLayerModal(props: IAddLayerModalProps) {
+  const [selectedItem, setSelectedItem] = React.useState<LayerType>("data");
+  const [currentName, setCurrentName] = React.useState<string>("");
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<
+    string | undefined
+  >(undefined);
+  const [selectedSources, setSelectedSources] = React.useState<
+    UniverseDataSource[] | undefined
+  >(undefined);
+  const [currentFields, setCurrentFields] = React.useState<LayerFields>({});
+  const [deviceContexts, setDeviceContexts] = React.useState<
+    {
+      deviceName: string;
+      deviceId: string;
+    }[]
+  >([]);
+  const [layerSuggestions, setLayerSuggestions] = React.useState<{
     nonDataLayers: string[];
     dataLayers: LayerSuggestion[];
-  } = { nonDataLayers: [], dataLayers: [] };
+  }>({ nonDataLayers: [], dataLayers: [] });
 
-  constructor(props: IAddLayerModalProps) {
-    super(props);
-    this.state = {
-      selectedItem: "data",
-      currentName: "",
-      currentDeviceId: undefined,
-    };
-    this.props.universeData.getDeviceContexts().then((deviceContexts) => {
-      this.deviceContexts = deviceContexts;
-      this.setState({
-        currentDeviceId: deviceContexts[0].deviceId,
-      });
+  const { onCancel } = props;
+
+  useEffect(() => {
+    props.universeData.getDeviceContexts().then((d) => {
+      setDeviceContexts(d);
+      setCurrentDeviceId(d[0].deviceId);
     });
 
     LayerRegistry.getLayerSuggestions(
-      this.props.universeData,
-      this.props.deviceContext
-    ).then((layerSuggestions) => {
-      this.layerSuggestions = layerSuggestions;
-      this.forceUpdate();
+      props.universeData,
+      props.deviceContext
+    ).then((_) => {
+      setLayerSuggestions(_);
     });
-  }
+  });
 
-  private onChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      currentName: ev.target.value,
-    });
+  const onChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentName(ev.target.value);
   };
 
-  onSelect = (layerType: LayerType, dataSources?: UniverseDataSource[]) => {
-    this.setState({
-      selectedItem: layerType,
-    });
-    this.selectedSources = dataSources;
-    this.currentFields = LayerRegistry.getFields(layerType, "create");
+  const onSelect = (
+    layerType: LayerType,
+    dataSources?: UniverseDataSource[]
+  ) => {
+    setSelectedItem(layerType);
+    setSelectedSources(dataSources);
+    setCurrentFields(LayerRegistry.getFields(layerType, "create"));
     if (layerType === "data") {
-      this.props.universeData.getDeviceContexts().then((deviceContexts) => {
-        this.setState({
-          currentDeviceId: deviceContexts[0].deviceId,
-        });
+      props.universeData.getDeviceContexts().then((d) => {
+        setCurrentDeviceId(d[0].deviceId);
       });
     } else {
-      this.setState({
-        currentDeviceId: undefined,
-      });
+      setCurrentDeviceId(undefined);
     }
-    this.forceUpdate();
   };
 
-  private onChangeCurrentDeviceId = (device: string) => {
-    this.setState({
-      currentDeviceId: device,
-    });
+  const onChangeCurrentDeviceId = (device: string) => {
+    setCurrentDeviceId(device);
   };
 
-  private onTextFieldChange(ev: React.ChangeEvent<HTMLInputElement>) {
-    // @ts-ignore
-    this.fields[this.key].value = ev.target.value;
-    // @ts-ignore
-    this.el.forceUpdate();
-  }
-
-  private addItemToScene = () => {
-    this.props.onAddLayer(
-      this.state.selectedItem,
-      this.selectedSources,
-      this.currentFields,
-      this.state.currentName,
-      this.state.selectedItem === "data"
-        ? this.state.currentDeviceId
-        : this.props.deviceContext
+  const addItemToScene = () => {
+    props.onAddLayer(
+      selectedItem,
+      selectedSources,
+      currentFields,
+      currentName,
+      selectedItem === "data" ? currentDeviceId : props.deviceContext
     );
   };
 
-  public render() {
-    const { onCancel } = this.props;
-    const { selectedItem } = this.state;
-
-    return (
-      <Modal
-        open
-        title="Add Layer"
-        acceptText="Add"
-        onAccept={this.addItemToScene}
-        onClose={onCancel}
-      >
-        <Stack spacing={2}>
-          <DialogContentText>Add a 3D layer to your universe</DialogContentText>
-          <TextField
-            value={this.state.currentName}
-            onChange={this.onChangeName}
-            label="Layer Name"
-            placeholder="My Layer"
-          />
-          <div>
-            {this.layerSuggestions.nonDataLayers.map((layerType) => (
-              <Button
-                variant={selectedItem === layerType ? "contained" : "outlined"}
-                key={`nondata-${layerType}`}
-                onClick={this.onSelect.bind(this, layerType, undefined)}
-                sx={{ m: 1 }}
-              >
-                {LayerRegistry.getCommonName(layerType)}
-              </Button>
-            ))}
-          </div>
-          {this.layerSuggestions.dataLayers.length > 0 && (
-            <>
-              <DialogContentText>Data derived 3D layers:</DialogContentText>
-              <div>
-                {this.layerSuggestions.dataLayers.map((suggestion) => {
-                  let name: string;
-
-                  if (suggestion.sources[0].sourceType === "realtime") {
-                    name = suggestion.sources[0].rosTopicName;
-                  } else if (suggestion.sources[0].sourceType === "hardware") {
-                    name = suggestion.sources[0].rtcStreamName;
-                  } else {
-                    name = suggestion.sources[0].streamName;
-                  }
-
-                  return (
-                    <Button
-                      variant={
-                        selectedItem === suggestion.layerType
-                          ? "contained"
-                          : "outlined"
-                      }
-                      key={`data-${suggestion.layerType}-${suggestion.sources[0].id}`}
-                      sx={{ m: 1 }}
-                      onClick={this.onSelect.bind(
-                        this,
-                        suggestion.layerType,
-                        suggestion.sources
-                      )}
-                    >
-                      {LayerRegistry.getCommonName(suggestion.layerType)} [
-                      {name}]
-                    </Button>
-                  );
-                })}
-              </div>
-            </>
-          )}
-          {Object.entries(this.currentFields).map(([key, value]) => (
-            <React.Fragment key={key}>
-              {value.description}
-              :
-              <TextField
-                value={value.value || ""}
-                placeholder={value.placeholder}
-                onChange={this.onTextFieldChange.bind({
-                  fields: this.currentFields,
-                  el: this,
-                  key,
-                })}
-              />
-            </React.Fragment>
+  return (
+    <Modal
+      open
+      title="Add Layer"
+      acceptText="Add"
+      onAccept={addItemToScene}
+      onClose={onCancel}
+    >
+      <Stack spacing={2}>
+        <DialogContentText>Add a 3D layer to your universe</DialogContentText>
+        <TextField
+          value={currentName}
+          onChange={onChangeName}
+          label="Layer Name"
+          placeholder="My Layer"
+        />
+        <div>
+          {layerSuggestions.nonDataLayers.map((layerType) => (
+            <Button
+              variant={selectedItem === layerType ? "contained" : "outlined"}
+              key={`nondata-${layerType}`}
+              onClick={onSelect.bind(undefined, layerType, undefined)}
+              sx={{ m: 1 }}
+            >
+              {LayerRegistry.getCommonName(layerType)}
+            </Button>
           ))}
-          {selectedItem === "data" && (
-            <>
-              <DialogContentText>
-                Select a device you'd like to use a source of data:
-              </DialogContentText>
-              <Select
-                label="Device"
-                value={this.state.currentDeviceId}
-                onChange={this.onChangeCurrentDeviceId}
-                items={this.deviceContexts.map((deviceContext) => ({
-                  label: deviceContext.deviceName,
-                  value: deviceContext.deviceId,
-                }))}
-              />
-            </>
-          )}
-        </Stack>
-      </Modal>
-    );
-  }
+        </div>
+        {layerSuggestions.dataLayers.length > 0 && (
+          <>
+            <DialogContentText>Data derived 3D layers:</DialogContentText>
+            <div>
+              {layerSuggestions.dataLayers.map((suggestion) => {
+                let name: string;
+
+                if (suggestion.sources[0].sourceType === "realtime") {
+                  name = suggestion.sources[0].rosTopicName;
+                } else if (suggestion.sources[0].sourceType === "hardware") {
+                  name = suggestion.sources[0].rtcStreamName;
+                } else {
+                  name = suggestion.sources[0].streamName;
+                }
+
+                return (
+                  <Button
+                    variant={
+                      selectedItem === suggestion.layerType
+                        ? "contained"
+                        : "outlined"
+                    }
+                    key={`data-${suggestion.layerType}-${suggestion.sources[0].id}`}
+                    sx={{ m: 1 }}
+                    onClick={onSelect.bind(
+                      undefined,
+                      suggestion.layerType,
+                      suggestion.sources
+                    )}
+                  >
+                    {LayerRegistry.getCommonName(suggestion.layerType)} [{name}]
+                  </Button>
+                );
+              })}
+            </div>
+          </>
+        )}
+        {Object.entries(currentFields).map(([key, value]) => (
+          <React.Fragment key={key}>
+            {value.description}
+            :
+            <TextField
+              value={value.value || ""}
+              placeholder={value.placeholder}
+              onChange={(ev) => {
+                currentFields[key].value = ev.target.value;
+                setCurrentFields(currentFields);
+              }}
+            />
+          </React.Fragment>
+        ))}
+        {selectedItem === "data" && (
+          <>
+            <DialogContentText>
+              Select a device you'd like to use a source of data:
+            </DialogContentText>
+            <Select
+              label="Device"
+              value={currentDeviceId}
+              onChange={onChangeCurrentDeviceId}
+              items={deviceContexts.map((deviceContext) => ({
+                label: deviceContext.deviceName,
+                value: deviceContext.deviceId,
+              }))}
+            />
+          </>
+        )}
+      </Stack>
+    </Modal>
+  );
 }
