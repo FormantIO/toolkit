@@ -141,3 +141,5 @@ export function findSceneGraphParentElement(
   }
   return findSceneGraphParentElement(parent.children, path, filter);
 }
+
+export type SceneGraph = SceneGraphElement[];

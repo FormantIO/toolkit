@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Icon, Tooltip, Typography } from "@formant/ui-sdk";
-import { Component } from "react";
 import styled from "styled-components";
 import { TreeElement, TreePath } from "../model/ITreeElement";
 

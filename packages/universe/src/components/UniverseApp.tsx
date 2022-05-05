@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Vector3 } from "three";
 import produce from "immer";
+import { useRecoilState } from "recoil";
 import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../../common/defined";
@@ -31,6 +32,7 @@ import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 import { FieldEditor } from "./FieldEditor";
 import { UniverseSnackbar } from "./UniverseSnackbar";
+import { sceneGraphAtom } from "../state/sceneGraph";
 
 const Controls = styled.div`
   position: absolute;
@@ -126,7 +128,7 @@ export function UniverseApp(props: IUniverseAppProps) {
   const [viewer, setViewer] = React.useState<UniverseViewer | undefined>(
     undefined
   );
-  const [sceneGraph, setSceneGraph] = React.useState<SceneGraphElement[]>([]);
+  const [sceneGraph, setSceneGraph] = useRecoilState(sceneGraphAtom);
   const [currentPath, setCurrentPath] = React.useState<TreePath>([]);
   const [currentlyEditingElement, setCurrentlyEditingElement] = React.useState<
     TreePath | undefined

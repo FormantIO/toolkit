@@ -5,7 +5,6 @@ import {
   Stack,
   TextField,
 } from "@formant/ui-sdk";
-import produce, { castDraft } from "immer";
 import * as React from "react";
 import { useEffect } from "react";
 import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";

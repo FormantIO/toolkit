@@ -16,12 +16,6 @@ interface ISelectTransformPathModalProps {
   onCancel: () => void;
 }
 
-interface ISelectTransformPathModalState {
-  selected: TreePath | undefined;
-  items: Map<string, TreeElement>;
-  mapName: string | undefined;
-}
-
 export function SelectTransformPathModal(
   props: ISelectTransformPathModalProps
 ) {

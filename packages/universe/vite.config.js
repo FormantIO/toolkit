@@ -23,6 +23,9 @@ module.exports = defineConfig({
         "lzfjs",
         "urdf-loader",
         "@formant/ui-sdk-realtime-player-core",
+        "recoil",
+        "recoil-nexus",
+        "immer",
       ],
       output: {
         // Provide global variables to use in the UMD build
