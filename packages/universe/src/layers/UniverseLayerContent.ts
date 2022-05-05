@@ -1,10 +1,12 @@
 import { Object3D, PerspectiveCamera, Raycaster } from "three";
-import { setRecoil } from "recoil-nexus";
+import { getRecoil, setRecoil } from "recoil-nexus";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
+import { sceneGraphAtom } from "../state/sceneGraph";
+import { SceneGraph, visitSceneGraphElement } from "../main";
 
 export abstract class UniverseLayerContent extends Object3D {
   static id: string;
@@ -44,6 +46,10 @@ export abstract class UniverseLayerContent extends Object3D {
 
   onPointerMove(_raycaster: Raycaster): void {}
 
+  onPointerEnter(_raycaster: Raycaster): void {}
+
+  onPointerLeave(_raycaster: Raycaster): void {}
+
   onPointerDown(_raycaster: Raycaster, _button: number): void {}
 
   onPointerUp(_raycaster: Raycaster, _button: number): void {}
@@ -54,5 +60,20 @@ export abstract class UniverseLayerContent extends Object3D {
 
   showSnackbar(message: string): void {
     setRecoil(snackbarAtom, { message, open: true });
+  }
+
+  setFieldValue(field: string, value: string): void {
+    // TODO: do some sort of deep nested immutable recreation
+    const sceneGraph = JSON.parse(
+      JSON.stringify(getRecoil(sceneGraphAtom))
+    ) as SceneGraph;
+    sceneGraph.forEach((element) => {
+      visitSceneGraphElement(element, (e) => {
+        if (e.id === this.layerId) {
+          e.fieldValues[field].value = value;
+        }
+      });
+    });
+    setRecoil(sceneGraphAtom, sceneGraph);
   }
 }

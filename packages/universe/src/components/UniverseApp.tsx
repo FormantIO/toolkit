@@ -135,6 +135,8 @@ export function UniverseApp(props: IUniverseAppProps) {
   >(undefined);
   const [updatingSceneGraph, setUpdatingSceneGraph] = React.useState(false);
 
+  console.log(JSON.stringify(sceneGraph, null, 2));
+
   const persist = throttle(() => {
     if (updatingSceneGraph && props.onSceneGraphChange) {
       props.onSceneGraphChange(
@@ -746,7 +748,7 @@ export function UniverseApp(props: IUniverseAppProps) {
                             key={fieldId}
                             fieldId={fieldId}
                             field={field}
-                            initialValue={fieldValues[fieldId]}
+                            value={fieldValues[fieldId]}
                             onChange={onFieldChanged}
                           />
                         ))}

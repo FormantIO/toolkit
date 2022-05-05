@@ -119,7 +119,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       element.addEventListener("pointermove", this.onPointerMove);
       element.addEventListener("pointerdown", this.onPointerDown);
       element.addEventListener("pointerup", this.onPointerUp);
-      element.addEventListener("pointerleave", this.onPointerUp);
+      element.addEventListener("pointerenter", this.onPointerEnter);
+      element.addEventListener("pointerleave", this.onPointerLeave);
       element.addEventListener("wheel", this.onPointerWheel);
 
       const { devicePixelRatio } = window;
@@ -182,6 +183,18 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const { button } = event;
     Array.from(this.pathToLayer.values()).forEach((_) => {
       _.onPointerUp(this.raycaster, button);
+    });
+  };
+
+  onPointerEnter = (_event: PointerEvent) => {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onPointerEnter(this.raycaster);
+    });
+  };
+
+  onPointerLeave = (_event: PointerEvent) => {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      _.onPointerLeave(this.raycaster);
     });
   };
 
