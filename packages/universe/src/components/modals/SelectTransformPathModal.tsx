@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
+import { useEffect } from "react";
 import { DialogContentText, Select } from "@formant/ui-sdk";
 import { ITransformNode } from "../../../../data-sdk/src/model/ITransformNode";
 import { defined } from "../../../../common/defined";
@@ -7,6 +7,7 @@ import { TreeElement, TreePath } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { SortableTree } from "../SortableTree";
 import { Modal } from "./Modal";
+import { fork } from "../../../../common/fork";
 
 interface ISelectTransformPathModalProps {
   deviceContext: string;
@@ -21,29 +22,43 @@ interface ISelectTransformPathModalState {
   mapName: string | undefined;
 }
 
-export class SelectTransformPathModal extends Component<
-  ISelectTransformPathModalProps,
-  ISelectTransformPathModalState
-> {
-  async componentDidMount() {
-    const transformTrees =
-      await this.props.universeData.getLatestTransformTrees(
-        this.props.deviceContext
-      );
-    const trees = new Map<string, TreeElement>();
-    transformTrees.forEach((tree) =>
-      trees.set(
-        tree.streamName,
-        this.buildTransformTreeElement(tree.transformTree)
-      )
-    );
-    this.setState({
-      items: trees,
-      mapName: Array.from(trees.keys())[0],
-    });
-  }
+export function SelectTransformPathModal(
+  props: ISelectTransformPathModalProps
+) {
+  const [selected, setSelected] = React.useState<TreePath | undefined>(
+    undefined
+  );
+  const [items, setItems] = React.useState<Map<string, TreeElement>>(new Map());
+  const [mapName, setMapName] = React.useState<string | undefined>(undefined);
 
-  getSelectedTitle(treeElements: TreeElement[], path: TreePath): string {
+  const buildTransformTreeElement = (tree: ITransformNode): TreeElement => ({
+    title: defined(tree.name),
+    children: tree.children?.map((_) => buildTransformTreeElement(_)),
+  });
+
+  useEffect((): void => {
+    fork(
+      (async () => {
+        const transformTrees = await props.universeData.getLatestTransformTrees(
+          props.deviceContext
+        );
+        const trees = new Map<string, TreeElement>();
+        transformTrees.forEach((tree) =>
+          trees.set(
+            tree.streamName,
+            buildTransformTreeElement(tree.transformTree)
+          )
+        );
+        setItems(trees);
+        setMapName(Array.from(trees.keys())[0]);
+      })()
+    );
+  }, []);
+
+  const getSelectedTitle = (
+    treeElements: TreeElement[],
+    path: TreePath
+  ): string => {
     const i = path.shift();
     if (i === undefined) {
       throw new Error("Invalid path");
@@ -52,77 +67,61 @@ export class SelectTransformPathModal extends Component<
     if (path.length === 0) {
       return element.title;
     }
-    return this.getSelectedTitle(element.children || [], path);
-  }
+    return getSelectedTitle(element.children || [], path);
+  };
 
-  onSelectTransform = () => {
-    if (this.state.mapName) {
-      this.props.onSelect(
-        this.state.mapName,
-        this.getSelectedTitle(
-          [defined(this.state.items.get(this.state.mapName))],
-          defined(this.state.selected)
-        )
+  const onSelectTransform = () => {
+    if (mapName) {
+      props.onSelect(
+        mapName,
+        getSelectedTitle([defined(items.get(mapName))], defined(selected))
       );
     }
   };
 
-  onSelectTransformItem = (item: TreePath) => {
-    this.setState({
-      selected: item,
-    });
+  const onSelectTransformItem = (item: TreePath) => {
+    setSelected(item);
   };
 
-  onChangeTree = (target: string) => {
-    this.setState({
-      mapName: target,
-      selected: undefined,
-    });
+  const onChangeTree = (target: string) => {
+    setMapName(target);
+    setSelected(undefined);
   };
 
-  buildTransformTreeElement(tree: ITransformNode): TreeElement {
-    return {
-      title: defined(tree.name),
-      children: tree.children?.map((_) => this.buildTransformTreeElement(_)),
-    };
+  const { onCancel } = props;
+  let treeItems;
+  if (mapName) {
+    treeItems = items.get(mapName);
   }
+  const treeNames = Array.from(items.keys() || []);
 
-  public render() {
-    const { onCancel } = this.props;
-    let items;
-    if (this.state?.mapName) {
-      items = this.state.items.get(this.state.mapName);
-    }
-    const treeNames = Array.from(this.state?.items.keys() || []);
-
-    return (
-      <Modal
-        open
-        title="Select Transform Path"
-        acceptText="Select"
-        onAccept={this.onSelectTransform}
-        acceptDisabled={!this.state?.selected || !this.state?.mapName}
-        onClose={onCancel}
-      >
-        <DialogContentText>
-          Select the transform path you would like to use
-        </DialogContentText>
-        {items && (
-          <>
-            <Select
-              label="TF"
-              value={this.state?.mapName}
-              onChange={this.onChangeTree}
-              items={treeNames.map((_) => ({ label: _, value: _ }))}
-            />
-            <SortableTree
-              items={[items]}
-              onSelected={this.onSelectTransformItem}
-              selected={this.state.selected}
-            />
-          </>
-        )}
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      open
+      title="Select Transform Path"
+      acceptText="Select"
+      onAccept={onSelectTransform}
+      acceptDisabled={!selected || !mapName}
+      onClose={onCancel}
+    >
+      <DialogContentText>
+        Select the transform path you would like to use
+      </DialogContentText>
+      {treeItems && (
+        <>
+          <Select
+            label="TF"
+            value={mapName}
+            onChange={onChangeTree}
+            items={treeNames.map((_) => ({ label: _, value: _ }))}
+          />
+          <SortableTree
+            items={[treeItems]}
+            onSelected={onSelectTransformItem}
+            selected={selected}
+          />
+        </>
+      )}
+    </Modal>
+  );
 }

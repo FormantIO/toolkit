@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Component, useEffect } from "react";
+import { useEffect } from "react";
 import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Modal } from "./Modal";
