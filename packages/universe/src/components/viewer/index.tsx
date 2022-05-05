@@ -58,7 +58,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private camera: THREE.PerspectiveCamera;
 
-  private pathToLayer: Map<SceneGraphElement, TransformLayer<any>> = new Map();
+  private pathToLayer: Map<SceneGraphElement, TransformLayer> = new Map();
 
   private editControls: TransformControls | undefined;
 
@@ -175,32 +175,32 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   onPointerDown = (event: PointerEvent) => {
     const { button } = event;
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerDown(this.raycaster, button);
+      defined(_.contentNode).onPointerDown(this.raycaster, button);
     });
   };
 
   onPointerUp = (event: PointerEvent) => {
     const { button } = event;
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerUp(this.raycaster, button);
+      defined(_.contentNode).onPointerUp(this.raycaster, button);
     });
   };
 
   onPointerEnter = (_event: PointerEvent) => {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerEnter(this.raycaster);
+      defined(_.contentNode).onPointerEnter(this.raycaster);
     });
   };
 
   onPointerLeave = (_event: PointerEvent) => {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerLeave(this.raycaster);
+      defined(_.contentNode).onPointerLeave(this.raycaster);
     });
   };
 
   onPointerWheel = (event: WheelEvent) => {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerWheel(this.raycaster, event.deltaY);
+      defined(_.contentNode).onPointerWheel(this.raycaster, event.deltaY);
     });
   };
 
@@ -249,7 +249,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      _.onPointerMove(this.raycaster);
+      defined(_.contentNode).onPointerMove(this.raycaster);
     });
   }
 
@@ -309,7 +309,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
-    o.onFieldChanged(fieldId, value);
+    defined(o.contentNode).onFieldChanged(fieldId, value);
   }
 
   public toggleVisible(

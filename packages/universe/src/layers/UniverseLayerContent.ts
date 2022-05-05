@@ -9,7 +9,7 @@ import { sceneGraphAtom } from "../state/sceneGraph";
 import { SceneGraph, visitSceneGraphElement } from "../main";
 
 export abstract class UniverseLayerContent extends Object3D {
-  static id: string;
+  static layerTypeId: string;
 
   static commonName: string;
 
@@ -19,7 +19,17 @@ export abstract class UniverseLayerContent extends Object3D {
 
   static fields?: LayerFields;
 
-  layerId: string;
+  protected layerId!: string;
+
+  protected universeData!: IUniverseData;
+
+  protected layerContext?: string;
+
+  protected layerDataSources: UniverseDataSource[] = [];
+
+  protected layerFields: LayerFields = {};
+
+  camera?: () => PerspectiveCamera;
 
   static async getLayerSuggestions(
     _data: IUniverseData,
@@ -28,21 +38,31 @@ export abstract class UniverseLayerContent extends Object3D {
     return [];
   }
 
-  static createDefault(
-    _layerId: string,
-    _universeData: IUniverseData,
-    _deviceId?: string,
-    _universeDataSources?: UniverseDataSource[],
-    _fields?: LayerFields,
-    _camera?: () => PerspectiveCamera
-  ): TransformLayer<UniverseLayerContent> {
-    throw new Error("Method not implemented.");
+  static createDefault<T extends UniverseLayerContent>(
+    content: T,
+    layerId: string,
+    universeData: IUniverseData,
+    deviceId?: string,
+    dataSources?: UniverseDataSource[],
+    fields?: LayerFields,
+    camera?: () => PerspectiveCamera
+  ): TransformLayer {
+    content.layerId = layerId;
+    content.universeData = universeData;
+    content.layerContext = deviceId;
+    content.layerDataSources = dataSources || [];
+    content.layerFields = fields || {};
+    content.camera = camera;
+    const transform = new TransformLayer();
+    transform.universeData = universeData;
+    transform.deviceId = deviceId;
+    transform.contentNode = content;
+    transform.add(content);
+    content.init();
+    return transform;
   }
 
-  constructor(layerId: string) {
-    super();
-    this.layerId = layerId;
-  }
+  init(): void {}
 
   onPointerMove(_raycaster: Raycaster): void {}
 

@@ -1,8 +1,7 @@
 import { BoxGeometry, CanvasTexture, Mesh, MeshBasicMaterial } from "three";
 import * as uuid from "uuid";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
-import { TransformLayer } from "./TransformLayer";
+import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { defined } from "../../../common/defined";
 import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
@@ -19,24 +18,6 @@ export class HardwareVideoLayer extends UniverseLayerContent {
   static description = "A video plane representing a camera.";
 
   static usesData = true;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<HardwareVideoLayer> {
-    return new TransformLayer(
-      layerId,
-      new HardwareVideoLayer(
-        layerId,
-        deviceId,
-        universeData,
-        defined(universeDataSources)[0]
-      ),
-      deviceId
-    );
-  }
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -66,27 +47,22 @@ export class HardwareVideoLayer extends UniverseLayerContent {
 
   loaded: boolean = false;
 
-  drawer: H264BytestreamCanvasDrawer;
+  drawer!: H264BytestreamCanvasDrawer;
 
-  canvas: HTMLCanvasElement;
+  canvas!: HTMLCanvasElement;
 
-  mesh: Mesh;
+  mesh!: Mesh;
 
-  constructor(
-    layerId?: string,
-    deviceId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource
-  ) {
-    super(defined(layerId));
+  init() {
+    const dataSource = defined(this.layerDataSources)[0];
     this.drawer = new H264BytestreamCanvasDrawer(
       () => new RealtimePlayerWorker(),
       () => {},
       () => {}
     );
     defined(this.universeData).subscribeToVideo(
-      defined(deviceId),
-      defined(this.dataSource),
+      defined(this.layerContext),
+      defined(dataSource),
       this.onData
     );
     this.canvas = document.createElement("CANVAS") as HTMLCanvasElement;

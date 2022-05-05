@@ -9,12 +9,12 @@ export interface LayerSuggestion {
   sources: UniverseDataSource[];
   layerType: LayerType;
 }
-export class LayerRegistry {
-  private static layers: Map<LayerType, typeof UniverseLayerContent> =
-    new Map();
 
-  static register(layer: typeof UniverseLayerContent) {
-    LayerRegistry.layers.set(layer.id, layer);
+export class LayerRegistry {
+  private static layers: Map<LayerType, any> = new Map();
+
+  static register(layer: any) {
+    LayerRegistry.layers.set(layer.layerTypeId, layer);
   }
 
   static async getLayerSuggestions(
@@ -74,16 +74,17 @@ export class LayerRegistry {
     nodeType: LayerType,
     universeData: IUniverseData,
     deviceId?: string,
-    universeDataSources?: UniverseDataSource[],
+    dataSources?: UniverseDataSource[],
     fields?: LayerFields,
     getCurrentCamera?: () => PerspectiveCamera
   ) {
-    const layer = defined(LayerRegistry.layers.get(nodeType));
-    return layer.createDefault(
+    const Layer = defined(LayerRegistry.layers.get(nodeType));
+    return UniverseLayerContent.createDefault(
+      new Layer(),
       layerId,
       universeData,
       deviceId,
-      universeDataSources,
+      dataSources,
       fields,
       getCurrentCamera
     );

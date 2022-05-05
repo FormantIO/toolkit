@@ -1,14 +1,13 @@
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IMap } from "../../../data-sdk/src/model/IMap";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
+import { IUniverseData } from "../model/IUniverseData";
 import { GridMap } from "../objects/GridMap";
 import { LayerSuggestion } from "./LayerRegistry";
-import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
 export class GridMapLayer extends UniverseLayerContent {
-  static id = "grid_map";
+  static layerTypeId: string = "grid_map";
 
   static commonName = "Grid Map";
 
@@ -16,24 +15,6 @@ export class GridMapLayer extends UniverseLayerContent {
     "A grid map to represent a set of locations and data intensity.";
 
   static usesData = true;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<GridMapLayer> {
-    return new TransformLayer(
-      layerId,
-      new GridMapLayer(
-        layerId,
-        deviceId,
-        universeData,
-        defined(universeDataSources)[0]
-      ),
-      deviceId
-    );
-  }
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -59,7 +40,7 @@ export class GridMapLayer extends UniverseLayerContent {
                   streamType: stream.configuration.type,
                 },
               ],
-              layerType: GridMapLayer.id,
+              layerType: GridMapLayer.layerTypeId,
             });
           }
         }
@@ -70,16 +51,11 @@ export class GridMapLayer extends UniverseLayerContent {
 
   map = new GridMap();
 
-  constructor(
-    layerId?: string,
-    deviceId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource
-  ) {
-    super(defined(layerId));
+  init() {
+    const dataSource = defined(this.layerDataSources)[0];
     defined(this.universeData).subscribeToMap(
-      defined(deviceId),
-      defined(this.dataSource),
+      defined(this.layerContext),
+      defined(dataSource),
       this.onData
     );
     this.add(this.map);

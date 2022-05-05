@@ -8,15 +8,11 @@ import {
   Texture,
   TextureLoader,
 } from "three";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
-import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { SVGLoader } from "../../three-utils/SVGLoader";
-import { LayerFields, LayerField } from "../model/LayerField";
-import { defined } from "../../../common/defined";
 
 export class ImageLayer extends UniverseLayerContent {
-  static id = "image";
+  static layerTypeId: string = "image";
 
   static commonName = "Image";
 
@@ -35,22 +31,8 @@ export class ImageLayer extends UniverseLayerContent {
     },
   };
 
-  static createDefault(
-    layerId: string,
-    _universeData: IUniverseData,
-    deviceId: string,
-    _universeDataSources?: UniverseDataSource[],
-    fields?: LayerFields
-  ): TransformLayer<ImageLayer> {
-    return new TransformLayer(
-      layerId,
-      new ImageLayer(layerId, (fields || {}).url),
-      deviceId
-    );
-  }
-
-  constructor(layerId?: string, urlField?: LayerField) {
-    super(defined(layerId));
+  init() {
+    const urlField = (this.layerFields || {}).url;
     if (urlField && urlField.type === "text" && urlField.value) {
       const isSvg = urlField.value.toLowerCase().endsWith(".svg");
       if (isSvg) {

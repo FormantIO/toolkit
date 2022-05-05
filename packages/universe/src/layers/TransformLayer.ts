@@ -1,18 +1,16 @@
 import * as uuid from "uuid";
 import { getDistance } from "geolib";
-import { Euler, Matrix4, Quaternion, Raycaster, Vector3 } from "three";
+import { Euler, Matrix4, Object3D, Quaternion, Vector3 } from "three";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../model/SceneGraph";
 import { TreePath } from "../model/ITreeElement";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
+import { IUniverseData } from "../model/IUniverseData";
 
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
-export class TransformLayer<
-  T extends UniverseLayerContent
-> extends UniverseLayerContent {
-  static id = "transform_space";
+export class TransformLayer extends Object3D {
+  static layerTypeId: string = "transform_space";
 
   static commonName = "Empty";
 
@@ -20,44 +18,11 @@ export class TransformLayer<
 
   static usesData = false;
 
-  static createDefault(
-    layerId: string,
-    _universeData: IUniverseData,
-    deviceId: string,
-    _universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<UniverseLayerContent> {
-    return new TransformLayer(layerId, undefined, deviceId);
-  }
+  public universeData!: IUniverseData;
 
-  contentNode: T | undefined;
+  public deviceId?: string;
 
-  constructor(layerId?: string, content?: T, private deviceId?: string) {
-    super(defined(layerId));
-    if (content) {
-      this.contentNode = content;
-      this.add(content);
-    }
-  }
-
-  public onPointerMove(raycaster: Raycaster): void {
-    this.contentNode?.onPointerMove(raycaster);
-  }
-
-  public onPointerDown(raycaster: Raycaster, button: number): void {
-    this.contentNode?.onPointerDown(raycaster, button);
-  }
-
-  public onPointerUp(raycaster: Raycaster, button: number): void {
-    this.contentNode?.onPointerUp(raycaster, button);
-  }
-
-  public onPointerWheel(raycaster: Raycaster, delta: number): void {
-    this.contentNode?.onPointerWheel(raycaster, delta);
-  }
-
-  public onFieldChanged(field: string, value: string): void {
-    this.contentNode?.onFieldChanged(field, value);
-  }
+  contentNode: UniverseLayerContent | undefined;
 
   buildTransformList(
     transformNodes: ITransformNode[],

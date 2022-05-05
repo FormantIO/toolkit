@@ -1,14 +1,11 @@
-import { PerspectiveCamera } from "three";
 import * as JSZip from "jszip";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { Urdf } from "../objects/Urdf";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
+import { IUniverseData } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
-import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
-import { LayerFields } from "../model/LayerField";
 
 async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   const data = await fetch(zipPath).then((_) => _.arrayBuffer());
@@ -81,33 +78,13 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
 }
 
 export class DeviceVisualUrdfLayer extends UniverseLayerContent {
-  static id = "device_visual_urdf";
+  static layerTypeId: string = "device_visual_urdf";
 
   static commonName = "URDF";
 
   static description = "A 3D model to represent a robot.";
 
   static usesData = true;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[],
-    _fields?: LayerFields,
-    _getCurrentCamera?: () => PerspectiveCamera
-  ): TransformLayer<DeviceVisualUrdfLayer> {
-    return new TransformLayer(
-      layerId,
-      new DeviceVisualUrdfLayer(
-        layerId,
-        universeData,
-        defined(universeDataSources)[0],
-        deviceId
-      ),
-      deviceId
-    );
-  }
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -128,7 +105,7 @@ export class DeviceVisualUrdfLayer extends UniverseLayerContent {
                   rosTopicType: stream.topicType,
                 },
               ],
-              layerType: DeviceVisualUrdfLayer.id,
+              layerType: DeviceVisualUrdfLayer.layerTypeId,
             });
           }
         }
@@ -141,21 +118,20 @@ export class DeviceVisualUrdfLayer extends UniverseLayerContent {
 
   loaded: boolean = false;
 
-  constructor(
-    layerId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource,
-    private deviceId?: string
-  ) {
-    super(defined(layerId));
-    if (dataSource && dataSource.sourceType === "realtime" && deviceId) {
+  init() {
+    const dataSource = defined(this.layerDataSources)[0];
+    if (
+      dataSource &&
+      dataSource.sourceType === "realtime" &&
+      this.layerContext
+    ) {
       defined(this.universeData).subscribeToJointState(
-        deviceId,
-        defined(this.dataSource),
+        this.layerContext,
+        defined(dataSource),
         this.onData
       );
-      defined(universeData)
-        .getUrdfs(defined(this.deviceId))
+      defined(this.universeData)
+        .getUrdfs(defined(this.layerContext))
         .then((_) => {
           if (_.length === 0) {
             return;

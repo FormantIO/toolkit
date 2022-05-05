@@ -3,13 +3,12 @@ import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
 import { loadFromBase64 } from "../objects/pcd";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
-import { TransformLayer } from "./TransformLayer";
+import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 import { LayerSuggestion } from "./LayerRegistry";
 
 export class PointCloudLayer extends UniverseLayerContent {
-  static id = "point_cloud";
+  static layerTypeId: string = "point_cloud";
 
   static commonName = "Point Cloud";
 
@@ -17,25 +16,7 @@ export class PointCloudLayer extends UniverseLayerContent {
 
   static usesData = true;
 
-  points: Points;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<PointCloudLayer> {
-    return new TransformLayer(
-      layerId,
-      new PointCloudLayer(
-        layerId,
-        deviceId,
-        universeData,
-        defined(universeDataSources)[0]
-      ),
-      deviceId
-    );
-  }
+  points!: Points;
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -55,7 +36,7 @@ export class PointCloudLayer extends UniverseLayerContent {
                   rosTopicType: stream.topicType,
                 },
               ],
-              layerType: PointCloudLayer.id,
+              layerType: PointCloudLayer.layerTypeId,
             });
           }
         }
@@ -64,16 +45,10 @@ export class PointCloudLayer extends UniverseLayerContent {
     return dataLayers;
   }
 
-  constructor(
-    layerId?: string,
-    deviceId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource
-  ) {
-    super(defined(layerId));
+  init() {
     defined(this.universeData).subscribeToPointCloud(
-      defined(deviceId),
-      defined(this.dataSource),
+      defined(this.layerContext),
+      defined(this.layerDataSources)[0],
       this.onData
     );
 

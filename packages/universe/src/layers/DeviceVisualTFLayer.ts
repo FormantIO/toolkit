@@ -1,44 +1,21 @@
-import { PerspectiveCamera, Vector2 } from "three";
+import { Vector2 } from "three";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TransformTree } from "../objects/TransformTree";
 import { ITransformTreeNode } from "../objects/transformTreeLoader";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
+import { IUniverseData } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
-import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
-import { LayerFields } from "../model/LayerField";
 
 export class DeviceVisualTFLayer extends UniverseLayerContent {
-  static id = "device_visual_tf";
+  static layerTypeId: string = "device_visual_tf";
 
   static commonName = "Transform Tree";
 
   static description = "A transform tree to represent a robot.";
 
   static usesData = true;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[],
-    _fields?: LayerFields,
-    getCurrentCamera?: () => PerspectiveCamera
-  ): TransformLayer<DeviceVisualTFLayer> {
-    return new TransformLayer(
-      layerId,
-      new DeviceVisualTFLayer(
-        layerId,
-        deviceId,
-        universeData,
-        defined(universeDataSources)[0],
-        getCurrentCamera
-      ),
-      deviceId
-    );
-  }
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -66,7 +43,7 @@ export class DeviceVisualTFLayer extends UniverseLayerContent {
                   streamType: "transform tree",
                 },
               ],
-              layerType: DeviceVisualTFLayer.id,
+              layerType: DeviceVisualTFLayer.layerTypeId,
             });
           }
         })
@@ -77,20 +54,14 @@ export class DeviceVisualTFLayer extends UniverseLayerContent {
 
   transformTree: TransformTree | undefined;
 
-  constructor(
-    layerId?: string,
-    deviceId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource,
-    getCamera?: () => PerspectiveCamera
-  ) {
-    super(defined(layerId));
-    if (getCamera) {
-      this.transformTree = new TransformTree(getCamera());
+  init() {
+    const dataSource = defined(this.layerDataSources)[0];
+    if (this.camera) {
+      this.transformTree = new TransformTree(this.camera());
       this.add(this.transformTree);
       defined(this.universeData).subscribeToTransformTree(
-        defined(deviceId),
-        defined(this.dataSource),
+        defined(this.layerContext),
+        defined(dataSource),
         this.onTransformTreeData
       );
     }

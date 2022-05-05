@@ -15,38 +15,19 @@ import {
 import * as uuid from "uuid";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
+import { IUniverseData } from "../model/IUniverseData";
 import { GeometryWorld } from "../objects/GeometryWorld";
 import { LayerSuggestion } from "./LayerRegistry";
-import { TransformLayer } from "./TransformLayer";
 import { UniverseLayerContent } from "./UniverseLayerContent";
 
 export class GeometryLayer extends UniverseLayerContent {
-  static id = "geometry";
+  static layerTypeId: string = "geometry";
 
   static commonName = "Geometry";
 
   static description = "Geometry driven from a ROS stream.";
 
   static usesData = true;
-
-  static createDefault(
-    layerId: string,
-    universeData: IUniverseData,
-    deviceId: string,
-    universeDataSources?: UniverseDataSource[]
-  ): TransformLayer<GeometryLayer> {
-    return new TransformLayer(
-      layerId,
-      new GeometryLayer(
-        layerId,
-        deviceId,
-        universeData,
-        defined(universeDataSources)[0]
-      ),
-      deviceId
-    );
-  }
 
   static async getLayerSuggestions(
     universeData: IUniverseData,
@@ -66,7 +47,7 @@ export class GeometryLayer extends UniverseLayerContent {
                   rosTopicType: stream.topicType,
                 },
               ],
-              layerType: GeometryLayer.id,
+              layerType: GeometryLayer.layerTypeId,
             });
           }
         }
@@ -79,16 +60,11 @@ export class GeometryLayer extends UniverseLayerContent {
 
   private worldGeometry: Map<string, Mesh | Line | Sprite> = new Map();
 
-  constructor(
-    layerId?: string,
-    deviceId?: string,
-    private universeData?: IUniverseData,
-    private dataSource?: UniverseDataSource
-  ) {
-    super(defined(layerId));
+  init() {
+    const dataSource = defined(this.layerDataSources)[0];
     defined(this.universeData).subscribeToGeometry(
-      defined(deviceId),
-      defined(this.dataSource),
+      defined(this.layerContext),
+      defined(dataSource),
       this.onData
     );
   }
