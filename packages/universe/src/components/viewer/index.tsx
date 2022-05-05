@@ -22,6 +22,7 @@ import {
   getSceneGraphElementParent,
   Positioning,
   SceneGraphElement,
+  SceneGraph,
 } from "../../model/SceneGraph";
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
@@ -42,7 +43,6 @@ const MeasureContainer = styled.div`
 
 export interface IUniverseViewerProps {
   universeData: IUniverseData;
-  sceneGraph: SceneGraphElement[];
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
   vr?: boolean;
 }
@@ -240,23 +240,23 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
-  public removeSceneGraphItem(path: TreePath) {
+  public removeSceneGraphItem(sceneGraph: SceneGraph, path: TreePath) {
     if (this.attachedPath && treePathEquals(path, this.attachedPath)) {
-      this.toggleEditing(path, false);
+      this.toggleEditing(sceneGraph, path, false);
     }
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const layer = defined(this.pathToLayer.get(el));
 
     definedAndNotNull(layer.parent).remove(layer);
     this.pathToLayer.delete(el);
   }
 
-  public addSceneGraphItem(path: TreePath, deviceId?: string) {
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+  public addSceneGraphItem(
+    sceneGraph: SceneGraph,
+    path: TreePath,
+    deviceId?: string
+  ) {
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
 
     const fields = LayerRegistry.getFields(el.type);
     injectLayerFieldValues(fields, el.fieldValues);
@@ -272,7 +272,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     if (el.position.type === "manual") {
       layer.position.set(el.position.x, el.position.y, el.position.z);
     }
-    const parent = getSceneGraphElementParent(this.props.sceneGraph, path);
+    const parent = getSceneGraphElementParent(sceneGraph, path);
     if (parent) {
       const o = defined(this.pathToLayer.get(parent));
       o.add(layer);
@@ -288,18 +288,23 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   }
 
-  public notifyFieldChanged(path: TreePath, fieldId: string, value: string) {
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+  public notifyFieldChanged(
+    sceneGraph: SceneGraph,
+    path: TreePath,
+    fieldId: string,
+    value: string
+  ) {
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
     o.onFieldChanged(fieldId, value);
   }
 
-  public toggleVisible(path: TreePath, visible: boolean) {
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+  public toggleVisible(
+    sceneGraph: SceneGraph,
+    path: TreePath,
+    visible: boolean
+  ) {
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
     o.visible = visible;
     o.traverse((child) => {
@@ -307,11 +312,13 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
-  public toggleEditing(path: TreePath, editing: boolean) {
+  public toggleEditing(
+    sceneGraph: SceneGraph,
+    path: TreePath,
+    editing: boolean
+  ) {
     const c = defined(this.editControls);
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
     if (editing) {
       c.setMode("translate");
@@ -323,10 +330,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
   }
 
-  public updatePositioning(path: TreePath, position: Positioning) {
-    const el = definedAndNotNull(
-      findSceneGraphElement(this.props.sceneGraph, path)
-    );
+  public updatePositioning(
+    sceneGraph: SceneGraph,
+    path: TreePath,
+    position: Positioning
+  ) {
+    const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
     o.setPositioning(position, this.props.universeData);
   }

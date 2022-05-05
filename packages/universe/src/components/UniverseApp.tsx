@@ -1,8 +1,6 @@
 import * as React from "react";
-import { Component } from "react";
 import { Vector3 } from "three";
-import { RecoilRoot } from "recoil";
-import RecoilNexus from "recoil-nexus";
+import produce from "immer";
 import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../../common/defined";
@@ -96,127 +94,66 @@ export interface IUniverseState {
   currentContextName: string;
 }
 
-export class UniverseApp extends Component<IUniverseAppProps, IUniverseState> {
-  private currentlyEditingName: string = "";
+function stringToColor(str: string) {
+  /* tslint:disable:no-bitwise */
+  let hash = 0;
+  for (let i = 0; i < str.length; i += 1) {
+    // eslint-disable-next-line no-bitwise
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  let color = "#";
+  for (let i = 0; i < 3; i += 1) {
+    // eslint-disable-next-line no-bitwise
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.substr(-2);
+  }
+  /* tslint:enable:no-bitwise */
+  return color;
+}
 
-  private viewer: UniverseViewer | undefined;
+export function UniverseApp(props: IUniverseAppProps) {
+  const [showingAddDialog, setShowingAddDialog] = React.useState(false);
+  const [showingRenameDialog, setShowingRenameDialog] = React.useState(false);
+  const [showingTransformSelect, setShowingTransformSelect] =
+    React.useState(false);
+  const [showingLocationStreamSelect, setShowingLocationStreamSelect] =
+    React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+  const [currentlySelectedElement, setCurrentlySelectedElement] =
+    React.useState<TreePath | undefined>(undefined);
+  const [currentContextName, setCurrentContextName] = React.useState("");
+  const [currentlyEditingName, setCurrentlyEditingName] = React.useState("");
+  const [viewer, setViewer] = React.useState<UniverseViewer | undefined>(
+    undefined
+  );
+  const [sceneGraph, setSceneGraph] = React.useState<SceneGraphElement[]>([]);
+  const [currentPath, setCurrentPath] = React.useState<TreePath>([]);
+  const [currentlyEditingElement, setCurrentlyEditingElement] = React.useState<
+    TreePath | undefined
+  >(undefined);
+  const [updatingSceneGraph, setUpdatingSceneGraph] = React.useState(false);
 
-  private sceneGraph: SceneGraphElement[] = [];
-
-  private currentPath: TreePath = [];
-
-  private currentlyEditingElement: TreePath | undefined;
-
-  private updatingSceneGraph: boolean = false;
-
-  private persist = throttle(() => {
-    if (this.updatingSceneGraph && this.props.onSceneGraphChange) {
-      this.props.onSceneGraphChange(
-        JSON.parse(JSON.stringify(this.sceneGraph)) as SceneGraphElement[]
+  const persist = throttle(() => {
+    if (updatingSceneGraph && props.onSceneGraphChange) {
+      props.onSceneGraphChange(
+        JSON.parse(JSON.stringify(sceneGraph)) as SceneGraphElement[]
       );
     }
   }, 1000);
 
-  constructor(props: IUniverseAppProps) {
-    super(props);
-    this.state = {
-      showingAddDialog: false,
-      showingRenameDialog: false,
-      showingTransformSelect: false,
-      showingLocationStreamSelect: false,
-      sidebarOpen: true,
-      currentlySelectedElement: undefined,
-      currentContextName: "",
-    };
-  }
-
-  onViewerLoaded = async (el: UniverseViewer | null) => {
-    this.viewer = el || undefined;
-    const populateLayer = (e: SceneGraphElement, path: TreePath, i: number) => {
-      this.currentPath = path;
-      const pathThusFar = [...path, i];
-      this.onAddLayer(
-        e.type,
-        e.dataSources,
-        e.fieldValues,
-        e.name,
-        e.deviceContext
-      );
-      if (e.children) {
-        e.children.forEach((c, j) => populateLayer(c, pathThusFar, j));
-      }
-
-      if (e.position) {
-        const element = findSceneGraphElement(this.sceneGraph, pathThusFar);
-        definedAndNotNull(element).position = e.position;
-        defined(this.viewer).updatePositioning(pathThusFar, e.position);
-      }
-    };
-    if (this.props.initialSceneGraph) {
-      this.props.initialSceneGraph.forEach((e, i) => {
-        populateLayer(e, [], i);
-      });
-    }
-    this.updatingSceneGraph = true;
-    this.forceUpdate();
+  const hideAddDialog = () => {
+    setShowingAddDialog(false);
   };
 
-  private showAddDialog = (currentPath: TreePath) => {
-    this.setState({
-      showingAddDialog: true,
-    });
-    this.currentPath = currentPath;
-  };
-
-  private showRenameDialog = (currentPath: TreePath) => {
-    if (currentPath.length > 0) {
-      this.setState({
-        showingRenameDialog: true,
-      });
-      this.currentPath = currentPath;
-      this.currentlyEditingName = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, currentPath)
-      ).name;
-    }
-  };
-
-  private hideAddDialog = () => {
-    this.setState({
-      showingAddDialog: false,
-    });
-  };
-
-  private hideRenameDialog = () => {
-    this.setState({
-      showingRenameDialog: false,
-    });
-  };
-
-  private onLayerAdded = (
-    layerType: LayerType,
-    dataSources?: UniverseDataSource[],
-    fields?: LayerFields,
-    name?: string,
-    deviceContext?: string
-  ) => {
-    this.onAddLayer(
-      layerType,
-      dataSources,
-      extractLayerFieldValues(fields || {}),
-      name,
-      deviceContext
-    );
-  };
-
-  private onAddLayer = (
+  const onAddLayer = (
     layerType: LayerType,
     dataSources?: UniverseDataSource[],
     fields?: LayerFieldValues,
     name?: string,
     deviceContext?: string
   ) => {
-    this.hideAddDialog();
-    if (this.viewer && this.currentPath) {
+    hideAddDialog();
+    if (viewer && currentPath) {
       const newElement = new SceneGraphElement(
         name || LayerRegistry.getCommonName(layerType),
         layerType,
@@ -225,356 +162,421 @@ export class UniverseApp extends Component<IUniverseAppProps, IUniverseState> {
       );
       newElement.deviceContext = deviceContext;
       newElement.fieldValues = fields || {};
-      let newPath;
-      if (this.currentPath.length === 0) {
-        this.sceneGraph.push(newElement);
-        newPath = [this.sceneGraph.length - 1];
-      } else {
-        const el = definedAndNotNull(
-          findSceneGraphElement(this.sceneGraph, this.currentPath)
-        );
-        el.children.push(newElement);
-        newPath = [...this.currentPath, el.children.length - 1];
-      }
-      this.viewer.addSceneGraphItem(newPath, deviceContext);
-      this.forceUpdate();
+      let newPath: TreePath | undefined;
+      const newSceneGraph = produce(sceneGraph, (draft) => {
+        if (currentPath.length === 0) {
+          draft.push(newElement);
+          newPath = [draft.length - 1];
+        } else {
+          const el = definedAndNotNull(
+            findSceneGraphElement(draft, currentPath)
+          );
+          el.children.push(newElement);
+          newPath = [...currentPath, el.children.length - 1];
+        }
+      });
+      setSceneGraph(newSceneGraph);
+      viewer.addSceneGraphItem(newSceneGraph, defined(newPath), deviceContext);
     }
-    this.persist();
+    persist();
   };
 
-  private onRemoveItem = (path: TreePath) => {
-    if (!this.viewer) {
+  const onViewerLoaded = async (el: UniverseViewer | null) => {
+    if (viewer || !el) {
+      return;
+    }
+    const v = el;
+    setViewer(el || undefined);
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const populateLayer = (
+        e: SceneGraphElement,
+        path: TreePath,
+        i: number
+      ) => {
+        const pathThusFar = [...path, i];
+
+        const newElement = new SceneGraphElement(
+          e.name || LayerRegistry.getCommonName(e.type),
+          e.type,
+          LayerRegistry.getDescription(e.type),
+          e.dataSources
+        );
+        newElement.deviceContext = e.deviceContext;
+        newElement.fieldValues = e.fieldValues || {};
+        let newPath;
+        if (path.length === 0) {
+          draft.push(newElement);
+          newPath = [draft.length - 1];
+        } else {
+          const el2 = definedAndNotNull(findSceneGraphElement(draft, path));
+          el2.children.push(newElement);
+          newPath = [...path, el2.children.length - 1];
+        }
+        v.addSceneGraphItem(draft, newPath, e.deviceContext);
+
+        if (e.children) {
+          e.children.forEach((c, j) => populateLayer(c, pathThusFar, j));
+        }
+
+        if (e.position) {
+          const element = findSceneGraphElement(draft, pathThusFar);
+          definedAndNotNull(element).position = e.position;
+          v.updatePositioning(draft, pathThusFar, e.position);
+        }
+      };
+      if (props.initialSceneGraph) {
+        props.initialSceneGraph.forEach((e, i) => {
+          populateLayer(e, [], i);
+        });
+      }
+    });
+    setSceneGraph(newSceneGraph);
+    setUpdatingSceneGraph(true);
+  };
+
+  const showAddDialog = (cp: TreePath) => {
+    setShowingAddDialog(true);
+    setCurrentPath(cp);
+  };
+
+  const showRenameDialog = (cp: TreePath) => {
+    if (cp.length > 0) {
+      setShowingRenameDialog(true);
+      setCurrentPath(cp);
+      setCurrentlyEditingName(
+        definedAndNotNull(findSceneGraphElement(sceneGraph, cp)).name
+      );
+    }
+  };
+
+  const hideRenameDialog = () => {
+    setShowingRenameDialog(false);
+  };
+
+  const onLayerAdded = (
+    layerType: LayerType,
+    dataSources?: UniverseDataSource[],
+    fields?: LayerFields,
+    name?: string,
+    deviceContext?: string
+  ) => {
+    onAddLayer(
+      layerType,
+      dataSources,
+      extractLayerFieldValues(fields || {}),
+      name,
+      deviceContext
+    );
+  };
+
+  const onRemoveItem = (path: TreePath) => {
+    if (!viewer) {
       return;
     }
 
-    const e = definedAndNotNull(findSceneGraphElement(this.sceneGraph, path));
+    const e = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     visitSceneGraphElementReverse(
       e,
       (_, epath) => {
         if (
-          this.currentlyEditingElement &&
-          treePathEquals(this.currentlyEditingElement, epath)
+          currentlyEditingElement &&
+          treePathEquals(currentlyEditingElement, epath)
         ) {
-          defined(this.viewer).toggleEditing(
-            this.currentlyEditingElement,
+          defined(viewer).toggleEditing(
+            sceneGraph,
+            currentlyEditingElement,
             false
           );
-          this.currentlyEditingElement = undefined;
+          setCurrentlyEditingElement(undefined);
         }
-        defined(this.viewer).removeSceneGraphItem(epath);
+        defined(viewer).removeSceneGraphItem(sceneGraph, epath);
       },
       path
     );
-    const sgParent = getSceneGraphElementParent(this.sceneGraph, path);
-    if (sgParent) {
-      sgParent.children.splice(path[path.length - 1], 1);
-    } else {
-      this.sceneGraph.splice(path[path.length - 1], 1);
-    }
-    this.forceUpdate();
-    this.persist();
-  };
-
-  private onDuplicateItem = (path: TreePath) => {
-    if (!this.viewer) {
-      return;
-    }
-    const sgParent = getSceneGraphElementParent(this.sceneGraph, path);
-    if (sgParent) {
-      const newEl = cloneSceneGraph(
-        defined(sgParent.children[path[path.length - 1]])
-      );
-      sgParent.children.push(newEl);
-      path.pop();
-      const newPath = [...path, sgParent.children.length - 1];
-      visitSceneGraphElement(
-        newEl,
-        (_, epath) => {
-          defined(this.viewer).addSceneGraphItem(epath);
-        },
-        newPath
-      );
-    } else {
-      const newEl = cloneSceneGraph(
-        defined(this.sceneGraph[path[path.length - 1]])
-      );
-      this.sceneGraph.push(newEl);
-      path.pop();
-      const newPath = [...path, this.sceneGraph.length - 1];
-      visitSceneGraphElement(
-        newEl,
-        (_, epath) => {
-          defined(this.viewer).addSceneGraphItem(epath);
-        },
-        newPath
-      );
-    }
-    this.forceUpdate();
-    this.persist();
-  };
-
-  private onRenameLayer = (name: string) => {
-    this.hideRenameDialog();
-    if (this.currentPath) {
-      const el = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, this.currentPath)
-      );
-      el.name = name;
-      this.forceUpdate();
-    }
-    this.persist();
-  };
-
-  private onIconInteracted = (path: TreePath, icon: number) => {
-    if (path.length === 0 || !this.viewer) {
-      return;
-    }
-    const el = definedAndNotNull(findSceneGraphElement(this.sceneGraph, path));
-    if (icon === 0) {
-      el.visible = !el.visible;
-
-      visitSceneGraphElement(
-        el,
-        (e, epath) => {
-          if (el.visible && !e.visible) {
-            // stop early if we start encountering elements that should stay invisible
-            return false;
-          }
-          if (
-            this.currentlyEditingElement &&
-            treePathEquals(this.currentlyEditingElement, epath)
-          ) {
-            defined(this.viewer).toggleEditing(
-              this.currentlyEditingElement,
-              false
-            );
-            e.editing = false;
-            this.currentlyEditingElement = undefined;
-          }
-          defined(this.viewer).toggleVisible(epath, el.visible);
-          return false;
-        },
-        path
-      );
-    } else if (icon === 1) {
-      const isEditing = el.editing;
-      if (this.currentlyEditingElement) {
-        const editingElement = definedAndNotNull(
-          findSceneGraphElement(this.sceneGraph, this.currentlyEditingElement)
-        );
-        editingElement.editing = false;
-        this.viewer.toggleEditing(this.currentlyEditingElement, false);
-        this.currentlyEditingElement = undefined;
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const sgParent = getSceneGraphElementParent(draft, path);
+      if (sgParent) {
+        sgParent.children.splice(path[path.length - 1], 1);
+      } else {
+        draft.splice(path[path.length - 1], 1);
       }
-      if (!isEditing) {
-        el.editing = true;
-        this.currentlyEditingElement = path;
-        this.viewer.toggleEditing(path, el.editing);
-      }
-    }
-    this.forceUpdate();
-    this.persist();
-  };
-
-  private onSceneGraphElementEdited = (path: TreePath, transform: Vector3) => {
-    if (this.viewer) {
-      const el = definedAndNotNull(
-        findSceneGraphElement(this.sceneGraph, path)
-      );
-      if (el.position.type === "manual") {
-        el.position = {
-          type: "manual",
-          x: transform.x,
-          y: transform.y,
-          z: transform.z,
-        };
-        this.forceUpdate();
-      }
-    }
-    this.persist();
-  };
-
-  private recenter = () => {
-    if (this.viewer) {
-      this.viewer.recenter();
-    }
-  };
-
-  private onItemSelected = (path?: TreePath) => {
-    this.setState({
-      currentlySelectedElement: path,
     });
-    let element: SceneGraphElement | null | undefined;
-    let parentContext: string | undefined;
-    let currentContext: string | undefined;
-    if (path) {
-      element = findSceneGraphElement(this.sceneGraph, path);
-      const parent = findSceneGraphParentElement(
-        this.sceneGraph,
-        path,
-        (el) => el.deviceContext !== undefined
-      );
-      if (parent) {
-        parentContext = parent.deviceContext;
-      }
-      if (element) currentContext = element.deviceContext || parentContext;
+    setSceneGraph(newSceneGraph);
+    persist();
+  };
+
+  const onDuplicateItem = (path: TreePath) => {
+    if (!viewer) {
+      return;
     }
 
-    if (currentContext)
-      this.props.universeData.getDeviceContextName(currentContext).then((_) => {
-        if (_) {
-          this.setState({
-            currentContextName: _,
-          });
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const sgParent = getSceneGraphElementParent(draft, path);
+      if (sgParent) {
+        const newEl = cloneSceneGraph(
+          defined(sgParent.children[path[path.length - 1]])
+        );
+        sgParent.children.push(newEl);
+        path.pop();
+        const newPath = [...path, sgParent.children.length - 1];
+        visitSceneGraphElement(
+          newEl,
+          (_, epath) => {
+            defined(viewer).addSceneGraphItem(draft, epath);
+          },
+          newPath
+        );
+      } else {
+        const newEl = cloneSceneGraph(defined(draft[path[path.length - 1]]));
+        draft.push(newEl);
+        path.pop();
+        const newPath = [...path, draft.length - 1];
+        visitSceneGraphElement(
+          newEl,
+          (_, epath) => {
+            defined(viewer).addSceneGraphItem(draft, epath);
+          },
+          newPath
+        );
+      }
+    });
+    setSceneGraph(newSceneGraph);
+    persist();
+  };
+
+  const onRenameLayer = (name: string) => {
+    hideRenameDialog();
+    if (currentPath) {
+      const newSceneGraph = produce(sceneGraph, (draft) => {
+        const el = definedAndNotNull(findSceneGraphElement(draft, currentPath));
+        el.name = name;
+      });
+      setSceneGraph(newSceneGraph);
+    }
+    persist();
+  };
+
+  const onIconInteracted = (path: TreePath, icon: number) => {
+    if (path.length === 0 || !viewer) {
+      return;
+    }
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const el = definedAndNotNull(findSceneGraphElement(draft, path));
+      if (icon === 0) {
+        el.visible = !el.visible;
+
+        visitSceneGraphElement(
+          el,
+          (e, epath) => {
+            if (el.visible && !e.visible) {
+              // stop early if we start encountering elements that should stay invisible
+              return false;
+            }
+            if (
+              currentlyEditingElement &&
+              treePathEquals(currentlyEditingElement, epath)
+            ) {
+              defined(viewer).toggleEditing(
+                draft,
+                currentlyEditingElement,
+                false
+              );
+              e.editing = false;
+              setCurrentlyEditingElement(undefined);
+            }
+            defined(viewer).toggleVisible(draft, epath, el.visible);
+            return false;
+          },
+          path
+        );
+      } else if (icon === 1) {
+        const isEditing = el.editing;
+        if (currentlyEditingElement) {
+          const editingElement = definedAndNotNull(
+            findSceneGraphElement(draft, currentlyEditingElement)
+          );
+          editingElement.editing = false;
+          viewer.toggleEditing(draft, currentlyEditingElement, false);
+          setCurrentlyEditingElement(undefined);
+        }
+        if (!isEditing) {
+          el.editing = true;
+          setCurrentlyEditingElement(path);
+          viewer.toggleEditing(draft, path, el.editing);
+        }
+      }
+    });
+    setSceneGraph(newSceneGraph);
+
+    persist();
+  };
+
+  const onSceneGraphElementEdited = (path: TreePath, transform: Vector3) => {
+    if (viewer) {
+      const newSceneGraph = produce(sceneGraph, (draft) => {
+        const el = definedAndNotNull(findSceneGraphElement(draft, path));
+        if (el.position.type === "manual") {
+          el.position = {
+            type: "manual",
+            x: transform.x,
+            y: transform.y,
+            z: transform.z,
+          };
         }
       });
+      setSceneGraph(newSceneGraph);
+    }
+    persist();
   };
 
-  private onChangePositionType = (positionType: string) => {
-    const element = definedAndNotNull(
-      findSceneGraphElement(
-        this.sceneGraph,
-        defined(this.state.currentlySelectedElement)
-      )
-    );
-    if (positionType === "manual") {
-      element.position = {
-        type: "manual",
-        x: 0,
-        y: 0,
-        z: 0,
-      };
-    } else if (positionType === "gps") {
-      element.position = {
-        type: "gps",
-        relativeToLongitude: 0,
-        relativeToLatitude: 0,
-      };
-    } else if (positionType === "transform tree") {
+  const recenter = () => {
+    if (viewer) {
+      viewer.recenter();
+    }
+  };
+
+  const onItemSelected = (path?: TreePath) => {
+    setCurrentlySelectedElement(path);
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      let element: SceneGraphElement | null | undefined;
+      let parentContext: string | undefined;
+      let currentContext: string | undefined;
+      if (path) {
+        element = findSceneGraphElement(draft, path);
+        const parent = findSceneGraphParentElement(
+          draft,
+          path,
+          (el) => el.deviceContext !== undefined
+        );
+        if (parent) {
+          parentContext = parent.deviceContext;
+        }
+        if (element) currentContext = element.deviceContext || parentContext;
+      }
+
+      if (currentContext)
+        props.universeData.getDeviceContextName(currentContext).then((_) => {
+          if (_) {
+            setCurrentContextName(_);
+          }
+        });
+    });
+    setSceneGraph(newSceneGraph);
+  };
+
+  const onChangePositionType = (positionType: string) => {
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const element = definedAndNotNull(
+        findSceneGraphElement(draft, defined(currentlySelectedElement))
+      );
+      if (positionType === "manual") {
+        element.position = {
+          type: "manual",
+          x: 0,
+          y: 0,
+          z: 0,
+        };
+      } else if (positionType === "gps") {
+        element.position = {
+          type: "gps",
+          relativeToLongitude: 0,
+          relativeToLatitude: 0,
+        };
+      } else if (positionType === "transform tree") {
+        element.position = {
+          type: "transform tree",
+        };
+      }
+    });
+    setSceneGraph(newSceneGraph);
+    persist();
+  };
+
+  const onSelectTransformPath = (name: string, end: string) => {
+    setShowingTransformSelect(false);
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const element = definedAndNotNull(
+        findSceneGraphElement(draft, defined(currentlySelectedElement))
+      );
       element.position = {
         type: "transform tree",
+        stream: name,
+        end,
       };
-    }
-    this.forceUpdate();
-    this.persist();
-  };
-
-  private onSelectTransformPath = (name: string, end: string) => {
-    this.setState({
-      showingTransformSelect: false,
+      defined(viewer).updatePositioning(
+        draft,
+        defined(currentlySelectedElement),
+        element.position
+      );
     });
-    const element = definedAndNotNull(
-      findSceneGraphElement(
-        this.sceneGraph,
-        defined(this.state.currentlySelectedElement)
-      )
-    );
-    element.position = {
-      type: "transform tree",
-      stream: name,
-      end,
-    };
-    defined(this.viewer).updatePositioning(
-      defined(this.state.currentlySelectedElement),
-      element.position
-    );
-
-    this.forceUpdate();
-    this.persist();
+    setSceneGraph(newSceneGraph);
+    persist();
   };
 
-  private onSelectLocationStream = (
+  const onSelectLocationStream = (
     name: string,
     relativeToLong: number,
     relativeToLat: number
   ) => {
-    this.setState({
-      showingLocationStreamSelect: false,
+    setShowingLocationStreamSelect(false);
+    const newSceneGraph = produce(sceneGraph, (draft) => {
+      const element = definedAndNotNull(
+        findSceneGraphElement(draft, defined(currentlySelectedElement))
+      );
+      element.position = {
+        type: "gps",
+        stream: name,
+        relativeToLongitude: relativeToLong,
+        relativeToLatitude: relativeToLat,
+      };
+      defined(viewer).updatePositioning(
+        draft,
+        defined(currentlySelectedElement),
+        element.position
+      );
     });
-    const element = definedAndNotNull(
-      findSceneGraphElement(
-        this.sceneGraph,
-        defined(this.state.currentlySelectedElement)
-      )
-    );
-    element.position = {
-      type: "gps",
-      stream: name,
-      relativeToLongitude: relativeToLong,
-      relativeToLatitude: relativeToLat,
-    };
-    defined(this.viewer).updatePositioning(
-      defined(this.state.currentlySelectedElement),
-      element.position
-    );
-    this.forceUpdate();
-    this.persist();
+    setSceneGraph(newSceneGraph);
+    persist();
   };
 
-  private showTransformSelect = () => {
-    this.setState({
-      showingTransformSelect: true,
-    });
+  const showTransformSelect = () => {
+    setShowingTransformSelect(true);
   };
 
-  private hideTransformSelect = () => {
-    this.setState({
-      showingTransformSelect: false,
-    });
+  const hideTransformSelect = () => {
+    setShowingTransformSelect(false);
   };
 
-  private showLocationStreamSelect = () => {
-    this.setState({
-      showingLocationStreamSelect: true,
-    });
+  const showLocationStreamSelect = () => {
+    setShowingLocationStreamSelect(true);
   };
 
-  private hideLocationStreamSelect = () => {
-    this.setState({
-      showingLocationStreamSelect: false,
-    });
+  const hideLocationStreamSelect = () => {
+    setShowingLocationStreamSelect(false);
   };
 
-  private toggleSidebar = () => {
-    this.setState((s) => ({
-      sidebarOpen: !s.sidebarOpen,
-    }));
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
-  private onFieldChanged = (fieldId: string, value: string) => {
-    if (this.viewer) {
-      this.viewer.notifyFieldChanged(
-        defined(this.state.currentlySelectedElement),
+  const onFieldChanged = (fieldId: string, value: string) => {
+    if (viewer) {
+      viewer.notifyFieldChanged(
+        sceneGraph,
+        defined(currentlySelectedElement),
         fieldId,
         value
       );
     }
   };
 
-  stringToColor(str: string) {
-    /* tslint:disable:no-bitwise */
-    let hash = 0;
-    for (let i = 0; i < str.length; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let color = "#";
-    for (let i = 0; i < 3; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.substr(-2);
-    }
-    /* tslint:enable:no-bitwise */
-    return color;
-  }
-
-  private buildSubTree(
+  const buildSubTree = (
     element: SceneGraphElement,
     path: TreePath,
     inheritedColor?: string
-  ): TreeElement {
+  ): TreeElement => {
     const color = element.deviceContext
-      ? this.stringToColor(element.deviceContext)
+      ? stringToColor(element.deviceContext)
       : inheritedColor;
     return {
       title: element.name,
@@ -595,227 +597,218 @@ export class UniverseApp extends Component<IUniverseAppProps, IUniverseState> {
         },
       ],
       children: element.children.map((_, i) =>
-        this.buildSubTree(_, [...path, i], color)
+        buildSubTree(_, [...path, i], color)
       ),
     };
-  }
+  };
 
-  private buildTree(): TreeElement[] {
-    return [
-      {
-        title: "Universe",
-        icons: [
-          {
-            icon: "help",
-            description: "This is your entire collection of layers.",
-          },
-        ],
-        children: this.sceneGraph.map((_, i) => this.buildSubTree(_, [i])),
-      },
-    ];
-  }
+  const buildTree = (): TreeElement[] => [
+    {
+      title: "Universe",
+      icons: [
+        {
+          icon: "help",
+          description: "This is your entire collection of layers.",
+        },
+      ],
+      children: sceneGraph.map((_, i) => buildSubTree(_, [i])),
+    },
+  ];
 
-  render() {
-    const { mode, vr } = this.props;
-    const { sidebarOpen } = this.state;
-    let element: SceneGraphElement | null | undefined;
-    let hasParentContext = false;
-    let parentContext: string | undefined;
-    let currentContext: string | undefined;
-    if (this.state.currentlySelectedElement) {
-      element = findSceneGraphElement(
-        this.sceneGraph,
-        this.state.currentlySelectedElement
-      );
-      const parent = findSceneGraphParentElement(
-        this.sceneGraph,
-        this.state.currentlySelectedElement,
-        (el) => el.deviceContext !== undefined
-      );
-      if (parent) {
-        parentContext = parent.deviceContext;
-        hasParentContext = true;
-      }
-      if (element) currentContext = element.deviceContext || parentContext;
-    }
-
-    const showSidebar = mode === "edit" && sidebarOpen;
-
-    let fields: LayerFields = {};
-    const fieldValues: { [key in string]: string | undefined } = {};
-    if (element) {
-      fields = LayerRegistry.getFields(element.type, "edit");
-      Array.from(Object.keys(fields)).forEach((key) => {
-        fieldValues[key] = element?.fieldValues[key].value;
-      });
-    }
-
-    return (
-      <>
-        <UniverseSnackbar />
-        <UniverseContainer>
-          <Box
-            display={showSidebar ? "grid" : "block"}
-            gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
-            sx={{ height: "100%" }}
-          >
-            {showSidebar && (
-              <UniverseSidebar
-                onAdd={this.showAddDialog}
-                onRemove={this.onRemoveItem}
-                onDuplicate={this.onDuplicateItem}
-                onRename={this.showRenameDialog}
-                tree={this.buildTree()}
-                onIconInteracted={this.onIconInteracted}
-                onItemSelected={this.onItemSelected}
-              >
-                {element !== undefined && element !== null && (
-                  <>
-                    <PropertiesTitle>Properties</PropertiesTitle>
-                    <div>
-                      {currentContext !== undefined && (
-                        <PropertyRow>
-                          <>
-                            device:{" "}
-                            {currentContext !== undefined
-                              ? this.state.currentContextName
-                              : "none"}
-                          </>
-                        </PropertyRow>
-                      )}
-                      <div>
-                        <Stack spacing={4}>
-                          <div>
-                            <div>positioning</div>
-                            <Select
-                              label="Positioning"
-                              value={element.position.type}
-                              onChange={this.onChangePositionType}
-                              items={[
-                                "manual",
-                                ...(element.deviceContext || hasParentContext
-                                  ? ["transform tree", "gps"]
-                                  : []),
-                              ].map((_) => ({ label: _, value: _ }))}
-                            />
-                          </div>
-                          {element.position.type === "manual" && (
-                            <div>
-                              <Typography variant="body1">
-                                x: {element.position.x.toFixed(4)}
-                                <br />
-                                y: {element.position.y.toFixed(4)}
-                                <br />
-                                z: {element.position.z.toFixed(4)}
-                              </Typography>
-                            </div>
-                          )}
-                          {element.position.type === "gps" && (
-                            <div>
-                              <Typography variant="body1">
-                                stream: {element.position.stream}
-                                <br />
-                                relative to longitude:{" "}
-                                {element.position.relativeToLongitude}
-                                <br />
-                                relative to latitude:{" "}
-                                {element.position.relativeToLatitude}
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                onClick={this.showLocationStreamSelect}
-                              >
-                                Select
-                              </Button>
-                            </div>
-                          )}
-                          {element.position.type === "transform tree" && (
-                            <div>
-                              <Typography variant="body1">
-                                stream: {element.position.stream}
-                                <br />
-                                transform: {element.position.end}
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                onClick={this.showTransformSelect}
-                              >
-                                Select
-                              </Button>
-                            </div>
-                          )}
-                          {Object.entries(fields).map(([fieldId, field]) => (
-                            <FieldEditor
-                              key={fieldId}
-                              fieldId={fieldId}
-                              field={field}
-                              initialValue={fieldValues[fieldId]}
-                              onChange={this.onFieldChanged}
-                            />
-                          ))}
-                        </Stack>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </UniverseSidebar>
-            )}
-            <Box
-              sx={{ position: "relative", overflow: "hidden", height: "100%" }}
-            >
-              <UniverseViewer
-                ref={this.onViewerLoaded}
-                sceneGraph={this.sceneGraph}
-                onSceneGraphElementEdited={this.onSceneGraphElementEdited}
-                universeData={this.props.universeData}
-                vr={vr}
-              />
-              <Controls>
-                <Control onClick={this.recenter}>
-                  <Icon name="recenter" />
-                </Control>
-                {mode === "edit" && (
-                  <Control onClick={this.toggleSidebar}>
-                    <Icon name="edit" />
-                  </Control>
-                )}
-              </Controls>
-            </Box>
-          </Box>
-
-          {this.state.showingAddDialog && (
-            <AddLayerModal
-              onCancel={this.hideAddDialog}
-              onAddLayer={this.onLayerAdded}
-              universeData={this.props.universeData}
-              deviceContext={element?.deviceContext || parentContext}
-            />
-          )}
-          {this.state.showingRenameDialog && (
-            <RenameLayerModal
-              name={this.currentlyEditingName}
-              onCancel={this.hideRenameDialog}
-              onRenameLayer={this.onRenameLayer}
-            />
-          )}
-          {this.state.showingTransformSelect && currentContext && (
-            <SelectTransformPathModal
-              deviceContext={currentContext}
-              universeData={this.props.universeData}
-              onCancel={this.hideTransformSelect}
-              onSelect={this.onSelectTransformPath}
-            />
-          )}
-          {this.state.showingLocationStreamSelect && currentContext && (
-            <SelectLocationModal
-              deviceContext={currentContext}
-              universeData={this.props.universeData}
-              onCancel={this.hideLocationStreamSelect}
-              onSelect={this.onSelectLocationStream}
-            />
-          )}
-        </UniverseContainer>
-      </>
+  const { mode, vr } = props;
+  let element: SceneGraphElement | null | undefined;
+  let hasParentContext = false;
+  let parentContext: string | undefined;
+  let currentContext: string | undefined;
+  if (currentlySelectedElement) {
+    element = findSceneGraphElement(sceneGraph, currentlySelectedElement);
+    const parent = findSceneGraphParentElement(
+      sceneGraph,
+      currentlySelectedElement,
+      (el) => el.deviceContext !== undefined
     );
+    if (parent) {
+      parentContext = parent.deviceContext;
+      hasParentContext = true;
+    }
+    if (element) currentContext = element.deviceContext || parentContext;
   }
+
+  const showSidebar = mode === "edit" && sidebarOpen;
+
+  let fields: LayerFields = {};
+  const fieldValues: { [key in string]: string | undefined } = {};
+  if (element) {
+    fields = LayerRegistry.getFields(element.type, "edit");
+    Array.from(Object.keys(fields)).forEach((key) => {
+      fieldValues[key] = element?.fieldValues[key].value;
+    });
+  }
+
+  return (
+    <>
+      <UniverseSnackbar />
+      <UniverseContainer>
+        <Box
+          display={showSidebar ? "grid" : "block"}
+          gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
+          sx={{ height: "100%" }}
+        >
+          {showSidebar && (
+            <UniverseSidebar
+              onAdd={showAddDialog}
+              onRemove={onRemoveItem}
+              onDuplicate={onDuplicateItem}
+              onRename={showRenameDialog}
+              tree={buildTree()}
+              onIconInteracted={onIconInteracted}
+              onItemSelected={onItemSelected}
+            >
+              {element !== undefined && element !== null && (
+                <>
+                  <PropertiesTitle>Properties</PropertiesTitle>
+                  <div>
+                    {currentContext !== undefined && (
+                      <PropertyRow>
+                        <>
+                          device:{" "}
+                          {currentContext !== undefined
+                            ? currentContextName
+                            : "none"}
+                        </>
+                      </PropertyRow>
+                    )}
+                    <div>
+                      <Stack spacing={4}>
+                        <div>
+                          <div>positioning</div>
+                          <Select
+                            label="Positioning"
+                            value={element.position.type}
+                            onChange={onChangePositionType}
+                            items={[
+                              "manual",
+                              ...(element.deviceContext || hasParentContext
+                                ? ["transform tree", "gps"]
+                                : []),
+                            ].map((_) => ({ label: _, value: _ }))}
+                          />
+                        </div>
+                        {element.position.type === "manual" && (
+                          <div>
+                            <Typography variant="body1">
+                              x: {element.position.x.toFixed(4)}
+                              <br />
+                              y: {element.position.y.toFixed(4)}
+                              <br />
+                              z: {element.position.z.toFixed(4)}
+                            </Typography>
+                          </div>
+                        )}
+                        {element.position.type === "gps" && (
+                          <div>
+                            <Typography variant="body1">
+                              stream: {element.position.stream}
+                              <br />
+                              relative to longitude:{" "}
+                              {element.position.relativeToLongitude}
+                              <br />
+                              relative to latitude:{" "}
+                              {element.position.relativeToLatitude}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              onClick={showLocationStreamSelect}
+                            >
+                              Select
+                            </Button>
+                          </div>
+                        )}
+                        {element.position.type === "transform tree" && (
+                          <div>
+                            <Typography variant="body1">
+                              stream: {element.position.stream}
+                              <br />
+                              transform: {element.position.end}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              onClick={showTransformSelect}
+                            >
+                              Select
+                            </Button>
+                          </div>
+                        )}
+                        {Object.entries(fields).map(([fieldId, field]) => (
+                          <FieldEditor
+                            key={fieldId}
+                            fieldId={fieldId}
+                            field={field}
+                            initialValue={fieldValues[fieldId]}
+                            onChange={onFieldChanged}
+                          />
+                        ))}
+                      </Stack>
+                    </div>
+                  </div>
+                </>
+              )}
+            </UniverseSidebar>
+          )}
+          <Box
+            sx={{ position: "relative", overflow: "hidden", height: "100%" }}
+          >
+            <UniverseViewer
+              ref={onViewerLoaded}
+              onSceneGraphElementEdited={onSceneGraphElementEdited}
+              universeData={props.universeData}
+              vr={vr}
+            />
+            <Controls>
+              <Control onClick={recenter}>
+                <Icon name="recenter" />
+              </Control>
+              {mode === "edit" && (
+                <Control onClick={toggleSidebar}>
+                  <Icon name="edit" />
+                </Control>
+              )}
+            </Controls>
+          </Box>
+        </Box>
+
+        {showingAddDialog && (
+          <AddLayerModal
+            onCancel={hideAddDialog}
+            onAddLayer={onLayerAdded}
+            universeData={props.universeData}
+            deviceContext={element?.deviceContext || parentContext}
+          />
+        )}
+        {showingRenameDialog && (
+          <RenameLayerModal
+            name={currentlyEditingName}
+            onCancel={hideRenameDialog}
+            onRenameLayer={onRenameLayer}
+          />
+        )}
+        {showingTransformSelect && currentContext && (
+          <SelectTransformPathModal
+            deviceContext={currentContext}
+            universeData={props.universeData}
+            onCancel={hideTransformSelect}
+            onSelect={onSelectTransformPath}
+          />
+        )}
+        {showingLocationStreamSelect && currentContext && (
+          <SelectLocationModal
+            deviceContext={currentContext}
+            universeData={props.universeData}
+            onCancel={hideLocationStreamSelect}
+            onSelect={onSelectLocationStream}
+          />
+        )}
+      </UniverseContainer>
+    </>
+  );
 }
