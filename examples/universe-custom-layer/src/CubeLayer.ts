@@ -18,15 +18,16 @@ export class CubeLayer extends UniverseLayerContent {
   );
 
   static createDefault(
+    layerId: string,
     _universeData: IUniverseData,
     _deviceId: string,
     _universeDataSources?: UniverseDataSource[]
   ): TransformLayer<CubeLayer> {
-    return new TransformLayer(new CubeLayer());
+    return new TransformLayer(layerId, new CubeLayer(layerId));
   }
 
-  constructor() {
-    super();
+  constructor(layerId?: string) {
+    super(layerId as string);
     this.add(this.cube);
   }
 
@@ -58,5 +59,9 @@ export class CubeLayer extends UniverseLayerContent {
         m.color.set(0xff0000);
       }
     }
+  }
+
+  onPointerUp(_raycaster: THREE.Raycaster, _button: number): void {
+    this.showSnackbar("Clicked!");
   }
 }

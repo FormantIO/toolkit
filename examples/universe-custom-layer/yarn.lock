@@ -267,10 +267,10 @@
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
   integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
 
-"@formant/ui-sdk@0.0.17", "@formant/ui-sdk@latest":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.17.tgz#a41fe05512431ced0d247d299b28db2f508f6529"
-  integrity sha512-ZFLvy5t96qFhqZ7uXlL8JALm1U1p/UDzSS7pt3mP5eSttkC4RcG8rCKhAhzzlIAm6B/9OmzCn+O37i5yHFPxQQ==
+"@formant/ui-sdk@0.0.19", "@formant/ui-sdk@latest":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.19.tgz#b3c2bf78f93f90c8a69e594e1d029c1d4532ec6a"
+  integrity sha512-UVo6BxV1j8tycEadgBU+oZIpHdaQk59hhltfc7tEwez/vRKM+ev7tencvPlV5VMqc0Ku7Itauxm/9Kr8JoQ82A==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
@@ -295,20 +295,23 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.40.tgz#d63423965e0ed90e3f09a556852fa0f802f87161"
-  integrity sha512-izqasTF/xMkIg4WKKowfIG7hM68K+iaYSJspW1hZiFoaiLmw9CvMgQBBl6h+pqbmquKzZLE6TmPeisu+sawy3w==
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.41.tgz#656b07b3c72f346b306c9960bce0d77184d234b0"
+  integrity sha512-Rus5/Vcp9HhD0aJ1VSWax2zVc9TsVkJIMUU3sz8hiG+cymt5tJJEvdXesPgZldLSjQtZeERfL5+mTq6tZS4DuQ==
   dependencies:
-    "@formant/ui-sdk" "0.0.17"
+    "@formant/ui-sdk" "0.0.19"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
     "@formant/ui-sdk-realtime-player-core-worker" "^0.0.2"
     "@types/react" "^18.0.8"
     "@types/uuid" "^8.3.4"
     geolib "^3.3.3"
+    immer "^9.0.12"
     jszip "^3.9.1"
     lzfjs "^1.0.1"
     react "^18.0.0"
     react-use-measure "^2.1.1"
+    recoil "^0.7.2"
+    recoil-nexus "^0.3.15"
     styled-components "^5.3.5"
     three "^0.125.2"
     urdf-loader "^0.10.3"
@@ -812,6 +815,11 @@ h264decoder@^1.0.0:
   resolved "https://registry.yarnpkg.com/h264decoder/-/h264decoder-1.0.0.tgz#5c3c5bc1f755df10f3689d58e00910264be8a8ff"
   integrity sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ==
 
+hamt_plus@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hamt_plus/-/hamt_plus-1.0.2.tgz#e21c252968c7e33b20f6a1b094cd85787a265601"
+  integrity sha1-4hwlKWjH4zsg9qGwlM2FeHomVgE=
+
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -835,6 +843,11 @@ immediate@~3.0.5:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
+
+immer@^9.0.12:
+  version "9.0.12"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.12.tgz#2d33ddf3ee1d247deab9d707ca472c8c942a0f20"
+  integrity sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==
 
 import-fresh@^3.1.0:
   version "3.3.0"
@@ -1067,6 +1080,18 @@ readable-stream@~2.3.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
+recoil-nexus@^0.3.15:
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/recoil-nexus/-/recoil-nexus-0.3.15.tgz#82e9b916409aef53cf2b2cc2dbae26b331f1a893"
+  integrity sha512-UrV1VWZskAa/bvLmLc/W/DN11GkL9WGrB5heAtgiz8XLWvyUFfJr20uM4c7YIsssO7g1zDfM4MfbAldbGYWMYQ==
+
+recoil@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/recoil/-/recoil-0.7.2.tgz#37aafc9e0674abae639263354a11c910e71bf78a"
+  integrity sha512-OT4pI7FOUHcIoRtjsL5Lqq+lFFzQfir4MIbUkqyJ3nqv3WfBP1pHepyurqTsK5gw+T+I2R8+uOD28yH+Lg5o4g==
+  dependencies:
+    hamt_plus "1.0.2"
+
 regenerator-runtime@^0.13.4:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
@@ -1087,9 +1112,9 @@ resolve@^1.12.0, resolve@^1.22.0:
     supports-preserve-symlinks-flag "^1.0.0"
 
 rollup@^2.59.0:
-  version "2.71.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.71.1.tgz#82b259af7733dfd1224a8171013aaaad02971a22"
-  integrity sha512-lMZk3XfUBGjrrZQpvPSoXcZSfKcJ2Bgn+Z0L1MoW2V8Wh7BVM+LOBJTPo16yul2MwL59cXedzW1ruq3rCjSRgw==
+  version "2.72.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.72.0.tgz#f94280b003bcf9f2f1f2594059a9db5abced371e"
+  integrity sha512-KqtR2YcO35/KKijg4nx4STO3569aqCUeGRkKWnJ6r+AvBBrVY9L4pmf4NHVrQr4mTOq6msbohflxr2kpihhaOA==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -1201,9 +1226,9 @@ uuid@^8.3.2:
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 vite@^2.9.1:
-  version "2.9.7"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.7.tgz#210c328e08ed206ab0953eb1ca00860042cd0a77"
-  integrity sha512-5hH7aNQe8rJiTTqCtPNX/6mIKlGw+1wg8UXwAxDIIN8XaSR+Zx3GT2zSu7QKa1vIaBqfUODGh3vpwY8r0AW/jw==
+  version "2.9.8"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.8.tgz#2c2cb0790beb0fbe4b8c0995b80fe691a91c2545"
+  integrity sha512-zsBGwn5UT3YS0NLSJ7hnR54+vUKfgzMUh/Z9CxF1YKEBVIe213+63jrFLmZphgGI5zXwQCSmqIdbPuE8NJywPw==
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.13"
