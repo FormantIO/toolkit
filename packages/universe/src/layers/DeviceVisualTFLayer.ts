@@ -6,9 +6,9 @@ import { TransformTree } from "../objects/TransformTree";
 import { ITransformTreeNode } from "../objects/transformTreeLoader";
 import { IUniverseData } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class DeviceVisualTFLayer extends UniverseLayerContent {
+export class DeviceVisualTFLayer extends UniverseLayer {
   static layerTypeId: string = "device_visual_tf";
 
   static commonName = "Transform Tree";

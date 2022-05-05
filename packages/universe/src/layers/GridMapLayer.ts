@@ -4,9 +4,9 @@ import { IMap } from "../../../data-sdk/src/model/IMap";
 import { IUniverseData } from "../model/IUniverseData";
 import { GridMap } from "../objects/GridMap";
 import { LayerSuggestion } from "./LayerRegistry";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class GridMapLayer extends UniverseLayerContent {
+export class GridMapLayer extends UniverseLayer {
   static layerTypeId: string = "grid_map";
 
   static commonName = "Grid Map";

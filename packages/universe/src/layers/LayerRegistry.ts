@@ -2,7 +2,7 @@ import { PerspectiveCamera } from "three";
 import { UniverseDataSource, IUniverseData } from "../model/IUniverseData";
 import { LayerType } from ".";
 import { defined } from "../../../common/defined";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 import { LayerFields, LayerFieldLocation } from "../model/LayerField";
 
 export interface LayerSuggestion {
@@ -79,7 +79,7 @@ export class LayerRegistry {
     getCurrentCamera?: () => PerspectiveCamera
   ) {
     const Layer = defined(LayerRegistry.layers.get(nodeType));
-    return UniverseLayerContent.createDefault(
+    return UniverseLayer.createDefault(
       new Layer(),
       layerId,
       universeData,

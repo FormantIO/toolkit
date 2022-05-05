@@ -1,9 +1,9 @@
 import { GroundPlane } from "../objects/GroundPlane";
 import { Axes } from "../objects/Axes";
 import { AxisLabels } from "../objects/AxisLabels";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class GroundLayer extends UniverseLayerContent {
+export class GroundLayer extends UniverseLayer {
   static layerTypeId: string = "ground";
 
   static commonName = "Ground";

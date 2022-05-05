@@ -1,6 +1,6 @@
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class DataLayer extends UniverseLayerContent {
+export class DataLayer extends UniverseLayer {
   static layerTypeId = "data";
 
   static commonName = "Data Source";

@@ -2,7 +2,7 @@ import { BoxGeometry, CanvasTexture, Mesh, MeshBasicMaterial } from "three";
 import * as uuid from "uuid";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
 import { IUniverseData } from "../model/IUniverseData";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 import { defined } from "../../../common/defined";
 import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -10,7 +10,7 @@ import { LayerSuggestion } from "./LayerRegistry";
 // eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
-export class HardwareVideoLayer extends UniverseLayerContent {
+export class HardwareVideoLayer extends UniverseLayer {
   static id = "hardware_video";
 
   static commonName = "Hardware Video";

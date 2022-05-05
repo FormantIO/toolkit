@@ -1,7 +1,7 @@
 import { Label } from "../objects/Label";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class LabelLayer extends UniverseLayerContent {
+export class LabelLayer extends UniverseLayer {
   static layerTypeId: string = "label";
 
   static commonName = "Label";

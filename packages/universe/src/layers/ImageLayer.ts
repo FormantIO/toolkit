@@ -8,10 +8,10 @@ import {
   Texture,
   TextureLoader,
 } from "three";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 import { SVGLoader } from "../../three-utils/SVGLoader";
 
-export class ImageLayer extends UniverseLayerContent {
+export class ImageLayer extends UniverseLayer {
   static layerTypeId: string = "image";
 
   static commonName = "Image";

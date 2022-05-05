@@ -15,7 +15,7 @@ import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
 export * from "./components/Universe";
 export * from "./model/IUniverseData";
 export * from "./layers/LayerRegistry";
-export * from "./layers/UniverseLayerContent";
+export * from "./layers/UniverseLayer";
 export * from "./layers/TransformLayer";
 export * from "./components/sidebar";
 export * from "./model/SceneGraph";

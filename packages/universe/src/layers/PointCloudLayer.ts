@@ -4,10 +4,10 @@ import { defined } from "../../../common/defined";
 import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
 import { loadFromBase64 } from "../objects/pcd";
 import { IUniverseData } from "../model/IUniverseData";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 import { LayerSuggestion } from "./LayerRegistry";
 
-export class PointCloudLayer extends UniverseLayerContent {
+export class PointCloudLayer extends UniverseLayer {
   static layerTypeId: string = "point_cloud";
 
   static commonName = "Point Cloud";

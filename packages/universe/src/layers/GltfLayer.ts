@@ -1,7 +1,7 @@
 import { GLTFLoader } from "../../three-utils/GLTFLoader";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class GltfLayer extends UniverseLayerContent {
+export class GltfLayer extends UniverseLayer {
   static layerTypeId: string = "3dmodel";
 
   static commonName = "3D Model";

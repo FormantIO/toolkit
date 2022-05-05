@@ -18,9 +18,9 @@ import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { IUniverseData } from "../model/IUniverseData";
 import { GeometryWorld } from "../objects/GeometryWorld";
 import { LayerSuggestion } from "./LayerRegistry";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
-export class GeometryLayer extends UniverseLayerContent {
+export class GeometryLayer extends UniverseLayer {
   static layerTypeId: string = "geometry";
 
   static commonName = "Geometry";

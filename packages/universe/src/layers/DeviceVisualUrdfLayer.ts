@@ -5,7 +5,7 @@ import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { Urdf } from "../objects/Urdf";
 import { IUniverseData } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
 async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   const data = await fetch(zipPath).then((_) => _.arrayBuffer());
@@ -77,7 +77,7 @@ async function loadURDFIntoBlob(zipPath: string): Promise<string | false> {
   return false;
 }
 
-export class DeviceVisualUrdfLayer extends UniverseLayerContent {
+export class DeviceVisualUrdfLayer extends UniverseLayer {
   static layerTypeId: string = "device_visual_urdf";
 
   static commonName = "URDF";

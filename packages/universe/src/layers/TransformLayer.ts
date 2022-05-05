@@ -7,7 +7,7 @@ import { Positioning } from "../model/SceneGraph";
 import { TreePath } from "../model/ITreeElement";
 import { IUniverseData } from "../model/IUniverseData";
 
-import { UniverseLayerContent } from "./UniverseLayerContent";
+import { UniverseLayer } from "./UniverseLayer";
 
 export class TransformLayer extends Object3D {
   static layerTypeId: string = "transform_space";
@@ -22,7 +22,7 @@ export class TransformLayer extends Object3D {
 
   public deviceId?: string;
 
-  contentNode: UniverseLayerContent | undefined;
+  contentNode: UniverseLayer | undefined;
 
   buildTransformList(
     transformNodes: ITransformNode[],

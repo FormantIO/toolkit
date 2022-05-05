@@ -8,7 +8,7 @@ import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import { SceneGraph, visitSceneGraphElement } from "../main";
 
-export abstract class UniverseLayerContent extends Object3D {
+export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
 
   static commonName: string;
@@ -38,7 +38,7 @@ export abstract class UniverseLayerContent extends Object3D {
     return [];
   }
 
-  static createDefault<T extends UniverseLayerContent>(
+  static createDefault<T extends UniverseLayer>(
     content: T,
     layerId: string,
     universeData: IUniverseData,
