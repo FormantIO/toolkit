@@ -1,8 +1,10 @@
 import { Object3D, PerspectiveCamera, Raycaster } from "three";
+import { setRecoil } from "recoil-nexus";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
+import { snackbarAtom } from "../state/snackbar";
 
 export abstract class UniverseLayerContent extends Object3D {
   static id: string;
@@ -49,4 +51,8 @@ export abstract class UniverseLayerContent extends Object3D {
   onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
 
   onFieldChanged(_field: string, _value: string): void {}
+
+  showSnackbar(message: string): void {
+    setRecoil(snackbarAtom, { message, open: true });
+  }
 }

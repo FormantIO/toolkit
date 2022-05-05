@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
 import { Vector3 } from "three";
+import { RecoilRoot } from "recoil";
+import RecoilNexus from "recoil-nexus";
 import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../../common/defined";
@@ -30,6 +32,7 @@ import { RenameLayerModal } from "./modals/RenameLayerModal";
 import { SelectLocationModal } from "./modals/SelectLocationModal";
 import { SelectTransformPathModal } from "./modals/SelectTransformPathModal";
 import { FieldEditor } from "./FieldEditor";
+import { UniverseSnackbar } from "./UniverseSnackbar";
 
 const Controls = styled.div`
   position: absolute;
@@ -648,168 +651,172 @@ export class Universe extends Component<IUniverseProps, IUniverseState> {
     }
 
     return (
-      <UniverseContainer>
-        <Box
-          display={showSidebar ? "grid" : "block"}
-          gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
-          sx={{ height: "100%" }}
-        >
-          {showSidebar && (
-            <UniverseSidebar
-              onAdd={this.showAddDialog}
-              onRemove={this.onRemoveItem}
-              onDuplicate={this.onDuplicateItem}
-              onRename={this.showRenameDialog}
-              tree={this.buildTree()}
-              onIconInteracted={this.onIconInteracted}
-              onItemSelected={this.onItemSelected}
-            >
-              {element !== undefined && element !== null && (
-                <>
-                  <PropertiesTitle>Properties</PropertiesTitle>
-                  <div>
-                    {currentContext !== undefined && (
-                      <PropertyRow>
-                        <>
-                          device:{" "}
-                          {currentContext !== undefined
-                            ? this.state.currentContextName
-                            : "none"}
-                        </>
-                      </PropertyRow>
-                    )}
-                    <div>
-                      <Stack spacing={4}>
-                        <div>
-                          <div>positioning</div>
-                          <Select
-                            label="Positioning"
-                            value={element.position.type}
-                            onChange={this.onChangePositionType}
-                            items={[
-                              "manual",
-                              ...(element.deviceContext || hasParentContext
-                                ? ["transform tree", "gps"]
-                                : []),
-                            ].map((_) => ({ label: _, value: _ }))}
-                          />
-                        </div>
-                        {element.position.type === "manual" && (
-                          <div>
-                            <Typography variant="body1">
-                              x: {element.position.x.toFixed(4)}
-                              <br />
-                              y: {element.position.y.toFixed(4)}
-                              <br />
-                              z: {element.position.z.toFixed(4)}
-                            </Typography>
-                          </div>
-                        )}
-                        {element.position.type === "gps" && (
-                          <div>
-                            <Typography variant="body1">
-                              stream: {element.position.stream}
-                              <br />
-                              relative to longitude:{" "}
-                              {element.position.relativeToLongitude}
-                              <br />
-                              relative to latitude:{" "}
-                              {element.position.relativeToLatitude}
-                            </Typography>
-                            <Button
-                              variant="contained"
-                              onClick={this.showLocationStreamSelect}
-                            >
-                              Select
-                            </Button>
-                          </div>
-                        )}
-                        {element.position.type === "transform tree" && (
-                          <div>
-                            <Typography variant="body1">
-                              stream: {element.position.stream}
-                              <br />
-                              transform: {element.position.end}
-                            </Typography>
-                            <Button
-                              variant="contained"
-                              onClick={this.showTransformSelect}
-                            >
-                              Select
-                            </Button>
-                          </div>
-                        )}
-                        {Object.entries(fields).map(([fieldId, field]) => (
-                          <FieldEditor
-                            key={fieldId}
-                            fieldId={fieldId}
-                            field={field}
-                            initialValue={fieldValues[fieldId]}
-                            onChange={this.onFieldChanged}
-                          />
-                        ))}
-                      </Stack>
-                    </div>
-                  </div>
-                </>
-              )}
-            </UniverseSidebar>
-          )}
+      <RecoilRoot>
+        <RecoilNexus />
+        <UniverseSnackbar />
+        <UniverseContainer>
           <Box
-            sx={{ position: "relative", overflow: "hidden", height: "100%" }}
+            display={showSidebar ? "grid" : "block"}
+            gridTemplateColumns={showSidebar ? "370px 1fr" : undefined}
+            sx={{ height: "100%" }}
           >
-            <UniverseViewer
-              ref={this.onViewerLoaded}
-              sceneGraph={this.sceneGraph}
-              onSceneGraphElementEdited={this.onSceneGraphElementEdited}
-              universeData={this.props.universeData}
-              vr={vr}
-            />
-            <Controls>
-              <Control onClick={this.recenter}>
-                <Icon name="recenter" />
-              </Control>
-              {mode === "edit" && (
-                <Control onClick={this.toggleSidebar}>
-                  <Icon name="edit" />
+            {showSidebar && (
+              <UniverseSidebar
+                onAdd={this.showAddDialog}
+                onRemove={this.onRemoveItem}
+                onDuplicate={this.onDuplicateItem}
+                onRename={this.showRenameDialog}
+                tree={this.buildTree()}
+                onIconInteracted={this.onIconInteracted}
+                onItemSelected={this.onItemSelected}
+              >
+                {element !== undefined && element !== null && (
+                  <>
+                    <PropertiesTitle>Properties</PropertiesTitle>
+                    <div>
+                      {currentContext !== undefined && (
+                        <PropertyRow>
+                          <>
+                            device:{" "}
+                            {currentContext !== undefined
+                              ? this.state.currentContextName
+                              : "none"}
+                          </>
+                        </PropertyRow>
+                      )}
+                      <div>
+                        <Stack spacing={4}>
+                          <div>
+                            <div>positioning</div>
+                            <Select
+                              label="Positioning"
+                              value={element.position.type}
+                              onChange={this.onChangePositionType}
+                              items={[
+                                "manual",
+                                ...(element.deviceContext || hasParentContext
+                                  ? ["transform tree", "gps"]
+                                  : []),
+                              ].map((_) => ({ label: _, value: _ }))}
+                            />
+                          </div>
+                          {element.position.type === "manual" && (
+                            <div>
+                              <Typography variant="body1">
+                                x: {element.position.x.toFixed(4)}
+                                <br />
+                                y: {element.position.y.toFixed(4)}
+                                <br />
+                                z: {element.position.z.toFixed(4)}
+                              </Typography>
+                            </div>
+                          )}
+                          {element.position.type === "gps" && (
+                            <div>
+                              <Typography variant="body1">
+                                stream: {element.position.stream}
+                                <br />
+                                relative to longitude:{" "}
+                                {element.position.relativeToLongitude}
+                                <br />
+                                relative to latitude:{" "}
+                                {element.position.relativeToLatitude}
+                              </Typography>
+                              <Button
+                                variant="contained"
+                                onClick={this.showLocationStreamSelect}
+                              >
+                                Select
+                              </Button>
+                            </div>
+                          )}
+                          {element.position.type === "transform tree" && (
+                            <div>
+                              <Typography variant="body1">
+                                stream: {element.position.stream}
+                                <br />
+                                transform: {element.position.end}
+                              </Typography>
+                              <Button
+                                variant="contained"
+                                onClick={this.showTransformSelect}
+                              >
+                                Select
+                              </Button>
+                            </div>
+                          )}
+                          {Object.entries(fields).map(([fieldId, field]) => (
+                            <FieldEditor
+                              key={fieldId}
+                              fieldId={fieldId}
+                              field={field}
+                              initialValue={fieldValues[fieldId]}
+                              onChange={this.onFieldChanged}
+                            />
+                          ))}
+                        </Stack>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </UniverseSidebar>
+            )}
+            <Box
+              sx={{ position: "relative", overflow: "hidden", height: "100%" }}
+            >
+              <UniverseViewer
+                ref={this.onViewerLoaded}
+                sceneGraph={this.sceneGraph}
+                onSceneGraphElementEdited={this.onSceneGraphElementEdited}
+                universeData={this.props.universeData}
+                vr={vr}
+              />
+              <Controls>
+                <Control onClick={this.recenter}>
+                  <Icon name="recenter" />
                 </Control>
-              )}
-            </Controls>
+                {mode === "edit" && (
+                  <Control onClick={this.toggleSidebar}>
+                    <Icon name="edit" />
+                  </Control>
+                )}
+              </Controls>
+            </Box>
           </Box>
-        </Box>
 
-        {this.state.showingAddDialog && (
-          <AddLayerModal
-            onCancel={this.hideAddDialog}
-            onAddLayer={this.onLayerAdded}
-            universeData={this.props.universeData}
-            deviceContext={element?.deviceContext || parentContext}
-          />
-        )}
-        {this.state.showingRenameDialog && (
-          <RenameLayerModal
-            name={this.currentlyEditingName}
-            onCancel={this.hideRenameDialog}
-            onRenameLayer={this.onRenameLayer}
-          />
-        )}
-        {this.state.showingTransformSelect && currentContext && (
-          <SelectTransformPathModal
-            deviceContext={currentContext}
-            universeData={this.props.universeData}
-            onCancel={this.hideTransformSelect}
-            onSelect={this.onSelectTransformPath}
-          />
-        )}
-        {this.state.showingLocationStreamSelect && currentContext && (
-          <SelectLocationModal
-            deviceContext={currentContext}
-            universeData={this.props.universeData}
-            onCancel={this.hideLocationStreamSelect}
-            onSelect={this.onSelectLocationStream}
-          />
-        )}
-      </UniverseContainer>
+          {this.state.showingAddDialog && (
+            <AddLayerModal
+              onCancel={this.hideAddDialog}
+              onAddLayer={this.onLayerAdded}
+              universeData={this.props.universeData}
+              deviceContext={element?.deviceContext || parentContext}
+            />
+          )}
+          {this.state.showingRenameDialog && (
+            <RenameLayerModal
+              name={this.currentlyEditingName}
+              onCancel={this.hideRenameDialog}
+              onRenameLayer={this.onRenameLayer}
+            />
+          )}
+          {this.state.showingTransformSelect && currentContext && (
+            <SelectTransformPathModal
+              deviceContext={currentContext}
+              universeData={this.props.universeData}
+              onCancel={this.hideTransformSelect}
+              onSelect={this.onSelectTransformPath}
+            />
+          )}
+          {this.state.showingLocationStreamSelect && currentContext && (
+            <SelectLocationModal
+              deviceContext={currentContext}
+              universeData={this.props.universeData}
+              onCancel={this.hideLocationStreamSelect}
+              onSelect={this.onSelectLocationStream}
+            />
+          )}
+        </UniverseContainer>
+      </RecoilRoot>
     );
   }
 }

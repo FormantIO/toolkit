@@ -290,10 +290,10 @@
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
   integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
 
-"@formant/ui-sdk@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.18.tgz#cc212fcc907c778b803b7b433a61664e1675d393"
-  integrity sha512-a+sZKH+Vyd3z3rYbvBucgyQlwy/iS3X5Hz/ixnF0nKndBD/sCrWpC4x8t1Yveu3Tzz9mcZ4LmuBpYVp+OOswNw==
+"@formant/ui-sdk@0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.19.tgz#b3c2bf78f93f90c8a69e594e1d029c1d4532ec6a"
+  integrity sha512-UVo6BxV1j8tycEadgBU+oZIpHdaQk59hhltfc7tEwez/vRKM+ev7tencvPlV5VMqc0Ku7Itauxm/9Kr8JoQ82A==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
@@ -1573,6 +1573,11 @@ h264decoder@^1.0.0:
   resolved "https://registry.yarnpkg.com/h264decoder/-/h264decoder-1.0.0.tgz#5c3c5bc1f755df10f3689d58e00910264be8a8ff"
   integrity sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ==
 
+hamt_plus@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hamt_plus/-/hamt_plus-1.0.2.tgz#e21c252968c7e33b20f6a1b094cd85787a265601"
+  integrity sha1-4hwlKWjH4zsg9qGwlM2FeHomVgE=
+
 has-bigints@^1.0.1, has-bigints@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/has-bigints/-/has-bigints-1.0.2.tgz#0871bd3e3d51626f6ca0966668ba35d5602d6eaa"
@@ -2222,6 +2227,18 @@ readable-stream@~2.3.6:
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
+
+recoil-nexus@^0.3.15:
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/recoil-nexus/-/recoil-nexus-0.3.15.tgz#82e9b916409aef53cf2b2cc2dbae26b331f1a893"
+  integrity sha512-UrV1VWZskAa/bvLmLc/W/DN11GkL9WGrB5heAtgiz8XLWvyUFfJr20uM4c7YIsssO7g1zDfM4MfbAldbGYWMYQ==
+
+recoil@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/recoil/-/recoil-0.7.2.tgz#37aafc9e0674abae639263354a11c910e71bf78a"
+  integrity sha512-OT4pI7FOUHcIoRtjsL5Lqq+lFFzQfir4MIbUkqyJ3nqv3WfBP1pHepyurqTsK5gw+T+I2R8+uOD28yH+Lg5o4g==
+  dependencies:
+    hamt_plus "1.0.2"
 
 regenerator-runtime@^0.13.4:
   version "0.13.9"
