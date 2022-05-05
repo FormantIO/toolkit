@@ -38,29 +38,29 @@ const IconsDiv = styled.div`
   float: right;
 `;
 
-export class SortableTree extends Component<ISortableTreeProps> {
-  private onItemClicked = (p: TreePath) => {
-    this.select(p);
+export function SortableTree(props: ISortableTreeProps) {
+  const onIconClicked = (path: TreePath, iconIndex: number) => {
+    if (props.onIconSelected) {
+      props.onIconSelected(path, iconIndex);
+    }
   };
 
-  private onItemIconClicked = (currentPath: TreePath, iconIndex: number) => {
-    this.onIconClicked(currentPath, iconIndex);
+  const select = (path: TreePath) => {
+    if (props.onSelected) {
+      props.onSelected(path);
+    }
   };
 
-  onIconClicked(path: TreePath, iconIndex: number) {
-    if (this.props.onIconSelected) {
-      this.props.onIconSelected(path, iconIndex);
-    }
-  }
+  const onItemClicked = (p: TreePath) => {
+    select(p);
+  };
 
-  select(path: TreePath) {
-    if (this.props.onSelected) {
-      this.props.onSelected(path);
-    }
-  }
+  const onItemIconClicked = (currentPath: TreePath, iconIndex: number) => {
+    onIconClicked(currentPath, iconIndex);
+  };
 
-  renderTree(elements: TreeElement[], pathSoFar: TreePath = []) {
-    const { selected } = this.props;
+  const renderTree = (elements: TreeElement[], pathSoFar: TreePath = []) => {
+    const { selected } = props;
     return elements.map((e: TreeElement, elementIndex: number) => {
       const currentPath = [...pathSoFar, elementIndex];
       const isSelected =
@@ -79,7 +79,7 @@ export class SortableTree extends Component<ISortableTreeProps> {
               }}
             >
               <TitleSpan
-                onClick={this.onItemClicked.bind(this, currentPath)}
+                onClick={onItemClicked.bind(undefined, currentPath)}
                 data-tooltip={e.title}
               >
                 <Typography variant="body1">
@@ -114,8 +114,8 @@ export class SortableTree extends Component<ISortableTreeProps> {
                       <div
                         tabIndex={iconIndex}
                         role="button"
-                        onClick={this.onItemIconClicked.bind(
-                          this,
+                        onClick={onItemIconClicked.bind(
+                          undefined,
                           currentPath,
                           iconIndex
                         )}
@@ -134,14 +134,12 @@ export class SortableTree extends Component<ISortableTreeProps> {
                 ))}
             </IconsDiv>
           </TreeItemDiv>
-          <div>{e.children && this.renderTree(e.children, currentPath)}</div>
+          <div>{e.children && renderTree(e.children, currentPath)}</div>
         </React.Fragment>
       );
     });
-  }
+  };
 
-  public render() {
-    const { items } = this.props;
-    return <div>{this.renderTree(items, [])}</div>;
-  }
+  const { items } = props;
+  return <div>{renderTree(items, [])}</div>;
 }
