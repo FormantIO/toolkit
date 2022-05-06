@@ -6,24 +6,32 @@ export class LightsaberLayer extends UniverseLayer {
   static commonName = "Lightsaber";
   static description = "A weapon of a more civilized age.";
 
-  geo = new THREE.BoxGeometry(0.04318, 0.04318, 0.91);
-  mat = new THREE.MeshBasicMaterial({ color: 0x20a0ff });
-  cube = new THREE.Mesh(this.geo, this.mat);
+  saberGeo = new THREE.BoxGeometry(0.0418, 0.0418, 0.91);
+  saberMat = new THREE.MeshBasicMaterial({ color: 0x18d2ff });
+  saberCube = new THREE.Mesh(this.saberGeo, this.saberMat);
+
+  baseGeo = new THREE.BoxGeometry(0.04318, 0.04318, 0.2286);
+  baseMat = new THREE.MeshBasicMaterial({ color: 0xbac4e2 });
+  baseCube = new THREE.Mesh(this.baseGeo, this.baseMat);
 
   init() {
-    this.add(this.cube);
+    this.baseCube.add(this.saberCube);
+    this.saberCube.position.set(0, 0, 0.5);
+    this.add(this.baseCube);
   }
 
   onEnterVR(xr: THREE.WebXRManager): void {
-    xr.getControllerGrip(0).add(this.cube);
+    xr.getControllerGrip(0).add(this.baseCube);
   }
 
   onExitVR(xr: THREE.WebXRManager): void {
-    xr.getControllerGrip(0).remove(this.cube);
+    xr.getControllerGrip(0).remove(this.baseCube);
   }
 
   destroy(): void {
-    this.geo.dispose();
-    this.mat.dispose();
+    this.baseGeo.dispose();
+    this.baseMat.dispose();
+    this.saberGeo.dispose();
+    this.saberMat.dispose();
   }
 }
