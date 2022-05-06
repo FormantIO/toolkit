@@ -295,9 +295,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.43"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.43.tgz#032d40e62e16f9c6bc467145098f8e3c4e74075d"
-  integrity sha512-AcrAGXfy6hnVWJZBYWmvv7yrCSmZvWLf6Cq0pTKmFRgHtwvhVgcurFliEJlG9TL+82WB6rx7uLdIIAWTNpg3Lw==
+  version "0.0.45"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.45.tgz#33a5e44f73e4eabe3ba0ded084dedf8a25a2be1f"
+  integrity sha512-6myy2SLq2AFKF+pbkoNR/97jawmvdtKCZm/UsXeynznbO24m0Dzl/R0aYiMzyDpPa3QeClGKoNrS26enJIYPxQ==
   dependencies:
     "@formant/ui-sdk" "0.0.19"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
@@ -326,14 +326,14 @@
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
 "@jridgewell/set-array@^1.0.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@jridgewell/set-array/-/set-array-1.1.0.tgz#1179863356ac8fbea64a5a4bcde93a4871012c01"
-  integrity sha512-SfJxIxNVYLTsKwzB3MoOQ1yxf4w/E6MdkvTgrgAt1bfxjSrLUoHMKrDOykwN14q65waezZIdqDneUIPh4/sKxg==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@jridgewell/set-array/-/set-array-1.1.1.tgz#36a6acc93987adcf0ba50c66908bd0b70de8afea"
+  integrity sha512-Ct5MqZkLGEXTVmQYbGtx9SVqD2fqwvdubdps5D3djjAkgkKwT918VNOz65pEHFaYTeWcukmJmH5SwsA9Tn2ObQ==
 
 "@jridgewell/sourcemap-codec@^1.4.10":
-  version "1.4.12"
-  resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.12.tgz#7ed98f6fa525ffb7c56a2cbecb5f7bb91abd2baf"
-  integrity sha512-az/NhpIwP3K33ILr0T2bso+k2E/SLf8Yidd8mHl0n6sCQ4YdyC8qDhZA6kOPDNDBA56ZnIjngVl0U3jREA0BUA==
+  version "1.4.13"
+  resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.13.tgz#b6461fb0c2964356c469e115f504c95ad97ab88c"
+  integrity sha512-GryiOJmNcWbovBxTfZSF71V/mXbgcV3MewDe3kIMCLyIh5e7SKAeUZs+rMnJ8jkMolZ/4/VsdBmMrw3l+VdZ3w==
 
 "@mui/base@5.0.0-alpha.79":
   version "5.0.0-alpha.79"

@@ -7,7 +7,7 @@ import { SimulatedUniverseData } from "../../../packages/universe/demo/Simulated
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const mode = urlParams.get("mode");
-const vr = urlParams.get("mode");
+const vr = urlParams.get("vr");
 
 import { CubeLayer } from "./CubeLayer";
 
