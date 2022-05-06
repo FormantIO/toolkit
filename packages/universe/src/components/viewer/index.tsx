@@ -174,7 +174,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
               if (source.gamepad) {
                 const buttons = source.gamepad.buttons.map((b) => b.value);
-                const axes = source.gamepad.axes.slice(0);
+                const axes = Array.from(source.gamepad.axes.slice(0));
                 const oldState = this.gamePads.get(source);
                 const newState = {
                   handedness,

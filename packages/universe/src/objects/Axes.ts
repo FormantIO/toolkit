@@ -14,7 +14,6 @@ function axisLine(vector: Vector3, color: Color, opacity: number = 0.4) {
     opacity,
     depthTest: true,
     depthWrite: true,
-    fog: true,
   });
   material.transparent = true;
   const geometry = new BufferGeometry();
