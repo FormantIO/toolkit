@@ -266,6 +266,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyEnterVR() {
     const { xr } = defined(this.renderer);
+    this.scene.add(xr.getController(0));
+    this.scene.add(xr.getControllerGrip(0));
+    this.scene.add(xr.getController(1));
+    this.scene.add(xr.getControllerGrip(1));
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onEnterVR(xr);
     });
@@ -273,6 +277,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyExitVR() {
     const { xr } = defined(this.renderer);
+    this.scene.remove(xr.getController(0));
+    this.scene.remove(xr.getControllerGrip(0));
+    this.scene.remove(xr.getController(1));
+    this.scene.remove(xr.getControllerGrip(1));
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onExitVR(xr);
     });
