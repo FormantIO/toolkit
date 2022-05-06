@@ -33,7 +33,7 @@ function App() {
           deviceContext: undefined,
           children: [],
           visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
+          position: { type: "manual", x: 0, y: 0, z: 1 },
           fieldValues: {},
           data: {},
         },

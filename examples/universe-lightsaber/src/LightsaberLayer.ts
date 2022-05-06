@@ -16,16 +16,16 @@ export class LightsaberLayer extends UniverseLayer {
 
   init() {
     this.baseCube.add(this.saberCube);
-    this.saberCube.position.set(0, 0, 0.5);
+    this.saberCube.position.set(0, 0, -0.5);
     this.add(this.baseCube);
   }
 
   onEnterVR(xr: THREE.WebXRManager): void {
-    xr.getControllerGrip(0).add(this.baseCube);
+    xr.getControllerGrip(1).add(this.baseCube);
   }
 
   onExitVR(xr: THREE.WebXRManager): void {
-    xr.getControllerGrip(0).remove(this.baseCube);
+    xr.getControllerGrip(1).remove(this.baseCube);
   }
 
   destroy(): void {
