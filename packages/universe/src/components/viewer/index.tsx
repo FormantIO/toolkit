@@ -72,6 +72,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private pointerDirty = false;
 
+  private isInVR = false;
+
   constructor(props: IUniverseViewerProps) {
     super(props);
     this.scene = new THREE.Scene();
@@ -144,13 +146,22 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       });
       this.scene.add(this.editControls);
       this.renderer.setAnimationLoop(() => {
+        const renderer = defined(this.renderer);
+        if (renderer.xr.isPresenting !== this.isInVR) {
+          this.isInVR = renderer.xr.isPresenting;
+          if (this.isInVR) {
+            this.notifyEnterVR();
+          } else {
+            this.notifyExitVR();
+          }
+        }
         this.raycaster.setFromCamera(this.pointer, this.camera);
         if (this.pointerDirty) {
           this.notifyRaycasterChanged();
           this.pointerDirty = false;
         }
-        if (this.renderer && this.orbitControls) {
-          this.renderer.render(this.scene, this.camera);
+        if (this.orbitControls) {
+          renderer.render(this.scene, this.camera);
           this.orbitControls.update();
         }
       });
@@ -253,6 +264,20 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
+  private notifyEnterVR() {
+    const { xr } = defined(this.renderer);
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onEnterVR(xr);
+    });
+  }
+
+  private notifyExitVR() {
+    const { xr } = defined(this.renderer);
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onExitVR(xr);
+    });
+  }
+
   public removeSceneGraphItem(sceneGraph: SceneGraph, path: TreePath) {
     if (this.attachedPath && treePathEquals(path, this.attachedPath)) {
       this.toggleEditing(sceneGraph, path, false);
@@ -260,6 +285,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const layer = defined(this.pathToLayer.get(el));
 
+    defined(layer.contentNode).destroy();
     definedAndNotNull(layer.parent).remove(layer);
     this.pathToLayer.delete(el);
   }
@@ -320,6 +346,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el));
     o.visible = visible;
+    defined(o.contentNode).onVisibilityChanged(visible);
     o.traverse((child) => {
       child.visible = visible;
     });

@@ -6,13 +6,13 @@ export class AxisLabels extends Group {
 
   constructor() {
     super();
-    const x = new Label("x", false, 10);
+    const x = new Label("x", false);
     x.position.set(this.labelRadius, 0, 0);
     this.add(x);
-    const y = new Label("y", false, 10);
+    const y = new Label("y", false);
     y.position.set(0, this.labelRadius, 0);
     this.add(y);
-    const z = new Label("z", false, 10);
+    const z = new Label("z", false);
     z.position.set(0, 0, this.labelRadius);
     this.add(z);
   }

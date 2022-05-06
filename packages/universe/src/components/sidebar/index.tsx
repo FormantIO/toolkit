@@ -32,6 +32,7 @@ const ButtonsDiv = styled.div`
 
 const TreeArea = styled.div`
   overflow-y: scroll;
+  padding-right: 1rem;
 `;
 
 export interface IUniverseSidebarProps {

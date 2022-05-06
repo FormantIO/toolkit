@@ -11,6 +11,7 @@ function App() {
       initialSceneGraph={createScene()}
       universeData={new SimulatedUniverseData()}
       mode="edit"
+      vr={true}
       onSceneGraphChange={(_) => {
         console.log(JSON.stringify(_));
       }}

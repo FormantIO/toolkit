@@ -32,12 +32,22 @@ export class Label extends Group {
 
   material: SpriteMaterial | undefined;
 
-  constructor(text: string, sizeAttenuate: boolean = true, scale: number = 1) {
-    super();
+  currentText: string;
 
+  constructor(text: string, private sizeAttenuate: boolean = true) {
+    super();
+    this.currentText = text;
+    this.update();
+  }
+
+  private update() {
+    if (this.sprite) {
+      this.dispose();
+      this.sprite = undefined;
+    }
     const fontface = "Arial";
     const fontsize = 30;
-    const message = text;
+    const message = this.currentText;
     const font = `${fontsize}px ${fontface}`;
 
     const canvas = document.createElement("canvas");
@@ -76,30 +86,43 @@ export class Label extends Group {
     const spriteMaterial = new SpriteMaterial({
       map: texture,
       depthTest: false,
-      sizeAttenuation: sizeAttenuate,
+      sizeAttenuation: this.sizeAttenuate,
     });
     this.material = spriteMaterial;
 
     const sprite = new Sprite(spriteMaterial);
     // make things less blurrier
-    const pixelScale = 4 * scale;
+    const pixelScale = (this.sizeAttenuate ? 0.002 : 0.001) * canvas.width;
     // scale sprite so it isn't stretched
     sprite.scale.set(
-      1 / pixelScale,
-      (textHeight + padding) / (textWidth + padding) / pixelScale,
-      1.0 / pixelScale
+      pixelScale,
+      ((textHeight + padding) / (textWidth + padding)) * pixelScale,
+      pixelScale
     );
     this.add(sprite);
     this.sprite = sprite;
     this.renderOrder = 100;
   }
 
+  get text(): string {
+    return this.currentText;
+  }
+
+  set text(v: string) {
+    if (this.currentText !== v) {
+      this.currentText = v;
+      this.update();
+    }
+  }
+
   dispose() {
     if (this.texture) {
       this.texture.dispose();
+      this.texture = undefined;
     }
     if (this.material) {
       this.material.dispose();
+      this.material = undefined;
     }
   }
 }

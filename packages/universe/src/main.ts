@@ -19,6 +19,7 @@ export * from "./layers/UniverseLayer";
 export * from "./layers/TransformLayer";
 export * from "./components/sidebar";
 export * from "./model/SceneGraph";
+export * from "./objects/Label";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

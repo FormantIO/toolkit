@@ -1,4 +1,4 @@
-import { Object3D, PerspectiveCamera, Raycaster } from "three";
+import { Object3D, PerspectiveCamera, Raycaster, WebXRManager } from "three";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -77,6 +77,14 @@ export abstract class UniverseLayer extends Object3D {
   onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
 
   onFieldChanged(_field: string, _value: string): void {}
+
+  onEnterVR(_xr: WebXRManager): void {}
+
+  onExitVR(_xr: WebXRManager): void {}
+
+  onVisibilityChanged(_visibility: boolean): void {}
+
+  destroy(): void {}
 
   showSnackbar(message: string): void {
     setRecoil(snackbarAtom, { message, open: true });
