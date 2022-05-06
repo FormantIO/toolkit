@@ -28,6 +28,17 @@ export class LightsaberLayer extends UniverseLayer {
     xr.getControllerGrip(1).remove(this.baseCube);
   }
 
+  onGamePadButtonChanged(
+    _source: THREE.XRInputSource,
+    _button: number,
+    value: number
+  ): void {
+    if (value === 1) {
+      const randomColor = Math.random() * 0xffffff;
+      this.saberMat.color.set(randomColor);
+    }
+  }
+
   destroy(): void {
     this.baseGeo.dispose();
     this.baseMat.dispose();
