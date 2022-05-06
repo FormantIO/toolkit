@@ -1,4 +1,10 @@
-import { Object3D, PerspectiveCamera, Raycaster, WebXRManager } from "three";
+import {
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  WebXRManager,
+  XRInputSource,
+} from "three";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -83,6 +89,18 @@ export abstract class UniverseLayer extends Object3D {
   onExitVR(_xr: WebXRManager): void {}
 
   onVisibilityChanged(_visibility: boolean): void {}
+
+  onGamePadButtonChanged(
+    _source: XRInputSource,
+    _button: number,
+    _value: number
+  ): void {}
+
+  onGamePadAxisChanged(
+    _source: XRInputSource,
+    _axis: number,
+    _value: number
+  ): void {}
 
   destroy(): void {}
 

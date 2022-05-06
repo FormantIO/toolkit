@@ -8,6 +8,7 @@ import {
   WebGLRenderer,
   HemisphereLight,
   Raycaster,
+  XRInputSource,
 } from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../../three-utils/OrbitControls";
@@ -47,6 +48,12 @@ export interface IUniverseViewerProps {
   vr?: boolean;
 }
 
+interface GamePadState {
+  handedness: THREE.XRHandedness;
+  buttons: number[];
+  axes: number[];
+}
+
 export class UniverseViewer extends Component<IUniverseViewerProps> {
   private element: HTMLElement | null = null;
 
@@ -73,6 +80,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   private pointerDirty = false;
 
   private isInVR = false;
+
+  gamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
 
   constructor(props: IUniverseViewerProps) {
     super(props);
@@ -155,6 +164,51 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
             this.notifyExitVR();
           }
         }
+        if (this.isInVR) {
+          const session = renderer.xr.getSession();
+          if (session) {
+            session.inputSources.forEach((source) => {
+              let handedness: THREE.XRHandedness = "none";
+              if (source && source.handedness) {
+                handedness = source.handedness;
+              }
+              if (source.gamepad) {
+                const buttons = source.gamepad.buttons.map((b) => b.value);
+                const axes = source.gamepad.axes.slice(0);
+                const oldState = this.gamePads.get(source);
+                const newState = {
+                  handedness,
+                  buttons,
+                  axes,
+                };
+
+                if (oldState) {
+                  for (let p = 0; p < newState.buttons.length; p += 1) {
+                    if (newState.buttons[p] !== oldState.buttons[p]) {
+                      this.notifyGamePadButtonChanged(
+                        source,
+                        p,
+                        newState.buttons[p]
+                      );
+                    }
+                  }
+
+                  for (let p = 0; p < newState.axes.length; p += 1) {
+                    if (newState.axes[p] !== oldState.axes[p]) {
+                      this.notifyGamePadAxisChanged(
+                        source,
+                        p,
+                        newState.axes[p]
+                      );
+                    }
+                  }
+                }
+                this.gamePads.set(source, newState);
+              }
+            });
+          }
+        }
+
         this.raycaster.setFromCamera(this.pointer, this.camera);
         if (this.pointerDirty) {
           this.notifyRaycasterChanged();
@@ -261,6 +315,26 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onPointerMove(this.raycaster);
+    });
+  }
+
+  private notifyGamePadButtonChanged(
+    source: XRInputSource,
+    button: number,
+    value: number
+  ) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onGamePadButtonChanged(source, button, value);
+    });
+  }
+
+  private notifyGamePadAxisChanged(
+    source: XRInputSource,
+    axis: number,
+    value: number
+  ) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onGamePadAxisChanged(source, axis, value);
     });
   }
 
