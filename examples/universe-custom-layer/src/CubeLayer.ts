@@ -1,24 +1,76 @@
-import { UniverseLayer, FormantHandModel, Label } from "@formant/universe";
-import * as THREE from "three";
+import { UniverseLayer, Label, Hand } from "@formant/universe";
+import {
+  BoxGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Raycaster,
+  WebXRManager,
+} from "three";
 
 export class CubeLayer extends UniverseLayer {
   static layerTypeId = "cube";
   static commonName = "Cube";
   static description = "This is just a simple cube.";
 
-  geo = new THREE.BoxGeometry(1, 1, 1);
-  mat = new THREE.MeshBasicMaterial({ color: 0x20a0ff });
-  cube = new THREE.Mesh(this.geo, this.mat);
+  geo = new BoxGeometry(1, 1, 1);
+  mat = new MeshBasicMaterial({ color: 0x20a0ff });
+  cube = new Mesh(this.geo, this.mat);
 
-  label = new Label("hey");
+  label = new Label("");
 
   init() {
     this.add(this.cube);
+  }
+
+  onPointerMove(raycaster: Raycaster): void {
+    let intersects = raycaster.intersectObject(this.cube).length > 0;
+    this.mat.color.set(intersects ? 0x20a0ff : 0xffffff);
+  }
+
+  onPointerDown(raycaster: Raycaster): void {
+    if (raycaster.intersectObject(this.cube).length > 0) {
+      this.mat.color.set(0xff0000);
+    }
+  }
+
+  onPointerUp(_raycaster: Raycaster, _button: number): void {
+    this.showSnackbar("Clicked!");
+  }
+
+  onEnterVR(_xr: WebXRManager): void {
+    this.mat.color.set(0x00ff00);
+  }
+
+  onExitVR(_xr: WebXRManager): void {
+    this.mat.color.set(0xffffff);
+  }
+
+  onHandsMoved(hands: Hand[]): void {
+    let intersects = false;
+    let text = "";
+    hands.forEach((hand: Hand, i) => {
+      if (hand && hand.intersectBoxObject(this.cube)) {
+        const p = hands[i].controller.joints["index-finger-tip"].position;
+        text = p.x.toFixed(4) + "," + p.y.toFixed(4) + "," + p.z.toFixed(4);
+        intersects = true;
+      }
+    });
+
+    if (intersects) {
+      this.label.text = text;
+      this.mat.color.setHex(0xff0000);
+    } else {
+      this.label.text = "hands entered, touch the cube";
+      this.mat.color.setHex(0x20a0ff);
+    }
+  }
+
+  onHandsEnter(_hands: Hand[]): void {
     this.add(this.label);
   }
 
-  onHandsMoved(hands: FormantHandModel[]): void {
-    this.label.text = JSON.stringify((hands[0].controller as any).joints);
+  onHandsLeave(_hands: Hand[]): void {
+    this.add(this.label);
   }
 
   destroy(): void {
