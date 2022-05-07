@@ -28,7 +28,6 @@ import {
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
-import { XRHandModelFactory } from "../../../three-utils/webxr/XRHandModelFactory";
 import { FormantHandModel } from "../../objects/FormantHandModel";
 
 const MeasureContainer = styled.div`
@@ -145,17 +144,13 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(width, height);
 
-      const handModelFactory = new XRHandModelFactory();
-
       const hand1 = this.renderer.xr.getHand(0);
       const hand1Model = new FormantHandModel(hand1);
-      hand1.add(handModelFactory.createHandModel(hand1));
-      this.scene.add(hand1);
+      this.scene.add(hand1Model);
 
       const hand2 = this.renderer.xr.getHand(1);
       const hand2Model = new FormantHandModel(hand2);
-      hand2.add(handModelFactory.createHandModel(hand2));
-      this.scene.add(hand2);
+      this.scene.add(hand2Model);
 
       hand1.addEventListener("connected", () => {
         if (!this.usingHands) {
