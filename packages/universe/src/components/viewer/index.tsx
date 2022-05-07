@@ -83,7 +83,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private isInVR = false;
 
-  // private usingHands = false;
+  private usingHands = false;
 
   private clock = new THREE.Clock();
 
@@ -175,41 +175,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         handModel2 as unknown as Hand,
       ];
 
-      /* const handModelFactory = new XRHandModelFactory();
-
-      const hand1 = this.renderer.xr.getHand(0) as Hand;
-      hand1.add(handModelFactory.createHandModel(hand1));
-      this.scene.add(hand1);
-
-      const hand2 = this.renderer.xr.getHand(1) as Hand;
-      hand2.add(handModelFactory.createHandModel(hand2));
-      this.scene.add(hand2);
-
-      hand1.addEventListener("connected", () => {
-        if (!this.usingHands) {
-          this.notifyHandsConnected([hand1, hand2]);
-          this.usingHands = true;
-        }
-      });
-      hand1.addEventListener("disconnected", () => {
-        if (this.usingHands) {
-          this.notifyHandsDisconnected([hand1, hand2]);
-          this.usingHands = false;
-        }
-      });
-      hand2.addEventListener("connected", () => {
-        if (!this.usingHands) {
-          this.notifyHandsConnected([hand1, hand2]);
-          this.usingHands = true;
-        }
-      });
-      hand2.addEventListener("disconnected", () => {
-        if (this.usingHands) {
-          this.notifyHandsDisconnected([hand1, hand2]);
-          this.usingHands = false;
-        }
-      }); */
-
       this.orbitControls = new OrbitControls(
         this.camera,
         this.renderer.domElement
@@ -284,7 +249,23 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
             });
             this.notifyControllers(controllers);
-            this.notifyHands(hands);
+            if (
+              hands[0].visible &&
+              hands[1].visible &&
+              this.usingHands === false
+            ) {
+              this.notifyHandsEnter(hands);
+              this.usingHands = true;
+            }
+            if (
+              hands[0].visible === false &&
+              hands[1].visible === false &&
+              this.usingHands === true
+            ) {
+              this.notifyHandsLeave(hands);
+              this.usingHands = false;
+            }
+            this.notifyHandsMoved(hands);
           }
         }
 
@@ -393,17 +374,17 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.renderer?.setSize(width, height);
   };
 
-  /* private notifyHandsConnected(hands: Hand[]) {
+  private notifyHandsEnter(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsEnter(hands);
     });
   }
 
-  private notifyHandsDisconnected(hands: Hand[]) {
+  private notifyHandsLeave(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsLeave(hands);
     });
-  } */
+  }
 
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {
@@ -449,7 +430,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
-  private notifyHands(hands: Hand[]) {
+  private notifyHandsMoved(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsMoved(hands);
     });

@@ -106,6 +106,10 @@ export abstract class UniverseLayer extends Object3D {
     _source: XRInputSource
   ): void {}
 
+  onHandsEnter(_hands: Hand[]): void {}
+
+  onHandsLeave(_hands: Hand[]): void {}
+
   onHandsMoved(_hands: Hand[]): void {}
 
   onUpdate(_delta: number): void {}
