@@ -11,9 +11,9 @@ import {
   XRInputSource,
 } from "three";
 import styled from "styled-components";
-import { OrbitControls } from "../../../three-utils/OrbitControls";
-import { TransformControls } from "../../../three-utils/TransformControls";
-import { VRButton } from "../../../three-utils/VRButton";
+import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
+import { TransformControls } from "../../../three-utils/controls/TransformControls";
+import { VRButton } from "../../../three-utils/webxr/VRButton";
 import { defined, definedAndNotNull } from "../../../../common/defined";
 import { LayerRegistry } from "../../layers/LayerRegistry";
 import { TransformLayer } from "../../layers/TransformLayer";

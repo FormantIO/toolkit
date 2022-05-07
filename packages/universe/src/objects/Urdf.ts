@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import URDFLoader, { URDFRobot } from "urdf-loader";
 import { Group, LoadingManager, Mesh, Scene } from "three";
-import { ColladaLoader } from "../../three-utils/ColladaLoader";
+import { ColladaLoader } from "../../three-utils/loaders/ColladaLoader";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ITransform } from "../../../model/ITransform";
 import { transformMatrix } from "../math/transformMatrix";

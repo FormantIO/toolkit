@@ -1,7 +1,7 @@
 import { Group, Matrix4, PerspectiveCamera, Vector2, Vector3 } from "three";
-import { Line2 } from "../../three-utils/Line2";
-import { LineGeometry } from "../../three-utils/LineGeometry";
-import { LineMaterial } from "../../three-utils/LineMaterial";
+import { Line2 } from "../../three-utils/lines/Line2";
+import { LineGeometry } from "../../three-utils/lines/LineGeometry";
+import { LineMaterial } from "../../three-utils/lines/LineMaterial";
 import { transformMatrix } from "../math/transformMatrix";
 import { ITransformTreeNode } from "./transformTreeLoader";
 import { vector } from "../math/vector";

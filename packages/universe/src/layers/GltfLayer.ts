@@ -1,4 +1,4 @@
-import { GLTFLoader } from "../../three-utils/GLTFLoader";
+import { GLTFLoader } from "../../three-utils/loaders/GLTFLoader";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class GltfLayer extends UniverseLayer {

@@ -9,7 +9,7 @@ import {
   TextureLoader,
 } from "three";
 import { UniverseLayer } from "./UniverseLayer";
-import { SVGLoader } from "../../three-utils/SVGLoader";
+import { SVGLoader } from "../../three-utils/loaders/SVGLoader";
 
 export class ImageLayer extends UniverseLayer {
   static layerTypeId: string = "image";

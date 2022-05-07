@@ -1,7 +1,7 @@
 import { Group, Vector2 } from "three";
-import { Line2 } from "../../three-utils/Line2";
-import { LineGeometry } from "../../three-utils/LineGeometry";
-import { LineMaterial } from "../../three-utils/LineMaterial";
+import { Line2 } from "../../three-utils/lines/Line2";
+import { LineGeometry } from "../../three-utils/lines/LineGeometry";
+import { LineMaterial } from "../../three-utils/lines/LineMaterial";
 import { IVector3 } from "../../../data-sdk/src/model/IVector3";
 import { Color } from "../../../common/Color";
 
