@@ -3,7 +3,7 @@ prepublish:
 	yarn build
 	yarn types
 	mkdir -p dist/types/universe/three-utils/webxr
-	cp three-utils/webxr/XRHandMeshModel.d.ts dist/types/universe/three-utils/webxr/
+	cp three-utils/webxr/*.d.ts dist/types/universe/three-utils/webxr/
 
 threeutils:
 	cp node_modules/three/examples/jsm/webxr/VRButton.js three-utils/webxr/

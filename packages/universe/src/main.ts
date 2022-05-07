@@ -20,7 +20,7 @@ export * from "./layers/TransformLayer";
 export * from "./components/sidebar";
 export * from "./model/SceneGraph";
 export * from "./objects/Label";
-export { FormantHandModel } from "./objects/FormantHandModel";
+export * from "./components/viewer/index";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

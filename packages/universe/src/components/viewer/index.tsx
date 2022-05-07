@@ -9,6 +9,7 @@ import {
   HemisphereLight,
   Raycaster,
   XRInputSource,
+  Group,
 } from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
@@ -28,7 +29,7 @@ import {
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
-import { FormantHandModel } from "../../objects/FormantHandModel";
+import { XRHandModelFactory } from "../../../three-utils/webxr/XRHandModelFactory";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -48,6 +49,9 @@ export interface IUniverseViewerProps {
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
   vr?: boolean;
 }
+export type JointNames = string;
+export type Joint = Group & { jointRadius: number };
+export type Hand = Group & { joints: { [key in JointNames]: Joint } };
 
 interface GamePadState {
   handedness: THREE.XRHandedness;
@@ -144,35 +148,37 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(width, height);
 
-      const hand1 = this.renderer.xr.getHand(0);
-      const hand1Model = new FormantHandModel(hand1);
-      this.scene.add(hand1Model);
+      const handModelFactory = new XRHandModelFactory();
 
-      const hand2 = this.renderer.xr.getHand(1);
-      const hand2Model = new FormantHandModel(hand2);
-      this.scene.add(hand2Model);
+      const hand1 = this.renderer.xr.getHand(0) as Hand;
+      hand1.add(handModelFactory.createHandModel(hand1));
+      this.scene.add(hand1);
+
+      const hand2 = this.renderer.xr.getHand(1) as Hand;
+      hand2.add(handModelFactory.createHandModel(hand2));
+      this.scene.add(hand2);
 
       hand1.addEventListener("connected", () => {
         if (!this.usingHands) {
-          this.notifyHandsConnected([hand1Model, hand2Model]);
+          this.notifyHandsConnected([hand1, hand2]);
           this.usingHands = true;
         }
       });
       hand1.addEventListener("disconnected", () => {
         if (this.usingHands) {
-          this.notifyHandsDisconnected([hand1Model, hand2Model]);
+          this.notifyHandsDisconnected([hand1, hand2]);
           this.usingHands = false;
         }
       });
       hand2.addEventListener("connected", () => {
         if (!this.usingHands) {
-          this.notifyHandsConnected([hand1Model, hand2Model]);
+          this.notifyHandsConnected([hand1, hand2]);
           this.usingHands = true;
         }
       });
       hand2.addEventListener("disconnected", () => {
         if (this.usingHands) {
-          this.notifyHandsDisconnected([hand1Model, hand2Model]);
+          this.notifyHandsDisconnected([hand1, hand2]);
           this.usingHands = false;
         }
       });
@@ -251,7 +257,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
             });
             this.notifyControllers(controllers);
-            this.notifyHands([hand1Model, hand2Model]);
+            this.notifyHands([hand1, hand2]);
           }
         }
 
@@ -360,13 +366,13 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.renderer?.setSize(width, height);
   };
 
-  private notifyHandsConnected(hands: FormantHandModel[]) {
+  private notifyHandsConnected(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsEnter(hands);
     });
   }
 
-  private notifyHandsDisconnected(hands: FormantHandModel[]) {
+  private notifyHandsDisconnected(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsLeave(hands);
     });
@@ -416,7 +422,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
-  private notifyHands(hands: FormantHandModel[]) {
+  private notifyHands(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsMoved(hands);
     });

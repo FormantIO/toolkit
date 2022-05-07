@@ -13,7 +13,8 @@ import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
-import { FormantHandModel, SceneGraph, visitSceneGraphElement } from "../main";
+import { SceneGraph, visitSceneGraphElement } from "../main";
+import { Hand } from "../components/viewer";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -105,11 +106,11 @@ export abstract class UniverseLayer extends Object3D {
     _source: XRInputSource
   ): void {}
 
-  onHandsMoved(_hands: FormantHandModel[]): void {}
+  onHandsMoved(_hands: Hand[]): void {}
 
-  onHandsEnter(_hands: FormantHandModel[]): void {}
+  onHandsEnter(_hands: Hand[]): void {}
 
-  onHandsLeave(_hands: FormantHandModel[]): void {}
+  onHandsLeave(_hands: Hand[]): void {}
 
   onUpdate(_delta: number): void {}
 
