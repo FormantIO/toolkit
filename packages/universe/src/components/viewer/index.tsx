@@ -28,6 +28,7 @@ import {
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
+import { XRHandModelFactory } from "../../../three-utils/webxr/XRHandModelFactory";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -138,6 +139,16 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       const { offsetWidth: width, offsetHeight: height } = element;
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(width, height);
+
+      const handModelFactory = new XRHandModelFactory();
+
+      const hand1 = this.renderer.xr.getHand(0);
+      hand1.add(handModelFactory.createHandModel(hand1));
+      this.scene.add(hand1);
+
+      const hand2 = this.renderer.xr.getHand(1);
+      hand2.add(handModelFactory.createHandModel(hand2));
+      this.scene.add(hand2);
 
       this.orbitControls = new OrbitControls(
         this.camera,
