@@ -43,6 +43,7 @@ export class Label extends Group {
   private update() {
     if (this.sprite) {
       this.dispose();
+      this.remove(this.sprite);
       this.sprite = undefined;
     }
     const fontface = "Arial";

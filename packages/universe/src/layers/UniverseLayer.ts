@@ -14,7 +14,7 @@ import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import { SceneGraph, visitSceneGraphElement } from "../main";
-import { Hand } from "../components/viewer";
+import { Hand } from "../components/viewer/Hand";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -107,10 +107,6 @@ export abstract class UniverseLayer extends Object3D {
   ): void {}
 
   onHandsMoved(_hands: Hand[]): void {}
-
-  onHandsEnter(_hands: Hand[]): void {}
-
-  onHandsLeave(_hands: Hand[]): void {}
 
   onUpdate(_delta: number): void {}
 

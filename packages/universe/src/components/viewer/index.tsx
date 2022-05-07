@@ -9,7 +9,6 @@ import {
   HemisphereLight,
   Raycaster,
   XRInputSource,
-  Group,
 } from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
@@ -29,7 +28,9 @@ import {
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
-import { XRHandModelFactory } from "../../../three-utils/webxr/XRHandModelFactory";
+import { XRControllerModelFactory } from "../../../three-utils/webxr/XRControllerModelFactory";
+import { OculusHandModel } from "../../../three-utils/webxr/OculusHandModel";
+import { Hand } from "./Hand";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -49,10 +50,6 @@ export interface IUniverseViewerProps {
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
   vr?: boolean;
 }
-export type JointNames = string;
-export type Joint = Group & { jointRadius: number };
-export type Hand = Group & { joints: { [key in JointNames]: Joint } };
-
 interface GamePadState {
   handedness: THREE.XRHandedness;
   buttons: number[];
@@ -86,7 +83,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private isInVR = false;
 
-  private usingHands = false;
+  // private usingHands = false;
 
   private clock = new THREE.Clock();
 
@@ -148,7 +145,37 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(width, height);
 
-      const handModelFactory = new XRHandModelFactory();
+      const controllerModelFactory = new XRControllerModelFactory();
+
+      const controllerGrip1 = this.renderer.xr.getControllerGrip(0);
+      controllerGrip1.add(
+        controllerModelFactory.createControllerModel(controllerGrip1)
+      );
+      this.scene.add(controllerGrip1);
+
+      const hand1 = this.renderer.xr.getHand(0);
+      const handModel1 = new OculusHandModel(hand1);
+      hand1.add(handModel1);
+      this.scene.add(hand1);
+
+      // Hand 2
+      const controllerGrip2 = this.renderer.xr.getControllerGrip(1);
+      controllerGrip2.add(
+        controllerModelFactory.createControllerModel(controllerGrip2)
+      );
+      this.scene.add(controllerGrip2);
+
+      const hand2 = this.renderer.xr.getHand(1);
+      const handModel2 = new OculusHandModel(hand2);
+      hand2.add(handModel2);
+      this.scene.add(hand2);
+
+      const hands = [
+        handModel1 as unknown as Hand,
+        handModel2 as unknown as Hand,
+      ];
+
+      /* const handModelFactory = new XRHandModelFactory();
 
       const hand1 = this.renderer.xr.getHand(0) as Hand;
       hand1.add(handModelFactory.createHandModel(hand1));
@@ -181,7 +208,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
           this.notifyHandsDisconnected([hand1, hand2]);
           this.usingHands = false;
         }
-      });
+      }); */
 
       this.orbitControls = new OrbitControls(
         this.camera,
@@ -257,7 +284,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
             });
             this.notifyControllers(controllers);
-            this.notifyHands([hand1, hand2]);
+            this.notifyHands(hands);
           }
         }
 
@@ -366,7 +393,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.renderer?.setSize(width, height);
   };
 
-  private notifyHandsConnected(hands: Hand[]) {
+  /* private notifyHandsConnected(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsEnter(hands);
     });
@@ -376,7 +403,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsLeave(hands);
     });
-  }
+  } */
 
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {

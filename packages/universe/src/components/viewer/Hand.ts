@@ -1,0 +1,49 @@
+import { Object3D, Vector3 } from "three";
+
+export type Joints =
+  | "wrist"
+  | "thumb-metacarpal"
+  | "thumb-phalanx-proximal"
+  | "thumb-phalanx-distal"
+  | "thumb-tip"
+  | "index-finger-metacarpal"
+  | "index-finger-phalanx-proximal"
+  | "index-finger-phalanx-intermediate"
+  | "index-finger-phalanx-distal"
+  | "index-finger-tip"
+  | "middle-finger-metacarpal"
+  | "middle-finger-phalanx-proximal"
+  | "middle-finger-phalanx-intermediate"
+  | "middle-finger-phalanx-distal"
+  | "middle-finger-tip"
+  | "ring-finger-metacarpal"
+  | "ring-finger-phalanx-proximal"
+  | "ring-finger-phalanx-intermediate"
+  | "ring-finger-phalanx-distal"
+  | "ring-finger-tip"
+  | "pinky-finger-metacarpal"
+  | "pinky-finger-phalanx-proximal"
+  | "pinky-finger-phalanx-intermediate"
+  | "pinky-finger-phalanx-distal"
+  | "pinky-finger-tip";
+
+export interface IJoint {
+  visible: boolean;
+}
+
+export interface IHandController {
+  joints: { [key in Joints]: IJoint };
+}
+
+// typings for XRHandMeshModel
+export type HandController = Object3D & IHandController;
+
+export interface IHand {
+  controller: HandController;
+  getPointerPosition(): Vector3 | null;
+  intersectBoxObject(boxObject: Object3D): boolean;
+  getPointerPosition(): Vector3 | null;
+}
+
+// typings for OculusHandModel
+export type Hand = Object3D & IHand;

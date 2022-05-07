@@ -20,7 +20,7 @@ export * from "./layers/TransformLayer";
 export * from "./components/sidebar";
 export * from "./model/SceneGraph";
 export * from "./objects/Label";
-export * from "./components/viewer/index";
+export * from "./components/viewer/Hand";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
