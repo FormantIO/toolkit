@@ -1,4 +1,4 @@
-import { Object3D, Vector3 } from "three";
+import { Group, Object3D, Vector3 } from "three";
 
 export type Joints =
   | "wrist"
@@ -29,10 +29,12 @@ export type Joints =
 
 export interface IJoint {
   visible: boolean;
+  jointRadius: number;
 }
 
 export interface IHandController {
-  joints: { [key in Joints]: IJoint };
+  visible: boolean;
+  joints: { [key in Joints]: Group & IJoint };
 }
 
 // typings for XRHandMeshModel
