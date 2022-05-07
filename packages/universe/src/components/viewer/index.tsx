@@ -149,7 +149,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       const hand2 = this.renderer.xr.getHand(1);
       hand2.add(handModelFactory.createHandModel(hand2));
       this.scene.add(hand2);
-      this.renderer.xr.setFoveation(0);
 
       this.orbitControls = new OrbitControls(
         this.camera,
@@ -171,6 +170,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         if (renderer.xr.isPresenting !== this.isInVR) {
           this.isInVR = renderer.xr.isPresenting;
           if (this.isInVR) {
+            defined(this.renderer).xr.setFoveation(0);
             this.notifyEnterVR();
           } else {
             this.notifyExitVR();
