@@ -7,7 +7,7 @@ export class LightsaberLayer extends UniverseLayer {
   static description = "A weapon of a more civilized age.";
 
   saberGeo = new THREE.BoxGeometry(0.0418, 0.0418, 0.91);
-  saberMat = new THREE.MeshBasicMaterial({ color: 0x18d2ff });
+  saberMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   saberCube = new THREE.Mesh(this.saberGeo, this.saberMat);
 
   baseGeo = new THREE.BoxGeometry(0.04318, 0.04318, 0.2286);
