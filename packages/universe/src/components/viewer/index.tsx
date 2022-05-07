@@ -29,6 +29,7 @@ import { TreePath, treePathEquals } from "../../model/ITreeElement";
 import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
 import { XRHandModelFactory } from "../../../three-utils/webxr/XRHandModelFactory";
+import { FormantHandModel } from "../../objects/FormantHandModel";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -81,6 +82,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   private pointerDirty = false;
 
   private isInVR = false;
+
+  private usingHands = false;
+
+  private clock = new THREE.Clock();
 
   gamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
 
@@ -143,12 +148,39 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       const handModelFactory = new XRHandModelFactory();
 
       const hand1 = this.renderer.xr.getHand(0);
+      const hand1Model = new FormantHandModel(hand1);
       hand1.add(handModelFactory.createHandModel(hand1));
       this.scene.add(hand1);
 
       const hand2 = this.renderer.xr.getHand(1);
+      const hand2Model = new FormantHandModel(hand2);
       hand2.add(handModelFactory.createHandModel(hand2));
       this.scene.add(hand2);
+
+      hand1.addEventListener("connected", () => {
+        if (!this.usingHands) {
+          this.notifyHandsConnected([hand1Model, hand2Model]);
+          this.usingHands = true;
+        }
+      });
+      hand1.addEventListener("disconnected", () => {
+        if (this.usingHands) {
+          this.notifyHandsDisconnected([hand1Model, hand2Model]);
+          this.usingHands = false;
+        }
+      });
+      hand2.addEventListener("connected", () => {
+        if (!this.usingHands) {
+          this.notifyHandsConnected([hand1Model, hand2Model]);
+          this.usingHands = true;
+        }
+      });
+      hand2.addEventListener("disconnected", () => {
+        if (this.usingHands) {
+          this.notifyHandsDisconnected([hand1Model, hand2Model]);
+          this.usingHands = false;
+        }
+      });
 
       this.orbitControls = new OrbitControls(
         this.camera,
@@ -170,7 +202,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         if (renderer.xr.isPresenting !== this.isInVR) {
           this.isInVR = renderer.xr.isPresenting;
           if (this.isInVR) {
-            defined(this.renderer).xr.setFoveation(0);
+            if (renderer.xr.setFoveation) renderer.xr.setFoveation(0);
             this.notifyEnterVR();
           } else {
             this.notifyExitVR();
@@ -179,12 +211,15 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         if (this.isInVR) {
           const session = renderer.xr.getSession();
           if (session) {
-            session.inputSources.forEach((source) => {
+            const controllers: THREE.Group[] = [];
+            session.inputSources.forEach((source, i) => {
               let handedness: THREE.XRHandedness = "none";
               if (source && source.handedness) {
                 handedness = source.handedness;
               }
               if (source.gamepad) {
+                const controller = renderer.xr.getController(i);
+                controllers.push(controller);
                 const buttons = source.gamepad.buttons.map((b) => b.value);
                 const axes = Array.from(source.gamepad.axes.slice(0));
                 const oldState = this.gamePads.get(source);
@@ -198,9 +233,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   for (let p = 0; p < newState.buttons.length; p += 1) {
                     if (newState.buttons[p] !== oldState.buttons[p]) {
                       this.notifyGamePadButtonChanged(
-                        source,
+                        controller,
                         p,
-                        newState.buttons[p]
+                        newState.buttons[p],
+                        source
                       );
                     }
                   }
@@ -208,9 +244,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   for (let p = 0; p < newState.axes.length; p += 1) {
                     if (newState.axes[p] !== oldState.axes[p]) {
                       this.notifyGamePadAxisChanged(
-                        source,
+                        controller,
                         p,
-                        newState.axes[p]
+                        newState.axes[p],
+                        source
                       );
                     }
                   }
@@ -218,6 +255,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.gamePads.set(source, newState);
               }
             });
+            this.notifyControllers(controllers);
+            this.notifyHands([hand1Model, hand2Model]);
           }
         }
 
@@ -230,6 +269,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
           renderer.render(this.scene, this.camera);
           this.orbitControls.update();
         }
+
+        this.notifyUpdate(this.clock.getDelta());
       });
       if (vr) element.appendChild(VRButton.createButton(this.renderer));
     }
@@ -324,6 +365,18 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.renderer?.setSize(width, height);
   };
 
+  private notifyHandsConnected(hands: FormantHandModel[]) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandsEnter(hands);
+    });
+  }
+
+  private notifyHandsDisconnected(hands: FormantHandModel[]) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandsLeave(hands);
+    });
+  }
+
   private notifyRaycasterChanged() {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onPointerMove(this.raycaster);
@@ -331,22 +384,52 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   }
 
   private notifyGamePadButtonChanged(
-    source: XRInputSource,
+    controller: THREE.Group,
     button: number,
-    value: number
+    value: number,
+    source: XRInputSource
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onGamePadButtonChanged(source, button, value);
+      defined(_.contentNode).onGamePadButtonChanged(
+        controller,
+        button,
+        value,
+        source
+      );
     });
   }
 
   private notifyGamePadAxisChanged(
-    source: XRInputSource,
+    controller: THREE.Group,
     axis: number,
-    value: number
+    value: number,
+    source: XRInputSource
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onGamePadAxisChanged(source, axis, value);
+      defined(_.contentNode).onGamePadAxisChanged(
+        controller,
+        axis,
+        value,
+        source
+      );
+    });
+  }
+
+  private notifyControllers(controllers: THREE.Group[]) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onControllersMoved(controllers);
+    });
+  }
+
+  private notifyHands(hands: FormantHandModel[]) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandsMoved(hands);
+    });
+  }
+
+  private notifyUpdate(delta: number) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onUpdate(delta);
     });
   }
 

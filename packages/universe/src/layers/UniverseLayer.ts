@@ -1,4 +1,5 @@
 import {
+  Group,
   Object3D,
   PerspectiveCamera,
   Raycaster,
@@ -12,7 +13,7 @@ import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
-import { SceneGraph, visitSceneGraphElement } from "../main";
+import { FormantHandModel, SceneGraph, visitSceneGraphElement } from "../main";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -91,16 +92,28 @@ export abstract class UniverseLayer extends Object3D {
   onVisibilityChanged(_visibility: boolean): void {}
 
   onGamePadButtonChanged(
-    _source: XRInputSource,
+    _controller: Group,
     _button: number,
-    _value: number
+    _value: number,
+    _source: XRInputSource
   ): void {}
 
   onGamePadAxisChanged(
-    _source: XRInputSource,
+    _controller: Group,
     _axis: number,
-    _value: number
+    _value: number,
+    _source: XRInputSource
   ): void {}
+
+  onHandsMoved(_hands: FormantHandModel[]): void {}
+
+  onHandsEnter(_hands: FormantHandModel[]): void {}
+
+  onHandsLeave(_hands: FormantHandModel[]): void {}
+
+  onUpdate(_delta: number): void {}
+
+  onControllersMoved(_controllers: Group[]): void {}
 
   destroy(): void {}
 
