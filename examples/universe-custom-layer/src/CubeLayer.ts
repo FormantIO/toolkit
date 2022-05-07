@@ -1,4 +1,4 @@
-import { UniverseLayer, FormantHandModel } from "@formant/universe";
+import { UniverseLayer, FormantHandModel, Label } from "@formant/universe";
 import * as THREE from "three";
 
 export class CubeLayer extends UniverseLayer {
@@ -10,23 +10,15 @@ export class CubeLayer extends UniverseLayer {
   mat = new THREE.MeshBasicMaterial({ color: 0x20a0ff });
   cube = new THREE.Mesh(this.geo, this.mat);
 
+  label = new Label("hey");
+
   init() {
     this.add(this.cube);
+    this.add(this.label);
   }
 
   onHandsMoved(hands: FormantHandModel[]): void {
-    let intersects = false;
-    hands.forEach((hand) => {
-      if (hand.intersectBoxObject(this.cube)) {
-        intersects = true;
-      }
-    });
-
-    if (intersects) {
-      this.mat.color.set(0xff0000);
-    } else {
-      this.mat.color.set(0x20a0ff);
-    }
+    this.label.text = JSON.stringify((hands[0].controller as any).joints);
   }
 
   destroy(): void {
