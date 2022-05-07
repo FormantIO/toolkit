@@ -250,22 +250,24 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
             });
             this.notifyControllers(controllers);
             if (
-              hands[0].visible &&
-              hands[1].visible &&
+              hands[0].controller.visible === true &&
+              hands[1].controller.visible === true &&
               this.usingHands === false
             ) {
               this.notifyHandsEnter(hands);
               this.usingHands = true;
             }
             if (
-              hands[0].visible === false &&
-              hands[1].visible === false &&
+              hands[0].controller.visible !== true &&
+              hands[1].controller.visible !== true &&
               this.usingHands === true
             ) {
               this.notifyHandsLeave(hands);
               this.usingHands = false;
             }
-            this.notifyHandsMoved(hands);
+            if (this.usingHands) {
+              this.notifyHandsMoved(hands);
+            }
           }
         }
 
