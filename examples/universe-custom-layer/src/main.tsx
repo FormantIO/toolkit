@@ -3,12 +3,7 @@ import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
 import { LayerRegistry, Universe } from "@formant/universe";
 import { SimulatedUniverseData } from "../../../packages/universe/demo/SimulatedUniverseData";
-
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const mode = urlParams.get("mode");
-const vr = urlParams.get("vr");
-
+import * as uuid from "uuid";
 import { CubeLayer } from "./CubeLayer";
 
 LayerRegistry.register(CubeLayer);
@@ -16,13 +11,35 @@ LayerRegistry.register(CubeLayer);
 function App() {
   return (
     <Universe
+      initialSceneGraph={[
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "ground",
+          name: "Ground",
+          deviceContext: undefined,
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 0 },
+          fieldValues: {},
+          data: {},
+        },
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "cube",
+          name: "Cube",
+          deviceContext: undefined,
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 0.5 },
+          fieldValues: {},
+          data: {},
+        },
+      ]}
       universeData={new SimulatedUniverseData()}
-      mode={
-        mode === "edit" || mode === "view" || mode === "no-interaction"
-          ? mode
-          : "edit"
-      }
-      vr={vr === "true"}
+      mode="edit"
+      vr
     ></Universe>
   );
 }

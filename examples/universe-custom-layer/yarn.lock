@@ -295,9 +295,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.45.tgz#33a5e44f73e4eabe3ba0ded084dedf8a25a2be1f"
-  integrity sha512-6myy2SLq2AFKF+pbkoNR/97jawmvdtKCZm/UsXeynznbO24m0Dzl/R0aYiMzyDpPa3QeClGKoNrS26enJIYPxQ==
+  version "0.0.56"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.56.tgz#ade863ab50852156743b41e041ba2c4a955375cb"
+  integrity sha512-elrYpuYyRWGvD4ub8hreMxvTK1+qXSu/p+5CPdKVArZ8VOq7NtPMlyto58vgA4yPXMmvukpCT1VFfhHPBSBR+w==
   dependencies:
     "@formant/ui-sdk" "0.0.19"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
@@ -313,7 +313,7 @@
     recoil "^0.7.2"
     recoil-nexus "^0.3.15"
     styled-components "^5.3.5"
-    three "^0.125.2"
+    three "0.140.0"
     urdf-loader "^0.10.3"
     uuid "^8.3.2"
 
@@ -470,9 +470,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.8":
-  version "18.0.8"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.8.tgz#a051eb380a9fbcaa404550543c58e1cf5ce4ab87"
-  integrity sha512-+j2hk9BzCOrrOSJASi5XiOyBbERk9jG5O73Ya4M0env5Ixi6vUNli4qy994AINcEF+1IEHISYFfIT4zwr++LKw==
+  version "18.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.9.tgz#d6712a38bd6cd83469603e7359511126f122e878"
+  integrity sha512-9bjbg1hJHUm4De19L1cHiW0Jvx3geel6Qczhjd0qY5VKVE2X5+x77YxAepuCwVh4vrgZJdgEJw48zrhRIeF4Nw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -491,6 +491,11 @@
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
     csstype "^3.0.2"
+
+"@types/three@^0.140.0":
+  version "0.140.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.140.0.tgz#3b74a021a69a6e2cd0e2550def15aa4c1c20e924"
+  integrity sha512-YPJLSIY6uKUOp1k6BZYDq5GtEIdhfeK04UCbc9IPAVbdn/RNjkfrbnyd7smrsNkJhc0IFASLpd3AAYgwqgXKVQ==
 
 "@types/uuid@^8.3.4":
   version "8.3.4"
@@ -1190,10 +1195,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-three@^0.125.2:
-  version "0.125.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.125.2.tgz#dcba12749a2eb41522e15212b919cd3fbf729b12"
-  integrity sha512-7rIRO23jVKWcAPFdW/HREU2NZMGWPBZ4XwEMt0Ak0jwLUKVJhcKM55eCBWyGZq/KiQbeo1IeuAoo/9l2dzhTXA==
+three@0.140.0:
+  version "0.140.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.140.0.tgz#5ad85df954c63015337a846134e0daa6c7c0dead"
+  integrity sha512-jcHjbnYspPLDdsDQChmzyAoZ5KhJbgFk6pNGlAIc9fQMvsfPGjF5H9glrngqvb2CR/qXcClMyp5PYdF996lldA==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
