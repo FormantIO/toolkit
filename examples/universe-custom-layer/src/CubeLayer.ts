@@ -1,4 +1,4 @@
-import { UniverseLayer, Label, Hand } from "@formant/universe";
+import { UniverseLayer, Label, Hand, Controller } from "@formant/universe";
 import {
   BoxGeometry,
   MeshBasicMaterial,
@@ -16,7 +16,7 @@ export class CubeLayer extends UniverseLayer {
   mat = new MeshBasicMaterial({ color: 0x20a0ff });
   cube = new Mesh(this.geo, this.mat);
 
-  label = new Label("");
+  label = new Label("controller");
 
   init() {
     this.add(this.cube);
@@ -35,6 +35,31 @@ export class CubeLayer extends UniverseLayer {
 
   onPointerUp(_raycaster: Raycaster, _button: number): void {
     this.showSnackbar("Clicked!");
+  }
+
+  onControllersMoved(
+    _controllers: Controller[],
+    raycasters: Raycaster[]
+  ): void {
+    let intersected = false;
+    raycasters.forEach((raycaster: Raycaster) => {
+      if (!intersected) {
+        intersected = raycaster.intersectObject(this.cube).length > 0;
+      }
+    });
+
+    this.mat.color.set(intersected ? 0x20a0ff : 0xffffff);
+  }
+
+  onControllerButtonChanged(
+    controller: Controller,
+    raycaster: Raycaster,
+    _button: number,
+    value: number
+  ): void {
+    if (value === 1 && raycaster.intersectObject(this.cube).length > 0) {
+      controller.pulse(1, 100);
+    }
   }
 
   onEnterVR(_xr: WebXRManager): void {
