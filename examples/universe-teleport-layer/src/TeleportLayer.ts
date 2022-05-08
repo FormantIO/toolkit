@@ -23,7 +23,7 @@ export class TeleportLayer extends UniverseLayer {
     })
   );
 
-  intersection: THREE.Vector3 = new THREE.Vector3();
+  intersection?: THREE.Vector3;
 
   init() {
     this.add(this.marker);
@@ -38,24 +38,36 @@ export class TeleportLayer extends UniverseLayer {
     const intersects = raycaster.intersectObjects([this.floor]);
 
     if (intersects.length > 0) {
-      console.log("intersecting");
       this.intersection = intersects[0].point;
-      console.log(this.intersection);
-      this.marker.position.set(
-        this.intersection.x,
-        this.intersection.y,
-        this.intersection.z
-      );
+      this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
     }
   }
 
   onControllerButtonChanged(
-    controller: Controller,
-    raycaster: Raycaster,
+    _controller: Controller,
+    _raycaster: Raycaster,
     button: number,
     value: number
   ): void {
-    console.log(button);
+    if (button === 0 && value === 1 && this.xr && this.intersection) {
+      const baseReferenceSpace = this.xr.getReferenceSpace();
+      if (baseReferenceSpace) {
+        const offsetPosition = {
+          x: -this.intersection.x,
+          y: -this.intersection.y,
+          z: -this.intersection.z,
+          w: 1,
+        };
+        const offsetRotation = new THREE.Quaternion();
+        // @ts-ignore-next-line
+        const transform = new XRRigidTransform(offsetPosition, offsetRotation);
+        const teleportSpaceOffset =
+          baseReferenceSpace.getOffsetReferenceSpace(transform);
+
+        (this.xr as any).setReferenceSpace(teleportSpaceOffset);
+        this.intersection = undefined;
+      }
+    }
   }
 
   onEnterVR(xr: WebXRManager): void {
