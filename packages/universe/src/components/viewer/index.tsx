@@ -8,7 +8,6 @@ import {
   WebGLRenderer,
   HemisphereLight,
   Raycaster,
-  XRInputSource,
 } from "three";
 import styled from "styled-components";
 import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
@@ -31,6 +30,7 @@ import { Color } from "../../../../common/Color";
 import { XRControllerModelFactory } from "../../../three-utils/webxr/XRControllerModelFactory";
 import { OculusHandModel } from "../../../three-utils/webxr/OculusHandModel";
 import { Hand } from "./Hand";
+import { Controller } from "./Controller";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -145,6 +145,25 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(width, height);
 
+      // create lines coming off controllers
+      const controller1 = this.renderer.xr.getController(0);
+      this.scene.add(controller1);
+
+      const controller2 = this.renderer.xr.getController(1);
+      this.scene.add(controller2);
+
+      const geometry = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0, 0, -1),
+      ]);
+
+      const line = new THREE.Line(geometry);
+      line.name = "line";
+      line.scale.z = 5;
+
+      controller1.add(line.clone());
+      controller2.add(line.clone());
+
       const controllerModelFactory = new XRControllerModelFactory();
 
       const controllerGrip1 = this.renderer.xr.getControllerGrip(0);
@@ -204,7 +223,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         if (this.isInVR) {
           const session = renderer.xr.getSession();
           if (session) {
-            const controllers: THREE.Group[] = [];
+            const controllers: Controller[] = [];
+            const raycasters: THREE.Raycaster[] = [];
             session.inputSources.forEach((source, i) => {
               let handedness: THREE.XRHandedness = "none";
               if (source && source.handedness) {
@@ -212,7 +232,19 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
               if (source.gamepad) {
                 const controller = renderer.xr.getController(i);
-                controllers.push(controller);
+                (controller as any).pulse = function pulse(
+                  intensity: number,
+                  length: number
+                ) {
+                  const gamepad = source.gamepad as any;
+                  if (
+                    gamepad.hapticActuators &&
+                    gamepad.hapticActuators.length > 0
+                  ) {
+                    gamepad.hapticActuators[0].pulse(intensity, length);
+                  }
+                };
+                controllers.push(controller as Controller);
                 const buttons = source.gamepad.buttons.map((b) => b.value);
                 const axes = Array.from(source.gamepad.axes.slice(0));
                 const oldState = this.gamePads.get(source);
@@ -221,26 +253,40 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   buttons,
                   axes,
                 };
+                const raycaster = new Raycaster();
+
+                const controllerTempMatrix = new THREE.Matrix4();
+                controllerTempMatrix
+                  .identity()
+                  .extractRotation(controller.matrixWorld);
+
+                raycaster.ray.origin.setFromMatrixPosition(
+                  controller.matrixWorld
+                );
+                raycaster.ray.direction
+                  .set(0, 0, -1)
+                  .applyMatrix4(controllerTempMatrix);
+                raycasters.push(raycaster);
 
                 if (oldState) {
                   for (let p = 0; p < newState.buttons.length; p += 1) {
                     if (newState.buttons[p] !== oldState.buttons[p]) {
-                      this.notifyGamePadButtonChanged(
-                        controller,
+                      this.notifyControllerButtonChanged(
+                        controller as Controller,
+                        raycaster,
                         p,
-                        newState.buttons[p],
-                        source
+                        newState.buttons[p]
                       );
                     }
                   }
 
                   for (let p = 0; p < newState.axes.length; p += 1) {
                     if (newState.axes[p] !== oldState.axes[p]) {
-                      this.notifyGamePadAxisChanged(
-                        controller,
+                      this.notifyControllerAxisChanged(
+                        controller as Controller,
+                        raycaster,
                         p,
-                        newState.axes[p],
-                        source
+                        newState.axes[p]
                       );
                     }
                   }
@@ -248,7 +294,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.gamePads.set(source, newState);
               }
             });
-            this.notifyControllers(controllers);
+            this.notifyControllers(controllers, raycasters);
             if (
               hands[0].controller.visible === true &&
               hands[1].controller.visible === true &&
@@ -394,41 +440,44 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     });
   }
 
-  private notifyGamePadButtonChanged(
-    controller: THREE.Group,
+  private notifyControllerButtonChanged(
+    controller: Controller,
+    raycaster: THREE.Raycaster,
     button: number,
-    value: number,
-    source: XRInputSource
+    value: number
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onGamePadButtonChanged(
+      defined(_.contentNode).onControllerButtonChanged(
         controller,
+        raycaster,
         button,
-        value,
-        source
+        value
       );
     });
   }
 
-  private notifyGamePadAxisChanged(
-    controller: THREE.Group,
+  private notifyControllerAxisChanged(
+    controller: Controller,
+    raycaster: THREE.Raycaster,
     axis: number,
-    value: number,
-    source: XRInputSource
+    value: number
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onGamePadAxisChanged(
+      defined(_.contentNode).onControllerAxisChanged(
         controller,
+        raycaster,
         axis,
-        value,
-        source
+        value
       );
     });
   }
 
-  private notifyControllers(controllers: THREE.Group[]) {
+  private notifyControllers(
+    controllers: Controller[],
+    raycasters: THREE.Raycaster[]
+  ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onControllersMoved(controllers);
+      defined(_.contentNode).onControllersMoved(controllers, raycasters);
     });
   }
 

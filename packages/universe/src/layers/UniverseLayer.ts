@@ -1,11 +1,4 @@
-import {
-  Group,
-  Object3D,
-  PerspectiveCamera,
-  Raycaster,
-  WebXRManager,
-  XRInputSource,
-} from "three";
+import { Object3D, PerspectiveCamera, Raycaster, WebXRManager } from "three";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -15,6 +8,7 @@ import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import { SceneGraph, visitSceneGraphElement } from "../main";
 import { Hand } from "../components/viewer/Hand";
+import { Controller } from "../components/viewer/Controller";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -92,18 +86,23 @@ export abstract class UniverseLayer extends Object3D {
 
   onVisibilityChanged(_visibility: boolean): void {}
 
-  onGamePadButtonChanged(
-    _controller: Group,
+  onControllerButtonChanged(
+    _controller: Controller,
+    _raycaster: Raycaster,
     _button: number,
-    _value: number,
-    _source: XRInputSource
+    _value: number
   ): void {}
 
-  onGamePadAxisChanged(
-    _controller: Group,
+  onControllerAxisChanged(
+    _controller: Controller,
+    _raycaster: Raycaster,
     _axis: number,
-    _value: number,
-    _source: XRInputSource
+    _value: number
+  ): void {}
+
+  onControllersMoved(
+    _controllers: Controller[],
+    _raycasters: Raycaster[]
   ): void {}
 
   onHandsEnter(_hands: Hand[]): void {}
@@ -113,8 +112,6 @@ export abstract class UniverseLayer extends Object3D {
   onHandsMoved(_hands: Hand[]): void {}
 
   onUpdate(_delta: number): void {}
-
-  onControllersMoved(_controllers: Group[]): void {}
 
   destroy(): void {}
 

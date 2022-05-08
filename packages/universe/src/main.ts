@@ -21,6 +21,7 @@ export * from "./components/sidebar";
 export * from "./model/SceneGraph";
 export * from "./objects/Label";
 export * from "./components/viewer/Hand";
+export * from "./components/viewer/Controller";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
