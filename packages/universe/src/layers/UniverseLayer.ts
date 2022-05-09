@@ -88,22 +88,17 @@ export abstract class UniverseLayer extends Object3D {
 
   onControllerButtonChanged(
     _controller: Controller,
-    _raycaster: Raycaster,
     _button: number,
     _value: number
   ): void {}
 
   onControllerAxisChanged(
     _controller: Controller,
-    _raycaster: Raycaster,
     _axis: number,
     _value: number
   ): void {}
 
-  onControllersMoved(
-    _controllers: Controller[],
-    _raycasters: Raycaster[]
-  ): void {}
+  onControllersMoved(_controllers: Controller[]): void {}
 
   onHandsEnter(_hands: Hand[]): void {}
 

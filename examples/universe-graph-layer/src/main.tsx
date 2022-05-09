@@ -1,11 +1,12 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { LayerRegistry, Universe, TeleportLayer } from "@formant/universe";
+import { LayerRegistry, Universe } from "@formant/universe";
 import { SimulatedUniverseData } from "../../../packages/universe/demo/SimulatedUniverseData";
 import * as uuid from "uuid";
+import { CubeLayer } from "./CubeLayer";
 
-LayerRegistry.register(TeleportLayer);
+LayerRegistry.register(CubeLayer);
 
 function App() {
   return (
@@ -26,12 +27,12 @@ function App() {
         {
           id: uuid.v4(),
           editing: false,
-          type: "teleport",
-          name: "Teleport",
+          type: "cube",
+          name: "Cube",
           deviceContext: undefined,
           children: [],
           visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
+          position: { type: "manual", x: 0, y: 0, z: 0.5 },
           fieldValues: {},
           data: {},
         },

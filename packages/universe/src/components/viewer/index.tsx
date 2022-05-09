@@ -224,15 +224,15 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
           const session = renderer.xr.getSession();
           if (session) {
             const controllers: Controller[] = [];
-            const raycasters: THREE.Raycaster[] = [];
             session.inputSources.forEach((source, i) => {
               let handedness: THREE.XRHandedness = "none";
               if (source && source.handedness) {
                 handedness = source.handedness;
               }
               if (source.gamepad) {
-                const controller = renderer.xr.getController(i);
-                (controller as any).pulse = function pulse(
+                const controller = renderer.xr.getController(i) as Controller;
+                controller.handedness = handedness;
+                controller.pulse = function pulse(
                   intensity: number,
                   length: number
                 ) {
@@ -244,7 +244,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                     gamepad.hapticActuators[0].pulse(intensity, length);
                   }
                 };
-                controllers.push(controller as Controller);
+                controllers.push(controller);
                 const buttons = source.gamepad.buttons.map((b) => b.value);
                 const axes = Array.from(source.gamepad.axes.slice(0));
                 const oldState = this.gamePads.get(source);
@@ -266,14 +266,13 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 raycaster.ray.direction
                   .set(0, 0, -1)
                   .applyMatrix4(controllerTempMatrix);
-                raycasters.push(raycaster);
+                controller.raycaster = raycaster;
 
                 if (oldState) {
                   for (let p = 0; p < newState.buttons.length; p += 1) {
                     if (newState.buttons[p] !== oldState.buttons[p]) {
                       this.notifyControllerButtonChanged(
                         controller as Controller,
-                        raycaster,
                         p,
                         newState.buttons[p]
                       );
@@ -284,7 +283,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                     if (newState.axes[p] !== oldState.axes[p]) {
                       this.notifyControllerAxisChanged(
                         controller as Controller,
-                        raycaster,
                         p,
                         newState.axes[p]
                       );
@@ -294,7 +292,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.gamePads.set(source, newState);
               }
             });
-            this.notifyControllers(controllers, raycasters);
+            this.notifyControllers(controllers);
             if (
               hands[0].controller.visible === true &&
               hands[1].controller.visible === true &&
@@ -442,14 +440,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyControllerButtonChanged(
     controller: Controller,
-    raycaster: THREE.Raycaster,
     button: number,
     value: number
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onControllerButtonChanged(
         controller,
-        raycaster,
         button,
         value
       );
@@ -458,26 +454,17 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private notifyControllerAxisChanged(
     controller: Controller,
-    raycaster: THREE.Raycaster,
     axis: number,
     value: number
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onControllerAxisChanged(
-        controller,
-        raycaster,
-        axis,
-        value
-      );
+      defined(_.contentNode).onControllerAxisChanged(controller, axis, value);
     });
   }
 
-  private notifyControllers(
-    controllers: Controller[],
-    raycasters: THREE.Raycaster[]
-  ) {
+  private notifyControllers(controllers: Controller[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
-      defined(_.contentNode).onControllersMoved(controllers, raycasters);
+      defined(_.contentNode).onControllersMoved(controllers);
     });
   }
 

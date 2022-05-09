@@ -295,9 +295,9 @@
     "@mui/utils" "^5.6.1"
 
 "@formant/universe@latest":
-  version "0.0.70"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.70.tgz#245b38874bcf6bdfc5cae9723ce5dc5de6109d56"
-  integrity sha512-KWBl78UxG0Q/ku1V1oWgcow5LT63J+v1otg9wJNAVK57Zwi0MWgreo/11wN0XRFMd9vbdgBtQ2aIsa2v5Vn20w==
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.71.tgz#6e1356bf8cf11c80ed0ce01f6d480ac3dbea2c04"
+  integrity sha512-bqvykH9WKMUQLHw/6qYcGunYjCFwkOQ1Ew234DeelWNqaZEISR/Mg9C1Bllbo+nDy45386P1Mzke92ZbElQeag==
   dependencies:
     "@formant/ui-sdk" "0.0.19"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
@@ -552,6 +552,11 @@ chalk@^2.0.0:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
+
+chart.js@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.7.1.tgz#0516f690c6a8680c6c707e31a4c1807a6f400ada"
+  integrity sha512-8knRegQLFnPQAheZV8MjxIXc5gQEfDFD897BJgv/klO/vtIyFFmgMXrNfgrXpbTr/XbTturxRgxIXx/Y+ASJBA==
 
 classnames@^2.3.1:
   version "2.3.1"

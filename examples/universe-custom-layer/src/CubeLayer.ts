@@ -37,14 +37,11 @@ export class CubeLayer extends UniverseLayer {
     this.showSnackbar("Clicked!");
   }
 
-  onControllersMoved(
-    _controllers: Controller[],
-    raycasters: Raycaster[]
-  ): void {
+  onControllersMoved(controllers: Controller[]): void {
     let intersected = false;
-    raycasters.forEach((raycaster: Raycaster) => {
+    controllers.forEach((_) => {
       if (!intersected) {
-        intersected = raycaster.intersectObject(this.cube).length > 0;
+        intersected = _.raycaster.intersectObject(this.cube).length > 0;
       }
     });
 
@@ -53,11 +50,13 @@ export class CubeLayer extends UniverseLayer {
 
   onControllerButtonChanged(
     controller: Controller,
-    raycaster: Raycaster,
     _button: number,
     value: number
   ): void {
-    if (value === 1 && raycaster.intersectObject(this.cube).length > 0) {
+    if (
+      value === 1 &&
+      controller.raycaster.intersectObject(this.cube).length > 0
+    ) {
       controller.pulse(1, 100);
     }
   }
