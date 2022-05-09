@@ -24,6 +24,19 @@ export * from "./objects/Label";
 export * from "./components/viewer/Hand";
 export * from "./components/viewer/Controller";
 
+export type IH264VideoFrame =
+  import("../../data-sdk/src/model/IH264VideoFrame").IH264VideoFrame;
+export type IJointState =
+  import("../../data-sdk/src/model/IJointState").IJointState;
+export type ILocation = import("../../data-sdk/src/model/ILocation").ILocation;
+export type IMap = import("../../data-sdk/src/model/IMap").IMap;
+export type IMarker3DArray =
+  import("../../data-sdk/src/model/IMarker3DArray").IMarker3DArray;
+export type ITransformNode =
+  import("../../data-sdk/src/model/ITransformNode").ITransformNode;
+export type IRtcPointCloud =
+  import("../../data-sdk/src/model/IRtcPointCloud").IRtcPointCloud;
+
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
 LayerRegistry.register(TransformLayer);

@@ -82,10 +82,16 @@ export class HardwareVideoLayer extends UniverseLayer {
     this.drawer.start();
   }
 
-  onData = (h264Frame: IH264VideoFrame) => {
-    this.drawer.receiveEncodedFrame(h264Frame);
-    this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
-    (this.mesh.material as any).map.needsUpdate = true;
-    (this.mesh.material as any).needsUpdate = true;
+  onData = (
+    h264Frame:
+      | { type: "frame"; frame: IH264VideoFrame }
+      | { type: "url"; url: string }
+  ) => {
+    if (h264Frame.type === "frame") {
+      this.drawer.receiveEncodedFrame(h264Frame.frame);
+      this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
+      (this.mesh.material as any).map.needsUpdate = true;
+      (this.mesh.material as any).needsUpdate = true;
+    }
   };
 }

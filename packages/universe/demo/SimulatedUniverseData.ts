@@ -22,11 +22,35 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToJson(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (
+      data:
+        | { type: "url"; url: string }
+        | { type: "json"; data: any }
+        | { type: "raw_json"; data: string }
+    ) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+
+  subscribeToText(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (
+      data: { type: "url"; url: string } | { type: "text"; data: string }
+    ) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+
   async getStatistics(): Promise<IUniverseStatistics> {
     return {
       rtcDevices: [],
     };
   }
+
   subscribeDataSourceStateChange(
     _deviceId: string,
     _source: UniverseDataSource,
@@ -34,10 +58,13 @@ export class SimulatedUniverseData implements IUniverseData {
   ): CloseSubscription {
     return () => {};
   }
+
   time = Date.now();
+
   setTime(time: number): void {
     this.time = time;
   }
+
   async getLatestTransformTrees(
     deviceId: string
   ): Promise<{ streamName: string; transformTree: ITransformNode }[]> {
@@ -278,7 +305,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToVideo(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IH264VideoFrame) => void
+    _callback: (data: { type: "frame"; frame: IH264VideoFrame }) => void
   ): () => void {
     return () => {};
   }

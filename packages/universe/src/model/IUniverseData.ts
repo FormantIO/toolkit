@@ -70,61 +70,102 @@ export interface IUniverseStatistics {
 
 export interface IUniverseData {
   setTime(time: number): void;
+
   getLatestTransformTrees(deviceId: string): Promise<
     {
       streamName: string;
       transformTree: any;
     }[]
   >;
+
   getLatestLocations(
     deviceId: string
   ): Promise<{ streamName: string; location: ILocation }[]>;
+
   getDeviceContexts(): Promise<{ deviceName: string; deviceId: string }[]>;
+
   getDeviceContextName(deviceId: string): Promise<string | undefined>;
+
   getTelemetryStreamType(
     deviceId: string,
     streamName: string
   ): Promise<string | undefined>;
+
   getTelemetryStreams(deviceId: string): Promise<ITelemetryStream[]>;
+
   getTeleopRosStreams(deviceId: string): Promise<ITelemetryRosStream[]>;
+
   getUrdfs(deviceId: string): Promise<string[]>;
+
   getHardwareStreams(deviceId: string): Promise<IHardwareStream[]>;
+
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IRtcPointCloud) => void
   ): CloseSubscription;
+
   subscribeToGeometry(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMarker3DArray) => void
   ): CloseSubscription;
+
   subscribeToJointState(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IJointState) => void
   ): CloseSubscription;
+
   subscribeToMap(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IMap) => void
   ): CloseSubscription;
+
   subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IH264VideoFrame) => void
+    callback: (
+      data:
+        | { type: "frame"; frame: IH264VideoFrame }
+        | { type: "url"; url: string }
+    ) => void
   ): CloseSubscription;
+
   subscribeToTransformTree(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: ITransformNode) => void
   ): CloseSubscription;
+
   subscribeToLocation(
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: ILocation) => void
   ): CloseSubscription;
+
+  subscribeToJson(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (
+      data:
+        | { type: "url"; url: string }
+        | { type: "json"; data: any }
+        | { type: "raw_json"; data: string }
+    ) => void
+  ): CloseSubscription;
+
+  subscribeToText(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (
+      data: { type: "url"; url: string } | { type: "text"; data: string }
+    ) => void
+  ): CloseSubscription;
+
   getStatistics(): Promise<IUniverseStatistics>;
+
   subscribeDataSourceStateChange(
     deviceId: string,
     source: UniverseDataSource,
