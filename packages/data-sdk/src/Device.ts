@@ -77,6 +77,8 @@ export enum SessionType {
 
 export class Device {
   rtcClient: RtcClient | undefined;
+  remoteDevicePeerId: string | undefined;
+
   realtimeListeners: RealtimeListener[] = [];
   constructor(
     public id: string,
@@ -149,6 +151,14 @@ export class Device {
     this.realtimeListeners.forEach((_) => _(peerId, message));
   };
 
+  getRealtimeStatus(): "disconnected" | "connecting" | "connected" {
+    if (this.rtcClient && this.remoteDevicePeerId) {
+      return this.rtcClient.getConnectionStatus(this.remoteDevicePeerId);
+    } else {
+      throw new Error(`Realtime connection hasn't been started for ${this.id}`);
+    }
+  }
+
   async startRealtimeConnection(
     sessionType: SessionType = SessionType.Observe
   ) {
@@ -183,12 +193,18 @@ export class Device {
       }
 
       // We can connect our real-time communication client to device peers by their ID
-      const devicePeerId = devicePeer.id;
-      await rtcClient.connect(devicePeerId, undefined, sessionType as number);
+      this.remoteDevicePeerId = devicePeer.id;
+      await rtcClient.connect(
+        this.remoteDevicePeerId,
+        undefined,
+        sessionType as number
+      );
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
-      while (rtcClient.getConnectionStatus(devicePeerId) !== "connected") {
+      while (
+        rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
+      ) {
         await delay(100);
       }
       this.rtcClient = rtcClient;
