@@ -159,6 +159,14 @@ export class Device {
     }
   }
 
+  getRealtimePing(): number | undefined {
+    if (this.rtcClient && this.remoteDevicePeerId) {
+      return this.rtcClient.getPing(this.remoteDevicePeerId);
+    } else {
+      throw new Error(`Realtime connection hasn't been started for ${this.id}`);
+    }
+  }
+
   async startRealtimeConnection(
     sessionType: SessionType = SessionType.Observe
   ) {
