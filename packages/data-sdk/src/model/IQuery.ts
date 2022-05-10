@@ -6,4 +6,5 @@ export interface IQuery extends IFilter {
   aggregate?: AggregateLevel;
   start: IsoDate;
   end: IsoDate;
+  latestOnly?: boolean;
 }

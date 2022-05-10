@@ -70,6 +70,11 @@ export type RealtimeDataStream = {
   name: string;
 };
 
+export enum SessionType {
+  Teleop = 1,
+  Observe = 3,
+}
+
 export class Device {
   rtcClient: RtcClient | undefined;
   realtimeListeners: RealtimeListener[] = [];
@@ -144,7 +149,9 @@ export class Device {
     this.realtimeListeners.forEach((_) => _(peerId, message));
   };
 
-  async startRealtimeConnection() {
+  async startRealtimeConnection(
+    sessionType: SessionType = SessionType.Observe
+  ) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         signalingClient: new SignalingPromiseClient(
@@ -177,7 +184,7 @@ export class Device {
 
       // We can connect our real-time communication client to device peers by their ID
       const devicePeerId = devicePeer.id;
-      await rtcClient.connect(devicePeerId);
+      await rtcClient.connect(devicePeerId, undefined, sessionType as number);
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
