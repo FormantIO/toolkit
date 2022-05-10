@@ -27,8 +27,8 @@ function App() {
         {
           id: uuid.v4(),
           editing: false,
-          type: "cube",
-          name: "Cube",
+          type: "graph",
+          name: "Graph",
           deviceContext: undefined,
           children: [],
           visible: true,

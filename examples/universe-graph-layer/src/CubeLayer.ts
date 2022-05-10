@@ -1,28 +1,25 @@
-import { UniverseLayer, Label, Hand, Controller } from "@formant/universe";
+import { UniverseLayer, Label } from "@formant/universe";
 import {
   BoxGeometry,
-  MeshBasicMaterial,
   Mesh,
-  Raycaster,
-  WebXRManager,
   CanvasTexture,
   MeshStandardMaterial,
   Color,
-  Texture,
 } from "three";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 export class CubeLayer extends UniverseLayer {
-  static layerTypeId = "cube";
-  static commonName = "Cube";
-  static description = "This is just a simple cube.";
+  static layerTypeId = "graph";
+  static commonName = "Graph";
+  static description = "This is just a simple graph.";
 
-  geo = new BoxGeometry(1, 1, 1);
+  geo = new BoxGeometry(1, 0, 1);
   mat = new MeshStandardMaterial();
-  cube = new Mesh(this.geo, this.mat);
+  cube = new Mesh(this.geo, this.mat).rotateY(Math.PI);
 
   label = new Label("controller");
+  canvasTex!: CanvasTexture;
 
   init() {
     const canvas = document.createElement("canvas");
@@ -31,6 +28,7 @@ export class CubeLayer extends UniverseLayer {
     document.body.appendChild(canvas);
     const ctx = canvas.getContext("2d");
     if (ctx) {
+      Chart.defaults.font.size = 30;
       const myChart = new Chart(ctx, {
         type: "bar",
         data: {
@@ -67,19 +65,15 @@ export class CubeLayer extends UniverseLayer {
           },
         },
       });
-      myChart.update();
-      window.setTimeout(() => {
-        ctx.fillStyle = "rgb(255,0,0)";
-        ctx.fillRect(0, 0, 40, 40);
-        const canvasTex = new Texture(myChart.canvas);
-        canvasTex.needsUpdate = true;
-
-        this.mat.map = canvasTex;
-        this.mat.emissive = new Color(0x344444);
-        this.mat.needsUpdate = true;
-      }, 1000);
+      this.canvasTex = new CanvasTexture(myChart.canvas);
+      this.mat.map = this.canvasTex;
+      this.mat.emissive = new Color(0x444444);
     }
     this.add(this.cube);
+  }
+
+  onUpdate(_delta: number): void {
+    this.canvasTex.needsUpdate = true;
   }
 
   destroy(): void {
