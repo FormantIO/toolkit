@@ -2,6 +2,7 @@ import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../../data-sdk/src/model/ILocation";
 import { IMap } from "../../../data-sdk/src/model/IMap";
+import { IPointCloud } from "../../../data-sdk/src/model/IPointCloud";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
@@ -102,7 +103,11 @@ export interface IUniverseData {
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IRtcPointCloud) => void
+    callback: (
+      data:
+        | { type: "telemetry_point_cloud"; pointCloud: IPointCloud }
+        | { type: "rtc_point_cloud"; pointCloud: IRtcPointCloud }
+    ) => void
   ): CloseSubscription;
 
   subscribeToGeometry(

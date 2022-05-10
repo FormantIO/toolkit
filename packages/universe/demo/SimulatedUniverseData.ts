@@ -15,6 +15,7 @@ import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
 import { IMap } from "../../data-sdk/src/model/IMap";
 import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
+import { IPointCloud } from "../src/main";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -138,7 +139,11 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToPointCloud(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IRtcPointCloud) => void
+    _callback: (
+      data:
+        | { type: "telemetry_point_cloud"; pointCloud: IPointCloud }
+        | { type: "rtc_point_cloud"; pointCloud: IRtcPointCloud }
+    ) => void
   ): () => void {
     return () => {};
   }

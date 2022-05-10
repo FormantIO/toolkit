@@ -36,6 +36,8 @@ export type ITransformNode =
   import("../../data-sdk/src/model/ITransformNode").ITransformNode;
 export type IRtcPointCloud =
   import("../../data-sdk/src/model/IRtcPointCloud").IRtcPointCloud;
+export type IPointCloud =
+  import("../../data-sdk/src/model/IPointCloud").IPointCloud;
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

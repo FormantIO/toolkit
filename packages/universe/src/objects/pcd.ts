@@ -199,7 +199,7 @@ function calculateOffsets(header: IPcdHeader): {
   );
 }
 
-function parse(buffer: ArrayBuffer): IPcd {
+export function parse(buffer: ArrayBuffer): IPcd {
   const { header, body } = parseHeader(buffer);
 
   const { offsets, size } = calculateOffsets(header);
