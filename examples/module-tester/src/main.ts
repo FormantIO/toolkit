@@ -44,6 +44,21 @@ if (App.isModule()) {
   }
 );
 
+(document.querySelector("#sendchannel") as HTMLElement).addEventListener(
+  "click",
+  () => {
+    App.sendChannelData("test_channel", { abc: 123 });
+  }
+);
+
+App.addChannelDataListener("test_channel", (e) => {
+  if (e.source === App.getCurrentModuleContext()) {
+    App.showMessage("channel data i sent: " + JSON.stringify(e));
+  } else {
+    App.showMessage("channel data: " + JSON.stringify(e));
+  }
+});
+
 App.setupModuleMenus([
   {
     label: "My Menu Item",
