@@ -13,6 +13,12 @@ export type AppMessage =
       type: "setup_module_menus";
       module: string;
       menus: { label: string }[];
+    }
+  | {
+      type: "send_channel_data";
+      channel: string;
+      source: string;
+      data: any;
     };
 
 export type EmbeddedAppMessage =
@@ -129,6 +135,19 @@ export class App {
     this.sendAppMessage({
       type: "refresh_auth_token",
       module: moduleName,
+    });
+  }
+
+  static sendChannelData(channel: string, data: any) {
+    const moduleName = this.getCurrentModuleContext();
+    if (!moduleName) {
+      throw new Error("No module context");
+    }
+    this.sendAppMessage({
+      type: "send_channel_data",
+      source: moduleName,
+      channel,
+      data,
     });
   }
 
