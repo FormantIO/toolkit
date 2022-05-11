@@ -29,6 +29,12 @@ export type EmbeddedAppMessage =
       streams: { [x: string]: any };
       time: number;
       queryRange: { start: number; end: number };
+    }
+  | {
+      type: "channel_data";
+      channel: string;
+      source: string;
+      data: any;
     };
 export interface ModuleData {
   queryRange: QueryRange;
@@ -168,4 +174,20 @@ export class App {
       }
     });
   }
+
+  static addChannelDataListener(
+    channel: string,
+    handler: (e: { source: string; data: any }) => void
+  ) {
+    window.addEventListener("message", (event) => {
+      const msg = event.data as EmbeddedAppMessage;
+      if (msg.type === "channel_data" && msg.channel === channel) {
+        handler({
+          source: msg.source,
+          data: msg.data,
+        });
+      }
+    });
+  }
 }
+(";");
