@@ -9,7 +9,7 @@ export class DeviceVideo extends THREE.Object3D {
   videoStream: RealtimeVideoStream | undefined;
   drawer: H264BytestreamCanvasDrawer;
   canvas: HTMLCanvasElement;
-  mesh: THREE.Mesh;
+  mesh: THREE.Mesh | undefined;
   constructor(private device: Device, videoStreamName?: string) {
     super();
     this.drawer = new H264BytestreamCanvasDrawer(
@@ -18,16 +18,8 @@ export class DeviceVideo extends THREE.Object3D {
       () => {}
     );
     this.canvas = document.createElement("CANVAS") as HTMLCanvasElement;
-
-    const texture = new THREE.CanvasTexture(this.canvas);
-
-    const material = new THREE.MeshBasicMaterial({
-      map: texture,
-    });
-
-    const geometry = new THREE.BoxGeometry(1, 1, 0);
-    this.mesh = new THREE.Mesh(geometry, material);
-    this.add(this.mesh);
+    this.canvas.width = 0;
+    this.canvas.height = 0;
 
     (async () => {
       const videoStreams = await this.device.getRealtimeVideoStreams();
@@ -63,8 +55,26 @@ export class DeviceVideo extends THREE.Object3D {
 
   drawVideoFrame(h264Frame: any) {
     this.drawer.receiveEncodedFrame(h264Frame);
-    this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
-    (this.mesh.material as any).map.needsUpdate = true;
-    (this.mesh.material as any).needsUpdate = true;
+    if (
+      !this.mesh &&
+      this.drawer.canvas &&
+      this.drawer.canvas.width > 0 &&
+      this.drawer.canvas.height > 0
+    ) {
+      const texture = new THREE.CanvasTexture(this.drawer.canvas);
+
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+      });
+
+      const geometry = new THREE.BoxGeometry(1, 1, 0);
+      this.mesh = new THREE.Mesh(geometry, material);
+      this.add(this.mesh);
+    }
+    if (this.mesh) {
+      this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
+      (this.mesh.material as any).map.needsUpdate = true;
+      (this.mesh.material as any).needsUpdate = true;
+    }
   }
 }
