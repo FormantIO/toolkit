@@ -73,7 +73,7 @@ export class App {
     window.parent.postMessage(message, "*");
   }
 
-  private static getCurrentModuleContext(): string | null {
+  static getCurrentModuleContext(): string | null {
     let urlParams = new URLSearchParams("");
 
     if (typeof window !== "undefined") {
