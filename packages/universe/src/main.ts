@@ -40,10 +40,6 @@ export type IPointCloud =
   import("../../data-sdk/src/model/IPointCloud").IPointCloud;
 export type IGridMap = import("./model/IGridMap").IGridMap;
 export type IPcd = import("./objects/pcd").IPcd;
-export {
-  loadFromBase64 as loadPcdFromBase64,
-  parse as parsePcd,
-} from "./objects/pcd";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
