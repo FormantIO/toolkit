@@ -1,6 +1,6 @@
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
-import { IMap } from "../../../data-sdk/src/model/IMap";
+import { IGridMap } from "../main";
 import { IUniverseData } from "../model/IUniverseData";
 import { GridMap } from "../objects/GridMap";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -53,7 +53,7 @@ export class GridMapLayer extends UniverseLayer {
 
   init() {
     const dataSource = defined(this.layerDataSources)[0];
-    defined(this.universeData).subscribeToMap(
+    defined(this.universeData).subscribeToGridMap(
       defined(this.layerContext),
       defined(dataSource),
       this.onData
@@ -61,7 +61,7 @@ export class GridMapLayer extends UniverseLayer {
     this.add(this.map);
   }
 
-  onData = (data: IMap) => {
+  onData = (data: IGridMap) => {
     this.map.map = data;
   };
 }

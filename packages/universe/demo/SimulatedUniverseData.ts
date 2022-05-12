@@ -8,14 +8,12 @@ import {
   IUniverseStatistics,
   UniverseDataSource,
 } from "../src/model/IUniverseData";
-import { IRtcPointCloud } from "../../data-sdk/src/model/IRtcPointCloud";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IMap } from "../../data-sdk/src/model/IMap";
 import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
-import { IPointCloud } from "../src/main";
+import { IGridMap, IPcd } from "../src/main";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -23,15 +21,10 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
-  subscribeToJson(
+  subscribeToJson<T>(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (
-      data:
-        | { type: "url"; url: string }
-        | { type: "json"; data: any }
-        | { type: "raw_json"; data: string }
-    ) => void
+    _callback: (data: T) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
@@ -39,9 +32,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToText(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (
-      data: { type: "url"; url: string } | { type: "text"; data: string }
-    ) => void
+    _callback: (data: string) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
@@ -139,11 +130,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToPointCloud(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (
-      data:
-        | { type: "telemetry_point_cloud"; pointCloud: IPointCloud }
-        | { type: "rtc_point_cloud"; pointCloud: IRtcPointCloud }
-    ) => void
+    _callback: (data: IPcd) => void
   ): () => void {
     return () => {};
   }
@@ -299,18 +286,18 @@ export class SimulatedUniverseData implements IUniverseData {
     return () => {};
   }
 
-  subscribeToMap(
+  subscribeToGridMap(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IMap) => void
+    _callback: (data: IGridMap) => void
   ): () => void {
     return () => {};
   }
 
-  subscribeToVideo(
+  subscribeToRealtimeVideo(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: { type: "frame"; frame: IH264VideoFrame }) => void
+    _callback: (data: IH264VideoFrame) => void
   ): () => void {
     return () => {};
   }

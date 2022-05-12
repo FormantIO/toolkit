@@ -10,12 +10,12 @@ import { LayerSuggestion } from "./LayerRegistry";
 // eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
-export class HardwareVideoLayer extends UniverseLayer {
-  static id = "hardware_video";
+export class RealtimeVideoLayer extends UniverseLayer {
+  static id = "rtc_video";
 
-  static commonName = "Hardware Video";
+  static commonName = "Realtime Video";
 
-  static description = "A video plane representing a camera.";
+  static description = "A video plane representing a realtime camera.";
 
   static usesData = true;
 
@@ -36,7 +36,7 @@ export class HardwareVideoLayer extends UniverseLayer {
                   rtcStreamName: stream.name,
                 },
               ],
-              layerType: HardwareVideoLayer.id,
+              layerType: RealtimeVideoLayer.id,
             });
           }
         }
@@ -60,7 +60,7 @@ export class HardwareVideoLayer extends UniverseLayer {
       () => {},
       () => {}
     );
-    defined(this.universeData).subscribeToVideo(
+    defined(this.universeData).subscribeToRealtimeVideo(
       defined(this.layerContext),
       defined(dataSource),
       this.onData
@@ -82,16 +82,10 @@ export class HardwareVideoLayer extends UniverseLayer {
     this.drawer.start();
   }
 
-  onData = (
-    h264Frame:
-      | { type: "frame"; frame: IH264VideoFrame }
-      | { type: "url"; url: string }
-  ) => {
-    if (h264Frame.type === "frame") {
-      this.drawer.receiveEncodedFrame(h264Frame.frame);
-      this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
-      (this.mesh.material as any).map.needsUpdate = true;
-      (this.mesh.material as any).needsUpdate = true;
-    }
+  onData = (frame: IH264VideoFrame) => {
+    this.drawer.receiveEncodedFrame(frame);
+    this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
+    (this.mesh.material as any).map.needsUpdate = true;
+    (this.mesh.material as any).needsUpdate = true;
   };
 }

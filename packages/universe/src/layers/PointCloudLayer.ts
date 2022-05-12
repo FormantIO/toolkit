@@ -1,12 +1,10 @@
 import { BufferAttribute, BufferGeometry, Points, PointsMaterial } from "three";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
-import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
-import { loadFromBase64, parse } from "../objects/pcd";
+import { IPcd } from "../objects/pcd";
 import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayer } from "./UniverseLayer";
 import { LayerSuggestion } from "./LayerRegistry";
-import { IPointCloud } from "../../../data-sdk/src/model/IPointCloud";
 
 export class PointCloudLayer extends UniverseLayer {
   static layerTypeId: string = "point_cloud";
@@ -68,19 +66,7 @@ export class PointCloudLayer extends UniverseLayer {
     this.add(this.points);
   }
 
-  onData = async (
-    data:
-      | { type: "telemetry_point_cloud"; pointCloud: IPointCloud }
-      | { type: "rtc_point_cloud"; pointCloud: IRtcPointCloud }
-  ) => {
-    const pcd =
-      data.type === "telemetry_point_cloud"
-        ? parse(
-            await fetch(data.pointCloud.url, { mode: "cors" }).then((r) =>
-              r.arrayBuffer()
-            )
-          )
-        : loadFromBase64(data.pointCloud.data);
+  onData = (pcd: IPcd) => {
     this.points.geometry.setDrawRange(
       0,
       pcd.positions ? pcd.positions.length / 3 : 0
@@ -92,3 +78,12 @@ export class PointCloudLayer extends UniverseLayer {
     positionAttr.needsUpdate = true;
   };
 }
+
+/*  const pcd =
+      data.type === "telemetry_point_cloud"
+        ? parse(
+            await fetch(data.pointCloud.url, { mode: "cors" }).then((r) =>
+              r.arrayBuffer()
+            )
+          )
+        : loadFromBase64(data.pointCloud.data); */

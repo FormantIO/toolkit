@@ -1,11 +1,10 @@
 import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../../data-sdk/src/model/ILocation";
-import { IMap } from "../../../data-sdk/src/model/IMap";
-import { IPointCloud } from "../../../data-sdk/src/model/IPointCloud";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
-import { IRtcPointCloud } from "../../../data-sdk/src/model/IRtcPointCloud";
+import { IPcd } from "../objects/pcd";
+import { IGridMap } from "./IGridMap";
 
 export type DataSourceState =
   | "missing_data"
@@ -75,7 +74,7 @@ export interface IUniverseData {
   getLatestTransformTrees(deviceId: string): Promise<
     {
       streamName: string;
-      transformTree: any;
+      transformTree: ITransformNode;
     }[]
   >;
 
@@ -103,11 +102,7 @@ export interface IUniverseData {
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (
-      data:
-        | { type: "telemetry_point_cloud"; pointCloud: IPointCloud }
-        | { type: "rtc_point_cloud"; pointCloud: IRtcPointCloud }
-    ) => void
+    callback: (data: IPcd) => void
   ): CloseSubscription;
 
   subscribeToGeometry(
@@ -122,20 +117,16 @@ export interface IUniverseData {
     callback: (data: IJointState) => void
   ): CloseSubscription;
 
-  subscribeToMap(
+  subscribeToGridMap(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IMap) => void
+    callback: (data: IGridMap) => void
   ): CloseSubscription;
 
-  subscribeToVideo(
+  subscribeToRealtimeVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (
-      data:
-        | { type: "frame"; frame: IH264VideoFrame }
-        | { type: "url"; url: string }
-    ) => void
+    callback: (frame: IH264VideoFrame) => void
   ): CloseSubscription;
 
   subscribeToTransformTree(
@@ -150,23 +141,16 @@ export interface IUniverseData {
     callback: (data: ILocation) => void
   ): CloseSubscription;
 
-  subscribeToJson(
+  subscribeToJson<T>(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (
-      data:
-        | { type: "url"; url: string }
-        | { type: "json"; data: any }
-        | { type: "raw_json"; data: string }
-    ) => void
+    callback: (data: T) => void
   ): CloseSubscription;
 
   subscribeToText(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (
-      data: { type: "url"; url: string } | { type: "text"; data: string }
-    ) => void
+    callback: (text: string) => void
   ): CloseSubscription;
 
   getStatistics(): Promise<IUniverseStatistics>;

@@ -8,7 +8,7 @@ import { GltfLayer } from "./layers/GltfLayer";
 import { GridMapLayer } from "./layers/GridMapLayer";
 import { GeometryLayer } from "./layers/GeometryLayer";
 import { PointCloudLayer } from "./layers/PointCloudLayer";
-import { HardwareVideoLayer } from "./layers/HardwareVideoLayer";
+import { RealtimeVideoLayer } from "./layers/RealtimeVideoLayer";
 import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
 
@@ -38,6 +38,9 @@ export type IRtcPointCloud =
   import("../../data-sdk/src/model/IRtcPointCloud").IRtcPointCloud;
 export type IPointCloud =
   import("../../data-sdk/src/model/IPointCloud").IPointCloud;
+export type IGridMap = import("./model/IGridMap").IGridMap;
+export type IPcd = import("./objects/pcd").IPcd;
+export { loadFromBase64, parse } from "./objects/pcd";
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
@@ -51,4 +54,4 @@ LayerRegistry.register(GeometryLayer);
 LayerRegistry.register(PointCloudLayer);
 LayerRegistry.register(DeviceVisualUrdfLayer);
 LayerRegistry.register(DeviceVisualTFLayer);
-LayerRegistry.register(HardwareVideoLayer);
+LayerRegistry.register(RealtimeVideoLayer);

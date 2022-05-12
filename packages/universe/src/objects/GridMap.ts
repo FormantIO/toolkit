@@ -1,4 +1,5 @@
 import {
+  CanvasTexture,
   ClampToEdgeWrapping,
   CustomBlending,
   DoubleSide,
@@ -10,13 +11,12 @@ import {
   PlaneGeometry,
   ShaderMaterial,
   Texture,
-  TextureLoader,
 } from "three";
 import { defined } from "../../../common/defined";
 import { fork } from "../../../common/fork";
-import { IMap } from "../../../data-sdk/src/model/IMap";
 import { Color } from "../../../common/Color";
 import { transformMatrix } from "../math/transformMatrix";
+import { IGridMap } from "../main";
 
 export class GridMap extends Group {
   public onLoad?: () => void;
@@ -25,11 +25,11 @@ export class GridMap extends Group {
 
   private plane?: Mesh;
 
-  private current?: IMap;
+  private current?: IGridMap;
 
-  private next?: IMap;
+  private next?: IGridMap;
 
-  private loading?: IMap;
+  private loading?: IGridMap;
 
   constructor() {
     super();
@@ -86,11 +86,11 @@ void main() {
     this.matrixAutoUpdate = false;
   }
 
-  public set map(map: IMap | undefined) {
+  public set map(map: IGridMap | undefined) {
     fork(this.update(map));
   }
 
-  private async update(map: IMap | undefined) {
+  private async update(map: IGridMap | undefined) {
     if (this.loading) {
       this.next = map;
       return;
@@ -116,26 +116,16 @@ void main() {
       this.add(this.plane);
     }
 
-    const { url, worldToLocal, origin, width, height, resolution } = map;
+    const { canvas, worldToLocal, origin, width, height, resolution } = map;
 
-    if (url !== this.current?.url) {
-      const mapTexture = await new Promise<Texture>((resolve) => {
-        const result = new TextureLoader().load(
-          url,
-          (loaded) => !firstLoad && resolve(loaded)
-        );
-        if (firstLoad) {
-          resolve(result);
-        }
-      });
+    const mapTexture = new CanvasTexture(canvas);
 
-      mapTexture.generateMipmaps = false;
-      mapTexture.wrapS = ClampToEdgeWrapping;
-      mapTexture.wrapT = ClampToEdgeWrapping;
-      mapTexture.minFilter = LinearFilter;
-      mapTexture.magFilter = NearestFilter;
-      this.material.uniforms.mapTexture.value = mapTexture;
-    }
+    mapTexture.generateMipmaps = false;
+    mapTexture.wrapS = ClampToEdgeWrapping;
+    mapTexture.wrapT = ClampToEdgeWrapping;
+    mapTexture.minFilter = LinearFilter;
+    mapTexture.magFilter = NearestFilter;
+    this.material.uniforms.mapTexture.value = mapTexture;
 
     this.matrix.copy(
       transformMatrix(worldToLocal)
