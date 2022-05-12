@@ -167,7 +167,7 @@ export class Device {
     }
   }
 
-  async startRealtimeConnection() {
+  async startRealtimeConnection(sessionType?: SessionType) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         signalingClient: new SignalingPromiseClient(
@@ -200,7 +200,11 @@ export class Device {
 
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
-      await rtcClient.connect(this.remoteDevicePeerId);
+      await rtcClient.connect(
+        this.remoteDevicePeerId,
+        undefined,
+        sessionType as number | undefined
+      );
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
