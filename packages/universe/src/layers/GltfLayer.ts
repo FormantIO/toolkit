@@ -1,4 +1,4 @@
-import { GLTFLoader } from "../../three-utils/loaders/GLTFLoader";
+import { Model3D } from "../objects/Model3D";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class GltfLayer extends UniverseLayer {
@@ -24,12 +24,7 @@ export class GltfLayer extends UniverseLayer {
   init() {
     const urlField = (this.layerFields || {}).url;
     if (urlField && urlField.type === "text" && urlField.value) {
-      const loader = new GLTFLoader();
-      loader.load(urlField.value, (gltf) => {
-        const ninetyDegrees = Math.PI / 2;
-        gltf.scene.rotation.set(ninetyDegrees, 0, 0);
-        this.add(gltf.scene);
-      });
+      this.add(new Model3D(urlField.value));
     }
   }
 }
