@@ -226,22 +226,14 @@ function createComponents(theme: Theme) {
               borderBottom: `1px solid ${theme.palette.secondary.main}`,
             },
           },
-          input: {
-            "&:-webkit-autofill": {
-              transition:
-                "background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s",
-              "transition-delay": "background-color 5000s, color 5000s",
-            },
-          },
         },
       },
       MuiOutlinedInput: {
         styleOverrides: {
           input: {
             "&:-webkit-autofill": {
-              transition:
-                "background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s",
-              "transition-delay": "background-color 5000s, color 5000s",
+              "-webkit-box-shadow": `0 0 0 100px ${theme.palette.primary.dark} inset`,
+              "-webkit-text-fill-color": theme.palette.primary.light,
             },
           },
         },
