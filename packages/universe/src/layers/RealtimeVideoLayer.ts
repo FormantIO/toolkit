@@ -11,7 +11,7 @@ import { LayerSuggestion } from "./LayerRegistry";
 import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
 export class RealtimeVideoLayer extends UniverseLayer {
-  static id = "rtc_video";
+  static layerTypeId = "rtc_video";
 
   static commonName = "Realtime Video";
 
@@ -36,7 +36,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
                   rtcStreamName: stream.name,
                 },
               ],
-              layerType: RealtimeVideoLayer.id,
+              layerType: RealtimeVideoLayer.layerTypeId,
             });
           }
         }
@@ -48,8 +48,6 @@ export class RealtimeVideoLayer extends UniverseLayer {
   loaded: boolean = false;
 
   drawer!: H264BytestreamCanvasDrawer;
-
-  canvas!: HTMLCanvasElement;
 
   mesh!: Mesh;
 
@@ -65,9 +63,16 @@ export class RealtimeVideoLayer extends UniverseLayer {
       defined(dataSource),
       this.onData
     );
-    this.canvas = document.createElement("CANVAS") as HTMLCanvasElement;
+    const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
 
-    const texture = new CanvasTexture(this.canvas);
+    this.drawer.setCanvas(canvas);
+    this.drawer.start();
+  }
+
+  onData = (frame: IH264VideoFrame) => {
+    // we lazily create this canvas because threejs doesn't like size changes
+    const canvas = defined(this.drawer.canvas);
+    const texture = new CanvasTexture(canvas);
 
     const material = new MeshBasicMaterial({
       map: texture,
@@ -78,13 +83,8 @@ export class RealtimeVideoLayer extends UniverseLayer {
     this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.set(ninetyDegrees, 0, 0);
     this.add(this.mesh);
-    this.drawer.setCanvas(this.canvas);
-    this.drawer.start();
-  }
-
-  onData = (frame: IH264VideoFrame) => {
     this.drawer.receiveEncodedFrame(frame);
-    this.mesh.scale.set(1, this.canvas.height / this.canvas.width, 0);
+    this.mesh.scale.set(1, canvas.height / canvas.width, 0);
     (this.mesh.material as any).map.needsUpdate = true;
     (this.mesh.material as any).needsUpdate = true;
   };
