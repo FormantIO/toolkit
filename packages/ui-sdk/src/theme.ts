@@ -226,6 +226,13 @@ function createComponents(theme: Theme) {
               borderBottom: `1px solid ${theme.palette.secondary.main}`,
             },
           },
+          input: {
+            "&:-webkit-autofill": {
+              transition:
+                "background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s",
+              "transition-delay": "background-color 5000s, color 5000s",
+            },
+          },
         },
       },
       MuiTooltip: {

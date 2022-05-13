@@ -228,6 +228,7 @@ function App() {
           <Box sx={{ p: 2 }}>
             <Grid container gap={2}>
               <TextField
+                type="username"
                 id="outlined-basic"
                 label="Outlined"
                 variant="filled"
