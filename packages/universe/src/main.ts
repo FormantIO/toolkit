@@ -11,7 +11,6 @@ import { PointCloudLayer } from "./layers/PointCloudLayer";
 import { RealtimeVideoLayer } from "./layers/RealtimeVideoLayer";
 import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
-import { AxesLayer } from "./layers/AxesLayer";
 
 export * from "./components/Universe";
 export * from "./model/IUniverseData";
@@ -43,7 +42,6 @@ export type IPointCloud =
 export type IGridMap = import("./model/IGridMap").IGridMap;
 export type IPcd = import("./objects/pcd").IPcd;
 
-LayerRegistry.register(AxesLayer);
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
 LayerRegistry.register(TransformLayer);

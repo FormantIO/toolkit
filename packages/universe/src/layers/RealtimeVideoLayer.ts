@@ -27,7 +27,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
   static usesData = true;
 
   static fields = {
-    video_shape: {
+    videoShape: {
       name: "Shape",
       description: "The shape you'd like the video to be",
       placeholder: "sphere",
@@ -96,7 +96,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
     if (!this.mesh && canvas.width > 0 && canvas.height > 0) {
       const texture = new CanvasTexture(canvas);
 
-      const shapeField = (this.layerFields || {}).video_shape;
+      const shapeField = (this.layerFields || {}).videoShape;
       const shape = shapeField.value;
       if (shape === "sphere") {
         const material = new MeshBasicMaterial({

@@ -24,6 +24,7 @@ function axisLine(vector: Vector3, color: Color, opacity: number = 0.4) {
 
 export class Axes extends Group {
   constructor(
+    flat: boolean,
     xColor: Color = new Color(0xea719d),
     yColor: Color = new Color(0x2ec495),
     zColor: Color = new Color(0x18d2ff)
@@ -38,7 +39,9 @@ export class Axes extends Group {
     this.add(axisLine(new Vector3(0, radius, 0), yColor));
     this.add(axisLine(new Vector3(0, -radius, 0), yColor));
 
-    this.add(axisLine(new Vector3(0, 0, radius), zColor, 0.3));
-    this.add(axisLine(new Vector3(0, 0, -radius), zColor, 0.2));
+    if (!flat) {
+      this.add(axisLine(new Vector3(0, 0, radius), zColor, 0.3));
+      this.add(axisLine(new Vector3(0, 0, -radius), zColor, 0.2));
+    }
   }
 }

@@ -67,6 +67,7 @@ export class PointCloudLayer extends UniverseLayer {
         vertexColors: false,
       })
     );
+    this.points.frustumCulled = false;
 
     this.add(this.points);
   }
