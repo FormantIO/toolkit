@@ -18,7 +18,7 @@ ROS2BAG_RECORD_COMMAND_STRING = "ros2 bag record -o "
 def _get_bag_record_command():
     command = ROS2BAG_RECORD_COMMAND_STRING
     command += BAG_PREFIX
-    command += time.time()
+    command += str(time.time())
     for topic in TOPICS_TO_RECORD:
         command += " %s" % topic
         return shlex.split(command)
@@ -44,7 +44,7 @@ class Ros2BagRecorder:
     def stop(self):
         self._stop_recording()
 
-    def _start_recording(self):
+    def _start_recording(self, _metadata=None):
         self._current_command = _get_bag_record_command()
         if self._recording_process is not None:
             print("Error: Cannot start recording, recording already in progress!")
@@ -56,7 +56,7 @@ class Ros2BagRecorder:
             except Exception as e:
                 print("Failed to start recording: %s" % str(e))
 
-    def _stop_recording(self):
+    def _stop_recording(self, _metadata=None):
         if self._recording_process is not None:
             print("Stopping recording.")
             try:
