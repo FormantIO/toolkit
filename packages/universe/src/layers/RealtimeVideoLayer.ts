@@ -112,9 +112,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
           map: texture,
         });
         const geometry = new BoxGeometry(1, 1, 0);
-        const ninetyDegrees = Math.PI / 2;
         this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(ninetyDegrees, 0, 0);
       }
       this.add(this.mesh);
       if (shape !== "sphere") {
