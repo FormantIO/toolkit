@@ -17,6 +17,17 @@ export class PointCloudLayer extends UniverseLayer {
 
   points!: Points;
 
+  static fields = {
+    pointSize: {
+      name: "Point Size",
+      description: "Size of points",
+      placeholder: "0.01",
+      value: "0.01",
+      type: "text",
+      location: ["create"],
+    },
+  };
+
   static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
@@ -58,12 +69,19 @@ export class PointCloudLayer extends UniverseLayer {
       new BufferAttribute(new Float32Array(MAX_POINTS * 3), 3)
     );
     geom.setDrawRange(0, 0);
+    let size = 0.01;
+    if (
+      this.layerFields &&
+      this.layerFields.pointSize &&
+      this.layerFields.pointSize.value
+    ) {
+      size = parseFloat(this.layerFields.pointSize.value);
+    }
     this.points = new Points(
       geom,
       new PointsMaterial({
         color: 0xbac4e2,
-        opacity: 0.5,
-        size: 0.01,
+        size,
         vertexColors: false,
       })
     );

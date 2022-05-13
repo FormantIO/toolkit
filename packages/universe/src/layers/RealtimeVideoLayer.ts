@@ -106,7 +106,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
         const geometry = new SphereGeometry(0.3);
         const oneEightyDegrees = Math.PI;
         this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(oneEightyDegrees, 0, 0);
+        this.mesh.rotation.set(oneEightyDegrees, 0, oneEightyDegrees);
       } else {
         const material = new MeshBasicMaterial({
           map: texture,
