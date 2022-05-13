@@ -60,7 +60,12 @@ export class PointCloudLayer extends UniverseLayer {
     geom.setDrawRange(0, 0);
     this.points = new Points(
       geom,
-      new PointsMaterial({ size: 0.01, vertexColors: false })
+      new PointsMaterial({
+        color: 0xbac4e2,
+        opacity: 0.5,
+        size: 0.01,
+        vertexColors: false,
+      })
     );
 
     this.add(this.points);
