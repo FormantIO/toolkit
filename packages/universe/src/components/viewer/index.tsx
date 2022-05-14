@@ -310,6 +310,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               ) {
                 this.notifyHandsLeave(hands);
                 this.usingHands = false;
+                this.currentHandPoses = ["none", "none"];
+                this.notifyHandPosesChanged(hands);
               }
               if (this.usingHands) {
                 this.notifyHandsMoved(hands);
@@ -320,8 +322,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.currentHandPoses[0] !== hand1Pose ||
                 this.currentHandPoses[2] !== hand2Pose
               ) {
-                this.notifyHandPosesChanged(hands);
                 this.currentHandPoses = [hand1Pose, hand2Pose];
+                this.notifyHandPosesChanged(hands);
               }
             }
           }

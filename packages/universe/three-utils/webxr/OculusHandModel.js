@@ -13,7 +13,6 @@ class OculusHandModel extends Object3D {
     this.envMap = null;
 
     this.mesh = null;
-    this.handVisible = false;
 
     controller.addEventListener("connected", (event) => {
       const xrInputSource = event.data;
@@ -69,23 +68,23 @@ class OculusHandModel extends Object3D {
   getHandPose() {
     let pose = "none";
     if (this.controller) {
-      const finger1 = this.controller.getJoint("index-finger-tip");
-      const palm1 = this.controller.getJoint("index-finger-metacarpal");
+      const finger1 = this.getJoint("index-finger-tip");
+      const palm1 = this.getJoint("index-finger-metacarpal");
       let distance1 = null;
       if (finger1 && palm1)
         distance1 = finger1.position.distanceTo(palm1.position);
-      const finger2 = this.controller.getJoint("middle-finger-tip");
-      const palm2 = this.controller.getJoint("middle-finger-metacarpal");
+      const finger2 = this.getJoint("middle-finger-tip");
+      const palm2 = this.getJoint("middle-finger-metacarpal");
       let distance2 = null;
       if (finger2 && palm2)
         distance2 = finger2.position.distanceTo(palm2.position);
-      const finger3 = this.controller.getJoint("ring-finger-tip");
-      const palm3 = this.controller.getJoint("ring-finger-metacarpal");
+      const finger3 = this.getJoint("ring-finger-tip");
+      const palm3 = this.getJoint("ring-finger-metacarpal");
       let distance3 = null;
       if (finger3 && palm3)
         distance3 = finger3.position.distanceTo(palm3.position);
-      const finger4 = this.controller.getJoint("pinky-finger-tip");
-      const palm4 = this.controller.getJoint("pinky-finger-metacarpal");
+      const finger4 = this.getJoint("pinky-finger-tip");
+      const palm4 = this.getJoint("pinky-finger-metacarpal");
       let distance4 = null;
       if (finger4 && palm4)
         distance4 = finger4.position.distanceTo(palm4.position);
@@ -103,7 +102,7 @@ class OculusHandModel extends Object3D {
           pose = "grip";
         } else if (
           distance1 &&
-          distance1 > 0.05 &&
+          distance1 > 0.1 &&
           distance2 &&
           distance2 < 0.05 &&
           distance3 &&
@@ -112,17 +111,6 @@ class OculusHandModel extends Object3D {
           distance4 < 0.05
         ) {
           pose = "pointing";
-        } else if (
-          distance1 &&
-          distance1 > 0.05 &&
-          distance2 &&
-          distance2 > 0.05 &&
-          distance3 &&
-          distance3 < 0.05 &&
-          distance4 &&
-          distance4 < 0.05
-        ) {
-          pose = "two-finger-pointing";
         } else if (distance1 && distance2 && distance3 && distance4) {
           pose = "normal";
         }
