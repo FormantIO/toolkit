@@ -106,6 +106,8 @@ export abstract class UniverseLayer extends Object3D {
 
   onHandsMoved(_hands: Hand[]): void {}
 
+  onHandPosesChanged(_hands: Hand[]): void {}
+
   onUpdate(_delta: number): void {}
 
   destroy(): void {}

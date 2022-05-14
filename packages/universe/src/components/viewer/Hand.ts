@@ -40,10 +40,14 @@ export interface IHandController {
 // typings for XRHandMeshModel
 export type HandController = Object3D & IHandController;
 
+export type HandPose = "none" | "grip" | "pointing" | "two-finger-pointing";
+
 export interface IHand {
   controller: HandController;
+  handVisible: boolean;
   getPointerPosition(): Vector3 | null;
   getJoint(joint: Joints): Object3D | null;
+  getHandPose(): HandPose;
   intersectBoxObject(boxObject: Object3D): boolean;
 }
 

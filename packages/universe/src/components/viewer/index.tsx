@@ -29,7 +29,7 @@ import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
 import { XRControllerModelFactory } from "../../../three-utils/webxr/XRControllerModelFactory";
 import { OculusHandModel } from "../../../three-utils/webxr/OculusHandModel";
-import { Hand } from "./Hand";
+import { Hand, HandPose } from "./Hand";
 import { Controller } from "./Controller";
 
 const MeasureContainer = styled.div`
@@ -88,6 +88,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   private clock = new THREE.Clock();
 
   gamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
+
+  private currentHandPoses: HandPose[] = ["none", "none"];
 
   constructor(props: IUniverseViewerProps) {
     super(props);
@@ -173,7 +175,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.scene.add(controllerGrip1);
 
       const hand1 = this.renderer.xr.getHand(0);
-      const handModel1 = new OculusHandModel(hand1);
+      const handModel1 = new OculusHandModel(hand1) as unknown as Hand;
       hand1.add(handModel1);
       this.scene.add(hand1);
 
@@ -185,14 +187,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.scene.add(controllerGrip2);
 
       const hand2 = this.renderer.xr.getHand(1);
-      const handModel2 = new OculusHandModel(hand2);
+      const handModel2 = new OculusHandModel(hand2) as unknown as Hand;
       hand2.add(handModel2);
       this.scene.add(hand2);
 
-      const hands = [
-        handModel1 as unknown as Hand,
-        handModel2 as unknown as Hand,
-      ];
+      const hands = [handModel1, handModel2];
 
       this.orbitControls = new OrbitControls(
         this.camera,
@@ -314,6 +313,15 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               }
               if (this.usingHands) {
                 this.notifyHandsMoved(hands);
+              }
+              const hand1Pose = hands[0].getHandPose();
+              const hand2Pose = hands[1].getHandPose();
+              if (
+                this.currentHandPoses[0] !== hand1Pose ||
+                this.currentHandPoses[2] !== hand2Pose
+              ) {
+                this.notifyHandPosesChanged(hands);
+                this.currentHandPoses = [hand1Pose, hand2Pose];
               }
             }
           }
@@ -475,6 +483,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   private notifyHandsMoved(hands: Hand[]) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onHandsMoved(hands);
+    });
+  }
+
+  private notifyHandPosesChanged(hands: Hand[]) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandPosesChanged(hands);
     });
   }
 
