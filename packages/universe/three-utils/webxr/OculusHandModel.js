@@ -91,18 +91,18 @@ class OculusHandModel extends Object3D {
       if (this.controller.visible) {
         if (
           distance1 &&
-          distance1 < 0.05 &&
+          distance1 > 0.1 &&
           distance2 &&
-          distance2 < 0.05 &&
+          distance2 < 0.1 &&
           distance3 &&
-          distance3 < 0.05 &&
+          distance3 < 0.1 &&
           distance4 &&
-          distance4 < 0.05
+          distance4 < 0.1
         ) {
-          pose = "grip";
+          pose = "normal";
         } else if (
           distance1 &&
-          distance1 > 0.1 &&
+          distance1 > 0.2 &&
           distance2 &&
           distance2 < 0.05 &&
           distance3 &&
@@ -112,7 +112,7 @@ class OculusHandModel extends Object3D {
         ) {
           pose = "pointing";
         } else if (distance1 && distance2 && distance3 && distance4) {
-          pose = "normal";
+          pose = "grip";
         }
       }
     }
