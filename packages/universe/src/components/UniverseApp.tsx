@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { Vector3 } from "three";
 import produce from "immer";
 import { useRecoilState } from "recoil";
@@ -134,8 +135,20 @@ export function UniverseApp(props: IUniverseAppProps) {
     TreePath | undefined
   >(undefined);
   const [updatingSceneGraph, setUpdatingSceneGraph] = React.useState(false);
+  const [fontLoaded, setFontLoaded] = React.useState(false);
 
-  console.log(JSON.stringify(sceneGraph, null, 2));
+  useEffect(() => {
+    (async () => {
+      const font = new FontFace(
+        "Inter",
+        "url(https://fonts.gstatic.com/s/inter/v11/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2)"
+      );
+      await font.load();
+      // @ts-ignore-next-line
+      document.fonts.add(font);
+      setFontLoaded(true);
+    })();
+  }, []);
 
   const persist = throttle(() => {
     if (updatingSceneGraph && props.onSceneGraphChange) {
@@ -762,12 +775,14 @@ export function UniverseApp(props: IUniverseAppProps) {
           <Box
             sx={{ position: "relative", overflow: "hidden", height: "100%" }}
           >
-            <UniverseViewer
-              ref={onViewerLoaded}
-              onSceneGraphElementEdited={onSceneGraphElementEdited}
-              universeData={props.universeData}
-              vr={vr}
-            />
+            {fontLoaded && (
+              <UniverseViewer
+                ref={onViewerLoaded}
+                onSceneGraphElementEdited={onSceneGraphElementEdited}
+                universeData={props.universeData}
+                vr={vr}
+              />
+            )}
             <Controls>
               <Control onClick={recenter}>
                 <Icon name="recenter" />

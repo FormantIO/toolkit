@@ -46,7 +46,7 @@ export class Label extends Group {
       this.remove(this.sprite);
       this.sprite = undefined;
     }
-    const fontface = "Arial";
+    const fontface = "Inter";
     const fontsize = 30;
     const message = this.currentText;
     const font = `${fontsize}px ${fontface}`;
