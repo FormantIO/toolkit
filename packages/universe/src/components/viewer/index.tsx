@@ -292,25 +292,29 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.gamePads.set(source, newState);
               }
             });
-            this.notifyControllers(controllers);
-            if (
-              hands[0].controller.visible === true &&
-              hands[1].controller.visible === true &&
-              this.usingHands === false
-            ) {
-              this.notifyHandsEnter(hands);
-              this.usingHands = true;
+            if (controllers.length > 0) {
+              this.notifyControllers(controllers);
             }
-            if (
-              hands[0].controller.visible !== true &&
-              hands[1].controller.visible !== true &&
-              this.usingHands === true
-            ) {
-              this.notifyHandsLeave(hands);
-              this.usingHands = false;
-            }
-            if (this.usingHands) {
-              this.notifyHandsMoved(hands);
+            if (hands.length > 0) {
+              if (
+                hands[0].controller.visible === true &&
+                hands[1].controller.visible === true &&
+                this.usingHands === false
+              ) {
+                this.notifyHandsEnter(hands);
+                this.usingHands = true;
+              }
+              if (
+                hands[0].controller.visible !== true &&
+                hands[1].controller.visible !== true &&
+                this.usingHands === true
+              ) {
+                this.notifyHandsLeave(hands);
+                this.usingHands = false;
+              }
+              if (this.usingHands) {
+                this.notifyHandsMoved(hands);
+              }
             }
           }
         }

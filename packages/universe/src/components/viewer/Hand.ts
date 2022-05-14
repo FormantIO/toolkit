@@ -43,8 +43,8 @@ export type HandController = Object3D & IHandController;
 export interface IHand {
   controller: HandController;
   getPointerPosition(): Vector3 | null;
+  getJoint(joint: Joints): Object3D | null;
   intersectBoxObject(boxObject: Object3D): boolean;
-  getPointerPosition(): Vector3 | null;
 }
 
 // typings for OculusHandModel

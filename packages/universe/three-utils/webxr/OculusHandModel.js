@@ -57,6 +57,14 @@ class OculusHandModel extends Object3D {
     return null;
   }
 
+  getJoint(joint) {
+    const j = this.controller.joints[joint];
+    if (j) {
+      return j;
+    }
+    return null;
+  }
+
   intersectBoxObject(boxObject) {
     const pointerPosition = this.getPointerPosition();
     if (pointerPosition) {
