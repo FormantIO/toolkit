@@ -67,63 +67,65 @@ class OculusHandModel extends Object3D {
   }
 
   getHandPose() {
-    const finger1 = hands[0].getJoint("index-finger-tip");
-    const palm1 = hands[0].getJoint("index-finger-metacarpal");
-    let distance1 = null;
-    if (finger1 && palm1)
-      distance1 = finger1.position.distanceTo(palm1.position);
-    const finger2 = hands[0].getJoint("middle-finger-tip");
-    const palm2 = hands[0].getJoint("middle-finger-metacarpal");
-    let distance2 = null;
-    if (finger2 && palm2)
-      distance2 = finger2.position.distanceTo(palm2.position);
-    const finger3 = hands[0].getJoint("ring-finger-tip");
-    const palm3 = hands[0].getJoint("ring-finger-metacarpal");
-    let distance3 = null;
-    if (finger3 && palm3)
-      distance3 = finger3.position.distanceTo(palm3.position);
-    const finger4 = hands[0].getJoint("pinky-finger-tip");
-    const palm4 = hands[0].getJoint("pinky-finger-metacarpal");
-    let distance4 = null;
-    if (finger4 && palm4)
-      distance4 = finger4.position.distanceTo(palm4.position);
     let pose = "none";
-    if (this.controller.visible) {
-      if (
-        distance1 &&
-        distance1 < 0.05 &&
-        distance2 &&
-        distance2 < 0.05 &&
-        distance3 &&
-        distance3 < 0.05 &&
-        distance4 &&
-        distance4 < 0.05
-      ) {
-        pose = "grip";
-      } else if (
-        distance1 &&
-        distance1 > 0.05 &&
-        distance2 &&
-        distance2 < 0.05 &&
-        distance3 &&
-        distance3 < 0.05 &&
-        distance4 &&
-        distance4 < 0.05
-      ) {
-        pose = "pointing";
-      } else if (
-        distance1 &&
-        distance1 > 0.05 &&
-        distance2 &&
-        distance2 > 0.05 &&
-        distance3 &&
-        distance3 < 0.05 &&
-        distance4 &&
-        distance4 < 0.05
-      ) {
-        pose = "two-finger-pointing";
-      } else if (distance1 && distance2 && distance3 && distance4) {
-        pose = "normal";
+    if (this.controller) {
+      const finger1 = this.controller.getJoint("index-finger-tip");
+      const palm1 = this.controller.getJoint("index-finger-metacarpal");
+      let distance1 = null;
+      if (finger1 && palm1)
+        distance1 = finger1.position.distanceTo(palm1.position);
+      const finger2 = this.controller.getJoint("middle-finger-tip");
+      const palm2 = this.controller.getJoint("middle-finger-metacarpal");
+      let distance2 = null;
+      if (finger2 && palm2)
+        distance2 = finger2.position.distanceTo(palm2.position);
+      const finger3 = this.controller.getJoint("ring-finger-tip");
+      const palm3 = this.controller.getJoint("ring-finger-metacarpal");
+      let distance3 = null;
+      if (finger3 && palm3)
+        distance3 = finger3.position.distanceTo(palm3.position);
+      const finger4 = this.controller.getJoint("pinky-finger-tip");
+      const palm4 = this.controller.getJoint("pinky-finger-metacarpal");
+      let distance4 = null;
+      if (finger4 && palm4)
+        distance4 = finger4.position.distanceTo(palm4.position);
+      if (this.controller.visible) {
+        if (
+          distance1 &&
+          distance1 < 0.05 &&
+          distance2 &&
+          distance2 < 0.05 &&
+          distance3 &&
+          distance3 < 0.05 &&
+          distance4 &&
+          distance4 < 0.05
+        ) {
+          pose = "grip";
+        } else if (
+          distance1 &&
+          distance1 > 0.05 &&
+          distance2 &&
+          distance2 < 0.05 &&
+          distance3 &&
+          distance3 < 0.05 &&
+          distance4 &&
+          distance4 < 0.05
+        ) {
+          pose = "pointing";
+        } else if (
+          distance1 &&
+          distance1 > 0.05 &&
+          distance2 &&
+          distance2 > 0.05 &&
+          distance3 &&
+          distance3 < 0.05 &&
+          distance4 &&
+          distance4 < 0.05
+        ) {
+          pose = "two-finger-pointing";
+        } else if (distance1 && distance2 && distance3 && distance4) {
+          pose = "normal";
+        }
       }
     }
 
