@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { WebXRManager, XRReferenceSpace } from "three";
+import { WebXRManager, XRReferenceSpace, XRSession } from "three";
 import { Controller } from "../components/viewer/Controller";
 import { UniverseLayer } from "./UniverseLayer";
 
@@ -30,6 +30,8 @@ export class TeleportLayer extends UniverseLayer {
 
   originalBaseReferenceSpace?: XRReferenceSpace;
 
+  session: XRSession | null = null;
+
   init() {
     this.add(this.marker);
     this.add(this.floor);
@@ -41,7 +43,6 @@ export class TeleportLayer extends UniverseLayer {
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
-      console.log(this.intersection.x, -this.intersection.z);
       this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
     }
   }
@@ -58,10 +59,12 @@ export class TeleportLayer extends UniverseLayer {
       this.xr &&
       this.intersection
     ) {
+      const session = this.xr.getSession();
       const baseReferenceSpace = this.xr.getReferenceSpace();
       if (baseReferenceSpace && this.camera) {
-        if (!this.originalBaseReferenceSpace) {
+        if (!this.originalBaseReferenceSpace || this.session !== session) {
           this.originalBaseReferenceSpace = baseReferenceSpace;
+          this.session = session;
         }
 
         const offsetPosition = {
