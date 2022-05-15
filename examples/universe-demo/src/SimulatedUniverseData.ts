@@ -1,8 +1,12 @@
 import {
+  CloseSubscription,
+  DataSourceState,
   IHardwareStream,
+  IPcd,
   ITelemetryRosStream,
   ITelemetryStream,
   IUniverseData,
+  IUniverseStatistics,
   UniverseDataSource,
 } from "@formant/universe";
 import { IH264VideoFrame } from "@formant/universe/dist/types/data-sdk/src/model/IH264VideoFrame";
@@ -10,8 +14,8 @@ import { IJointState } from "@formant/universe/dist/types/data-sdk/src/model/IJo
 import { ILocation } from "@formant/universe/dist/types/data-sdk/src/model/ILocation";
 import { IMap } from "@formant/universe/dist/types/data-sdk/src/model/IMap";
 import { IMarker3DArray } from "@formant/universe/dist/types/data-sdk/src/model/IMarker3DArray";
-import { IRtcPointCloud } from "@formant/universe/dist/types/data-sdk/src/model/IRtcPointCloud";
 import { ITransformNode } from "@formant/universe/dist/types/model/ITransformNode";
+import { IGridMap } from "@formant/universe/dist/types/universe/src/model/IGridMap";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -19,6 +23,45 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToGridMap(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: IGridMap) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToRealtimeVideo(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (frame: IH264VideoFrame) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToJson<T>(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: T) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToText(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (text: string) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  getStatistics(): Promise<IUniverseStatistics> {
+    throw new Error("Method not implemented.");
+  }
+  subscribeDataSourceStateChange(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _onDataSourceStateChange?: (state: DataSourceState) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+
   time = Date.now();
   setTime(time: number): void {
     this.time = time;
@@ -96,7 +139,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToPointCloud(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IRtcPointCloud) => void
+    _callback: (data: IPcd) => void
   ): () => void {
     return () => {};
   }

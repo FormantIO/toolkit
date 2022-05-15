@@ -7,6 +7,30 @@ export function createScene() {
     {
       id: uuid.v4(),
       editing: false,
+      type: "teleport",
+      name: "Teleport",
+      deviceContext: undefined,
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {},
+      data: {},
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
+      type: "hands",
+      name: "Hands",
+      deviceContext: undefined,
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {},
+      data: {},
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
       type: "data",
       name: "Spot-9000",
       deviceContext: SPOT_ID,
@@ -28,6 +52,7 @@ export function createScene() {
           fieldValues: {
             label_text: {
               type: "text",
+              location: [],
               value: "Spot-9000",
             },
           },
@@ -87,6 +112,7 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             label_text: {
+              location: [],
               type: "text",
               value: "RoboArm1",
             },
@@ -147,6 +173,7 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             label_text: {
+              location: [],
               type: "text",
               value: "RoboArm2",
             },
@@ -208,6 +235,7 @@ export function createScene() {
           fieldValues: {
             label_text: {
               type: "text",
+              location: [],
               value: "RoboArm3",
             },
           },
@@ -274,6 +302,7 @@ export function createScene() {
       },
       fieldValues: {
         url: {
+          location: [],
           type: "text",
           value:
             "https://formant-3d-models.s3.us-west-2.amazonaws.com/grass.gltf",

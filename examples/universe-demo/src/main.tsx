@@ -1,15 +1,19 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { FormantProvider } from "@formant/ui-sdk";
-import { Universe } from "@formant/universe";
+import { LayerRegistry, TeleportLayer, Universe } from "@formant/universe";
 import { SimulatedUniverseData } from "./SimulatedUniverseData";
 import { createScene } from "./createScene";
 import { App as FormantApp, ModuleData } from "@formant/data-sdk";
+import { HandsLayer } from "./HandsLayer";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const mode = urlParams.get("mode");
 const vr = urlParams.get("vr");
+
+LayerRegistry.register(TeleportLayer);
+LayerRegistry.register(HandsLayer);
 
 function App() {
   const data = new SimulatedUniverseData();
