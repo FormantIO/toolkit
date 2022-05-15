@@ -38,6 +38,32 @@ export function createScene() {
         {
           id: uuid.v4(),
           editing: false,
+          type: "realtime_video",
+          name: "Video",
+          deviceContext: "abcd",
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 1.4 },
+          fieldValues: {
+            videoShape: {
+              type: "text",
+              value: "sphere",
+              location: [],
+            },
+          },
+          dataSources: [
+            {
+              id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
+              sourceType: "realtime",
+              rosTopicName: "armJoints",
+              rosTopicType: "sensor_msgs/JointState",
+            },
+          ],
+          data: {},
+        },
+        {
+          id: uuid.v4(),
+          editing: false,
           type: "label",
           name: "Name Label",
           deviceContext: "abc",

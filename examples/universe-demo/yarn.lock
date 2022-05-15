@@ -263,19 +263,6 @@
     google-protobuf "3.17.3"
     grpc-web "1.2.1"
 
-"@formant/ui-sdk-realtime-player-core-worker@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core-worker/-/ui-sdk-realtime-player-core-worker-0.0.2.tgz#d60327d2d7f1021b8094d57d4b3b004b9ad22d2c"
-  integrity sha512-Ml7QoFI9JHWZhsUUPA3HZRIkOOI9O1rr3ASCn0fpOJACEmpKHAbSXc0fk0yCvUpQHtbG4T4jTtHQ+11tKSWUMQ==
-  dependencies:
-    "@types/offscreencanvas" "^2019.6.4"
-    h264decoder "^1.0.0"
-
-"@formant/ui-sdk-realtime-player-core@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
-  integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
-
 "@formant/ui-sdk@0.0.19":
   version "0.0.19"
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.19.tgz#b3c2bf78f93f90c8a69e594e1d029c1d4532ec6a"
@@ -320,13 +307,11 @@
     styled-components "^5.3.5"
 
 "@formant/universe@latest":
-  version "0.0.111"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.111.tgz#dc1bdc3c6367dc44dda86c0cdab6a9f8ba3eab45"
-  integrity sha512-q5EXJGR1tPxdJLtqoiM3iGOCCIA6+c2lMwMyCK3axZ6kJ0KaK1yHZwEiObjIipi66IpbveSGijI9NXsnzjogEg==
+  version "0.0.113"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.113.tgz#f3c81cccab8654a7de40313d58ba880d3a91016d"
+  integrity sha512-kEhsJiqH1o6oDOh53NQT7xn5VTZChIYW2drImm5aczQ+WnB9cwFn70MSplf9gs5ilShb2FLKte1VHKUOUIUH9A==
   dependencies:
     "@formant/ui-sdk" "0.0.19"
-    "@formant/ui-sdk-realtime-player-core" "^0.0.2"
-    "@formant/ui-sdk-realtime-player-core-worker" "^0.0.2"
     "@types/react" "^18.0.8"
     "@types/uuid" "^8.3.4"
     geolib "^3.3.3"
@@ -889,11 +874,6 @@ grpc-web@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.2.1.tgz#860051d705bf5baa7b81fcbd14030060bf16b7b9"
   integrity sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw==
-
-h264decoder@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/h264decoder/-/h264decoder-1.0.0.tgz#5c3c5bc1f755df10f3689d58e00910264be8a8ff"
-  integrity sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ==
 
 hamt_plus@1.0.2:
   version "1.0.2"

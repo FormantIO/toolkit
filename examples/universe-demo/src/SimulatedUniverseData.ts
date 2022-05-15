@@ -2,11 +2,13 @@ import {
   CloseSubscription,
   DataSourceState,
   IHardwareStream,
+  InteractionContext,
   IPcd,
   ITelemetryRosStream,
   ITelemetryStream,
   IUniverseData,
   IUniverseStatistics,
+  RealtimeButtonConfiguration,
   UniverseDataSource,
 } from "@formant/universe";
 import { IH264VideoFrame } from "@formant/universe/dist/types/data-sdk/src/model/IH264VideoFrame";
@@ -23,6 +25,31 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  getInteractionContext(): InteractionContext {
+    throw new Error("Method not implemented.");
+  }
+  addInteractionContextChangedListener(
+    _callback: (c: InteractionContext) => void
+  ): void {
+    throw new Error("Method not implemented.");
+  }
+  removeInteractionContextChangedListener(
+    _callback: (c: InteractionContext) => void
+  ): void {
+    throw new Error("Method not implemented.");
+  }
+  getRealtimeButtons(
+    _deviceId: string
+  ): Promise<RealtimeButtonConfiguration[]> {
+    throw new Error("Method not implemented.");
+  }
+  sendRealtimeButtonState(
+    _deviceId: string,
+    _streamName: string,
+    _state: boolean
+  ): void {
+    throw new Error("Method not implemented.");
+  }
   subscribeToGridMap(
     _deviceId: string,
     _source: UniverseDataSource,
@@ -33,9 +60,29 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToRealtimeVideo(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (frame: IH264VideoFrame) => void
-  ): CloseSubscription {
-    throw new Error("Method not implemented.");
+    callback: (data: HTMLCanvasElement) => void
+  ): () => void {
+    const canvas = document.createElement("canvas");
+    canvas.width = 640;
+    canvas.height = 480;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      setInterval(() => {
+        // draw random rect
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = `rgb(${255 * Math.random()}, ${255 * Math.random()}, ${
+          255 * Math.random()
+        })`;
+        ctx.fillRect(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * canvas.width,
+          Math.random() * canvas.height
+        );
+        callback(canvas);
+      }, 10);
+    }
+    return () => {};
   }
   subscribeToJson<T>(
     _deviceId: string,
