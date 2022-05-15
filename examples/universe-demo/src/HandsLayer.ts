@@ -22,7 +22,7 @@ export class HandsLayer extends UniverseLayer {
   base = new Object3D();
 
   cube = new Mesh(
-    new BoxBufferGeometry(1 / 2, 0, 0.66 / 2),
+    new BoxBufferGeometry(1 / 2, 0.66 / 2, 0),
     new MeshBasicMaterial({
       map: new TextureLoader().load(
         "https://i0.wp.com/ilikeinterfaces.com/wp-content/uploads/2016/04/00_15_4200053.png"
@@ -33,7 +33,7 @@ export class HandsLayer extends UniverseLayer {
   init() {
     this.base.add(this.cube);
     this.add(this.base);
-    this.cube.position.set(0, 0.4, 0);
+    this.cube.position.set(0, 0, 0.4);
   }
 
   onHandsEnter(hands: Hand[]): void {
@@ -66,8 +66,8 @@ export class HandsLayer extends UniverseLayer {
       )}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
       this.base.position.set(
         camera.position.x,
-        -camera.position.z,
-        camera.position.y
+        camera.position.y,
+        camera.position.z
       );
     }
   }
