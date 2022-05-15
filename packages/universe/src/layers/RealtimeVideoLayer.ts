@@ -87,7 +87,8 @@ export class RealtimeVideoLayer extends UniverseLayer {
 
       const shapeField = (this.layerFields || {}).videoShape;
       const shape = shapeField.value;
-      if (shape === "sphere") {
+      const ninetyDegrees = Math.PI / 2;
+      if (shape === "sphere" || shape === "sphere_rotated") {
         const material = new MeshBasicMaterial({
           map: texture,
           side: BackSide,
@@ -95,13 +96,16 @@ export class RealtimeVideoLayer extends UniverseLayer {
         const geometry = new SphereGeometry(0.3);
         const oneEightyDegrees = Math.PI;
         this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(oneEightyDegrees, 0, oneEightyDegrees);
+        if (shape === "sphere_rotated") {
+          this.mesh.rotation.set(oneEightyDegrees, 0, oneEightyDegrees);
+        } else {
+          this.mesh.rotation.set(ninetyDegrees, 0, 0);
+        }
       } else {
         const material = new MeshBasicMaterial({
           map: texture,
         });
         const geometry = new BoxGeometry(1, 1, 0);
-        const ninetyDegrees = Math.PI / 2;
         this.mesh = new Mesh(geometry, material);
         this.mesh.rotation.set(ninetyDegrees, 0, 0);
       }
