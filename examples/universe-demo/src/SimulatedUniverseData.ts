@@ -11,7 +11,6 @@ import {
   RealtimeButtonConfiguration,
   UniverseDataSource,
 } from "@formant/universe";
-import { IH264VideoFrame } from "@formant/universe/dist/types/data-sdk/src/model/IH264VideoFrame";
 import { IJointState } from "@formant/universe/dist/types/data-sdk/src/model/IJointState";
 import { ILocation } from "@formant/universe/dist/types/data-sdk/src/model/ILocation";
 import { IMap } from "@formant/universe/dist/types/data-sdk/src/model/IMap";
@@ -57,7 +56,7 @@ export class SimulatedUniverseData implements IUniverseData {
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
-  subscribeToRealtimeVideo(
+  subscribeToVideo(
     _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: HTMLCanvasElement) => void
@@ -108,8 +107,12 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   time = Date.now();
-  setTime(time: number): void {
-    this.time = time;
+  setTime(time: number | "live"): void {
+    if (time === "live") {
+      throw new Error("Not implemented");
+    } else {
+      this.time = time;
+    }
   }
   async getLatestTransformTrees(
     deviceId: string
@@ -344,14 +347,6 @@ export class SimulatedUniverseData implements IUniverseData {
     _deviceId: string,
     _source: UniverseDataSource,
     _callback: (data: IMap) => void
-  ): () => void {
-    return () => {};
-  }
-
-  subscribeToVideo(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: IH264VideoFrame) => void
   ): () => void {
     return () => {};
   }

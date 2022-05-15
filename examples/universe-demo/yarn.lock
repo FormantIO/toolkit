@@ -307,9 +307,9 @@
     styled-components "^5.3.5"
 
 "@formant/universe@latest":
-  version "0.0.114"
-  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.114.tgz#58f05da879d5a12937aa7c36b8048a93460e38e6"
-  integrity sha512-79+p+NfY7Y9jPV6HiUBeO1ggbrTVy0oFOkudTcIf3EpuITJbyGeTNTMFLJGcJwj06v5k/4NTw2MwnAXQkTrU8w==
+  version "0.0.115"
+  resolved "https://registry.yarnpkg.com/@formant/universe/-/universe-0.0.115.tgz#d8290d876022a2a050e689c416c138011e58e7f9"
+  integrity sha512-ELNrYN2FsdNz/zh51pTLjpWc6zRa6Ui1R7Xh/65BYblIVJdZfYSkpeX+OBye9vML+yO97k0PGidOEPK+pC3r6w==
   dependencies:
     "@formant/ui-sdk" "0.0.19"
     "@types/react" "^18.0.8"

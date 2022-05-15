@@ -38,7 +38,7 @@ export function createScene() {
         {
           id: uuid.v4(),
           editing: false,
-          type: "realtime_video",
+          type: "video",
           name: "Video",
           deviceContext: "abcd",
           children: [],
