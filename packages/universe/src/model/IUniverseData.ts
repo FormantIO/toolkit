@@ -1,4 +1,3 @@
-import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";

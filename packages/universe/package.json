@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.112",
+  "version": "0.0.113",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -50,8 +50,6 @@
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
     "@formant/ui-sdk": "0.0.19",
-    "@formant/ui-sdk-realtime-player-core": "^0.0.2",
-    "@formant/ui-sdk-realtime-player-core-worker": "^0.0.2",
     "@types/react": "^18.0.8",
     "@types/uuid": "^8.3.4",
     "geolib": "^3.3.3",

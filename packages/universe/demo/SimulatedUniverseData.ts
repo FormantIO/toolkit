@@ -14,7 +14,6 @@ import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
 import { IGridMap, IPcd } from "../src/main";
 import { definedAndNotNull } from "../../common/defined";
 
