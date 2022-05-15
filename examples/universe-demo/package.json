@@ -2,7 +2,7 @@
   "name": "example",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --port 9148",
+    "dev": "vite --host 0.0.0.0 --https --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview"
   },

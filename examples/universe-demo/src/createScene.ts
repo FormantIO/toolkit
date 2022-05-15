@@ -43,7 +43,7 @@ export function createScene() {
           deviceContext: "abcd",
           children: [],
           visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 1.4 },
+          position: { type: "manual", x: 0, y: 1.4, z: 0 },
           fieldValues: {
             videoShape: {
               type: "text",
@@ -72,8 +72,8 @@ export function createScene() {
           position: {
             type: "manual",
             x: 0,
-            y: 1.6653345369377348e-16,
-            z: 0.9554891467013107,
+            y: 0.9554891467013107,
+            z: 1.6653345369377348e-16,
           },
           fieldValues: {
             label_text: {
@@ -92,8 +92,8 @@ export function createScene() {
           position: {
             type: "manual",
             x: 0,
-            y: 0,
-            z: 0.6511622,
+            y: 0.6511622,
+            z: 0,
           },
           fieldValues: {},
           name: "Spot URDF",
