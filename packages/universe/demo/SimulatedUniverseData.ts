@@ -80,8 +80,12 @@ export class SimulatedUniverseData implements IUniverseData {
 
   time = Date.now();
 
-  setTime(time: number): void {
-    this.time = time;
+  setTime(time: number | "live"): void {
+    if (time === "live") {
+      this.time = Date.now();
+    } else {
+      this.time = time;
+    }
   }
 
   async getLatestTransformTrees(
@@ -321,7 +325,7 @@ export class SimulatedUniverseData implements IUniverseData {
     return () => {};
   }
 
-  subscribeToRealtimeVideo(
+  subscribeToVideo(
     _deviceId: string,
     _source: UniverseDataSource,
     callback: (data: HTMLCanvasElement) => void

@@ -12,12 +12,12 @@ import { UniverseLayer } from "./UniverseLayer";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { LayerSuggestion } from "./LayerRegistry";
 
-export class RealtimeVideoLayer extends UniverseLayer {
-  static layerTypeId = "realtime_video";
+export class VideoLayer extends UniverseLayer {
+  static layerTypeId = "video";
 
-  static commonName = "Realtime Video";
+  static commonName = "Video";
 
-  static description = "A video representing a realtime camera.";
+  static description = "A video representing a camera.";
 
   static usesData = true;
 
@@ -49,7 +49,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
                   rtcStreamName: stream.name,
                 },
               ],
-              layerType: RealtimeVideoLayer.layerTypeId,
+              layerType: VideoLayer.layerTypeId,
             });
           }
         }
@@ -69,7 +69,7 @@ export class RealtimeVideoLayer extends UniverseLayer {
   init() {
     const dataSource = defined(this.layerDataSources)[0];
 
-    defined(this.universeData).subscribeToRealtimeVideo(
+    defined(this.universeData).subscribeToVideo(
       defined(this.layerContext),
       defined(dataSource),
       this.onData
@@ -122,61 +122,3 @@ export class RealtimeVideoLayer extends UniverseLayer {
     }
   };
 }
-
-/*
-
-
-
-import { IH264VideoFrame } from "../../../data-sdk/src/model/IH264VideoFrame";
-
-import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
-
-
-  this.drawer = new H264BytestreamCanvasDrawer(
-      () => new RealtimePlayerWorker(),
-      () => {},
-      () => {}
-    );
-    const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
-    canvas.width = 0;
-    canvas.height = 0;
-    this.drawer.setCanvas(canvas);
-    this.drawer.start();
-
-const drawer = defined(this.drawer);
-    drawer.receiveEncodedFrame(frame);
-    // we lazily create this canvas because threejs doesn't like size changes
-    const canvas = defined(drawer.canvas);
-    if (!this.mesh && canvas.width > 0 && canvas.height > 0) {
-      const texture = new CanvasTexture(canvas);
-
-      const shapeField = (this.layerFields || {}).videoShape;
-      const shape = shapeField.value;
-      if (shape === "sphere") {
-        const material = new MeshBasicMaterial({
-          map: texture,
-          side: BackSide,
-        });
-        const geometry = new SphereGeometry(0.3);
-        const oneEightyDegrees = Math.PI;
-        this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(oneEightyDegrees, 0, oneEightyDegrees);
-      } else {
-        const material = new MeshBasicMaterial({
-          map: texture,
-        });
-        const geometry = new BoxGeometry(1, 1, 0);
-        const ninetyDegrees = Math.PI / 2;
-        this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(ninetyDegrees, 0, 0);
-      }
-      this.add(this.mesh);
-      if (shape !== "sphere") {
-        this.mesh.scale.set(1, canvas.height / canvas.width, 0);
-      }
-      (this.mesh.material as any).map.needsUpdate = true;
-      (this.mesh.material as any).needsUpdate = true;
-    } */

@@ -8,7 +8,7 @@ import { GltfLayer } from "./layers/GltfLayer";
 import { GridMapLayer } from "./layers/GridMapLayer";
 import { GeometryLayer } from "./layers/GeometryLayer";
 import { PointCloudLayer } from "./layers/PointCloudLayer";
-import { RealtimeVideoLayer } from "./layers/RealtimeVideoLayer";
+import { VideoLayer } from "./layers/VideoLayer";
 import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
 
@@ -54,4 +54,4 @@ LayerRegistry.register(GeometryLayer);
 LayerRegistry.register(PointCloudLayer);
 LayerRegistry.register(DeviceVisualUrdfLayer);
 LayerRegistry.register(DeviceVisualTFLayer);
-LayerRegistry.register(RealtimeVideoLayer);
+LayerRegistry.register(VideoLayer);

@@ -93,7 +93,7 @@ export interface IUniverseData {
     state: boolean
   ): void;
 
-  setTime(time: number): void;
+  setTime(time: number | "live"): void;
 
   getLatestTransformTrees(deviceId: string): Promise<
     {
@@ -147,7 +147,7 @@ export interface IUniverseData {
     callback: (data: IGridMap) => void
   ): CloseSubscription;
 
-  subscribeToRealtimeVideo(
+  subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
     callback: (frame: HTMLCanvasElement) => void
