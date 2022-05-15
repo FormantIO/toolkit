@@ -95,8 +95,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     super(props);
     this.scene = new THREE.Scene();
     this.scene.add(this.root);
-    const ninetyDegrees = Math.PI / 2;
-    this.root.rotation.set(-ninetyDegrees, 0, 0);
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,

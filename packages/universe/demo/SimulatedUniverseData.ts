@@ -14,8 +14,7 @@ import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IGridMap, IPcd } from "../src/main";
-import { definedAndNotNull } from "../../common/defined";
+import { IGridMap, IMap, IPcd } from "../src/main";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -48,6 +47,38 @@ export class SimulatedUniverseData implements IUniverseData {
   ): void {
     throw new Error("Method not implemented.");
   }
+  subscribeToGridMap(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: IGridMap) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToVideo(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    callback: (data: HTMLCanvasElement) => void
+  ): () => void {
+    const image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.addEventListener(
+      "load",
+      () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext("2d");
+        if (context) {
+          context.drawImage(image, 0, 0);
+          callback(canvas);
+        }
+      },
+      false
+    );
+    image.src =
+      "https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg";
+    return () => {};
+  }
   subscribeToJson<T>(
     _deviceId: string,
     _source: UniverseDataSource,
@@ -55,39 +86,32 @@ export class SimulatedUniverseData implements IUniverseData {
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
-
   subscribeToText(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: string) => void
+    _callback: (text: string) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
-
-  async getStatistics(): Promise<IUniverseStatistics> {
-    return {
-      rtcDevices: [],
-    };
+  getStatistics(): Promise<IUniverseStatistics> {
+    throw new Error("Method not implemented.");
   }
-
   subscribeDataSourceStateChange(
     _deviceId: string,
     _source: UniverseDataSource,
     _onDataSourceStateChange?: (state: DataSourceState) => void
   ): CloseSubscription {
-    return () => {};
+    throw new Error("Method not implemented.");
   }
 
   time = Date.now();
-
   setTime(time: number | "live"): void {
     if (time === "live") {
-      this.time = Date.now();
+      throw new Error("Not implemented");
     } else {
       this.time = time;
     }
   }
-
   async getLatestTransformTrees(
     deviceId: string
   ): Promise<{ streamName: string; transformTree: ITransformNode }[]> {
@@ -317,37 +341,11 @@ export class SimulatedUniverseData implements IUniverseData {
     return () => {};
   }
 
-  subscribeToGridMap(
+  subscribeToMap(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IGridMap) => void
+    _callback: (data: IMap) => void
   ): () => void {
-    return () => {};
-  }
-
-  subscribeToVideo(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    callback: (data: HTMLCanvasElement) => void
-  ): () => void {
-    const canvas = document.createElement("canvas");
-    canvas.width = 640;
-    canvas.height = 480;
-    const ctx = definedAndNotNull(canvas.getContext("2d"));
-    setInterval(() => {
-      // draw random rect
-      ctx.globalAlpha = 0.5;
-      ctx.fillStyle = `rgb(${255 * Math.random()}, ${255 * Math.random()}, ${
-        255 * Math.random()
-      })`;
-      ctx.fillRect(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height,
-        Math.random() * canvas.width,
-        Math.random() * canvas.height
-      );
-      callback(canvas);
-    }, 10);
     return () => {};
   }
 

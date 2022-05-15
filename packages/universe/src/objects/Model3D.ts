@@ -6,8 +6,6 @@ export class Model3D extends Object3D {
     super();
     const loader = new GLTFLoader();
     loader.load(url, (gltf) => {
-      const ninetyDegrees = Math.PI / 2;
-      gltf.scene.rotation.set(ninetyDegrees, 0, 0);
       this.add(gltf.scene);
     });
   }

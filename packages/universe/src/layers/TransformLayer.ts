@@ -123,8 +123,8 @@ export class TransformLayer extends Object3D {
           this.matrix = new Matrix4().compose(
             new Vector3(
               horizontalDistance,
-              verticalDistance,
-              location.altitude || 0
+              location.altitude || 0,
+              verticalDistance
             ),
             quaternion,
             new Vector3(1, 1, 1)

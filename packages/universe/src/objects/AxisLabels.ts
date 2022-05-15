@@ -10,11 +10,11 @@ export class AxisLabels extends Group {
     x.position.set(this.labelRadius, 0, 0);
     this.add(x);
     const y = new Label("y", false);
-    y.position.set(0, this.labelRadius, 0);
+    y.position.set(0, 0, this.labelRadius);
     this.add(y);
     if (!flat) {
       const z = new Label("z", false);
-      z.position.set(0, 0, this.labelRadius);
+      z.position.set(0, this.labelRadius, 0);
       this.add(z);
     }
   }

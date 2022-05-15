@@ -33,6 +33,8 @@ export class TeleportLayer extends UniverseLayer {
   session: XRSession | null = null;
 
   init() {
+    this.floor.rotation.set(-Math.PI / 2, 0, 0);
+    this.marker.rotation.set(-Math.PI / 2, 0, 0);
     this.add(this.marker);
     this.add(this.floor);
   }
@@ -43,7 +45,11 @@ export class TeleportLayer extends UniverseLayer {
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
-      this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
+      this.marker.position.set(
+        this.intersection.x,
+        this.intersection.y,
+        this.intersection.z
+      );
     }
   }
 

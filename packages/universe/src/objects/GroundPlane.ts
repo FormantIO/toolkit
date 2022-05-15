@@ -30,7 +30,9 @@ function polarGridCircle(
   const material = new LineBasicMaterial({
     color: circleColor,
   });
-  return new Line(geometry, material);
+  const l = new Line(geometry, material);
+  l.rotation.x = Math.PI / 2;
+  return l;
 }
 
 function polarGrid(majorCircleColor: Color, minorCircleColor: Color) {

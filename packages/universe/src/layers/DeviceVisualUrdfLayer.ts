@@ -119,6 +119,8 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
   loaded: boolean = false;
 
   init() {
+    const ninetyDegrees = Math.PI / 2;
+    this.rotation.set(-ninetyDegrees, 0, 0);
     const dataSource = defined(this.layerDataSources)[0];
     if (
       dataSource &&

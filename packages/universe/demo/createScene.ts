@@ -7,10 +7,48 @@ export function createScene() {
     {
       id: uuid.v4(),
       editing: false,
+      type: "teleport",
+      name: "Teleport",
+      deviceContext: undefined,
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {},
+      data: {},
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
       type: "data",
       name: "Spot-9000",
       deviceContext: SPOT_ID,
       children: [
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "video",
+          name: "Video",
+          deviceContext: "abcd",
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 1.4, z: 0 },
+          fieldValues: {
+            videoShape: {
+              type: "text",
+              value: "sphere",
+              location: [],
+            },
+          },
+          dataSources: [
+            {
+              id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
+              sourceType: "realtime",
+              rosTopicName: "armJoints",
+              rosTopicType: "sensor_msgs/JointState",
+            },
+          ],
+          data: {},
+        },
         {
           id: uuid.v4(),
           editing: false,
@@ -19,12 +57,17 @@ export function createScene() {
           deviceContext: "abc",
           children: [],
           visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
+          position: {
+            type: "manual",
+            x: 0,
+            y: 0.9554891467013107,
+            z: 1.6653345369377348e-16,
+          },
           fieldValues: {
             label_text: {
               type: "text",
+              location: [],
               value: "Spot-9000",
-              location: ["create", "edit"],
             },
           },
           data: {},
@@ -37,8 +80,8 @@ export function createScene() {
           position: {
             type: "manual",
             x: 0,
-            y: 0,
-            z: 0.6511622,
+            y: 0.6511622,
+            z: 0,
           },
           fieldValues: {},
           name: "Spot URDF",
@@ -83,9 +126,9 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             label_text: {
+              location: [],
               type: "text",
-              value: "RoboArm2",
-              location: ["create", "edit"],
+              value: "RoboArm1",
             },
           },
           data: {},
@@ -144,9 +187,9 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             label_text: {
+              location: [],
               type: "text",
               value: "RoboArm2",
-              location: ["create", "edit"],
             },
           },
           data: {},
@@ -206,8 +249,8 @@ export function createScene() {
           fieldValues: {
             label_text: {
               type: "text",
+              location: [],
               value: "RoboArm3",
-              location: ["create", "edit"],
             },
           },
           data: {},
@@ -261,24 +304,27 @@ export function createScene() {
       data: {},
     },
     {
-      id: uuid.v4(),
-      editing: false,
-      type: "realtime_video",
-      name: "Video",
-      deviceContext: "abcd",
       children: [],
+      id: "ac2dc279-b50a-4c02-b65e-8c545be92b6c",
       visible: true,
-      position: { type: "manual", x: 0, y: 0, z: 0 },
-      fieldValues: {},
-      dataSources: [
-        {
-          id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
-          sourceType: "realtime",
-          rosTopicName: "armJoints",
-          rosTopicType: "sensor_msgs/JointState",
+      editing: true,
+      position: {
+        type: "manual",
+        x: -0.05213157574107391,
+        y: 0.18048159900166147,
+        z: 3.469446951953614e-17,
+      },
+      fieldValues: {
+        url: {
+          location: [],
+          type: "text",
+          value:
+            "https://formant-3d-models.s3.us-west-2.amazonaws.com/grass.gltf",
         },
-      ],
-      data: {},
+      },
+      name: "Grass",
+      type: "3dmodel",
+      data: "A 3D model.",
     },
   ];
   return sg;

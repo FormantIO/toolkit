@@ -94,12 +94,9 @@ export class VideoLayer extends UniverseLayer {
           side: BackSide,
         });
         const geometry = new SphereGeometry(0.3);
-        const oneEightyDegrees = Math.PI;
         this.mesh = new Mesh(geometry, material);
         if (shape === "sphere_rotated") {
-          this.mesh.rotation.set(oneEightyDegrees, 0, oneEightyDegrees);
-        } else {
-          this.mesh.rotation.set(ninetyDegrees, 0, 0);
+          this.mesh.rotation.set(ninetyDegrees, 0, ninetyDegrees);
         }
       } else {
         const material = new MeshBasicMaterial({
@@ -107,7 +104,6 @@ export class VideoLayer extends UniverseLayer {
         });
         const geometry = new BoxGeometry(1, 1, 0);
         this.mesh = new Mesh(geometry, material);
-        this.mesh.rotation.set(ninetyDegrees, 0, 0);
       }
       this.add(this.mesh);
       if (shape !== "sphere") {
