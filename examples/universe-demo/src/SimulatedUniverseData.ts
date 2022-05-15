@@ -62,26 +62,24 @@ export class SimulatedUniverseData implements IUniverseData {
     _source: UniverseDataSource,
     callback: (data: HTMLCanvasElement) => void
   ): () => void {
-    const canvas = document.createElement("canvas");
-    canvas.width = 640;
-    canvas.height = 480;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      setInterval(() => {
-        // draw random rect
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = `rgb(${255 * Math.random()}, ${255 * Math.random()}, ${
-          255 * Math.random()
-        })`;
-        ctx.fillRect(
-          Math.random() * canvas.width,
-          Math.random() * canvas.height,
-          Math.random() * canvas.width,
-          Math.random() * canvas.height
-        );
-        callback(canvas);
-      }, 10);
-    }
+    const image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.addEventListener(
+      "load",
+      () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext("2d");
+        if (context) {
+          context.drawImage(image, 0, 0);
+          callback(canvas);
+        }
+      },
+      false
+    );
+    image.src =
+      "https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg";
     return () => {};
   }
   subscribeToJson<T>(
