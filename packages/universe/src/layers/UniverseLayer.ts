@@ -1,5 +1,6 @@
 import { Object3D, PerspectiveCamera, Raycaster, WebXRManager } from "three";
 import { getRecoil, setRecoil } from "recoil-nexus";
+import { Howl } from "howler";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
@@ -129,5 +130,21 @@ export abstract class UniverseLayer extends Object3D {
       });
     });
     setRecoil(sceneGraphAtom, sceneGraph);
+  }
+
+  public playSound(
+    url: string,
+    volume: number = 1,
+    loop: boolean = false
+  ): () => void {
+    const sound = new Howl({
+      src: [url],
+      volume,
+      loop,
+    });
+    sound.play();
+    return () => {
+      sound.stop();
+    };
   }
 }

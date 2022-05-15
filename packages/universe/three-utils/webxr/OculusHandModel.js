@@ -58,7 +58,7 @@ class OculusHandModel extends Object3D {
   }
 
   getJoint(joint) {
-    const j = this.controller.joints[joint];
+    return this.controller.joints[joint];
     if (j) {
       return j;
     }
@@ -68,11 +68,15 @@ class OculusHandModel extends Object3D {
   getHandPose() {
     let pose = "none";
     if (this.controller) {
+      const thumb = this.getJoint("thumb-tip");
       const finger1 = this.getJoint("index-finger-tip");
       const palm1 = this.getJoint("index-finger-metacarpal");
       let distance1 = null;
       if (finger1 && palm1)
         distance1 = finger1.position.distanceTo(palm1.position);
+      let pinchDistance = null;
+      if (thumb && finger1)
+        pinchDistance = thumb.position.distanceTo(finger1.position);
       const finger2 = this.getJoint("middle-finger-tip");
       const palm2 = this.getJoint("middle-finger-metacarpal");
       let distance2 = null;
@@ -89,28 +93,30 @@ class OculusHandModel extends Object3D {
       if (finger4 && palm4)
         distance4 = finger4.position.distanceTo(palm4.position);
       if (this.controller.visible) {
-        if (
-          distance1 &&
-          distance1 > 0.1 &&
-          distance2 &&
-          distance2 < 0.1 &&
-          distance3 &&
-          distance3 < 0.1 &&
-          distance4 &&
-          distance4 < 0.1
-        ) {
-          pose = "normal";
+        if (pinchDistance && pinchDistance < 0.02) {
+          pose = "pinch";
         } else if (
           distance1 &&
-          distance1 > 0.2 &&
+          distance1 > 0.11 &&
           distance2 &&
-          distance2 < 0.05 &&
+          distance2 < 0.065 &&
           distance3 &&
-          distance3 < 0.05 &&
+          distance3 < 0.065 &&
           distance4 &&
-          distance4 < 0.05
+          distance4 < 0.065
         ) {
           pose = "pointing";
+        } else if (
+          distance1 &&
+          distance1 >= 0.065 &&
+          distance2 &&
+          distance2 >= 0.065 &&
+          distance3 &&
+          distance3 >= 0.065 &&
+          distance4 &&
+          distance4 >= 0.065
+        ) {
+          pose = "normal";
         } else if (distance1 && distance2 && distance3 && distance4) {
           pose = "grip";
         }

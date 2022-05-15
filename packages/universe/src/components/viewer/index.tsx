@@ -320,7 +320,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               const hand2Pose = hands[1].getHandPose();
               if (
                 this.currentHandPoses[0] !== hand1Pose ||
-                this.currentHandPoses[2] !== hand2Pose
+                this.currentHandPoses[1] !== hand2Pose
               ) {
                 this.currentHandPoses = [hand1Pose, hand2Pose];
                 this.notifyHandPosesChanged(hands);

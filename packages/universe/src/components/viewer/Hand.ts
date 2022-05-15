@@ -40,7 +40,7 @@ export interface IHandController {
 // typings for XRHandMeshModel
 export type HandController = Object3D & IHandController;
 
-export type HandPose = "none" | "grip" | "pointing" | "two-finger-pointing";
+export type HandPose = "none" | "grip" | "pointing" | "pinch";
 
 export interface IHand {
   controller: HandController;
