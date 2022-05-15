@@ -151,7 +151,7 @@ export interface IUniverseData {
   subscribeToRealtimeVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (frame: IH264VideoFrame) => void
+    callback: (frame: HTMLCanvasElement) => void
   ): CloseSubscription;
 
   subscribeToTransformTree(

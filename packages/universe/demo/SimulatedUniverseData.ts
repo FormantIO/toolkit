@@ -16,6 +16,7 @@ import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
 import { IH264VideoFrame } from "../../data-sdk/src/model/IH264VideoFrame";
 import { IGridMap, IPcd } from "../src/main";
+import { definedAndNotNull } from "../../common/defined";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -324,8 +325,26 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToRealtimeVideo(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IH264VideoFrame) => void
+    callback: (data: HTMLCanvasElement) => void
   ): () => void {
+    const canvas = document.createElement("canvas");
+    canvas.width = 640;
+    canvas.height = 480;
+    const ctx = definedAndNotNull(canvas.getContext("2d"));
+    setInterval(() => {
+      // draw random rect
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = `rgb(${255 * Math.random()}, ${255 * Math.random()}, ${
+        255 * Math.random()
+      })`;
+      ctx.fillRect(
+        Math.random() * canvas.width,
+        Math.random() * canvas.height,
+        Math.random() * canvas.width,
+        Math.random() * canvas.height
+      );
+      callback(canvas);
+    }, 10);
     return () => {};
   }
 

@@ -260,6 +260,26 @@ export function createScene() {
       fieldValues: {},
       data: {},
     },
+    {
+      id: uuid.v4(),
+      editing: false,
+      type: "realtime_video",
+      name: "Video",
+      deviceContext: "abcd",
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {},
+      dataSources: [
+        {
+          id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
+          sourceType: "realtime",
+          rosTopicName: "armJoints",
+          rosTopicType: "sensor_msgs/JointState",
+        },
+      ],
+      data: {},
+    },
   ];
   return sg;
 }
