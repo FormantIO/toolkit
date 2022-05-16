@@ -4,7 +4,6 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
-  Texture,
   TextureLoader,
 } from "three";
 
