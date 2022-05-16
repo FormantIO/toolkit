@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { WebXRManager, XRReferenceSpace, XRSession } from "three";
+import { Vector3, WebXRManager, XRReferenceSpace, XRSession } from "three";
 import { Controller } from "../components/viewer/Controller";
+import { Hand, HandPose } from "../components/viewer/Hand";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class TeleportLayer extends UniverseLayer {
@@ -32,6 +33,8 @@ export class TeleportLayer extends UniverseLayer {
 
   session: XRSession | null = null;
 
+  lastPose: HandPose = "unknown";
+
   init() {
     this.floor.rotation.set(-Math.PI / 2, 0, 0);
     this.marker.rotation.set(-Math.PI / 2, 0, 0);
@@ -41,6 +44,20 @@ export class TeleportLayer extends UniverseLayer {
 
   onControllersMoved(controllers: Controller[]): void {
     const { raycaster } = controllers[0];
+    const intersects = raycaster.intersectObjects([this.floor]);
+
+    if (intersects.length > 0) {
+      this.intersection = intersects[0].point;
+      this.marker.position.set(
+        this.intersection.x,
+        this.intersection.y,
+        this.intersection.z
+      );
+    }
+  }
+
+  onHandsMoved(hands: Hand[]): void {
+    const { raycaster } = hands[0];
     const intersects = raycaster.intersectObjects([this.floor]);
 
     if (intersects.length > 0) {
@@ -65,6 +82,20 @@ export class TeleportLayer extends UniverseLayer {
       this.xr &&
       this.intersection
     ) {
+      this.teleportTo(this.intersection);
+      controller.pulse(1, 100);
+    }
+  }
+
+  onHandPosesChanged(hands: Hand[]): void {
+    const pose = hands[0].getHandPose();
+    if (this.lastPose === "open" && pose === "fist" && this.intersection) {
+      this.teleportTo(this.intersection);
+    }
+  }
+
+  teleportTo(p: Vector3) {
+    if (this.xr) {
       const session = this.xr.getSession();
       const baseReferenceSpace = this.xr.getReferenceSpace();
       if (baseReferenceSpace && this.camera) {
@@ -74,9 +105,9 @@ export class TeleportLayer extends UniverseLayer {
         }
 
         const offsetPosition = {
-          x: -this.intersection.x,
-          y: -this.intersection.y,
-          z: -this.intersection.z,
+          x: -p.x,
+          y: -p.y,
+          z: -p.z,
           w: 1,
         };
         const offsetRotation = new THREE.Quaternion();
@@ -87,12 +118,15 @@ export class TeleportLayer extends UniverseLayer {
           this.originalBaseReferenceSpace.getOffsetReferenceSpace(transform);
         // @ts-ignore
         this.xr.setReferenceSpace(teleportSpaceOffset);
-        controller.pulse(1, 100);
       }
     }
   }
 
   onEnterVR(xr: WebXRManager): void {
     this.xr = xr;
+  }
+
+  onExitVR(_xr: THREE.WebXRManager): void {
+    this.xr = undefined;
   }
 }

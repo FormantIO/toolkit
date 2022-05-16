@@ -66,7 +66,7 @@ class OculusHandModel extends Object3D {
   }
 
   getHandPose() {
-    let pose = "none";
+    let pose = "unknown";
     if (this.controller) {
       const thumb = this.getJoint("thumb-tip");
       const finger1 = this.getJoint("index-finger-tip");
@@ -105,7 +105,7 @@ class OculusHandModel extends Object3D {
           distance4 &&
           distance4 < 0.065
         ) {
-          pose = "pointing";
+          pose = "point";
         } else if (
           distance1 &&
           distance1 >= 0.065 &&
@@ -116,9 +116,9 @@ class OculusHandModel extends Object3D {
           distance4 &&
           distance4 >= 0.065
         ) {
-          pose = "normal";
+          pose = "open";
         } else if (distance1 && distance2 && distance3 && distance4) {
-          pose = "grip";
+          pose = "fist";
         }
       }
     }

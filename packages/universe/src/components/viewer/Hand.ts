@@ -1,4 +1,4 @@
-import { Group, Object3D, Vector3 } from "three";
+import { Group, Object3D, Raycaster, Vector3 } from "three";
 
 export type Joints =
   | "wrist"
@@ -40,9 +40,10 @@ export interface IHandController {
 // typings for XRHandMeshModel
 export type HandController = Object3D & IHandController;
 
-export type HandPose = "none" | "grip" | "pointing" | "pinch";
+export type HandPose = "unknown" | "fist" | "point" | "pinch" | "open";
 
 export interface IHand {
+  raycaster: Raycaster;
   controller: HandController;
   handVisible: boolean;
   getPointerPosition(): Vector3 | null;

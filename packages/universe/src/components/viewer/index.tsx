@@ -89,7 +89,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   gamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
 
-  private currentHandPoses: HandPose[] = ["none", "none"];
+  private currentHandPoses: HandPose[] = ["unknown", "unknown"];
 
   constructor(props: IUniverseViewerProps) {
     super(props);
@@ -265,6 +265,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   .applyMatrix4(controllerTempMatrix);
                 controller.raycaster = raycaster;
 
+                if (handedness === "left") {
+                  hands[0].raycaster = raycaster;
+                } else if (handedness === "right") {
+                  hands[1].raycaster = raycaster;
+                }
+
                 if (oldState) {
                   for (let p = 0; p < newState.buttons.length; p += 1) {
                     if (newState.buttons[p] !== oldState.buttons[p]) {
@@ -308,7 +314,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               ) {
                 this.notifyHandsLeave(hands);
                 this.usingHands = false;
-                this.currentHandPoses = ["none", "none"];
+                this.currentHandPoses = ["unknown", "unknown"];
                 this.notifyHandPosesChanged(hands);
               }
               if (this.usingHands) {
