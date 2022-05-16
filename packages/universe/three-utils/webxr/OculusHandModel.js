@@ -97,7 +97,7 @@ class OculusHandModel extends Object3D {
           pose = "pinch";
         } else if (
           distance1 &&
-          distance1 > 0.11 &&
+          distance1 >= 0.065 &&
           distance2 &&
           distance2 < 0.065 &&
           distance3 &&

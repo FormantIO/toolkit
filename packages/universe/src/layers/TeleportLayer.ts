@@ -35,6 +35,10 @@ export class TeleportLayer extends UniverseLayer {
 
   lastLeftHandPose: HandPose = "unknown";
 
+  lastLeftHandPoseTime: number = 0;
+
+  teleporting: boolean = false;
+
   init() {
     this.floor.rotation.set(-Math.PI / 2, 0, 0);
     this.marker.rotation.set(-Math.PI / 2, 0, 0);
@@ -94,9 +98,14 @@ export class TeleportLayer extends UniverseLayer {
       pose === "fist" &&
       this.intersection
     ) {
-      this.lastLeftHandPose = pose;
-      this.teleportTo(this.intersection);
+      const timeSinceLastHandPose = Date.now() - this.lastLeftHandPoseTime;
+      // don't teleport if hand change was just a quick movement
+      if (timeSinceLastHandPose > 500) {
+        this.teleportTo(this.intersection);
+      }
     }
+    this.lastLeftHandPose = pose;
+    this.lastLeftHandPoseTime = Date.now();
   }
 
   teleportTo(p: Vector3) {

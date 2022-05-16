@@ -30,34 +30,17 @@ export class HandsLayer extends UniverseLayer {
   );
 
   init() {
-    this.base.add(this.cube);
+    /*this.base.add(this.cube);
     this.add(this.base);
-    this.cube.position.set(0, 0, 0.4);
+    this.cube.position.set(0, 0, 0.4);*/
   }
 
   onHandsEnter(hands: Hand[]): void {
     hands[0].add(this.labelLeft);
-    const wrist = hands[0].getJoint("wrist");
-    if (wrist) {
-      this.labelLeft.position.set(
-        wrist.position.x,
-        wrist.position.y,
-        wrist.position.z
-      );
-    }
-
     hands[1].add(this.labelRight);
-    const wrist2 = hands[1].getJoint("wrist");
-    if (wrist2) {
-      this.labelRight.position.set(
-        wrist2.position.x,
-        wrist2.position.y,
-        wrist2.position.z
-      );
-    }
   }
 
-  onUpdate(_delta: number): void {
+  /*onUpdate(_delta: number): void {
     if (this.camera) {
       const camera = this.camera();
       this.labelLeft.text = `${camera.position.x.toFixed(
@@ -69,6 +52,11 @@ export class HandsLayer extends UniverseLayer {
         camera.position.z
       );
     }
+  }*/
+
+  onHandPosesChanged(hands: Hand[]): void {
+    this.labelLeft.text = `${hands[0].getHandPose()}`;
+    this.labelRight.text = `${hands[1].getHandPose()}`;
   }
 
   onHandsMoved(hands: Hand[]): void {

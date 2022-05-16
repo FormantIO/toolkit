@@ -266,9 +266,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 controller.raycaster = raycaster;
 
                 if (handedness === "left") {
-                  hands[0].raycaster = raycaster;
-                } else if (handedness === "right") {
                   hands[1].raycaster = raycaster;
+                } else if (handedness === "right") {
+                  hands[0].raycaster = raycaster;
                 }
 
                 if (oldState) {
