@@ -33,7 +33,7 @@ export class TeleportLayer extends UniverseLayer {
 
   session: XRSession | null = null;
 
-  lastPose: HandPose = "unknown";
+  lastLeftHandPose: HandPose = "unknown";
 
   init() {
     this.floor.rotation.set(-Math.PI / 2, 0, 0);
@@ -89,7 +89,12 @@ export class TeleportLayer extends UniverseLayer {
 
   onHandPosesChanged(hands: Hand[]): void {
     const pose = hands[0].getHandPose();
-    if (this.lastPose === "open" && pose === "fist" && this.intersection) {
+    if (
+      this.lastLeftHandPose === "open" &&
+      pose === "fist" &&
+      this.intersection
+    ) {
+      this.lastLeftHandPose = pose;
       this.teleportTo(this.intersection);
     }
   }
