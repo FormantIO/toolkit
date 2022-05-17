@@ -99,17 +99,6 @@ class OculusHandModel extends Object3D {
           distance1 &&
           distance1 >= 0.065 &&
           distance2 &&
-          distance2 < 0.065 &&
-          distance3 &&
-          distance3 < 0.065 &&
-          distance4 &&
-          distance4 < 0.065
-        ) {
-          pose = "point";
-        } else if (
-          distance1 &&
-          distance1 >= 0.065 &&
-          distance2 &&
           distance2 >= 0.065 &&
           distance3 &&
           distance3 >= 0.065 &&
@@ -117,8 +106,19 @@ class OculusHandModel extends Object3D {
           distance4 >= 0.065
         ) {
           pose = "open";
-        } else if (distance1 && distance2 && distance3 && distance4) {
+        } else if (
+          distance1 &&
+          distance1 < 0.065 &&
+          distance2 &&
+          distance2 < 0.065 &&
+          distance3 &&
+          distance3 < 0.065 &&
+          distance4 &&
+          distance4 < 0.065
+        ) {
           pose = "fist";
+        } else if (distance1 && distance2 && distance3 && distance4) {
+          pose = "point";
         }
       }
     }

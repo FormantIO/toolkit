@@ -35,7 +35,7 @@ export class TeleportLayer extends UniverseLayer {
 
   lastLeftHandPose: HandPose = "unknown";
 
-  lastLeftHandPoseTime: number = 0;
+  lastLeftHandOpenPoseEndedTime: number = 0;
 
   teleporting: boolean = false;
 
@@ -71,6 +71,8 @@ export class TeleportLayer extends UniverseLayer {
         this.intersection.y,
         this.intersection.z
       );
+    } else {
+      this.intersection = undefined;
     }
   }
 
@@ -93,19 +95,17 @@ export class TeleportLayer extends UniverseLayer {
 
   onHandPosesChanged(hands: Hand[]): void {
     const pose = hands[0].getHandPose();
-    if (
-      this.lastLeftHandPose === "open" &&
-      pose === "fist" &&
-      this.intersection
-    ) {
-      const timeSinceLastHandPose = Date.now() - this.lastLeftHandPoseTime;
-      // don't teleport if hand change was just a quick movement
-      if (timeSinceLastHandPose > 500) {
+    if (this.lastLeftHandPose === "open") {
+      this.lastLeftHandOpenPoseEndedTime = Date.now();
+    }
+    if (pose === "fist" && this.intersection) {
+      const timeSinceLastOpenHandPose =
+        Date.now() - this.lastLeftHandOpenPoseEndedTime;
+      if (timeSinceLastOpenHandPose < 200) {
         this.teleportTo(this.intersection);
       }
     }
     this.lastLeftHandPose = pose;
-    this.lastLeftHandPoseTime = Date.now();
   }
 
   teleportTo(p: Vector3) {
