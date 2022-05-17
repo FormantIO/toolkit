@@ -24,6 +24,10 @@ import {
   Icon,
 } from "../src/main";
 
+import { LineChart } from "../src/components/LineChart/LineChart";
+import { Card } from "../src/components/LineChart/Card";
+import { dummyData } from "../src/components/LineChart/dummyData";
+
 function App() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -355,6 +359,38 @@ function App() {
                 </Stack>
               ))}
             </Grid>
+          </Box>
+          <Typography
+            variant="h2"
+            sx={{ textDecoration: "underline", marginBottom: 5 }}
+          >
+            Line Chart
+          </Typography>
+          <Typography variant="body1" sx={{ marginBottom: 5 }}>
+            Chart tooltip completly customizable, example on the right graph.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <LineChart
+              height={200}
+              width={450}
+              data={dummyData}
+              color={"#36a0fe"}
+            />
+            <LineChart
+              height={200}
+              width={450}
+              toolTipContainerId="chartjs-tooltip"
+              toolTipXContainerId="tooltop-text"
+              toolTipYContainerId="tooltop-text-2"
+              CustomTooltip={() => <Card />}
+              data={dummyData}
+              color={"#36a0fe"}
+            />
           </Box>
         </Container>
       </Box>

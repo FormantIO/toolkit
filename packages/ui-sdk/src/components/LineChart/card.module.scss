@@ -1,0 +1,58 @@
+.card {
+  font-family: "inter";
+  min-height: 40px;
+  min-width: 180px;
+  width: auto;
+  background-color: black;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px 15px 20px;
+  position: relative;
+  &:before {
+    content: "";
+    background-color: #36a0fe;
+    height: 65px;
+    width: 5px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    position: absolute;
+    top: 15px;
+    left: 0px;
+  }
+  p {
+    color: #fff;
+    font-size: 24px;
+  }
+  &-astro {
+    font-size: 18px;
+    color: #bac4e2;
+    margin-left: 10px;
+    margin-top: 3px;
+  }
+  &-x {
+    color: #fff;
+    font-size: 24px;
+  }
+  &-y {
+    color: #fff;
+    font-size: 24px;
+  }
+}
+
+.text-container {
+  display: flex;
+}
+
+.date {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  margin-left: 15px;
+  margin-top: 3px;
+}
+
+.label {
+  color: white;
+  font-size: 24px;
+}
