@@ -1,0 +1,10 @@
+{
+    "subscribe_to_all": false,
+    "topics": ["/sine_wave"],
+    "ignore_topics":[],
+    "bag_length": 1,
+    "bag_overlap": 0,
+    "bag_storage_path": "bags/",
+    "bag_naming_convention":"bag$bn-$dt.bag",
+    "date_time_string":"%d_%m_%Y-%H_%M_%S"
+}
