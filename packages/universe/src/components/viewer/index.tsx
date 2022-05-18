@@ -348,6 +348,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               axes,
             };
             const handHeld = {
+              gamepad,
               pulse(intensity: number, length: number) {
                 if (
                   gamepad.hapticActuators &&
