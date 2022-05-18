@@ -31,6 +31,7 @@ import { XRControllerModelFactory } from "../../../three-utils/webxr/XRControlle
 import { OculusHandModel } from "../../../three-utils/webxr/OculusHandModel";
 import { Hand, HandPose } from "./Hand";
 import { Controller } from "./Controller";
+import { HandheldController } from "./HandheldController";
 
 const MeasureContainer = styled.div`
   width: 100%;
@@ -50,10 +51,13 @@ export interface IUniverseViewerProps {
   onSceneGraphElementEdited: (path: TreePath, transform: Vector3) => void;
   vr?: boolean;
 }
-interface GamePadState {
-  handedness: THREE.XRHandedness;
+interface HandHeldGamePadState {
   buttons: number[];
   axes: number[];
+}
+
+interface GamePadState extends HandHeldGamePadState {
+  handedness: THREE.XRHandedness;
 }
 
 export class UniverseViewer extends Component<IUniverseViewerProps> {
@@ -87,7 +91,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private clock = new THREE.Clock();
 
-  gamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
+  handHeldControllerGamePadState: HandHeldGamePadState | undefined;
+
+  vrControllerGamePads: Map<THREE.XRInputSource, GamePadState> = new Map();
 
   private currentHandPoses: HandPose[] = ["unknown", "unknown"];
 
@@ -244,7 +250,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 controllers.push(controller);
                 const buttons = source.gamepad.buttons.map((b) => b.value);
                 const axes = Array.from(source.gamepad.axes.slice(0));
-                const oldState = this.gamePads.get(source);
+                const oldState = this.vrControllerGamePads.get(source);
                 const newState = {
                   handedness,
                   buttons,
@@ -292,7 +298,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                     }
                   }
                 }
-                this.gamePads.set(source, newState);
+                this.vrControllerGamePads.set(source, newState);
               }
             });
             if (controllers.length > 0) {
@@ -330,6 +336,52 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 this.notifyHandPosesChanged(hands);
               }
             }
+          }
+        } else {
+          const gamepad = navigator.getGamepads()[0];
+          if (gamepad) {
+            const buttons = gamepad.buttons.map((b) => b.value);
+            const axes = Array.from(gamepad.axes.slice(0));
+            const oldState = this.handHeldControllerGamePadState;
+            const newState = {
+              buttons,
+              axes,
+            };
+            const handHeld = {
+              pulse(intensity: number, length: number) {
+                if (
+                  gamepad.hapticActuators &&
+                  gamepad.hapticActuators.length > 0
+                ) {
+                  // @ts-ignore-next-line
+                  if (gamepad.hapticActuators[0].pulse)
+                    // @ts-ignore-next-line
+                    gamepad.hapticActuators[0].pulse(intensity, length);
+                }
+              },
+            };
+            if (oldState) {
+              for (let p = 0; p < newState.buttons.length; p += 1) {
+                if (newState.buttons[p] !== oldState.buttons[p]) {
+                  this.notifyHandheldControllerButtonChanged(
+                    handHeld as HandheldController,
+                    p,
+                    newState.buttons[p]
+                  );
+                }
+              }
+
+              for (let p = 0; p < newState.axes.length; p += 1) {
+                if (newState.axes[p] !== oldState.axes[p]) {
+                  this.notifyHandheldControllerAxisChanged(
+                    handHeld as HandheldController,
+                    p,
+                    newState.axes[p]
+                  );
+                }
+              }
+            }
+            this.handHeldControllerGamePadState = newState;
           }
         }
 
@@ -477,6 +529,34 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   ) {
     Array.from(this.pathToLayer.values()).forEach((_) => {
       defined(_.contentNode).onControllerAxisChanged(controller, axis, value);
+    });
+  }
+
+  private notifyHandheldControllerButtonChanged(
+    controller: HandheldController,
+    button: number,
+    value: number
+  ) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandheldControllerButtonChanged(
+        controller,
+        button,
+        value
+      );
+    });
+  }
+
+  private notifyHandheldControllerAxisChanged(
+    controller: HandheldController,
+    axis: number,
+    value: number
+  ) {
+    Array.from(this.pathToLayer.values()).forEach((_) => {
+      defined(_.contentNode).onHandheldControllerAxisChanged(
+        controller,
+        axis,
+        value
+      );
     });
   }
 

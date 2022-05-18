@@ -2,6 +2,7 @@ import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { ILocation } from "../../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
+import { INumericSetEntry } from "../../../data-sdk/src/model/INumericSetEntry";
 import { IPcd } from "../objects/pcd";
 import { IGridMap } from "./IGridMap";
 
@@ -175,6 +176,18 @@ export interface IUniverseData {
     deviceId: string,
     source: UniverseDataSource,
     callback: (text: string) => void
+  ): CloseSubscription;
+
+  subscribeToNumeric(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (num: number) => void
+  ): CloseSubscription;
+
+  subscribeToNumericSet(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (entry: INumericSetEntry) => void
   ): CloseSubscription;
 
   getStatistics(): Promise<IUniverseStatistics>;

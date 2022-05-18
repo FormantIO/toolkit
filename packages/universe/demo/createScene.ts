@@ -19,6 +19,18 @@ export function createScene() {
     {
       id: uuid.v4(),
       editing: false,
+      type: "xbox",
+      name: "Xbox",
+      deviceContext: undefined,
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {},
+      data: {},
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
       type: "data",
       name: "Spot-9000",
       deviceContext: SPOT_ID,

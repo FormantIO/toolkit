@@ -10,6 +10,7 @@ import { sceneGraphAtom } from "../state/sceneGraph";
 import { SceneGraph, visitSceneGraphElement } from "../main";
 import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
+import { HandheldController } from "../components/viewer/HandheldController";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -95,6 +96,18 @@ export abstract class UniverseLayer extends Object3D {
 
   onControllerAxisChanged(
     _controller: Controller,
+    _axis: number,
+    _value: number
+  ): void {}
+
+  onHandheldControllerButtonChanged(
+    _controller: HandheldController,
+    _button: number,
+    _value: number
+  ): void {}
+
+  onHandheldControllerAxisChanged(
+    _controller: HandheldController,
     _axis: number,
     _value: number
   ): void {}

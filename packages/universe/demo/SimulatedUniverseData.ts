@@ -15,6 +15,7 @@ import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
 import { IGridMap, IMap, IPcd } from "../src/main";
+import { INumericSetEntry } from "../../data-sdk/src/model/INumericSetEntry";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -22,6 +23,20 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToNumeric(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (num: number) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToNumericSet(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (entry: INumericSetEntry) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
   getInteractionContext(): InteractionContext {
     throw new Error("Method not implemented.");
   }
