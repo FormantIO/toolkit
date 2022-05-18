@@ -15,6 +15,7 @@ import { IJointState } from "@formant/universe/dist/types/data-sdk/src/model/IJo
 import { ILocation } from "@formant/universe/dist/types/data-sdk/src/model/ILocation";
 import { IMap } from "@formant/universe/dist/types/data-sdk/src/model/IMap";
 import { IMarker3DArray } from "@formant/universe/dist/types/data-sdk/src/model/IMarker3DArray";
+import { INumericSetEntry } from "@formant/universe/dist/types/data-sdk/src/model/INumericSetEntry";
 import { ITransformNode } from "@formant/universe/dist/types/model/ITransformNode";
 import { IGridMap } from "@formant/universe/dist/types/universe/src/model/IGridMap";
 
@@ -24,6 +25,20 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToNumeric(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (num: number) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToNumericSet(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (entry: INumericSetEntry) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
   getInteractionContext(): InteractionContext {
     throw new Error("Method not implemented.");
   }

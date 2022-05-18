@@ -639,7 +639,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.getCurrentCamera
     );
     if (el.position.type === "manual") {
-      layer.position.set(el.position.x, el.position.z, el.position.y);
+      layer.position.set(el.position.x, el.position.y, el.position.z);
     }
     const parent = getSceneGraphElementParent(sceneGraph, path);
     if (parent) {

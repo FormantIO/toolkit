@@ -6,6 +6,7 @@ import { SimulatedUniverseData } from "./SimulatedUniverseData";
 import { createScene } from "./createScene";
 import { App as FormantApp, ModuleData } from "@formant/data-sdk";
 import { HandsLayer } from "./HandsLayer";
+import { XboxLayer } from "./XboxLayer";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -14,6 +15,7 @@ const vr = urlParams.get("vr");
 
 LayerRegistry.register(TeleportLayer);
 LayerRegistry.register(HandsLayer);
+LayerRegistry.register(XboxLayer);
 
 function App() {
   const data = new SimulatedUniverseData();

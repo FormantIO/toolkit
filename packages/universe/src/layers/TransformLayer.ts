@@ -156,7 +156,7 @@ export class TransformLayer extends Object3D {
               const transforms = this.buildTransformList([tree], pathToName);
               const transformMatrices = transforms.map((_) =>
                 new Matrix4().compose(
-                  new Vector3(_.pos.x, _.pos.z, _.pos.y),
+                  new Vector3(_.pos.x, _.pos.y, _.pos.z),
                   _.rotation,
                   new Vector3(1, 1, 1)
                 )
@@ -175,7 +175,7 @@ export class TransformLayer extends Object3D {
         }
       );
     } else if (positioning.type === "manual") {
-      this.position.set(positioning.x, positioning.z, positioning.y);
+      this.position.set(positioning.x, positioning.y, positioning.z);
     }
   }
 }
