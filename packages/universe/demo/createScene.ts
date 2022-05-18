@@ -312,7 +312,13 @@ export function createScene() {
       children: [],
       visible: true,
       position: { type: "manual", x: 0, y: 0, z: 0 },
-      fieldValues: {},
+      fieldValues: {
+        flatAxes: {
+          type: "text",
+          location: [],
+          value: "true",
+        },
+      },
       data: {},
     },
     {

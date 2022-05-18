@@ -1,5 +1,5 @@
 import { HandheldController } from "../src/components/viewer/HandheldController";
-import { UniverseLayer } from "../src/main";
+import { Controller, UniverseLayer } from "../src/main";
 
 export class XboxLayer extends UniverseLayer {
   static layerTypeId: string = "xbox";
@@ -18,17 +18,18 @@ export class XboxLayer extends UniverseLayer {
     console.log(_axis, _value);
   }
 
-  onHandheldControllerButtonChanged(
-    _controller: HandheldController,
+  onControllerButtonChanged(
+    _controller: Controller,
     _button: number,
     _value: number
   ): void {
-    console.log(_button, _value);
-    _controller.vibrate({
-      startDelay: 0,
-      duration: 200,
-      weakMagnitude: 1.0,
-      strongMagnitude: 1.0,
-    });
+    if (_value === 1) {
+      console.log(_button, _value);
+      this.playSound(
+        "https://formant-3d-models.s3.us-west-2.amazonaws.com/levelup.wav",
+        1,
+        false
+      );
+    }
   }
 }

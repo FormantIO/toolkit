@@ -36,12 +36,12 @@ export class Axes extends Group {
     this.add(axisLine(new Vector3(radius, 0, 0), xColor));
     this.add(axisLine(new Vector3(-radius, 0, 0), xColor));
 
-    this.add(axisLine(new Vector3(0, radius, 0), yColor));
-    this.add(axisLine(new Vector3(0, -radius, 0), yColor));
-
     if (!flat) {
-      this.add(axisLine(new Vector3(0, 0, radius), zColor, 0.3));
-      this.add(axisLine(new Vector3(0, 0, -radius), zColor, 0.2));
+      this.add(axisLine(new Vector3(0, radius, 0), yColor, 0.3));
+      this.add(axisLine(new Vector3(0, -radius, 0), yColor, 0.2));
     }
+
+    this.add(axisLine(new Vector3(0, 0, radius), zColor));
+    this.add(axisLine(new Vector3(0, 0, -radius), zColor));
   }
 }
