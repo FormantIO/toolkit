@@ -42,6 +42,8 @@ export type IPointCloud =
   import("../../data-sdk/src/model/IPointCloud").IPointCloud;
 export type IGridMap = import("./model/IGridMap").IGridMap;
 export type IPcd = import("./objects/pcd").IPcd;
+export type INumericSetEntry =
+  import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);
