@@ -3,14 +3,18 @@
 This file contains the definition of the Adapter itself. The adapter is what allows us to start up the bag recorder
 """
 
-import threading
 import logging
-from utils import *
+import threading
+import time
 from typing import Tuple
+
 from baghandler import BagHandler
+from utils import *
 
+# logger.basicConfig(level=get_log_level())
+logger = logging.getLogger(__name__)
 
-def save_msg_to_bag(data, callback_params: Tuple[BagHandler, str, str]):
+def save_msg_to_bag(data, callback_params: Tuple[BagHandler, str]):
     """
     This is the callback that is used for all incoming messages
     """
@@ -47,9 +51,10 @@ class Adapter:
         Start all the callbacks and their specified topics
         """
         rospy.init_node("ros_bag_recorder_adapter")
+        
         for topic in self.topics:
             if not is_valid_ros_topic(topic):
-                logging.warning(f"Topic f{topic} cannot be subscribed to by \
+                logger.warning(f"Topic f{topic} cannot be subscribed to by \
                     the bag recorder. Skipping topic.")
                 continue
 
@@ -60,17 +65,39 @@ class Adapter:
 
             self.subscriptions[topic] = sub
 
-            logging.info(f"Successfully subscribed to {topic}")
-            print(f"Successfully subscribed to {topic}")
+            logger.info(f"Successfully subscribed to {topic}")
+    
+        rospy.on_shutdown(self.shutdown)
+        
+        topic_refresh_rate = get_config_variable("topic_refresh_rate")
 
-    def close(self):
-        for sub in self.subscriptions:
-            sub.unregister()
+        if(not get_config_variable("subscribe_to_all")):
+            rospy.spin()
+
+        else:
+            while(not self._shutdown_system):
+                time.sleep(topic_refresh_rate)
+                
+                self.topics = get_topics()
+
+                for topic in self.topics:
+                    if topic in self.subscriptions:
+                        continue 
+                
+                    logger.info(f"Found New Topic: {topic}")
+                
+                    sub = rospy.Subscriber(topic, get_topic_type_obj(topic),
+                                   save_msg_to_bag,
+                                   (self.bag_handler, topic))
+                    self.subscriptions[topic] = sub
+                
+                    logger.info(f"Successfully subscribed to new topic: {topic}")
+
 
     def shutdown(self):
         for sub in self.subscriptions.items():
             sub[1].unregister()
-            logging.info(f"Successfully unsubscribed from {sub[0]}")
+            logger.info(f"Successfully unsubscribed from {sub[0]}")
         self._shutdown_system = True
         self.bag_thread.join()
 

@@ -1,3 +1,5 @@
+from typing import Optional
+from matplotlib.pyplot import get
 import rostopic
 import rospy
 import rosbag
@@ -141,7 +143,9 @@ def load_configuration_variables():
         ("bag_storage_path", "optional", "bags/"),
         ("bag_naming_convention", "optional", "%bn_%dt"),
         ("date_time_string", "optional", "%d_%m_%Y-%H_%M_%S"),
-        ("ignore_topics", "optional", [])
+        ("ignore_topics", "optional", []),
+        ("loglevel", "optional", "WARN"),
+        ("topic_refresh_rate", "optional", 2)
     ]
 
     config_values = {}
@@ -183,3 +187,16 @@ def get_config_variable(variable: str):
         exit(1)
 
     return config_vars[variable]
+
+def get_log_level():
+    log_level = get_config_variable("loglevel")
+    if log_level.upper() == "DEBUG":
+        return logging.DEBUG
+    elif log_level.upper() == "INFO":
+        return logging.INFO
+    elif log_level.upper() == "WARN":
+        return logging.WARN
+    elif log_level.upper() == "CRITICAL":
+        return logging.CRITICAL
+
+logging.basicConfig(level=get_log_level())

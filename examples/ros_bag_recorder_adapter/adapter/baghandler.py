@@ -4,10 +4,14 @@ This file contains the definition of the BagHandler which is used to control wha
 messages get written to what bag. 
 """
 
-from utils import *
+from datetime import datetime, timedelta
+import logging
 import time
-import datetime
 from queue import Queue
+
+from utils import *
+
+logging.basicConfig(level=get_log_level())
 
 
 class BagHandler:
@@ -34,27 +38,27 @@ class BagHandler:
 
         # Bag 1. This is always the newest bag
         self.bag1 = generate_bag()
-        self.bag1_start = datetime.datetime.now()
-        self.bag1_end = datetime.datetime.now() +\
-            datetime.timedelta(seconds=self.bag_overlap)
+        self.bag1_start = datetime.now()
+        self.bag1_end = datetime.now() +\
+            timedelta(seconds=self.bag_overlap)
 
         # Bag 2. This bag may or may not exist. It depends on the
         # Size of the overlap.
         self.bag2 = generate_bag()
-        self.bag2_start = datetime.datetime.now()
-        self.bag2_end = datetime.datetime.now() +\
-            datetime.timedelta(seconds=self.bag_length)
+        self.bag2_start = datetime.now()
+        self.bag2_end = datetime.now() +\
+            timedelta(seconds=self.bag_length)
 
         self.bag_index = 2
 
-        self.last_message_time = datetime.datetime.now()
+        self.last_message_time = datetime.now()
 
     def enqueue_message(self, message):
         """Give the bag handler a new message."""
 
         # TODO: check if I can get the time out of the message rather
-        #       than using datetime.datetime.now()
-        self.message_queue.put((datetime.datetime.now(), message))
+        #       than using datetime.now()
+        self.message_queue.put((datetime.now(), message))
 
     def run(self, shutdown):
         """
@@ -116,9 +120,9 @@ class BagHandler:
 
             self.bag_index += 1
             self.bag2_start = self.bag1_end - \
-                datetime.timedelta(seconds=self.bag_overlap)
+                timedelta(seconds=self.bag_overlap)
             self.bag2_end = self.bag2_start + \
-                datetime.timedelta(seconds=self.bag_length)
+                timedelta(seconds=self.bag_length)
 
             # We have to recurse because there is a chance that the new bag is
             # Not new enough and we need to generate an even newer bag
