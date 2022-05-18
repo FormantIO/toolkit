@@ -11,7 +11,7 @@ from queue import Queue
 
 from utils import *
 
-logging.basicConfig(level=get_log_level())
+logger = logging.getLogger(__name__)
 
 
 class BagHandler:
@@ -32,7 +32,7 @@ class BagHandler:
 
         # Run check for valid bag lengths
         if(self.bag_overlap > self.bag_length / 2):
-            logging.critical("Error: bag overlap is too large. \
+            logger.critical("Error: bag overlap is too large. \
                 Overlap must be <= bag_length / 2. Exiting.")
             exit(1)
 
@@ -75,7 +75,7 @@ class BagHandler:
 
             # If the messages are out of order, then we just drop the old message
             if timestamp < self.last_message_time:
-                logging.info("Bag Error: dropping message. Out of order error")
+                logger.info("Bag Error: dropping message. Out of order error")
                 continue
             self.last_message_time = timestamp
 
@@ -116,7 +116,7 @@ class BagHandler:
             self.bag1_end = self.bag2_end
 
             self.bag2 = generate_bag()
-            logging.debug(f"Created new bag. Bag index {self.bag_index}")
+            logger.debug(f"Created new bag. Bag index {self.bag_index}")
 
             self.bag_index += 1
             self.bag2_start = self.bag1_end - \

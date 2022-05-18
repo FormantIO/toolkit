@@ -1,5 +1,3 @@
-from typing import Optional
-from matplotlib.pyplot import get
 import rostopic
 import rospy
 import rosbag
@@ -11,6 +9,7 @@ from json import load as jsonload
 from globals import formant_client
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
 
 def get_topics():
     """
@@ -95,7 +94,7 @@ def is_valid_ros_topic(topic):
     try:
         data_type = rostopic.get_topic_type(topic, blocking=False)[0]
     except rostopic.ROSTopicIOException:
-        logging.info(
+        logger.info(
             "Cannot validate topic: %s, ROS master could not be reached." % topic
         )
         return False
@@ -104,7 +103,7 @@ def is_valid_ros_topic(topic):
 
     message_class = roslib.message.get_message_class(data_type)
     if not message_class:
-        logging.warning(
+        logger.warning(
             "Cannot subscribe to %s with type %s;" % (topic, data_type)
             + " no message class found."
             + " catkin workspace may be unsourced.",
@@ -113,7 +112,7 @@ def is_valid_ros_topic(topic):
 
     message_description = message_class._full_text
     if not message_description:
-        logging.warning(
+        logger.warning(
             "Cannot subscribe to %s; no message description found." % topic,
         )
         return False
@@ -160,11 +159,11 @@ def load_configuration_variables():
 
         elif config_val is None and config_var[0] not in json_config:
             if config_var[1] == "required":
-                logging.fatal(f"Required config variable {config_var[0]}\
+                logger.fatal(f"Required config variable {config_var[0]}\
                     not found as a key-value pair or in config.json. Exiting.")
                 exit(1)
             if config_var[1] == "optional":
-                logging.warning(f"Config variable {config_var[0]} not \
+                logger.warning(f"Config variable {config_var[0]} not \
                     found as a key-value pair or in config.json. Using \
                         default value: {config_var[2]}")
                 config_val = config_var[2]
@@ -183,7 +182,7 @@ def get_config_variable(variable: str):
     config_vars = load_configuration_variables()
 
     if variable not in config_vars:
-        logging.fatal(f"Requested config variable {variable} does not exist.")
+        logger.fatal(f"Requested config variable {variable} does not exist.")
         exit(1)
 
     return config_vars[variable]
@@ -198,5 +197,3 @@ def get_log_level():
         return logging.WARN
     elif log_level.upper() == "CRITICAL":
         return logging.CRITICAL
-
-logging.basicConfig(level=get_log_level())
