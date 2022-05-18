@@ -24,5 +24,11 @@ export class XboxLayer extends UniverseLayer {
     _value: number
   ): void {
     console.log(_button, _value);
+    _controller.vibrate({
+      startDelay: 0,
+      duration: 200,
+      weakMagnitude: 1.0,
+      strongMagnitude: 1.0,
+    });
   }
 }

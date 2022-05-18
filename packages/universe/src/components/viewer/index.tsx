@@ -349,15 +349,16 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
             };
             const handHeld = {
               gamepad,
-              pulse(intensity: number, length: number) {
-                if (
-                  gamepad.hapticActuators &&
-                  gamepad.hapticActuators.length > 0
-                ) {
-                  // @ts-ignore-next-line
-                  if (gamepad.hapticActuators[0].pulse)
-                    // @ts-ignore-next-line
-                    gamepad.hapticActuators[0].pulse(intensity, length);
+              vibrate(params: {
+                startDelay: number;
+                duration: number;
+                weakMagnitude: number;
+                strongMagnitude: number;
+              }) {
+                // @ts-ignore-next-line
+                const actuator = gamepad.vibrationActuator as any;
+                if (actuator) {
+                  actuator.playEffect(actuator.type, params);
                 }
               },
             };

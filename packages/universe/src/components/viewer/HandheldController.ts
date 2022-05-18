@@ -1,4 +1,9 @@
 export interface HandheldController {
   gamepad: Gamepad;
-  pulse(intensity: number, duration: number): void;
+  vibrate(params: {
+    startDelay: number;
+    duration: number;
+    weakMagnitude: number;
+    strongMagnitude: number;
+  }): void;
 }
