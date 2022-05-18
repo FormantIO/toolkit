@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.126",
+  "version": "0.0.129",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --https --port 9146",
     "build": "tsc && vite build",

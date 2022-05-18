@@ -155,7 +155,11 @@ export class TransformLayer extends Object3D {
               );
               const transforms = this.buildTransformList([tree], pathToName);
               const transformMatrices = transforms.map((_) =>
-                new Matrix4().compose(_.pos, _.rotation, new Vector3(1, 1, 1))
+                new Matrix4().compose(
+                  new Vector3(_.pos.x, _.pos.z, _.pos.y),
+                  _.rotation,
+                  new Vector3(1, 1, 1)
+                )
               );
               const transformMatrix = transformMatrices.reduce(
                 (acc, curr) => acc.multiply(curr),
@@ -171,7 +175,7 @@ export class TransformLayer extends Object3D {
         }
       );
     } else if (positioning.type === "manual") {
-      this.position.set(positioning.x, positioning.y, positioning.z);
+      this.position.set(positioning.x, positioning.z, positioning.y);
     }
   }
 }

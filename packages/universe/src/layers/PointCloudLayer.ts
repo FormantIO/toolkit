@@ -86,7 +86,8 @@ export class PointCloudLayer extends UniverseLayer {
       })
     );
     this.points.frustumCulled = false;
-
+    const ninetyDegrees = Math.PI / 2;
+    this.points.rotation.set(-ninetyDegrees, 0, 0);
     this.add(this.points);
   }
 
