@@ -29,6 +29,5 @@ export class XboxLayer extends UniverseLayer {
       weakMagnitude: 1.0,
       strongMagnitude: 1.0,
     });
-    debugger;
   }
 }
