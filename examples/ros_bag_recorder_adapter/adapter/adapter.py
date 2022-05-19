@@ -3,26 +3,17 @@
 This file contains the definition of the Adapter itself. The adapter is what allows us to start up the bag recorder
 """
 
-import logging
+import logger as logging
 import threading
 import time
-from typing import Tuple
 
 from baghandler import BagHandler
+from config import Config
 from utils import *
 
 # logger.basicConfig(level=get_log_level())
-logger = logging.getLogger(__name__)
 
-def save_msg_to_bag(data, callback_params: Tuple[BagHandler, str]):
-    """
-    This is the callback that is used for all incoming messages
-    """
-    # Unwrap the extra call params here
-    bag_handler, topic_name = callback_params
-    
-    # Put the message into the queue with current timestamp
-    bag_handler.enqueue_message((data, topic_name))
+logger = logging.getLogger()
 
 
 class Adapter:
@@ -32,11 +23,13 @@ class Adapter:
 
     def __init__(self):
 
+        self.config = Config()
+
         # Set the topics and types for the specified adapter
-        if get_config_variable("subscribe_to_all"):
+        if self.config.get_param("subscribe_to_all"):
             self.topics = get_topics()
         else:
-            self.topics = get_config_variable("topics")
+            self.topics = self.config.get_param("topics")
 
         # Create a new rosbag with the name as the time and date
         self.bag_handler = BagHandler()
@@ -51,17 +44,23 @@ class Adapter:
         Start all the callbacks and their specified topics
         """
         rospy.init_node("ros_bag_recorder_adapter")
-        
+
+        ignore_topics = set(self.config.get_param("ignore_topics"))
+
         for topic in self.topics:
+            
+            if topic in ignore_topics:
+                continue
+
             if not is_valid_ros_topic(topic):
-                logger.warning(f"Topic f{topic} cannot be subscribed to by \
-                    the bag recorder. Skipping topic.")
+                logger.warning(f"Topic f{topic} cannot be subscribed to by "\
+                    +"the bag recorder. Skipping topic.")
                 continue
 
             
             sub = rospy.Subscriber(topic, get_topic_type_obj(topic),
-                                   save_msg_to_bag,
-                                   (self.bag_handler, topic))
+                                   self.bag_handler.message_callback,
+                                   topic)
 
             self.subscriptions[topic] = sub
 
@@ -69,9 +68,9 @@ class Adapter:
     
         rospy.on_shutdown(self.shutdown)
         
-        topic_refresh_rate = get_config_variable("topic_refresh_rate")
+        topic_refresh_rate = int(self.config.get_param("topic_refresh_rate"))
 
-        if(not get_config_variable("subscribe_to_all")):
+        if not self.config.get_param("subscribe_to_all"):
             rospy.spin()
 
         else:
@@ -81,14 +80,14 @@ class Adapter:
                 self.topics = get_topics()
 
                 for topic in self.topics:
-                    if topic in self.subscriptions:
+                    if topic in self.subscriptions or topic in ignore_topics:
                         continue 
                 
                     logger.info(f"Found New Topic: {topic}")
                 
                     sub = rospy.Subscriber(topic, get_topic_type_obj(topic),
-                                   save_msg_to_bag,
-                                   (self.bag_handler, topic))
+                                   self.bag_handler.message_callback,
+                                   topic)
                     self.subscriptions[topic] = sub
                 
                     logger.info(f"Successfully subscribed to new topic: {topic}")

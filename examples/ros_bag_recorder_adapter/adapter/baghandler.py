@@ -4,14 +4,16 @@ This file contains the definition of the BagHandler which is used to control wha
 messages get written to what bag. 
 """
 
-from datetime import datetime, timedelta
-import logging
+import logger as logging
 import time
+from datetime import datetime, timedelta
 from queue import Queue
 
+from bag import BagFactory
+from config import Config
 from utils import *
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class BagHandler:
@@ -25,31 +27,36 @@ class BagHandler:
 
         # The elements in the message queue are of the form
         # (timestamp: Datetime Obj, message)
+        self.config = Config()
+
         self.message_queue = Queue()
 
-        self.bag_length = get_config_variable("bag_length")
-        self.bag_overlap = get_config_variable("bag_overlap")
+        self.bag_length = int(self.config.get_param("bag_length"))
+        self.bag_overlap = int(self.config.get_param("bag_overlap"))
+
+        self.bag_factory = BagFactory()
 
         # Run check for valid bag lengths
         if(self.bag_overlap > self.bag_length / 2):
-            logger.critical("Error: bag overlap is too large. \
-                Overlap must be <= bag_length / 2. Exiting.")
+            logger.critical(f"Error: bag overlap is too large. "+\
+                f"Overlap must be <= bag_length / 2. "+\
+                    f"Overlap: {self.bag_overlap}. Length: {self.bag_length}. Exiting.")
             exit(1)
 
         # Bag 1. This is always the newest bag
-        self.bag1 = generate_bag()
+        self.bag1 = self.bag_factory.create_bag()
+        self.bag1.open()
         self.bag1_start = datetime.now()
         self.bag1_end = datetime.now() +\
             timedelta(seconds=self.bag_overlap)
 
         # Bag 2. This bag may or may not exist. It depends on the
         # Size of the overlap.
-        self.bag2 = generate_bag()
+        self.bag2 = self.bag_factory.create_bag()
+        self.bag2.open()
         self.bag2_start = datetime.now()
         self.bag2_end = datetime.now() +\
             timedelta(seconds=self.bag_length)
-
-        self.bag_index = 2
 
         self.last_message_time = datetime.now()
 
@@ -80,20 +87,18 @@ class BagHandler:
             self.last_message_time = timestamp
 
             # We can always write to bag1 as we ran the bag check method
-            BagHandler._write_to_bag(self.bag1, message)
+            self.bag1.write(*message)
+            # BagHandler._write_to_bag(self.bag1, message)
 
             if timestamp >= self.bag2_start:
-                BagHandler._write_to_bag(self.bag2, message)
-        
+                # BagHandler._write_to_bag(self.bag2, message)
+                self.bag2.write(*message)
+
         self._close_bags()
 
-    @staticmethod
-    def _write_to_bag(bag: rosbag.Bag, message):
-        """
-        Write a message to a bag
-        """
-        data, topic_name = message
-        bag.write(topic_name, data)
+    def message_callback(self, data, topic_name):
+        """"""
+        self.enqueue_message((data, topic_name))
 
     def _bag_check(self):
         """
@@ -105,7 +110,7 @@ class BagHandler:
         """
 
         # TODO : I'd like this to not remove the front item by not using a get()
-        timestamp, item = self.message_queue.get() 
+        timestamp, item = self.message_queue.get()
         self.front_item = (timestamp, item)
 
         # There is no longer a need for bag1
@@ -115,10 +120,11 @@ class BagHandler:
             self.bag1_start = self.bag2_start
             self.bag1_end = self.bag2_end
 
-            self.bag2 = generate_bag()
-            logger.debug(f"Created new bag. Bag index {self.bag_index}")
+            self.bag2 = self.bag_factory.create_bag()
+            self.bag2.open()
 
-            self.bag_index += 1
+            logger.info(f"New bag Generated at {self.bag2.name}")
+
             self.bag2_start = self.bag1_end - \
                 timedelta(seconds=self.bag_overlap)
             self.bag2_end = self.bag2_start + \
