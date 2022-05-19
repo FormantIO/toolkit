@@ -1,6 +1,6 @@
-formant==1.61.9
-rosbag==1.15.14
-rosgraph==1.15.14
-roslib==1.15.8
-rospy==1.15.14
-rostopic==1.15.14
+formant==1.61.*
+rosbag==1.15.*
+rosgraph==1.15.*
+roslib==1.15.*
+rospy==1.15.*
+rostopic==1.15.*
