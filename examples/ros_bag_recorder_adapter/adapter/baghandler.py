@@ -8,6 +8,7 @@ import logger as logging
 import time
 from datetime import datetime, timedelta
 from queue import Queue
+from math import ceil
 
 from bag import BagFactory
 from config import Config
@@ -82,8 +83,13 @@ class BagHandler:
 
             # If the messages are out of order, then we just drop the old message
             if timestamp < self.last_message_time:
-                logger.info("Bag Error: dropping message. Out of order error")
+                logger.warn("Bag Error: dropping message. Out of order error")
                 continue
+
+            if timestamp < self.bag1_start:
+                logger.warn ("Bag Error: Dropping Message. Bag Timestamp")   
+                continue
+
             self.last_message_time = timestamp
 
             # We can always write to bag1 as we ran the bag check method
@@ -113,6 +119,70 @@ class BagHandler:
         timestamp, item = self.message_queue.get()
         self.front_item = (timestamp, item)
 
+        if timestamp > self.bag1_end:
+
+            # in this case, we can definitely close bag 1
+            self.bag1.close()
+
+            # Case 1: timestamp is still in range of bag2.
+            #         In that case, we simply set bag1 as bag2 and then
+            #         generate a new bag2 with the next time interval
+            if self.bag2_end > timestamp:
+                self.bag1 = self.bag2
+                self.bag1_start = self.bag2_start
+                self.bag1_end = self.bag2_end
+
+                self.bag2 = self.bag_factory.create_bag()
+                self.bag2.open()
+
+                self.bag2_start = self.bag1_end - \
+                    timedelta(seconds=self.bag_overlap)
+                self.bag2_end = self.bag2_start + \
+                    timedelta(seconds=self.bag_length)
+                
+                return
+
+            # Case 2: neither bag1 nor bag2 contain the timestamp. 
+            #       : In this case, we need to jump up to the proper
+            #       : interval in the bagging timeline.
+            #       : The following does that. 
+            if self.bag2_end < timestamp:
+                self.bag2.close()
+                # The time between when the same bag closes
+                bag_close_interval = 2 * self.bag_length - 2 * self.bag_overlap
+                
+                t = (timestamp - self.bag2_end).total_seconds()
+
+                num_intervals = ceil(t / bag_close_interval)
+
+                bag_new_end = self.bag2_end + timedelta(seconds=num_intervals * bag_close_interval)
+                bag_new_start = bag_new_end - timedelta(seconds=self.bag_length)
+
+                self.bag1 = self.bag_factory.create_bag()
+                self.bag1.open()
+
+                self.bag2 = self.bag_factory.create_bag()
+                self.bag2.open()
+
+                # Case 1: bag_new_start represents bag 1
+                if bag_new_start < timestamp:
+                    self.bag1_start = bag_new_start
+                    self.bag1_end = bag_new_end
+
+                    self.bag2_start = self.bag1_end - timedelta(seconds=self.bag_overlap)
+                    self.bag2_end = self.bag2_start + timedelta(seconds=self.bag_length) 
+
+                # Case 2: bag_new_start represents bag 2
+                elif bag_new_start >= timestamp:
+
+                    self.bag1_start = bag_new_start - timedelta(seconds=(self.bag_length-self.bag_overlap))
+                    self.bag1_end = self.bag1_start + timedelta(seconds=self.bag_length)
+                    
+                    self.bag2_start = bag_new_start
+                    self.bag2_end = self.bag2_start + timedelta(seconds=self.bag_length) 
+
+        return
+        
         # There is no longer a need for bag1
         if timestamp > self.bag1_end:
             self.bag1.close()
@@ -125,10 +195,25 @@ class BagHandler:
 
             logger.info(f"New bag Generated at {self.bag2.name}")
 
-            self.bag2_start = self.bag1_end - \
-                timedelta(seconds=self.bag_overlap)
-            self.bag2_end = self.bag2_start + \
-                timedelta(seconds=self.bag_length)
+            # Should have a new bag opened every
+            # bag_length - bag_overlap seconds. 
+
+            # Need to make up timestamp - (bag2_end - overlap) seconds. 
+            # That equates to x seconds. 
+            # floor(x / (bag2_end - overlap))
+
+            bag_intervals = timedelta(seconds=self.bag_length-self.bag_overlap)
+            total_missing_time = (timestamp - bag_intervals).total_seconds()
+
+            num_intervals = floor(total_missing_time / bag_intervals.total_seconds())
+
+            self.bag2_start = self.bag2_end + num_intervals * bag_intervals.total_seconds()
+            self.bag2_end = self.bag2_start + timedelta(seconds=self.bag_length)
+
+            # self.bag2_start = self.bag1_end - \
+            #     timedelta(seconds=self.bag_overlap)
+            # self.bag2_end = self.bag2_start + \
+            #     timedelta(seconds=self.bag_length)
 
             # We have to recurse because there is a chance that the new bag is
             # Not new enough and we need to generate an even newer bag
