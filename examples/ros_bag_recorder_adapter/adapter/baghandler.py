@@ -181,43 +181,6 @@ class BagHandler:
                     self.bag2_start = bag_new_start
                     self.bag2_end = self.bag2_start + timedelta(seconds=self.bag_length) 
 
-        return
-        
-        # There is no longer a need for bag1
-        if timestamp > self.bag1_end:
-            self.bag1.close()
-            self.bag1 = self.bag2
-            self.bag1_start = self.bag2_start
-            self.bag1_end = self.bag2_end
-
-            self.bag2 = self.bag_factory.create_bag()
-            self.bag2.open()
-
-            logger.info(f"New bag Generated at {self.bag2.name}")
-
-            # Should have a new bag opened every
-            # bag_length - bag_overlap seconds. 
-
-            # Need to make up timestamp - (bag2_end - overlap) seconds. 
-            # That equates to x seconds. 
-            # floor(x / (bag2_end - overlap))
-
-            bag_intervals = timedelta(seconds=self.bag_length-self.bag_overlap)
-            total_missing_time = (timestamp - bag_intervals).total_seconds()
-
-            num_intervals = floor(total_missing_time / bag_intervals.total_seconds())
-
-            self.bag2_start = self.bag2_end + num_intervals * bag_intervals.total_seconds()
-            self.bag2_end = self.bag2_start + timedelta(seconds=self.bag_length)
-
-            # self.bag2_start = self.bag1_end - \
-            #     timedelta(seconds=self.bag_overlap)
-            # self.bag2_end = self.bag2_start + \
-            #     timedelta(seconds=self.bag_length)
-
-            # We have to recurse because there is a chance that the new bag is
-            # Not new enough and we need to generate an even newer bag
-            self._bag_check()
 
     def _close_bags(self):
         """Close the bag handlers bags."""
