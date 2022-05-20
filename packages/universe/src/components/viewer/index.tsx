@@ -1,6 +1,7 @@
 import { Measure } from "@formant/ui-sdk";
 import * as React from "react";
 import { Component } from "react";
+import { Howler } from "howler";
 import * as THREE from "three";
 import {
   PointLight,
@@ -398,6 +399,17 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         }
 
         this.notifyUpdate(this.clock.getDelta());
+
+        Howler.pos(
+          this.camera.position.x,
+          this.camera.position.y,
+          this.camera.position.z
+        );
+        let lookAt = new Vector3(0, 0, -1);
+        let up = new Vector3(0, 1, 0);
+        lookAt = lookAt.applyQuaternion(this.camera.quaternion);
+        up = up.applyQuaternion(this.camera.quaternion);
+        Howler.orientation(lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
       });
       if (vr) element.appendChild(VRButton.createButton(this.renderer));
     }

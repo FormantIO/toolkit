@@ -1,4 +1,10 @@
-import { Object3D, PerspectiveCamera, Raycaster, WebXRManager } from "three";
+import {
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  Vector3,
+  WebXRManager,
+} from "three";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { Howl } from "howler";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
@@ -148,13 +154,24 @@ export abstract class UniverseLayer extends Object3D {
   public playSound(
     url: string,
     volume: number = 1,
-    loop: boolean = false
+    loop: boolean = false,
+    pos: Vector3 | undefined = undefined
   ): () => void {
     const sound = new Howl({
       src: [url],
       volume,
       loop,
     });
+    if (pos) {
+      sound.pos(pos.x, pos.y, pos.z);
+      // @ts-ignore-next-line
+      sound.pannerAttr({
+        panningModel: "HRTF",
+        refDistance: 0.8,
+        rolloffFactor: 2.5,
+        distanceModel: "exponential",
+      });
+    }
     sound.play();
     return () => {
       sound.stop();
