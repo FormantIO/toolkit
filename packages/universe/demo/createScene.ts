@@ -328,9 +328,9 @@ export function createScene() {
       editing: true,
       position: {
         type: "manual",
-        x: -0.05213157574107391,
-        y: 0.18048159900166147,
-        z: 3.469446951953614e-17,
+        x: 0,
+        y: 0,
+        z: 0,
       },
       fieldValues: {
         url: {

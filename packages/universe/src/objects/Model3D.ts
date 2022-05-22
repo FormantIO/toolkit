@@ -8,8 +8,9 @@ export class Model3D extends Object3D {
     loader.load(url, (gltf) => {
       gltf.scene.traverse((o: any) => {
         if (o.isMesh) {
-          if (o.material.emissive !== undefined)
-            o.material.emissive = new Color(0x555555);
+          if (o.material.emissive !== undefined) {
+            o.material.emissive = new Color(0x111111);
+          }
         }
       });
       this.add(gltf.scene);
