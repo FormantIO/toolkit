@@ -11,8 +11,7 @@ import {
   Raycaster,
 } from "three";
 import styled from "styled-components";
-// @ts-ignore-next-line
-import { RGBELoader } from "../../../node_modules/three/examples/jsm/loaders/RGBELoader";
+import { RGBELoader } from "../../../three-utils/loaders/RGBELoader";
 import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
 import { TransformControls } from "../../../three-utils/controls/TransformControls";
 import { VRButton } from "../../../three-utils/webxr/VRButton";
@@ -116,7 +115,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.camera.position.y = 1;
 
     new RGBELoader().load(
-      "https://threejs.org/examples/textures/equirectangular/pedestrian_overpass_1k.hdr",
+      "https://threejs.org/examples/textures/equirectangular/venice_sunset_1k.hdr",
       (hdrEquirect: any) => {
         hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
 

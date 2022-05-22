@@ -337,7 +337,7 @@ export function createScene() {
           location: [],
           type: "text",
           value:
-            "https://formant-3d-models.s3.us-west-2.amazonaws.com/grass.gltf",
+            "https://formant-3d-models.s3.us-west-2.amazonaws.com/tadao_ando.glb",
         },
       },
       name: "Grass",
