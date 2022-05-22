@@ -1,4 +1,5 @@
 import { UniverseLayer, Hand, Label } from "@formant/universe";
+import { Vector3 } from "three";
 
 export class HandsLayer extends UniverseLayer {
   static layerTypeId = "hands";
@@ -19,6 +20,21 @@ export class HandsLayer extends UniverseLayer {
   onHandPosesChanged(hands: Hand[]): void {
     this.labelLeft.text = `${hands[0].getHandPose()}`;
     this.labelRight.text = `${hands[1].getHandPose()}`;
+    if (hands[0].getHandPose() === "pinch") {
+      this.playSound(
+        "https://formant-3d-models.s3.us-west-2.amazonaws.com/levelup.wav",
+        1,
+        false,
+        new Vector3(0, 2, 0)
+      );
+    }
+    if (hands[1].getHandPose() === "pinch") {
+      this.playSound(
+        "https://formant-3d-models.s3.us-west-2.amazonaws.com/levelup.wav",
+        1,
+        false
+      );
+    }
   }
 
   onHandsMoved(hands: Hand[]): void {
