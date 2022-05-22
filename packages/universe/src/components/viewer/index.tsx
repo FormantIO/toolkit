@@ -11,6 +11,8 @@ import {
   Raycaster,
 } from "three";
 import styled from "styled-components";
+// @ts-ignore-next-line
+import { RGBELoader } from "../../../node_modules/three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "../../../three-utils/controls/OrbitControls";
 import { TransformControls } from "../../../three-utils/controls/TransformControls";
 import { VRButton } from "../../../three-utils/webxr/VRButton";
@@ -100,6 +102,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   constructor(props: IUniverseViewerProps) {
     super(props);
+    Howler.volume(1);
     this.scene = new THREE.Scene();
     this.scene.add(this.root);
     this.camera = new THREE.PerspectiveCamera(
@@ -111,6 +114,15 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.camera.position.z = -1.5;
     this.camera.position.x = 1.5;
     this.camera.position.y = 1;
+
+    new RGBELoader().load(
+      "https://threejs.org/examples/textures/equirectangular/pedestrian_overpass_1k.hdr",
+      (hdrEquirect: any) => {
+        hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+
+        this.scene.environment = hdrEquirect;
+      }
+    );
 
     const accentColor1 = defined(Color.fromString("#18d2ff")).toString();
     const accentColor2 = defined(Color.fromString("#ea719d")).toString();

@@ -164,13 +164,6 @@ export abstract class UniverseLayer extends Object3D {
     });
     if (pos) {
       sound.pos(pos.x, pos.y, pos.z);
-      // @ts-ignore-next-line
-      sound.pannerAttr({
-        panningModel: "HRTF",
-        refDistance: 0.8,
-        rolloffFactor: 2.5,
-        distanceModel: "exponential",
-      });
     }
     sound.play();
     return () => {
