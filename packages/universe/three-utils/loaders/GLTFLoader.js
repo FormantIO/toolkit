@@ -2076,15 +2076,7 @@ class GLTFParser {
       ? navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]
       : -1;
 
-    if (
-      typeof createImageBitmap === "undefined" ||
-      isSafari ||
-      (isFirefox && firefoxVersion < 98)
-    ) {
-      this.textureLoader = new TextureLoader(this.options.manager);
-    } else {
-      this.textureLoader = new ImageBitmapLoader(this.options.manager);
-    }
+    this.textureLoader = new TextureLoader(this.options.manager);
 
     this.textureLoader.setCrossOrigin(this.options.crossOrigin);
     this.textureLoader.setRequestHeader(this.options.requestHeader);
