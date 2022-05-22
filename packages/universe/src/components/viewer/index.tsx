@@ -24,7 +24,6 @@ import {
   findSceneGraphElement,
   getSceneGraphElementParent,
   Positioning,
-  SceneGraphElement,
   SceneGraph,
 } from "../../model/SceneGraph";
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
@@ -74,7 +73,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private camera: THREE.PerspectiveCamera;
 
-  private pathToLayer: Map<SceneGraphElement, TransformLayer> = new Map();
+  private pathToLayer: Map<string, TransformLayer> = new Map();
 
   private editControls: TransformControls | undefined;
 
@@ -640,11 +639,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.toggleEditing(sceneGraph, path, false);
     }
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
-    const layer = defined(this.pathToLayer.get(el));
+    const layer = defined(this.pathToLayer.get(el.id));
 
     defined(layer.contentNode).destroy();
     definedAndNotNull(layer.parent).remove(layer);
-    this.pathToLayer.delete(el);
+    this.pathToLayer.delete(el.id);
   }
 
   public addSceneGraphItem(
@@ -670,12 +669,20 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     }
     const parent = getSceneGraphElementParent(sceneGraph, path);
     if (parent) {
-      const o = defined(this.pathToLayer.get(parent));
+      const o = defined(this.pathToLayer.get(parent.id));
       o.add(layer);
     } else {
       this.root.add(layer);
     }
-    this.pathToLayer.set(el, layer);
+    this.pathToLayer.set(el.id, layer);
+  }
+
+  public updateLayerVisibility(id: string, visible: boolean) {
+    const layer = defined(this.pathToLayer.get(id));
+    if (layer.visible !== visible) {
+      layer.visible = visible;
+      defined(layer.contentNode).onVisibilityChanged(visible);
+    }
   }
 
   public recenter() {
@@ -691,7 +698,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     value: string
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
-    const o = defined(this.pathToLayer.get(el));
+    const o = defined(this.pathToLayer.get(el.id));
     defined(o.contentNode).onFieldChanged(fieldId, value);
   }
 
@@ -701,12 +708,9 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     visible: boolean
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
-    const o = defined(this.pathToLayer.get(el));
+    const o = defined(this.pathToLayer.get(el.id));
     o.visible = visible;
     defined(o.contentNode).onVisibilityChanged(visible);
-    o.traverse((child) => {
-      child.visible = visible;
-    });
   }
 
   public toggleEditing(
@@ -716,7 +720,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   ) {
     const c = defined(this.editControls);
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
-    const o = defined(this.pathToLayer.get(el));
+    const o = defined(this.pathToLayer.get(el.id));
     if (editing) {
       c.setMode("translate");
       c.attach(o);
@@ -733,7 +737,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     position: Positioning
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
-    const o = defined(this.pathToLayer.get(el));
+    const o = defined(this.pathToLayer.get(el.id));
     o.setPositioning(position, this.props.universeData);
   }
 

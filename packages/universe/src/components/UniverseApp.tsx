@@ -150,6 +150,20 @@ export function UniverseApp(props: IUniverseAppProps) {
     })();
   }, []);
 
+  useEffect(() => {
+    if (viewer) {
+      const layers: SceneGraphElement[] = [];
+      sceneGraph.forEach((element) => {
+        visitSceneGraphElement(element, (e) => {
+          layers.push(e);
+        });
+      });
+      layers.forEach((layer) => {
+        viewer.updateLayerVisibility(layer.id, layer.visible);
+      });
+    }
+  }, [sceneGraph]);
+
   const persist = throttle(() => {
     if (updatingSceneGraph && props.onSceneGraphChange) {
       props.onSceneGraphChange(

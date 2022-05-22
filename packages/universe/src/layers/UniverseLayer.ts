@@ -13,7 +13,7 @@ import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
-import { SceneGraph, visitSceneGraphElement } from "../main";
+import { SceneGraph, SceneGraphElement, visitSceneGraphElement } from "../main";
 import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
@@ -92,7 +92,37 @@ export abstract class UniverseLayer extends Object3D {
 
   onExitVR(_xr: WebXRManager): void {}
 
-  onVisibilityChanged(_visibility: boolean): void {}
+  onVisibilityChanged(visible: boolean): void {
+    // default visibility shift
+    this.traverse((child) => {
+      child.visible = visible;
+    });
+  }
+
+  getLayers(): SceneGraphElement[] {
+    const sceneGraph = getRecoil(sceneGraphAtom);
+    const layers: SceneGraphElement[] = [];
+    sceneGraph.forEach((element) => {
+      visitSceneGraphElement(element, (e) => {
+        layers.push(e);
+      });
+    });
+    return layers;
+  }
+
+  setLayerVisibility(id: string, visible: boolean): void {
+    const sceneGraph = JSON.parse(
+      JSON.stringify(getRecoil(sceneGraphAtom))
+    ) as SceneGraph;
+    sceneGraph.forEach((element) => {
+      visitSceneGraphElement(element, (e) => {
+        if (e.id === id) {
+          e.visible = visible;
+        }
+      });
+    });
+    setRecoil(sceneGraphAtom, sceneGraph);
+  }
 
   onControllerButtonChanged(
     _controller: Controller,

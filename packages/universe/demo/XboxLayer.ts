@@ -1,4 +1,4 @@
-import { Raycaster, Vector3 } from "three";
+import { Raycaster } from "three";
 import { HandheldController } from "../src/components/viewer/HandheldController";
 import { Controller, UniverseLayer } from "../src/main";
 
@@ -11,6 +11,8 @@ export class XboxLayer extends UniverseLayer {
 
   static usesData = false;
 
+  labelVis = true;
+
   onHandheldControllerAxisChanged(
     _controller: HandheldController,
     _axis: number,
@@ -20,12 +22,13 @@ export class XboxLayer extends UniverseLayer {
   }
 
   onPointerDown(_raycaster: Raycaster, _button: number): void {
-    this.playSound(
-      "https://formant-3d-models.s3.us-west-2.amazonaws.com/levelup.wav",
-      1,
-      false,
-      new Vector3(0, 2, 0)
-    );
+    this.labelVis = !this.labelVis;
+    const layers = this.getLayers();
+    layers.forEach((layer) => {
+      if (layer.type === "label") {
+        this.setLayerVisibility(layer.id, this.labelVis);
+      }
+    });
   }
 
   onControllerButtonChanged(
