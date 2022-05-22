@@ -10,7 +10,6 @@ import { XboxLayer } from "./XboxLayer";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const mode = urlParams.get("mode");
 const vr = urlParams.get("vr");
 
 LayerRegistry.register(TeleportLayer);
@@ -31,11 +30,7 @@ function App() {
   return (
     <Universe
       universeData={data}
-      mode={
-        mode === "edit" || mode === "view" || mode === "no-interaction"
-          ? mode
-          : "edit"
-      }
+      mode={"view"}
       initialSceneGraph={createScene()}
       onSceneGraphChange={(_) => {
         console.log(JSON.stringify(_));
