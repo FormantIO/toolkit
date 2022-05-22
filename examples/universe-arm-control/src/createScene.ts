@@ -19,18 +19,6 @@ export function createScene() {
     {
       id: uuid.v4(),
       editing: false,
-      type: "xbox",
-      name: "Xbox",
-      deviceContext: undefined,
-      children: [],
-      visible: true,
-      position: { type: "manual", x: 0, y: 0, z: 0 },
-      fieldValues: {},
-      data: {},
-    },
-    {
-      id: uuid.v4(),
-      editing: false,
       type: "hands",
       name: "Hands",
       deviceContext: undefined,
@@ -47,24 +35,6 @@ export function createScene() {
       name: "RoboArm1",
       deviceContext: ARM1_ID,
       children: [
-        {
-          id: uuid.v4(),
-          editing: false,
-          type: "label",
-          name: "Name Label",
-          deviceContext: ARM1_ID,
-          children: [],
-          visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
-          fieldValues: {
-            label_text: {
-              location: [],
-              type: "text",
-              value: "RoboArm1",
-            },
-          },
-          data: {},
-        },
         {
           children: [],
           id: uuid.v4(),
