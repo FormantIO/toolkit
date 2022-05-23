@@ -5,6 +5,7 @@ import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { INumericSetEntry } from "../../../data-sdk/src/model/INumericSetEntry";
 import { IPcd } from "../objects/pcd";
 import { IGridMap } from "./IGridMap";
+import { ITransform } from "../../../model/ITransform";
 
 export type DataSourceState =
   | "missing_data"
@@ -197,4 +198,10 @@ export interface IUniverseData {
     source: UniverseDataSource,
     onDataSourceStateChange?: (state: DataSourceState) => void
   ): CloseSubscription;
+
+  sendRealtimePose(
+    deviceId: string,
+    streamName: string,
+    pose: ITransform
+  ): void;
 }
