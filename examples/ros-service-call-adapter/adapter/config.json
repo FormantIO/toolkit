@@ -1,0 +1,8 @@
+{
+    "service-commands": [
+        "rosservice"
+    ],
+    "button-mapping": {
+        "button_name": "service_name"
+    }
+}
