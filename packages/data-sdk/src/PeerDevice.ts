@@ -76,41 +76,22 @@ export class PeerDevice implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(sessionType?: SessionType) {
+  async startRealtimeConnection(_sessionType?: SessionType) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         lanOnlyMode: true,
         receive: this.handleMessage,
       });
 
-      while (!rtcClient.isReady()) {
-        await delay(100);
-      }
-
-      // Each online device and user has a peer in the system
-      const peers = await rtcClient.getPeers();
-
-      // Find the device peer corresponding to the device's ID
-      const devicePeer = peers.find((_) => _.deviceId === this.id);
-      if (!devicePeer) {
-        // If the device is offline, we won't be able to find its peer.
-        throw new Error("Cannot find peer, is the robot offline?");
-      }
-
-      // We can connect our real-time communication client to device peers by their ID
-      this.remoteDevicePeerId = devicePeer.id;
-      await rtcClient.connect(
-        this.remoteDevicePeerId,
-        undefined,
-        sessionType as number | undefined
-      );
+      await rtcClient.connectLan(this.peer_url);
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
-      while (
-        rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
-      ) {
+      while (true) {
         await delay(100);
+        if (rtcClient.getConnections()[0].isReady()) {
+          break;
+        }
       }
       this.rtcClient = rtcClient;
     } else {
