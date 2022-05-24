@@ -75,7 +75,19 @@ export enum SessionType {
   Observe = 3,
 }
 
-export class Device {
+export interface IRealtimeDevice {
+  startRealtimeConnection(sessionType?: SessionType): Promise<void>;
+  startListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
+  stopListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
+  addRealtimeListener(listener: RealtimeListener): void;
+  removeRealtimeListener(listener: RealtimeListener): void;
+  createCustomDataChannel(
+    channelName: string,
+    rtcConfig?: RTCDataChannelInit
+  ): Promise<DataChannel>;
+}
+
+export class Device implements IRealtimeDevice {
   rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | undefined;
 
