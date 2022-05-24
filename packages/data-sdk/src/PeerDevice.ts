@@ -1,8 +1,6 @@
-import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
-import { FORMANT_API_URL } from "./config";
+import { RtcClient } from "@formant/realtime-sdk";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
-import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { Manipulator } from "./Manipulator";
 import {
@@ -81,17 +79,7 @@ export class PeerDevice implements IRealtimeDevice {
   async startRealtimeConnection(sessionType?: SessionType) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
-        signalingClient: new SignalingPromiseClient(
-          FORMANT_API_URL,
-          null,
-          null
-        ),
-        getToken: async () => {
-          return defined(
-            Authentication.token,
-            "Realtime when user isn't authorized"
-          );
-        },
+        lanOnlyMode: true,
         receive: this.handleMessage,
       });
 
