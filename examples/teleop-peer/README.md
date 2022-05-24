@@ -7,6 +7,4 @@
 
 ### Running the adapter
 
-1. Install the `formant` python module. If it's already installed, make sure it is up-to-date. `python3 -m pip install --upgrade formant`
-2. Run `python3 adapter.py` with a Formant agent running on the same host.
-
+Check out https://github.com/FormantIO/formant-p2p-adapter for the adapter that goes with this backend
