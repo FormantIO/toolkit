@@ -16,6 +16,7 @@ import {
   SessionType,
 } from "./Device";
 import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
+import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 export class PeerDevice implements IRealtimeDevice {
   rtcClient: RtcClient | undefined;
@@ -251,19 +252,14 @@ export class PeerDevice implements IRealtimeDevice {
     });
   }
 
-  async getRemotePeer() {
-    // Each online device and user has a peer in the system
-    const peers = await defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    ).getPeers();
-
-    // Find the device peer corresponding to the device's ID
-    const devicePeer = peers.find((_) => _.deviceId === this.id);
-    return defined(
-      devicePeer,
-      "Could not find remote peer for device " + this.id
-    );
+  async getRemotePeer(): Promise<IRtcPeer> {
+    return {
+      id: this.peer_url,
+      organizationId: "",
+      deviceId: this.id,
+      capabilities: [],
+      capabilitySet: {},
+    };
   }
 
   async stopRealtimeConnection() {
