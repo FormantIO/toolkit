@@ -2,6 +2,8 @@
 import time
 from typing import List
 
+from numpy import source
+
 import rospy
 from formant.sdk.agent.v1.client import Client as FormantClient
 
@@ -38,6 +40,10 @@ class Adapter:
 
     def _handle_button_press(self, button_press):
         """Handle a button press along with the proper parameters."""
+
+        if not button_press.bitset.bits[0].value:
+            return
+
         button_name = button_press.bitset.bits[0].key
 
         logger.info(f"Button press received from button {button_name}")
@@ -83,7 +89,14 @@ class Adapter:
         stream_name = rospy.resolve_name(service_name).replace("/", ".")
         stream_name = stream_name[1:] if stream_name[0] == "." else stream_name
         response_stream = f"ros.service.{stream_name}.response"
-        self._fclient.post_text(response_stream, str(data))
+        try:
+            print(str(data))
+            print(response_stream) 
+            self._fclient.post_text(response_stream, str(data))
+            
+        except Exception:
+            logger.info("Failed to post response")
+            return
 
         logger.info(
-            f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
+                f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
