@@ -1,6 +1,17 @@
+"""
+This parser safely parses the datatypes supported by ROS messages.
+This allows a user to parse a string into data that could appear in a ROS message,
+in a safe way. 
+
+Implements a recursive descent parser for a few python primitives that could 
+appear in a ROS message. 
+"""
+
 import ast
 
-DELIMITERS = {"}", ")", "]", " ", ""}
+from pkg_resources import parse_version
+
+DELIMITERS = {"}", ")", "]", " ", "", ","}
 
 class StringStream:
     def __init__(self, input: str):
@@ -50,12 +61,19 @@ def parse_input(string_stream: StringStream):
     if string_stream.peek_char() == "F" or string_stream.peek_char() == "T":
         return parse_bool(string_stream)      
 
+    raise SyntaxError(f"Cannot parse input")
+
 def parse_bool(string_stream: StringStream):
     if string_stream.peek_char() != "F" and string_stream.peek_char() != "T":
         raise SyntaxError(f"Invalid boolean expression. Cannot parse {string_stream.input}")
 
     if string_stream.peek_char() == "F":
         return parse_bool_false(string_stream)
+
+    if string_stream.peek_char() == "T":
+        return parse_bool_true(string_stream) 
+    
+    raise SyntaxError(f"Invalid boolean. Cannot parse {string_stream.input}")
 
 def parse_bool_false(string_stream):
     parse_from_stream(string_stream, "False")
@@ -68,7 +86,10 @@ def parse_bool_true(string_stream):
 def parse_from_stream(string_stream:StringStream, string_to_parse:str):
     for character in string_to_parse:
         if string_stream.read_char() != character:
-            SyntaxError(f"Unmatched Character. Expected {character}")
+            raise SyntaxError(f"Unmatched Character. Expected {character}")
+
+    if string_stream.peek_char() not in DELIMITERS:
+        raise SyntaxError("Expected Delimiter")
 
 def parse_numeric(string_stream: StringStream):
     if not string_stream.peek_char().isnumeric() and not string_stream.peek_char() == "."\
@@ -78,7 +99,9 @@ def parse_numeric(string_stream: StringStream):
     if string_stream.peek_char().isnumeric():
         return parse_numeric_before_decimal(string_stream)
     elif string_stream.peek_char() == "-":
-        return parse_numeric_before_decimal(string_stream, string_stream.read_char())
+        delim = string_stream.read_char()
+        string_stream.validate_stream()
+        return parse_numeric_before_decimal(string_stream, delim)
     else:
         return parse_numeric_after_decimal(string_stream, string_stream.read_char()) 
 
@@ -87,8 +110,11 @@ def parse_numeric_before_decimal(string_stream: StringStream, soFar = ""):
     if string_stream.peek_char().isnumeric():
         return parse_numeric_before_decimal(string_stream, soFar+string_stream.read_char())
 
-    if string_stream.peek_char() == ".":
+    elif string_stream.peek_char() == ".":
         return parse_numeric_after_decimal(string_stream, soFar+string_stream.read_char()) 
+
+    elif string_stream.peek_char() not in DELIMITERS:
+        raise SyntaxError(f"Expected delimiter")
 
     return int(soFar) 
 
