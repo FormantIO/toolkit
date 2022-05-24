@@ -1,5 +1,7 @@
 import ast
 
+DELIMITERS = {"}", ")", "]", " ", ""}
+
 class StringStream:
     def __init__(self, input: str):
         self.input = input
@@ -32,7 +34,13 @@ def parse_input(string_stream: StringStream):
     if string_stream.peek_char() == "[":
         return parse_list(string_stream) 
 
-    if string_stream.peek_char().isnumeric() or string_stream.peek_char() == ".":
+    if string_stream.peek_char() == "(":
+        return tuple(parse_list(string_stream, "(", ")"))
+    
+    if string_stream.peek_char() == "{":
+        return set(parse_list(string_stream, "{", "}"))
+
+    if string_stream.peek_char().isnumeric() or string_stream.peek_char() == "." or string_stream.peek_char() == "-":
         return parse_numeric(string_stream)
 
     if string_stream.peek_char() == '"' or string_stream.peek_char() == "'":
@@ -63,12 +71,16 @@ def parse_from_stream(string_stream:StringStream, string_to_parse:str):
             SyntaxError(f"Unmatched Character. Expected {character}")
 
 def parse_numeric(string_stream: StringStream):
-    if not string_stream.peek_char().isnumeric() or string_stream.peek_char() == ".":
+    if not string_stream.peek_char().isnumeric() and not string_stream.peek_char() == "."\
+        and not string_stream.peek_char() == "-":
         raise SyntaxError(f"Invalid input. Cannot parse {string_stream.input}")
 
     if string_stream.peek_char().isnumeric():
         return parse_numeric_before_decimal(string_stream)
-    return parse_numeric_after_decimal(string_stream) 
+    elif string_stream.peek_char() == "-":
+        return parse_numeric_before_decimal(string_stream, string_stream.read_char())
+    else:
+        return parse_numeric_after_decimal(string_stream, string_stream.read_char()) 
 
 def parse_numeric_before_decimal(string_stream: StringStream, soFar = ""):
     
@@ -83,7 +95,8 @@ def parse_numeric_before_decimal(string_stream: StringStream, soFar = ""):
 def parse_numeric_after_decimal(string_stream: StringStream, soFar = ""):
     if string_stream.peek_char().isnumeric():
         return parse_numeric_after_decimal(string_stream, soFar+string_stream.read_char())
-
+    elif string_stream.peek_char() not in DELIMITERS:
+        raise SyntaxError(f"Expected delimiter, got {string_stream.peek_char()}")
     return float(soFar) 
 
 def parse_string(string_stream: StringStream, string_delimiter='"'):
@@ -113,8 +126,8 @@ def parse_escaped(string_stream: StringStream):
     string_stream.validate_stream()
     return ast.literal_eval(f"'\\{string_stream.read_char()}'")
 
-def parse_list(string_stream: StringStream):
-    if string_stream.read_char() != "[":
+def parse_list(string_stream: StringStream, list_start = "[", list_delim = "]"):
+    if string_stream.read_char() != list_start:
         raise SyntaxError(f"Invalid List. Cannot parse {string_stream.input}")
     
     parsed_list = []
@@ -123,19 +136,19 @@ def parse_list(string_stream: StringStream):
     if string_stream.peek_char() == ",":
         raise SyntaxError(f"Must have element before ,. Cannot parse {string_stream.input}")
     
-    while string_stream.peek_char() != "]":
+    while string_stream.peek_char() != list_delim:
         
         string_stream.remove_leading_whitespace()
         parsed_list.append(parse_input(string_stream))
         string_stream.validate_stream()
         string_stream.remove_leading_whitespace()
         
-        if string_stream.peek_char() != ',' and string_stream.peek_char() != ']':
+        if string_stream.peek_char() != ',' and string_stream.peek_char() != list_delim:
             raise SyntaxError("List must either have ] or ,")
 
         if string_stream.peek_char() == ",":
             string_stream.read_char()
-            if string_stream.peek_char() == "]":
+            if string_stream.peek_char() == list_delim:
                 raise SyntaxError("Commas must separate elements. ")
 
     string_stream.read_char()
