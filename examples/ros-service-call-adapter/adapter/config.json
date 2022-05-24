@@ -3,6 +3,11 @@
         "rosservice"
     ],
     "button-mapping": {
-        "button_name": "service_name"
+        "button_name": [
+            "service_name",
+            [
+                "params"
+            ]
+        ]
     }
 }

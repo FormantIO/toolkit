@@ -3,7 +3,7 @@ from json import load as json_load
 
 
 class Config:
-
+    """The config class loads the config.json from memory."""
 
     def __init__(self):
         with open("config.json", "r") as f:

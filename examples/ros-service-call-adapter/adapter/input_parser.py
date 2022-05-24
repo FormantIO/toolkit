@@ -9,8 +9,6 @@ appear in a ROS message.
 
 import ast
 
-from pkg_resources import parse_version
-
 DELIMITERS = {"}", ")", "]", " ", "", ","}
 
 class StringStream:
@@ -38,6 +36,15 @@ class StringStream:
             raise SyntaxError(f"Unexpected EOF. Cannot parse {self.input}")
 
 def parse(input: str):
+    """Parses a string for parsing data for use
+        in ros messages
+    
+    The grammar:
+    Primitive = Int | Float | String | Bool
+    List = [ Primitive, ... ]
+    Tuple = ( Primitive, ... )
+    Set = { Primitive, ... }
+    """
     ss = StringStream(input) 
     return parse_input(ss)
 

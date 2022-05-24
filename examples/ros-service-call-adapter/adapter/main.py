@@ -14,7 +14,6 @@ def main():
         adapter = Adapter()
         adapter.run()
     except KeyboardInterrupt:
-        print("Exiting")
         pass
 
 if __name__ == "__main__":
