@@ -24,10 +24,10 @@ export class PeerDevice implements IRealtimeDevice {
 
   realtimeListeners: RealtimeListener[] = [];
   id!: string;
-  constructor(public peer_url: string) {}
+  constructor(public peerUrl: string) {}
 
   async getLatestTelemetry(): Promise<IStreamCurrentValue[]> {
-    const data = await fetch(`${this.peer_url}/telemetry`);
+    const data = await fetch(`${this.peerUrl}/telemetry`);
     const telemetry = (await data.json()) as {
       [key in string]: { timestamp: string };
     };
@@ -46,13 +46,13 @@ export class PeerDevice implements IRealtimeDevice {
   }
 
   async getDeviceId(): Promise<string> {
-    let result = await fetch(`${this.peer_url}/configuration`);
+    let result = await fetch(`${this.peerUrl}/configuration`);
     const cfg = await result.json();
     return cfg.agent_config.id;
   }
 
   async getConfiguration(): Promise<ConfigurationDocument> {
-    let result = await fetch(`${this.peer_url}/configuration`);
+    let result = await fetch(`${this.peerUrl}/configuration`);
     const cfg = await result.json();
     return cfg.agent_config.document;
   }
@@ -84,15 +84,12 @@ export class PeerDevice implements IRealtimeDevice {
         receive: this.handleMessage,
       });
 
-      await rtcClient.connectLan(this.peer_url);
+      await rtcClient.connectLan(this.peerUrl);
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
-      while (true) {
+      while (rtcClient.getConnectionStatus(this.peerUrl) !== "connected") {
         await delay(100);
-        if (rtcClient.getConnections()[0].isReady()) {
-          break;
-        }
       }
       this.rtcClient = rtcClient;
     } else {
@@ -254,7 +251,7 @@ export class PeerDevice implements IRealtimeDevice {
 
   async getRemotePeer(): Promise<IRtcPeer> {
     return {
-      id: this.peer_url,
+      id: this.peerUrl,
       organizationId: "",
       deviceId: this.id,
       capabilities: [],
