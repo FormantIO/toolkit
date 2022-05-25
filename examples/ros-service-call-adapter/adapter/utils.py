@@ -1,9 +1,5 @@
 
-from os.path import exists
-from os import environ, system
-
 import rosgraph
-import roslib
 import rospy
 import rosservice
 import rostopic

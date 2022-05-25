@@ -2,8 +2,6 @@
 import time
 from typing import List
 
-from numpy import source
-
 import rospy
 from formant.sdk.agent.v1.client import Client as FormantClient
 
@@ -90,13 +88,10 @@ class Adapter:
         stream_name = stream_name[1:] if stream_name[0] == "." else stream_name
         response_stream = f"ros.service.{stream_name}.response"
         try:
-            print(str(data))
-            print(response_stream) 
             self._fclient.post_text(response_stream, str(data))
-            
         except Exception:
             logger.info("Failed to post response")
             return
 
         logger.info(
-                f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
+            f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
