@@ -1,39 +1,25 @@
 import React, { useRef, useState, useEffect } from "react";
-import styles from "./LineChart.module.scss";
+import styles from "./index.module.scss";
 import { Chart as ChartJS, ChartData, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { getOptions } from "./getOptions";
-import { getGradient } from "./getGradient";
 
 ChartJS.register(...registerables);
 
-const borderLineWidth = 1;
-
-export type Coordinate = { x: number; y: number };
-
-interface ILineChartProps {
-  data: Coordinate[];
-  color: string;
-  CustomTooltip?: React.FC;
-  toolTipContainerId?: string;
-  toolTipXContainerId?: string;
-  toolTipYContainerId?: string;
+interface IBarChartProps {
+  labels: string[];
+  data: number[];
   height?: number;
   width?: number;
 }
 
-export const LineChart: React.FC<ILineChartProps> = ({
+export const BarChart: React.FC<IBarChartProps> = ({
+  labels,
   data,
-  color,
-  CustomTooltip,
-  toolTipContainerId,
-  toolTipXContainerId,
-  toolTipYContainerId,
   height,
   width,
 }) => {
   const chartRef = useRef<ChartJS>(null);
-  const [chartData, setChartData] = useState<ChartData<"line">>({
+  const [chartData, setChartData] = useState<ChartData<"bar">>({
     datasets: [],
   });
   useEffect(() => {
@@ -41,21 +27,16 @@ export const LineChart: React.FC<ILineChartProps> = ({
     if (!chart) {
       return;
     }
-    if (!!toolTipContainerId) {
-      let tooltipEl = document.getElementById(toolTipContainerId);
-      tooltipEl!.style.display = "none";
-    }
+
     const chartData = {
+      labels,
       datasets: [
         {
           data,
-          backgroundColor: getGradient(color, chart.ctx, height),
-          borderColor: color,
+          backgroundColor: ["#F9C36E", "#F89973", "#EA719D"],
+          borderColor: ["#F9C36E", "#F89973", "#EA719D"],
           fill: true,
-          showLine: true,
-          borderWidth: 2,
           maintainAspectRatio: false,
-          tension: 0.5,
         },
       ],
     };
@@ -63,20 +44,56 @@ export const LineChart: React.FC<ILineChartProps> = ({
     setChartData(chartData);
   }, [data]);
 
+  const options = {
+    responsive: true,
+
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: "black",
+          tickColor: "transparent",
+        },
+        ticks: {
+          color: "#bac4e2",
+          font: {
+            size: 16,
+            family: "Atkinson Hyperlegible",
+            weight: "400",
+          },
+        },
+      },
+      y: {
+        grid: {
+          color: "black",
+          tickColor: "transparent",
+        },
+        ticks: {
+          color: "#bac4e2",
+          font: {
+            size: 9,
+            family: "Atkinson Hyperlegible",
+            weight: "400",
+          },
+        },
+      },
+    },
+  };
+
   return (
     <div style={{ height: height, width: width }} className={styles.chart}>
-      {!!CustomTooltip && <CustomTooltip />}
       <Chart
-        id="Line"
-        options={getOptions(
-          data,
-          color,
-          toolTipContainerId,
-          toolTipXContainerId,
-          toolTipYContainerId
-        )}
+        // id="Line"
+        options={options}
         ref={chartRef}
-        type="scatter"
+        type="bar"
         data={chartData}
         plugins={[
           {
@@ -88,7 +105,7 @@ export const LineChart: React.FC<ILineChartProps> = ({
               } = chart;
               ctx.save();
               ctx.beginPath();
-              ctx.lineWidth = borderLineWidth;
+              ctx.lineWidth = 1;
               ctx.moveTo(left, top);
               ctx.lineTo(right, top);
               ctx.lineTo(right, bottom);
