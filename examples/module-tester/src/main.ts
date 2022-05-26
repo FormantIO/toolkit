@@ -35,6 +35,14 @@ if (App.isModule()) {
   }
 );
 
+(document.querySelector("#gotodevice") as HTMLElement).addEventListener(
+  "click",
+  () => {
+    App.showMessage("going to device");
+    App.goToDevice("9309992b-452b-42fc-9aa2-dbd7e66a90cf");
+  }
+);
+
 (document.querySelector("#fetchcurrent") as HTMLElement).addEventListener(
   "click",
   () => {
