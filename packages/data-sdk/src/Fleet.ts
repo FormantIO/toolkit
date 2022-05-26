@@ -284,6 +284,23 @@ export class Fleet {
     return (await data.json()).items as IEvent[];
   }
 
+  static async getEvent(uuid: string): Promise<IEvent> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/admin/events/query/id=${uuid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+
+    return (await data.json()).items as IEvent;
+  }
   static async getInterventions(): Promise<IEvent[]> {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
