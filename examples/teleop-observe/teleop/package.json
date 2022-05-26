@@ -1,0 +1,16 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --port 9146",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@formant/data-sdk": "0.0.72",
+    "@formant/ui-sdk-joystick": "latest",
+    "@formant/ui-sdk-realtime-player": "latest",
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  }
+}
