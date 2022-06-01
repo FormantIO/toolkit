@@ -1,3 +1,3 @@
 #! /bin/bash
 
-zip -r adapter.zip ../adapter 
+zip -r adapter.zip adapter 
