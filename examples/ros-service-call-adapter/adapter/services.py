@@ -1,12 +1,10 @@
 
 import json
-import threading
 import time
 
 import rosmsg
 import rosservice
 from formant.sdk.agent.v1.client import Client as FormantClient
-
 
 from logger import getLogger
 
