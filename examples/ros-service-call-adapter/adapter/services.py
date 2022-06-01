@@ -7,6 +7,7 @@ import rosmsg
 import rosservice
 from formant.sdk.agent.v1.client import Client as FormantClient
 
+
 from logger import getLogger
 
 logger = getLogger
@@ -65,8 +66,10 @@ class ServiceChecker:
 
         services_json = json.dumps(services)
         logger.debug(f"Sending {services_json}")
-        self._fclient.post_json("ros.services.json", services_json)
-
+        try:
+            self._fclient.post_json("ros.services.json", services_json)
+        except Exception:
+            logger.warn("Error posting data to ros.services.json")
         
 
     @staticmethod
