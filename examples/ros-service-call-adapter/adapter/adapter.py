@@ -9,6 +9,7 @@ from config import Config
 from input_parser import parse
 from logger import getLogger
 from utils import service_call
+from services import ServiceChecker
 
 logger = getLogger()
 
@@ -21,9 +22,12 @@ class Adapter:
         self._fclient = FormantClient()
         self._config = Config().get_config()
         self._button_map = self._config["button-mapping"]
+        self._service_checker = ServiceChecker()
 
     def run(self):
         """Run the adapter. This function will never return, but is non-blocking."""
+
+        self._service_checker.start()
 
         self._fclient.register_teleop_callback(
             self._handle_button_press, ["Buttons"])
@@ -95,3 +99,6 @@ class Adapter:
 
         logger.info(
             f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
+
+    def shutdown(self):
+        self._service_checker.shutdown()

@@ -1,17 +1,17 @@
 
 # ROS Service Call Adapter 
 
-## `About`
+## About
 
 The ROS service call adapter allows a user to map Formant commands and Formant button presses to different service calls. For example, a user could have a button named <b>Check Robot</b>. In the service call adapter, you could map this button to a service called <b>/robot_status_check</b>. Thus, then the button Check Robot is pressed, it will internally call /robot_status_check. The result of the service call is then posted to a Formant Stream. 
 
-## `Getting Started`
+## Getting Started
 
 To get started with this adapter, first instal the adapter and make sure that the proper requirements are met via
 ```console
 pip install requirements.txt
 ```
-### `Command Mapping`
+### Command Mapping
 
 Now that the adapters requirements are met, you need to edit the 
 `config.json` file to configure commands and buttons that are mapped to 
@@ -40,7 +40,7 @@ The command is now mapped to a ROS service call. Issuing the command
 will successfully trigger the service call to be called by the 
 adapter.
 
-### `Button Mapping`
+### Button Mapping
 
 Mapping the button to a service call again requires editing the 
 `config.json` file. First, open the config.json file. We will
@@ -78,7 +78,55 @@ some options we can set as parameters, and thus send
 That's it. Now a button press to the `i_am_a_button` button will 
 map to the service call!
 
-### `Additional Notes`
+## Using the ROS Service Call Custom View
+
+Coming soon
+
+## Updating current services in Formant.io
+
+It is possible to get this adapter to send back all the currently
+active services along with their argument names and types.
+To do this, simply add the command `ros.services.update-services` to 
+Formant. Issuing this Command will cause the adapter to send back all
+ currently active services to the stream `ros.services.json` with the 
+following json format:
+
+```json
+{
+    "service-1-name":[
+        ["Service Argument 1: Name", "Service Argument 1: Name"],
+        ["Service Argument 2: Name", "Service Argument 2: Name"],
+        ...
+    ],
+    "service-2-name":[
+        ...
+    ],
+    ...
+}
+```
+
+For example, if we had a ROS service defined in `sample-service.srv` as 
+follows:
+```
+int32 size
+string name
+----
+bool success
+```
+
+The associated JSON for the message would be 
+
+```json
+{
+    "service-name":[
+        ["size", "int32"],
+        ["name", "string"]
+    ],
+    ...
+}
+```
+
+### Additional Notes
 
 The command parameters are parsed assuming they have a Python-Like 
 syntax. The parser can parse:<br>
@@ -88,6 +136,9 @@ syntax. The parser can parse:<br>
 * Integers
 * Booleans (True, False) 
 * Strings
+* ROS time
+* ROS duration
+* ROS Header 
 
 The parser does not evaluate expressions, so do not pass arithmetic
 expressions, as those will cause an error parsing.

@@ -8,4 +8,4 @@ if [ $n -ne 0 ]; then
     echo "source $variable"
 fi
 
-/usr/bin/python main.py
+/usr/bin/python3 main.py

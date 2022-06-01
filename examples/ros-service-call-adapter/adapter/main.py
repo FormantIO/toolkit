@@ -9,14 +9,12 @@ which are then processed as ROS service calls. The response
 
 from adapter import Adapter
 
-
 def main():
     try:
         adapter = Adapter()
         adapter.run()
     except KeyboardInterrupt:
-        pass
-
+        adapter.shutdown() 
 
 if __name__ == "__main__":
     main()
