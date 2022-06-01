@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@formant/realtime-sdk@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.8.tgz#861adcbd21d7b106d1cd0640cbd00c1448d9a0ab"
-  integrity sha512-g8pbxoc5hOsOs5EpiWMdxI8Ay2IjNRXj/2c4D1Xc51lFLkuhpHWBKU19c9gMq3wc9HfELSy1ZE5alf8jfVrB1w==
+"@formant/realtime-sdk@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.9.tgz#da03dfcfcaebcadf4b52451465d6f661f4f9e757"
+  integrity sha512-LuNIWb/fze9/Ky4W0+DWO7p9PozcOPqu/qZsA3axzEiItbQrcIHZlYoYYc4G0j2tbeSP+09cWRzEiHJKjB8z9A==
   dependencies:
     google-protobuf "3.17.3"
     grpc-web "1.2.1"
