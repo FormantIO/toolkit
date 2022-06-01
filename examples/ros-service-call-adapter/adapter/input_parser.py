@@ -8,6 +8,7 @@ appear in a ROS message.
 """
 
 import ast
+import rospy
 
 DELIMITERS = {"}", ")", "]", " ", "", ","}
 
@@ -18,6 +19,9 @@ def parse(input: str):
 
     The grammar:
     Primitive = Int | Float | String | Bool
+    ROS Header = h( Int, ROS Time, String )
+    ROS Time = t( Int | Float )
+    ROS Duration = d( Int | Float )
     List = [ Primitive, ... ]
     Tuple = ( Primitive, ... )
     Set = { Primitive, ... }
@@ -61,6 +65,9 @@ class _ROS_MSG_RDP:
         self.string_stream = StringStream(input_str)
 
     def parse_input(self):
+
+        self.string_stream.remove_leading_whitespace()
+
         if self.string_stream.peek_char() == "[":
             return self.parse_list()
 
@@ -79,6 +86,13 @@ class _ROS_MSG_RDP:
 
         if self.string_stream.peek_char() == "F" or self.string_stream.peek_char() == "T":
             return self.parse_bool()
+        
+        if self.string_stream.peek_char() == "t" or self.string_stream.peek_char() == "d":
+            lead = self.string_stream.peek_char() 
+            return self.parse_ROS_time_or_duration("time" if lead == "t" else "duration")
+
+        if self.string_stream.peek_char() == "h":
+            return self.parse_ROS_header()
 
         raise SyntaxError(f"Cannot parse input")
 
@@ -206,3 +220,49 @@ class _ROS_MSG_RDP:
 
         self.string_stream.read_char()
         return parsed_list
+
+    def parse_ROS_header(self):
+        if self.string_stream.read_char() != "h":
+            raise SyntaxError("Failed parsing ROS header. Expected h(header.seq, header.stamp, header.frame_id)")
+        header = self.parse_list("(", ")")
+        
+        if len(header) != 3:
+            raise SyntaxError(f"Header expected 3 arguments, but got {len(header)}")
+        
+        if not isinstance(header[0], int):
+            raise SyntaxError("Header.seq needs to be an integer type")
+        
+        if not isinstance(header[1], rospy.Time):
+            raise SyntaxError("Header.stamp needs to be rospy.Time type")
+
+        if not isinstance(header[2], str):
+            raise SyntaxError("Header.frame_id needs to be string type")
+
+        return rospy.Header(seq=header[0], stamp=header[1], frame_id=header[2])
+        
+    def parse_ROS_time_or_duration(self, parse_type="time"):
+        
+        if parse_type == "time":
+            lead = "t"
+        else:
+            lead = "d"
+ 
+        if self.string_stream.read_char() != lead:
+            raise SyntaxError("Failed parsing ROS time. Expected leading t")
+        
+        time_tuple=self.parse_list("(", ")")
+
+        if len(time_tuple) != 2:
+            raise SyntaxError("Expected two elements in the ROS datatype")
+
+        for elt in time_tuple:
+            if not isinstance(elt, int) and not isinstance(elt, float):
+                raise SyntaxError("Failed parsing time tuple. Expected numeric arguments")
+
+        if parse_type == "time":
+            return rospy.Time(secs=time_tuple[0], nsecs=time_tuple[1]) 
+        else:
+            return rospy.Duration(secs=time_tuple[0], nsecs=time_tuple[1]) 
+
+
+        
