@@ -213,7 +213,10 @@ export class Device implements IRealtimeDevice {
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
       await rtcClient.connect(this.remoteDevicePeerId, {
-        sessionType: sessionType as number | undefined,
+        sessionType:
+          sessionType === undefined
+            ? (SessionType.Teleop as number)
+            : (sessionType as number),
       });
 
       // WebRTC requires a signaling phase when forming a new connection.

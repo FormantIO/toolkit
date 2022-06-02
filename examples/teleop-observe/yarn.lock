@@ -2,19 +2,19 @@
 # yarn lockfile v1
 
 
-"@formant/data-sdk@^0.0.83":
-  version "0.0.83"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.83.tgz#798dff69002012d51df5b114bec3b457c5afc0fa"
-  integrity sha512-8XTXrvXXWQLv0qIRZgiyTUMHplB+NJXb17mtiLrgkPmxx0d4Esr5eOVLN9oLk5ZyjtHTfgWCBgk8BmDMBwpMHA==
+"@formant/data-sdk@0.0.87":
+  version "0.0.87"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.87.tgz#7e07c2ca2242bb020e4d2f4151e8cae8fa0d614f"
+  integrity sha512-PJr1sO5CWdh5Y8MrPg7OuzJor/nOr3TNqQvF8lbyo6kMwhSGIsHvh3ceI37FPwC6dhc54VNOGMqCtJmgFH8wGg==
   dependencies:
-    "@formant/realtime-sdk" "0.0.8"
+    "@formant/realtime-sdk" "0.0.11"
     "@types/google-protobuf" "^3.15.5"
     typedoc "^0.22.13"
 
-"@formant/realtime-sdk@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.8.tgz#861adcbd21d7b106d1cd0640cbd00c1448d9a0ab"
-  integrity sha512-g8pbxoc5hOsOs5EpiWMdxI8Ay2IjNRXj/2c4D1Xc51lFLkuhpHWBKU19c9gMq3wc9HfELSy1ZE5alf8jfVrB1w==
+"@formant/realtime-sdk@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.11.tgz#67e1375e95dcb67e1405e6d1c0d1999986054907"
+  integrity sha512-LWvJOjU1g68C1U0dBVMdwcAngkUXBThFofHLMjNiKkYRq5cgV9nc8AukI0+zkfhNL/G5D59fAAIc8tJRsafBUw==
   dependencies:
     google-protobuf "3.17.3"
     grpc-web "1.2.1"
