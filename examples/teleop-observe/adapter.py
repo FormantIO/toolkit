@@ -12,12 +12,15 @@ def joystick_callback(message):
 def string_command_callback(message):
     print(str(message))
 
+
 if __name__ == "__main__":
-    c = FormantClient()
+    c = FormantClient(agent_url="unix:///tmp/agent.sock")
     c.register_custom_data_channel_message_callback(
-        joystick_callback, channel_name_filter=["joystick"])
+        joystick_callback, channel_name_filter=["joystick"]
+    )
     c.register_custom_data_channel_message_callback(
-        string_command_callback, channel_name_filter=["string_command"])
+        string_command_callback, channel_name_filter=["string_command"]
+    )
 
     while True:
         time.sleep(0.1)
