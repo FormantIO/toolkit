@@ -14,6 +14,7 @@ def numeric_assert(val: str):
 
 def assert_equal(val1, val2):
     if val1 != val2:
+        print(f"Assert Equal Failed: {val1} != {val2}")
         raise Exception("err")
 
 
@@ -43,6 +44,9 @@ assert_equal((1, 2, 3, 4), parse("(1,2,3,4)"))
 assert_equal([1, 2, 3, [1, 2]], parse("[1,2,3,[1,2]]"))
 assert_equal([(1, 2, 3), {1, 2}, 3, 4], parse("[(1,  2  ,3),{1,2    },3,4]"))
 
+assert_equal([], parse("[]"))
+assert_equal(tuple(), parse("()"))
+assert_equal(set(), parse("{}"))
 
 assert_fail("[")
 assert_fail("(")
@@ -75,3 +79,9 @@ assert_fail("h( 100, d(5,6))")
 assert_fail("d(1,2,3)")
 
 # TODO test escape sequences
+
+# This is a weird case. It is correct tho. "\\\\" should parse to a single \. This 
+# This is because the input is actually split to be " (\\) (\\) " which is equal to \ \ which is an escaped backslash, which is equal to \
+assert_equal(parse('"\\\\"'), "\\")
+
+assert_equal(parse('"Hello, World!\nThis is a cool little parser!"'), "Hello, World!\nThis is a cool little parser!")

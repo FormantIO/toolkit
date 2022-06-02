@@ -177,7 +177,10 @@ class _ROS_MSG_RDP:
                 string += self.string_stream.read_char()
 
             self.string_stream.validate_stream()
-
+        
+        if self.string_stream.peek_char() != string_delimiter:
+            raise SyntaxError(f"Expected closing {string_delimiter} for string.")
+            
         self.string_stream.read_char()
 
         return string

@@ -8,4 +8,6 @@ if [ $n -ne 0 ]; then
     echo "source $variable"
 fi
 
+pip3 install -r requirements.txt
+
 /usr/bin/python3 main.py
