@@ -24,15 +24,16 @@ import {
   Icon,
 } from "../src/main";
 
-import { LineChart } from "../src/components/LineChart/LineChart";
-import { BarChart } from "../src/components/BarChart";
-import { Card } from "../src/components/LineChart/Card";
-import { PieChart } from "../src/components/PieChart";
-import { dummyData } from "../src/components/LineChart/dummyData";
-import { DoughnutChart } from "../src/components/DoughnutChart/index";
-import { PolarChart } from "../src/components/PolarChart/index";
-import { RadarChart } from "../src/components/RadarChart/index";
-import { ScatterChart } from "../src/components/ScatterChart/index";
+import { LineChart } from "../src/components/Charts/LineChart/LineChart";
+import { BarChart } from "../src/components/Charts/BarChart";
+import { Card } from "../src/components/Charts/LineChart/Card";
+import { PieChart } from "../src/components/Charts/PieChart";
+import { dummyData } from "../src/components/Charts/LineChart/dummyData";
+import { DoughnutChart } from "../src/components/Charts/DoughnutChart/index";
+import { PolarChart } from "../src/components/Charts/PolarChart/index";
+import { RadarChart } from "../src/components/Charts/RadarChart/index";
+import { ScatterChart } from "../src/components/Charts/ScatterChart/index";
+import { BubbleChart } from "../src/components/Charts/BubbleChart";
 function App() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -400,42 +401,46 @@ function App() {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-evenly",
+              justifyContent: "space-around",
+              alignItems: "center",
               marginTop: 6,
             }}
           >
-            <DoughnutChart
-              height={360}
-              width={450}
-              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
-              data={[12, 19, 3, 5, 2, 3]}
-            />
-            <PieChart
-              id="Pie"
-              height={200}
-              width={450}
-              labels={["Jan", "Feb", "Mar", "Apr"]}
-              data={[1, 2, 3, 2]}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: 20,
-            }}
-          >
-            <RadarChart
-              id="polar"
-              height={360}
-              width={450}
-              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
-              data={[12, 19, 3, 5, 2, 3]}
-            />
             <PolarChart
               id="Pie"
               height={200}
+              width={350}
+              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
+              data={[12, 19, 3, 5, 2, 3]}
+            />
+            <DoughnutChart
+              height={200}
+              width={350}
+              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
+              data={[12, 19, 3, 5, 2, 3]}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: 25,
+            }}
+          >
+            <BubbleChart
+              height={360}
               width={450}
+              data={[
+                { x: 1, y: 2, r: 4 },
+                { x: 2, y: 3, r: 14 },
+                { x: 3, y: 4, r: 5 },
+              ]}
+              id="bubble-chart"
+            />
+            <RadarChart
+              id="polar"
+              height={260}
+              width={350}
               labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
               data={[12, 19, 3, 5, 2, 3]}
             />
@@ -444,7 +449,7 @@ function App() {
             sx={{
               display: "flex",
               justifyContent: "space-evenly",
-              marginTop: 20,
+              marginTop: 10,
             }}
           >
             <BarChart

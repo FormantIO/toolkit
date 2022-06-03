@@ -2,24 +2,32 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "./index.module.scss";
 import { Chart as ChartJS, ChartData, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { Coordinate } from "../LineChart/LineChart";
+import { colors } from "../colors";
 
 ChartJS.register(...registerables);
 
-interface IScatterChartProps {
-  data: Coordinate[];
+interface IBubbleChartProps {
+  labels?: string[];
+  data: BubbleCoordinate[];
   height?: number | string;
   width?: number | string;
   id: string; // unique string
 }
 
-export const ScatterChart: React.FC<IScatterChartProps> = ({
+type BubbleCoordinate = {
+  x: number | string;
+  y: number | string;
+  r: number;
+};
+
+export const BubbleChart: React.FC<IBubbleChartProps> = ({
+  labels,
   data,
   height,
   width,
 }) => {
   const chartRef = useRef<ChartJS>(null);
-  const [chartData, setChartData] = useState<ChartData<"scatter">>({
+  const [chartData, setChartData] = useState<ChartData<"bubble">>({
     datasets: [],
   });
   useEffect(() => {
@@ -29,22 +37,32 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
     }
 
     const chartData = {
+      labels,
       datasets: [
         {
           data,
-          backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-          borderColor: ["rgba(255, 99, 132, 1)"],
-
+          backgroundColor: colors.map((_) => _ + "33") as string[],
+          borderColor: colors,
+          fill: true,
           maintainAspectRatio: false,
         },
       ],
     };
 
-    setChartData(chartData);
+    setChartData(chartData as any);
   }, [data]);
 
   const options = {
     responsive: true,
+
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
     scales: {
       x: {
         grid: {
@@ -52,7 +70,7 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
           tickColor: "transparent",
         },
         ticks: {
-          stepSize: 10,
+          step: 1,
           color: "#bac4e2",
           font: {
             size: 9,
@@ -67,7 +85,6 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
           tickColor: "transparent",
         },
         ticks: {
-          stepSize: 10,
           color: "#bac4e2",
           font: {
             size: 9,
@@ -77,17 +94,11 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
         },
       },
     },
-    plugins: {
-      legend: {},
-      title: {
-        display: false,
-      },
-    },
   };
 
   return (
     <div style={{ height: height, width: width }} className={styles.chart}>
-      <Chart options={options} ref={chartRef} type="scatter" data={chartData} />
+      <Chart options={options} ref={chartRef} type="bubble" data={chartData} />
     </div>
   );
 };
