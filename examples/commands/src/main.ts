@@ -9,7 +9,7 @@ import "./style.css";
   // get current device from url context
   const device = await Fleet.getCurrentDevice();
   el("#commands").innerHTML = (await device.getAvailableCommands())
-    .map((_) => _.name)
+    .map((_) => `<option value=${_.name}>${_.name}</option>`)
     .join(", ");
 })();
 

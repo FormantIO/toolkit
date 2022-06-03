@@ -1,6 +1,6 @@
 import styles from "./card.module.scss";
 import React from "react";
-import { Icon } from "../../Icon";
+import { Icon } from "../../../Icon";
 export const Card: React.FC = () => {
   return (
     <div id="chartjs-tooltip" className={styles.card}>

@@ -437,6 +437,7 @@ export class Device implements IRealtimeDevice {
       parameterEnabled: i.parameterEnabled,
       parameterValue: i.parameterValue,
       parameterMeta: i.parameterMeta,
+      enabled: i.enabled,
     }));
   }
 
