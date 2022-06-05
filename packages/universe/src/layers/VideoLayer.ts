@@ -7,10 +7,7 @@ import {
   Group,
   Mesh,
   MeshBasicMaterial,
-  PlaneGeometry,
   SphereGeometry,
-  TextureLoader,
-  Vector2,
 } from "three";
 import * as uuid from "uuid";
 import { IUniverseData } from "../model/IUniverseData";
