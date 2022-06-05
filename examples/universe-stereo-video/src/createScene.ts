@@ -1,6 +1,6 @@
 import { SceneGraphElement } from "@formant/universe";
 import * as uuid from "uuid";
-import { ARM1_ID, ARM2_ID, ARM3_ID, SPOT_ID } from "./SimulatedUniverseData";
+import { SPOT_ID } from "./SimulatedUniverseData";
 
 export function createScene() {
   const sg: SceneGraphElement[] = [

@@ -100,7 +100,8 @@ export class SimulatedUniverseData implements IUniverseData {
       },
       false
     );
-    image.src = "https://i.imgur.com/hE2fKBw.jpeg";
+    image.src =
+      "https://formant-3d-models.s3.us-west-2.amazonaws.com/stereo.jpg";
     return () => {};
   }
   subscribeToJson<T>(
