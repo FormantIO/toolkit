@@ -1,0 +1,12 @@
+#commands{
+height: 40px;
+min-width: 200px;
+width: auto;
+border-top-right-radius: 6px;
+border-top-left-radius: 6px;
+border: none;
+border-bottom: #bac4e2 .5px dotted;    
+background-color: #3b4668;
+padding: 0 15px;
+color: white;
+}

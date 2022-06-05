@@ -1,5 +1,3 @@
-import { Card } from "./Card";
-
 export const getOptions = (
   data: { x: number; y: number }[],
   color: string,
