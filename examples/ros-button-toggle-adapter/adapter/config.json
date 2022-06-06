@@ -1,0 +1,23 @@
+{
+    "API-buttons":{
+        "Button Name" : "Export topic",
+        "button-configuration":{
+
+        }
+    },
+    "ROS-buttons":{
+        "Button Topic" : "Export topic",
+        "button-configuration":{
+            
+        }
+    },
+    "ROS-status-topics":{
+        "ROS Status Topic" : "Export topic",
+        "button-configuration":{
+            
+        }
+    },
+    "global-configuration" : {
+    }
+}
+
