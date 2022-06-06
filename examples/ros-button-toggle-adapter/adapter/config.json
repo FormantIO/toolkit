@@ -1,23 +1,25 @@
 {
-    "API-buttons":{
-        "Button Name" : "Export topic",
-        "button-configuration":{
-
+    "API-buttons": {
+        "Button Name": {
+            "Export topic": "topic name",
+            "button-configuration": {}
         }
     },
-    "ROS-buttons":{
-        "Button Topic" : "Export topic",
-        "button-configuration":{
-            
+    "ROS-buttons": {
+        "ROS Topic": {
+            "Export topic": "topic name",
+            "button-configuration": {}
         }
     },
-    "ROS-status-topics":{
-        "ROS Status Topic" : "Export topic",
-        "button-configuration":{
-            
+    "ROS-status-topics": {
+        "ROS Status topic": {
+            "Export topic": "topic name",
+            "button-configuration": {}
         }
     },
-    "global-configuration" : {
+    "global-configuration": {
+        "Callback Settings": [
+            "on change"
+        ]
     }
 }
-
