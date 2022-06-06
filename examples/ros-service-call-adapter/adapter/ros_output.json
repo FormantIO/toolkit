@@ -1,0 +1,62 @@
+[
+    {
+        "name": "header",
+        "type": [
+            {
+                "name": "header.seq",
+                "type": "uint32"
+            },
+            {
+                "name": "header.stamp",
+                "type": "time"
+            },
+            {
+                "name": "header.frame_id",
+                "type": "string"
+            }
+        ]
+    },
+    {
+        "name": "seq",
+        "type": "int32"
+    },
+    {
+        "name": "twist",
+        "type": [
+            {
+                "name": "twist.linear",
+                "type": [
+                    {
+                        "name": "twist.linear.x",
+                        "type": "float64"
+                    },
+                    {
+                        "name": "twist.linear.y",
+                        "type": "float64"
+                    },
+                    {
+                        "name": "twist.linear.z",
+                        "type": "float64"
+                    }
+                ]
+            },
+            {
+                "name": "twist.angular",
+                "type": [
+                    {
+                        "name": "twist.angular.x",
+                        "type": "float64"
+                    },
+                    {
+                        "name": "twist.angular.y",
+                        "type": "float64"
+                    },
+                    {
+                        "name": "twist.angular.z",
+                        "type": "float64"
+                    }
+                ]
+            }
+        ]
+    }
+]

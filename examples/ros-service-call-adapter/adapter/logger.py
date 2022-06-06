@@ -1,6 +1,6 @@
 
 # log_level = 1[debug], 2[info], 3[warn], 4[fatal]
-log_level = 3
+log_level = 1
 
 
 def debug(msg):

@@ -1,0 +1,32 @@
+
+
+int
+bool
+int
+Twist
+    Linear
+        float
+        float
+        float
+    Angular
+        float
+        float
+        float
+
+## MAPS TO \/\/\/
+
+[
+    {Name:int, children=[]},
+    {Name:bool, children=[]},
+    {Name:int, children=[]},
+    {name:Twist, children=
+    [ 
+        {Name: Linear, children=
+        [
+            {Name: float, children=[]},
+            {Name: float, children=[]},
+            {Name: float, children=[]}
+        ]}
+    ]}
+
+]

@@ -1,0 +1,13 @@
+[
+    {
+        "name":"name",
+        "type":"primitive"
+    },
+    {
+        "name":"name",
+        "type":[{
+            "name":"parent-name.name",
+            "type":"primitive"
+        }]
+    }
+]
