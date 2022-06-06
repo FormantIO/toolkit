@@ -75,7 +75,19 @@ export enum SessionType {
   Observe = 3,
 }
 
-export class Device {
+export interface IRealtimeDevice {
+  startRealtimeConnection(sessionType?: SessionType): Promise<void>;
+  startListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
+  stopListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
+  addRealtimeListener(listener: RealtimeListener): void;
+  removeRealtimeListener(listener: RealtimeListener): void;
+  createCustomDataChannel(
+    channelName: string,
+    rtcConfig?: RTCDataChannelInit
+  ): Promise<DataChannel>;
+}
+
+export class Device implements IRealtimeDevice {
   rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | undefined;
 
@@ -200,11 +212,12 @@ export class Device {
 
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
-      await rtcClient.connect(
-        this.remoteDevicePeerId,
-        undefined,
-        sessionType as number | undefined
-      );
+      await rtcClient.connect(this.remoteDevicePeerId, {
+        sessionType:
+          sessionType === undefined
+            ? (SessionType.Teleop as number)
+            : (sessionType as number),
+      });
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
@@ -424,6 +437,7 @@ export class Device {
       parameterEnabled: i.parameterEnabled,
       parameterValue: i.parameterValue,
       parameterMeta: i.parameterMeta,
+      enabled: i.enabled,
     }));
   }
 

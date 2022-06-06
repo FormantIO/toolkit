@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@formant/data-sdk@latest":
-  version "0.0.76"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.76.tgz#5f5de3e328fc223f8f6a2f13b5804a08cf9850fa"
-  integrity sha512-jyJtEz2Gl/jiAI2mBY3f2GmeXpPZ+m+tw6djx9jXDCJC9YxHNr8qKNxcYhzD6/K1htISqpz0OozoHDzECQOP9g==
+"@formant/data-sdk@^0.0.83":
+  version "0.0.83"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.83.tgz#798dff69002012d51df5b114bec3b457c5afc0fa"
+  integrity sha512-8XTXrvXXWQLv0qIRZgiyTUMHplB+NJXb17mtiLrgkPmxx0d4Esr5eOVLN9oLk5ZyjtHTfgWCBgk8BmDMBwpMHA==
   dependencies:
     "@formant/realtime-sdk" "0.0.8"
     "@types/google-protobuf" "^3.15.5"

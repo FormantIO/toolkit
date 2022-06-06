@@ -1,6 +1,7 @@
 export * from "./Fleet";
 export * from "./Authentication";
 export * from "./Device";
+export * from "./PeerDevice";
 export * from "./DataChannel";
 export * from "./CaptureStream";
 export * from "./Manipulator";
@@ -103,6 +104,7 @@ export * from "./model/IsoDate";
 export * from "./model/ISpreadsheetIdRange";
 export * from "./model/IStreamData";
 export * from "./model/IStreamTypeMap";
+export * from "./model/IStreamCurrentValue";
 export * from "./model/ISystemEvent";
 export * from "./model/ITaggedUsers";
 export * from "./model/ITagParameters";

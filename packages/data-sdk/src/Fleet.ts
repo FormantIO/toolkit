@@ -8,6 +8,7 @@ import { IEventQuery } from "./model/IEventQuery";
 import { IEvent } from "./model/IEvent";
 import { IQuery } from "./model/IQuery";
 import { IStreamData } from "./model/IStreamData";
+import { PeerDevice } from "./PeerDevice";
 
 export interface TelemetryResult {
   deviceId: string;
@@ -56,6 +57,12 @@ export class Fleet {
     );
     Fleet.knownContext.push(new WeakRef(context));
     return context;
+  }
+
+  static async getPeerDevice(url: string): Promise<PeerDevice> {
+    const peer = new PeerDevice(url);
+    peer.id = await peer.getDeviceId();
+    return peer;
   }
 
   static async getDevice(deviceId: string): Promise<Device> {
@@ -277,6 +284,23 @@ export class Fleet {
     return (await data.json()).items as IEvent[];
   }
 
+  static async getEvent(uuid: string): Promise<IEvent> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/admin/events/query/id=${uuid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+
+    return (await data.json()).items as IEvent;
+  }
   static async getInterventions(): Promise<IEvent[]> {
     if (!Authentication.token) {
       throw new Error("Not authenticated");

@@ -9,10 +9,10 @@ ChartJS.register(...registerables);
 
 const borderLineWidth = 1;
 
-type coordinate = { x: number; y: number };
+export type Coordinate = { x: number; y: number };
 
 interface ILineChartProps {
-  data: coordinate[];
+  data: Coordinate[];
   color: string;
   CustomTooltip?: React.FC;
   toolTipContainerId?: string;
@@ -55,6 +55,7 @@ export const LineChart: React.FC<ILineChartProps> = ({
           showLine: true,
           borderWidth: 2,
           maintainAspectRatio: false,
+          tension: 0.5,
         },
       ],
     };

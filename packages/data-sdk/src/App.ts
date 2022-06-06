@@ -1,5 +1,6 @@
 export type AppMessage =
   | { type: "go_to_time"; time: number }
+  | { type: "go_to_device"; deviceId: string }
   | { type: "request_module_data"; module: string }
   | { type: "show_message"; message: string }
   | { type: "refresh_auth_token"; module: string }
@@ -93,6 +94,13 @@ export class App {
     this.sendAppMessage({
       type: "go_to_time",
       time: date.getTime(),
+    });
+  }
+
+  static goToDevice(deviceId: string) {
+    this.sendAppMessage({
+      type: "go_to_device",
+      deviceId,
     });
   }
 

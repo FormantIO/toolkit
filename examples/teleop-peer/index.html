@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" style="background: #3b4668">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formant Teleop Example</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+  </head>
+  <body style="display: none">
+    <section>
+      <h1>Teleop Demo P2P</h1>
+      <p>
+        This custom view is a demonstration of how the data sdk can be used with
+        the ui sdk for realtime teleop views. In particular we use
+        <b>ui-sdk-joystick</b> and <b>ui-sdk-realtime-player</b>. Checkout
+        <a href="https://github.com/FormantIO/toolkit" target="_blank"
+          >https://github.com/FormantIO/toolkit</a
+        >
+        for more information! When you're device is ready to telop, hit connect.
+      </p>
+      <p>
+        <button>Connect</button>
+      </p>
+    </section>
+    <div id="log" style="display: none; text-shadow: 1px 1p #666"></div>
+    <formant-realtime-player style="display: none"></formant-realtime-player>
+    <formant-joystick style="display: none" wasd></formant-joystick>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

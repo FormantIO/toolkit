@@ -24,10 +24,16 @@ import {
   Icon,
 } from "../src/main";
 
-import { LineChart } from "../src/components/LineChart/LineChart";
-import { Card } from "../src/components/LineChart/Card";
-import { dummyData } from "../src/components/LineChart/dummyData";
-
+import { LineChart } from "../src/components/Charts/LineChart/LineChart";
+import { BarChart } from "../src/components/Charts/BarChart";
+import { Card } from "../src/components/Charts/LineChart/Card";
+import { PieChart } from "../src/components/Charts/PieChart";
+import { dummyData } from "../src/components/Charts/LineChart/dummyData";
+import { DoughnutChart } from "../src/components/Charts/DoughnutChart/index";
+import { PolarChart } from "../src/components/Charts/PolarChart/index";
+import { RadarChart } from "../src/components/Charts/RadarChart/index";
+import { ScatterChart } from "../src/components/Charts/ScatterChart/index";
+import { BubbleChart } from "../src/components/Charts/BubbleChart";
 function App() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -364,7 +370,7 @@ function App() {
             variant="h2"
             sx={{ textDecoration: "underline", marginBottom: 5 }}
           >
-            Line Chart
+            Charts
           </Typography>
           <Typography variant="body1" sx={{ marginBottom: 5 }}>
             Chart tooltip completly customizable, example on the right graph.
@@ -391,6 +397,68 @@ function App() {
               data={dummyData}
               color={"#36a0fe"}
             />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              marginTop: 6,
+            }}
+          >
+            <PolarChart
+              id="Pie"
+              height={200}
+              width={350}
+              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
+              data={[12, 19, 3, 5, 2, 3]}
+            />
+            <DoughnutChart
+              height={200}
+              width={350}
+              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
+              data={[12, 19, 3, 5, 2, 3]}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: 25,
+            }}
+          >
+            <BubbleChart
+              height={360}
+              width={450}
+              data={[
+                { x: 1, y: 2, r: 4 },
+                { x: 2, y: 3, r: 14 },
+                { x: 3, y: 4, r: 5 },
+              ]}
+              id="bubble-chart"
+            />
+            <RadarChart
+              id="polar"
+              height={260}
+              width={350}
+              labels={["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]}
+              data={[12, 19, 3, 5, 2, 3]}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: 10,
+            }}
+          >
+            <BarChart
+              height={360}
+              width={450}
+              labels={["Jan", "Feb", "Mar"]}
+              data={[1, 2, 3]}
+            />
+            <ScatterChart id="Pie" height={200} width={450} data={dummyData} />
           </Box>
         </Container>
       </Box>
