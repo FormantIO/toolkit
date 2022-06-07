@@ -43,21 +43,21 @@ export class SimulatedUniverseData implements IUniverseData {
     _deviceId: string,
     _streamName: string,
     _value: boolean
-  ): void {
+  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
   sendRealtimeBitset(
     _deviceId: string,
     _streamName: string,
     _bitset: IBitset
-  ): void {
+  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
   sendRealtimePose(
     _deviceId: string,
     _streamName: string,
     _pose: ITransform
-  ): void {
+  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
 

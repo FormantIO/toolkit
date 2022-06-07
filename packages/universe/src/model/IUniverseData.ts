@@ -213,17 +213,21 @@ export interface IUniverseData {
     onDataSourceStateChange?: (state: DataSourceState) => void
   ): CloseSubscription;
 
-  sendRealtimePose(deviceId: string, streamName: string, pose: IPose): void;
+  sendRealtimePose(
+    deviceId: string,
+    streamName: string,
+    pose: IPose
+  ): Promise<void>;
 
   sendRealtimeBoolean(
     deviceId: string,
     streamName: string,
     value: boolean
-  ): void;
+  ): Promise<void>;
 
   sendRealtimeBitset(
     deviceId: string,
     streamName: string,
     bitset: IBitset
-  ): void;
+  ): Promise<void>;
 }
