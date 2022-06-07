@@ -9,10 +9,12 @@
         "type": "object",
         "properties": {
             "logger": {
-                "type": "string"
+                "type": "string",
+                "title": "logger"
             },
             "level": {
-                "type": "string"
+                "type": "string",
+                "title": "level"
             }
         }
     },
@@ -26,10 +28,12 @@
         "type": "object",
         "properties": {
             "logger": {
-                "type": "string"
+                "type": "string",
+                "title": "logger"
             },
             "level": {
-                "type": "string"
+                "type": "string",
+                "title": "level"
             }
         }
     },
@@ -43,10 +47,12 @@
         "type": "object",
         "properties": {
             "logger": {
-                "type": "string"
+                "type": "string",
+                "title": "logger"
             },
             "level": {
-                "type": "string"
+                "type": "string",
+                "title": "level"
             }
         }
     },
@@ -58,18 +64,22 @@
                 "type": "object",
                 "properties": {
                     "header.seq": {
-                        "type": "integer"
+                        "type": "integer",
+                        "title": "header.seq"
                     },
                     "header.stamp": {
-                        "type": "string"
+                        "type": "string",
+                        "title": "header.stamp"
                     },
                     "header.frame_id": {
-                        "type": "string"
+                        "type": "string",
+                        "title": "header.frame_id"
                     }
                 }
             },
             "seq": {
-                "type": "integer"
+                "type": "integer",
+                "title": "seq"
             },
             "twist": {
                 "type": "object",
@@ -78,13 +88,16 @@
                         "type": "object",
                         "properties": {
                             "twist.linear.x": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.linear.x"
                             },
                             "twist.linear.y": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.linear.y"
                             },
                             "twist.linear.z": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.linear.z"
                             }
                         }
                     },
@@ -92,13 +105,16 @@
                         "type": "object",
                         "properties": {
                             "twist.angular.x": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.angular.x"
                             },
                             "twist.angular.y": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.angular.y"
                             },
                             "twist.angular.z": {
-                                "type": "number"
+                                "type": "number",
+                                "title": "twist.angular.z"
                             }
                         }
                     }
@@ -108,7 +124,8 @@
                 "type": "array",
                 "items": {
                     "type": "integer"
-                }
+                },
+                "title": "my_int_array"
             }
         }
     }

@@ -31,7 +31,9 @@ def ROS_to_json_schema_type_conversion(intype: str):
 def ROS_type_to_JSON_schema(ros_type):
 
     if not isinstance(ros_type["type"], list):
-        return ROS_to_json_schema_type_conversion(ros_type["type"])
+        output = ROS_to_json_schema_type_conversion(ros_type["type"])
+        output["title"] = ros_type["name"]
+        return output
 
     # If we get here, it means that the type has sub types / child types
     output = {}
