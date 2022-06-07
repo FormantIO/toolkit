@@ -1,0 +1,42 @@
+{
+    "title": "/service",
+    "type": "object",
+    "properties": {
+        "twist": {
+            "type": "object",
+            "properties": {
+                "linear": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "number"
+                        },
+                        "y": {
+                            "type": "number"
+                        },
+                        "z": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "angular": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "number"
+                        },
+                        "y": {
+                            "type": "number"
+                        },
+                        "z": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "other_random_value":{
+            "type":"string"
+        }
+    }
+}

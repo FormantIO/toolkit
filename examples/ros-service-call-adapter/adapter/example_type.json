@@ -1,13 +1,115 @@
-[
-    {
-        "name":"name",
-        "type":"primitive"
+{
+    "/rosout/get_loggers": {
+        "title": "/rosout/get_loggers",
+        "type": "object",
+        "properties": {}
     },
-    {
-        "name":"name",
-        "type":[{
-            "name":"parent-name.name",
-            "type":"primitive"
-        }]
+    "/rosout/set_logger_level": {
+        "title": "/rosout/set_logger_level",
+        "type": "object",
+        "properties": {
+            "logger": {
+                "type": "string"
+            },
+            "level": {
+                "type": "string"
+            }
+        }
+    },
+    "/formant_bridge_node/get_loggers": {
+        "title": "/formant_bridge_node/get_loggers",
+        "type": "object",
+        "properties": {}
+    },
+    "/formant_bridge_node/set_logger_level": {
+        "title": "/formant_bridge_node/set_logger_level",
+        "type": "object",
+        "properties": {
+            "logger": {
+                "type": "string"
+            },
+            "level": {
+                "type": "string"
+            }
+        }
+    },
+    "/random_server/get_loggers": {
+        "title": "/random_server/get_loggers",
+        "type": "object",
+        "properties": {}
+    },
+    "/random_server/set_logger_level": {
+        "title": "/random_server/set_logger_level",
+        "type": "object",
+        "properties": {
+            "logger": {
+                "type": "string"
+            },
+            "level": {
+                "type": "string"
+            }
+        }
+    },
+    "/random": {
+        "title": "/random",
+        "type": "object",
+        "properties": {
+            "header": {
+                "type": "object",
+                "properties": {
+                    "header.seq": {
+                        "type": "integer"
+                    },
+                    "header.stamp": {
+                        "type": "string"
+                    },
+                    "header.frame_id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "seq": {
+                "type": "integer"
+            },
+            "twist": {
+                "type": "object",
+                "properties": {
+                    "twist.linear": {
+                        "type": "object",
+                        "properties": {
+                            "twist.linear.x": {
+                                "type": "number"
+                            },
+                            "twist.linear.y": {
+                                "type": "number"
+                            },
+                            "twist.linear.z": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "twist.angular": {
+                        "type": "object",
+                        "properties": {
+                            "twist.angular.x": {
+                                "type": "number"
+                            },
+                            "twist.angular.y": {
+                                "type": "number"
+                            },
+                            "twist.angular.z": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            },
+            "my_int_array": {
+                "type": "array",
+                "items": {
+                    "type": "integer"
+                }
+            }
+        }
     }
-]
+}

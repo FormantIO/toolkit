@@ -1,10 +1,26 @@
 
+def flatten_ros_data_structure(ros_format):
+    elements = []
 
-def convert_to_ros(indented_json_format):
-    converter = IndentedToRos(indented_json_format)
+    for param in ros_format:
+        if isinstance(param["type"], list):
+            elements += flatten_ros_data_structure(param["type"])
+        else:
+            elements.append(param) 
+        
+    return elements
+
+
+def parse_indented_as_ros(indented_json_format):
+    converter = IndentedJsonToRosJson(indented_json_format)
     return converter.get_converted()
 
-class IndentedToRos:
+class IndentedJsonToRosJson:
+    """
+    Indented JSON to ROS Json provides a tool that will parse
+    indented Json data into its ROS parts. The indented format is
+    generated from parse_indented_string 
+    """
 
     def __init__(self, indented_format):
         self._indented_format = indented_format
@@ -16,17 +32,14 @@ class IndentedToRos:
         return self._ros_format
 
     def _convert(self):
-        
         for param in self._indented_format:
-            if "---" in param["name"]:
+            if "---" in param["name"]: # Signifies the end of the request part of a ROS message
                 break 
             self._ros_format.append(self._convert_type(param))
 
     def _convert_type(self, type_obj, parent_name=""):
-        
-        
         ros_type, param_name = type_obj["name"].lstrip().rstrip().replace("\n","").split(" ")
-        p_name = f"{parent_name}.{param_name}" if len(parent_name) else param_name
+        p_name = f"{parent_name}.{param_name}" if len(parent_name) else param_name#f"{ros_type}::{param_name}"
       
 
         if not len(type_obj["children"]):
