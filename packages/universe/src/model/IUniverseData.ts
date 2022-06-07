@@ -91,12 +91,6 @@ export interface IUniverseData {
 
   getRealtimeButtons(deviceId: string): Promise<RealtimeButtonConfiguration[]>;
 
-  sendRealtimeButtonState(
-    deviceId: string,
-    streamName: string,
-    state: boolean
-  ): void;
-
   setTime(time: number | "live"): void;
 
   getLatestTransformTrees(deviceId: string): Promise<
