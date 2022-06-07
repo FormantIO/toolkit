@@ -13,6 +13,8 @@ import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
 
 export * from "./components/Universe";
+export * from "./model/IPose";
+export * from "./model/IOdometry";
 export * from "./model/IUniverseData";
 export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayer";
@@ -44,6 +46,7 @@ export type IGridMap = import("./model/IGridMap").IGridMap;
 export type IPcd = import("./objects/pcd").IPcd;
 export type INumericSetEntry =
   import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
+export type IBitset = import("../../data-sdk/src/model/IBitset").IBitset;
 
 LayerRegistry.register(DataLayer);
 LayerRegistry.register(LabelLayer);

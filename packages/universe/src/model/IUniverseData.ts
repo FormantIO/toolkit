@@ -3,9 +3,11 @@ import { ILocation } from "../../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { INumericSetEntry } from "../../../data-sdk/src/model/INumericSetEntry";
+import { IBitset } from "../../../data-sdk/src/model/IBitset";
+import { IOdometry } from "./IOdometry";
+import { IPose } from "./IPose";
 import { IPcd } from "../objects/pcd";
 import { IGridMap } from "./IGridMap";
-import { ITransform } from "../../../model/ITransform";
 
 export type DataSourceState =
   | "missing_data"
@@ -131,6 +133,18 @@ export interface IUniverseData {
     callback: (data: IPcd) => void
   ): CloseSubscription;
 
+  subscribeToOdometry(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IOdometry) => void
+  ): CloseSubscription;
+
+  subscribeToPose(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IPose) => void
+  ): CloseSubscription;
+
   subscribeToGeometry(
     deviceId: string,
     source: UniverseDataSource,
@@ -199,9 +213,17 @@ export interface IUniverseData {
     onDataSourceStateChange?: (state: DataSourceState) => void
   ): CloseSubscription;
 
-  sendRealtimePose(
+  sendRealtimePose(deviceId: string, streamName: string, pose: IPose): void;
+
+  sendRealtimeBoolean(
     deviceId: string,
     streamName: string,
-    pose: ITransform
+    value: boolean
+  ): void;
+
+  sendRealtimeBitset(
+    deviceId: string,
+    streamName: string,
+    bitset: IBitset
   ): void;
 }

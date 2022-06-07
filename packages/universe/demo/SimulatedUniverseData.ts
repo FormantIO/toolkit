@@ -14,9 +14,10 @@ import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IGridMap, IMap, IPcd } from "../src/main";
+import { IGridMap, IMap, IOdometry, IPcd, IPose } from "../src/main";
 import { INumericSetEntry } from "../../data-sdk/src/model/INumericSetEntry";
 import { ITransform } from "../../model/ITransform";
+import { IBitset } from "../../data-sdk/src/model/IBitset";
 
 export const SPOT_ID = "abc";
 export const ARM1_ID = "asdfadsfas";
@@ -24,6 +25,34 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToOdometry(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: IOdometry) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  subscribeToPose(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: IPose) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+  sendRealtimeBoolean(
+    _deviceId: string,
+    _streamName: string,
+    _value: boolean
+  ): void {
+    throw new Error("Method not implemented.");
+  }
+  sendRealtimeBitset(
+    _deviceId: string,
+    _streamName: string,
+    _bitset: IBitset
+  ): void {
+    throw new Error("Method not implemented.");
+  }
   sendRealtimePose(
     _deviceId: string,
     _streamName: string,
@@ -99,8 +128,7 @@ export class SimulatedUniverseData implements IUniverseData {
       },
       false
     );
-    image.src =
-      "https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg";
+    image.src = "https://i.imgur.com/hE2fKBw.jpeg";
     return () => {};
   }
   subscribeToJson<T>(

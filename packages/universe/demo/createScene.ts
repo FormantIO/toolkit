@@ -1,6 +1,6 @@
 import { SceneGraphElement } from "../src/main";
 import * as uuid from "uuid";
-import { ARM1_ID, ARM2_ID, ARM3_ID, SPOT_ID } from "./SimulatedUniverseData";
+import { SPOT_ID } from "./SimulatedUniverseData";
 
 export function createScene() {
   const sg: SceneGraphElement[] = [
@@ -47,7 +47,7 @@ export function createScene() {
           fieldValues: {
             videoShape: {
               type: "text",
-              value: "sphere",
+              value: "stereo-side-by-side",
               location: [],
             },
           },
@@ -61,245 +61,9 @@ export function createScene() {
           ],
           data: {},
         },
-        {
-          id: uuid.v4(),
-          editing: false,
-          type: "label",
-          name: "Name Label",
-          deviceContext: "abc",
-          children: [],
-          visible: true,
-          position: {
-            type: "manual",
-            x: 0,
-            y: 0.9554891467013107,
-            z: 1.6653345369377348e-16,
-          },
-          fieldValues: {
-            label_text: {
-              type: "text",
-              location: [],
-              value: "Spot-9000",
-            },
-          },
-          data: {},
-        },
-        {
-          children: [],
-          id: uuid.v4(),
-          visible: true,
-          editing: false,
-          position: {
-            type: "manual",
-            x: 0,
-            y: 0.6511622,
-            z: 0,
-          },
-          fieldValues: {},
-          name: "Spot URDF",
-          type: "device_visual_urdf",
-          data: "A 3D model to represent a robot.",
-          dataSources: [
-            {
-              id: uuid.v4(),
-              sourceType: "realtime",
-              rosTopicName: "spotJoints",
-              rosTopicType: "sensor_msgs/JointState",
-            },
-          ],
-          deviceContext: SPOT_ID,
-        },
       ],
       visible: true,
-      position: {
-        type: "gps",
-        stream: "spotLocation",
-        relativeToLongitude: -122.5782375,
-        relativeToLatitude: 45.4661989,
-      },
-      fieldValues: {},
-      data: {},
-    },
-    {
-      id: uuid.v4(),
-      editing: false,
-      type: "data",
-      name: "RoboArm1",
-      deviceContext: ARM1_ID,
-      children: [
-        {
-          id: uuid.v4(),
-          editing: false,
-          type: "label",
-          name: "Name Label",
-          deviceContext: ARM1_ID,
-          children: [],
-          visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
-          fieldValues: {
-            label_text: {
-              location: [],
-              type: "text",
-              value: "RoboArm1",
-            },
-          },
-          data: {},
-        },
-        {
-          children: [],
-          id: uuid.v4(),
-          visible: true,
-          editing: false,
-          position: {
-            type: "manual",
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-          fieldValues: {},
-          name: "Arm URDF",
-          type: "device_visual_urdf",
-          data: "A 3D model to represent a robot.",
-          dataSources: [
-            {
-              id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
-              sourceType: "realtime",
-              rosTopicName: "armJoints",
-              rosTopicType: "sensor_msgs/JointState",
-            },
-          ],
-          deviceContext: ARM1_ID,
-        },
-      ],
-      visible: true,
-      position: {
-        type: "gps",
-        stream: "armLocation",
-        relativeToLongitude: -122.5782375,
-        relativeToLatitude: 45.4661989,
-      },
-      fieldValues: {},
-      data: {},
-    },
-    {
-      id: uuid.v4(),
-      editing: false,
-      type: "data",
-      name: "RoboArm2",
-      deviceContext: ARM2_ID,
-      children: [
-        {
-          id: uuid.v4(),
-          editing: false,
-          type: "label",
-          name: "Name Label",
-          deviceContext: ARM2_ID,
-          children: [],
-          visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
-          fieldValues: {
-            label_text: {
-              location: [],
-              type: "text",
-              value: "RoboArm2",
-            },
-          },
-          data: {},
-        },
-        {
-          children: [],
-          id: uuid.v4(),
-          visible: true,
-          editing: false,
-          position: {
-            type: "manual",
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-          fieldValues: {},
-          name: "Arm URDF",
-          type: "device_visual_urdf",
-          data: "A 3D model to represent a robot.",
-          dataSources: [
-            {
-              id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
-              sourceType: "realtime",
-              rosTopicName: "armJoints",
-              rosTopicType: "sensor_msgs/JointState",
-            },
-          ],
-          deviceContext: ARM2_ID,
-        },
-      ],
-      visible: true,
-      position: {
-        type: "gps",
-        stream: "armLocation",
-        relativeToLongitude: -122.5782375,
-        relativeToLatitude: 45.4661989,
-      },
-      fieldValues: {},
-      data: {},
-    },
-    {
-      id: uuid.v4(),
-      editing: false,
-      type: "data",
-      name: "RoboArm3",
-      deviceContext: ARM3_ID,
-      children: [
-        {
-          id: uuid.v4(),
-          editing: false,
-          type: "label",
-          name: "Name Label",
-          deviceContext: ARM3_ID,
-          children: [],
-          visible: true,
-          position: { type: "manual", x: 0, y: 0, z: 0 },
-          fieldValues: {
-            label_text: {
-              type: "text",
-              location: [],
-              value: "RoboArm3",
-            },
-          },
-          data: {},
-        },
-        {
-          children: [],
-          id: uuid.v4(),
-          visible: true,
-          editing: false,
-          position: {
-            type: "manual",
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-          fieldValues: {},
-          name: "Arm URDF",
-          type: "device_visual_urdf",
-          data: "A 3D model to represent a robot.",
-          dataSources: [
-            {
-              id: "89d29103-2686-4ae6-b525-f660dcd2e17a",
-              sourceType: "realtime",
-              rosTopicName: "armJoints",
-              rosTopicType: "sensor_msgs/JointState",
-            },
-          ],
-          deviceContext: ARM3_ID,
-        },
-      ],
-      visible: true,
-      position: {
-        type: "gps",
-        stream: "armLocation",
-        relativeToLongitude: -122.5782375,
-        relativeToLatitude: 45.4661989,
-      },
+      position: { type: "manual", x: 0, y: 0, z: 0 },
       fieldValues: {},
       data: {},
     },
@@ -320,29 +84,6 @@ export function createScene() {
         },
       },
       data: {},
-    },
-    {
-      children: [],
-      id: "ac2dc279-b50a-4c02-b65e-8c545be92b6c",
-      visible: true,
-      editing: true,
-      position: {
-        type: "manual",
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      fieldValues: {
-        url: {
-          location: [],
-          type: "text",
-          value:
-            "https://formant-3d-models.s3.us-west-2.amazonaws.com/tadao_ando.glb",
-        },
-      },
-      name: "Grass",
-      type: "3dmodel",
-      data: "A 3D model.",
     },
   ];
   return sg;
