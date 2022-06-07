@@ -1,4 +1,5 @@
 import json
+from tkinter import Button
 
 class Config:
     """The config class gets the config.json file and loads it into memory."""
@@ -12,48 +13,33 @@ class Config:
         """Get the loaded config."""
         return self._config
     
-    def callback_settings(self, type="global", name=None):
+    def get_global_config(self):
+        return self._config["global-configuration"]
+
+    def get_button_config(self, type, name):
         """Return the global callback settings or specific callback settings."""
-        if type == "global":
-            return ButtonConfiguration(
-                "global",
-                self._config["global_configuration"]
-            )
+        return ButtonConfiguration(
+            self.get_config()[type][name],
+            self.get_global_config()
+        )
 
 class ButtonConfiguration:
-    def __init__(self, name: str, configuration):
+    def __init__(self, configuration, global_config):
         """
         Initialize the button configuration.
         
         @param name - Either Button name or topic name
         @param configuration - The config as seen in the JSON
         """
-        self._name = name
         self._configuration = configuration
+        self._global_configuration = global_config
 
-    def get_name(self):
-        return self._name
-    
-    def get_export_topic(self):
-        return self._configuration["Export Topic"]
-
-    def publish_on_change(self):
-        "Return True if the 'on change' setting is set"
-        return self._check_callback_config("on change")
-    
-    def publish_on_pulse(self):
-        "Return True if the 'pulse' setting is set"
-        return self._check_callback_config("pulse")
-    
-    def publish_on_subscriber(self):
-        "Return True if the 'on subscriber' setting is set"
-        return self._check_callback_config("on subscriber")
-
-    def _check_callback_config(self, setting):
-        return setting in self._configuration["Callback Settings"]
-
-class CallbackSettings:
-    def __init__(self, configuration):
-        pass 
-
-    
+    def get(self, param, default=None):
+        """
+        Return the value of param if it exists in the 
+        button config. If not, return global config.
+        If that does not exist, then return the default value.
+        """
+        if param in self._configuration:
+            return self._configuration[param]
+        return self._global_configuration.get(param, default)

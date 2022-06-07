@@ -1,25 +1,15 @@
 {
     "API-buttons": {
-        "Button Name": {
-            "Export topic": "topic name",
-            "button-configuration": {}
+        "/api_button": {
+            "output_topic": "api_button_state"
         }
     },
     "ROS-buttons": {
-        "ROS Topic": {
-            "Export topic": "topic name",
-            "button-configuration": {}
-        }
-    },
-    "ROS-status-topics": {
-        "ROS Status topic": {
-            "Export topic": "topic name",
-            "button-configuration": {}
+        "/ros_button": {
+            "output_topic": "ros_button_state"
         }
     },
     "global-configuration": {
-        "Callback Settings": [
-            "on change"
-        ]
+        "initial-state": false 
     }
 }

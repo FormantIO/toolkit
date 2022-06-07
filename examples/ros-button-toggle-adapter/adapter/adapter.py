@@ -10,8 +10,9 @@ class Adapter:
         self._is_shutdown = False
 
     def start(self):
-        while(not self._is_shutdown):
+        while(not rospy.is_shutdown()):
             time.sleep(1)
+        self.shutdown()
 
     def shutdown(self):
         pass
