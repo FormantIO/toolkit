@@ -18,7 +18,7 @@
       "require": "./dist/data-sdk.umd.js"
     }
   },
-  "version": "0.0.89",
+  "version": "0.0.90",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -32,7 +32,7 @@
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
-    "@formant/realtime-sdk": "0.0.12",
+    "@formant/realtime-sdk": "0.0.13",
     "@types/google-protobuf": "^3.15.5",
     "typedoc": "^0.22.13"
   }
