@@ -37,6 +37,7 @@ class ServiceChecker:
 
         self._fclient.register_command_request_callback(self._check_services, ["ros.services.update-services"])
         self._check_services()
+        self._post_json()
 
     def shutdown(self):
         """Kills the ServiceChecker."""
@@ -61,13 +62,11 @@ class ServiceChecker:
         
         services = {}
         
-
         for service_name in service_names:
             service = RosService(service_name) 
             if not service.is_valid():
                 continue
             services[service_name] = service.request_args()
-
         self._services_json = json.dumps(services)
         self._data_to_post = True
     
@@ -90,9 +89,6 @@ class ServiceChecker:
             return rosservice.get_service_list()
         except rosservice.ROSServiceException:
             return []
-
-    def _get_service_type(self, service_name):
-        return rosservice.get_service_type(service_name)
 
 
 class RosService:
@@ -126,42 +122,6 @@ class RosService:
     def request_args(self):
         """Request the args for the service and the associated types."""
         srv_text = rosmsg.get_srv_text(self._service_type_str)
-        return convert_to_ros(parse_indented_string(srv_text))
+        parsed_from_indented_text = parse_indented_string(srv_text)
+        return convert_to_ros(parsed_from_indented_text)
 
-class RosServiceOld:
-    """The RosService acts as a wrapper for services and provides an interface for accessing service data."""
-
-    def __init__(self, service_name):
-        """Initialize the RosService class and parse the service."""
-     
-        self._is_valid = True
-        self._service_name = service_name
-
-        try:
-            self._service_type_str = rosservice.get_service_type(service_name) 
-
-            # Check if the service is running. If not, abort
-            if service_name not in set(rosservice.get_service_list()):
-                self._is_valid = False
-                return
-            
-            self._args = self._get_service_args_and_types()
-        except Exception:
-            self._is_valid = False
-
-    def is_valid(self):
-        """Return True if all the parsing was successful"""
-        return self._is_valid
-
-    def request_as_json(self):          
-        """Return the service arguments as a JSON string"""
-
-        return json.dumps(self.request_args())
-
-    def request_args(self):
-        """Request the args for the service and the associated types."""
-        srv_text = rosmsg.get_srv_text(self._service_type_str)
-        return convert_to_ros(parse_indented_string(srv_text))
-
-def is_primitive(type_str):
-    pass
