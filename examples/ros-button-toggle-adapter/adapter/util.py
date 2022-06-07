@@ -1,4 +1,4 @@
-import logging 
+import logging
 
 import rosgraph
 import roslib
@@ -55,5 +55,6 @@ def get_topic_type_obj(topic):
     data_type = rostopic.get_topic_type(topic, blocking=False)[0]
     return roslib.message.get_message_class(data_type)
 
+
 def get_ros_type_obj(type: str):
-    return roslib.message.get_message_class(type) 
+    return roslib.message.get_message_class(type)

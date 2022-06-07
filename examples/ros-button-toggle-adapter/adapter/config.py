@@ -1,5 +1,5 @@
 import json
-from tkinter import Button
+
 
 class Config:
     """The config class gets the config.json file and loads it into memory."""
@@ -7,12 +7,12 @@ class Config:
     def __init__(self):
         """Initialize the Config class"""
         with open("config.json", "r") as f:
-            self._config = json.load(f) 
-    
+            self._config = json.load(f)
+
     def get_config(self):
         """Get the loaded config."""
         return self._config
-    
+
     def get_global_config(self):
         return self._config["global-configuration"]
 
@@ -23,11 +23,12 @@ class Config:
             self.get_global_config()
         )
 
+
 class ButtonConfiguration:
     def __init__(self, configuration, global_config):
         """
         Initialize the button configuration.
-        
+
         @param name - Either Button name or topic name
         @param configuration - The config as seen in the JSON
         """
