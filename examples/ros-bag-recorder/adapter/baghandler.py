@@ -4,7 +4,7 @@ This file contains the definition of the BagHandler which is used to control wha
 messages get written to what bag. 
 """
 
-import logger as logging
+import logging
 import time
 from datetime import datetime, timedelta
 from queue import Queue

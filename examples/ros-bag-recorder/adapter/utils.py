@@ -1,4 +1,4 @@
-import logger as logging
+import logging
 
 import rosgraph
 import roslib

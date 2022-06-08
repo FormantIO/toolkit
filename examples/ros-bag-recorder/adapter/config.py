@@ -1,11 +1,10 @@
 
-from typing import List
-import logger as logging
+import ast
+import logging
+from distutils.util import strtobool
 from json import load as jsonload
 from threading import Lock
-import ast
-
-from distutils.util import strtobool
+from typing import List
 
 from formant.sdk.agent.v1 import Client as FormantClient
 

@@ -3,7 +3,7 @@
 This file contains the definition of the Adapter itself. The adapter is what allows us to start up the bag recorder
 """
 
-import logger as logging
+import logging
 import threading
 import time
 
