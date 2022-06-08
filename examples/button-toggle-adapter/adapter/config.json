@@ -7,9 +7,13 @@
     "ROS-buttons": {
         "/ros_button": {
             "output_topic": "ros_button_state"
+        },
+        "/hos_button": {
+            "output_topic": "ros_button_state"
         }
     },
     "global-configuration": {
-        "initial-state": false 
+        "initial-state": false,
+        "publish-on-sub": true
     }
 }

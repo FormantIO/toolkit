@@ -1,3 +1,4 @@
+import logging
 
 import rospy
 from formant.sdk.agent.v1.client import Client as FormantClient
@@ -5,18 +6,17 @@ from std_msgs.msg import Bool as RosBool
 
 from config import ButtonConfiguration, Config
 
+logger = logging.getLogger()
 
 class ButtonHandler:
     
     def __init__(self):
 
         self._fclient = FormantClient()
-
         self._config = Config()
 
         rospy.init_node("button_toggle_adapter")
         self._subscriptions = {}
-
         self._buttons = {}
 
         self._init_API_buttons()
@@ -37,13 +37,21 @@ class ButtonHandler:
         ros_button_topics = self._config.get_config()["ROS-buttons"]
 
         for button_topic in ros_button_topics:
+            
             try:
+                resolved_topic = rospy.resolve_name(button_topic)
+
+                # Don't create multiple button objects for the same topic.
+                if resolved_topic in self._buttons:
+                    continue
+
                 sub = rospy.Subscriber(
                     button_topic,
                     RosBool,
                     self._ros_topic_button_callback,
                     button_topic)
-                resolved_topic = rospy.resolve_name(button_topic)
+
+                logger.debug(f"Registered subscriber for topic: {button_topic}")
 
             except Exception:
                 continue
@@ -59,11 +67,7 @@ class ButtonHandler:
     def _ros_topic_button_callback(self, data, topic):
         if data.data:
             self._buttons[topic].toggle_state()
-
-    def _ros_button_status_callback(self, data):
-        import pdb
-        pdb.set_trace()
-
+    
     def _API_button_callback(self, button_press):
         name = button_press.bitset.bits[0].key
         value = button_press.bitset.bits[0].value
@@ -93,10 +97,15 @@ class Button:
         self._output_topic = config.get("output_topic")
         self._config = config
 
+        sub_listener = None
+        if self._config.get("publish-on-sub", False):
+            sub_listener = Button.ButtonSubscribeListener(self.get_state)
+
         self._pub = rospy.Publisher(
             self._output_topic,
             RosBool,
-            queue_size=1)
+            queue_size=1,
+            subscriber_listener=sub_listener)
 
     def set_state(self, state):
         if self._state == state:
@@ -105,10 +114,36 @@ class Button:
         self._state = state
         self._handle_state_change()
 
+    def get_state(self):
+        return self._state
+
     def toggle_state(self):
         """Toggle the state of the button."""
         self.set_state(not self._state)
 
     def _handle_state_change(self):
         """Handle the change of state on a ROS button."""
-        self._pub.publish(self._state)
+        self.publish_state()
+
+    def publish_state(self):
+        """Publish the state to all configured places."""
+        self._pub.publish(self._state) 
+
+    class ButtonSubscribeListener(rospy.SubscribeListener):
+        """Implementation of the rospy SubscribeListener."""
+
+        def __init__(self, get_state):
+            """
+            Initialize the listener
+            
+            @param get_state: fn() - a function which 
+                returns the current state of the button.
+            """
+            self._get_state = get_state
+
+        def peer_subscribe(self, _1, _2, peer_publish):
+            """Callback for when there is a new subscriber."""
+            peer_publish(
+                RosBool(
+                data=self._get_state()
+                ))

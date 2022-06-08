@@ -1,4 +1,3 @@
-
 from adapter import Adapter
 
 def main():
