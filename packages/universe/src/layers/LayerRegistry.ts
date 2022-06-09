@@ -4,6 +4,7 @@ import { LayerType } from ".";
 import { defined } from "../../../common/defined";
 import { UniverseLayer } from "./UniverseLayer";
 import { LayerFields, LayerFieldLocation } from "../model/LayerField";
+import { TransformLayer } from "./TransformLayer";
 
 export interface LayerSuggestion {
   sources: UniverseDataSource[];
@@ -76,7 +77,8 @@ export class LayerRegistry {
     deviceId?: string,
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
-    getCurrentCamera?: () => PerspectiveCamera
+    getCurrentCamera?: () => PerspectiveCamera,
+    getTransformLayer?: (id: string) => TransformLayer
   ) {
     const Layer = defined(LayerRegistry.layers.get(nodeType));
     return UniverseLayer.createDefault(
@@ -86,7 +88,8 @@ export class LayerRegistry {
       deviceId,
       dataSources,
       fields,
-      getCurrentCamera
+      getCurrentCamera,
+      getTransformLayer
     );
   }
 }

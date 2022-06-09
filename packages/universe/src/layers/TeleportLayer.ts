@@ -112,7 +112,7 @@ export class TeleportLayer extends UniverseLayer {
     if (this.xr) {
       const session = this.xr.getSession();
       const baseReferenceSpace = this.xr.getReferenceSpace();
-      if (baseReferenceSpace && this.camera) {
+      if (baseReferenceSpace) {
         if (!this.originalBaseReferenceSpace || this.session !== session) {
           this.originalBaseReferenceSpace = baseReferenceSpace;
           this.session = session;

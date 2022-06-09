@@ -5,8 +5,10 @@ import {
   BufferGeometry,
   CanvasTexture,
   Group,
+  Material,
   Mesh,
   MeshBasicMaterial,
+  Object3D,
   SphereGeometry,
 } from "three";
 import * as uuid from "uuid";
@@ -78,6 +80,14 @@ export class VideoLayer extends UniverseLayer {
       defined(dataSource),
       this.onData
     );
+  }
+
+  onLayerPartsRequested(): {
+    [key in string]: Material | Mesh | Group | Object3D | undefined;
+  } {
+    return {
+      "video-mesh": this.mesh,
+    };
   }
 
   onData = (frame: HTMLCanvasElement) => {

@@ -1,4 +1,7 @@
 import {
+  Group,
+  Material,
+  Mesh,
   Object3D,
   PerspectiveCamera,
   Raycaster,
@@ -17,6 +20,7 @@ import { SceneGraph, SceneGraphElement, visitSceneGraphElement } from "../main";
 import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
+import { defined } from "../../../common/defined";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -39,7 +43,9 @@ export abstract class UniverseLayer extends Object3D {
 
   protected layerFields: LayerFields = {};
 
-  camera?: () => PerspectiveCamera;
+  private camera?: () => PerspectiveCamera;
+
+  private getTransformLayerHelper?: (id: string) => TransformLayer;
 
   static async getLayerSuggestions(
     _data: IUniverseData,
@@ -55,7 +61,8 @@ export abstract class UniverseLayer extends Object3D {
     deviceId?: string,
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
-    camera?: () => PerspectiveCamera
+    camera?: () => PerspectiveCamera,
+    getTransformLayerHelper?: (id: string) => TransformLayer
   ): TransformLayer {
     content.layerId = layerId;
     content.universeData = universeData;
@@ -63,6 +70,7 @@ export abstract class UniverseLayer extends Object3D {
     content.layerDataSources = dataSources || [];
     content.layerFields = fields || {};
     content.camera = camera;
+    content.getTransformLayerHelper = getTransformLayerHelper;
     const transform = new TransformLayer();
     transform.universeData = universeData;
     transform.deviceId = deviceId;
@@ -101,6 +109,11 @@ export abstract class UniverseLayer extends Object3D {
     });
   }
 
+  getCurrentCamera(): PerspectiveCamera {
+    const f = defined(this.camera);
+    return f();
+  }
+
   getLayers(): SceneGraphElement[] {
     const sceneGraph = getRecoil(sceneGraphAtom);
     const layers: SceneGraphElement[] = [];
@@ -110,6 +123,19 @@ export abstract class UniverseLayer extends Object3D {
       });
     });
     return layers;
+  }
+
+  getLayerRootObject3D(layerId: string): Object3D {
+    const f = defined(this.getTransformLayerHelper);
+    return f(layerId);
+  }
+
+  getLayerParts(layerId: string): {
+    [key in string]: Material | Mesh | Group | Object3D | undefined;
+  } {
+    const f = defined(this.getTransformLayerHelper);
+    const tranformLayer = f(layerId);
+    return defined(tranformLayer.contentNode).onLayerPartsRequested();
   }
 
   setLayerVisibility(id: string, visible: boolean): void {
@@ -124,6 +150,12 @@ export abstract class UniverseLayer extends Object3D {
       });
     });
     setRecoil(sceneGraphAtom, sceneGraph);
+  }
+
+  onLayerPartsRequested(): {
+    [key in string]: Material | Mesh | Group | Object3D | undefined;
+  } {
+    return {};
   }
 
   onControllerButtonChanged(

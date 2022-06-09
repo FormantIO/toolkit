@@ -509,6 +509,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   getCurrentCamera = () => this.camera;
 
+  getTransformLayerById = (layerId: string) => {
+    const layer = this.pathToLayer.get(layerId);
+    return defined(layer);
+  };
+
   private onResize = (width: number, height: number) => {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
@@ -662,7 +667,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       deviceId,
       el.dataSources,
       fields,
-      this.getCurrentCamera
+      this.getCurrentCamera,
+      this.getTransformLayerById
     );
     if (el.position.type === "manual") {
       layer.position.set(el.position.x, el.position.y, el.position.z);

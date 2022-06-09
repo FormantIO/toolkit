@@ -56,15 +56,13 @@ export class DeviceVisualTFLayer extends UniverseLayer {
 
   init() {
     const dataSource = defined(this.layerDataSources)[0];
-    if (this.camera) {
-      this.transformTree = new TransformTree(this.camera());
-      this.add(this.transformTree);
-      defined(this.universeData).subscribeToTransformTree(
-        defined(this.layerContext),
-        defined(dataSource),
-        this.onTransformTreeData
-      );
-    }
+    this.transformTree = new TransformTree(this.getCurrentCamera());
+    this.add(this.transformTree);
+    defined(this.universeData).subscribeToTransformTree(
+      defined(this.layerContext),
+      defined(dataSource),
+      this.onTransformTreeData
+    );
   }
 
   onTransformTreeData = async (data: ITransformNode) => {
