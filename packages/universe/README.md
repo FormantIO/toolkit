@@ -24,7 +24,7 @@ A layer part is a 3D element that a layer wants the world outside of itself to b
 
 ## What is a data source?
 
-A data source is a representation of a specific source of information that might be present within a robot.
+A data source is a representation of a specific source of information that might be present within a robot (example: A ROS message stream, a realtime hardware video source, a stream of JSON telemetry).
 
 # Built-in Layers
 
