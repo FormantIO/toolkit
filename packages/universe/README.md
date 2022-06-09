@@ -2,6 +2,8 @@
 
 A toolkit for building 3D worlds with Formant.  Fleets of data are brimming with spatial data.  This is a library and editor that can help you put together 3D visualizations of robots on mobile, desktop, and VR.  It's meant to be an easy way for you to connect layers of information to data sources behind a single interface.
 
+![image](https://user-images.githubusercontent.com/66638393/172955268-0fbc4fd4-1c4b-45d3-ae1e-bf28e470dd42.png)
+
 # Mental model of this library
 
 ## What is universe?
