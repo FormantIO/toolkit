@@ -1,4 +1,4 @@
-import { RtcClient } from "@formant/realtime-sdk";
+import { IRtcConnectConfiguration, RtcClient } from "@formant/realtime-sdk";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 import { DataChannel } from "./DataChannel";
@@ -13,7 +13,6 @@ import {
   RealtimeDataStream,
   RealtimeListener,
   RealtimeVideoStream,
-  SessionType,
 } from "./Device";
 import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
@@ -77,7 +76,7 @@ export class PeerDevice implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(_sessionType?: SessionType) {
+  async startRealtimeConnection(_config?: IRtcConnectConfiguration) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         lanOnlyMode: true,

@@ -1,4 +1,8 @@
-import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
+import {
+  IRtcConnectConfiguration,
+  RtcClient,
+  SignalingPromiseClient,
+} from "@formant/realtime-sdk";
 import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
@@ -76,7 +80,7 @@ export enum SessionType {
 }
 
 export interface IRealtimeDevice {
-  startRealtimeConnection(sessionType?: SessionType): Promise<void>;
+  startRealtimeConnection(config?: IRtcConnectConfiguration): Promise<void>;
   startListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
   stopListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
   addRealtimeListener(listener: RealtimeListener): void;
@@ -179,7 +183,7 @@ export class Device implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(sessionType?: SessionType) {
+  async startRealtimeConnection(config?: IRtcConnectConfiguration) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         signalingClient: new SignalingPromiseClient(
@@ -212,12 +216,12 @@ export class Device implements IRealtimeDevice {
 
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
-      await rtcClient.connect(this.remoteDevicePeerId, {
-        sessionType:
-          sessionType === undefined
-            ? (SessionType.Teleop as number)
-            : (sessionType as number),
-      });
+      await rtcClient.connect(
+        this.remoteDevicePeerId,
+        config || {
+          sessionType: SessionType.Teleop as number,
+        }
+      );
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
