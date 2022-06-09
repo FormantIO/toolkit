@@ -74,10 +74,10 @@ export type RealtimeDataStream = {
   name: string;
 };
 
-export enum SessionType {
-  Teleop = 1,
-  Observe = 3,
-}
+export const SessionType = {
+  Teleop: 1,
+  Observe: 3,
+};
 
 export interface IRealtimeDevice {
   startRealtimeConnection(config?: IRtcConnectConfiguration): Promise<void>;
