@@ -26,7 +26,9 @@ el("button").addEventListener("click", async () => {
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.name + "</b>");
     log("Getting a realtime connection ... ");
-    await device.startRealtimeConnection(SessionType.Observe);
+    await device.startRealtimeConnection({
+      sessionType: SessionType.Observe,
+    });
     device.addRealtimeListener((_peerId: any, message: any) => {
       (el("formant-realtime-player") as RealtimePlayer).drawVideoFrame(
         message.payload.h264VideoFrame
