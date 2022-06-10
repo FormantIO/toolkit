@@ -25,6 +25,13 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  sendCommand(
+    _deviceId: string,
+    _name: string,
+    _data?: string | undefined
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   subscribeToOdometry(
     _deviceId: string,
     _source: UniverseDataSource,

@@ -224,4 +224,6 @@ export interface IUniverseData {
     streamName: string,
     bitset: IBitset
   ): Promise<void>;
+
+  sendCommand(deviceId: string, name: string, data?: string): Promise<void>;
 }
