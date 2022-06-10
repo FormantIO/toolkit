@@ -445,7 +445,12 @@ export class Device implements IRealtimeDevice {
     }));
   }
 
-  async sendCommand(name: string, data?: string, time?: Date, metadata?: {}) {
+  async sendCommand(
+    name: string,
+    data?: string,
+    time?: Date,
+    metadata?: {}
+  ): Promise<void> {
     const commands = await this.getAvailableCommands();
     const command = commands.find((_) => _.name === name);
     if (!command) {
@@ -475,7 +480,7 @@ export class Device implements IRealtimeDevice {
       },
     };
 
-    const result = await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
+    await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
       method: "POST",
       body: JSON.stringify({
         commandTemplateId: command.id,
@@ -490,8 +495,6 @@ export class Device implements IRealtimeDevice {
         Authorization: "Bearer " + Authentication.token,
       },
     });
-    const files = await result.json();
-    return files.fileUrls;
   }
 
   async createCustomDataChannel(
