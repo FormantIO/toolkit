@@ -30,7 +30,6 @@ export * from "./objects/Model3D";
 export * from "./components/viewer/Hand";
 export * from "./components/viewer/Controller";
 export * from "./components/viewer/HandheldController";
-export { URDFLink, URDFRobot } from "urdf-loader";
 
 export type IH264VideoFrame =
   import("../../data-sdk/src/model/IH264VideoFrame").IH264VideoFrame;
