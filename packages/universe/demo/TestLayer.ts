@@ -1,3 +1,4 @@
+import { Object3D } from "three";
 import { UniverseLayer } from "../src/main";
 
 export class TestLayer extends UniverseLayer {
@@ -7,30 +8,40 @@ export class TestLayer extends UniverseLayer {
 
   static description = "Layer for testing.";
 
-  init() {
-    const c = this.createGltf(
-      "https://formant-3d-models.s3.us-west-2.amazonaws.com/poser.glb"
-    );
-    c.position.y = 1;
-    this.add(c);
-
+  createButton(name: string) {
+    const o = new Object3D();
     const r = this.createRoundedRectangle({
-      width: 0.5,
-      height: 0.25,
+      width: 0.35,
+      height: 0.15,
       radius: 0.05,
+      color: 0x2d3855,
     });
-    r.position.y = 0.5;
-    this.add(r);
+    o.add(r);
 
-    const img = this.createImage("https://i.imgur.com/sZJWdbK.gif");
-    img.position.y = 0.5;
-    img.position.z = 0.0001;
-    img.scale.set(0.25, 0.25, 0.25);
-    this.add(img);
-
-    const t = this.createText("Formant", { fontSize: 16 });
-    t.position.y = 0.2;
+    const t = this.createText(name, { fontSize: 16 });
     t.position.z = 0.0002;
-    this.add(t);
+    o.add(t);
+    return o;
+  }
+
+  init() {
+    const title = this.createText("AR3-EC2", { fontSize: 40 });
+    title.position.y = 0.8;
+    title.position.x = 1;
+    this.add(title);
+    const subtitle = this.createText("Powered by PickNik", { fontSize: 12 });
+    subtitle.position.y = 0.7;
+    subtitle.position.x = 1;
+    subtitle.position.z = 0.002;
+    this.add(subtitle);
+    const b1 = this.createButton("Reset");
+    const b2 = this.createButton("Execute");
+    b1.position.y = 0.5;
+    b2.position.y = 0.5;
+
+    b1.position.x = 1 + 0.19;
+    b2.position.x = 1 + -0.19;
+    this.add(b1);
+    this.add(b2);
   }
 }

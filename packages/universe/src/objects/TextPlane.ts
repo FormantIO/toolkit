@@ -1,17 +1,17 @@
 /* eslint-disable no-bitwise */
 import {
-  DoubleSide,
   Group,
   LinearMipMapLinearFilter,
   Mesh,
   MeshBasicMaterial,
+  Object3D,
   PlaneBufferGeometry,
   Texture,
 } from "three";
 import { definedAndNotNull } from "../../../common/defined";
 
 export class TextPlane extends Group {
-  mesh: Mesh | undefined;
+  mesh: Object3D | undefined;
 
   texture: Texture | undefined;
 
@@ -68,6 +68,8 @@ export class TextPlane extends Group {
     const metrics = context.measureText(message);
     const actualHeight =
       metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+    const offsetVerticalPercentage =
+      metrics.fontBoundingBoxDescent / actualHeight / 2;
     const textWidth = metrics.width;
     const textHeight = actualHeight;
     canvas.width = textWidth;
@@ -89,7 +91,6 @@ export class TextPlane extends Group {
     const material = new MeshBasicMaterial({
       map: texture,
       transparent: true,
-      side: DoubleSide,
     });
 
     this.material = material;
@@ -99,11 +100,15 @@ export class TextPlane extends Group {
       material
     );
 
+    const o = new Object3D();
+    mesh.position.y = -textHeight * offsetVerticalPercentage;
+    o.add(mesh);
+
     // make things less blurrier
-    const pixelScale = 0.000005 * canvas.width;
-    mesh.scale.set(pixelScale, pixelScale, pixelScale);
-    this.add(mesh);
-    this.mesh = mesh;
+    const pixelScale = 0.001;
+    o.scale.set(pixelScale, pixelScale, pixelScale);
+    this.add(o);
+    this.mesh = o;
   }
 
   get text(): string {
