@@ -9,7 +9,6 @@ import {
   WebGLRenderer,
   HemisphereLight,
   Raycaster,
-  ACESFilmicToneMapping,
 } from "three";
 import styled from "styled-components";
 import { RGBELoader } from "../../../three-utils/loaders/RGBELoader";
@@ -128,15 +127,15 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const skyColor = defined(Color.fromString("#f8f9fc")).toString();
     const groundColor = defined(Color.fromString("#282f45")).toString();
 
-    const accentLight1 = new PointLight(accentColor1, 3, 0, 0);
-    accentLight1.position.set(5, 5, 5);
+    const accentLight1 = new PointLight(accentColor1, 0.3, 0, 0);
+    accentLight1.position.set(1000, 1000, 1000);
     this.scene.add(accentLight1);
 
-    const accentLight2 = new PointLight(accentColor2, 3, 0, 0);
-    accentLight2.position.set(-5, -5, 5);
+    const accentLight2 = new PointLight(accentColor2, 0.7, 0, 0);
+    accentLight2.position.set(-1000, -1000, 1000);
     this.scene.add(accentLight2);
 
-    const ambientLight = new HemisphereLight(skyColor, groundColor, 1.5);
+    const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5);
     this.scene.add(ambientLight);
   }
 
@@ -148,10 +147,13 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         alpha: true,
         antialias: true,
       });
+      this.renderer.sortObjects = false;
       this.renderer.xr.enabled = true;
+      /* 
       this.renderer.physicallyCorrectLights = true;
       this.renderer.toneMapping = ACESFilmicToneMapping;
       this.renderer.shadowMap.enabled = true;
+      */
       element.appendChild(this.renderer.domElement);
 
       element.addEventListener("pointermove", this.onPointerMove);

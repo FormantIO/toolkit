@@ -1,7 +1,11 @@
 import {
+  BufferAttribute,
+  BufferGeometry,
+  DoubleSide,
   Group,
   Material,
   Mesh,
+  MeshBasicMaterial,
   Object3D,
   PerspectiveCamera,
   Raycaster,
@@ -16,7 +20,15 @@ import { TransformLayer } from "./TransformLayer";
 import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
-import { SceneGraph, SceneGraphElement, visitSceneGraphElement } from "../main";
+import {
+  ImagePlane,
+  Label,
+  Model3D,
+  SceneGraph,
+  SceneGraphElement,
+  TextPlane,
+  visitSceneGraphElement,
+} from "../main";
 import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
@@ -233,5 +245,211 @@ export abstract class UniverseLayer extends Object3D {
     return () => {
       sound.stop();
     };
+  }
+
+  public createGltf(url: string): Model3D {
+    return new Model3D(url);
+  }
+
+  public createRoundedRectangle(config: {
+    width: number;
+    height: number;
+    radius: number;
+    color?: number;
+    smoothness?: number;
+  }) {
+    const w = config.width;
+    const h = config.height;
+    const r = config.radius;
+    const color = config.color || 0xffffff;
+    const smoothness = config.smoothness || 10;
+    // https://discourse.threejs.org/t/roundedrectangle/28645
+    // helper const's
+    const wi = w / 2 - r; // inner width
+    const hi = h / 2 - r; // inner height
+    const w2 = w / 2; // half width
+    const h2 = h / 2; // half height
+    const ul = r / w; // u left
+    const ur = (w - r) / w; // u right
+    const vl = r / h; // v low
+    const vh = (h - r) / h; // v high
+
+    const positions = [
+      -wi,
+      -h2,
+      0,
+      wi,
+      -h2,
+      0,
+      wi,
+      h2,
+      0,
+      -wi,
+      -h2,
+      0,
+      wi,
+      h2,
+      0,
+      -wi,
+      h2,
+      0,
+      -w2,
+      -hi,
+      0,
+      -wi,
+      -hi,
+      0,
+      -wi,
+      hi,
+      0,
+      -w2,
+      -hi,
+      0,
+      -wi,
+      hi,
+      0,
+      -w2,
+      hi,
+      0,
+      wi,
+      -hi,
+      0,
+      w2,
+      -hi,
+      0,
+      w2,
+      hi,
+      0,
+      wi,
+      -hi,
+      0,
+      w2,
+      hi,
+      0,
+      wi,
+      hi,
+      0,
+    ];
+
+    const uvs = [
+      ul,
+      0,
+      ur,
+      0,
+      ur,
+      1,
+      ul,
+      0,
+      ur,
+      1,
+      ul,
+      1,
+      0,
+      vl,
+      ul,
+      vl,
+      ul,
+      vh,
+      0,
+      vl,
+      ul,
+      vh,
+      0,
+      vh,
+      ur,
+      vl,
+      1,
+      vl,
+      1,
+      vh,
+      ur,
+      vl,
+      1,
+      vh,
+      ur,
+      vh,
+    ];
+
+    let phia = 0;
+    let phib;
+    let xc;
+    let yc;
+    let uc;
+    let vc;
+    let cosa;
+    let sina;
+    let cosb;
+    let sinb;
+
+    for (let i = 0; i < smoothness * 4; i += 1) {
+      phib = (Math.PI * 2 * (i + 1)) / (4 * smoothness);
+
+      cosa = Math.cos(phia);
+      sina = Math.sin(phia);
+      cosb = Math.cos(phib);
+      sinb = Math.sin(phib);
+
+      xc = i < smoothness || i >= 3 * smoothness ? wi : -wi;
+      yc = i < 2 * smoothness ? hi : -hi;
+
+      positions.push(
+        xc,
+        yc,
+        0,
+        xc + r * cosa,
+        yc + r * sina,
+        0,
+        xc + r * cosb,
+        yc + r * sinb,
+        0
+      );
+
+      uc = i < smoothness || i >= 3 * smoothness ? ur : ul;
+      vc = i < 2 * smoothness ? vh : vl;
+
+      uvs.push(
+        uc,
+        vc,
+        uc + ul * cosa,
+        vc + vl * sina,
+        uc + ul * cosb,
+        vc + vl * sinb
+      );
+
+      phia = phib;
+    }
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new BufferAttribute(new Float32Array(positions), 3)
+    );
+    geometry.setAttribute("uv", new BufferAttribute(new Float32Array(uvs), 2));
+
+    return new Mesh(
+      geometry,
+      new MeshBasicMaterial({
+        color,
+        side: DoubleSide,
+      })
+    );
+  }
+
+  public createLabel(text: string, sizeAttenuate?: boolean): Label {
+    return new Label(text, sizeAttenuate);
+  }
+
+  public createText(
+    text: string,
+    config?: {
+      color?: number;
+      fontSize?: number;
+    }
+  ): TextPlane {
+    return new TextPlane(text, config?.color || 0xbac4e2, config?.fontSize);
+  }
+
+  public createImage(url: string): ImagePlane {
+    return new ImagePlane(url);
   }
 }

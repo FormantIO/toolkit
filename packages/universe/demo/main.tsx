@@ -4,10 +4,10 @@ import { FormantProvider } from "@formant/ui-sdk";
 import { LayerRegistry, TeleportLayer, Universe } from "../src/main";
 import { SimulatedUniverseData } from "./SimulatedUniverseData";
 import { createScene } from "./createScene";
-import { XboxLayer } from "./XboxLayer";
+import { TestLayer } from "./TestLayer";
 
 LayerRegistry.register(TeleportLayer);
-LayerRegistry.register(XboxLayer);
+LayerRegistry.register(TestLayer);
 
 function App() {
   const data = new SimulatedUniverseData();

@@ -30,11 +30,11 @@ export class LabelLayer extends UniverseLayer {
       labelTextField.type === "text" &&
       labelTextField.value
     ) {
-      this.createLabel(labelTextField.value);
+      this.updateLabel(labelTextField.value);
     }
   }
 
-  createLabel(text: string): void {
+  updateLabel(text: string): void {
     if (this.label) {
       this.remove(this.label);
       this.label.dispose();
@@ -44,6 +44,6 @@ export class LabelLayer extends UniverseLayer {
   }
 
   onFieldChanged(_field: string, value: string): void {
-    this.createLabel(value);
+    this.updateLabel(value);
   }
 }

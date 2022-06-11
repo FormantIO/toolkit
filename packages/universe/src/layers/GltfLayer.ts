@@ -1,4 +1,3 @@
-import { Model3D } from "../objects/Model3D";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class GltfLayer extends UniverseLayer {
@@ -24,7 +23,7 @@ export class GltfLayer extends UniverseLayer {
   init() {
     const urlField = (this.layerFields || {}).url;
     if (urlField && urlField.type === "text" && urlField.value) {
-      this.add(new Model3D(urlField.value));
+      this.add(this.createGltf(urlField.value));
     }
   }
 }

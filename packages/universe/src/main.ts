@@ -23,6 +23,8 @@ export * from "./layers/TeleportLayer";
 export * from "./components/sidebar";
 export * from "./model/SceneGraph";
 export * from "./objects/Label";
+export * from "./objects/TextPlane";
+export * from "./objects/ImagePlane";
 export * from "./objects/Model3D";
 export * from "./components/viewer/Hand";
 export * from "./components/viewer/Controller";
