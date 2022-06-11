@@ -76,7 +76,7 @@ export class VideoLayer extends UniverseLayer {
   init() {
     const dataSource = defined(this.layerDataSources)[0];
     defined(this.universeData).subscribeToVideo(
-      defined(this.layerContext),
+      defined(this.getLayerContext()).deviceId,
       defined(dataSource),
       this.onData
     );

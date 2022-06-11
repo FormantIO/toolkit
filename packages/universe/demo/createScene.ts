@@ -15,18 +15,7 @@ export function createScene() {
       fieldValues: {},
       data: {},
     },
-    {
-      id: uuid.v4(),
-      editing: false,
-      type: "test",
-      name: "Test",
-      deviceContext: undefined,
-      children: [],
-      visible: true,
-      position: { type: "manual", x: 0, y: 0, z: 0 },
-      fieldValues: {},
-      data: {},
-    },
+
     {
       id: uuid.v4(),
       editing: false,
@@ -46,7 +35,20 @@ export function createScene() {
       data: {},
     },
     {
-      children: [],
+      children: [
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "test",
+          name: "Test",
+          deviceContext: undefined,
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 0 },
+          fieldValues: {},
+          data: {},
+        },
+      ],
       id: uuid.v4(),
       visible: true,
       editing: false,

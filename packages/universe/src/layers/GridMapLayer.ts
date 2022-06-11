@@ -54,7 +54,7 @@ export class GridMapLayer extends UniverseLayer {
   init() {
     const dataSource = defined(this.layerDataSources)[0];
     defined(this.universeData).subscribeToGridMap(
-      defined(this.layerContext),
+      defined(this.getLayerContext()).deviceId,
       defined(dataSource),
       this.onData
     );

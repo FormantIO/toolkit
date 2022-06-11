@@ -57,7 +57,7 @@ export class PointCloudLayer extends UniverseLayer {
 
   init() {
     defined(this.universeData).subscribeToPointCloud(
-      defined(this.layerContext),
+      defined(this.getLayerContext()).deviceId,
       defined(this.layerDataSources)[0],
       (d) => this.onData(d)
     );

@@ -21,6 +21,7 @@ import { LayerFields } from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import {
+  findSceneGraphElement,
   ImagePlane,
   Label,
   Model3D,
@@ -32,8 +33,14 @@ import {
 import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
-import { defined } from "../../../common/defined";
+import { defined, definedAndNotNull } from "../../../common/defined";
 import { Urdf } from "../objects/Urdf";
+import { TreePath } from "../model/ITreeElement";
+
+export type UniveseLayerContext = {
+  type: "device";
+  deviceId: string;
+};
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -50,7 +57,7 @@ export abstract class UniverseLayer extends Object3D {
 
   protected universeData!: IUniverseData;
 
-  protected layerContext?: string;
+  private layerContext?: string;
 
   protected layerDataSources: UniverseDataSource[] = [];
 
@@ -125,6 +132,43 @@ export abstract class UniverseLayer extends Object3D {
   getCurrentCamera(): PerspectiveCamera {
     const f = defined(this.camera);
     return f();
+  }
+
+  getLayerContext(): UniveseLayerContext | undefined {
+    if (this.layerContext) {
+      return {
+        type: "device",
+        deviceId: this.layerContext,
+      };
+    }
+
+    const sceneGraph = getRecoil(sceneGraphAtom);
+    let layerPath: TreePath | undefined;
+    sceneGraph.forEach((element, i) => {
+      visitSceneGraphElement(element, (e, path) => {
+        if (e.id === this.layerId) {
+          layerPath = [i, ...path];
+          return false;
+        }
+        return undefined;
+      });
+    });
+    if (layerPath) {
+      while (layerPath.length > 0) {
+        const el = definedAndNotNull(
+          findSceneGraphElement(sceneGraph, layerPath)
+        );
+        if (el.deviceContext) {
+          return {
+            type: "device",
+            deviceId: el.deviceContext,
+          };
+        }
+        layerPath.pop();
+      }
+    }
+
+    return undefined;
   }
 
   getLayers(): SceneGraphElement[] {

@@ -63,7 +63,7 @@ export class GeometryLayer extends UniverseLayer {
   init() {
     const dataSource = defined(this.layerDataSources)[0];
     defined(this.universeData).subscribeToGeometry(
-      defined(this.layerContext),
+      defined(this.getLayerContext()).deviceId,
       defined(dataSource),
       this.onData
     );

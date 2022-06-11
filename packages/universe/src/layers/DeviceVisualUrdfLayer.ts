@@ -134,18 +134,15 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
     const ninetyDegrees = Math.PI / 2;
     this.rotation.set(-ninetyDegrees, 0, 0);
     const dataSource = defined(this.layerDataSources)[0];
-    if (
-      dataSource &&
-      dataSource.sourceType === "realtime" &&
-      this.layerContext
-    ) {
+    const context = defined(this.getLayerContext()).deviceId;
+    if (dataSource && dataSource.sourceType === "realtime" && context) {
       defined(this.universeData).subscribeToJointState(
-        this.layerContext,
+        context,
         defined(dataSource),
         this.onData
       );
       defined(this.universeData)
-        .getUrdfs(defined(this.layerContext))
+        .getUrdfs(defined(context))
         .then((_) => {
           if (_.length === 0) {
             return;

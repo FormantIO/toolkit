@@ -59,7 +59,7 @@ export class DeviceVisualTFLayer extends UniverseLayer {
     this.transformTree = new TransformTree(this.getCurrentCamera());
     this.add(this.transformTree);
     defined(this.universeData).subscribeToTransformTree(
-      defined(this.layerContext),
+      defined(this.getLayerContext()).deviceId,
       defined(dataSource),
       this.onTransformTreeData
     );
