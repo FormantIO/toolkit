@@ -28,7 +28,7 @@ export class TestLayer extends UniverseLayer {
     img.scale.set(0.25, 0.25, 0.25);
     this.add(img);
 
-    const t = this.createText("Formant", { fontSize: 60 });
+    const t = this.createText("Formant", { fontSize: 16 });
     t.position.y = 0.2;
     t.position.z = 0.0002;
     this.add(t);

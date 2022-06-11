@@ -58,7 +58,7 @@ export class TextPlane extends Group {
     const fontface = "Inter";
     const fontsize = this.currentFontSize;
     const message = this.currentText;
-    const font = `${fontsize * 2}px ${fontface}`;
+    const font = `${fontsize * 4}px ${fontface}`;
 
     const canvas = document.createElement("canvas");
     const context = definedAndNotNull(canvas.getContext("2d"));
