@@ -37,7 +37,7 @@ import { defined, definedAndNotNull } from "../../../common/defined";
 import { Urdf } from "../objects/Urdf";
 import { TreePath } from "../model/ITreeElement";
 
-export type UniveseLayerContext = {
+export type UniverseLayerContext = {
   type: "device";
   deviceId: string;
 };
@@ -134,7 +134,7 @@ export abstract class UniverseLayer extends Object3D {
     return f();
   }
 
-  getLayerContext(): UniveseLayerContext | undefined {
+  getLayerContext(): UniverseLayerContext | undefined {
     if (this.layerContext) {
       return {
         type: "device",

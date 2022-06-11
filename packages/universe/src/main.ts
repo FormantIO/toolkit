@@ -31,6 +31,8 @@ export * from "./components/viewer/Hand";
 export * from "./components/viewer/Controller";
 export * from "./components/viewer/HandheldController";
 
+export { defined, definedAndNotNull } from "../../common/defined";
+
 export type IH264VideoFrame =
   import("../../data-sdk/src/model/IH264VideoFrame").IH264VideoFrame;
 export type IJointState =
