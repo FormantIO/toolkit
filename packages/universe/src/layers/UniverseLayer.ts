@@ -33,6 +33,7 @@ import { Hand } from "../components/viewer/Hand";
 import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
 import { defined } from "../../../common/defined";
+import { Urdf } from "../objects/Urdf";
 
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
@@ -143,7 +144,7 @@ export abstract class UniverseLayer extends Object3D {
   }
 
   getLayerParts(layerId: string): {
-    [key in string]: Material | Mesh | Group | Object3D | undefined;
+    [key in string]: Material | Mesh | Group | Object3D | Urdf | undefined;
   } {
     const f = defined(this.getTransformLayerHelper);
     const tranformLayer = f(layerId);

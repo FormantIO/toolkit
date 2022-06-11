@@ -443,10 +443,7 @@ export class SimulatedUniverseData implements IUniverseData {
     ];
   }
 
-  async getUrdfs(deviceId: string): Promise<string[]> {
-    if (deviceId === SPOT_ID) {
-      return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/spot.zip"];
-    }
+  async getUrdfs(_deviceId: string): Promise<string[]> {
     return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/arm.zip"];
   }
 

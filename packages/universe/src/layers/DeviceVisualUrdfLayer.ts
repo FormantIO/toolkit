@@ -1,5 +1,6 @@
 import * as JSZip from "jszip";
 import * as uuid from "uuid";
+import { Object3D, Event, Group, Material, Mesh, BufferGeometry } from "three";
 import { defined } from "../../../common/defined";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
 import { Urdf } from "../objects/Urdf";
@@ -86,6 +87,17 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
 
   static usesData = true;
 
+  static fields = {
+    ghosted: {
+      name: "Ghosted",
+      description: "If you would like this URDF to appear ghosted transparent.",
+      placeholder: "false",
+      value: "",
+      type: "text",
+      location: ["create"],
+    },
+  };
+
   static async getLayerSuggestions(
     universeData: IUniverseData,
     deviceContext?: string
@@ -155,7 +167,11 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
   }
 
   loadAllUrdfs = (blobUrl: string) => {
-    this.urdf = new Urdf(blobUrl, undefined, this.onLoad);
+    this.urdf = new Urdf(
+      blobUrl,
+      { ghosted: this.layerFields?.ghosted?.value === "true" },
+      this.onLoad
+    );
     this.add(this.urdf);
   };
 
@@ -168,4 +184,18 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
       this.urdf.jointState = data;
     }
   };
+
+  override onLayerPartsRequested(): {
+    [x: string]:
+      | Object3D<Event>
+      | Material
+      | Mesh<BufferGeometry, Material | Material[]>
+      | Group
+      | Urdf
+      | undefined;
+  } {
+    return {
+      urdf: this.urdf,
+    };
+  }
 }

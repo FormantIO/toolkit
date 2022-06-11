@@ -9,6 +9,8 @@ import {
   WebGLRenderer,
   HemisphereLight,
   Raycaster,
+  Object3D,
+  ACESFilmicToneMapping,
 } from "three";
 import styled from "styled-components";
 import { RGBELoader } from "../../../three-utils/loaders/RGBELoader";
@@ -127,16 +129,20 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const skyColor = defined(Color.fromString("#f8f9fc")).toString();
     const groundColor = defined(Color.fromString("#282f45")).toString();
 
-    const accentLight1 = new PointLight(accentColor1, 0.3, 0, 0);
+    const d = 2.8;
+    const o = new Object3D();
+    o.rotation.x = -Math.PI / 2;
+    const accentLight1 = new PointLight(accentColor1, 0.3 * d, 0, 0);
     accentLight1.position.set(1000, 1000, 1000);
-    this.scene.add(accentLight1);
+    o.add(accentLight1);
 
-    const accentLight2 = new PointLight(accentColor2, 0.7, 0, 0);
+    const accentLight2 = new PointLight(accentColor2, 0.7 * d, 0, 0);
     accentLight2.position.set(-1000, -1000, 1000);
-    this.scene.add(accentLight2);
+    o.add(accentLight2);
 
-    const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5);
-    this.scene.add(ambientLight);
+    const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5 * d);
+    o.add(ambientLight);
+    this.scene.add(o);
   }
 
   public componentDidMount() {
@@ -149,11 +155,11 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       });
       this.renderer.sortObjects = false;
       this.renderer.xr.enabled = true;
-      /* 
+
       this.renderer.physicallyCorrectLights = true;
       this.renderer.toneMapping = ACESFilmicToneMapping;
       this.renderer.shadowMap.enabled = true;
-      */
+
       element.appendChild(this.renderer.domElement);
 
       element.addEventListener("pointermove", this.onPointerMove);

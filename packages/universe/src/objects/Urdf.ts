@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import URDFLoader, { URDFRobot } from "urdf-loader";
+import URDFLoader, { URDFLink, URDFRobot } from "urdf-loader";
 import { Group, LoadingManager, Mesh, Scene } from "three";
 import { ColladaLoader } from "../../three-utils/loaders/ColladaLoader";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
@@ -176,6 +176,6 @@ export class Urdf extends Group {
     });
   }
 
-  public getLink = (name?: string) =>
+  public getLink = (name?: string): URDFLink | undefined =>
     name ? this.robot?.links[name] : undefined;
 }
