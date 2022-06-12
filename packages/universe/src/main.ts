@@ -30,6 +30,8 @@ export * from "./objects/Model3D";
 export * from "./components/viewer/Hand";
 export * from "./components/viewer/Controller";
 export * from "./components/viewer/HandheldController";
+export * from "./formantColor";
+export * from "./oculusQuest";
 
 export { defined, definedAndNotNull } from "../../common/defined";
 
