@@ -7,4 +7,8 @@ export const OculusQuest = {
   XButton: 3,
   YButton: 4,
   ThumbRestButton: 5,
+  LeftController: 0,
+  RightController: 1,
+  LeftHand: 0,
+  RightHand: 1,
 };
