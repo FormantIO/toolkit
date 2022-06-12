@@ -1,5 +1,6 @@
 import {
   IRtcConnectConfiguration,
+  IRtcStreamPayload,
   RtcClient,
   SignalingPromiseClient,
 } from "@formant/realtime-sdk";
@@ -58,7 +59,7 @@ export type RealtimeMessage = {
       streamType: string;
     };
   };
-  payload: any;
+  payload: IRtcStreamPayload;
 };
 
 export type RealtimeListener = (

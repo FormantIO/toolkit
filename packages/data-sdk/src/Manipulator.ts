@@ -38,9 +38,9 @@ export class Manipulator {
 
   onRealtimeMessage = (_peerId: string, message: RealtimeMessage) => {
     if (message.payload.jointState) {
-      this.currentListeners.forEach((listener) =>
-        listener(message.payload.jointState)
-      );
+      this.currentListeners.forEach((listener) => {
+        if (message.payload.jointState) listener(message.payload.jointState);
+      });
     }
   };
 
