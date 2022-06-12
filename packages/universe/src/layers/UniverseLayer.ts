@@ -292,8 +292,8 @@ export abstract class UniverseLayer extends Object3D {
     };
   }
 
-  public createGltf(url: string): Model3D {
-    return new Model3D(url);
+  public createGltf(url: string, onLoad?: () => void): Model3D {
+    return new Model3D(url, onLoad);
   }
 
   public createRoundedRectangle(config: {
