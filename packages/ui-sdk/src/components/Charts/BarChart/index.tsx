@@ -55,7 +55,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
         display: false,
       },
     },
-    barPercentage: .2,
+    barPercentage: .12,
     scales: {
       x: {
         grid: {
@@ -73,7 +73,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
       },
       y: {
         grid: {
-          color: "black",
+          color: "#1C1E2D",
           tickColor: "transparent",
         },
         ticks: {

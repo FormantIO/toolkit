@@ -35,7 +35,8 @@ export const DoughnutChart: FC<IChartProps> = ({
         {
           data,
           backgroundColor:colors,
-          borderColor: colors,
+          borderColor: "#2d3855",
+          borderWidth: 3,
           fill: true,
           maintainAspectRatio: false,
         },
@@ -47,7 +48,7 @@ export const DoughnutChart: FC<IChartProps> = ({
 
   const options = {
     responsive: true,
-    cutout: 140,
+    cutout: 165,
     plugins: {
       legend: {
         display: false,
