@@ -34,9 +34,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
       datasets: [
         {
           data,
-          backgroundColor: colors.map((_) => _ + "33") as string[],
-          borderColor: colors,
-          borderWidth: 2,
+          backgroundColor: colors,
           fill: true,
           maintainAspectRatio: false,
         },
@@ -57,6 +55,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
         display: false,
       },
     },
+    barPercentage: .2,
     scales: {
       x: {
         grid: {

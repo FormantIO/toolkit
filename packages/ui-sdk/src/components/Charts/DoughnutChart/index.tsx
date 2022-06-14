@@ -34,7 +34,7 @@ export const DoughnutChart: FC<IChartProps> = ({
       datasets: [
         {
           data,
-          backgroundColor: colors.map((_) => _ + "33") as string[],
+          backgroundColor:colors,
           borderColor: colors,
           fill: true,
           maintainAspectRatio: false,
@@ -47,6 +47,7 @@ export const DoughnutChart: FC<IChartProps> = ({
 
   const options = {
     responsive: true,
+    cutout: 140,
     plugins: {
       legend: {
         display: false,
