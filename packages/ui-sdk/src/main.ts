@@ -22,3 +22,4 @@ export * from "./Icon";
 export * from "./Select";
 export * from "./HelpIcon";
 export * from "./hooks";
+export * from './components/Charts'

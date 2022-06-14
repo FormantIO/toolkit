@@ -22,18 +22,17 @@ import {
   Snackbar,
   icons,
   Icon,
+  LineChart,
+  BarChart,
+  DoughnutChart,
+  PolarChart,
+  BubbleChart,
+  ScatterChart,
+  RadarChart,
 } from "../src/main";
 
-import { LineChart } from "../src/components/Charts/LineChart/LineChart";
-import { BarChart } from "../src/components/Charts/BarChart";
 import { Card } from "../src/components/Charts/LineChart/Card";
-import { PieChart } from "../src/components/Charts/PieChart";
 import { dummyData } from "../src/components/Charts/LineChart/dummyData";
-import { DoughnutChart } from "../src/components/Charts/DoughnutChart/index";
-import { PolarChart } from "../src/components/Charts/PolarChart/index";
-import { RadarChart } from "../src/components/Charts/RadarChart/index";
-import { ScatterChart } from "../src/components/Charts/ScatterChart/index";
-import { BubbleChart } from "../src/components/Charts/BubbleChart";
 function App() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
