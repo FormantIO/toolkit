@@ -78,7 +78,6 @@ class ServiceChecker:
                 continue
             services[service_name] = service.request_args()
         self._services_json = json.dumps(services)
-        print(self._services_json) 
         self._data_to_post = True
 
     def _post_json(self):
@@ -92,6 +91,10 @@ class ServiceChecker:
         except Exception:
             logger.warn("Error posting data to ros.services.json")
         self._data_to_post = False
+
+    def _update_services(self):
+        self._check_services()
+        self._post_json()
 
     @staticmethod
     def _get_running_services():
@@ -147,10 +150,7 @@ class RosService:
             return {}
 
         parsed_from_indented_text = parse_indented_string(srv_text)
-        # if self._service_name == "/random":
-        #     import pdb
-        #     pdb.set_trace()
+
         ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
-        # flat_ros = flatten_ros_data_structure(ros_formatted)
-        print(ros_formatted)
+        print(ros_formatted, end="\n-------\n") 
         return ROS_format_to_JSON_schema(self._service_name, ros_formatted) 

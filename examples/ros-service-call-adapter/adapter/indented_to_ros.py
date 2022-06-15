@@ -40,10 +40,24 @@ class IndentedJsonToRosJson:
             self._ros_format.append(self._convert_type(param))
 
     def _convert_type(self, type_obj, parent_name=""):
+        """
+        Convert a single parent child structure into a ROS formatted structure. 
+        """
+
         ros_type, param_name = type_obj["name"].lstrip(
         ).rstrip().replace("\n", "").split(" ")
         p_name = f"{parent_name}.{param_name}" if len(
             parent_name) else param_name  # f"{ros_type}::{param_name}"
+
+        special_types = {"duration", "time"}
+
+        # In the case that we have a duration or time primitive,
+        # we are going to adjust to ask for the secs and nsecs required for each type.
+        if ros_type in special_types:
+            type_obj['children'] = [
+                {'name': 'uint32 secs', 'children':[]},
+                {'name': 'uint32 nsecs', 'children':[]}
+            ]
 
         if not len(type_obj["children"]):
             return {"name": p_name,

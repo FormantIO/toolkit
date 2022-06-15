@@ -1,60 +1,91 @@
 {
-    "seq": {
-        "name": "seq",
-        "type": "int32",
-        "ros_type": "int32"
-    },
-    "twist": {
-        "name": "twist",
-        "type": {
-            "twist.linear": {
-                "name": "twist.linear",
-                "type": {
-                    "twist.linear.x": {
-                        "name": "twist.linear.x",
-                        "type": "float64",
-                        "ros_type": "float64"
-                    },
-                    "twist.linear.y": {
-                        "name": "twist.linear.y",
-                        "type": "float64",
-                        "ros_type": "float64"
-                    },
-                    "twist.linear.z": {
-                        "name": "twist.linear.z",
-                        "type": "float64",
-                        "ros_type": "float64"
+    "title": "/random",
+    "type": "object",
+    "properties": {
+        "header": {
+            "type": "object",
+            "properties": {
+                "header.seq": {
+                    "type": "integer",
+                    "title": "header.seq"
+                },
+                "header.stamp": {
+                    "type": "object",
+                    "properties": {
+                        "header.stamp.secs": {
+                            "type": "integer",
+                            "title": "header.stamp.secs"
+                        },
+                        "header.stamp.nsecs": {
+                            "type": "integer",
+                            "title": "header.stamp.nsecs"
+                        }
                     }
                 },
-                "ros_type": "geometry_msgs/Vector3"
-            },
-            "twist.angular": {
-                "name": "twist.angular",
-                "type": {
-                    "twist.angular.x": {
-                        "name": "twist.angular.x",
-                        "type": "float64",
-                        "ros_type": "float64"
-                    },
-                    "twist.angular.y": {
-                        "name": "twist.angular.y",
-                        "type": "float64",
-                        "ros_type": "float64"
-                    },
-                    "twist.angular.z": {
-                        "name": "twist.angular.z",
-                        "type": "float64",
-                        "ros_type": "float64"
-                    }
-                },
-                "ros_type": "geometry_msgs/Vector3"
+                "header.frame_id": {
+                    "type": "string",
+                    "title": "header.frame_id"
+                }
             }
         },
-        "ros_type": "geometry_msgs/Twist"
-    },
-    "my_int_array": {
-        "name": "my_int_array",
-        "type": "int32[]",
-        "ros_type": "int32[]"
+        "seq": {
+            "type": "object",
+            "properties": {
+                "seq.secs": {
+                    "type": "integer",
+                    "title": "seq.secs"
+                },
+                "seq.nsecs": {
+                    "type": "integer",
+                    "title": "seq.nsecs"
+                }
+            }
+        },
+        "twist": {
+            "type": "object",
+            "properties": {
+                "twist.linear": {
+                    "type": "object",
+                    "properties": {
+                        "twist.linear.x": {
+                            "type": "number",
+                            "title": "twist.linear.x"
+                        },
+                        "twist.linear.y": {
+                            "type": "number",
+                            "title": "twist.linear.y"
+                        },
+                        "twist.linear.z": {
+                            "type": "number",
+                            "title": "twist.linear.z"
+                        }
+                    }
+                },
+                "twist.angular": {
+                    "type": "object",
+                    "properties": {
+                        "twist.angular.x": {
+                            "type": "number",
+                            "title": "twist.angular.x"
+                        },
+                        "twist.angular.y": {
+                            "type": "number",
+                            "title": "twist.angular.y"
+                        },
+                        "twist.angular.z": {
+                            "type": "number",
+                            "title": "twist.angular.z"
+                        }
+                    }
+                }
+            }
+        },
+        "my_int_array": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            },
+            "title": "my_int_array"
+        }
     }
 }

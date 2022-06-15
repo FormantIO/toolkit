@@ -132,6 +132,6 @@ def ROS_type_to_python(ros_type: str):
         "float32":float,
         "float64":float,
         "string":str,
-        "time":str,
-        "duration":str
+        "time":rospy.Time,
+        "duration":rospy.Duration
     }[ros_type]

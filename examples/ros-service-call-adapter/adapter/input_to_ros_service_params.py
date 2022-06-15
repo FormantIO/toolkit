@@ -7,8 +7,6 @@ import json
 import rostopic
 import rospy
 
-# print(utils.get_ROS_format_keyed("random"))
-
 def parse(input: str):
     """
     Parse the service call adapter input
@@ -71,10 +69,3 @@ def _get_param_obj(param_value, param_def, parent_name):
     param_type_obj = ros_type_obj(**new_param_values)
     
     return param_type_obj
-  
-# with open('sample.json', 'r') as f: 
-#     test = json.load(f)
-
-# test = json.dumps(test) 
-
-# print(parse(test)) 
