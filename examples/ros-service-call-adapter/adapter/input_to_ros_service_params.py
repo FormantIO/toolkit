@@ -5,13 +5,14 @@ from tracemalloc import get_object_traceback
 import utils
 import json
 import rostopic
+import rospy
 
 # print(utils.get_ROS_format_keyed("random"))
 
 def parse(input: str):
     """
     Parse the service call adapter input
-    into a kwargs dictionary of parameters
+    into an args dictionary of parameters
     and their respective values
     """
 
@@ -19,11 +20,12 @@ def parse(input: str):
     input = json.loads(input)
     
     # get the name of the service and its associated parameters
-    service_name = list(input.keys())[0]
-    service_params = input[service_name]
+    service_name = rospy.resolve_name(list(input.keys())[0])
+    service_params = input[list(input.keys())[0]]
 
     # get the keyed format of the ros service request message
     service_param_definitions = utils.get_ROS_format_keyed(service_name)
+    ordered_params = utils.get_ROS_format(service_name) 
 
     # Go through all the passed parameters, evaluating then, and 
     # return the kwargs to the caller
@@ -31,7 +33,15 @@ def parse(input: str):
     for param in service_params:
         param_objects[param] = _get_param_obj(service_params[param], service_param_definitions[param], param) 
 
-    return param_objects
+    # The final step is to create an ordering for the parameters
+    # so that the service can be called
+    param_objects_ordered = []
+  
+    for param in ordered_params:
+        name = param['name']
+        param_objects_ordered.append(param_objects[name])
+
+    return (service_name, param_objects_ordered)
 
 def _get_param_obj(param_value, param_def, parent_name):
     """
@@ -62,12 +72,9 @@ def _get_param_obj(param_value, param_def, parent_name):
     
     return param_type_obj
   
+# with open('sample.json', 'r') as f: 
+#     test = json.load(f)
 
+# test = json.dumps(test) 
 
-
-with open('sample.json', 'r') as f: 
-    test = json.load(f)
-
-test = json.dumps(test) 
-
-print(parse(test)) 
+# print(parse(test)) 

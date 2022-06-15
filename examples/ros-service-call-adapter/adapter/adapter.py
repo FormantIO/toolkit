@@ -6,7 +6,7 @@ import rospy
 from formant.sdk.agent.v1.client import Client as FormantClient
 
 from config import Config
-from input_parser import parse
+from input_to_ros_service_params import parse
 from logger import getLogger
 from services import ServiceChecker
 from utils import service_call
