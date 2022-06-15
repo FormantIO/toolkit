@@ -64,6 +64,8 @@ class Adapter:
         logger.info(
             f"New command received. Parsing and executing: {data.text}")
 
+        print(f"New command received. Parsing and executing: {data.text}")
+
         try:
             datum = parse(data.text)
         except Exception:

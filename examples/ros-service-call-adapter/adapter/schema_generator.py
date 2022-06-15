@@ -1,3 +1,4 @@
+import utils
 
 def ROS_to_json_schema_type_conversion(intype: str):
     """Convert a ROS type to it's corresponding python type."""
@@ -27,10 +28,8 @@ def ROS_to_json_schema_type_conversion(intype: str):
     return output
 
 
-def ROS_type_to_JSON_schema(ros_type, add_ros_type_info=True):
+def ROS_type_to_JSON_schema(ros_type):
     """Convert a singular ros type to a JSON schema"""
-
-    special_types = {"time", "duration"}
 
     # and ros_type['type'] not in special_types:
     if not isinstance(ros_type["type"], list):
@@ -39,15 +38,11 @@ def ROS_type_to_JSON_schema(ros_type, add_ros_type_info=True):
 
         return output
 
-    # We have to have a special case for when we are dealing with a ros time or ros duration.
-    # if ros_type['type'] in special_types:
-    #   pass
-
     # If we get here, it means that the type has sub types / child types
-
     output = {}
     output["type"] = "object"
     output["properties"] = {}
+    output["title"] = ros_type["name"]
     for param in ros_type["type"]:
         output["properties"][param["name"]] = ROS_type_to_JSON_schema(param)
 
