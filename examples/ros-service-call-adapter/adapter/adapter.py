@@ -68,13 +68,13 @@ class Adapter:
 
         try:
             datum = parse(data.text)
-        except Exception:
-            logger.warn(f"Failed parsing {data.text}. Dropping command.")
+        except Exception as e:
+            logger.warn(f"Failed parsing {data.text}. Dropping command. Reason: {e}")
             return
 
         service_name = datum[0]
         service_args = datum[1]
-
+ 
         self._handle_service_call(service_name, service_args)
 
     def _handle_service_call(self, service_name: str, service_args: List[str]):

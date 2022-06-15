@@ -1,10 +1,12 @@
 
 import json
+import logging
 
 import rospy
 
 import utils
 
+logger = logging.getLogger()
 
 def parse(input: str):
     """
@@ -19,6 +21,10 @@ def parse(input: str):
     # get the name of the service and its associated parameters
     service_name = rospy.resolve_name(list(input.keys())[0])
     service_params = input[list(input.keys())[0]]
+
+    if not utils.is_valid_ros_service(service_name):
+        logger.warn("Invalid service")
+        raise Exception("Invalid service name")
 
     # get the keyed format of the ros service request message
     service_param_definitions = utils.get_ROS_format_keyed(service_name)

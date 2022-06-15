@@ -36,7 +36,7 @@ def service_call(service_name, *args):
             logger.info(f"Failed to execute service call. {e}")
             result = None
     except rospy.ServiceException as e:
-        logger.info("Service Call Failed.")
+        logger.info(f"Service Call Failed. Reason: {e}")
 
     return result
 
