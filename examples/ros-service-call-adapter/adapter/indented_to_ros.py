@@ -55,8 +55,8 @@ class IndentedJsonToRosJson:
         # we are going to adjust to ask for the secs and nsecs required for each type.
         if ros_type in special_types:
             type_obj['children'] = [
-                {'name': 'uint32 secs', 'children':[]},
-                {'name': 'uint32 nsecs', 'children':[]}
+                {'name': 'uint32 secs', 'children': []},
+                {'name': 'uint32 nsecs', 'children': []}
             ]
 
         if not len(type_obj["children"]):

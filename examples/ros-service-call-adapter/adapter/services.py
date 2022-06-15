@@ -1,22 +1,18 @@
 
 import json
+import logging
 import time
-from matplotlib.cbook import flatten
-
-from yaml import parse
 
 import rosmsg
 import rosservice
 from formant.sdk.agent.v1.client import Client as FormantClient
 
-from logger import getLogger
+import utils
 from indented_parser import parse_indented_string
-from indented_to_ros import parse_indented_as_ros, flatten_ros_data_structure
+from indented_to_ros import parse_indented_as_ros
 from schema_generator import ROS_format_to_JSON_schema
 
-import utils
-
-logger = getLogger
+logger = logging.getLogger()
 
 
 class ServiceChecker:
@@ -41,7 +37,7 @@ class ServiceChecker:
         self._started = True
 
         self._fclient.register_command_request_callback(
-            self._check_services, ["ros.services.update-services"])
+            self._update_services, ["ros.services.update-services"])
         self._check_services()
         self._post_json()
 
@@ -92,7 +88,7 @@ class ServiceChecker:
             logger.warn("Error posting data to ros.services.json")
         self._data_to_post = False
 
-    def _update_services(self):
+    def _update_services(self, *_):
         self._check_services()
         self._post_json()
 
@@ -152,5 +148,4 @@ class RosService:
         parsed_from_indented_text = parse_indented_string(srv_text)
 
         ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
-        print(ros_formatted, end="\n-------\n") 
-        return ROS_format_to_JSON_schema(self._service_name, ros_formatted) 
+        return ROS_format_to_JSON_schema(self._service_name, ros_formatted)

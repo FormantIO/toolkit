@@ -1,10 +1,11 @@
 
 from io import StringIO
-from json import loads
+
 
 def get_indentation(line):
     """Return the indentation level of a line"""
     return len(line) - len(line.lstrip())
+
 
 class IndentedStream:
     """
@@ -12,9 +13,9 @@ class IndentedStream:
     indentation level and the current line."""
 
     def __init__(self, string):
-        self._string = string 
-        self._stream = StringIO(string) 
-        self._s_iter = iter(self._stream) 
+        self._string = string
+        self._stream = StringIO(string)
+        self._s_iter = iter(self._stream)
 
         self._next_line = None
         self._next_indentation = None
@@ -40,34 +41,36 @@ class IndentedStream:
             self._next_line = None
             self._next_indentation = None
 
+
 class IndentStreamParser:
 
     def __init__(self, input):
         self._input = input
-        self._stream = IndentedStream(input) 
+        self._stream = IndentedStream(input)
 
-        self._base_indentation = self._stream.peek_indentation() 
-    
+        self._base_indentation = self._stream.peek_indentation()
+
     def parse(self):
         objs = []
-        
+
         while(self._stream.peek_indentation() != None):
             objs.append(self._parse())
-        
+
         return objs
 
     def _parse(self):
         current_indentation = self._stream.peek_indentation()
         key = self._stream.peek_line()
-        children = [] 
+        children = []
 
         self._stream.read()
 
         while(self._stream.peek_indentation() != None and
                 self._stream.peek_indentation() > current_indentation):
-            children.append(self._parse()) 
-        
-        return {"name":key, "children":children} 
+            children.append(self._parse())
+
+        return {"name": key, "children": children}
+
 
 def parse_indented_string(string):
     """
@@ -88,8 +91,8 @@ def parse_indented_string(string):
                 ]
             }
         ]
-        
+
     """
-    parser = IndentStreamParser(string) 
+    parser = IndentStreamParser(string)
     parsed = parser.parse()
     return parsed

@@ -1,17 +1,16 @@
 
-from attr import s
+import logging
+
 import rosgraph
+import roslib
+import rosmsg
 import rospy
 import rosservice
-import rostopic
-import rosmsg
-import roslib
+
 from indented_parser import parse_indented_string
 from indented_to_ros import parse_indented_as_ros
 
-from logger import getLogger
-
-logger = getLogger()
+logger = logging.getLogger()
 
 
 def current_services():
@@ -65,11 +64,13 @@ def is_valid_ros_service(service_name):
 def get_service_type_obj(service_name: str):
     return rosservice.get_service_class_by_name(service_name)
 
+
 def get_ROS_service_type_str(service_name: str):
     try:
         return rosservice.get_service_type(service_name)
     except rosservice.ROSServiceException:
         return None
+
 
 def get_ROS_format(service: str):
     """"""
@@ -83,29 +84,30 @@ def get_ROS_format(service: str):
 
     parsed_from_indented_text = parse_indented_string(srv_text)
     ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
-    
+
     return ros_formatted
 
 
 def get_ROS_format_keyed(service: str):
-    service = rospy.resolve_name(service) 
+    service = rospy.resolve_name(service)
     ros_formatted_list = get_ROS_format(service)
 
     output = {}
 
     for param in ros_formatted_list:
-        output[param['name']] = _gen_key_output(param) 
-            
+        output[param['name']] = _gen_key_output(param)
+
     return output
+
 
 def _gen_key_output(type_dict):
 
     if not isinstance(type_dict['type'], list):
         return type_dict
-    
+
     if type_dict['type']:
         new_output_type = {}
-        
+
         for param in type_dict['type']:
             new_output_type[param['name']] = _gen_key_output(param)
 
@@ -115,23 +117,25 @@ def _gen_key_output(type_dict):
 
     return {}
 
+
 def get_message_class(message_class_str: str):
     return roslib.message.get_message_class(message_class_str)
 
+
 def ROS_type_to_python(ros_type: str):
     return {
-        "bool":bool,
-        "int8":int,
-        "uint8":int,
-        "int16":int,
-        "uint16":int,
-        "int32":int,
-        "uint32":int,
-        "int64":int,
-        "uint64":int,
-        "float32":float,
-        "float64":float,
-        "string":str,
-        "time":rospy.Time,
-        "duration":rospy.Duration
+        "bool": bool,
+        "int8": int,
+        "uint8": int,
+        "int16": int,
+        "uint16": int,
+        "int32": int,
+        "uint32": int,
+        "int64": int,
+        "uint64": int,
+        "float32": float,
+        "float64": float,
+        "string": str,
+        "time": rospy.Time,
+        "duration": rospy.Duration
     }[ros_type]
