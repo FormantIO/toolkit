@@ -1,0 +1,60 @@
+{
+    "seq": {
+        "name": "seq",
+        "type": "int32",
+        "ros_type": "int32"
+    },
+    "twist": {
+        "name": "twist",
+        "type": {
+            "twist.linear": {
+                "name": "twist.linear",
+                "type": {
+                    "twist.linear.x": {
+                        "name": "twist.linear.x",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    },
+                    "twist.linear.y": {
+                        "name": "twist.linear.y",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    },
+                    "twist.linear.z": {
+                        "name": "twist.linear.z",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    }
+                },
+                "ros_type": "geometry_msgs/Vector3"
+            },
+            "twist.angular": {
+                "name": "twist.angular",
+                "type": {
+                    "twist.angular.x": {
+                        "name": "twist.angular.x",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    },
+                    "twist.angular.y": {
+                        "name": "twist.angular.y",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    },
+                    "twist.angular.z": {
+                        "name": "twist.angular.z",
+                        "type": "float64",
+                        "ros_type": "float64"
+                    }
+                },
+                "ros_type": "geometry_msgs/Vector3"
+            }
+        },
+        "ros_type": "geometry_msgs/Twist"
+    },
+    "my_int_array": {
+        "name": "my_int_array",
+        "type": "int32[]",
+        "ros_type": "int32[]"
+    }
+}

@@ -91,4 +91,5 @@ def parse_indented_string(string):
         
     """
     parser = IndentStreamParser(string) 
-    return parser.parse()
+    parsed = parser.parse()
+    return parsed

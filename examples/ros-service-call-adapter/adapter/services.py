@@ -14,6 +14,8 @@ from indented_parser import parse_indented_string
 from indented_to_ros import parse_indented_as_ros, flatten_ros_data_structure
 from schema_generator import ROS_format_to_JSON_schema
 
+import utils
+
 logger = getLogger
 
 
@@ -76,6 +78,7 @@ class ServiceChecker:
                 continue
             services[service_name] = service.request_args()
         self._services_json = json.dumps(services)
+        print(self._services_json) 
         self._data_to_post = True
 
     def _post_json(self):
@@ -109,6 +112,10 @@ class RosService:
         self._is_valid = True
         self._service_name = service_name
 
+        if not utils.is_valid_ros_service(service_name):
+            self._is_valid = False
+            return
+
         try:
             self._service_type_str = rosservice.get_service_type(service_name)
 
@@ -132,8 +139,18 @@ class RosService:
     def request_args(self):
         """Request the args for the service and the associated types."""
 
-        srv_text = rosmsg.get_srv_text(self._service_type_str)
+        try:
+            srv_text = rosmsg.get_srv_text(self._service_type_str)
+        except rosmsg.ROSMsgException:
+            logger.warn(f"Failure getting srv text for {self._service_name}")
+            self._is_valid = False
+            return {}
+
         parsed_from_indented_text = parse_indented_string(srv_text)
+        # if self._service_name == "/random":
+        #     import pdb
+        #     pdb.set_trace()
         ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
         # flat_ros = flatten_ros_data_structure(ros_formatted)
+        print(ros_formatted)
         return ROS_format_to_JSON_schema(self._service_name, ros_formatted) 

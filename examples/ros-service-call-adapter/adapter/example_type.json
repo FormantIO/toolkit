@@ -60,23 +60,6 @@
         "title": "/random",
         "type": "object",
         "properties": {
-            "header": {
-                "type": "object",
-                "properties": {
-                    "header.seq": {
-                        "type": "integer",
-                        "title": "header.seq"
-                    },
-                    "header.stamp": {
-                        "type": "string",
-                        "title": "header.stamp"
-                    },
-                    "header.frame_id": {
-                        "type": "string",
-                        "title": "header.frame_id"
-                    }
-                }
-            },
             "seq": {
                 "type": "integer",
                 "title": "seq"

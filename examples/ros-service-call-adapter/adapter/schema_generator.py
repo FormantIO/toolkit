@@ -28,14 +28,17 @@ def ROS_to_json_schema_type_conversion(intype: str):
 
     return output
 
-def ROS_type_to_JSON_schema(ros_type):
+def ROS_type_to_JSON_schema(ros_type, add_ros_type_info=True):
+    """Convert a singular ros type to a JSON schema"""
 
     if not isinstance(ros_type["type"], list):
         output = ROS_to_json_schema_type_conversion(ros_type["type"])
         output["title"] = ros_type["name"]
+
         return output
 
     # If we get here, it means that the type has sub types / child types
+
     output = {}
     output["type"] = "object"
     output["properties"] = {}
@@ -47,7 +50,8 @@ def ROS_type_to_JSON_schema(ros_type):
 
 
 def ROS_format_to_JSON_schema(service_name, ros_format):
-    
+    """Convert a JSON generated for ROS to a JSON schema document."""
+
     schema = {}
 
     schema["title"] = service_name
