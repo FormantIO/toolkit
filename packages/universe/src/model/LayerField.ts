@@ -1,21 +1,21 @@
 export type LayerFieldLocation = "create" | "edit";
-export interface TextLayerFieldValue {
+
+export type LayerFieldType = string | number | boolean;
+
+export type LayerFieldValue = {
   type: string;
   location: string[];
-  value?: string;
-}
+  value?: LayerFieldType;
+};
 
-export interface TextLayerField extends TextLayerFieldValue {
+export interface LayerField extends LayerFieldValue {
   name: string;
   description: string;
   placeholder: string;
 }
 
-export type LayerField = TextLayerField;
-export type LayerFieldValue = TextLayerFieldValue;
-
 export type LayerFields = { [key in string]: LayerField };
-export type LayerFieldValues = { [key: string]: TextLayerFieldValue };
+export type LayerFieldValues = { [key: string]: LayerFieldValue };
 
 export function extractLayerFieldValues(
   layerFields: LayerFields
@@ -36,6 +36,9 @@ export function injectLayerFieldValues(
   layerFieldValues: LayerFieldValues
 ): void {
   Object.entries(layerFieldValues).forEach(([key, value]) => {
+    if (!layerFields[key]) {
+      throw new Error(`Invalid layer field key: ${key}`);
+    }
     layerFields[key].value = value.value;
   });
 }

@@ -1,4 +1,10 @@
-import { BufferAttribute, BufferGeometry, Points, PointsMaterial } from "three";
+import {
+  BufferAttribute,
+  BufferGeometry,
+  Points,
+  PointsMaterial,
+  TextureLoader,
+} from "three";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { IPcd } from "../objects/pcd";
@@ -22,7 +28,23 @@ export class PointCloudLayer extends UniverseLayer {
       name: "Point Size",
       description: "Size of points",
       placeholder: "0.01",
-      value: "0.01",
+      value: 0.01,
+      type: "number",
+      location: ["create"],
+    },
+    pointColor: {
+      name: "Point Color",
+      description: "Color of points",
+      placeholder: "",
+      value: 0xffffff,
+      type: "number",
+      location: ["create"],
+    },
+    pointTexture: {
+      name: "Point Texture",
+      description: "Texture of points",
+      placeholder: "",
+      value: "",
       type: "text",
       location: ["create"],
     },
@@ -56,12 +78,6 @@ export class PointCloudLayer extends UniverseLayer {
   }
 
   init() {
-    defined(this.universeData).subscribeToPointCloud(
-      defined(this.getLayerContext()).deviceId,
-      defined(this.layerDataSources)[0],
-      (d) => this.onData(d)
-    );
-
     const geom = new BufferGeometry();
     const MAX_POINTS = 350000;
     geom.setAttribute(
@@ -69,26 +85,30 @@ export class PointCloudLayer extends UniverseLayer {
       new BufferAttribute(new Float32Array(MAX_POINTS * 3), 3)
     );
     geom.setDrawRange(0, 0);
-    let size = 0.01;
-    if (
-      this.layerFields &&
-      this.layerFields.pointSize &&
-      this.layerFields.pointSize.value
-    ) {
-      size = parseFloat(this.layerFields.pointSize.value);
-    }
+    const texture = this.getFieldText("pointTexture");
+    const color = this.getFieldNumber("pointColor") || 0xbac4e2;
+    const size = this.getFieldNumber("pointSize") || 0.1;
     this.points = new Points(
       geom,
       new PointsMaterial({
-        color: 0xbac4e2,
+        color,
         size,
         vertexColors: false,
+        map: texture ? new TextureLoader().load(texture) : undefined,
+        transparent: true,
+        depthWrite: false,
       })
     );
     this.points.frustumCulled = false;
     const ninetyDegrees = Math.PI / 2;
     this.points.rotation.set(-ninetyDegrees, 0, 0);
     this.add(this.points);
+
+    defined(this.universeData).subscribeToPointCloud(
+      defined(this.getLayerContext()).deviceId,
+      defined(this.layerDataSources)[0],
+      (d) => this.onData(d)
+    );
   }
 
   onData = (pcd: IPcd) => {

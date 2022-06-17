@@ -1,3 +1,4 @@
+import { defined } from "../main";
 import { Label } from "../objects/Label";
 import { UniverseLayer } from "./UniverseLayer";
 
@@ -11,7 +12,7 @@ export class LabelLayer extends UniverseLayer {
   static usesData = false;
 
   static fields = {
-    label_text: {
+    labelText: {
       name: "Label Text",
       description: "The text you'd like to show in the label",
       placeholder: "hello world",
@@ -24,14 +25,7 @@ export class LabelLayer extends UniverseLayer {
   label: Label | undefined;
 
   init() {
-    const labelTextField = (this.layerFields || {}).label_text;
-    if (
-      labelTextField &&
-      labelTextField.type === "text" &&
-      labelTextField.value
-    ) {
-      this.updateLabel(labelTextField.value);
-    }
+    this.updateLabel(defined(this.getFieldText("labelText")));
   }
 
   updateLabel(text: string): void {

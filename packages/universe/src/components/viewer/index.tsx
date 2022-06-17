@@ -20,7 +20,7 @@ import { VRButton } from "../../../three-utils/webxr/VRButton";
 import { defined, definedAndNotNull } from "../../../../common/defined";
 import { LayerRegistry } from "../../layers/LayerRegistry";
 import { TransformLayer } from "../../layers/TransformLayer";
-import { injectLayerFieldValues } from "../../model/LayerField";
+import { injectLayerFieldValues, LayerFieldType } from "../../model/LayerField";
 import {
   findSceneGraphElement,
   getSceneGraphElementParent,
@@ -709,7 +709,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     sceneGraph: SceneGraph,
     path: TreePath,
     fieldId: string,
-    value: string
+    value: LayerFieldType
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el.id));
