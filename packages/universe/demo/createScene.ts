@@ -14,6 +14,43 @@ export function createScene() {
       position: { type: "manual", x: 0, y: 0, z: 0 },
       fieldValues: {},
       data: {},
+      dataSources: [
+        {
+          id: uuid.v4(),
+          sourceType: "realtime",
+          rosTopicName: "/joint_states",
+          rosTopicType: "sensor_msgs/JointState",
+        },
+      ],
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
+      type: "point_cloud",
+      name: "Point Cloud",
+      deviceContext: "abc",
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 1, z: 0 },
+      fieldValues: {
+        pointColor: {
+          type: "number",
+          value: 0xffffff,
+          location: [],
+        },
+        pointSize: {
+          type: "number",
+          value: 0.0375,
+          location: [],
+        },
+        pointTexture: {
+          type: "text",
+          value:
+            "https://formant-3d-models.s3.us-west-2.amazonaws.com/point.png",
+          location: [],
+        },
+      },
+      data: {},
     },
 
     {
@@ -27,9 +64,9 @@ export function createScene() {
       position: { type: "manual", x: 0, y: 0, z: 0 },
       fieldValues: {
         flatAxes: {
-          type: "text",
+          type: "boolean",
           location: [],
-          value: "true",
+          value: true,
         },
       },
       data: {},

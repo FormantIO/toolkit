@@ -1,3 +1,4 @@
+import { defined } from "../main";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class ImageLayer extends UniverseLayer {
@@ -21,9 +22,6 @@ export class ImageLayer extends UniverseLayer {
   };
 
   init() {
-    const urlField = (this.layerFields || {}).url;
-    if (urlField && urlField.type === "text" && urlField.value) {
-      this.add(this.createImage(urlField.value));
-    }
+    this.add(this.createImage(defined(this.getFieldText("url"))));
   }
 }

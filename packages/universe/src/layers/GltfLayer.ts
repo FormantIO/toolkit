@@ -1,3 +1,4 @@
+import { defined } from "../main";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class GltfLayer extends UniverseLayer {
@@ -21,9 +22,6 @@ export class GltfLayer extends UniverseLayer {
   };
 
   init() {
-    const urlField = (this.layerFields || {}).url;
-    if (urlField && urlField.type === "text" && urlField.value) {
-      this.add(this.createGltf(urlField.value));
-    }
+    this.add(this.createGltf(defined(this.getFieldText("url"))));
   }
 }

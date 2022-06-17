@@ -246,6 +246,27 @@ export class SimulatedUniverseData implements IUniverseData {
     _source: UniverseDataSource,
     _callback: (data: IPcd) => void
   ): () => void {
+    const points: number[] = [];
+    for (let i = 0; i < 100; i++) {
+      points.push(Math.random() - 0.5);
+      points.push(Math.random() - 0.5);
+      points.push(Math.random() - 0.5);
+    }
+    const pcd: IPcd = {
+      header: {
+        version: "1",
+        fields: [],
+        size: [],
+        type: [],
+        count: [],
+        height: 0,
+        width: 0,
+        points: 0,
+        data: "ascii",
+      },
+      positions: new Float32Array(points),
+    };
+    _callback(pcd);
     return () => {};
   }
 

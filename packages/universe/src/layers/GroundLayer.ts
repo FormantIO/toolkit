@@ -17,16 +17,14 @@ export class GroundLayer extends UniverseLayer {
       name: "Show Flat Axes",
       description: "Axes should be flat",
       placeholder: "false",
-      value: "false",
-      type: "text",
+      value: false,
+      type: "boolean",
       location: ["create"],
     },
   };
 
   init() {
-    const { flatAxes } = this.layerFields || {};
-    const flat =
-      flatAxes && flatAxes.type === "text" && flatAxes.value === "true";
+    const flat = this.getFieldBoolean("flatAxes") || false;
 
     this.add(new GroundPlane());
     this.add(new Axes(flat));
