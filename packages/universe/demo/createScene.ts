@@ -40,7 +40,7 @@ export function createScene() {
         },
         pointSize: {
           type: "number",
-          value: 0.075,
+          value: 0.0375,
           location: [],
         },
         pointTexture: {

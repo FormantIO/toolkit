@@ -48,6 +48,14 @@ export class PointCloudLayer extends UniverseLayer {
       type: "text",
       location: ["create"],
     },
+    pointAttenuate: {
+      name: "Point Attenuate",
+      description: "Attenuate point size",
+      placeholder: "",
+      value: false,
+      type: "boolean",
+      location: ["create"],
+    },
   };
 
   static async getLayerSuggestions(
@@ -88,6 +96,7 @@ export class PointCloudLayer extends UniverseLayer {
     const texture = this.getFieldText("pointTexture");
     const color = this.getFieldNumber("pointColor") || 0xbac4e2;
     const size = this.getFieldNumber("pointSize") || 0.1;
+    const attenuate = this.getFieldBoolean("pointAttenuate") || false;
     this.points = new Points(
       geom,
       new PointsMaterial({
@@ -97,6 +106,7 @@ export class PointCloudLayer extends UniverseLayer {
         map: texture ? new TextureLoader().load(texture) : undefined,
         transparent: true,
         depthWrite: false,
+        sizeAttenuation: attenuate,
       })
     );
     this.points.frustumCulled = false;
