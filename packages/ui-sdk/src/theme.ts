@@ -206,6 +206,13 @@ function createComponents(theme: Theme) {
               color: theme.palette.secondary.main,
             },
           },
+          outlined: {
+            borderRadius: 4,
+            padding: "0.125rem 0.375rem",
+            "&.Mui-focused":{
+              backgroundColor: "#2d3855",
+            }
+          },
         },
       },
       MuiFilledInput: {
@@ -230,11 +237,34 @@ function createComponents(theme: Theme) {
       },
       MuiOutlinedInput: {
         styleOverrides: {
+          root: {
+            backgroundColor: theme.palette.primary.dark,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            borderBottom: `1px dotted ${theme.palette.primary.light}`,
+
+            "&.Mui-focused": {
+              border: `1px solid ${theme.palette.secondary.main}`,
+              backgroundColor: theme.palette.common.black,
+            },
+          },
+          notchedOutline: {
+            border: "transparent",
+          },
+
           input: {
             "&:-webkit-autofill": {
               "-webkit-box-shadow": `0 0 0 100px ${theme.palette.primary.dark} inset`,
               "-webkit-text-fill-color": theme.palette.primary.light,
             },
+          },
+        },
+      },
+
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            color: "red",
           },
         },
       },
@@ -281,6 +311,7 @@ function createComponents(theme: Theme) {
               color: theme.palette.primary.main,
             },
           },
+
           sizeSmall: {
             height: "1.25rem",
             fontWeight: 500,

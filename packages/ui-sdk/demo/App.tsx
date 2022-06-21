@@ -29,6 +29,7 @@ import {
   BubbleChart,
   ScatterChart,
   RadarChart,
+  InputBase,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -239,9 +240,11 @@ function App() {
               <TextField
                 type="username"
                 id="outlined-basic"
-                label="Outlined"
+                label="Filled"
                 variant="filled"
               />
+              <TextField type="username" label="Outlined" variant="outlined" />
+              <InputBase />
             </Grid>
           </Box>
           <Typography variant="h2" sx={{ textDecoration: "underline" }}>

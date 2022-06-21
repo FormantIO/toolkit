@@ -16,6 +16,7 @@ export {
   Switch,
   Link,
   Snackbar,
+  InputBase
 } from "@mui/material";
 export { Measure } from "./components/Measure";
 export * from "./Icon";
