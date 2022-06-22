@@ -209,7 +209,7 @@ export class VideoLayer extends UniverseLayer {
             map: texture,
             side: BackSide,
           });
-          const size = isFullScreen ? 100000 : 0.3;
+          const size = isFullScreen ? 1000 : 0.3;
           const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
           if (shape === "sphere_rotated") {
