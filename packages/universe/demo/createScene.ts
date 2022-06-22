@@ -52,7 +52,6 @@ export function createScene() {
       },
       data: {},
     },
-
     {
       id: uuid.v4(),
       editing: false,
@@ -84,6 +83,32 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {},
           data: {},
+        },
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "video",
+          name: "Video",
+          deviceContext: "Abc",
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 0 },
+          fieldValues: {
+            shape: {
+              type: "string",
+              location: [],
+              value: "sphere_fullscreen",
+            },
+          },
+          data: {},
+          dataSources: [
+            {
+              id: uuid.v4(),
+              sourceType: "realtime",
+              rosTopicName: "/joint_states",
+              rosTopicType: "sensor_msgs/JointState",
+            },
+          ],
         },
       ],
       id: uuid.v4(),

@@ -27,7 +27,7 @@ export class VideoLayer extends UniverseLayer {
   static usesData = true;
 
   static fields = {
-    videoShape: {
+    shape: {
       name: "Shape",
       description: "The shape you'd like the video to be",
       placeholder: "sphere",
@@ -91,8 +91,7 @@ export class VideoLayer extends UniverseLayer {
   }
 
   onData = (frame: HTMLCanvasElement) => {
-    const shapeField = (this.layerFields || {}).videoShape;
-    const shape = shapeField.value;
+    const shape = this.getFieldText("shape");
     if (shape === "stereo-side-by-side") {
       if (!this.group) {
         const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
@@ -197,15 +196,29 @@ export class VideoLayer extends UniverseLayer {
         this.texture = texture;
 
         const ninetyDegrees = Math.PI / 2;
-        if (shape === "sphere" || shape === "sphere_rotated") {
+        const isSphere =
+          shape === "sphere" ||
+          shape === "sphere_rotated" ||
+          shape === "sphere_fullscreen" ||
+          shape === "sphere_rotated_fullscreen";
+        if (isSphere) {
+          const isFullScreen =
+            shape === "sphere_fullscreen" ||
+            shape === "sphere_rotated_fullscreen";
           const material = new MeshBasicMaterial({
             map: texture,
             side: BackSide,
           });
-          const geometry = new SphereGeometry(0.3);
+          const size = isFullScreen ? 100000 : 0.3;
+          const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
           if (shape === "sphere_rotated") {
             this.mesh.rotation.set(ninetyDegrees, 0, ninetyDegrees);
+          }
+          if (isFullScreen) {
+            material.depthTest = false;
+            material.depthWrite = false;
+            material.transparent = true;
           }
         } else {
           const material = new MeshBasicMaterial({
@@ -215,7 +228,7 @@ export class VideoLayer extends UniverseLayer {
           this.mesh = new Mesh(geometry, material);
         }
         this.add(this.mesh);
-        if (shape !== "sphere") {
+        if (!isSphere) {
           this.mesh.scale.set(1, canvas.height / canvas.width, 0);
         }
         (this.mesh.material as any).map.needsUpdate = true;

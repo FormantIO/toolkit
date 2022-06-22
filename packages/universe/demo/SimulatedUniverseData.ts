@@ -135,7 +135,8 @@ export class SimulatedUniverseData implements IUniverseData {
       },
       false
     );
-    image.src = "https://i.imgur.com/hE2fKBw.jpeg";
+    image.src =
+      "https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg";
     return () => {};
   }
   subscribeToJson<T>(

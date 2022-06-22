@@ -182,9 +182,9 @@ export abstract class UniverseLayer extends Object3D {
     return layers;
   }
 
-  getLayerRootObject3D(layerId: string): Object3D {
+  getLayerRoot(layerId?: string): Object3D {
     const f = defined(this.getTransformLayerHelper);
-    return f(layerId);
+    return f(layerId || this.layerId);
   }
 
   getLayerParts(layerId: string): {
