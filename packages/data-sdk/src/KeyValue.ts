@@ -32,9 +32,6 @@ export class KeyValue {
         FORMANT_API_URL + `/v1/admin/key-value/${key}`,
         {
           method: "GET",
-          body: JSON.stringify({
-            organizationId: defined(Authentication.currentUser).organizationId,
-          }),
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + Authentication.token,
@@ -46,6 +43,46 @@ export class KeyValue {
         throw new Error(keyValue.message);
       }
       return keyValue.value;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  public static async list(): Promise<string[]> {
+    try {
+      const result = await fetch(FORMANT_API_URL + "/v1/admin/key-value", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      });
+      const keyValueList = await result.json();
+      if (result.status !== 200) {
+        throw new Error(keyValueList.message);
+      }
+      return keyValueList.items;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  public static async delete(key: string) {
+    try {
+      const result = await fetch(
+        FORMANT_API_URL + `/v1/admin/key-value/${key}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + Authentication.token,
+          },
+        }
+      );
+      if (!result.ok) {
+        throw new Error("Unable to handle request");
+      }
+      return;
     } catch (e: any) {
       throw e;
     }
