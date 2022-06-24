@@ -174,6 +174,24 @@ export class TransformLayer extends Object3D {
             });
         }
       );
+    } else if (positioning.type === "localization" && positioning.stream) {
+      this.positionUnsubsciber = universeData.subscribeToOdometry(
+        defined(deviceId),
+        {
+          id: uuid.v4(),
+          sourceType: "telemetry",
+          streamName: positioning.stream,
+          streamType: "localization",
+        },
+        (odom) => {
+          const pos = odom.pose.translation;
+          const rot = odom.pose.rotation;
+          this.position.set(pos.x, pos.y, pos.z);
+          this.setRotationFromQuaternion(
+            new Quaternion(rot.x, rot.y, rot.z, rot.w)
+          );
+        }
+      );
     } else if (positioning.type === "manual") {
       this.position.set(positioning.x, positioning.y, positioning.z);
     }

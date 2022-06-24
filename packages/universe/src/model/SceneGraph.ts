@@ -17,6 +17,10 @@ export type Positioning =
       end?: string;
     }
   | {
+      type: "localization";
+      stream?: string;
+    }
+  | {
       type: "gps";
       stream?: string;
       relativeToLongitude: number;
