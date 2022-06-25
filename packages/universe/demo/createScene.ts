@@ -36,18 +36,15 @@ export function createScene() {
         pointColor: {
           type: "number",
           value: 0xffffff,
-          location: [],
         },
         pointSize: {
           type: "number",
           value: 0.0375,
-          location: [],
         },
         pointTexture: {
           type: "text",
           value:
             "https://formant-3d-models.s3.us-west-2.amazonaws.com/point.png",
-          location: [],
         },
       },
       data: {},
@@ -64,7 +61,6 @@ export function createScene() {
       fieldValues: {
         flatAxes: {
           type: "boolean",
-          location: [],
           value: true,
         },
       },
@@ -95,9 +91,8 @@ export function createScene() {
           position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             shape: {
-              type: "string",
-              location: [],
-              value: "sphere_fullscreen",
+              type: "text",
+              value: "sphere",
             },
           },
           data: {},
@@ -115,15 +110,12 @@ export function createScene() {
       visible: true,
       editing: false,
       position: {
-        type: "manual",
-        x: 0,
-        y: 0,
-        z: 0,
+        type: "localization",
+        stream: "foo",
       },
       fieldValues: {
         ghosted: {
           type: "text",
-          location: [],
           value: "true",
         },
       },

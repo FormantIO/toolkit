@@ -16,12 +16,12 @@ export class ImageLayer extends UniverseLayer {
       description: "The URL image to use as a texture",
       placeholder: "https://example.com/image.png",
       value: "",
-      type: "text",
-      location: ["create"],
+      type: "text" as const,
+      location: ["create" as const],
     },
   };
 
   init() {
-    this.add(this.createImage(defined(this.getFieldText("url"))));
+    this.add(this.createImage(defined(this.getField(ImageLayer.fields.url))));
   }
 }

@@ -32,8 +32,8 @@ export class VideoLayer extends UniverseLayer {
       description: "The shape you'd like the video to be",
       placeholder: "sphere",
       value: "",
-      type: "text",
-      location: ["create"],
+      type: "text" as const,
+      location: ["create" as const],
     },
   };
 
@@ -91,7 +91,7 @@ export class VideoLayer extends UniverseLayer {
   }
 
   onData = (frame: HTMLCanvasElement) => {
-    const shape = this.getFieldText("shape");
+    const shape = this.getField(VideoLayer.fields.shape);
     if (shape === "stereo-side-by-side") {
       if (!this.group) {
         const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
@@ -209,7 +209,7 @@ export class VideoLayer extends UniverseLayer {
             map: texture,
             side: BackSide,
           });
-          const size = isFullScreen ? 1000 : 0.3;
+          const size = isFullScreen ? 500 : 0.3;
           const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
           if (shape === "sphere_rotated") {

@@ -17,15 +17,15 @@ export class LabelLayer extends UniverseLayer {
       description: "The text you'd like to show in the label",
       placeholder: "hello world",
       value: "",
-      type: "text",
-      location: ["create", "edit"],
+      type: "text" as const,
+      location: ["create" as const, "edit" as const],
     },
   };
 
   label: Label | undefined;
 
   init() {
-    this.updateLabel(defined(this.getFieldText("labelText")));
+    this.updateLabel(defined(this.getField(LabelLayer.fields.labelText)));
   }
 
   updateLabel(text: string): void {

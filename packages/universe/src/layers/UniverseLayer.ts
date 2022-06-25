@@ -17,7 +17,12 @@ import { Howl } from "howler";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
-import { LayerFields, LayerFieldType } from "../model/LayerField";
+import {
+  LayerField,
+  LayerFields,
+  LayerFieldType,
+  LayerFieldTypeMap,
+} from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import {
@@ -116,7 +121,10 @@ export abstract class UniverseLayer extends Object3D {
 
   onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
 
-  onFieldChanged(_field: string, _value: LayerFieldType): void {}
+  onFieldChanged(
+    _field: string,
+    _value: LayerFieldTypeMap[LayerFieldType]
+  ): void {}
 
   onEnterVR(_xr: WebXRManager): void {}
 
@@ -498,44 +506,20 @@ export abstract class UniverseLayer extends Object3D {
     return new ImagePlane(url);
   }
 
-  protected getFieldNumber(name: string) {
+  protected getField<T extends LayerFieldType>(
+    f: LayerField<T>
+  ): LayerFieldTypeMap[T] | undefined {
+    const { name } = f;
     const field = this.layerFields[name];
     if (field) {
-      if (field.type !== "number") {
+      if (field.type !== f.type) {
         throw new Error(`Field ${name} is not a number`);
       }
-      if (typeof field.value !== "number") {
-        throw new Error(`Field ${name} value is not a number`);
+      // eslint-disable-next-line valid-typeof
+      if (typeof field.value !== f.type) {
+        throw new Error(`Field ${name} value is not a ${f.type}`);
       }
-      return field.value as number;
-    }
-    return undefined;
-  }
-
-  protected getFieldText(name: string) {
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== "text") {
-        throw new Error(`Field ${name} is not text`);
-      }
-      if (typeof field.value !== "string") {
-        throw new Error(`Field ${name} value is not text`);
-      }
-      return field.value as string;
-    }
-    return undefined;
-  }
-
-  protected getFieldBoolean(name: string) {
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== "boolean") {
-        throw new Error(`Field ${name} is not a boolean`);
-      }
-      if (typeof field.value !== "boolean") {
-        throw new Error(`Field ${name} value is not a boolean`);
-      }
-      return field.value as boolean;
+      return field.value as LayerFieldTypeMap[T];
     }
     return undefined;
   }

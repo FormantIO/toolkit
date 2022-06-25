@@ -14,6 +14,7 @@ import {
   LayerFieldValues,
   extractLayerFieldValues,
   LayerFieldType,
+  LayerFieldTypeMap,
 } from "../model/LayerField";
 import {
   cloneSceneGraph,
@@ -591,7 +592,10 @@ export function UniverseApp(props: IUniverseAppProps) {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const onFieldChanged = (fieldId: string, value: LayerFieldType) => {
+  const onFieldChanged = (
+    fieldId: string,
+    value: LayerFieldTypeMap[LayerFieldType]
+  ) => {
     if (viewer) {
       viewer.notifyFieldChanged(
         sceneGraph,
@@ -669,13 +673,13 @@ export function UniverseApp(props: IUniverseAppProps) {
   const showSidebar = mode === "edit" && sidebarOpen;
 
   let fields: LayerFields = {};
-  const fieldValues: {
-    [key in string]: string | number | boolean | undefined;
-  } = {};
+  const fieldValues: LayerFieldValues = {};
   if (element) {
     fields = LayerRegistry.getFields(element.type, "edit");
     Array.from(Object.keys(fields)).forEach((key) => {
-      fieldValues[key] = element?.fieldValues[key].value;
+      if (element) {
+        fieldValues[key] = element.fieldValues[key];
+      }
     });
   }
 
@@ -778,7 +782,7 @@ export function UniverseApp(props: IUniverseAppProps) {
                             key={fieldId}
                             fieldId={fieldId}
                             field={field}
-                            value={fieldValues[fieldId]}
+                            value={fieldValues[fieldId].value}
                             onChange={onFieldChanged}
                           />
                         ))}
