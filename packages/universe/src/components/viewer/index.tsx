@@ -109,6 +109,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     Howler.volume(1);
     this.scene = new THREE.Scene();
     this.scene.add(this.root);
+    this.root.rotateX(-Math.PI / 2);
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -135,7 +136,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
     const d = 2.8;
     const o = new Object3D();
-    o.rotation.x = -Math.PI / 2;
     const accentLight1 = new PointLight(accentColor1, 0.3 * d, 0, 0);
     accentLight1.position.set(1000, 1000, 1000);
     o.add(accentLight1);

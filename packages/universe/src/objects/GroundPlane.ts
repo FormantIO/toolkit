@@ -31,7 +31,6 @@ function polarGridCircle(
     color: circleColor,
   });
   const l = new Line(geometry, material);
-  l.rotation.x = Math.PI / 2;
   return l;
 }
 

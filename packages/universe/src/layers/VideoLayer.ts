@@ -1,6 +1,5 @@
 import {
   BackSide,
-  BoxGeometry,
   BufferAttribute,
   BufferGeometry,
   CanvasTexture,
@@ -9,6 +8,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
+  PlaneGeometry,
   SphereGeometry,
 } from "three";
 import * as uuid from "uuid";
@@ -224,8 +224,10 @@ export class VideoLayer extends UniverseLayer {
           const material = new MeshBasicMaterial({
             map: texture,
           });
-          const geometry = new BoxGeometry(1, 1, 0);
+          const geometry = new PlaneGeometry(1, 1);
           this.mesh = new Mesh(geometry, material);
+          this.mesh.rotateX(ninetyDegrees);
+          this.mesh.rotateY(ninetyDegrees);
         }
         this.add(this.mesh);
         if (!isSphere) {

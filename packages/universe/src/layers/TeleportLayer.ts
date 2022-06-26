@@ -40,8 +40,6 @@ export class TeleportLayer extends UniverseLayer {
   teleporting: boolean = false;
 
   init() {
-    this.floor.rotation.set(-Math.PI / 2, 0, 0);
-    this.marker.rotation.set(-Math.PI / 2, 0, 0);
     this.add(this.marker);
     this.add(this.floor);
   }
