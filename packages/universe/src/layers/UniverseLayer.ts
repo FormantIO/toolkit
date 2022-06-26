@@ -485,13 +485,16 @@ export abstract class UniverseLayer extends Object3D {
     );
     geometry.setAttribute("uv", new BufferAttribute(new Float32Array(uvs), 2));
 
-    return new Mesh(
+    const m = new Mesh(
       geometry,
       new MeshBasicMaterial({
         color,
         side: DoubleSide,
       })
     );
+    m.rotateX(Math.PI / 2);
+    m.rotateY(Math.PI / 2);
+    return m;
   }
 
   public createLabel(text: string, sizeAttenuate?: boolean): Label {

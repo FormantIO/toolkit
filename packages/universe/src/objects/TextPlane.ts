@@ -37,6 +37,8 @@ export class TextPlane extends Group {
     this.currentFontSize = fontSize;
     this.currentMaxWidth = maxWidth;
     this.update();
+    this.rotateX(Math.PI / 2);
+    this.rotateY(Math.PI / 2);
   }
 
   private toColor(num: number) {
