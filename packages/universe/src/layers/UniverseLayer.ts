@@ -47,6 +47,12 @@ export type UniverseLayerContext = {
   deviceId: string;
 };
 
+const typeMap = {
+  text: "string",
+  number: "number",
+  boolean: "boolean",
+};
+
 export abstract class UniverseLayer extends Object3D {
   static layerTypeId: string;
 
@@ -509,17 +515,21 @@ export abstract class UniverseLayer extends Object3D {
   protected getField<T extends LayerFieldType>(
     f: LayerField<T>
   ): LayerFieldTypeMap[T] | undefined {
-    const { name } = f;
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== f.type) {
-        throw new Error(`Field ${name} is not a number`);
+    const layerKey = Object.keys((this.constructor as any).fields).find(
+      (key) => (this.constructor as any).fields[key] === f
+    );
+    if (layerKey) {
+      const field = this.layerFields[layerKey];
+      if (field) {
+        if (field.type !== f.type) {
+          throw new Error(`Field ${layerKey} is not a number`);
+        }
+        // eslint-disable-next-line valid-typeof
+        if (typeof field.value !== typeMap[f.type]) {
+          throw new Error(`Field ${layerKey} value is not a ${f.type}`);
+        }
+        return field.value as LayerFieldTypeMap[T];
       }
-      // eslint-disable-next-line valid-typeof
-      if (typeof field.value !== f.type) {
-        throw new Error(`Field ${name} value is not a ${f.type}`);
-      }
-      return field.value as LayerFieldTypeMap[T];
     }
     return undefined;
   }

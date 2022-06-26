@@ -196,6 +196,8 @@ export class VideoLayer extends UniverseLayer {
         this.texture = texture;
 
         const ninetyDegrees = Math.PI / 2;
+        const isRotated =
+          shape === "sphere_rotated" || shape === "sphere_rotated_fullscreen";
         const isSphere =
           shape === "sphere" ||
           shape === "sphere_rotated" ||
@@ -212,8 +214,10 @@ export class VideoLayer extends UniverseLayer {
           const size = isFullScreen ? 500 : 0.3;
           const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
-          if (shape === "sphere_rotated") {
+          if (isRotated) {
             this.mesh.rotation.set(ninetyDegrees, 0, ninetyDegrees);
+          } else {
+            this.mesh.rotation.set(ninetyDegrees, 0, 0);
           }
           if (isFullScreen) {
             material.depthTest = false;

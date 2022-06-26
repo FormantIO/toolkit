@@ -111,8 +111,6 @@ export class PointCloudLayer extends UniverseLayer {
       })
     );
     this.points.frustumCulled = false;
-    const ninetyDegrees = Math.PI / 2;
-    this.points.rotation.set(-ninetyDegrees, 0, 0);
     this.add(this.points);
 
     defined(this.universeData).subscribeToPointCloud(
@@ -134,12 +132,3 @@ export class PointCloudLayer extends UniverseLayer {
     positionAttr.needsUpdate = true;
   };
 }
-
-/*  const pcd =
-      data.type === "telemetry_point_cloud"
-        ? parse(
-            await fetch(data.pointCloud.url, { mode: "cors" }).then((r) =>
-              r.arrayBuffer()
-            )
-          )
-        : loadFromBase64(data.pointCloud.data); */
