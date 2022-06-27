@@ -16,11 +16,11 @@ int main()
 
     // std::cout << config["bag_overlap"].as<int>(3) << std::endl;
 
-    std::cout << c.get<Config::Params::topic_refresh_rate, double>() << std::endl; 
+   // std::cout << c.get<Config::Params::topic_refresh_rate, double>() << std::endl; 
 
     // std::cout << c.GET(subscribe_to_all) << std::endl;
-    auto q = c.get<Config::Params::topics, std::vector<std::string>>();
-    for(auto t : c.get<Config::Params::topics, std::vector<std::string>>()){
+    auto q =  c.get_topics();
+    for(auto t : q){
         std::cout << t << std::endl; 
     }
 

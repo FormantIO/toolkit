@@ -11,18 +11,6 @@ class Config
 {
 
 public:
-    enum class Params
-    {
-        subscribe_to_all,
-        topics,
-        ignore_topics,
-        topic_refresh_rate,
-        bag_length,
-        bag_overlap,
-        bag_storage_path,
-        bag_naming_convention,
-        date_time_string
-    };
 
     inline Config()
     {
@@ -30,11 +18,6 @@ public:
         RSJresource c(infile);
         config = c;
         load_config();
-    }
-
-    template <Params P, typename T>
-    inline T get()
-    {
     }
 
     bool get_subscribe_to_all()
@@ -186,36 +169,5 @@ private:
     ConfigResource<std::string> bag_naming_convention;
     ConfigResource<std::string> date_time_string;
 };
-
-#define DECLARE_PARAM(param)                         \
-    template <>                                      \
-    inline auto Config::get<Config::Params::param>() \
-        ->decltype(param.resource)                   \
-    {                                                \
-        return param.resource;                       \
-    }
-
-#define GET(param) get<Config::Params::param, decltype(Config::param)>()
-
-DECLARE_PARAM(subscribe_to_all)
-DECLARE_PARAM(topics)
-DECLARE_PARAM(ignore_topics)
-DECLARE_PARAM(topic_refresh_rate)
-DECLARE_PARAM(bag_overlap)
-DECLARE_PARAM(bag_storage_path)
-DECLARE_PARAM(bag_naming_convention)
-DECLARE_PARAM(date_time_string)
-
-// template<>
-// auto Config::get<Config::Params::subscribe_to_all>()
-// -> decltype(subscribe_to_all.resource){
-//     return subscribe_to_all.resource;
-// }
-
-// template<>
-// auto Config::get<Config::Params::topics>()
-// -> decltype(topics.resource){
-//     return topics.resource;
-// }
 
 #endif
