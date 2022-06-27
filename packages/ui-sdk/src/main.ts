@@ -16,11 +16,12 @@ export {
   Switch,
   Link,
   Snackbar,
-  InputBase
+  InputBase,
 } from "@mui/material";
 export { Measure } from "./components/Measure";
+export { JsonSchemaForm } from "./components/JsonSchemaForm";
 export * from "./Icon";
 export * from "./Select";
 export * from "./HelpIcon";
 export * from "./hooks";
-export * from './components/Charts'
+export * from "./components/Charts";
