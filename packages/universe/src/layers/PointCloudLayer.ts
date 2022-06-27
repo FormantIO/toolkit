@@ -29,32 +29,32 @@ export class PointCloudLayer extends UniverseLayer {
       description: "Size of points",
       placeholder: "0.01",
       value: 0.01,
-      type: "number",
-      location: ["create"],
+      type: "number" as const,
+      location: ["create" as const],
     },
     pointColor: {
       name: "Point Color",
       description: "Color of points",
       placeholder: "",
       value: 0xffffff,
-      type: "number",
-      location: ["create"],
+      type: "number" as const,
+      location: ["create" as const],
     },
     pointTexture: {
       name: "Point Texture",
       description: "Texture of points",
       placeholder: "",
       value: "",
-      type: "text",
-      location: ["create"],
+      type: "text" as const,
+      location: ["create" as const],
     },
     pointAttenuate: {
       name: "Point Attenuate",
       description: "Attenuate point size",
       placeholder: "",
       value: false,
-      type: "boolean",
-      location: ["create"],
+      type: "boolean" as const,
+      location: ["create" as const],
     },
   };
 
@@ -93,10 +93,11 @@ export class PointCloudLayer extends UniverseLayer {
       new BufferAttribute(new Float32Array(MAX_POINTS * 3), 3)
     );
     geom.setDrawRange(0, 0);
-    const texture = this.getFieldText("pointTexture");
-    const color = this.getFieldNumber("pointColor") || 0xbac4e2;
-    const size = this.getFieldNumber("pointSize") || 0.1;
-    const attenuate = this.getFieldBoolean("pointAttenuate") || false;
+    const texture = this.getField(PointCloudLayer.fields.pointTexture);
+    const color = this.getField(PointCloudLayer.fields.pointColor) || 0xbac4e2;
+    const size = this.getField(PointCloudLayer.fields.pointSize) || 0.1;
+    const attenuate =
+      this.getField(PointCloudLayer.fields.pointAttenuate) || false;
     this.points = new Points(
       geom,
       new PointsMaterial({
@@ -110,8 +111,6 @@ export class PointCloudLayer extends UniverseLayer {
       })
     );
     this.points.frustumCulled = false;
-    const ninetyDegrees = Math.PI / 2;
-    this.points.rotation.set(-ninetyDegrees, 0, 0);
     this.add(this.points);
 
     defined(this.universeData).subscribeToPointCloud(
@@ -133,12 +132,3 @@ export class PointCloudLayer extends UniverseLayer {
     positionAttr.needsUpdate = true;
   };
 }
-
-/*  const pcd =
-      data.type === "telemetry_point_cloud"
-        ? parse(
-            await fetch(data.pointCloud.url, { mode: "cors" }).then((r) =>
-              r.arrayBuffer()
-            )
-          )
-        : loadFromBase64(data.pointCloud.data); */

@@ -93,8 +93,8 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
       description: "If you would like this URDF to appear ghosted transparent.",
       placeholder: "false",
       value: "",
-      type: "text",
-      location: ["create"],
+      type: "text" as const,
+      location: ["create" as const],
     },
   };
 
@@ -131,8 +131,6 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
   loaded: boolean = false;
 
   init() {
-    const ninetyDegrees = Math.PI / 2;
-    this.rotation.set(-ninetyDegrees, 0, 0);
     const dataSource = defined(this.layerDataSources)[0];
     const context = defined(this.getLayerContext()).deviceId;
     if (dataSource && dataSource.sourceType === "realtime" && context) {
@@ -166,7 +164,9 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
   loadAllUrdfs = (blobUrl: string) => {
     this.urdf = new Urdf(
       blobUrl,
-      { ghosted: this.layerFields?.ghosted?.value === "true" },
+      {
+        ghosted: this.getField(DeviceVisualUrdfLayer.fields.ghosted) === "true",
+      },
       this.onLoad
     );
     this.add(this.urdf);

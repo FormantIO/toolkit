@@ -17,7 +17,12 @@ import { Howl } from "howler";
 import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
-import { LayerFields, LayerFieldType } from "../model/LayerField";
+import {
+  LayerField,
+  LayerFields,
+  LayerFieldType,
+  LayerFieldTypeMap,
+} from "../model/LayerField";
 import { snackbarAtom } from "../state/snackbar";
 import { sceneGraphAtom } from "../state/sceneGraph";
 import {
@@ -40,6 +45,12 @@ import { TreePath } from "../model/ITreeElement";
 export type UniverseLayerContext = {
   type: "device";
   deviceId: string;
+};
+
+const typeMap = {
+  text: "string",
+  number: "number",
+  boolean: "boolean",
 };
 
 export abstract class UniverseLayer extends Object3D {
@@ -116,7 +127,10 @@ export abstract class UniverseLayer extends Object3D {
 
   onPointerWheel(_raycaster: Raycaster, _delta: number): void {}
 
-  onFieldChanged(_field: string, _value: LayerFieldType): void {}
+  onFieldChanged(
+    _field: string,
+    _value: LayerFieldTypeMap[LayerFieldType]
+  ): void {}
 
   onEnterVR(_xr: WebXRManager): void {}
 
@@ -471,13 +485,16 @@ export abstract class UniverseLayer extends Object3D {
     );
     geometry.setAttribute("uv", new BufferAttribute(new Float32Array(uvs), 2));
 
-    return new Mesh(
+    const m = new Mesh(
       geometry,
       new MeshBasicMaterial({
         color,
         side: DoubleSide,
       })
     );
+    m.rotateX(Math.PI / 2);
+    m.rotateY(Math.PI / 2);
+    return m;
   }
 
   public createLabel(text: string, sizeAttenuate?: boolean): Label {
@@ -498,44 +515,24 @@ export abstract class UniverseLayer extends Object3D {
     return new ImagePlane(url);
   }
 
-  protected getFieldNumber(name: string) {
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== "number") {
-        throw new Error(`Field ${name} is not a number`);
+  protected getField<T extends LayerFieldType>(
+    f: LayerField<T>
+  ): LayerFieldTypeMap[T] | undefined {
+    const layerKey = Object.keys((this.constructor as any).fields).find(
+      (key) => (this.constructor as any).fields[key] === f
+    );
+    if (layerKey) {
+      const field = this.layerFields[layerKey];
+      if (field) {
+        if (field.type !== f.type) {
+          throw new Error(`Field ${layerKey} is not a number`);
+        }
+        // eslint-disable-next-line valid-typeof
+        if (typeof field.value !== typeMap[f.type]) {
+          throw new Error(`Field ${layerKey} value is not a ${f.type}`);
+        }
+        return field.value as LayerFieldTypeMap[T];
       }
-      if (typeof field.value !== "number") {
-        throw new Error(`Field ${name} value is not a number`);
-      }
-      return field.value as number;
-    }
-    return undefined;
-  }
-
-  protected getFieldText(name: string) {
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== "text") {
-        throw new Error(`Field ${name} is not text`);
-      }
-      if (typeof field.value !== "string") {
-        throw new Error(`Field ${name} value is not text`);
-      }
-      return field.value as string;
-    }
-    return undefined;
-  }
-
-  protected getFieldBoolean(name: string) {
-    const field = this.layerFields[name];
-    if (field) {
-      if (field.type !== "boolean") {
-        throw new Error(`Field ${name} is not a boolean`);
-      }
-      if (typeof field.value !== "boolean") {
-        throw new Error(`Field ${name} value is not a boolean`);
-      }
-      return field.value as boolean;
     }
     return undefined;
   }

@@ -1,21 +1,35 @@
 export type LayerFieldLocation = "create" | "edit";
 
-export type LayerFieldType = string | number | boolean;
+export type LayerFieldType = "text" | "number" | "boolean";
 
-export type LayerFieldValue = {
-  type: string;
-  location: string[];
-  value?: LayerFieldType;
+export type LayerFieldTypeMap = {
+  text: string;
+  number: number;
+  boolean: boolean;
 };
 
-export interface LayerField extends LayerFieldValue {
+type LayerFieldValue<T extends LayerFieldType = LayerFieldType> = {
+  type: T;
+  value?: LayerFieldTypeMap[T];
+};
+
+export interface LayerField<T extends LayerFieldType = LayerFieldType>
+  extends LayerFieldValue<T> {
   name: string;
+  location: LayerFieldLocation[];
   description: string;
   placeholder: string;
 }
 
-export type LayerFields = { [key in string]: LayerField };
-export type LayerFieldValues = { [key: string]: LayerFieldValue };
+export type LayerFieldUnion = {
+  [Type in keyof LayerFieldTypeMap]: LayerField<Type>;
+}[keyof LayerFieldTypeMap];
+type LayerFieldValuesUnion = {
+  [Type in keyof LayerFieldTypeMap]: LayerFieldValue<Type>;
+}[keyof LayerFieldTypeMap];
+
+export type LayerFields = { [key in string]: LayerFieldUnion };
+export type LayerFieldValues = { [key: string]: LayerFieldValuesUnion };
 
 export function extractLayerFieldValues(
   layerFields: LayerFields
@@ -25,8 +39,7 @@ export function extractLayerFieldValues(
     values[key] = {
       type: field.type,
       value: field.value,
-      location: field.location,
-    };
+    } as LayerFieldValuesUnion;
   });
   return values;
 }

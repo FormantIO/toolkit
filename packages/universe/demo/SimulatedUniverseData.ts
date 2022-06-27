@@ -35,9 +35,18 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToOdometry(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IOdometry) => void
+    callback: (data: IOdometry) => void
   ): CloseSubscription {
-    throw new Error("Method not implemented.");
+    setInterval(() => {
+      callback({
+        pose: {
+          translation: { x: Math.random(), y: Math.random(), z: Math.random() },
+          rotation: { x: 0, y: 0, z: 0, w: 1 },
+        },
+        covariance: [],
+      });
+    }, 1000);
+    return () => {};
   }
   subscribeToPose(
     _deviceId: string,

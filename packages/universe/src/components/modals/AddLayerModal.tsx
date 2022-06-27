@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";
 import { LayerType } from "../../layers";
 import { LayerRegistry, LayerSuggestion } from "../../layers/LayerRegistry";
-import { LayerFields } from "../../model/LayerField";
+import { LayerFields, LayerFieldUnion } from "../../model/LayerField";
 import { Modal } from "./Modal";
 
 interface IAddLayerModalProps {
@@ -175,7 +175,7 @@ export function AddLayerModal(props: IAddLayerModalProps) {
                   [key]: {
                     ...currentFields[key],
                     value: ev.target.value,
-                  },
+                  } as LayerFieldUnion,
                 });
               }}
             />

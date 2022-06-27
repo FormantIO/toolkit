@@ -51,7 +51,10 @@ export class LayerRegistry {
   }
 
   static getDescription(type: LayerType): string {
-    return defined(LayerRegistry.layers.get(type)).description;
+    return defined(
+      LayerRegistry.layers.get(type),
+      `Could not find layer of type ${type}`
+    ).description;
   }
 
   static getFields(

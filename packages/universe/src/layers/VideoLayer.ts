@@ -1,6 +1,5 @@
 import {
   BackSide,
-  BoxGeometry,
   BufferAttribute,
   BufferGeometry,
   CanvasTexture,
@@ -9,6 +8,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
+  PlaneGeometry,
   SphereGeometry,
 } from "three";
 import * as uuid from "uuid";
@@ -32,8 +32,8 @@ export class VideoLayer extends UniverseLayer {
       description: "The shape you'd like the video to be",
       placeholder: "sphere",
       value: "",
-      type: "text",
-      location: ["create"],
+      type: "text" as const,
+      location: ["create" as const],
     },
   };
 
@@ -91,7 +91,7 @@ export class VideoLayer extends UniverseLayer {
   }
 
   onData = (frame: HTMLCanvasElement) => {
-    const shape = this.getFieldText("shape");
+    const shape = this.getField(VideoLayer.fields.shape);
     if (shape === "stereo-side-by-side") {
       if (!this.group) {
         const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
@@ -196,6 +196,8 @@ export class VideoLayer extends UniverseLayer {
         this.texture = texture;
 
         const ninetyDegrees = Math.PI / 2;
+        const isRotated =
+          shape === "sphere_rotated" || shape === "sphere_rotated_fullscreen";
         const isSphere =
           shape === "sphere" ||
           shape === "sphere_rotated" ||
@@ -209,11 +211,13 @@ export class VideoLayer extends UniverseLayer {
             map: texture,
             side: BackSide,
           });
-          const size = isFullScreen ? 1000 : 0.3;
+          const size = isFullScreen ? 500 : 0.3;
           const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
-          if (shape === "sphere_rotated") {
+          if (isRotated) {
             this.mesh.rotation.set(ninetyDegrees, 0, ninetyDegrees);
+          } else {
+            this.mesh.rotation.set(ninetyDegrees, 0, 0);
           }
           if (isFullScreen) {
             material.depthTest = false;
@@ -224,8 +228,10 @@ export class VideoLayer extends UniverseLayer {
           const material = new MeshBasicMaterial({
             map: texture,
           });
-          const geometry = new BoxGeometry(1, 1, 0);
+          const geometry = new PlaneGeometry(1, 1);
           this.mesh = new Mesh(geometry, material);
+          this.mesh.rotateX(ninetyDegrees);
+          this.mesh.rotateY(ninetyDegrees);
         }
         this.add(this.mesh);
         if (!isSphere) {
