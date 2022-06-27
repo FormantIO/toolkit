@@ -209,9 +209,9 @@ function createComponents(theme: Theme) {
           outlined: {
             borderRadius: 4,
             padding: "0.125rem 0.375rem",
-            "&.Mui-focused":{
+            "&.Mui-focused": {
               backgroundColor: "#2d3855",
-            }
+            },
           },
         },
       },
@@ -261,10 +261,10 @@ function createComponents(theme: Theme) {
         },
       },
 
-      MuiFormLabel: {
+      MuiFormHelperText: {
         styleOverrides: {
           root: {
-            color: "red",
+            color: theme.palette.error.main,
           },
         },
       },
