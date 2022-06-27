@@ -94,6 +94,7 @@ export const JsonSchemaForm: FC<IJsonSchemaFormProps> = ({
             </React.Fragment>
           );
         }
+        return
       })}
     </>
   );

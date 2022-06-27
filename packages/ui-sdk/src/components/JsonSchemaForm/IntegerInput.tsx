@@ -29,7 +29,6 @@ export const IntegerInput: FC<IIntegerInputProps> = ({
     <TextField
       type="phone"
       key={jsonSchemaObject.properties[property].title}
-      className="formant-integer-input"
       sx={{ marginBottom: "36px" }}
       fullWidth={true}
       value={
