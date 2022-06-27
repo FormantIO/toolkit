@@ -10,7 +10,7 @@ import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class TransformLayer extends Object3D {
-  static layerTypeId: string = "transform_space";
+  static layerTypeId: string = "transform";
 
   static commonName = "Empty";
 
