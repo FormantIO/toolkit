@@ -1,0 +1,12 @@
+{
+    "subscribe_to_all": true,
+    "topics": ["/camera/rgb/image_color", "/sine_wave", "/camera/depth_registered/points"],
+    "ignore_topics":[],
+    "topic_refresh_rate":2,
+    "bag_length": 20,
+    "bag_overlap": 8,
+    "bag_storage_path": "/home/fvolcic/bags",
+    "bag_naming_convention":"demo-bag$bn-$dt.bag",
+    "date_time_string":"%d_%m_%Y-%H_%M_%S",
+    "loglevel":"debug"
+}
