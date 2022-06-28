@@ -11,6 +11,8 @@ int main(int argc, char **argv){
     std::cout << "Starting adapter" << std::endl; 
 
     ros::init(argc, argv, "FormantRosbagAdapter");  
+    ros::start();
     Adapter adapter; 
-    adapter.run(); 
+    adapter.run();
+    ros::shutdown();  
 }

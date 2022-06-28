@@ -15,6 +15,7 @@ class Adapter{
 public:
 
     inline Adapter(){
+
         Config config;
         setup_topics(config); 
 
