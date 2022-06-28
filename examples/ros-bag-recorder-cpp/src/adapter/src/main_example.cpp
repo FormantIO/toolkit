@@ -56,11 +56,12 @@ int main(int argc, char** argv)
 {
     Parser parser;
 
-    if( argc != 2 ){
-        printf("Usage: rosbag_example topic_name\n");
+    if( argc != 3 ){
+        printf("Usage: rosbag_example topic_name_1 topic_name_2\n");
         return 1;
     }
     const std::string topic_name = argv[1];
+    const std::string topic_name2 = argv[2]; 
 
     ros::init(argc, argv, "universal_subscriber");
     ros::NodeHandle nh;
@@ -83,6 +84,15 @@ int main(int argc, char** argv)
         topicCallback(msg, topic_name, parser) ;
     };
     ros::Subscriber subscriber = nh.subscribe(topic_name, 10, callback);
+
+    //who is afraid of lambdas and boost::functions ?
+    boost::function<void(const ShapeShifter::ConstPtr&) > callback2;
+    callback2 = [&parser, topic_name2](const ShapeShifter::ConstPtr& msg)
+    {
+        topicCallback(msg, topic_name2, parser) ;
+    };
+    ros::Subscriber subscriber2 = nh.subscribe(topic_name2, 10, callback2);
+
 
     ros::spin();
     return 0;

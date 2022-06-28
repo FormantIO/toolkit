@@ -20,47 +20,47 @@ public:
         load_config();
     }
 
-    bool get_subscribe_to_all()
+    bool get_subscribe_to_all() const
     {
         return subscribe_to_all.resource;
     }
 
-    std::vector<std::string> get_topics()
+    std::vector<std::string> get_topics() const
     {
         return topics.resource;
     }
 
-    std::vector<std::string> get_ignore_topics()
+    std::vector<std::string> get_ignore_topics() const
     {
         return ignore_topics.resource;
     }
 
-    int get_topic_refresh_rate()
+    int get_topic_refresh_rate() const
     {
         return topic_refresh_rate.resource;
     }
 
-    int get_bag_length()
+    int get_bag_length() const
     {
         return bag_length.resource;
     }
 
-    int get_bag_overlap()
+    int get_bag_overlap() const
     {
         return bag_overlap.resource;
     }
 
-    std::string get_bag_storage_path()
+    std::string get_bag_storage_path() const
     {
         return bag_storage_path.resource;
     }
 
-    std::string get_bag_naming_convention()
+    std::string get_bag_naming_convention() const
     {
         return bag_naming_convention.resource;
     }
 
-    std::string get_date_time_string()
+    std::string get_date_time_string() const
     {
         return date_time_string.resource;
     }
