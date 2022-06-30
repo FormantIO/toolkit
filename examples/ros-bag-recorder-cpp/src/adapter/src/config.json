@@ -1,0 +1,22 @@
+{
+    "subscribe_to_all": false,
+    "topics": [
+        "/camera/rgb/image_color",
+        "/camera/rgb/image_raw", 
+        "/camera/rgb/image_mono",
+        "/sine_wave", 
+        "/camera/depth_registered/points",
+        "/camera/depth_registered/image",
+        "/camera/depth_registered/hw_registered/image_rect",
+        "/camera/rgb/camera_info",
+        "/chatter"
+    ],
+    "ignore_topics":[],
+    "topic_refresh_rate":2,
+    "bag_length": 2,
+    "bag_overlap": 0.5,
+    "bag_storage_path": "/home/fvolcic/Documents/toolkit/examples/ros-bag-recorder-cpp/src/adapter/src/bags",
+    "bag_naming_convention":"demo-bag$bn-$dt.bag",
+    "date_time_string":"%d_%m_%Y-%H_%M_%S",
+    "loglevel":"debug"
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package v1.model;
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+
+message Text {
+    string value = 1;
+}
+
+message Json {
+    string value = 1;
+}

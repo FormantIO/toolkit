@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package v1.model;
+
+import "protos/model/v1/file.proto";
+import "protos/model/v1/health.proto";
+import "protos/model/v1/math.proto";
+import "protos/model/v1/navigation.proto";
+import "protos/model/v1/text.proto";
+import "protos/model/v1/media.proto";
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+/* Datapoint contains data and associated metadata to be sent to the Formant
+ * cloud. */
+message Datapoint {
+  string stream = 1;
+  int64 timestamp = 2;  // unix epoch time in milliseconds
+  map<string, string> tags = 3;
+  oneof data {  // payload, use one of the fields below.
+    Text text = 4;
+    Numeric numeric = 5;
+    NumericSet numeric_set = 17;
+    Bitset bitset = 7;
+    File file = 8;
+    Image image = 9;
+    PointCloud point_cloud = 10;
+    Location location = 11;
+    Localization localization = 12;
+    Health health = 13;
+    Json json = 14;
+    Battery battery = 15;
+    Video video = 16;
+    TransformTree transform_tree = 18;
+  }
+  reserved 6;
+}
+
+/* ControlDatapoint contains data sent from Formant teleop. */
+ message ControlDatapoint {
+  string stream = 1;
+  int64 timestamp = 2;  // unix epoch time in milliseconds
+  oneof data {  // payload, use one of the fields below.
+    Bitset bitset = 3;
+    Twist twist = 4;
+    Transform pose = 5;
+    Numeric numeric = 6;
+    PoseWithCovariance pose_with_covariance = 7;
+    Point point = 8;
+  }
+}

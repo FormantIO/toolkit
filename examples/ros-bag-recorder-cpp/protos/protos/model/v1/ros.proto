@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package v1.model;
+
+import "protos/model/v1/math.proto";
+import "protos/model/v1/navigation.proto";
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+message ROSTopic {
+  string name = 1;
+  string path = 2;
+  bool encode_video = 3;
+}
+
+message ROSLocalization {
+  string map_topic = 1;
+  string odom_topic = 2;
+  repeated string point_cloud_topics = 3;
+  string path_topic = 4;
+  string goal_topic = 5;
+  string base_reference_frame = 6;
+}
+
+message ROSTransformTree {
+  string base_reference_frame = 1;
+}
+
+message ROSMessageToPublish {
+  string stream = 1;
+  string frame_id = 7;
+  uint64 timestamp = 8;  // unix epoch time in milliseconds
+  oneof data {
+    model.Twist twist = 2;
+    bool bool = 3;
+    bytes compressed_image = 4;  // jpeg encoded compressed image
+    string text = 5;
+    model.Transform pose = 6;
+    model.GoalID goalID = 9;
+    model.Numeric numeric = 10;
+    model.PoseWithCovariance pose_with_covariance = 11;
+    model.Point point = 12;
+  }
+}
+
+enum ROSTopicType {
+  UNKNOWN = 0;
+  STD_MSGS_BOOL = 1;
+  SENSOR_MSGS_COMPRESSED_IMAGE = 2;
+  STD_MSGS_STRING = 3;
+  GEOMETRY_MSGS_POSE = 4;
+  ACTIONLIB_MSGS_GOALID = 5;
+  GEOMETRY_MSGS_TWIST = 6;
+  H264_VIDEO_FRAME = 7;
+  AUDIO_CHUNK = 8;
+  STD_MSGS_FLOAT64 = 9;
+  SENSOR_MSGS_JOINT_STATE = 10;
+  GEOMETRY_MSGS_POSE_WITH_COVARIANCE = 11;
+  SENSOR_MSGS_POINT_CLOUD2 = 12;
+  SENSOR_MSGS_LASER_SCAN = 13;
+  GEOMETRY_MSGS_POINT=14;
+  VISUALIZATION_MSGS_MARKER_ARRAY = 15;
+}

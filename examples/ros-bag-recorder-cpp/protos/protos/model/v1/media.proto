@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package v1.model;
+
+import "protos/model/v1/math.proto";
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+message Image {
+  // e.g. "image/png" for png images.
+  string content_type = 1;
+  oneof data {
+    // Absolute path to a file on the local filesystem or valid remote URL for remote files
+    string url = 2;
+    // 2MB limit
+    bytes raw = 3;
+  }
+}
+
+message PointCloud {
+  oneof data {
+    // Absolute path to a file on the local filesystem or valid remote URL for remote files
+    string url = 1;
+    // 2MB limit
+    bytes raw = 2;
+  }
+  // The transform of the map relative to a common reference frame.
+  Transform world_to_local = 3;
+}
+
+message RtcPointCloud {
+  bytes data = 1;
+  Transform world_to_local = 2;
+
+}
+
+message H264VideoFrame {
+  // Index of current frame, used to ensure we are not decoding duplicates
+  int32 index = 1;
+  // Flag to indicate special frame 
+  // 0: post-initialization fmp4 frame
+  // 1: fmp4 initialization segment
+  // 2: bytestream access unit
+  // 3: keyframe
+  int32 flags = 2;
+  // byte array containing frame
+  bytes frame_data = 3;
+}
+
+message AudioChunk {
+  // Index of current chunk, used to ensure we are in order and not duplicating
+  int32 index = 1;
+  // format of audio chunk
+  string format = 2;
+  // byte array containing chunk
+  bytes chunk_data = 3;
+}
+
+message Video {
+  // Mime Type 
+  string mime_type = 1; // Supported types:  ["video/mp4"]
+  // Duration of video clip in milliseconds
+  int64 duration = 2;
+  oneof data {
+    // Absolute path to a file on the local filesystem or valid remote URL for remote files
+    string url = 3;
+    // 2MB limit
+    bytes raw = 4;
+  }
+}
+
+message TransformTree {
+    oneof data {
+    // Absolute path to a file on the local filesystem or valid remote URL for remote files
+    string url = 1;
+    // 2MB limit
+    bytes raw = 2;
+  }
+}

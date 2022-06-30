@@ -1,0 +1,203 @@
+syntax = "proto3";
+
+package v1.model;
+
+import "protos/model/v1/ros.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+message AgentConfigurationStore {
+  string agent_version = 1;
+  AgentConfiguration configuration = 2;
+  AgentFeatureSet feature_set = 3;
+}
+
+message AgentFeatureSet {
+  bool telemetry = 1;
+  bool internal_telemetry = 2;
+  bool teleop = 3;
+  bool custom_events = 4;
+  bool triggered_events = 5;
+  bool ssh = 6;
+  bool port_forwarding = 7;
+  bool commands = 8;
+  bool interventions = 9;
+  bool on_demand = 10;
+  bool app_config = 11;
+  bool blob_storage = 12;
+}
+
+message AgentConfiguration {
+  string id = 1;
+  string name = 2;
+  AgentConfigurationDocument document = 3;
+}
+
+message AgentConfigurationDocument {
+  int64 version = 1;
+  map<string, string> tags = 2;
+  TelemetryConfiguration telemetry = 3;
+  ResourcesConfiguration resources = 4;
+  ApplicationConfiguration application = 5;
+  TeleopConfiguration teleop = 6;
+  PortForwardingConfiguration port_forwarding = 7;
+  BlobData blob_data = 8;
+  Diagnostics diagnostics = 9;
+  google.protobuf.BoolValue terminal_access = 10;
+  repeated AdapterConfiguration adapters = 11;
+}
+
+message AdapterConfiguration {
+  string id = 1;
+  string name = 2;
+  string file_id = 3;
+  string exec_command = 4;
+}
+
+message TeleopConfiguration {
+  repeated TeleopRosStreamConfiguration ros_streams = 1;
+  repeated TeleopCustomStreamConfiguration custom_streams = 2;
+  repeated TeleopHardwareStreamConfiguration hardware_streams=3;
+}
+
+message PortForwardingConfiguration {
+  google.protobuf.BoolValue enabled = 1;
+}
+
+enum TeleopMode {
+  COMMAND = 0;
+  OBSERVE = 1;
+}
+
+message TeleopRosStreamConfiguration {
+  string topic_name = 1;
+  ROSTopicType topic_type = 2;
+  TeleopMode mode = 3;
+  bool encode_video = 4;
+  string audio_codec = 5;
+  string quality = 6;
+  string base_reference_frame = 7;
+  string local_frame = 8;
+
+}
+
+message TeleopHardwareStreamConfiguration {
+  string name = 1;
+  string rtc_stream_type = 2;
+  TeleopMode mode = 3;
+  string hw_descriptor = 4;
+  string quality = 5;
+  string hardware_type = 6;
+  bool rtsp_encoding_needed = 7;
+  bool is_onvif = 8;
+  string ip_cam_username = 9;
+  string ip_cam_password = 10;
+}
+
+message TeleopCustomStreamConfiguration {
+  string name = 1;
+  string rtc_stream_type = 2;
+  TeleopMode mode = 3;
+  bool encode_video = 4;
+  string quality = 5;
+
+}
+
+message TelemetryConfiguration {
+  repeated StreamConfiguration streams = 1;
+  ROSConfiguration ros = 2;
+}
+
+message ApplicationConfiguration {
+  map<string, string> configuration_map = 1;
+}
+
+message ResourcesConfiguration {
+  DiskConfiguration disk = 1;
+  google.protobuf.DoubleValue stream_throttle_hz = 2;
+}
+
+message DiskConfiguration {
+  // size of the datapoints on-disk buffer. default is 100MB, max is 50GB
+  int64 buffer_size = 1;
+  // size of the datapoints on-disk on-demand buffer. default is 0, max is 50GB
+  int64 on_demand_buffer_size = 2;
+}
+
+message ROSConfiguration {
+  string world_reference_frame_id = 1;
+}
+
+message StreamConfiguration {
+  string name = 1;
+  map<string, string> tags = 2;
+  oneof configuration {
+    ROSTopic ros_topic = 3;
+    ROSLocalization ros_localization = 4;
+    DirectoryWatch directory_watch = 5;
+    FileTail file_tail = 6;
+    ROSTransformTree ros_transform_tree = 7;
+    Custom custom = 9;
+    Hardware hardware = 10;
+  }
+  google.protobuf.DoubleValue throttle_hz = 8;
+  google.protobuf.BoolValue disabled = 19;
+  google.protobuf.BoolValue on_demand = 20;
+  StreamTransformConfiguration transform = 21;
+  string quality = 22;
+
+}
+
+message StreamTransformConfiguration {
+  google.protobuf.BoolValue video_encoding_enabled = 1;
+}
+
+message BlobData {
+  string data = 1;
+}
+
+message Diagnostics {
+  google.protobuf.BoolValue report_logs = 1;
+  google.protobuf.BoolValue report_metrics = 2;
+}
+
+enum FileFormat {
+  PLAIN_TEXT = 0;
+  JSON = 1;
+}
+
+enum FileType {
+  FILE = 0;
+  IMAGE = 1;
+  POINT_CLOUD = 4;
+  VIDEO = 5;
+}
+
+message Custom {
+}
+
+message Hardware {
+  string hw_descriptor = 1;
+  string audio_hw_descriptor = 3;
+  string hardware_type = 4;
+  bool rtsp_encoding_needed = 5;
+  bool is_onvif = 6;
+  string ip_cam_username = 7;
+  string ip_cam_password = 8;
+}
+
+message DirectoryWatch {
+  string directory = 1;
+  string extension = 2;
+  FileType file_type = 3;
+  bool remote_agent = 4;
+}
+
+message FileTail {
+  string filename = 1;
+  FileFormat file_format = 2;
+  string time_key = 3;
+  string time_format = 4;
+  string regex = 5;
+}
