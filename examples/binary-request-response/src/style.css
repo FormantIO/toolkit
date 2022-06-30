@@ -1,9 +1,0 @@
-#log {
-    position: absolute;
-    left: 4rem;
-    top: 4rem;
-    z-index: 1000;
-    height: 400px;
-    overflow: hidden;
-    width: 80%;
-}
