@@ -1,8 +1,21 @@
+/**
+ * @file config.h
+ *
+ * @brief This file houses the config allows grabs configuration
+ *        parameters from various locations.
+ * @version 0.1
+ * @date 2022-06-29
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 
 #include <fstream>
-#include "rsjp.hpp"
 #include <string>
 #include <vector>
+#include <cstdlib>
+
+#include "rsjp.hpp"
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -12,11 +25,22 @@ class Config
 
 public:
 
+
     inline Config()
     {
-        std::ifstream infile("config.json");
+        std::string config_location("config.json");
+
+        if (const char *env_p = std::getenv("FORMANT_BAG_RECORDER_CONFIG_LOCATION"))
+        {
+            config_location = std::string(env_p);
+        }
+
+        std::ifstream infile(config_location);
         RSJresource c(infile);
+        c.parse();
         config = c;
+        std::cout << config["bag_length"].as<double>() << std::endl;
+        std::cout << c["bag_length"].as<double>() << std::endl;
         load_config();
     }
 
@@ -117,7 +141,8 @@ private:
 
     void load_bag_length()
     {
-        bag_length.set_resource(resource_loader<double>("bag_length", 2));
+        bag_length.set_resource(resource_loader<double>("bag_length", 5));
+        std::cout << "Bag Length set to " << bag_length.resource << std::endl;
     }
 
     void load_bag_overlap()
@@ -127,19 +152,26 @@ private:
 
     void load_bag_storage_path()
     {
-        bag_storage_path.set_resource(resource_loader<std::string>("bag_overlap", "/home/fvolcic/bags"));
+        bag_storage_path.set_resource(resource_loader<std::string>("bag_storage_path", "./"));
     }
 
     void load_bag_naming_convention()
     {
-        bag_naming_convention.set_resource(resource_loader<std::string>("bag_storage_path", "demo-bag$bn-$dt.bag"));
+        bag_naming_convention.set_resource(resource_loader<std::string>("bag_naming_convention", "demo-bag$bn-$dt.bag"));
     }
 
     void load_date_time_string()
     {
-        date_time_string.set_resource(resource_loader<std::string>("bag_storage_path", "demo-bag$bn-$dt.bag"));
+        date_time_string.set_resource(resource_loader<std::string>("date_time_string", "%d_%m_%Y-%H_%M_%S"));
     }
 
+    /**
+     * @brief A config resource is a wrapper that holds 
+     *        configuration parameter along with 
+     *        telling us if the resource has loaded.
+     * 
+     * @tparam T 
+     */
     template <typename T>
     struct ConfigResource
     {
@@ -156,6 +188,8 @@ private:
         T resource;
         bool loaded = false;
     };
+
+    // Class fields below
 
     RSJresource config;
 

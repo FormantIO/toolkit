@@ -1,4 +1,13 @@
-
+/**
+ * @file recorder.hpp
+ * @brief This file houses the recorder which sets up ROS subscribers
+ * 
+ * @version 0.1
+ * @date 2022-06-29
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #include <ros_type_introspection/ros_introspection.hpp>
 #include <ros/master.h>
@@ -20,6 +29,12 @@ class Recorder
 {
 
 public:
+
+    /**
+     * @brief Add a new message recorder which will record messages to a bag. 
+     * 
+     * @param topic 
+     */
     inline void add_recorder(const std::string &topic)
     {
 
@@ -39,15 +54,23 @@ public:
         current_topics.insert(topic); 
     }
 
+    /**
+     * @brief ROS subscriber callback where incoming messages are sent to.
+     * 
+     * @param msg 
+     * @param topic_name 
+     */
     inline void topicCallback(const topic_tools::ShapeShifter::ConstPtr &msg,
                        const std::string &topic_name)
     {
+        // Get the mutex
         boost::mutex::scoped_lock lock(queue_mutex);  
-        std::cout << "New Message on " << topic_name << "\n"; 
+        OutgoingMessage outgoing(topic_name, msg, ros::Time::now());
 
-        OutgoingMessage outgoing(topic_name, msg, ros::Time::now()); 
-        
-        handler.write(outgoing);
+        // We can safely write to the bag as this will be the only instance 
+        // with the mutex. This forms a sort of 'queue' by only allowing the 
+        // thread with the mutex to write. 
+        handler.write(outgoing); 
     }
 
 private:
@@ -55,7 +78,6 @@ private:
     std::set<std::string> current_topics;
 
     boost::mutex queue_mutex;
-    std::queue<OutgoingMessage> message_queue;
 
     BagHandler handler; 
 

@@ -21,12 +21,14 @@ public:
     }
 
     inline void open(){
-        bag->open(name, rosbag::bagmode::Write); 
+        bag->open(name+std::string(".active"), rosbag::bagmode::Write); 
     }
 
     inline void close(){
         bag->close(); 
-        // delete bag; 
+        std::cout << "Closing bag " << name << "\n"; 
+        delete bag; 
+        rename(); 
     }
 
     inline void write(const OutgoingMessage & outgoing){
@@ -47,7 +49,7 @@ public:
 private:
 
     inline void rename(){
-
+        std::cout << std::rename((name+std::string(".active")).data(), name.data()) << std::endl; 
     }
 
     std::string name;
@@ -67,17 +69,14 @@ public:
         bag1 = RosBag(generate_bag_name()); 
         bag1.open(); 
         bag1_start_time = ros::Time::now(); 
-        bag1_end_time = bag1_start_time + ros::Duration(bag_length);
+        bag1_end_time = bag1_start_time + ros::Duration( bag_overlap );
+
+        std::cout << "Bag1 Start: " << bag1_start_time << " | Bag1 End: " << bag1_end_time << " | diff: " << bag1_end_time - bag1_start_time << std::endl; 
 
         bag2 = RosBag(generate_bag_name()); 
         bag2.open(); 
-        bag1_start_time = ros::Time::now(); 
-        bag1_end_time = bag1_start_time + ros::Duration(bag_length / 2);
-    }
-
-    inline ~BagHandler()
-    {
-        bag1.close();
+        bag2_start_time = bag1_start_time; 
+        bag2_end_time = bag2_start_time + ros::Duration( bag_length );
     }
 
     /**
@@ -87,7 +86,7 @@ public:
      */
     inline void write(const OutgoingMessage &outgoing)
     {
-        std::cout << "Writing to bag" << std::endl;
+        // std::cout << "Writing to bag" << std::endl;
      
         check_bags( outgoing.get_time() ); 
         
@@ -104,6 +103,7 @@ public:
         if(time > bag1_end_time){
             bag1.close(); 
 
+            std::cout << "Time Now: " << time << " | bag1 end time: " << bag1_end_time << "\n"; 
 
             // Case 1: timestamp is still in range of bag2.
             //         In that case, we simply set bag1 as bag2 and then
@@ -128,8 +128,6 @@ public:
             //       : The following does that. 
 
             std::cout << "Error: Case 2 Not implemented. Exiting" << std::endl;
-            bag1.close();
-            bag2.close(); 
             exit(1); 
 
         }
@@ -140,9 +138,10 @@ private:
 
     inline std::string generate_bag_name(){
         std::string bag_naming_convention = "bag$bn.bag";
-        bag_naming_convention += ".active"; 
         adapter_utils::replaceAll(bag_naming_convention, "$bn", std::to_string(bag_index)); 
-        return bag_naming_convention; 
+        bag_index += 1;
+        std::string storage_path = config.get_bag_storage_path(); 
+        return storage_path + std::string("/") + bag_naming_convention; 
     }
 
     Config config;
