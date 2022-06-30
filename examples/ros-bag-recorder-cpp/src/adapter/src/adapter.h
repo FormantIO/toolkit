@@ -25,7 +25,7 @@ public:
     inline void run()
     {
 
-        for (;;)
+        for (;ros::ok();)
         {
             for (auto t : topics_to_subscribe)
             {
@@ -37,6 +37,7 @@ public:
             ros::Duration(config.get_topic_refresh_rate()).sleep();
             ros::master::getTopics(topics_to_subscribe);
         }
+
         ros::spin();
     }
 

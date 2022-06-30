@@ -18,7 +18,7 @@ public:
         return topic; 
     }
 
-    inline auto get_msg() const{
+    inline topic_tools::ShapeShifter::ConstPtr get_msg() const  {
         return msg;
     }
 

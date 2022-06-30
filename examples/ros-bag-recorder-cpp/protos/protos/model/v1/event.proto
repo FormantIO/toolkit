@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package v1.model;
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+message Event {
+  int64 timestamp = 1;
+  int64 end_timestamp = 8;
+  string message = 2;
+  string stream_name = 3;
+  string stream_type = 4;
+  bool notification_enabled = 5;
+  Severity severity = 9;
+  map<string, string> tags = 6;
+  reserved 7;
+}
+
+enum Severity {
+  INFO = 0;
+  WARNING = 1;
+  ERROR = 2;
+  CRITICAL = 3;
+}
+
+message AgentEventConfiguration {
+  repeated AgentEventTrigger event_triggers = 1;
+  int64 last_updated = 2;
+}
+
+message AgentEventTrigger {
+  string id = 1;
+  string stream = 2;
+  int64 interval = 3;
+  oneof condition {
+    PresenceEventTriggerCondition presence = 4;
+    ThresholdEventTriggerCondition threshold = 5;
+    RegexEventTriggerCondition regex = 6;
+    BitsetEventTriggerCondition bitset = 7;
+  }
+}
+
+message PresenceEventTriggerCondition {
+}
+
+message ThresholdEventTriggerCondition {
+  double value = 1;
+  ThresholdOperator operator = 2;
+}
+
+message RegexEventTriggerCondition {
+  string value = 1;
+}
+
+message BitsetEventTriggerCondition {
+  repeated BitsetCondition bit_conditions = 1;
+  BitsetOperator operator = 2;
+}
+
+message BitsetCondition {
+  string key = 1;
+  bool true = 2;
+  bool false = 3;
+}
+
+enum ThresholdOperator {
+  LT = 0;
+  LTE = 1;
+  GT = 2;
+  GTE = 3;
+  EQ = 4;
+  NEQ = 5;
+}
+
+enum BitsetOperator {
+  ANY = 0;
+  ALL = 1;
+}

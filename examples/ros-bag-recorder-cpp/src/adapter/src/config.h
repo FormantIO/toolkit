@@ -15,18 +15,28 @@
 #include <vector>
 #include <cstdlib>
 
+#include <grpcpp/grpcpp.h>
+
 #include "rsjp.hpp"
+#include "client.h"
 
 #ifndef CONFIG_H
 #define CONFIG_H
+
+using grpc::Channel;
+using grpc::ClientContext;
+using grpc::Status;
+
+using v1::agent::Agent;
+using v1::agent::GetApplicationConfigurationRequest;
+using v1::agent::GetApplicationConfigurationResponse;
 
 class Config
 {
 
 public:
-
-
     inline Config()
+        : f_client()
     {
         std::string config_location("config.json");
 
@@ -35,12 +45,17 @@ public:
             config_location = std::string(env_p);
         }
 
+        // Attempt to load the config from the config.json file.
         std::ifstream infile(config_location);
-        RSJresource c(infile);
-        c.parse();
-        config = c;
-        std::cout << config["bag_length"].as<double>() << std::endl;
-        std::cout << c["bag_length"].as<double>() << std::endl;
+        config = RSJresource(infile);
+        config.parse();
+
+        std::pair<bool, std::string> f_client_config_string = f_client.get_config_param("bag_recorder_config");
+        if (f_client_config_string.first)
+            fclient_config = RSJresource(f_client_config_string.second);
+        else
+            fclient_config = RSJresource("{}"); 
+
         load_config();
     }
 
@@ -93,7 +108,7 @@ private:
     template <class T>
     inline T resource_loader(std::string param, T default_val)
     {
-        return config[param].as<T>(default_val);
+        return fclient_config[param].as<T>(config[param].as<T>(default_val));
     }
 
     void load_config()
@@ -116,8 +131,14 @@ private:
 
     void load_topics()
     {
+
+        auto config_topics(
+            fclient_config["topics"].exists()? 
+                fclient_config["topics"].as_array(): 
+                config["topics"].as_array());
+
         std::vector<std::string> _topics;
-        for (auto topic : config["topics"].as_array())
+        for (auto topic : config_topics)
         {
             _topics.push_back(topic.as<std::string>());
         }
@@ -142,7 +163,6 @@ private:
     void load_bag_length()
     {
         bag_length.set_resource(resource_loader<double>("bag_length", 5));
-        std::cout << "Bag Length set to " << bag_length.resource << std::endl;
     }
 
     void load_bag_overlap()
@@ -166,11 +186,11 @@ private:
     }
 
     /**
-     * @brief A config resource is a wrapper that holds 
-     *        configuration parameter along with 
+     * @brief A config resource is a wrapper that holds
+     *        configuration parameter along with
      *        telling us if the resource has loaded.
-     * 
-     * @tparam T 
+     *
+     * @tparam T
      */
     template <typename T>
     struct ConfigResource
@@ -193,6 +213,9 @@ private:
 
     RSJresource config;
 
+    RSJresource fclient_config;
+    bool fclient_config_exists = false;
+
     ConfigResource<bool> subscribe_to_all;
     ConfigResource<std::vector<std::string>> topics;
     ConfigResource<std::vector<std::string>> ignore_topics;
@@ -202,6 +225,8 @@ private:
     ConfigResource<std::string> bag_storage_path;
     ConfigResource<std::string> bag_naming_convention;
     ConfigResource<std::string> date_time_string;
+
+    FormantAgentClient f_client;
 };
 
 #endif

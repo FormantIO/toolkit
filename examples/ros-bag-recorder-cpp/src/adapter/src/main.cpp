@@ -17,13 +17,10 @@
 int main(int argc, char **argv){
 
     // Setup ROS
-    ros::init(argc, argv, "FormantRosbagAdapter");  
+    ros::init(argc, argv, "formant_bag_recorder");  
     ros::start();
     
     // Start running the adapter
     Adapter adapter; 
     adapter.run();
-    
-    // Shutdown the adapter (This does not currently run).
-    ros::shutdown();  
 }

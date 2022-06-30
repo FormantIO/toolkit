@@ -1,0 +1,20 @@
+
+syntax = "proto3";
+
+package v1.model;
+
+option go_package = "github.com/FormantIO/genproto/go/v1/model";
+
+/* A File contains either raw bytes of data or an absolute path to a file on the
+ * local filesystem. Filename is optional and will be auto-generated if it is
+ * not provided. */
+message File {
+  oneof data {
+    // Absolute path to a file on the local filesystem or valid remote URL for remote files
+    string url = 1;
+    // 2MB limit
+    bytes raw = 2;
+  }
+  string filename = 3;  // auto-generated if not provided, optional
+  reserved 4;
+}
