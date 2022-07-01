@@ -11,6 +11,7 @@ import { PointCloudLayer } from "./layers/PointCloudLayer";
 import { VideoLayer } from "./layers/VideoLayer";
 import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
+import { EmptyLayer } from "./layers/EmptyLayer";
 
 export * from "./components/Universe";
 export * from "./model/IPose";
@@ -68,3 +69,4 @@ LayerRegistry.register(PointCloudLayer);
 LayerRegistry.register(DeviceVisualUrdfLayer);
 LayerRegistry.register(DeviceVisualTFLayer);
 LayerRegistry.register(VideoLayer);
+LayerRegistry.register(EmptyLayer);

@@ -19,6 +19,7 @@ export type Positioning =
   | {
       type: "localization";
       stream?: string;
+      rtcStream?: string;
     }
   | {
       type: "gps";

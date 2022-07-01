@@ -108,7 +108,9 @@ export abstract class UniverseLayer extends Object3D {
     transform.contentNode = content;
     transform.add(content);
     window.setTimeout(() => {
-      content.init();
+      if (content.init) {
+        content.init();
+      }
     }, 0);
     return transform;
   }

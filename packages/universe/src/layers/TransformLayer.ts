@@ -10,7 +10,7 @@ import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayer } from "./UniverseLayer";
 
 export class TransformLayer extends Object3D {
-  static layerTypeId: string = "transform_space";
+  static layerTypeId: string = "transform";
 
   static commonName = "Empty";
 
@@ -182,6 +182,24 @@ export class TransformLayer extends Object3D {
           sourceType: "telemetry",
           streamName: positioning.stream,
           streamType: "localization",
+        },
+        (odom) => {
+          const pos = odom.pose.translation;
+          const rot = odom.pose.rotation;
+          this.position.set(pos.x, pos.y, pos.z);
+          this.setRotationFromQuaternion(
+            new Quaternion(rot.x, rot.y, rot.z, rot.w)
+          );
+        }
+      );
+    } else if (positioning.type === "localization" && positioning.rtcStream) {
+      this.positionUnsubsciber = universeData.subscribeToOdometry(
+        defined(deviceId),
+        {
+          id: uuid.v4(),
+          sourceType: "realtime",
+          rosTopicName: positioning.rtcStream,
+          rosTopicType: "json",
         },
         (odom) => {
           const pos = odom.pose.translation;
