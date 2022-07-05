@@ -122,12 +122,13 @@ public:
 
             }
 
+            // TODO 
             // Case 2: neither bag1 nor bag2 contain the timestamp. 
             //       : In this case, we need to jump up to the proper
             //       : interval in the bagging timeline.
             //       : The following does that. 
 
-            std::cout << "Error: Case 2 Not implemented. Exiting" << std::endl;
+            std::cerr << "Error: Case 2 Not implemented. Exiting" << std::endl;
             exit(1); 
 
         }

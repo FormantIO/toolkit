@@ -51,8 +51,6 @@ add_executable(
 target_link_libraries(
   main
   ${catkin_LIBRARIES}
-  ${PROJECT_SOURCE_DIR}/../../protos
-  ${PROJECT_SOURCE_DIR}/../../protos/protos
   gRPC::grpc++
   protobuf::libprotobuf
 )

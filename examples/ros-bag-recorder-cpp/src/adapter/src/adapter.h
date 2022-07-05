@@ -6,10 +6,11 @@
 #include <iostream>
 #include <set>
 #include <vector>
-#include <thread>
+#include <thread> 
 
 #include "config.h"
 #include "recorder.hpp"
+#include "client.h"
 
 class Adapter
 {
@@ -43,7 +44,7 @@ public:
 
 private:
     Config config;
-
+     
     ros::master::V_TopicInfo all_topics;          // All currently published topics.
     ros::master::V_TopicInfo topics_to_subscribe; // The topics which we are to subscribe to.
 
