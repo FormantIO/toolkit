@@ -87,6 +87,7 @@ public:
     {
         if (current_topics.find(topic) != current_topics.end())
             return; // Already subscribed
+        std::cout << "Subscribing to " << topic << std::endl; 
         current_topics.insert(topic);
     }
 
@@ -99,9 +100,12 @@ public:
     inline void topicCallback(const topic_tools::ShapeShifter::ConstPtr &msg,
                               const std::string &topic_name)
     {
+        std::cout << "New Message!" << std::endl; 
+        
         // Get the mutex
         boost::mutex::scoped_lock lock(queue_mutex);
         OutgoingMessage outgoing(topic_name, msg, ros::Time::now());
+
 
         // We can safely write to the bag as this will be the only instance
         // with the mutex. This forms a sort of 'queue' by only allowing the
@@ -119,6 +123,8 @@ public:
         for (auto &topic : current_topics)
         {
 
+            std::cout << "generating sub to " << topic << std::endl;  
+
             ros::NodeHandle nh;
 
             boost::function<void(const topic_tools::ShapeShifter::ConstPtr &msg)> callback;
@@ -131,6 +137,8 @@ public:
 
             current_subscribers.push_back(sub);
         }
+ 
+        std::cout << "Subscribed to all topics" << std::endl; 
     }
 
     inline void stop_recording()
