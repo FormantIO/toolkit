@@ -161,9 +161,6 @@ private:
 
         while (stream->Read(&message))
         {
-
-            std::cout << "New Message" << std::endl;
-
             auto command = message.request().command();
             auto payload = message.request().text();
             auto id = message.request().id();

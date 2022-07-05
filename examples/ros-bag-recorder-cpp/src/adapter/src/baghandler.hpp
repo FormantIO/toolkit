@@ -23,14 +23,12 @@ public:
 
     inline void open()
     {
-        std::cout << "Opening bag at " << name + std::string(".active") << std::endl; 
         bag->open(name + std::string(".active"), rosbag::bagmode::Write);
     }
 
     inline void close()
     {
         bag->close();
-        std::cout << "Closing bag " << name << "\n";
         delete bag;
         rename();
     }
@@ -90,8 +88,7 @@ public:
      */
     inline void write(const OutgoingMessage &outgoing)
     {
-        // std::cout << "Writing to bag" << std::endl;
-
+      
         check_bags(outgoing.get_time());
 
         bag1.write(outgoing);
@@ -107,8 +104,6 @@ public:
         if (time > bag1_end_time)
         {
             bag1.close();
-
-            std::cout << "Time Now: " << time << " | bag1 end time: " << bag1_end_time << "\n";
 
             // Case 1: timestamp is still in range of bag2.
             //         In that case, we simply set bag1 as bag2 and then

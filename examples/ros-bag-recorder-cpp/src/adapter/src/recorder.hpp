@@ -30,14 +30,17 @@ class Recorder
 {
 
 public:
+    /**
+     * @brief Construct a new recorder object
+     *
+     */
     inline Recorder()
     {
         std::cout << "Recorder Started!" << std::endl;
         std::vector<std::string> topic_filter = {
             "start_ros_recorder",
             "stop_ros_recorder",
-            "start_ros_recorder_duration",
-            "test"};
+            "start_ros_recorder_duration"};
 
         auto cb = [this](const GetCommandRequestStreamResponse &msg)
         {
@@ -49,35 +52,6 @@ public:
         fclient.register_command_callback(callback, topic_filter);
     }
 
-    inline void handle_command(const GetCommandRequestStreamResponse &msg)
-    {
-        std::cout << "Command received" << std::endl;
-
-        std::string command = msg.request().command();
-        std::string payload = msg.request().text();
-
-        std::cout << command << " | " << payload << std::endl;
-
-        if(command == "start_ros_recorder_duration"){
-            double command_length = std::stod(payload); 
-            ros::Duration duration(command_length); 
-            record_duration(duration); 
-            return; 
-        }
-
-        if(command == "start_ros_recorder"){
-            start_recording();
-            return;
-        }
-
-        if(command == "stop_ros_recorder"){
-            stop_recording(); 
-            return; 
-        }
-
-
-    }
-
     /**
      * @brief Add a new message recorder which will record messages to a bag.
      *
@@ -87,7 +61,6 @@ public:
     {
         if (current_topics.find(topic) != current_topics.end())
             return; // Already subscribed
-        std::cout << "Subscribing to " << topic << std::endl; 
         current_topics.insert(topic);
     }
 
@@ -100,12 +73,9 @@ public:
     inline void topicCallback(const topic_tools::ShapeShifter::ConstPtr &msg,
                               const std::string &topic_name)
     {
-        std::cout << "New Message!" << std::endl; 
-        
         // Get the mutex
         boost::mutex::scoped_lock lock(queue_mutex);
         OutgoingMessage outgoing(topic_name, msg, ros::Time::now());
-
 
         // We can safely write to the bag as this will be the only instance
         // with the mutex. This forms a sort of 'queue' by only allowing the
@@ -113,18 +83,19 @@ public:
         handler.write(outgoing);
     }
 
+    /**
+     * @brief Start the ROS recorder
+     * 
+     */
     inline void start_recording()
     {
-        std::cout << "Bag Recorder Started" << std::endl; 
-        if(is_recording)
+        std::cout << "Bag Recorder Started" << std::endl;
+        if (is_recording)
             return;
         is_recording = true;
 
         for (auto &topic : current_topics)
         {
-
-            std::cout << "generating sub to " << topic << std::endl;  
-
             ros::NodeHandle nh;
 
             boost::function<void(const topic_tools::ShapeShifter::ConstPtr &msg)> callback;
@@ -137,17 +108,24 @@ public:
 
             current_subscribers.push_back(sub);
         }
- 
-        std::cout << "Subscribed to all topics" << std::endl; 
     }
 
+    /**
+     * @brief Stop the ROS recorder from recording
+     * 
+     */
     inline void stop_recording()
     {
-        std::cout << "Bag Recorder Stopped" << std::endl; 
+        std::cout << "Bag Recorder Stopped" << std::endl;
         current_subscribers.clear();
-        is_recording = false; 
+        is_recording = false;
     }
 
+    /**
+     * @brief Ask the recorder to record ROS messages for a specified duration of time
+     * 
+     * @param duration 
+     */
     inline void record_duration(ros::Duration duration)
     {
         start_recording();
@@ -155,20 +133,53 @@ public:
         stop_recording();
     }
 
-
 private:
 
-    std::vector<ros::Subscriber> current_subscribers;
-    std::set<std::string> current_topics;
+    /**
+     * @brief The callback which is used internally when a new command is received from the agent. 
+     * 
+     * @param msg 
+     */
+    inline void handle_command(const GetCommandRequestStreamResponse &msg)
+    {
+        std::cout << "Command received" << std::endl;
 
-    boost::mutex queue_mutex;
+        std::string command = msg.request().command();
+        std::string payload = msg.request().text();
 
-    BagHandler handler;
+        std::cout << command << " | " << payload << std::endl;
 
-    FormantAgentClient fclient;
+        if (command == "start_ros_recorder_duration")
+        {
+            double command_length = std::stod(payload);
+            ros::Duration duration(command_length);
+            record_duration(duration);
+            return;
+        }
 
-    bool is_recording = false; 
+        if (command == "start_ros_recorder")
+        {
+            start_recording();
+            return;
+        }
 
+        if (command == "stop_ros_recorder")
+        {
+            stop_recording();
+            return;
+        }
+    }
+
+    std::vector<ros::Subscriber> current_subscribers; // All the current ROS subscribers
+    std::set<std::string> current_topics; // The topics which are currently being subscribed to
+
+    boost::mutex queue_mutex; // The mutex which is locked when writing to the BagHandler
+
+    BagHandler handler; // The tool which is used to write directly to a ROS bag
+
+    FormantAgentClient fclient; // The Formant Client 
+
+    bool is_recording = false; // Is the adapter currently recording? 
 };
 
 #endif
