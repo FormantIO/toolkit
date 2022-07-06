@@ -1,9 +1,14 @@
-import Table from "./component/Table/Table";
 import "./App.css";
-import { TableComponent } from "./component/TableComponent/index";
+import { Table } from "./components/Table";
+import { Authentication } from "@formant/data-sdk";
+import { useEffect } from "react";
 
 function App() {
-  return <Table />;
+  return (
+    <div className="App">
+      <Table />
+    </div>
+  );
 }
 
 export default App;
