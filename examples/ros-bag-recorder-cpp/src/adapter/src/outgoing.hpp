@@ -6,6 +6,10 @@
 #ifndef OUTGOING_H
 #define OUTGOING_H
 
+/**
+ * @brief The outgoing message class houses the needed information to write a message to a ROS bag 
+ * 
+ */
 class OutgoingMessage
 {
 public:

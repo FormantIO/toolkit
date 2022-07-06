@@ -6,7 +6,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
-#include <thread> 
+#include <thread>
 
 #include "config.h"
 #include "recorder.hpp"
@@ -23,10 +23,15 @@ public:
         setup_topics(config);
     }
 
+    /**
+     * @brief Run the adapter. This function will not return until the node is killed
+     *        using the command line rosnode tool.
+     *
+     */
     inline void run()
     {
 
-        for (;ros::ok();)
+        for (; ros::ok();)
         {
             for (auto t : topics_to_subscribe)
             {
@@ -43,12 +48,12 @@ public:
     }
 
 private:
-    Config config;
-     
+    Config config; // The configuration variable to load the config.
+
     ros::master::V_TopicInfo all_topics;          // All currently published topics.
     ros::master::V_TopicInfo topics_to_subscribe; // The topics which we are to subscribe to.
 
-    Recorder recorder;
+    Recorder recorder; // The recorder object used to receive and save incoming ros messages
 
     bool is_shutdown = false;
 

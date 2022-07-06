@@ -81,6 +81,11 @@ public:
         bag2_end_time = bag2_start_time + ros::Duration(2 * bag_length - bag_overlap);
     }
 
+    inline ~BagHandler(){
+        bag1.close();
+        bag2.close(); 
+    }
+
     /**
      * @brief Write the outgoing message to the current open rosbag's.
      *

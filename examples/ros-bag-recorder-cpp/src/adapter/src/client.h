@@ -35,9 +35,7 @@ public:
     inline FormantAgentClient(std::shared_ptr<Channel> channel) : stub_(Agent::NewStub(channel)) {}
 
     inline FormantAgentClient() : FormantAgentClient(grpc::CreateChannel("unix:///var/lib/formant/agent.sock", grpc::InsecureChannelCredentials()))
-    {
-        std::cout << "Agent Started" << std::endl;
-    }
+    {}
 
     inline ~FormantAgentClient()
     {
@@ -100,7 +98,6 @@ public:
      */
     inline void register_command_callback(FormantAgentCallback callback, const std::string &command_filter, bool reset_stream = true)
     {
-        std::cout << "Registering Callback on " << command_filter << std::endl;
 
         // Step 1: register the register the command filter if needed
         if (!command_filters.count(command_filter))
@@ -150,14 +147,11 @@ private:
         GetCommandRequestStreamResponse message;
 
         command_stream_thread_started = true;
-        std::cout << "Waiting for msg on topics: ";
 
         for (auto c : command_filters)
         {
             std::cout << c << " ";
         }
-
-        std::cout << " LENGTH " << command_filters.size() << " END " << std::endl;
 
         while (stream->Read(&message))
         {

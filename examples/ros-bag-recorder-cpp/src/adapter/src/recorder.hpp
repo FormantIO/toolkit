@@ -179,7 +179,7 @@ private:
 
     FormantAgentClient fclient; // The Formant Client 
 
-    bool is_recording = false; // Is the adapter currently recording? 
+    bool is_recording = false; // Is the adapter currently recording?
 };
 
 #endif

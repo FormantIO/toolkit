@@ -31,6 +31,10 @@ using v1::agent::Agent;
 using v1::agent::GetApplicationConfigurationRequest;
 using v1::agent::GetApplicationConfigurationResponse;
 
+/**
+ * @brief Get configuration parameters from either the Formant device config or the local config.json file.
+ * 
+ */
 class Config
 {
 
@@ -59,58 +63,119 @@ public:
         load_config();
     }
 
+    /**
+     * @brief Get the subscribe_to_all configuration param
+     * 
+     * @return true 
+     * @return false 
+     */
     bool get_subscribe_to_all() const
     {
         return subscribe_to_all.resource;
     }
 
+     /**
+     * @brief Get a vector of the specified topics to subscribe to.
+     * 
+     * @return true
+     * @return false 
+     */
     std::vector<std::string> get_topics() const
     {
         return topics.resource;
     }
 
+    /**
+     * @brief Get a list of topics which are to be ignored by the bag recorder
+     * 
+     * @return std::vector<std::string> 
+     */
     std::vector<std::string> get_ignore_topics() const
     {
         return ignore_topics.resource;
     }
 
+    /**
+     * @brief Get the topic refresh rate for checking for new topics
+     * 
+     * @return int 
+     */
     int get_topic_refresh_rate() const
     {
         return topic_refresh_rate.resource;
     }
 
+    /**
+     * @brief Get the bag length configuration param
+     * 
+     * @return int 
+     */
     int get_bag_length() const
     {
         return bag_length.resource;
     }
 
+    /**
+     * @brief Get the bag_overlap configuration param
+     * 
+     * @return int 
+     */
     int get_bag_overlap() const
     {
         return bag_overlap.resource;
     }
 
+    /**
+     * @brief Get the bag_storage_path configuration param
+     * 
+     * @return std::string 
+     */
     std::string get_bag_storage_path() const
     {
         return bag_storage_path.resource;
     }
 
+    /**
+     * @brief Get the bag_naming_convention configuration param
+     * 
+     * @return std::string 
+     */
     std::string get_bag_naming_convention() const
     {
         return bag_naming_convention.resource;
     }
 
+    /**
+     * @brief Get the date_time_string format 
+     * 
+     * @return std::string 
+     */
     std::string get_date_time_string() const
     {
         return date_time_string.resource;
     }
 
 private:
+
+    /**
+     * @brief Load a parameter from either Formant or from the local config.json file if 
+     *        specified. If not specified, then load the specified default parameter
+     * 
+     * @tparam T 
+     * @param param 
+     * @param default_val 
+     * @return T 
+     */
     template <class T>
     inline T resource_loader(std::string param, T default_val)
     {
         return fclient_config[param].as<T>(config[param].as<T>(default_val));
     }
 
+    /**
+     * @brief Load all the configuration parameters into memory
+     * 
+     */
     void load_config()
     {
         load_subscribe_to_all();
