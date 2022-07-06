@@ -20,12 +20,9 @@ class ServiceChecker:
 
     def __init__(self):
         """Initialize the ServiceChecker"""
-        services = ServiceChecker._get_running_services()
-
+        
         self._fclient = FormantClient()
         self._shutdown_signal = self._shutdown
-        #self._service_thread = threading.Thread(target=self._run, daemon=True)
-        # self._service_thread.start()
         self._started = False
         self._is_shutdown = True
         self._data_to_post = False
@@ -33,7 +30,6 @@ class ServiceChecker:
     def start(self):
         """Starts the service checker thread."""
         self._is_shutdown = False
-        # self._service_thread.start()
         self._started = True
 
         self._fclient.register_command_request_callback(
@@ -45,20 +41,11 @@ class ServiceChecker:
         """Kills the ServiceChecker."""
 
         self._is_shutdown = True
-        # self._service_thread.join()
 
     def _shutdown(self):
         """return True if self._is_shutdown is set."""
 
         return self._is_shutdown
-
-    def _run(self):
-        """Run the ServiceChecker in a loop which checks for services then reports the JSON schema"""
-
-        while not self._shutdown_signal():
-            self._check_services()
-            self._post_json()
-            time.sleep(2)
 
     def _check_services(self, *_):
         """Check current published services then report the JSON schema for the services."""
