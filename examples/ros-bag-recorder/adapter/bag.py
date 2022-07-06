@@ -49,21 +49,32 @@ class RosBag:
         self.name = name
         self.bag = None
 
+        self._is_open = False
+
     def open(self):
         """Open the bag in memory as a *.bag.active file"""
+        print("Opening new bag")
         self.bag = rosbag.Bag(self.name, 'w') 
+        self._is_open = True
 
     def close(self):
         """Closes the bag, removing the .active suffix"""
+        print("Closing Bag")
+    
+        if not self.is_open():
+            return
 
         self.bag.close()
-        
+        self._is_open = False
+
         # -7 is the length of the .active suffix which we are removing.
         new_name = self.name[:-7]
         
         os.system(f"mv {self.name} {new_name}")
 
-
     def write(self, message, topic):
         """Writes the specified message to the bag"""
         self.bag.write(topic, message)
+
+    def is_open(self):
+        return self._is_open

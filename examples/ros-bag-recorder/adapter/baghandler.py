@@ -75,6 +75,13 @@ class BagHandler:
         while(not shutdown()):
             if self.message_queue.empty():
                 time.sleep(5/10)
+                
+                if self.bag1_end < datetime.now() - timedelta(seconds=1) and self.bag1.is_open():
+                    self.bag1.close()
+                
+                if self.bag2_end < datetime.now() - timedelta(seconds=1) and self.bag2.is_open():
+                    self.bag2.close()
+
                 continue
 
             self._bag_check()
@@ -184,5 +191,10 @@ class BagHandler:
 
     def _close_bags(self):
         """Close the bag handlers bags."""
-        self.bag1.close()
-        self.bag2.close()
+        if self.bag1.is_open():
+            self.bag1.close()
+        if self.bag2.is_open():
+            self.bag2.close()
+    
+    def shutdown(self):
+        self._close_bags() 
