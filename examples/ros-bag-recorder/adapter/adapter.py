@@ -4,6 +4,7 @@ This file contains the definition of the Adapter itself. The adapter is what all
 """
 
 import logging
+from multiprocessing.sharedctypes import Value
 import threading
 import time
 
@@ -58,7 +59,10 @@ class Adapter:
             self._recording = False
             
         if message.command == "start_ros_recorder_duration":
-            duration = rospy.Duration(secs=float(message.text))
+            try:
+                duration = rospy.Duration(secs=float(message.text))
+            except ValueError:
+                return
             self.start_recording(duration, True) 
 
     def run(self):
