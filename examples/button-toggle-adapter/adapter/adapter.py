@@ -17,5 +17,3 @@ class Adapter:
             time.sleep(1)
         self.shutdown()
 
-    def shutdown(self):
-        pass
