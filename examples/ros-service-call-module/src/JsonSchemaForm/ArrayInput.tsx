@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { TextField } from "@formant/ui-sdk";
 
 interface IArrayInputProps {
@@ -15,8 +15,7 @@ export const ArrayInput: FC<IArrayInputProps> = ({
   type,
 }) => {
   const [array, setArray] = useState<(string | number)[]>([""]);
-  const [currentInput, setCurrentInput] = useState("");
-  const [error, setError] = useState<string>("");
+  // const [error, setError] = useState<string>("");
 
   useEffect(() => {
     currentStateObject[jsonSchemaObject.properties[property].title] =
@@ -53,7 +52,6 @@ export const ArrayInput: FC<IArrayInputProps> = ({
     }
     array.push("");
     setArray([...array]);
-    setCurrentInput("");
   };
 
   const handleOnChange = (

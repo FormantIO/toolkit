@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react";
+import { useState, useEffect, FC, useCallback, useRef } from "react";
 import {
   Typography,
   Box,
@@ -15,11 +15,10 @@ const App: FC = () => {
   const latestTelemetry = useLatestTelemetry();
   const device = useDevice();
   const [services, setServices] = useState<any | undefined>();
-  const [service, setService] = useState<string | undefined>("");
-  const [params, setParams] = useState<{ [key: string]: string }>({});
+  const [service, setService] = useState<string | undefined>();
   const [showSnackbar, setShowSnackbar] = useState(false);
 
-  let serviceParameters = {};
+  let serviceParameters = useRef({});
 
   useEffect(() => {
     getServices();
@@ -32,27 +31,23 @@ const App: FC = () => {
       );
       const newServices = await fetch(newTelp[0].currentValue);
       const jsonResponse = await fetch(newServices.url);
-
       const json = await jsonResponse.json();
-      // if(Object.keys(json) === )
-      console.log(json);
       setServices(json);
     }
   };
 
-  const handleSubmit = () => {
-    console.log(serviceParameters);
-    // if (device && service) {
-    //   device.sendCommand(
-    //     "RosServiceTest",
-    //     JSON.stringify({ [service]: serviceParameters })
-    //   );
-    //   setService(undefined);
-    //   setShowSnackbar(true);
+  const handleSubmit = useCallback(() => {
+    if (device && service) {
+      device.sendCommand(
+        "ROS Service Center",
+        JSON.stringify({ [service]: serviceParameters.current })
+      );
+      setService(undefined);
+      setShowSnackbar(true);
+      serviceParameters.current = {};
+    }
+  }, []);
 
-    //   setParams({});
-    // }
-  };
   return (
     <div className="App">
       <Box position="relative" textAlign="left" width={350}>
@@ -70,8 +65,8 @@ const App: FC = () => {
         <Select
           sx={{ width: 350, textAlign: "left", marginBottom: "16px" }}
           onChange={(val) => {
+            serviceParameters.current = {};
             setService(val);
-            setParams({});
           }}
           label="Service"
           value={service ?? ""}
@@ -87,17 +82,13 @@ const App: FC = () => {
         {service && (
           <JsonSchemaForm
             jsonSchemaObject={services[service]}
-            currentStateObject={serviceParameters}
+            currentStateObject={serviceParameters.current}
           />
         )}
         <Button
           sx={{ position: "absolute", bottom: -50, right: 0 }}
           onClick={handleSubmit}
-          // disabled={
-          //   service === undefined ||
-          //   (services[service].length > 0 &&
-          //     Object.keys(params).length < services[service].length)
-          // }
+          disabled={service === undefined || services === undefined}
           size="large"
           variant="contained"
           color="secondary"

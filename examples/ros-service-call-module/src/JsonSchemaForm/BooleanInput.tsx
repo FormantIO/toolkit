@@ -1,5 +1,5 @@
 import { Box, Typography, Switch } from "@formant/ui-sdk";
-import { FC } from "react";
+import React, { FC } from "react";
 interface INumberInputProps {
   jsonSchemaObject: any;
   currentStateObject: any;

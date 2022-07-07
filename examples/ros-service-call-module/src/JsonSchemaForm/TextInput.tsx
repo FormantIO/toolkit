@@ -1,32 +1,36 @@
 import { TextField } from "@formant/ui-sdk";
-import { FC } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 
 interface ITextinputProps {
   jsonSchemaObject: any;
   currentStateObject: any;
   property: string;
+  defaultValue: string;
 }
 
 export const TextInput: FC<ITextinputProps> = ({
+  defaultValue,
   jsonSchemaObject,
   currentStateObject,
   property,
 }) => {
+  const [currentValue, setCurrentValue] = useState("");
+
+  useEffect(() => {
+    setCurrentValue(defaultValue);
+  }, []);
+
   return (
     <TextField
       type="text"
       key={jsonSchemaObject.properties[property].title}
       sx={{ marginBottom: "16px" }}
       fullWidth={true}
-      value={currentStateObject[jsonSchemaObject.properties[property].title]}
-      onChange={(ev) => {
-        jsonSchemaObject.title in currentStateObject
-          ? (currentStateObject[jsonSchemaObject.title] = {
-              ...currentStateObject[jsonSchemaObject.title],
-              [jsonSchemaObject.properties[property].title]: ev.target.value,
-            })
-          : (currentStateObject[jsonSchemaObject.properties[property].title] =
-              ev.target.value);
+      value={currentValue}
+      onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+        setCurrentValue(ev.target.value);
+        currentStateObject[jsonSchemaObject.properties[property].title] =
+          ev.target.value;
       }}
       label={
         jsonSchemaObject.properties[property].title[0].toUpperCase() +

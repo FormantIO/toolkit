@@ -1,32 +1,36 @@
-import { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { TextField } from "@formant/ui-sdk";
 
 interface INumberInputProps {
   jsonSchemaObject: any;
   currentStateObject: any;
   property: string;
+  defaultValue: string;
 }
 
 export const NumberInput: FC<INumberInputProps> = ({
   jsonSchemaObject,
   currentStateObject,
   property,
+  defaultValue,
 }) => {
+  const [currentValue, setCurrentValue] = useState("");
+
+  useEffect(() => {
+    setCurrentValue(defaultValue);
+  }, []);
+
   return (
     <TextField
       type="number"
       key={jsonSchemaObject.properties[property].title}
       sx={{ marginBottom: "16px" }}
       fullWidth={true}
-      value={currentStateObject[jsonSchemaObject.properties[property].title]}
+      value={currentValue}
       onChange={(ev) => {
-        jsonSchemaObject.title in currentStateObject
-          ? (currentStateObject[jsonSchemaObject.title] = {
-              ...currentStateObject[jsonSchemaObject.title],
-              [jsonSchemaObject.properties[property].title]: ev.target.value,
-            })
-          : (currentStateObject[jsonSchemaObject.properties[property].title] =
-              ev.target.value);
+        setCurrentValue(ev.target.value);
+        currentStateObject[jsonSchemaObject.properties[property].title] =
+          ev.target.value;
       }}
       label={
         jsonSchemaObject.properties[property].title[0].toUpperCase() +

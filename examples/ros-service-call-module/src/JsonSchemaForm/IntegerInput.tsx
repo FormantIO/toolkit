@@ -1,19 +1,27 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { TextField } from "@formant/ui-sdk";
-import "./index.css";
+
 interface IIntegerInputProps {
   jsonSchemaObject: any;
   currentStateObject: any;
   property: string;
+  defaultValue: string;
 }
 
 export const IntegerInput: FC<IIntegerInputProps> = ({
   jsonSchemaObject,
   currentStateObject,
   property,
+  defaultValue,
 }) => {
-  const [temp, setTemp] = useState("");
+  const [currentValue, setCurrentValue] = useState<number | string>();
+
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isNaN(parseInt(defaultValue))) return;
+    setCurrentValue(parseInt(defaultValue));
+  }, []);
   const isValid = (_: string) => {
     if (_ === "") return true;
     if (!!_) {
@@ -29,25 +37,21 @@ export const IntegerInput: FC<IIntegerInputProps> = ({
     <TextField
       type="phone"
       key={jsonSchemaObject.properties[property].title}
-      className="formant-integer-input"
       sx={{ marginBottom: "36px" }}
       fullWidth={true}
-      value={
-        currentStateObject[jsonSchemaObject.properties[property].title] ?? ""
-      }
+      value={currentValue}
       onChange={(ev) => {
         if (!isValid(ev.target.value)) {
           return;
         }
         setError("");
-        setTemp(ev.target.value);
-        jsonSchemaObject.title in currentStateObject
-          ? (currentStateObject[jsonSchemaObject.title] = {
-              ...currentStateObject[jsonSchemaObject.title],
-              [jsonSchemaObject.properties[property].title]: ev.target.value,
-            })
-          : (currentStateObject[jsonSchemaObject.properties[property].title] =
-              ev.target.value);
+        if (ev.target.value === "") {
+          setCurrentValue("");
+        } else {
+          setCurrentValue(parseInt(ev.target.value));
+        }
+        currentStateObject[jsonSchemaObject.properties[property].title] =
+          ev.target.value;
       }}
       label={
         jsonSchemaObject.properties[property].title[0].toUpperCase() +
