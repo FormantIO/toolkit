@@ -9,6 +9,8 @@ import {
   Object3D,
   PerspectiveCamera,
   Raycaster,
+  Texture,
+  TextureLoader,
   Vector3,
   WebXRManager,
 } from "three";
@@ -40,6 +42,7 @@ import { Controller } from "../components/viewer/Controller";
 import { HandheldController } from "../components/viewer/HandheldController";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { Urdf } from "../objects/Urdf";
+import { Gizmo } from "../objects/Gizmo";
 import { TreePath } from "../model/ITreeElement";
 
 export type UniverseLayerContext = {
@@ -312,12 +315,17 @@ export abstract class UniverseLayer extends Object3D {
     return new Model3D(url, onLoad);
   }
 
+  public createGizmo() {
+    return new Gizmo();
+  }
+
   public createRoundedRectangle(config: {
     width: number;
     height: number;
     radius: number;
     color?: number;
     smoothness?: number;
+    textureUrl?: string;
   }) {
     const w = config.width;
     const h = config.height;
@@ -487,11 +495,17 @@ export abstract class UniverseLayer extends Object3D {
     );
     geometry.setAttribute("uv", new BufferAttribute(new Float32Array(uvs), 2));
 
+    let texture: Texture | undefined;
+    if (config.textureUrl) {
+      texture = new TextureLoader().load(config.textureUrl || "");
+    }
     const m = new Mesh(
       geometry,
       new MeshBasicMaterial({
         color,
         side: DoubleSide,
+        map: texture,
+        transparent: texture !== undefined,
       })
     );
     m.rotateX(Math.PI / 2);
