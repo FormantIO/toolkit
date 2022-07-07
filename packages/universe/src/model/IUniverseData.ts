@@ -196,7 +196,7 @@ export interface IUniverseData {
   subscribeToNumericSet(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (entry: [number, INumericSetEntry][]) => void
+    callback: (entry: [number, INumericSetEntry[]][]) => void
   ): CloseSubscription;
 
   getStatistics(): Promise<IUniverseStatistics>;

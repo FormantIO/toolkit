@@ -87,18 +87,38 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToNumericSet(
     _deviceId: string,
     _source: UniverseDataSource,
-    callback: (entry: [number, INumericSetEntry][]) => void
+    callback: (entry: [number, INumericSetEntry[]][]) => void
   ): CloseSubscription {
     setInterval(() => {
       callback([
-        [Date.now() - 3000, { value: Math.random(), label: "test" }],
-        [Date.now() - 2000, { value: Math.random(), label: "test" }],
-        [Date.now() - 1000, { value: Math.random(), label: "test" }],
-        [Date.now(), { value: Math.random(), label: "test" }],
-        [Date.now() - 3000, { value: Math.random(), label: "bar" }],
-        [Date.now() - 2000, { value: Math.random(), label: "bar" }],
-        [Date.now() - 1000, { value: Math.random(), label: "bar" }],
-        [Date.now(), { value: Math.random(), label: "bar" }],
+        [
+          Date.now() - 3000,
+          [
+            { value: Math.random(), label: "test" },
+            { value: Math.random(), label: "bar" },
+          ],
+        ],
+        [
+          Date.now() - 2000,
+          [
+            { value: Math.random(), label: "test" },
+            { value: Math.random(), label: "bar" },
+          ],
+        ],
+        [
+          Date.now() - 1000,
+          [
+            { value: Math.random(), label: "test" },
+            { value: Math.random(), label: "bar" },
+          ],
+        ],
+        [
+          Date.now() - 0,
+          [
+            { value: Math.random(), label: "test" },
+            { value: Math.random(), label: "bar" },
+          ],
+        ],
       ]);
     }, 1000);
     return () => {};

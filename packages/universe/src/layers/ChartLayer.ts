@@ -124,14 +124,16 @@ export class ChartLayer extends UniverseLayer {
     );
   }
 
-  onData(newData: [number, INumericSetEntry][]): void {
+  onData(newData: [number, INumericSetEntry[]][]): void {
     const labeledData: { [key in string]: { x: number; y: number }[] } = {};
     newData.forEach(([time, data]) => {
-      if (labeledData[data.label]) {
-        labeledData[data.label].push({ x: time, y: data.value });
-      } else {
-        labeledData[data.label] = [{ x: time, y: data.value }];
-      }
+      data.forEach((_) => {
+        if (labeledData[_.label]) {
+          labeledData[_.label].push({ x: time, y: _.value });
+        } else {
+          labeledData[_.label] = [{ x: time, y: _.value }];
+        }
+      });
     });
     const { data } = this.chart;
 
