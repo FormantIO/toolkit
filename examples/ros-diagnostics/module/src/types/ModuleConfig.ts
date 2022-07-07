@@ -8,4 +8,5 @@ export interface Section {
 export interface SectionContent {
   topic: string;
   minHz: number;
+  type: string
 }
