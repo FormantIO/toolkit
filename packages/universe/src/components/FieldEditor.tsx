@@ -33,7 +33,7 @@ export function FieldEditor({ fieldId, field, value, onChange }: IFieldEditor) {
     <TextField
       label={field.name}
       value={currentValue}
-      placeholder={field.placeholder}
+      placeholder={field.placeholder.toString()}
       onChange={(e) => {
         const newValue = e.target.value || "";
         setCurrentValue(newValue);

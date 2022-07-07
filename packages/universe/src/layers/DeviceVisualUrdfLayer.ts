@@ -91,9 +91,9 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
     ghosted: {
       name: "Ghosted",
       description: "If you would like this URDF to appear ghosted transparent.",
-      placeholder: "false",
-      value: "",
-      type: "text" as const,
+      placeholder: false,
+      value: true,
+      type: "boolean" as const,
       location: ["create" as const],
     },
   };
@@ -165,7 +165,7 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
     this.urdf = new Urdf(
       blobUrl,
       {
-        ghosted: this.getField(DeviceVisualUrdfLayer.fields.ghosted) === "true",
+        ghosted: this.getField(DeviceVisualUrdfLayer.fields.ghosted) === true,
       },
       this.onLoad
     );

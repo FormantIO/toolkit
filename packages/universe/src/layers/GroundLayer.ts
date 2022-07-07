@@ -16,7 +16,7 @@ export class GroundLayer extends UniverseLayer {
     flatAxes: {
       name: "Show Flat Axes",
       description: "Axes should be flat",
-      placeholder: "false",
+      placeholder: false,
       value: false,
       type: "boolean" as const,
       location: ["create" as const],

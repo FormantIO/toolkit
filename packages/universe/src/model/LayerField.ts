@@ -18,7 +18,7 @@ export interface LayerField<T extends LayerFieldType = LayerFieldType>
   name: string;
   location: LayerFieldLocation[];
   description: string;
-  placeholder: string;
+  placeholder: LayerFieldTypeMap[T];
 }
 
 export type LayerFieldUnion = {

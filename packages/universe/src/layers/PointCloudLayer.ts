@@ -27,7 +27,7 @@ export class PointCloudLayer extends UniverseLayer {
     pointSize: {
       name: "Point Size",
       description: "Size of points",
-      placeholder: "0.01",
+      placeholder: 0.01,
       value: 0.01,
       type: "number" as const,
       location: ["create" as const],
@@ -35,7 +35,7 @@ export class PointCloudLayer extends UniverseLayer {
     pointColor: {
       name: "Point Color",
       description: "Color of points",
-      placeholder: "",
+      placeholder: 0xffffff,
       value: 0xffffff,
       type: "number" as const,
       location: ["create" as const],
@@ -51,7 +51,7 @@ export class PointCloudLayer extends UniverseLayer {
     pointAttenuate: {
       name: "Point Attenuate",
       description: "Attenuate point size",
-      placeholder: "",
+      placeholder: false,
       value: false,
       type: "boolean" as const,
       location: ["create" as const],

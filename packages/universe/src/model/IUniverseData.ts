@@ -190,13 +190,13 @@ export interface IUniverseData {
   subscribeToNumeric(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (num: number) => void
+    callback: (num: [number, number][]) => void
   ): CloseSubscription;
 
   subscribeToNumericSet(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (entry: INumericSetEntry) => void
+    callback: (entry: [number, INumericSetEntry][]) => void
   ): CloseSubscription;
 
   getStatistics(): Promise<IUniverseStatistics>;

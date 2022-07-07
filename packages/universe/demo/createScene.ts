@@ -6,6 +6,29 @@ export function createScene() {
     {
       id: uuid.v4(),
       editing: false,
+      type: "chart",
+      name: "Chart",
+      deviceContext: "abc",
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 1 },
+      fieldValues: {
+        width: { type: "number", value: 1 },
+        height: { type: "number", value: 0.5 },
+      },
+      data: {},
+      dataSources: [
+        {
+          id: uuid.v4(),
+          sourceType: "realtime",
+          rosTopicName: "/joint_states",
+          rosTopicType: "sensor_msgs/JointState",
+        },
+      ],
+    },
+    {
+      id: uuid.v4(),
+      editing: false,
       type: "teleport",
       name: "Teleport",
       deviceContext: undefined,
@@ -115,8 +138,8 @@ export function createScene() {
       },
       fieldValues: {
         ghosted: {
-          type: "text",
-          value: "true",
+          type: "boolean",
+          value: true,
         },
       },
       name: "Spot URDF",

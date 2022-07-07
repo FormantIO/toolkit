@@ -146,7 +146,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
     const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5 * d);
     o.add(ambientLight);
-    this.scene.add(o);
+    this.root.add(o);
   }
 
   public componentDidMount() {

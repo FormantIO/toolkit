@@ -12,6 +12,7 @@ import { VideoLayer } from "./layers/VideoLayer";
 import { DeviceVisualUrdfLayer } from "./layers/DeviceVisualUrdfLayer";
 import { DeviceVisualTFLayer } from "./layers/DeviceVisualTFLayer";
 import { EmptyLayer } from "./layers/EmptyLayer";
+import { ChartLayer } from "./layers/ChartLayer";
 
 export * from "./components/Universe";
 export * from "./model/IPose";
@@ -70,3 +71,4 @@ LayerRegistry.register(DeviceVisualUrdfLayer);
 LayerRegistry.register(DeviceVisualTFLayer);
 LayerRegistry.register(VideoLayer);
 LayerRegistry.register(EmptyLayer);
+LayerRegistry.register(ChartLayer);

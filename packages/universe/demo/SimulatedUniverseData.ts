@@ -40,7 +40,7 @@ export class SimulatedUniverseData implements IUniverseData {
     setInterval(() => {
       callback({
         pose: {
-          translation: { x: Math.random(), y: Math.random(), z: Math.random() },
+          translation: { x: 0, y: 0, z: 0 },
           rotation: { x: 0, y: 0, z: 0, w: 1 },
         },
         covariance: [],
@@ -80,16 +80,28 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToNumeric(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (num: number) => void
+    _callback: (num: [number, number][]) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
   subscribeToNumericSet(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (entry: INumericSetEntry) => void
+    callback: (entry: [number, INumericSetEntry][]) => void
   ): CloseSubscription {
-    throw new Error("Method not implemented.");
+    setInterval(() => {
+      callback([
+        [Date.now() - 3000, { value: Math.random(), label: "test" }],
+        [Date.now() - 2000, { value: Math.random(), label: "test" }],
+        [Date.now() - 1000, { value: Math.random(), label: "test" }],
+        [Date.now(), { value: Math.random(), label: "test" }],
+        [Date.now() - 3000, { value: Math.random(), label: "bar" }],
+        [Date.now() - 2000, { value: Math.random(), label: "bar" }],
+        [Date.now() - 1000, { value: Math.random(), label: "bar" }],
+        [Date.now(), { value: Math.random(), label: "bar" }],
+      ]);
+    }, 1000);
+    return () => {};
   }
   getInteractionContext(): InteractionContext {
     throw new Error("Method not implemented.");

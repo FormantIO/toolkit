@@ -168,7 +168,7 @@ export function AddLayerModal(props: IAddLayerModalProps) {
             :
             <TextField
               value={value.value || ""}
-              placeholder={value.placeholder}
+              placeholder={value.placeholder.toString()}
               onChange={(ev) => {
                 setCurrentFields({
                   ...currentFields,
