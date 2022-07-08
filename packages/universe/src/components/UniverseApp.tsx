@@ -234,6 +234,7 @@ export function UniverseApp(props: IUniverseAppProps) {
           LayerRegistry.getDescription(e.type),
           e.dataSources
         );
+        newElement.visible = e.visible;
         newElement.deviceContext = e.deviceContext;
         newElement.fieldValues = e.fieldValues || {};
         let newPath;

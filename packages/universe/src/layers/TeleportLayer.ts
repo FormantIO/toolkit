@@ -50,11 +50,7 @@ export class TeleportLayer extends UniverseLayer {
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
-      this.marker.position.set(
-        this.intersection.x,
-        this.intersection.y,
-        this.intersection.z
-      );
+      this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
     }
   }
 
@@ -64,11 +60,7 @@ export class TeleportLayer extends UniverseLayer {
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
-      this.marker.position.set(
-        this.intersection.x,
-        this.intersection.y,
-        this.intersection.z
-      );
+      this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
     } else {
       this.intersection = undefined;
     }
