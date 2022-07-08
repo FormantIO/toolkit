@@ -76,6 +76,11 @@ export class TransformLayer extends Object3D {
 
   positionUnsubsciber: undefined | (() => void);
 
+  setLayerVisibility(visible: boolean): void {
+    this.visible = visible;
+    defined(this.contentNode).onVisibilityChanged(visible);
+  }
+
   setPositioning(positioning: Positioning, universeData: IUniverseData) {
     const { deviceId } = this;
     if (this.positionUnsubsciber) {

@@ -693,6 +693,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       this.root.add(layer);
     }
     this.pathToLayer.set(el.id, layer);
+    this.toggleVisible(sceneGraph, path, el.visible);
   }
 
   public updateLayerVisibility(id: string, visible: boolean) {
@@ -727,8 +728,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el.id));
-    o.visible = visible;
-    defined(o.contentNode).onVisibilityChanged(visible);
+    o.setLayerVisibility(visible);
   }
 
   public toggleEditing(

@@ -201,7 +201,7 @@ export abstract class UniverseLayer extends Object3D {
     return layers;
   }
 
-  getLayerRoot(layerId?: string): Object3D {
+  getLayerRoot(layerId?: string): TransformLayer {
     const f = defined(this.getTransformLayerHelper);
     return f(layerId || this.layerId);
   }
@@ -317,6 +317,15 @@ export abstract class UniverseLayer extends Object3D {
 
   public createGizmo() {
     return new Gizmo();
+  }
+
+  public createPlane(config: {
+    width: number;
+    height: number;
+    color?: number;
+    textureUrl?: string;
+  }) {
+    return this.createRoundedRectangle({ ...config, radius: 0, smoothness: 0 });
   }
 
   public createRoundedRectangle(config: {

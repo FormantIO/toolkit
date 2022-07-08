@@ -7,7 +7,6 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
-  OctahedronGeometry,
   Quaternion,
   SphereGeometry,
   TorusGeometry,
@@ -15,8 +14,6 @@ import {
 } from "three";
 
 const radialGizmoRadius = 0.3;
-const radialPickerThickness = 0.05;
-const translatePickerThickness = 0.5;
 
 export type TranslateGizmoDimension =
   | "X"
@@ -165,9 +162,6 @@ export class Gizmo extends Object3D {
     matBlueTransparent.color.setStyle(zColor);
     matBlueTransparent.opacity = 0.5;
 
-    const matWhiteTransparent = gizmoMaterial.clone() as MeshBasicMaterial;
-    matWhiteTransparent.opacity = 0.25;
-
     const matHighlightTransparent = gizmoMaterial.clone() as MeshBasicMaterial;
     matHighlightTransparent.color.setStyle(highlightColor);
     matHighlightTransparent.opacity = 0.25;
@@ -251,54 +245,6 @@ export class Gizmo extends Object3D {
       ],
     };
 
-    const pickerTranslate: { [key in TranslatePickerDimension]: any } = {
-      X: [
-        [
-          new Mesh(new CylinderGeometry(0.2, 0, 0.6, 4), matInvisible),
-          [0.3, 0, 0],
-          [0, 0, -Math.PI / 2],
-          [translatePickerThickness, 1, translatePickerThickness],
-        ],
-      ],
-      Y: [
-        [
-          new Mesh(new CylinderGeometry(0.2, 0, 0.6, 4), matInvisible),
-          [0, 0.3, 0],
-          [0, 0, 0],
-          [translatePickerThickness, 1, translatePickerThickness],
-        ],
-      ],
-      Z: [
-        [
-          new Mesh(new CylinderGeometry(0.2, 0, 0.6, 4), matInvisible),
-          [0, 0, 0.3],
-          [Math.PI / 2, 0, 0],
-          [translatePickerThickness, 1, translatePickerThickness],
-        ],
-      ],
-      XYZ: [[new Mesh(new OctahedronGeometry(0.2, 0), matInvisible)]],
-      XY: [
-        [
-          new Mesh(new BoxGeometry(0.2, 0.2, 0.01), matInvisible),
-          [0.15, 0.15, 0],
-        ],
-      ],
-      YZ: [
-        [
-          new Mesh(new BoxGeometry(0.2, 0.2, 0.01), matInvisible),
-          [0, 0.15, 0.15],
-          [0, Math.PI / 2, 0],
-        ],
-      ],
-      XZ: [
-        [
-          new Mesh(new BoxGeometry(0.2, 0.2, 0.01), matInvisible),
-          [0.15, 0, 0.15],
-          [-Math.PI / 2, 0, 0],
-        ],
-      ],
-    };
-
     const helperTranslate: { [key in TranslateHelperDimension]: any } = {
       START: [],
       END: [],
@@ -338,31 +284,6 @@ export class Gizmo extends Object3D {
 
     const helperRotate: { [key in RotateHelperDimension]: any } = {
       AXIS: [],
-    };
-
-    const pickerRotateTorus = new Mesh(
-      new TorusGeometry(
-        radialGizmoRadius,
-        radialPickerThickness,
-        4,
-        24,
-        Math.PI / 2
-      ),
-      matInvisible
-    );
-    const pickerRotate: { [key in RotatePickerDimension]: any } = {
-      XYZE: [[new Mesh(new SphereGeometry(0.25, 10, 8), matInvisible)]],
-      X: [[pickerRotateTorus, [0, 0, 0], [0, -Math.PI / 2, -Math.PI]]],
-      Y: [[pickerRotateTorus, [0, 0, 0], [-Math.PI / 2, Math.PI, 0]]],
-      Z: [[pickerRotateTorus, [0, 0, 0], [0, Math.PI, -Math.PI / 2]]],
-      E: [
-        [
-          new Mesh(
-            new TorusGeometry(0.75, radialPickerThickness, 2, 24),
-            matInvisible
-          ),
-        ],
-      ],
     };
 
     // Creates an Object3D with gizmos described in custom hierarchy definition.
@@ -444,28 +365,10 @@ export class Gizmo extends Object3D {
         dimensions.rotation
       ))
     );
-    this.add(
-      (this.picker.translate = setupGizmo(
-        pickerTranslate,
-        "translate",
-        dimensions.translation
-      ))
-    );
-    this.add(
-      (this.picker.rotate = setupGizmo(
-        pickerRotate,
-        "rotate",
-        dimensions.rotation
-      ))
-    );
+
     this.add(
       (this.helper.translate = setupGizmo(helperTranslate, "translate"))
     );
     this.add((this.helper.rotate = setupGizmo(helperRotate, "rotate")));
-
-    // Pickers should be hidden always
-
-    this.picker.translate.visible = false;
-    this.picker.rotate.visible = false;
   }
 }
