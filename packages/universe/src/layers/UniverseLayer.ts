@@ -79,6 +79,8 @@ export abstract class UniverseLayer extends Object3D {
 
   private camera?: () => PerspectiveCamera;
 
+  private floor?: () => Object3D;
+
   private getTransformLayerHelper?: (id: string) => TransformLayer;
 
   static async getLayerSuggestions(
@@ -96,7 +98,8 @@ export abstract class UniverseLayer extends Object3D {
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
     camera?: () => PerspectiveCamera,
-    getTransformLayerHelper?: (id: string) => TransformLayer
+    getTransformLayerHelper?: (id: string) => TransformLayer,
+    floor?: () => Object3D
   ): TransformLayer {
     content.layerId = layerId;
     content.universeData = universeData;
@@ -104,6 +107,7 @@ export abstract class UniverseLayer extends Object3D {
     content.layerDataSources = dataSources || [];
     content.layerFields = fields || {};
     content.camera = camera;
+    content.floor = floor;
     content.getTransformLayerHelper = getTransformLayerHelper;
     const transform = new TransformLayer();
     transform.universeData = universeData;
@@ -150,6 +154,11 @@ export abstract class UniverseLayer extends Object3D {
 
   getCurrentCamera(): PerspectiveCamera {
     const f = defined(this.camera);
+    return f();
+  }
+
+  getFloor(): Object3D {
+    const f = defined(this.floor);
     return f();
   }
 

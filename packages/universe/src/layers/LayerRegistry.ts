@@ -1,4 +1,4 @@
-import { PerspectiveCamera } from "three";
+import { Object3D, PerspectiveCamera } from "three";
 import { UniverseDataSource, IUniverseData } from "../model/IUniverseData";
 import { LayerType } from ".";
 import { defined } from "../../../common/defined";
@@ -81,7 +81,8 @@ export class LayerRegistry {
     dataSources?: UniverseDataSource[],
     fields?: LayerFields,
     getCurrentCamera?: () => PerspectiveCamera,
-    getTransformLayer?: (id: string) => TransformLayer
+    getTransformLayer?: (id: string) => TransformLayer,
+    getFloor?: () => Object3D
   ) {
     const Layer = defined(LayerRegistry.layers.get(nodeType));
     return UniverseLayer.createDefault(
@@ -92,7 +93,8 @@ export class LayerRegistry {
       dataSources,
       fields,
       getCurrentCamera,
-      getTransformLayer
+      getTransformLayer,
+      getFloor
     );
   }
 }

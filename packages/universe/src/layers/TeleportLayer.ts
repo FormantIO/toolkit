@@ -18,15 +18,6 @@ export class TeleportLayer extends UniverseLayer {
     new THREE.MeshBasicMaterial({ color: 0xbac4e2 })
   );
 
-  floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(100, 100, 2, 2),
-    new THREE.MeshBasicMaterial({
-      color: 0x808080,
-      transparent: true,
-      opacity: 0,
-    })
-  );
-
   intersection?: THREE.Vector3;
 
   originalBaseReferenceSpace?: XRReferenceSpace;
@@ -41,12 +32,11 @@ export class TeleportLayer extends UniverseLayer {
 
   init() {
     this.add(this.marker);
-    this.add(this.floor);
   }
 
   onControllersMoved(controllers: Controller[]): void {
     const { raycaster } = controllers[0];
-    const intersects = raycaster.intersectObjects([this.floor]);
+    const intersects = raycaster.intersectObjects([this.getFloor()]);
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
@@ -56,7 +46,7 @@ export class TeleportLayer extends UniverseLayer {
 
   onHandsMoved(hands: Hand[]): void {
     const { raycaster } = hands[0];
-    const intersects = raycaster.intersectObjects([this.floor]);
+    const intersects = raycaster.intersectObjects([this.getFloor()]);
 
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;

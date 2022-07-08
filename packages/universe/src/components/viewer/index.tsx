@@ -78,6 +78,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   private camera: THREE.PerspectiveCamera;
 
+  private floor: THREE.Mesh;
+
   private pathToLayer: Map<string, TransformLayer> = new Map();
 
   private editControls: TransformControls | undefined;
@@ -119,6 +121,16 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.camera.position.z = -1.5;
     this.camera.position.x = 1.5;
     this.camera.position.y = 1;
+
+    this.floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(1000, 1000, 2, 2),
+      new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0,
+      })
+    );
+    this.root.add(this.floor);
 
     new RGBELoader().load(
       "https://threejs.org/examples/textures/equirectangular/venice_sunset_1k.hdr",
@@ -521,6 +533,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
   getCurrentCamera = () => this.camera;
 
+  getFloor = () => this.floor;
+
   getTransformLayerById = (layerId: string) => {
     const layer = this.pathToLayer.get(layerId);
     return defined(layer);
@@ -680,7 +694,8 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
       el.dataSources,
       fields,
       this.getCurrentCamera,
-      this.getTransformLayerById
+      this.getTransformLayerById,
+      this.getFloor
     );
     if (el.position.type === "manual") {
       layer.position.set(el.position.x, el.position.y, el.position.z);
