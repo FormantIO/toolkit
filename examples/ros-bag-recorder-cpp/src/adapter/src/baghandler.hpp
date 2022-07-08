@@ -151,6 +151,7 @@ private:
     {
         std::string bag_naming_convention = config.get_bag_naming_convention();
         adapter_utils::replaceAll(bag_naming_convention, "$bn", std::to_string(bag_index));
+        adapter_utils::replaceAll( bag_naming_convention, "$dt", adapter_utils::get_time(config.get_date_time_string()) );
         bag_index += 1;
         std::string storage_path = config.get_bag_storage_path();
         return storage_path + std::string("/") + bag_naming_convention;

@@ -148,11 +148,6 @@ private:
 
         command_stream_thread_started = true;
 
-        for (auto c : command_filters)
-        {
-            std::cout << c << " ";
-        }
-
         while (stream->Read(&message))
         {
             auto command = message.request().command();

@@ -11,8 +11,7 @@
 #include <iostream>
 #include <ros/ros.h>
 
-#include "adapter.h" 
-
+#include "recorder.hpp"
 
 int main(int argc, char **argv){
 
@@ -21,6 +20,6 @@ int main(int argc, char **argv){
     ros::start();
     
     // Start running the adapter
-    Adapter adapter; 
-    adapter.run();
+    Recorder recorder; 
+    ros::spin(); 
 }

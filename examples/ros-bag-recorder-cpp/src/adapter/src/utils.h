@@ -1,6 +1,10 @@
 #include <ros/master.h>
 #include <ctime>
 #include <sstream>
+#include <iostream>
+#include <sstream>
+#include <ctime> 
+#include <iomanip> 
 
 #ifndef UTILS_H
 #define UTILS_H
@@ -8,7 +12,7 @@
 namespace adapter_utils
 {
 
-    ros::master::V_TopicInfo get_topics()
+    inline ros::master::V_TopicInfo get_topics()
     {
 
         ros::master::V_TopicInfo master_topics;
@@ -16,7 +20,16 @@ namespace adapter_utils
         return master_topics;
     }
 
-    bool replace(std::string &str, const std::string &from, const std::string &to)
+    inline std::string get_time(const std::string &time_fmt)
+    {
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+        std::stringstream ss;
+        ss << std::put_time(&tm, time_fmt.c_str());
+        return ss.str();
+    }
+
+    inline bool replace(std::string &str, const std::string &from, const std::string &to)
     {
         size_t start_pos = str.find(from);
         if (start_pos == std::string::npos)
@@ -25,7 +38,7 @@ namespace adapter_utils
         return true;
     }
 
-    void replaceAll(std::string &str, const std::string &from, const std::string &to)
+    inline void replaceAll(std::string &str, const std::string &from, const std::string &to)
     {
         if (from.empty())
             return;
@@ -36,8 +49,6 @@ namespace adapter_utils
             start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
         }
     }
-
-   
 
 }
 #endif
