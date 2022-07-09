@@ -238,7 +238,8 @@ export class TransformLayer extends Object3D {
       camera.add(offset);
       const hud = new Object3D();
       offset.add(hud);
-      hud.position.set(0, 0, -0.4);
+      const eyeDistanceOculus = 0.068;
+      hud.position.set(eyeDistanceOculus / 2, 0, -0.4);
       const root = this;
       root.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
       hud.add(root);

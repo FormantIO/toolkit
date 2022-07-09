@@ -15,7 +15,9 @@ export class TeleportLayer extends UniverseLayer {
 
   marker = new THREE.Mesh(
     new THREE.CircleGeometry(0.25, 32),
-    new THREE.MeshBasicMaterial({ color: 0xbac4e2 })
+    new THREE.MeshBasicMaterial({
+      color: 0xbac4e2,
+    })
   );
 
   intersection?: THREE.Vector3;
@@ -32,6 +34,7 @@ export class TeleportLayer extends UniverseLayer {
 
   init() {
     this.add(this.marker);
+    this.marker.visible = false;
   }
 
   onControllersMoved(controllers: Controller[]): void {
@@ -41,6 +44,10 @@ export class TeleportLayer extends UniverseLayer {
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
       this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
+      this.marker.visible = true;
+    } else {
+      this.intersection = undefined;
+      this.marker.visible = false;
     }
   }
 
@@ -51,8 +58,10 @@ export class TeleportLayer extends UniverseLayer {
     if (intersects.length > 0) {
       this.intersection = intersects[0].point;
       this.marker.position.set(this.intersection.x, -this.intersection.z, 0);
+      this.marker.visible = true;
     } else {
       this.intersection = undefined;
+      this.marker.visible = false;
     }
   }
 
