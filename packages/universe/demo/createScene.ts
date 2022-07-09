@@ -139,7 +139,7 @@ export function createScene() {
       fieldValues: {
         ghosted: {
           type: "boolean",
-          value: true,
+          value: false,
         },
       },
       name: "Spot URDF",

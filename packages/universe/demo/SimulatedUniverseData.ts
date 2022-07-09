@@ -2,12 +2,11 @@ import {
   CloseSubscription,
   DataSourceState,
   IHardwareStream,
-  InteractionContext,
+  Interaction,
   ITelemetryRosStream,
   ITelemetryStream,
   IUniverseData,
   IUniverseStatistics,
-  RealtimeButtonConfiguration,
   UniverseDataSource,
 } from "../src/model/IUniverseData";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
@@ -25,6 +24,30 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  addInteraction(_interaction: Interaction) {
+    throw new Error("Method not implemented.");
+  }
+
+  removeInteraction(_id: string) {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractions(): Interaction[] {
+    throw new Error("Method not implemented.");
+  }
+
+  addInteractionsChangedListener(
+    _callback: (interactions: Interaction[]) => void
+  ): () => void {
+    throw new Error("Method not implemented.");
+  }
+
+  addInteractionListener(
+    _callback: (interaction: Interaction) => void
+  ): () => void {
+    throw new Error("Method not implemented.");
+  }
+
   sendCommand(
     _deviceId: string,
     _name: string,
@@ -32,6 +55,7 @@ export class SimulatedUniverseData implements IUniverseData {
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   subscribeToOdometry(
     _deviceId: string,
     _source: UniverseDataSource,
@@ -48,6 +72,7 @@ export class SimulatedUniverseData implements IUniverseData {
     }, 1000);
     return () => {};
   }
+
   subscribeToPose(
     _deviceId: string,
     _source: UniverseDataSource,
@@ -122,24 +147,6 @@ export class SimulatedUniverseData implements IUniverseData {
       ]);
     }, 1000);
     return () => {};
-  }
-  getInteractionContext(): InteractionContext {
-    throw new Error("Method not implemented.");
-  }
-  addInteractionContextChangedListener(
-    _callback: (c: InteractionContext) => void
-  ): void {
-    throw new Error("Method not implemented.");
-  }
-  removeInteractionContextChangedListener(
-    _callback: (c: InteractionContext) => void
-  ): void {
-    throw new Error("Method not implemented.");
-  }
-  getRealtimeButtons(
-    _deviceId: string
-  ): Promise<RealtimeButtonConfiguration[]> {
-    throw new Error("Method not implemented.");
   }
   sendRealtimeButtonState(
     _deviceId: string,

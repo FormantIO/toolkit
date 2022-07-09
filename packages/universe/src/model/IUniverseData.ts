@@ -71,25 +71,31 @@ export interface IUniverseStatistics {
   }[];
 }
 
-export interface InteractionContext {
-  deviceIds: string[];
+export interface Interaction {
+  deviceId: string;
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
 }
 
 export interface RealtimeButtonConfiguration {
   streamName: string;
 }
 export interface IUniverseData {
-  getInteractionContext(): InteractionContext;
+  addInteraction: (interaction: Interaction) => void;
 
-  addInteractionContextChangedListener(
-    callback: (c: InteractionContext) => void
-  ): void;
+  removeInteraction: (id: string) => void;
 
-  removeInteractionContextChangedListener(
-    callback: (c: InteractionContext) => void
-  ): void;
+  getInteractions: () => Interaction[];
 
-  getRealtimeButtons(deviceId: string): Promise<RealtimeButtonConfiguration[]>;
+  addInteractionsChangedListener: (
+    callback: (interactions: Interaction[]) => void
+  ) => () => void;
+
+  addInteractionListener: (
+    callback: (interaction: Interaction) => void
+  ) => () => void;
 
   setTime(time: number | "live"): void;
 
