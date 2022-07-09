@@ -121,6 +121,7 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     this.camera.position.z = -1.5;
     this.camera.position.x = 1.5;
     this.camera.position.y = 1;
+    this.scene.add(this.camera);
 
     this.floor = new THREE.Mesh(
       new THREE.PlaneGeometry(1000, 1000, 2, 2),
@@ -767,11 +768,12 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
   public updatePositioning(
     sceneGraph: SceneGraph,
     path: TreePath,
-    position: Positioning
+    position: Positioning,
+    scale?: { x: number; y: number; z: number }
   ) {
     const el = definedAndNotNull(findSceneGraphElement(sceneGraph, path));
     const o = defined(this.pathToLayer.get(el.id));
-    o.setPositioning(position, this.props.universeData);
+    o.setPositioning(this.props.universeData, position, scale);
   }
 
   public render() {

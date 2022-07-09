@@ -1,6 +1,13 @@
 import * as uuid from "uuid";
 import { getDistance } from "geolib";
-import { Euler, Matrix4, Object3D, Quaternion, Vector3 } from "three";
+import {
+  Euler,
+  Matrix4,
+  Object3D,
+  PerspectiveCamera,
+  Quaternion,
+  Vector3,
+} from "three";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../model/SceneGraph";
@@ -21,6 +28,8 @@ export class TransformLayer extends Object3D {
   public universeData!: IUniverseData;
 
   public deviceId?: string;
+
+  public camera?: () => PerspectiveCamera;
 
   contentNode: UniverseLayer | undefined;
 
@@ -81,7 +90,11 @@ export class TransformLayer extends Object3D {
     defined(this.contentNode).onVisibilityChanged(visible);
   }
 
-  setPositioning(positioning: Positioning, universeData: IUniverseData) {
+  setPositioning(
+    universeData: IUniverseData,
+    positioning: Positioning,
+    scale?: { x: number; y: number; z: number }
+  ) {
     const { deviceId } = this;
     if (this.positionUnsubsciber) {
       this.positionUnsubsciber();
@@ -217,6 +230,21 @@ export class TransformLayer extends Object3D {
       );
     } else if (positioning.type === "manual") {
       this.position.set(positioning.x, positioning.y, positioning.z);
+    } else if (positioning.type === "hud") {
+      this.position.set(positioning.x, positioning.y, 0);
+      const camera = defined(this.camera)();
+      const offset = new Object3D();
+      offset.position.set(0, 0, 0);
+      camera.add(offset);
+      const hud = new Object3D();
+      offset.add(hud);
+      hud.position.set(0, 0, -0.4);
+      const root = this;
+      root.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
+      hud.add(root);
+    }
+    if (scale) {
+      this.scale.set(scale.x, scale.y, scale.z);
     }
   }
 }

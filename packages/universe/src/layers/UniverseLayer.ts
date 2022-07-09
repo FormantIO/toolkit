@@ -110,6 +110,7 @@ export abstract class UniverseLayer extends Object3D {
     content.floor = floor;
     content.getTransformLayerHelper = getTransformLayerHelper;
     const transform = new TransformLayer();
+    transform.camera = camera;
     transform.universeData = universeData;
     transform.deviceId = deviceId;
     transform.contentNode = content;

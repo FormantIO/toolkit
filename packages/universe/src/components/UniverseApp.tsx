@@ -255,7 +255,7 @@ export function UniverseApp(props: IUniverseAppProps) {
         if (e.position) {
           const element = findSceneGraphElement(draft, pathThusFar);
           definedAndNotNull(element).position = e.position;
-          v.updatePositioning(draft, pathThusFar, e.position);
+          v.updatePositioning(draft, pathThusFar, e.position, e.scale);
         }
       };
       if (props.initialSceneGraph) {
@@ -540,7 +540,8 @@ export function UniverseApp(props: IUniverseAppProps) {
       defined(viewer).updatePositioning(
         draft,
         defined(currentlySelectedElement),
-        element.position
+        element.position,
+        element.scale
       );
     });
     setSceneGraph(newSceneGraph);
@@ -566,7 +567,8 @@ export function UniverseApp(props: IUniverseAppProps) {
       defined(viewer).updatePositioning(
         draft,
         defined(currentlySelectedElement),
-        element.position
+        element.position,
+        element.scale
       );
     });
     setSceneGraph(newSceneGraph);

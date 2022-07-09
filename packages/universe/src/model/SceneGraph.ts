@@ -12,6 +12,11 @@ export type Positioning =
       z: number;
     }
   | {
+      type: "hud";
+      x: number;
+      y: number;
+    }
+  | {
       type: "transform tree";
       stream?: string;
       end?: string;
@@ -42,6 +47,12 @@ export class SceneGraphElement {
     x: 0,
     y: 0,
     z: 0,
+  };
+
+  public scale?: {
+    x: number;
+    y: number;
+    z: number;
   };
 
   public fieldValues: LayerFieldValues = {};
