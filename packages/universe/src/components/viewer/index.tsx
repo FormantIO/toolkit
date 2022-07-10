@@ -11,6 +11,7 @@ import {
   Raycaster,
   Object3D,
   ACESFilmicToneMapping,
+  LineBasicMaterial,
 } from "three";
 import styled from "styled-components";
 import { RGBELoader } from "../../../three-utils/loaders/RGBELoader";
@@ -203,7 +204,14 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
         new THREE.Vector3(0, 0, -1),
       ]);
 
-      const line = new THREE.Line(geometry);
+      const line = new THREE.Line(
+        geometry,
+        new LineBasicMaterial({
+          color: 0xffffff,
+          opacity: 0.5,
+          transparent: true,
+        })
+      );
       line.name = "line";
       line.scale.z = 5;
 
