@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(adapter)
 add_compile_options(-std=c++11)
 
-include(FindProtobuf)
+# include(FindProtobuf)
 
 find_package(
   catkin REQUIRED COMPONENTS

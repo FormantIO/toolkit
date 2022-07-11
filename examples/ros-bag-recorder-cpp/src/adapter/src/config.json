@@ -11,4 +11,4 @@
     "bag_naming_convention":"demo-bag$bn-$dt.bag",
     "date_time_string":"%d_%m_%Y-%H_%M_%S",
     "loglevel":"debug"
-}
+}   
