@@ -41,6 +41,31 @@ export function createScene() {
       },
       data: {},
     },
+    {
+      id: uuid.v4(),
+      editing: false,
+      type: "device_visual_urdf",
+      name: "robot",
+      deviceContext: "Asd",
+      children: [],
+      visible: true,
+      position: { type: "manual", x: 0, y: 0, z: 0 },
+      fieldValues: {
+        ghosted: {
+          type: "boolean",
+          value: false,
+        },
+      },
+      dataSources: [
+        {
+          id: uuid.v4(),
+          sourceType: "realtime",
+          rosTopicName: "/joint_states",
+          rosTopicType: "sensor_msgs/JointState",
+        },
+      ],
+      data: {},
+    },
   ];
   return sg;
 }

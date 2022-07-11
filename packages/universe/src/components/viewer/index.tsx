@@ -176,7 +176,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
       this.renderer.physicallyCorrectLights = true;
       this.renderer.toneMapping = ACESFilmicToneMapping;
-      this.renderer.shadowMap.enabled = true;
 
       element.appendChild(this.renderer.domElement);
 
