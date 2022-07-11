@@ -27,9 +27,9 @@ if [ ! -f "devel/lib/adapter/main" ]; then
     catkin_make -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-O3
 fi
 
-echo "Attempting to start the bag recorder"
+echo "Attempting to start the bag recorder..."
 
 source devel/setup.bash
-rosrun adapter main
+rosrun ros_bag_adapter main
 
 echo "Hello, world!"

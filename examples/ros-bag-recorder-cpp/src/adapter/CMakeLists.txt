@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(adapter)
+project(ros_bag_adapter)
 add_compile_options(-std=c++11)
 
 # include(FindProtobuf)
@@ -22,7 +22,7 @@ file(
   ${PROJECT_SOURCE_DIR}/../../protos/protos/*/v1/*
 )
 
-find_package(protobuf CONFIG REQUIRED)
+find_package(protobuf)# CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(Threads REQUIRED)
 
