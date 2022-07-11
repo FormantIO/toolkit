@@ -8,11 +8,8 @@ or record at all times.
 
 ## protobuf Install 
 
-To install the protobuf compiler, all that is required is 
-```bash
-sudo apt update
-sudo apt install protobuf-compiler
-```
+You will need protobuf. You may download protobuf from
+https://github.com/protocolbuffers/protobuf/releases
 
 ## gRPC Install
 To begin, you will need to first install the C++ gRPC library. 
