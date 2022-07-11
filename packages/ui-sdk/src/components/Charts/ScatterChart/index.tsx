@@ -11,12 +11,20 @@ interface IScatterChartProps {
   height?: number | string;
   width?: number | string;
   id: string; // unique string
+  xMax?: number;
+  xMin?: number;
+  yMax?: number;
+  yMin?: number;
 }
 
 export const ScatterChart: React.FC<IScatterChartProps> = ({
   data,
   height,
   width,
+  xMax,
+  xMin,
+  yMax,
+  yMin,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"scatter">>({
@@ -47,6 +55,8 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
     responsive: true,
     scales: {
       x: {
+        min: xMin ?? 0,
+        max: xMax ?? 100,
         grid: {
           color: "black",
           tickColor: "transparent",
@@ -62,6 +72,8 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
         },
       },
       y: {
+        min: yMin ?? 0,
+        max: yMax ?? 100,
         grid: {
           color: "black",
           tickColor: "transparent",

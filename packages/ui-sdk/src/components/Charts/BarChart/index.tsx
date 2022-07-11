@@ -11,6 +11,8 @@ interface IBarChartProps {
   data: number[];
   height?: number;
   width?: number;
+  xMax?: number;
+  xMin?: number;
 }
 
 export const BarChart: React.FC<IBarChartProps> = ({
@@ -18,6 +20,8 @@ export const BarChart: React.FC<IBarChartProps> = ({
   data,
   height,
   width,
+  xMax,
+  xMin,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"bar">>({
@@ -55,7 +59,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
         display: false,
       },
     },
-    barPercentage: .12,
+    barPercentage: 0.12,
     scales: {
       x: {
         grid: {
@@ -72,6 +76,8 @@ export const BarChart: React.FC<IBarChartProps> = ({
         },
       },
       y: {
+        min: xMin ?? 0,
+        max: xMax ?? 100,
         grid: {
           color: "#1C1E2D",
           tickColor: "transparent",
