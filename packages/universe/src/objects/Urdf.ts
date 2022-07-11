@@ -82,7 +82,6 @@ export class Urdf extends Group {
         );
         dae.scene.traverse((_) => {
           if (_ instanceof Mesh) {
-            _.castShadow = true;
             this.meshs.push(_);
             _.geometry.computeVertexNormals();
             if (

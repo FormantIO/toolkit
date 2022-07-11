@@ -153,20 +153,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
     const accentLight1 = new PointLight(accentColor1, 0.3 * d, 0, 0);
     accentLight1.position.set(1000, 1000, 1000);
     o.add(accentLight1);
-    accentLight1.castShadow = true;
-    accentLight1.shadow.mapSize.width = 512;
-    accentLight1.shadow.mapSize.height = 512;
-    accentLight1.shadow.camera.near = 0.5;
-    accentLight1.shadow.camera.far = 1000;
 
     const accentLight2 = new PointLight(accentColor2, 0.7 * d, 0, 0);
     accentLight2.position.set(-1000, -1000, 1000);
     o.add(accentLight2);
-    accentLight2.castShadow = true;
-    accentLight2.shadow.mapSize.width = 512;
-    accentLight2.shadow.mapSize.height = 512;
-    accentLight2.shadow.camera.near = 0.5;
-    accentLight2.shadow.camera.far = 1000;
 
     const ambientLight = new HemisphereLight(skyColor, groundColor, 0.5 * d);
     o.add(ambientLight);
@@ -186,7 +176,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
 
       this.renderer.physicallyCorrectLights = true;
       this.renderer.toneMapping = ACESFilmicToneMapping;
-      this.renderer.shadowMap.enabled = true;
 
       element.appendChild(this.renderer.domElement);
 
