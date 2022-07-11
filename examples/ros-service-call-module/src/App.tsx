@@ -38,6 +38,7 @@ const App: FC = () => {
 
   const handleSubmit = useCallback(() => {
     if (device && service) {
+      console.log("here");
       device.sendCommand(
         "ROS Service Center",
         JSON.stringify({ [service]: serviceParameters.current })
@@ -46,7 +47,7 @@ const App: FC = () => {
       setShowSnackbar(true);
       serviceParameters.current = {};
     }
-  }, []);
+  }, [device, service]);
 
   return (
     <div className="App">
