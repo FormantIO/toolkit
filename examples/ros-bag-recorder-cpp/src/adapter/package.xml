@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ROS Bag Adapter</name>
+  <name>ROS_Bag_Adapter</name>
   <version>1.0.0</version>
   <description>C++ ROS Bag recorder</description>
   <maintainer email="franklin@formant.io">Franklin</maintainer>
