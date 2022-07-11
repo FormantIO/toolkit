@@ -215,7 +215,7 @@ export class VideoLayer extends UniverseLayer {
           const geometry = new SphereGeometry(size);
           this.mesh = new Mesh(geometry, material);
           if (isRotated) {
-            this.mesh.rotation.set(ninetyDegrees, 0, ninetyDegrees);
+            this.mesh.rotation.set(0, 0, 0);
           } else {
             this.mesh.rotation.set(ninetyDegrees, 0, 0);
           }
