@@ -87,7 +87,7 @@ public:
     }
 
     /**
-     * @brief Write the outgoing message to the current open rosbag's.
+     * @brief Write the outgoing message to the current open rosbags.
      *
      * @param outgoing
      */
