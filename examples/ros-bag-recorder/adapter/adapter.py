@@ -4,21 +4,16 @@ This file contains the definition of the Adapter itself. The adapter is what all
 """
 
 import logging
-from multiprocessing.sharedctypes import Value
+import sys
 import threading
-import time
 
 from baghandler import BagHandler
 from config import Config
-from genpy import Duration
 from utils import *
 
 from formant.sdk.agent.v1.client import Client as FormantClient
 
-# logger.basicConfig(level=get_log_level())
-
 logger = logging.getLogger()
-
 
 class Adapter:
     """
@@ -46,32 +41,36 @@ class Adapter:
 
         self.bag_thread.start()
 
-    def handle_command(self, message):
-        
-        if message.command == "start_ros_recorder":
-            if self._recording:
+    def start_ros_recorder(self, _message):
+        if self._recording:
                 return
             
-            self._recording_thread = threading.Thread(target=self.start_recording, args=(None, True))
-            self._recording_thread.start() 
+        self._recording_thread = threading.Thread(target=self.start_recording, args=(None, True))
+        self._recording_thread.start() 
 
-        if message.command == "stop_ros_recorder": 
-            self._recording = False
-            
-        if message.command == "start_ros_recorder_duration":
-            try:
-                duration = rospy.Duration(secs=float(message.text))
-            except ValueError:
-                return
-            self.start_recording(duration, True) 
+    def stop_ros_recorder(self, _message):
+        self._recording = False
+
+    def start_ros_recorder_duration(self, message):
+        try:
+            duration = rospy.Duration(secs=float(message.text))
+        except ValueError:
+            return
+        self.start_recording(duration, True) 
 
     def run(self):
         rospy.init_node("rospy_bag_recorder")
         rospy.on_shutdown(self.shutdown)
+ 
+        self._fclient.register_command_request_callback(self.start_ros_recorder,
+                ["start_ros_recorder"])
 
-        self._fclient.register_command_request_callback(self.handle_command, 
-            ["start_ros_recorder", "stop_ros_recorder", "start_ros_recorder_duration"])
-        
+        self._fclient.register_command_request_callback(self.stop_ros_recorder,
+                ["stop_ros_recorder"])
+
+        self._fclient.register_command_request_callback(self.start_ros_recorder_duration,
+                ["start_ros_recorder_duration"])
+
         rospy.spin() 
 
     def setup_topics(self):
@@ -105,7 +104,7 @@ class Adapter:
         last_update = rospy.Time.now() 
 
         if(duration is None):
-            duration = rospy.Duration(secs=9999999)
+            duration = rospy.Duration(secs=sys.maxsize)
 
         start_time = rospy.Time.now() 
         self._recording = True
@@ -118,7 +117,6 @@ class Adapter:
         self.stop_recording() 
 
     def stop_recording(self):
-        
         for sub in self.subscriptions.items():
             sub[1].unregister()
         self.subscriptions = {} 

@@ -53,13 +53,11 @@ class RosBag:
 
     def open(self):
         """Open the bag in memory as a *.bag.active file"""
-        print("Opening new bag")
         self.bag = rosbag.Bag(self.name, 'w') 
         self._is_open = True
 
     def close(self):
         """Closes the bag, removing the .active suffix"""
-        print("Closing Bag")
     
         if not self.is_open():
             return
