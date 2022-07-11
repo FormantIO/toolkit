@@ -3,27 +3,25 @@ export const getOptions = (
   color: string,
   toolTipContainerId?: string,
   toolTipXContainerId?: string,
-  toolTipYContainerId?: string
+  toolTipYContainerId?: string,
+  Ymin?: number,
+  Ymax?: number
 ) => {
   const getXaxisandYaxisMinAndMax = () => {
     let Xmax: number = data[0].x;
     let Xmin: number = data[0].x;
-    let Ymax: number = data[0].y;
-    let Ymin: number = data[0].y;
 
     data.map((_, idx) => {
       if (idx === data.length) return;
       if (data[idx].x > Xmax) Xmax = data[idx].x;
       if (data[idx].x < Xmin) Xmin = data[idx].x;
-      if (data[idx].y > Ymax) Ymax = data[idx].y;
-      if (data[idx].y < Ymin) Ymin = data[idx].y;
     });
 
     return {
       Xmax,
       Xmin,
-      Ymax,
-      Ymin,
+      Ymax: Ymax ?? 100,
+      Ymin: Ymin ?? 0,
     };
   };
 
@@ -31,8 +29,8 @@ export const getOptions = (
 
   return {
     maintainAspectRatio: false,
-
     elements: {
+      animation: false,
       point: {
         pointBackgroundColor: "transparent",
         pointBorderColor: "transparent",

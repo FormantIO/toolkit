@@ -4,8 +4,9 @@ import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./style.css";
 
-const loadVideo = async (defaultCamera: number) => {
-  (el("formant-realtime-player") as RealtimePlayer).drawer.start();
+const loadVideo = async (defaultCamera: number | string) => {
+  const player = el("formant-realtime-player") as RealtimePlayer;
+  player.drawer.start();
   let indicator = document.getElementById("loading-indicator");
   try {
     if (await Authentication.waitTilAuthenticated()) {
@@ -17,21 +18,28 @@ const loadVideo = async (defaultCamera: number) => {
           message.payload.h264VideoFrame
         );
       });
-      let videoStreams = await device.getRealtimeVideoStreams();
-      let settingsIcon = document.getElementById("settings");
-      let settingsBlock = document.getElementById("video-settings");
+      const videoStreams = await device.getRealtimeVideoStreams();
+      const settingsIcon = document.getElementById("settings")!;
+      const settingsBlock = document.getElementById("video-settings")!;
 
-      settingsIcon!.style.display = "flex";
-      settingsIcon?.addEventListener("click", () => {
-        settingsBlock!.style.display = "flex";
+      settingsIcon.style.display = "flex";
+      settingsIcon.addEventListener("click", () => {
+        settingsBlock.style.display = "flex";
       });
       renderCameraOptions(videoStreams);
+      const foundCamera = (_: { name: string }) => _.name === defaultCamera;
 
-      device.startListeningToRealtimeVideo(videoStreams[defaultCamera]);
+      device.startListeningToRealtimeVideo(
+        videoStreams[
+          videoStreams.findIndex(foundCamera) > -1
+            ? videoStreams.findIndex(foundCamera)
+            : 0
+        ]
+      );
       setTimeout(() => {
         indicator!.style.display = "none";
       }, 3000);
-      el("formant-realtime-player").style.display = "block";
+      player.style.display = "block";
     }
   } catch (e) {
     log((e as Error).message);
@@ -42,8 +50,10 @@ function saveDefaultCamera() {
   const videoSource = document.querySelectorAll("p.camera-option");
   videoSource.forEach((video) => {
     video.addEventListener("click", (event) => {
-      const camera = (event.target as HTMLParagraphElement).id;
-      KeyValue.set("defaultVideoStream", camera.at(-1)!);
+      let camera: string | string[] = (event.target as HTMLParagraphElement).id;
+      camera = camera.split("/");
+      camera = camera.join(" ");
+      KeyValue.set("defaultVideoStream", camera);
       let settingsBlock = document.getElementById("video-settings");
       settingsBlock!.style.display = "none";
       location.reload();
@@ -52,20 +62,25 @@ function saveDefaultCamera() {
 }
 
 function renderCameraOptions(videoStreams: any[]) {
-  videoStreams.forEach((_, idx) => {
+  videoStreams.forEach((_) => {
+    let _id: string | string[] = _.name.trim().split(/\s+/);
+    _id = (_id as string[]).join("/");
     $(".camera-options").append(
-      `<p id=${`video-${idx}`} class="camera-option">${_.name}</p>`
+      `<p id=${`${_id}`} class="camera-option">${_.name}</p>`
     );
   });
 }
 
-function log(msg: string) {
-  el("#log").innerHTML = msg + "<br>" + el("#log").innerHTML;
-}
+const log = (msg: string) =>
+  el("#log").prepend(msg, document.createElement("br"));
 
-function el(selector: string) {
-  return document.querySelector(selector) as HTMLElement;
-}
+const el = (selector: string): HTMLElement => {
+  const match = document.querySelector(selector);
+  if (!(match instanceof HTMLElement)) {
+    throw new Error(`No element found: "${selector}"`);
+  }
+  return match;
+};
 
 el("formant-realtime-player").addEventListener("click", () => {
   let settingsBlock = document.getElementById("video-settings");
@@ -75,10 +90,10 @@ el("formant-realtime-player").addEventListener("click", () => {
 document.body.style.display = "block";
 
 const getDefaultCamera = async () => {
-  let defaultCamera = 0;
+  let defaultCamera: number | string | string[] = 0;
   if (await Authentication.waitTilAuthenticated()) {
     try {
-      defaultCamera = parseInt(await KeyValue.get("defaultVideoStream"));
+      defaultCamera = await KeyValue.get("defaultVideoStream");
     } catch (error) {
       defaultCamera = 0;
     }

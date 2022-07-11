@@ -20,6 +20,8 @@ interface ILineChartProps {
   toolTipYContainerId?: string;
   height?: number;
   width?: number;
+  Ymin?: number;
+  Ymax?: number;
 }
 
 export const LineChart: React.FC<ILineChartProps> = ({
@@ -31,6 +33,8 @@ export const LineChart: React.FC<ILineChartProps> = ({
   toolTipYContainerId,
   height,
   width,
+  Ymax,
+  Ymin,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"line">>({
@@ -73,7 +77,9 @@ export const LineChart: React.FC<ILineChartProps> = ({
           color,
           toolTipContainerId,
           toolTipXContainerId,
-          toolTipYContainerId
+          toolTipYContainerId,
+          Ymin,
+          Ymax
         )}
         ref={chartRef}
         type="scatter"
