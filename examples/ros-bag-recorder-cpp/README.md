@@ -28,8 +28,8 @@ libraries. Namely, you'll need **Topic Tools** and **ROS Type introspection**
 Those can be installed as follows: 
 
 ```bash
-sudo apt install ros-<distro>-topic-tools
-sudo apt install ros-<distro>-ros-type-introspection 
+sudo apt install ros-$ROS_DISTRO-topic-tools
+sudo apt install ros-$ROS_DISTRO-ros-type-introspection 
 ```
 
 ## Run
