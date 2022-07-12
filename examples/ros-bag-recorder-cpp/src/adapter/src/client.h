@@ -24,6 +24,11 @@ using v1::agent::GetCommandRequestStreamResponse;
 using v1::agent::SendCommandResponseRequest;
 using v1::agent::SendCommandResponseResponse;
 
+// For getting blob data
+using v1::agent::GetConfigBlobDataRequest; 
+using v1::agent::GetConfigBlobDataResponse; 
+using v1::model::BlobData;  
+
 #ifndef GET_CONFIG_H
 #define GET_CONFIG_H
 
@@ -129,6 +134,24 @@ public:
             cancel_command_receiver_thread();
             start_command_receiver_thread();
         }
+    }
+
+    /**
+     * @brief Get blob data from Formant
+     * 
+     * @return std::string 
+     */
+    inline std::string get_blob_data(){
+
+        BlobData bd; 
+
+        ClientContext context; 
+        GetConfigBlobDataRequest request; 
+        GetConfigBlobDataResponse response; 
+
+        stub_->GetConfigBlobData(&context, request, &response); 
+
+        return response.blob_data().data(); 
     }
 
 private:

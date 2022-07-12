@@ -23,11 +23,17 @@ public:
 
     inline void open()
     {
-        bag->open(name + std::string(".active"), rosbag::bagmode::Write);
+        try{
+            bag->open(name + std::string(".active"), rosbag::bagmode::Write);
+            is_open = true;
+        }catch(rosbag::BagIOException){
+            std::cout << "Error opening bag at "<< name + std::string(".active") << std::endl;
+        }
     }
 
     inline void close()
     {
+        is_open = false; 
         bag->close();
         delete bag;
         rename();
@@ -35,7 +41,11 @@ public:
 
     inline void write(const OutgoingMessage &outgoing)
     {
-        bag->write(outgoing.get_topic(), outgoing.get_time(), outgoing.get_msg());
+        if(!is_open){
+            std::cout << "Error: bag is not open" << std::endl; 
+            return; 
+        }
+        bag->write(outgoing.get_topic(), outgoing.get_time(), outgoing.get_msg()); 
     }
 
     inline void operator=(RosBag &&rhs)
@@ -59,6 +69,7 @@ private:
 
     std::string name;
     rosbag::Bag *bag;
+    bool is_open = false; 
 };
 
 class BagHandler

@@ -16,6 +16,7 @@
 #include <cstdlib>
 
 #include <grpcpp/grpcpp.h>
+#include <nlohmann/json.hpp> 
 
 #include "rsjp.hpp"
 #include "client.h"
@@ -23,62 +24,63 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
+using json = nlohmann::json;
 
-using v1::agent::Agent;
-using v1::agent::GetApplicationConfigurationRequest;
-using v1::agent::GetApplicationConfigurationResponse;
-
-/**
- * @brief Get configuration parameters from either the Formant device config or the local config.json file.
- * 
- */
 class Config
 {
-
 public:
     inline Config()
-        : f_client()
     {
-        std::string config_location("config.json");
+        
+        FormantAgentClient fclient; 
 
-        if (const char *env_p = std::getenv("FORMANT_BAG_RECORDER_CONFIG_LOCATION"))
+        std::string blob_data(fclient.get_blob_data()); 
+        std::ifstream in_f2("config.json");
+
+        try
         {
-            config_location = std::string(env_p);
+            json blob_json = json::parse(blob_data); 
+
+            if(blob_json.contains("bag_recorder_config"))
+                 blob_config = blob_json["bag_recorder_config"]; 
+            else
+                blob_config = json(); 
+        }
+        catch (nlohmann::json::parse_error)
+        {
+            blob_config = json();
         }
 
-        // Attempt to load the config from the config.json file.
-        std::ifstream infile(config_location);
-        config = RSJresource(infile);
-        config.parse();
+        try
+        {
+            in_f2 >> file_config;
+        }
+        catch (nlohmann::json::parse_error)
+        {
+            file_config = json();
+        }
 
-        std::pair<bool, std::string> f_client_config_string = f_client.get_config_param("bag_recorder_config");
-        if (f_client_config_string.first)
-            fclient_config = RSJresource(f_client_config_string.second);
-        else
-            fclient_config = RSJresource("{}"); 
+        configurations = {&blob_config, &file_config};
 
         load_config();
     }
 
     /**
      * @brief Get the subscribe_to_all configuration param
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
     bool get_subscribe_to_all() const
     {
         return subscribe_to_all.resource;
     }
 
-     /**
+    /**
      * @brief Get a vector of the specified topics to subscribe to.
-     * 
+     *
      * @return true
-     * @return false 
+     * @return false
      */
     std::vector<std::string> get_topics() const
     {
@@ -87,8 +89,8 @@ public:
 
     /**
      * @brief Get a list of topics which are to be ignored by the bag recorder
-     * 
-     * @return std::vector<std::string> 
+     *
+     * @return std::vector<std::string>
      */
     std::vector<std::string> get_ignore_topics() const
     {
@@ -97,8 +99,8 @@ public:
 
     /**
      * @brief Get the topic refresh rate for checking for new topics
-     * 
-     * @return int 
+     *
+     * @return int
      */
     int get_topic_refresh_rate() const
     {
@@ -107,8 +109,8 @@ public:
 
     /**
      * @brief Get the bag length configuration param
-     * 
-     * @return int 
+     *
+     * @return double
      */
     int get_bag_length() const
     {
@@ -117,8 +119,8 @@ public:
 
     /**
      * @brief Get the bag_overlap configuration param
-     * 
-     * @return int 
+     *
+     * @return double
      */
     int get_bag_overlap() const
     {
@@ -127,8 +129,8 @@ public:
 
     /**
      * @brief Get the bag_storage_path configuration param
-     * 
-     * @return std::string 
+     *
+     * @return std::string
      */
     std::string get_bag_storage_path() const
     {
@@ -137,8 +139,8 @@ public:
 
     /**
      * @brief Get the bag_naming_convention configuration param
-     * 
-     * @return std::string 
+     *
+     * @return std::string
      */
     std::string get_bag_naming_convention() const
     {
@@ -146,9 +148,9 @@ public:
     }
 
     /**
-     * @brief Get the date_time_string format 
-     * 
-     * @return std::string 
+     * @brief Get the date_time_string format
+     *
+     * @return std::string
      */
     std::string get_date_time_string() const
     {
@@ -156,25 +158,9 @@ public:
     }
 
 private:
-
-    /**
-     * @brief Load a parameter from either Formant or from the local config.json file if 
-     *        specified. If not specified, then load the specified default parameter
-     * 
-     * @tparam T 
-     * @param param 
-     * @param default_val 
-     * @return T 
-     */
-    template <class T>
-    inline T resource_loader(std::string param, T default_val)
-    {
-        return fclient_config[param].as<T>(config[param].as<T>(default_val));
-    }
-
     /**
      * @brief Load all the configuration parameters into memory
-     * 
+     *
      */
     void load_config()
     {
@@ -191,63 +177,62 @@ private:
 
     void load_subscribe_to_all()
     {
-        subscribe_to_all.set_resource(resource_loader("subscribe_to_all", true));
+        subscribe_to_all.set_resource(resource_loader("subscribe_to_all", true, boolean));
     }
 
     void load_topics()
     {
 
-        auto config_topics(
-            fclient_config["topics"].exists()? 
-                fclient_config["topics"].as_array(): 
-                config["topics"].as_array());
-
         std::vector<std::string> _topics;
-        for (auto topic : config_topics)
+        for (auto c : configurations)
         {
-            _topics.push_back(topic.as<std::string>());
+            if (!type_check_param(c, "topics", string, true))
+                continue;
+
+            for (int i = 0; i < (*c)["topics"].size(); ++i)
+            {
+                _topics.push_back((*c)["topics"][i]);
+            }
+
+            topics.set_resource(_topics);
+            return;
         }
         topics.set_resource(_topics);
     }
 
     void load_ignore_topics()
     {
-        std::vector<std::string> _ignore_topics;
-        for (auto topic : config["ignore_topics"].as_array())
-        {
-            _ignore_topics.push_back(topic.as<std::string>());
-        }
-        ignore_topics.set_resource(_ignore_topics);
+        // TODO: Not implemented yet
     }
 
     void load_topic_refresh_rate()
     {
-        topic_refresh_rate.set_resource(resource_loader<double>("topic_refresh_rate", 2));
+        topic_refresh_rate.set_resource(resource_loader<double>("topic_refresh_rate", 2, number));
     }
 
     void load_bag_length()
     {
-        bag_length.set_resource(resource_loader<double>("bag_length", 5));
+        bag_length.set_resource(resource_loader<double>("bag_length", 5, number));
     }
 
     void load_bag_overlap()
     {
-        bag_overlap.set_resource(resource_loader<double>("bag_overlap", 2));
+        bag_overlap.set_resource(resource_loader<double>("bag_overlap", 2, number));
     }
 
     void load_bag_storage_path()
     {
-        bag_storage_path.set_resource(resource_loader<std::string>("bag_storage_path", "./"));
+        bag_storage_path.set_resource(resource_loader<std::string>("bag_storage_path", "./", string));
     }
 
     void load_bag_naming_convention()
     {
-        bag_naming_convention.set_resource(resource_loader<std::string>("bag_naming_convention", "demo-bag$bn-$dt.bag"));
+        bag_naming_convention.set_resource(resource_loader<std::string>("bag_naming_convention", "demo-bag$bn-$dt.bag", string));
     }
 
     void load_date_time_string()
     {
-        date_time_string.set_resource(resource_loader<std::string>("date_time_string", "%d_%m_%Y-%H_%M_%S"));
+        date_time_string.set_resource(resource_loader<std::string>("date_time_string", "%d_%m_%Y-%H_%M_%S", string));
     }
 
     /**
@@ -274,12 +259,92 @@ private:
         bool loaded = false;
     };
 
-    // Class fields below
+    json blob_config;
+    json file_config;
 
-    RSJresource config;
+    std::vector<json *> configurations;
 
-    RSJresource fclient_config;
-    bool fclient_config_exists = false;
+    enum config_types
+    {
+        string,
+        number,
+        boolean
+    };
+
+    template <typename T>
+    inline T resource_loader(const std::string &param, T def, config_types type)
+    {
+
+        for (auto config : configurations)
+        {
+
+            const auto &c(*config);
+
+            if (!c.contains(param))
+                continue;
+
+            if (c[param].is_null())
+                continue;
+
+            if (!type_check_param(config, param, type, false))
+                continue;
+
+            return c[param];
+        }
+        return def;
+    }
+
+    inline bool type_check_param(
+        const json *config,
+        const std::string &param,
+        const config_types type,
+        const bool is_array)
+    {
+        const json &cur_config = *config;
+
+        if (!config->contains(param))
+            return false;
+
+        if (!is_array)
+        {
+            return type_check_value(cur_config[param], type);
+        }
+        else
+        {
+
+            if (!cur_config[param].is_array())
+                return false;
+
+            for (int i = 0; i < cur_config[param].size(); ++i)
+            {
+                if (!type_check_value(cur_config[param][i], type))
+                    return false;
+            }
+
+            return true;
+        }
+    }
+
+    inline bool type_check_value(
+        const nlohmann::json &value,
+        const config_types type)
+    {
+
+        if (value.is_null())
+            return false;
+
+        switch (type)
+        {
+        case config_types::boolean:
+            return value.is_boolean();
+        case config_types::number:
+            return value.is_number();
+        case config_types::string:
+            return value.is_string();
+        default:
+            return false;
+        }
+    }
 
     ConfigResource<bool> subscribe_to_all;
     ConfigResource<std::vector<std::string>> topics;
@@ -290,8 +355,6 @@ private:
     ConfigResource<std::string> bag_storage_path;
     ConfigResource<std::string> bag_naming_convention;
     ConfigResource<std::string> date_time_string;
-
-    FormantAgentClient f_client;
 };
 
 #endif

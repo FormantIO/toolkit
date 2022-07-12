@@ -1,3 +1,5 @@
 
 To get the ros introspection lib:
     sudo apt install ros-noetic-ros-type-introspection
+
+install nlohmann/json.cpp
