@@ -6,6 +6,20 @@ or record at all times.
 
 # Quick start
 
+## nlohmann/JSON
+
+The nlohmann JSON library will need to be installed on the machine. 
+
+Ubuntu 20.04
+```bash
+sudo apt install nlohmann-json3-dev
+```
+
+Ubuntu 18.04
+```bash
+sudo apt install nlohmann-json-dev
+```
+
 ## protobuf Install 
 
 You will need protobuf. You may download protobuf from
