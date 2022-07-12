@@ -18,7 +18,6 @@
 #include <grpcpp/grpcpp.h>
 #include <nlohmann/json.hpp> 
 
-#include "rsjp.hpp"
 #include "client.h"
 
 #ifndef CONFIG_H
