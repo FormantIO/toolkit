@@ -1,41 +1,27 @@
+import React, { ChangeEventHandler, FC, useCallback } from "react";
+import { get } from "lodash";
 import { TextField } from "@formant/ui-sdk";
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 
-interface ITextinputProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-  property: string;
-  defaultValue: string;
-}
+import { updatePath } from "./updatePath";
+import { IInputProps, JsonStringSchema } from "./types";
+import { capitalize } from "./captialize";
 
-export const TextInput: FC<ITextinputProps> = ({
-  defaultValue,
-  jsonSchemaObject,
-  currentStateObject,
-  property,
-}) => {
-  const [currentValue, setCurrentValue] = useState("");
+export const TextInput: FC<IInputProps<JsonStringSchema>> = (props) => {
+  const { params, schema, setParams, path } = props;
 
-  useEffect(() => {
-    setCurrentValue(defaultValue);
-  }, []);
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => setParams((prev) => updatePath(prev, path, e.target.value)),
+    [path, setParams]
+  );
 
   return (
     <TextField
       type="text"
-      key={jsonSchemaObject.properties[property].title}
       sx={{ marginBottom: "16px" }}
       fullWidth={true}
-      value={currentValue}
-      onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
-        setCurrentValue(ev.target.value);
-        currentStateObject[jsonSchemaObject.properties[property].title] =
-          ev.target.value;
-      }}
-      label={
-        jsonSchemaObject.properties[property].title[0].toUpperCase() +
-        jsonSchemaObject.properties[property].title.slice(1)
-      }
+      value={get(params, path) ?? ""}
+      onChange={handleChange}
+      label={capitalize(schema.title)}
       variant="filled"
     />
   );

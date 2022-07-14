@@ -1,34 +1,31 @@
+import React, { ChangeEventHandler, FC, useCallback } from "react";
+import { get } from "lodash";
 import { Box, Typography, Switch } from "@formant/ui-sdk";
-import React, { FC } from "react";
-interface INumberInputProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-  property: string;
-}
 
-export const BooleanInput: FC<INumberInputProps> = ({
-  jsonSchemaObject,
-  currentStateObject,
-  property,
-}) => {
+import { updatePath } from "./updatePath";
+import { IInputProps, JsonBooleanSchema } from "./types";
+import { capitalize } from "./captialize";
+
+export const BooleanInput: FC<IInputProps<JsonBooleanSchema>> = (props) => {
+  const { params, schema, setParams, path } = props;
+
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      setParams((prev) => updatePath(prev, path, e.target.checked));
+    },
+    [path, setParams]
+  );
+
   return (
     <Box display="flex" height={56} alignItems="center" marginBottom={2}>
       <Typography>
-        {jsonSchemaObject.properties[property].title[0].toUpperCase() +
-          jsonSchemaObject.properties[property].title.slice(1) +
-          ": "}
+        {capitalize(schema.title)}
+        {": "}
       </Typography>
       <Switch
+        checked={get(params, path) ?? false}
         size="small"
-        onChange={(ev) => {
-          jsonSchemaObject.title in currentStateObject
-            ? (currentStateObject[jsonSchemaObject.title] = {
-                ...currentStateObject[jsonSchemaObject.title],
-                [jsonSchemaObject.properties[property].title]: ev.target.value,
-              })
-            : (currentStateObject[jsonSchemaObject.properties[property].title] =
-                ev.target.value);
-        }}
+        onChange={handleChange}
       />
     </Box>
   );
