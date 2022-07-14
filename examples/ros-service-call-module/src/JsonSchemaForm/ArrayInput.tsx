@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { TextField } from "@formant/ui-sdk";
+import capitalize from "lodash.capitalize";
 
 interface IArrayInputProps {
   jsonSchemaObject: any;
