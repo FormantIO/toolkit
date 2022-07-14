@@ -1,10 +1,43 @@
-const fieldTypes = ["string", "integer", "number", "array", "object"] as const;
+import {
+  ServiceParameters,
+  ServiceParameterSetter,
+} from "../ServiceParameters";
 
-type FieldType = typeof fieldTypes[number];
+type FieldType =
+  | "array"
+  | "boolean"
+  | "integer"
+  | "number"
+  | "object"
+  | "string";
 
-export interface JsonSchema {
+interface JsonBaseSchema<T extends FieldType> {
   title: string;
-  type: FieldType;
-  default: string;
-  properties?: JsonSchema;
+  type: T;
+  default?: string;
+}
+
+export interface JsonObjectSchema extends JsonBaseSchema<"object"> {
+  properties: { [key: string]: JsonSchema };
+}
+
+export type JsonStringSchema = JsonBaseSchema<"string">;
+export type JsonArraySchema = JsonBaseSchema<"array">;
+export type JsonBooleanSchema = JsonBaseSchema<"boolean">;
+export type JsonIntegerSchema = JsonBaseSchema<"integer">;
+export type JsonNumberSchema = JsonBaseSchema<"number">;
+
+export type JsonSchema =
+  | JsonObjectSchema
+  | JsonStringSchema
+  | JsonArraySchema
+  | JsonBooleanSchema
+  | JsonIntegerSchema
+  | JsonNumberSchema;
+
+export interface IInputProps<TSchema extends JsonSchema = JsonSchema> {
+  schema: TSchema;
+  params: ServiceParameters;
+  path: string[];
+  setParams: ServiceParameterSetter;
 }

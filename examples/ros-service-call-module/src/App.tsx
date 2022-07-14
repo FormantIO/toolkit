@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, useCallback, useRef } from "react";
+import { useState, useEffect, FC, useCallback, useMemo } from "react";
 import {
   Typography,
   Box,
@@ -10,44 +10,68 @@ import {
 } from "@formant/ui-sdk";
 import "./App.css";
 import { JsonSchemaForm } from "./JsonSchemaForm";
+import { ServiceParameters } from "./ServiceParameters";
+import { getDefaultParams } from "./getDefaultParams";
+import { JsonObjectSchema } from "./JsonSchemaForm/types";
+
+type Services = { [key: string]: JsonObjectSchema };
+
+const getServices = async (latestTelemetry: any): Promise<Services> => {
+  const newTelp = latestTelemetry.filter(
+    (stream: any) => stream.streamName === "ros.services.json"
+  );
+  const newServices = await fetch(newTelp[0].currentValue);
+  const jsonResponse = await fetch(newServices.url);
+  return await jsonResponse.json();
+};
 
 const App: FC = () => {
   const latestTelemetry = useLatestTelemetry();
   const device = useDevice();
-  const [services, setServices] = useState<any | undefined>();
-  const [service, setService] = useState<string | undefined>();
+  const [services, setServices] = useState<Services | null>();
+  const [service, setService] = useState<string | null>(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
-
-  let serviceParameters = useRef({});
+  const [params, setParams] = useState<ServiceParameters>({});
 
   useEffect(() => {
-    getServices();
+    if (!latestTelemetry) return;
+    getServices(latestTelemetry).then((json) => setServices(json));
   }, [latestTelemetry]);
 
-  const getServices = async () => {
-    if (latestTelemetry) {
-      const newTelp = latestTelemetry.filter(
-        (stream: any) => stream.streamName === "ros.services.json"
-      );
-      const newServices = await fetch(newTelp[0].currentValue);
-      const jsonResponse = await fetch(newServices.url);
-      const json = await jsonResponse.json();
-      setServices(json);
-    }
-  };
-
   const handleSubmit = useCallback(() => {
-    if (device && service) {
-      console.log("here");
-      device.sendCommand(
-        "ROS Service Center",
-        JSON.stringify({ [service]: serviceParameters.current })
-      );
-      setService(undefined);
-      setShowSnackbar(true);
-      serviceParameters.current = {};
+    if (!(device && service)) {
+      return;
     }
-  }, [device, service]);
+
+    console.log("here");
+    device.sendCommand(
+      "ROS Service Center",
+      JSON.stringify({ [service]: params })
+    );
+
+    setService(null);
+    setShowSnackbar(true);
+    setParams({});
+  }, [device, service, params]);
+
+  const handleSelectService = useCallback(
+    (val: string) => {
+      if (services) {
+        setService(val);
+        setParams(getDefaultParams(services[val]));
+      }
+    },
+    [services]
+  );
+
+  const dropdownItems = useMemo(
+    () =>
+      Object.keys(services ?? {}).map((key) => ({
+        label: key,
+        value: key,
+      })),
+    [service]
+  );
 
   return (
     <div className="App">
@@ -56,34 +80,22 @@ const App: FC = () => {
           ROS Service Command
         </Typography>
         <Box display="flex" flexDirection={"row"}>
-          <Box
-            width={"100%"}
-            display="flex"
-            justifyContent="space-between"
-          ></Box>
+          <Box width={"100%"} display="flex" justifyContent="space-between" />
         </Box>
 
         <Select
           sx={{ width: 350, textAlign: "left", marginBottom: "16px" }}
-          onChange={(val) => {
-            serviceParameters.current = {};
-            setService(val);
-          }}
+          onChange={handleSelectService}
           label="Service"
           value={service ?? ""}
-          items={
-            services !== undefined
-              ? Object.keys(services).map((_, idx) => ({
-                  label: _,
-                  value: _,
-                }))
-              : []
-          }
+          items={dropdownItems}
         />
-        {service && (
+        {services && service && (
           <JsonSchemaForm
-            jsonSchemaObject={services[service]}
-            currentStateObject={serviceParameters.current}
+            schema={services[service]}
+            params={params}
+            path={[]}
+            setParams={setParams}
           />
         )}
         <Button
