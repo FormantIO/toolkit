@@ -1,6 +1,11 @@
-import { DataChannel } from "./main";
+import {
+  DataChannel,
+  DataChannelErrorListener,
+  DataChannelListener,
+} from "./main";
 import { delay } from "../../common/delay";
 import { IRealtimeDevice } from "./Device";
+import { defined } from "../../common/defined";
 
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.
@@ -13,6 +18,36 @@ abstract class RequestDataChannel {
     protected channel_name: string,
     protected timeout: number
   ) {}
+
+  addOpenListener(listener: DataChannelListener) {
+    defined(this.channel, "channel not initalized").addOpenListener(listener);
+  }
+
+  removeOpenListener(listener: DataChannelListener) {
+    defined(this.channel, "channel not initalized").removeOpenListener(
+      listener
+    );
+  }
+
+  addCloseListener(listener: DataChannelListener) {
+    defined(this.channel, "channel not initalized").addCloseListener(listener);
+  }
+
+  removeCloseListener(listener: DataChannelListener) {
+    defined(this.channel, "channel not initalized").removeCloseListener(
+      listener
+    );
+  }
+
+  addErrorListener(listener: DataChannelErrorListener) {
+    defined(this.channel, "channel not initalized").addErrorListener(listener);
+  }
+
+  removeErrorListener(listener: DataChannelErrorListener) {
+    defined(this.channel, "channel not initalized").removeErrorListener(
+      listener
+    );
+  }
 }
 
 export class BinaryRequestDataChannel extends RequestDataChannel {
