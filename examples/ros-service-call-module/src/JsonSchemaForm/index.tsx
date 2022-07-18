@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Typography } from "../../main";
+import { FC } from "react";
+import { Typography } from "@formant/ui-sdk";
 import { TextInput } from "./TextInput";
 import { NumberInput } from "./NumberInput";
 import { BooleanInput } from "./BooleanInput";

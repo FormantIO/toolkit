@@ -1,20 +1,16 @@
 import React, { FC, ChangeEventHandler, useCallback } from "react";
-import { Box, Typography, Switch } from "../../main";
+import { Box, Typography, Switch } from "@formant/ui-sdk";
 import { capitalize } from "./capitalize";
 import { JsonBooleanSchema } from "./types";
 import { IInputProps } from "./types";
 import { updatePath } from "./updatePath";
 import { get } from "lodash";
-import { ServiceParameters } from "./ServiceParameters";
 
 export const BooleanInput: FC<IInputProps<JsonBooleanSchema>> = (props) => {
   const { params, schema, setParams, path } = props;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
-    (e) =>
-      setParams((prev: ServiceParameters) =>
-        updatePath(prev, path, e.target.checked)
-      ),
+    (e) => setParams((prev) => updatePath(prev, path, e.target.checked)),
     [path, setParams]
   );
 
