@@ -28,7 +28,7 @@ const getServices = async (latestTelemetry: any): Promise<Services> => {
 const App: FC = () => {
   const latestTelemetry = useLatestTelemetry();
   const device = useDevice();
-  const [services, setServices] = useState<Services | null>(y);
+  const [services, setServices] = useState<Services | null>();
   const [service, setService] = useState<string | null>(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [params, setParams] = useState<ServiceParameters>({});

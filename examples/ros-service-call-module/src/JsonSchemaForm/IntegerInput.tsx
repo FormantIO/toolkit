@@ -6,9 +6,8 @@ import { updatePath } from "./updatePath";
 import { IInputProps, JsonIntegerSchema } from "./types";
 
 export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
-  const { params, path, setParams, schema } = props;
-
   const [error, setError] = useState("");
+  const { params, path, setParams, schema } = props;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -18,6 +17,7 @@ export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
         setParams((prev) => updatePath(prev, path, e.target.value));
         return;
       }
+
       const newestInput = value.at(-1)!;
       const letterToFloat = parseFloat(newestInput);
       isInteger(letterToFloat)
@@ -29,6 +29,7 @@ export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
 
   return (
     <TextField
+      className="formant-integer-input "
       type="text"
       sx={{ marginBottom: "36px" }}
       fullWidth={true}
