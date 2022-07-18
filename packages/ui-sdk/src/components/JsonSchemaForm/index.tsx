@@ -1,101 +1,88 @@
 import React, { FC } from "react";
-import { Typography } from "@formant/ui-sdk";
+import { Typography } from "../../main";
 import { TextInput } from "./TextInput";
 import { NumberInput } from "./NumberInput";
 import { BooleanInput } from "./BooleanInput";
 import { IntegerInput } from "./IntegerInput";
 import { ArrayInput } from "./ArrayInput";
 
-interface IJsonSchemaFormProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-}
-export const JsonSchemaForm: FC<IJsonSchemaFormProps> = ({
-  jsonSchemaObject,
-  currentStateObject,
-}) => {
-  if (jsonSchemaObject === undefined || currentStateObject === undefined)
-    return <></>;
-  if (jsonSchemaObject.type === "string") return <></>;
-  const _objectKeys = Object.keys(jsonSchemaObject.properties);
-  return (
-    <>
-      {_objectKeys.map((_: any) => {
-        if (jsonSchemaObject.properties[_].type === "array") {
-          return (
-            <ArrayInput
-              key={jsonSchemaObject.properties[_].title}
-              jsonSchemaObject={jsonSchemaObject}
-              currentStateObject={currentStateObject}
-              property={_}
-              type={jsonSchemaObject.properties[_].items.type}
-            />
-          );
-        }
-        if (jsonSchemaObject.properties[_].type === "boolean") {
-          return (
-            <BooleanInput
-              key={jsonSchemaObject.properties[_].title}
-              jsonSchemaObject={jsonSchemaObject}
-              currentStateObject={currentStateObject}
-              property={_}
-            />
-          );
-        }
-        if (jsonSchemaObject.properties[_].type === "number") {
-          return (
-            <NumberInput
-              key={jsonSchemaObject.properties[_].title}
-              jsonSchemaObject={jsonSchemaObject}
-              currentStateObject={currentStateObject}
-              property={_}
-            />
-          );
-        }
-        if (jsonSchemaObject.properties[_].type === "integer") {
-          return (
-            <IntegerInput
-              key={jsonSchemaObject.properties[_].title}
-              jsonSchemaObject={jsonSchemaObject}
-              currentStateObject={currentStateObject}
-              property={_}
-            />
-          );
-        }
+import { IInputProps } from "./types";
+import { capitalize } from "./capitalize";
 
-        if (jsonSchemaObject.properties[_].type === "string") {
-          return (
-            <TextInput
-              key={jsonSchemaObject.properties[_].title}
-              jsonSchemaObject={jsonSchemaObject}
-              currentStateObject={currentStateObject}
-              property={_}
-            />
-          );
-        }
-        if (jsonSchemaObject.properties[_].type === "object") {
-          currentStateObject[jsonSchemaObject.properties[_].title] = {};
-          return (
-            <React.Fragment key={jsonSchemaObject.properties[_].title}>
-              <Typography variant="h3">
-                {jsonSchemaObject.properties[_].title[0].toUpperCase() +
-                  jsonSchemaObject.properties[_].title.slice(1)}
-              </Typography>
-              <div style={{ marginLeft: 10 }}>
-                {
-                  <JsonSchemaForm
-                    jsonSchemaObject={jsonSchemaObject.properties[_]}
-                    currentStateObject={
-                      currentStateObject[jsonSchemaObject.properties[_].title]
-                    }
-                  />
-                }
-              </div>
-            </React.Fragment>
-          );
-        }
-        return
-      })}
-    </>
-  );
+export const JsonSchemaForm: FC<IInputProps> = ({
+  schema,
+  params,
+  setParams,
+  path,
+}) => {
+  switch (schema.type) {
+    case "string": {
+      return (
+        <TextInput
+          params={params}
+          path={path}
+          schema={schema}
+          setParams={setParams}
+        />
+      );
+    }
+    case "number": {
+      return (
+        <NumberInput
+          params={params}
+          path={path}
+          schema={schema}
+          setParams={setParams}
+        />
+      );
+    }
+    case "boolean": {
+      return (
+        <BooleanInput
+          params={params}
+          path={path}
+          schema={schema}
+          setParams={setParams}
+        />
+      );
+    }
+    case "integer": {
+      return (
+        <IntegerInput
+          params={params}
+          path={path}
+          schema={schema}
+          setParams={setParams}
+        />
+      );
+    }
+    case "array": {
+      return <>TODO {schema.type}</>; // TODO
+    }
+    case "object": {
+      const { properties } = schema;
+      return (
+        <>
+          <Typography variant="h3">{capitalize(schema.title)}</Typography>
+          <div style={{ marginLeft: 10 }}>
+            {Object.keys(properties).map((key) => {
+              const childSchema = properties[key];
+              const nextPath = path ? [...path, key] : [key];
+              return (
+                <JsonSchemaForm
+                  key={nextPath.join(".")}
+                  schema={childSchema}
+                  path={nextPath}
+                  params={params}
+                  setParams={setParams}
+                />
+              );
+            })}
+          </div>
+        </>
+      );
+    }
+    default:
+      return <>Unsupported schema.type</>;
+  }
 };
