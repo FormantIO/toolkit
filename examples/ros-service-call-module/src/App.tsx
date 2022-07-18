@@ -28,7 +28,7 @@ const getServices = async (latestTelemetry: any): Promise<Services> => {
 const App: FC = () => {
   const latestTelemetry = useLatestTelemetry();
   const device = useDevice();
-  const [services, setServices] = useState<Services | null>();
+  const [services, setServices] = useState<Services | null>(y);
   const [service, setService] = useState<string | null>(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [params, setParams] = useState<ServiceParameters>({});
@@ -61,10 +61,12 @@ const App: FC = () => {
 
   const dropDownItems = useMemo(
     () =>
-      Object.keys(services ?? {}).map((key) => ({
-        label: key,
-        value: key,
-      })),
+      Object.keys(services ?? {}).map((key) => {
+        return {
+          label: key,
+          value: key,
+        };
+      }),
     [service]
   );
 

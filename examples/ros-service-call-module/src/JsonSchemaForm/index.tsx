@@ -47,7 +47,14 @@ export const JsonSchemaForm: FC<IInputProps> = ({
       );
     }
     case "integer": {
-      return <>TODO {schema.type}</>; // TODO
+      return (
+        <IntegerInput
+          params={params}
+          path={path}
+          schema={schema}
+          setParams={setParams}
+        />
+      );
     }
     case "array": {
       return <>TODO {schema.type}</>; // TODO

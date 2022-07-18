@@ -1,4 +1,4 @@
-import React, { FC, ChangeEventHandler, useCallback } from "react";
+import { FC, ChangeEventHandler, useCallback } from "react";
 import { TextField } from "@formant/ui-sdk";
 import { updatePath } from "./updatePath";
 import { IInputProps, JsonStringSchema } from "./types";
