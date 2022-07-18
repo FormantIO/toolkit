@@ -1,41 +1,26 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, ChangeEventHandler, useCallback } from "react";
 import { TextField } from "@formant/ui-sdk";
+import { capitalize } from "./capitalize";
+import { updatePath } from "./updatePath";
+import { JsonNumberSchema } from "./types";
+import { IInputProps } from "./types";
+import { get } from "lodash";
+export const NumberInput: FC<IInputProps<JsonNumberSchema>> = (props) => {
+  const { path, params, setParams, schema } = props;
 
-interface INumberInputProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-  property: string;
-  defaultValue: string;
-}
-
-export const NumberInput: FC<INumberInputProps> = ({
-  jsonSchemaObject,
-  currentStateObject,
-  property,
-  defaultValue,
-}) => {
-  const [currentValue, setCurrentValue] = useState("");
-
-  useEffect(() => {
-    setCurrentValue(defaultValue);
-  }, []);
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => setParams((prev) => updatePath(prev, path, e.target.value)),
+    [path, setParams]
+  );
 
   return (
     <TextField
       type="number"
-      key={jsonSchemaObject.properties[property].title}
       sx={{ marginBottom: "16px" }}
       fullWidth={true}
-      value={currentValue}
-      onChange={(ev) => {
-        setCurrentValue(ev.target.value);
-        currentStateObject[jsonSchemaObject.properties[property].title] =
-          ev.target.value;
-      }}
-      label={
-        jsonSchemaObject.properties[property].title[0].toUpperCase() +
-        jsonSchemaObject.properties[property].title.slice(1)
-      }
+      value={get(params, path) ?? ""}
+      onChange={handleChange}
+      label={capitalize(schema.title)}
       variant="filled"
     />
   );
