@@ -32,4 +32,3 @@ echo "Attempting to start the bag recorder..."
 source devel/setup.bash
 rosrun ros_bag_adapter main
 
-echo "Hello, world!"
