@@ -1,10 +1,12 @@
 
+import json
 import logging
 import time
 from typing import List
 
 import rospy
 from formant.sdk.agent.v1.client import Client as FormantClient
+from std_msgs.msg import Bool
 
 from config import Config
 from input_to_ros_service_params import parse
@@ -21,8 +23,10 @@ class Adapter:
 
         self._fclient = FormantClient()
         self._config = Config().get_config()
-        self._button_map = self._config["button-mapping"]
+        self._api_button_map = self._config["api-button-mapping"]
+        self._ros_button_map = self._config["ros-button-mapping"]
         self._service_checker = ServiceChecker()
+        rospy.init_node('service_call_adapter')
 
     def run(self):
         """Run the adapter. This function will never return, but is non-blocking."""
@@ -34,11 +38,39 @@ class Adapter:
         self._fclient.register_command_request_callback(
             self._handle_command, self._config["service-commands"])
 
+        self.subscribers = []
+        for topic in self._ros_button_map:
+            self.subscribers.append(
+                rospy.Subscriber(
+                    topic, 
+                    Bool,
+                    self._handle_ros_button_press,
+                    topic))
+
         logger.info(
             "Callback's have successfully been registered with the Formant client.")
 
         while True:
             time.sleep(1)
+
+    def _handle_ros_button_press(self, msg, topic):
+        """Handle a button press from a ROS topic."""
+
+        if not msg.data:
+            return 
+
+        logger.info(f"ROS button press received from {topic}")        
+
+        service_json = json.dumps(self._ros_button_map.get(topic, {}))
+
+        try:
+            datum = parse(service_json) 
+        except:
+            logger.warn(f"Failed parsing json for service call mapped to ROS topic {topic}")
+
+        service_name = datum[0]
+        service_args = datum[1]
+        self._handle_service_call(service_name, service_args)
 
     def _handle_button_press(self, button_press):
         """Handle a button press along with the proper parameters."""
@@ -50,13 +82,20 @@ class Adapter:
 
         logger.info(f"Button press received from button {button_name}")
 
-        if button_name not in self._button_map:
+        if button_name not in self._api_button_map:
             logger.info(f"Button {button_name} has not service mapping")
 
-        service_name = self._button_map[button_name][0]
-        params = self._button_map[button_name][1]
+        service_json = json.dumps(self._api_button_map[button_name]) 
+        
+        try:
+            datum = parse(service_json) 
+        except:
+            logger.warn(f"Failed parsing json for service call mapped to API button {button_name}")
 
-        self._handle_service_call(service_name, params)
+        service_name = datum[0]
+        service_args = datum[1]
+
+        self._handle_service_call(service_name, service_args)
 
     def _handle_command(self, data):
         """Handles an incoming formant command as specified in service-commands in config.json"""

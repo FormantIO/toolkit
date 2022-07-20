@@ -2,12 +2,20 @@
     "service-commands": [
         "rosservice"
     ],
-    "button-mapping": {
-        "button_name": [
-            "service_name",
-            [
-                "params"
-            ]
-        ]
-    }   
+    "api-button-mapping": {
+        "/api_button": {
+            "add_two_ints": {
+                "a": 4,
+                "b": 5
+            }
+        }
+    },
+    "ros-button-mapping":{
+        "/ros_button": {
+            "add_two_ints": {
+                "a": 100,
+                "b": 150
+            }
+        }
+    }
 }
