@@ -15,131 +15,7 @@ import { getDefaultParams } from "./getDefaultParams";
 import { JsonObjectSchema } from "./JsonSchemaForm/types";
 
 type Services = { [key: string]: JsonObjectSchema };
-let y: Services = {
-  "/rosout/get_loggers": {
-    title: "/rosout/get_loggers",
-    type: "object",
-    properties: {},
-  },
-  "/rosout/set_logger_level": {
-    title: "/rosout/set_logger_level",
-    type: "object",
-    properties: {
-      logger: { type: "string", title: "logger" },
-      level: { type: "string", title: "level" },
-    },
-  },
-  random: {
-    title: "/random",
-    type: "object",
-    properties: {
-      header: {
-        type: "object",
-        properties: {
-          "header.seq": {
-            type: "integer",
-            title: "header.seq",
-          },
-          "header.stamp": {
-            type: "object",
-            properties: {
-              "header.stamp.secs": {
-                type: "integer",
-                title: "header.stamp.secs",
-              },
-              "header.stamp.nsecs": {
-                type: "integer",
-                title: "header.stamp.nsecs",
-              },
-            },
-            title: "header.stamp",
-          },
-          "header.frame_id": {
-            type: "string",
-            title: "header.frame_id",
-          },
-        },
-        title: "header",
-      },
-      seq: {
-        type: "object",
-        properties: {
-          "seq.secs": {
-            type: "integer",
-            title: "seq.secs",
-          },
-          "seq.nsecs": {
-            type: "integer",
-            title: "seq.nsecs",
-          },
-        },
-        title: "seq",
-      },
-      twist: {
-        type: "object",
-        properties: {
-          "twist.linear": {
-            type: "object",
-            properties: {
-              "twist.linear.x": {
-                type: "number",
-                title: "twist.linear.x",
-              },
-              "twist.linear.y": {
-                type: "number",
-                title: "twist.linear.y",
-              },
-              "twist.linear.z": {
-                type: "number",
-                title: "twist.linear.z",
-              },
-            },
-            title: "twist.linear",
-          },
-          "twist.angular": {
-            type: "object",
-            properties: {
-              "twist.angular.x": {
-                type: "number",
-                title: "twist.angular.x",
-              },
-              "twist.angular.y": {
-                type: "number",
-                title: "twist.angular.y",
-              },
-              "twist.angular.z": {
-                type: "number",
-                title: "twist.angular.z",
-              },
-            },
-            title: "twist.angular",
-          },
-        },
-        title: "twist",
-      },
-      my_int_array: {
-        type: "array",
-        items: {
-          type: "integer",
-        },
-        title: "my_int_array",
-      },
-    },
-  },
-  arr: {
-    title: "/arr",
-    type: "object",
-    properties: {
-      my_int_array: {
-        type: "array",
-        items: {
-          type: "integer",
-        },
-        title: "my_int_array",
-      },
-    },
-  },
-};
+
 const getServices = async (latestTelemetry: any): Promise<Services> => {
   const newTelp = latestTelemetry.filter(
     (stream: any) => stream.streamName === "ros.service.json"
@@ -152,15 +28,15 @@ const getServices = async (latestTelemetry: any): Promise<Services> => {
 const App: FC = () => {
   const latestTelemetry = useLatestTelemetry();
   const device = useDevice();
-  const [services, setServices] = useState<Services | null>(y as any);
+  const [services, setServices] = useState<Services | null>();
   const [service, setService] = useState<string | null>();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [params, setParams] = useState<ServiceParameters>({});
 
-  // useEffect(() => {
-  //   if (!latestTelemetry) return;
-  //   getServices(latestTelemetry).then((json) => setServices(json));
-  // }, [latestTelemetry]);
+  useEffect(() => {
+    if (!latestTelemetry) return;
+    getServices(latestTelemetry).then((json) => setServices(json));
+  }, [latestTelemetry]);
 
   const handleSubmit = useCallback(() => {
     if (!device || !service) return;

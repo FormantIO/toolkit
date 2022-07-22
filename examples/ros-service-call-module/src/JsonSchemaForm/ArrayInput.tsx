@@ -93,6 +93,7 @@ export const ArrayInput: FC<IInputProps<JsonArraySchema>> = (props) => {
             onChange={(e) => handleChange(e, index)}
             value={currentValue[index] ?? ""}
             helperText={
+              //Shows error if exist at the bottom of the last text input
               index + 1 === currentValue.length && error.length > 1 ? error : ""
             }
             variant="filled"
