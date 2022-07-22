@@ -2,19 +2,31 @@
     "service-commands": [
         "rosservice"
     ],
-    "api-button-mapping": {
-        "/api_button": {
-            "add_two_ints": {
-                "a": 4,
-                "b": 5
-            }
-        }
-    },
-    "ros-button-mapping":{
+    "api-button-mapping": {},
+    "ros-button-mapping": {
         "/ros_button": {
-            "add_two_ints": {
-                "a": 100,
-                "b": 150
+            "/random": {
+                "string": "sample-string",
+                "int64_arr": [
+                    1.0,
+                    2.0
+                ],
+                "float32": 3.0,
+                "float64_arr": [
+                    4.0
+                ],
+                "twist": {
+                    "twist.linear": {
+                        "twist.linear.x": 5.0,
+                        "twist.linear.y": 6.0,
+                        "twist.linear.z": 7.0
+                    },
+                    "twist.angular": {
+                        "twist.angular.x": 8.0,
+                        "twist.angular.y": 9.0,
+                        "twist.angular.z": 10.0
+                    }
+                }
             }
         }
     }
