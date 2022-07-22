@@ -1,9 +1,13 @@
 export type DataChannelStringListener = (message: string) => void;
 export type DataChannelBinaryListener = (message: Uint8Array) => void;
-
+export type DataChannelListener = () => void;
+export type DataChannelErrorListener = (ev: Event) => void;
 export class DataChannel {
   ready = false;
   listeners: DataChannelStringListener[] = [];
+  openListeners: DataChannelListener[] = [];
+  closeListeners: DataChannelListener[] = [];
+  errorListeners: DataChannelErrorListener[] = [];
   binaryListeners: DataChannelBinaryListener[] = [];
   error: string | undefined;
   decoder = new TextDecoder();
@@ -12,13 +16,16 @@ export class DataChannel {
     this.dataChannel.binaryType = "arraybuffer";
     this.dataChannel.onopen = () => {
       this.ready = true;
+      this.openListeners.forEach((listener) => listener());
     };
     this.dataChannel.onclose = () => {
       this.ready = false;
+      this.closeListeners.forEach((listener) => listener());
     };
     this.dataChannel.onerror = (e) => {
       console.error(e);
       this.error = "An error occurred in DataChannel";
+      this.errorListeners.forEach((listener) => listener(e));
     };
     this.dataChannel.onmessage = (m: MessageEvent) => {
       this.listeners.forEach((_) => {
@@ -30,6 +37,30 @@ export class DataChannel {
         _(new Uint8Array(m.data));
       });
     };
+  }
+
+  addOpenListener(listener: DataChannelListener) {
+    this.openListeners.push(listener);
+  }
+
+  removeOpenListener(listener: DataChannelListener) {
+    this.openListeners = this.openListeners.filter((_) => _ !== listener);
+  }
+
+  addCloseListener(listener: DataChannelListener) {
+    this.closeListeners.push(listener);
+  }
+
+  removeCloseListener(listener: DataChannelListener) {
+    this.closeListeners = this.closeListeners.filter((l) => l !== listener);
+  }
+
+  addErrorListener(listener: DataChannelErrorListener) {
+    this.errorListeners.push(listener);
+  }
+
+  removeErrorListener(listener: DataChannelErrorListener) {
+    this.errorListeners = this.errorListeners.filter((l) => l !== listener);
   }
 
   async waitTilReady(): Promise<boolean> {

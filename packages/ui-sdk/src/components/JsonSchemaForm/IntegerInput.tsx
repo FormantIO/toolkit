@@ -1,57 +1,44 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useCallback, ChangeEventHandler } from "react";
 import { TextField } from "../../main";
+import { capitalize } from "./capitalize";
+import { get, isInteger } from "lodash";
+import { updatePath } from "./updatePath";
+import { IInputProps, JsonIntegerSchema } from "./types";
+import { ServiceParameters } from "./ServiceParameters";
 
-interface IIntegerInputProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-  property: string;
-}
-
-export const IntegerInput: FC<IIntegerInputProps> = ({
-  jsonSchemaObject,
-  currentStateObject,
-  property,
-}) => {
-  const [temp, setTemp] = useState("");
+export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
   const [error, setError] = useState("");
-  const isValid = (_: string) => {
-    if (_ === "") return true;
-    if (!!_) {
-      const newestInput = _.at(-1);
-      const letterToFloat = parseFloat(newestInput!);
-      if (Number.isInteger(letterToFloat)) return true;
-    }
-    setError("Please enter a valid integer");
-    return false;
-  };
+  const { params, path, setParams, schema } = props;
+
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      const { value } = e.target;
+      setError("");
+      if (value === "") {
+        setParams((prev: ServiceParameters) =>
+          updatePath(prev, path, e.target.value)
+        );
+        return;
+      }
+      const newestInput = value.at(-1)!;
+      const letterToFloat = parseFloat(newestInput);
+      isInteger(letterToFloat)
+        ? setParams((prev: ServiceParameters) =>
+            updatePath(prev, path, e.target.value)
+          )
+        : setError("Please enter a valid integer");
+    },
+    [path, setParams]
+  );
 
   return (
     <TextField
-      type="phone"
-      key={jsonSchemaObject.properties[property].title}
+      type="text"
       sx={{ marginBottom: "36px" }}
       fullWidth={true}
-      value={
-        currentStateObject[jsonSchemaObject.properties[property].title] ?? ""
-      }
-      onChange={(ev) => {
-        if (!isValid(ev.target.value)) {
-          return;
-        }
-        setError("");
-        setTemp(ev.target.value);
-        jsonSchemaObject.title in currentStateObject
-          ? (currentStateObject[jsonSchemaObject.title] = {
-              ...currentStateObject[jsonSchemaObject.title],
-              [jsonSchemaObject.properties[property].title]: ev.target.value,
-            })
-          : (currentStateObject[jsonSchemaObject.properties[property].title] =
-              ev.target.value);
-      }}
-      label={
-        jsonSchemaObject.properties[property].title[0].toUpperCase() +
-        jsonSchemaObject.properties[property].title.slice(1)
-      }
+      value={get(params, path) ?? ""}
+      onChange={handleChange}
+      label={capitalize(schema.title)}
       helperText={error}
       variant="filled"
     />

@@ -1,0 +1,6 @@
+formant==1.61.*
+rosbag==1.15.*
+rosgraph==1.15.*
+roslib==1.15.*
+rospy==1.15.*
+rostopic==1.15.*

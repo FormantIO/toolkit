@@ -80,6 +80,10 @@ export class TeleportLayer extends UniverseLayer {
   }
 
   teleportTo(p: Vector3) {
+    const c = this.getCurrentCamera().position.distanceTo(p);
+    if (c > 3) {
+      return;
+    }
     if (this.xr) {
       const session = this.xr.getSession();
       const baseReferenceSpace = this.xr.getReferenceSpace();
