@@ -1,10 +1,9 @@
-import React, { FC, useState, useCallback, ChangeEventHandler } from "react";
-import { TextField } from "../../main";
+import { FC, useState, useCallback, ChangeEventHandler } from "react";
+import { TextField } from "@formant/ui-sdk";
 import { capitalize } from "./capitalize";
 import { get, isInteger } from "lodash";
 import { updatePath } from "./updatePath";
 import { IInputProps, JsonIntegerSchema } from "./types";
-import { ServiceParameters } from "./ServiceParameters";
 
 export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
   const [error, setError] = useState("");
@@ -15,17 +14,14 @@ export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
       const { value } = e.target;
       setError("");
       if (value === "") {
-        setParams((prev: ServiceParameters) =>
-          updatePath(prev, path, e.target.value)
-        );
+        setParams((prev) => updatePath(prev, path, e.target.value));
         return;
       }
+
       const newestInput = value.at(-1)!;
       const letterToFloat = parseFloat(newestInput);
       isInteger(letterToFloat)
-        ? setParams((prev: ServiceParameters) =>
-            updatePath(prev, path, e.target.value)
-          )
+        ? setParams((prev) => updatePath(prev, path, e.target.value))
         : setError("Please enter a valid integer");
     },
     [path, setParams]
@@ -33,6 +29,7 @@ export const IntegerInput: FC<IInputProps<JsonIntegerSchema>> = (props) => {
 
   return (
     <TextField
+      className="formant-integer-input "
       type="text"
       sx={{ marginBottom: "36px" }}
       fullWidth={true}
