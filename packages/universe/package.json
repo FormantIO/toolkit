@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.218",
+  "version": "0.0.219",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 9146",
     "dev_vr": "vite --host 0.0.0.0 --https --port 9146",
@@ -35,7 +35,6 @@
     "@types/offscreencanvas": "^2019.6.4",
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.25",
-    "@types/three": "0.140.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.29.0",
     "eslint": "^8.14.0",
@@ -52,6 +51,7 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
+    "@types/three": "0.140.0",
     "@formant/ui-sdk": "0.0.19",
     "@formant/universe-core": "0.0.2",
     "@types/react": "^18.0.8",
