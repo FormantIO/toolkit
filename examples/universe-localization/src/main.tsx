@@ -8,13 +8,12 @@ import {
   Typography,
 } from "@formant/ui-sdk";
 import styled from "styled-components";
-import { Authentication } from "@formant/data-sdk";
+import { Authentication, Device, Fleet } from "@formant/data-sdk";
 import { Universe } from "@formant/universe";
 import * as uuid from "uuid";
 import { LiveUniverseData } from "@formant/universe-connector";
 
-
-function App() {
+function App({ deviceId }: { deviceId: string }) {
   return (
     <Universe
       initialSceneGraph={[
@@ -23,7 +22,7 @@ function App() {
           editing: false,
           type: "ground",
           name: "Ground",
-          deviceContext: undefined,
+          deviceContext: deviceId,
           children: [],
           visible: true,
           position: { type: "manual", x: 0, y: 0, z: 0 },
@@ -34,7 +33,7 @@ function App() {
             },
           },
           data: {},
-        }
+        },
       ]}
       universeData={new LiveUniverseData()}
       mode="view"
@@ -54,39 +53,61 @@ function Login() {
   const [loggedIn, setLoggedIn] = React.useState(false); // false
   const [username, setUsername] = React.useState(import.meta.env.VITE_EMAIL);
   const [password, setPassword] = React.useState(import.meta.env.VITE_PWD);
-  return loggedIn ? (
-    <App />
+  const [devices, setDevices] = React.useState<Device[]>([]);
+  const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
+  return loggedIn && deviceId ? (
+    <App deviceId={deviceId} />
   ) : (
     <Centered>
-      <Stack gap={3}>
-        <Typography variant="h1">Login</Typography>
+      {loggedIn ? (
         <div>
-          <TextField
-            label="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          {devices.map((_) => (
+            <Button
+              key={_.id}
+              variant="contained"
+              size="small"
+              type="button"
+              onClick={async () => {
+                setDeviceId(_.id);
+              }}
+            >
+              {_.name}
+            </Button>
+          ))}
         </div>
-        <div>
-          <TextField
-            label="password"
-            type="password"
-            value={"password"}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <Button
-          variant="contained"
-          size="large"
-          type="button"
-          onClick={async () => {
-            await Authentication.login(username, password);
-            setLoggedIn(true);
-          }}
-        >
-          Login
-        </Button>
-      </Stack>
+      ) : (
+        <Stack gap={3}>
+          <Typography variant="h1">Login</Typography>
+          <div>
+            <TextField
+              label="email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <TextField
+              label="password"
+              type="password"
+              value={"password"}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <Button
+            variant="contained"
+            size="large"
+            type="button"
+            onClick={async () => {
+              await Authentication.login(username, password);
+              setLoggedIn(true);
+              const devices = await Fleet.getDevices();
+              setDevices(devices);
+            }}
+          >
+            Login
+          </Button>
+        </Stack>
+      )}
     </Centered>
   );
 }
