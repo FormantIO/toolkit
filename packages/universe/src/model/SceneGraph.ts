@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { UniverseDataSource } from "./IUniverseData";
+import { UniverseDataSource } from  "@formant/universe-core";
 import { LayerType } from "../layers";
 import { LayerFieldValues } from "./LayerField";
 import { TreePath } from "./ITreeElement";

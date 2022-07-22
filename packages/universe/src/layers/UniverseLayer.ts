@@ -14,9 +14,9 @@ import {
   Vector3,
   WebXRManager,
 } from "three";
+import { IUniverseData, UniverseDataSource } from  "@formant/universe-core";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { Howl } from "howler";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { LayerSuggestion } from "./LayerRegistry";
 import { TransformLayer } from "./TransformLayer";
 import {

@@ -15,9 +15,6 @@ import { EmptyLayer } from "./layers/EmptyLayer";
 import { ChartLayer } from "./layers/ChartLayer";
 
 export * from "./components/Universe";
-export * from "./model/IPose";
-export * from "./model/IOdometry";
-export * from "./model/IUniverseData";
 export * from "./layers/LayerRegistry";
 export * from "./layers/UniverseLayer";
 export * from "./layers/TransformLayer";
@@ -37,6 +34,18 @@ export * from "./oculusQuest";
 
 export { defined, definedAndNotNull } from "../../common/defined";
 
+
+export type IGridMap =
+import("../../universe-core/src/model/IGridMap").IGridMap;
+export type IOdometry =
+import("../../universe-core/src/model/IOdometry").IOdometry;
+export type IUniverseData =
+import("../../universe-core/src/model/IUniverseData").IUniverseData;
+export type IPcd =
+import("../../universe-core/src/model/IPcd").IPcd;
+export type IPose =
+import("../../universe-core/src/model/IPose").IPose;
+
 export type IH264VideoFrame =
   import("../../data-sdk/src/model/IH264VideoFrame").IH264VideoFrame;
 export type IJointState =
@@ -51,8 +60,6 @@ export type IRtcPointCloud =
   import("../../data-sdk/src/model/IRtcPointCloud").IRtcPointCloud;
 export type IPointCloud =
   import("../../data-sdk/src/model/IPointCloud").IPointCloud;
-export type IGridMap = import("./model/IGridMap").IGridMap;
-export type IPcd = import("./objects/pcd").IPcd;
 export type INumericSetEntry =
   import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
 export type IBitset = import("../../data-sdk/src/model/IBitset").IBitset;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { TextField, DialogContentText, Stack, Select } from "@formant/ui-sdk";
-import { IUniverseData } from "../../model/IUniverseData";
+import { IUniverseData } from  "@formant/universe-core";
 import { Modal } from "./Modal";
 import { ILocation } from "../../../../data-sdk/src/model/ILocation";
 import { fork } from "../../../../common/fork";

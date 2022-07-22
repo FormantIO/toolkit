@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
+import { IUniverseData } from  "@formant/universe-core";
 import { defined } from "../../../common/defined";
 import { IGridMap } from "../main";
-import { IUniverseData } from "../model/IUniverseData";
 import { GridMap } from "../objects/GridMap";
 import { LayerSuggestion } from "./LayerRegistry";
 import { UniverseLayer } from "./UniverseLayer";

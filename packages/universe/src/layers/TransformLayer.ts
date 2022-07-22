@@ -1,5 +1,6 @@
 import * as uuid from "uuid";
 import { getDistance } from "geolib";
+import { IUniverseData } from  "@formant/universe-core";
 import {
   Euler,
   Matrix4,
@@ -12,7 +13,6 @@ import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../model/ITransformNode";
 import { Positioning } from "../model/SceneGraph";
 import { TreePath } from "../model/ITreeElement";
-import { IUniverseData } from "../model/IUniverseData";
 
 import { UniverseLayer } from "./UniverseLayer";
 

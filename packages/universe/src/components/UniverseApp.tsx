@@ -4,6 +4,7 @@ import { Vector3 } from "three";
 import produce from "immer";
 import { useRecoilState } from "recoil";
 import { Box, Button, Icon, Select, Stack, Typography } from "@formant/ui-sdk";
+import { IUniverseData, UniverseDataSource } from "@formant/universe-core";
 import styled from "styled-components";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { throttle } from "../../../common/throttle";
@@ -26,7 +27,6 @@ import {
   visitSceneGraphElementReverse,
 } from "../model/SceneGraph";
 import { TreeElement, TreePath, treePathEquals } from "../model/ITreeElement";
-import { IUniverseData, UniverseDataSource } from "../model/IUniverseData";
 import { UniverseSidebar } from "./sidebar";
 import { UniverseViewer } from "./viewer";
 import { AddLayerModal } from "./modals/AddLayerModal";

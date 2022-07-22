@@ -5,15 +5,14 @@ import {
   Interaction,
   ITelemetryRosStream,
   ITelemetryStream,
-  IUniverseData,
   IUniverseStatistics,
   UniverseDataSource,
-} from "../src/model/IUniverseData";
+} from "@formant/universe-core";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IGridMap, IMap, IOdometry, IPcd, IPose } from "../src/main";
+import { IGridMap, IMap, IOdometry, IPcd, IPose, IUniverseData } from "../src/main";
 import { INumericSetEntry } from "../../data-sdk/src/model/INumericSetEntry";
 import { ITransform } from "../../model/ITransform";
 import { IBitset } from "../../data-sdk/src/model/IBitset";

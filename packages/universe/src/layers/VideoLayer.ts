@@ -12,7 +12,7 @@ import {
   SphereGeometry,
 } from "three";
 import * as uuid from "uuid";
-import { IUniverseData } from "../model/IUniverseData";
+import { IUniverseData } from  "@formant/universe-core";
 import { UniverseLayer } from "./UniverseLayer";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { LayerSuggestion } from "./LayerRegistry";

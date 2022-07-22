@@ -3,6 +3,7 @@ import * as React from "react";
 import { Component } from "react";
 import { Howler } from "howler";
 import * as THREE from "three";
+import { IUniverseData } from  "@formant/universe-core";
 import {
   PointLight,
   Vector3,
@@ -33,7 +34,6 @@ import {
   SceneGraph,
 } from "../../model/SceneGraph";
 import { TreePath, treePathEquals } from "../../model/ITreeElement";
-import { IUniverseData } from "../../model/IUniverseData";
 import { Color } from "../../../../common/Color";
 import { XRControllerModelFactory } from "../../../three-utils/webxr/XRControllerModelFactory";
 import { OculusHandModel } from "../../../three-utils/webxr/OculusHandModel";

@@ -12,10 +12,10 @@ import {
   Texture,
   Vector3,
 } from "three";
+import { IUniverseData } from  "@formant/universe-core";
 import * as uuid from "uuid";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
-import { IUniverseData } from "../model/IUniverseData";
 import { GeometryWorld } from "../objects/GeometryWorld";
 import { LayerSuggestion } from "./LayerRegistry";
 import { UniverseLayer } from "./UniverseLayer";

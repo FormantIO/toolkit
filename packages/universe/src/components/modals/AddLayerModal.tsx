@@ -7,7 +7,7 @@ import {
 } from "@formant/ui-sdk";
 import * as React from "react";
 import { useEffect } from "react";
-import { IUniverseData, UniverseDataSource } from "../../model/IUniverseData";
+import { IUniverseData, UniverseDataSource } from  "@formant/universe-core";
 import { LayerType } from "../../layers";
 import { LayerRegistry, LayerSuggestion } from "../../layers/LayerRegistry";
 import { LayerFields, LayerFieldUnion } from "../../model/LayerField";

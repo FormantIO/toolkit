@@ -5,10 +5,9 @@ import {
   PointsMaterial,
   TextureLoader,
 } from "three";
+import { IUniverseData, IPcd } from  "@formant/universe-core";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
-import { IPcd } from "../objects/pcd";
-import { IUniverseData } from "../model/IUniverseData";
 import { UniverseLayer } from "./UniverseLayer";
 import { LayerSuggestion } from "./LayerRegistry";
 
