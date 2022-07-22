@@ -24,3 +24,4 @@ export type IPcd = import("./model/IPcd").IPcd;
 export type INumericSetEntry =
   import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
 export type IBitset = import("../../data-sdk/src/model/IBitset").IBitset;
+export type ITransform = import("../../data-sdk/src/model/ITransform").ITransform;
