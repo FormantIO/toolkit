@@ -319,10 +319,10 @@
     "@mui/material" "^5.6.1"
     "@mui/utils" "^5.6.1"
 
-"@formant/universe-core@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@formant/universe-core/-/universe-core-0.0.1.tgz#db4e476908327a2adcd58229df064dcca6ebfd34"
-  integrity sha512-wZvvsVnllRvsQjSZw8xfVZXeHh30lG4JyzXDeC0EAwT+quokiI3vbhMFTBbMB2xohFymYCTO6rwjsz+RSebgTQ==
+"@formant/universe-core@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@formant/universe-core/-/universe-core-0.0.2.tgz#b5f167402bc3fb2202cd2ba012fdba7afd2eee1d"
+  integrity sha512-pfky8z6DwGY9I28YwcvkDdcXSsQKc2Pb++fzek1sr2HOYnT2hXa70xOaWzR8VkMo8SiZ7pMJOBsyup7evVuPQw==
 
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
