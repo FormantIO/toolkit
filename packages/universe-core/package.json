@@ -1,0 +1,54 @@
+{
+  "name": "@formant/universe-core",
+  "description": "A core library for universe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formantio/toolkit.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/formantio/toolkit",
+  "main": "./dist/universe-core.umd.js",
+  "module": "./dist/universe-core.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/universe-core.es.js",
+      "require": "./dist/universe-core.umd.js"
+    }
+  },
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 9146",
+    "dev_vr": "vite --host 0.0.0.0 --https --port 9146",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "types": "tsc src/*.ts src/**/*.ts --jsx react --moduleResolution node --target ESNext --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "docs": "typedoc src/main.ts --theme default --out ../../docs/universe-core/",
+    "lint": "eslint -c .eslintrc.yml --quiet --ext ts,tsx .",
+    "lint_fix": "eslint -c .eslintrc.yml --quiet --ext ts,tsx --fix ."
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.7",
+    "@types/node": "^18.0.0",
+    "@types/offscreencanvas": "^2019.6.4",
+    "@types/styled-components": "^5.1.25",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",  
+    "typescript": "^4.6.3",
+    "vite": "^2.9.5"
+  },
+  "types": "./dist/types/universe-core-/src/main.d.ts",
+  "dependencies": {
+   
+  }
+}
