@@ -66,9 +66,7 @@ export const JsonSchemaForm: FC<IInputProps> = ({
         />
       );
     }
-    // case "array": {
-    //   return <>TODO {schema.type}</>; // TODO
-    // }
+
     case "object": {
       const { properties } = schema;
       return (
