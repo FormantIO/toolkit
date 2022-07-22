@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import { TextField } from "@formant/ui-sdk";
-import capitalize from "lodash.capitalize";
+import { capitalize } from "./capitalize";
 import { IInputProps, JsonArraySchema } from "./types";
 import { get, isInteger } from "lodash";
 import { updatePath } from "./updatePath";
