@@ -34,6 +34,64 @@ function App({ deviceId }: { deviceId: string }) {
           },
           data: {},
         },
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "grid_map",
+          name: "Grid Map",
+          deviceContext: deviceId,
+          children: [],
+          visible: true,
+          position: { type: "localization", stream: "localization" },
+          fieldValues: {},
+          data: {},
+          dataSources: [
+            {
+              id: uuid.v4(),
+              sourceType: "telemetry",
+              streamName: "map",
+              streamType: "localization",
+            },
+          ],
+        },
+        {
+          id: uuid.v4(),
+          editing: false,
+          type: "point_cloud",
+          name: "PointCloud",
+          deviceContext: deviceId,
+          children: [],
+          visible: true,
+          position: { type: "localization", stream: "localization" },
+          fieldValues: {
+            pointColor: {
+              type: "number",
+              value: 0xffffff,
+            },
+            pointSize: {
+              type: "number",
+              value: 5,
+            },
+            pointTexture: {
+              type: "text",
+              value:
+                "https://formant-3d-models.s3.us-west-2.amazonaws.com/point.png",
+            },
+            pointAttenuate: {
+              type: "boolean",
+              value: false,
+            },
+          },
+          data: {},
+          dataSources: [
+            {
+              id: uuid.v4(),
+              sourceType: "telemetry",
+              streamName: "map",
+              streamType: "localization",
+            },
+          ],
+        },
       ]}
       universeData={new LiveUniverseData()}
       mode="view"
