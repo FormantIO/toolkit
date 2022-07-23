@@ -1,0 +1,5 @@
+* {
+  box-sizing: border-box;
+  font-family: "Inter";
+  transition: all 0.2s ease-in;
+}
