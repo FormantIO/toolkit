@@ -36,16 +36,12 @@ export class GridMap extends Group {
 
     const mappedColor = defined(
       Color.fromString(
-        getComputedStyle(document.body).getPropertyValue(
-          "--formant-color-primary-2"
-        )
+        "#3b4668"
       )
     );
     const occupiedColor = defined(
       Color.fromString(
-        getComputedStyle(document.body).getPropertyValue(
-          "--formant-color-primary-3"
-        )
+        "#657197"
       )
     );
 
