@@ -19,11 +19,14 @@ export const Row: FC<IRowProps> = (props: any) => {
     >
       <Box
         sx={{
-          width: "30%",
+          width: "40%",
           padding: 1,
         }}
       >
-        <Typography variant="body2" sx={{ color: "white", fontSize: 14 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "white", fontSize: 11, wordBreak: "break-all" }}
+        >
           {leftValue}
         </Typography>
       </Box>
@@ -32,7 +35,7 @@ export const Row: FC<IRowProps> = (props: any) => {
           padding: 1,
         }}
       >
-        <Typography variant="body2" sx={{ color: "white", fontSize: 14 }}>
+        <Typography variant="body2" sx={{ color: "white", fontSize: 11 }}>
           {rightValue}
         </Typography>
       </Box>
