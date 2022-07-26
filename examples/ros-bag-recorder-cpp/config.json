@@ -1,0 +1,22 @@
+{
+    "subscribe_to_all": true,
+    "topics": [
+        "/formant/command",
+        "/formant/ingest",
+        "/ros_button",
+        "/rosout",
+        "/rosout_agg",
+        "/tf",
+        "/tf_static",
+        "/cosine_wave",
+        "/sine_wave"
+    ],
+    "ignore_topics":[],
+    "topic_refresh_rate":2,
+    "bag_length": 2,
+    "bag_overlap": 0.5,
+    "bag_storage_path": "/home/fvolcic/tmp/toolkit/examples/ros-bag-recorder-cpp/bags",
+    "bag_naming_convention":"bag$bn_$dt.bag",
+    "date_time_string":"%d_%m_%Y-%H_%M_%S",
+    "loglevel":"debug"
+}
