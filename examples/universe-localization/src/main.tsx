@@ -37,12 +37,32 @@ function App({ deviceId }: { deviceId: string }) {
         {
           id: uuid.v4(),
           editing: false,
+          type: "device_visual_tf",
+          name: "Device",
+          deviceContext: deviceId,
+          children: [],
+          visible: true,
+          position: { type: "manual", x: 0, y: 0, z: 0 },
+          fieldValues: {},
+          data: {},
+          dataSources: [
+            {
+              id: uuid.v4(),
+              sourceType: "telemetry",
+              streamName: "tf",
+              streamType: "transform tree",
+            },
+          ],
+        },
+        /* {
+          id: uuid.v4(),
+          editing: false,
           type: "grid_map",
           name: "Grid Map",
           deviceContext: deviceId,
           children: [],
           visible: true,
-          position: { type: "localization", stream: "localization" },
+          position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {},
           data: {},
           dataSources: [
@@ -62,7 +82,7 @@ function App({ deviceId }: { deviceId: string }) {
           deviceContext: deviceId,
           children: [],
           visible: true,
-          position: { type: "localization", stream: "localization" },
+          position: { type: "manual", x: 0, y: 0, z: 0 },
           fieldValues: {
             pointColor: {
               type: "number",
@@ -91,7 +111,7 @@ function App({ deviceId }: { deviceId: string }) {
               streamType: "localization",
             },
           ],
-        },
+        }, */
       ]}
       universeData={new LiveUniverseData()}
       mode="view"
@@ -109,8 +129,8 @@ const Centered = styled.div`
 
 function Login() {
   const [loggedIn, setLoggedIn] = React.useState(false); // false
-  const [username, setUsername] = React.useState(import.meta.env.VITE_EMAIL);
-  const [password, setPassword] = React.useState(import.meta.env.VITE_PWD);
+  const [username, setUsername] = React.useState<string | undefined>(undefined);
+  const [password, setPassword] = React.useState<string | undefined>(undefined);
   const [devices, setDevices] = React.useState<Device[]>([]);
   const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
   return loggedIn && deviceId ? (
@@ -147,7 +167,7 @@ function Login() {
             <TextField
               label="password"
               type="password"
-              value={"password"}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
@@ -156,10 +176,12 @@ function Login() {
             size="large"
             type="button"
             onClick={async () => {
-              await Authentication.login(username, password);
-              setLoggedIn(true);
-              const devices = await Fleet.getDevices();
-              setDevices(devices);
+              if (username && password) {
+                await Authentication.login(username, password);
+                setLoggedIn(true);
+                const devices = await Fleet.getDevices();
+                setDevices(devices);
+              }
             }}
           >
             Login
