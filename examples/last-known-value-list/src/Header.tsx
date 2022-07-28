@@ -18,12 +18,13 @@ export const Header: FC<IHeaderInterfaceProps> = ({ setShow }) => {
     >
       <Box
         sx={{
-          width: "30%",
+          minWidth: "40%",
+          width: "auto",
           padding: 1,
         }}
       >
         <Typography variant="body2" sx={{ color: "#bac4e2", fontSize: 14 }}>
-          Stream Name
+          Stream
         </Typography>
       </Box>
       <Box
@@ -32,7 +33,7 @@ export const Header: FC<IHeaderInterfaceProps> = ({ setShow }) => {
         }}
       >
         <Typography variant="body2" sx={{ color: "#bac4e2", fontSize: 14 }}>
-          Last known Value
+          Value
         </Typography>
       </Box>
       <Box
