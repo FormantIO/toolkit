@@ -11,7 +11,7 @@ export const sendCommand = async (
   let command = commands.find((_: { name: string }) => _.name === name);
 
   if (!command) {
-    await fetch("https://api-dev.formant.io/v1/admin/command-templates", {
+    await fetch("https://api.formant.io/v1/admin/command-templates", {
       method: "POST",
       body: JSON.stringify({
         command: "formant.publish_ros_topic",
@@ -52,7 +52,7 @@ export const sendCommand = async (
     },
   };
 
-  const com = await fetch(`https://api-dev.formant.io/v1/admin/commands`, {
+  const com = await fetch(`https://api.formant.io/v1/admin/commands`, {
     method: "POST",
     body: JSON.stringify({
       commandTemplateId: command.id,
@@ -72,7 +72,7 @@ export const sendCommand = async (
 export const getDevice = async (deviceId: string) => {
   if (await Authentication.waitTilAuthenticated()) {
     const response = await fetch(
-      `https://api-dev.formant.io/v1/admin/devices/${deviceId}`,
+      `https://api.formant.io/v1/admin/devices/${deviceId}`,
       {
         method: "GET",
         headers: {
