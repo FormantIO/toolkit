@@ -1,6 +1,6 @@
 import { Typography, Switch, Box, Icon, useDevice } from "@formant/ui-sdk";
 import { FC, useEffect } from "react";
-import { LastKnowValue, configuration } from "./Table";
+import { LastKnowValue, configuration } from "./types";
 import { Footer } from "./Footer";
 import { KeyValue, Authentication } from "@formant/data-sdk";
 import { useState, useCallback } from "react";
@@ -21,6 +21,7 @@ export const Configuration: FC<IConfigurationProps> = ({
   );
 
   useEffect(() => {
+    console.log(streams)
     if (currentConfiguration === undefined) {
       //If not configuration has been set all the streams are set to true
       setStreamsList(

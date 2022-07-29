@@ -4,20 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Row } from "./Row";
 import { Header } from "./Header";
 import { Configuration } from "./Configuration";
-
-export interface LastKnowValue {
-  currentValue: string;
-  currentValueTime: string;
-  deviceId: string;
-  id: string;
-  streamName: string;
-  streamType: string;
-}
-
-export type configuration = {
-  streamName: string;
-  enable: boolean;
-};
+import { Bitset, Text, Numeric } from "./types";
 
 const getValue = async () => {
   if (await Authentication.waitTilAuthenticated()) {
@@ -29,15 +16,28 @@ export const Table = () => {
   const telemetry = useLatestTelemetry();
   const [showConfig, setShowCongif] = useState(false);
   const [currentConfiguration, setCurrentConfiguration] = useState();
-  const [lastKnowValueList, setLastKnowValueList] = useState<LastKnowValue[]>(
-    []
-  );
+  const [lastKnowValueList, setLastKnowValueList] = useState<
+    (Text | Numeric)[]
+  >([]);
 
   useEffect(() => {
     if (!telemetry) return;
-    setLastKnowValueList(
-      telemetry.filter((_: LastKnowValue) => _.streamType === "text")
+    const textAndNumericStreams = telemetry.filter(
+      (_: Text | Numeric) =>
+        _.streamType === "text" || _.streamType === "numeric"
     );
+    const bitsetStreams = telemetry.filter((_: Bitset) => {
+      if (_.streamType === "bitset") {
+        return _.currentValue.keys.reduce((prev, key, idx) => {
+          return {
+            ...prev,
+            [key]: _.currentValue.values[idx],
+          };
+        }, {});
+      }
+    });
+    console.log(textAndNumericStreams, bitsetStreams);
+    setLastKnowValueList(textAndNumericStreams);
     getValue().then((_) => setCurrentConfiguration(_));
   }, [telemetry, showConfig]);
 
