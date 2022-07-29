@@ -18,7 +18,7 @@ type Services = { [key: string]: JsonObjectSchema };
 
 const getServices = async (latestTelemetry: any): Promise<Services> => {
   const newTelp = latestTelemetry.filter(
-    (stream: any) => stream.streamName === "ros.service.json"
+    (stream: any) => stream.streamName === "ros.services.json"
   );
   const newServices = await fetch(newTelp[0].currentValue);
   const jsonResponse = await fetch(newServices.url);
@@ -40,10 +40,7 @@ const App: FC = () => {
 
   const handleSubmit = useCallback(() => {
     if (!device || !service) return;
-    device.sendCommand(
-      "ROS Service Center",
-      JSON.stringify({ [service]: params })
-    );
+    device.sendCommand("rosservice", JSON.stringify({ [service]: params }));
     setService(null);
     setShowSnackbar(true);
     setParams({});
