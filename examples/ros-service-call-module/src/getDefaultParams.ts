@@ -19,6 +19,7 @@ export const getDefaultParams = (
           : sum;
       }
       case "array":
+        [""];
         return sum;
       default:
         return sum;

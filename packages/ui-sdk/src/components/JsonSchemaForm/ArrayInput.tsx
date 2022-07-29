@@ -1,89 +1,100 @@
-import React, { FC, useEffect, useState } from "react";
+import React,  { FC, useCallback, useMemo, useState } from "react";
 import { TextField } from "../../main";
+import { IInputProps, JsonArraySchema } from "./types";
+import { get, isInteger } from "lodash";
+import { updatePath } from "./updatePath";
+import { capitalize } from "./capitalize";
 
-interface IArrayInputProps {
-  jsonSchemaObject: any;
-  currentStateObject: any;
-  property: string;
-  type: string;
-}
+export const ArrayInput: FC<IInputProps<JsonArraySchema>> = (props) => {
+  const { params, schema, setParams, path } = props;
+  const [error, setError] = useState("");
 
-export const ArrayInput: FC<IArrayInputProps> = ({
-  jsonSchemaObject,
-  currentStateObject,
-  property,
-  type,
-}) => {
-  const [array, setArray] = useState<(string | number)[]>([""]);
-  // const [error, setError] = useState<string>("");
+  const currentValue = useMemo(() => {
+    return get(params, path) !== undefined ? get(params, path) : [""];
+  }, [params, setParams]);
 
-  useEffect(() => {
-    currentStateObject[jsonSchemaObject.properties[property].title] =
-      array.slice(0, array.length - 1);
-  }, [array]);
+  const handleOnBlur = useCallback(
+    (index: number) => {
+      setError("");
+      //Avoids deleting the first textfield
+      if (currentValue.length === 2) return;
 
-  const handleOnBlur = (index: number) => {
-    if (array.length === 1) return;
-    if (array.length === index + 1) {
-      array.pop();
-      setArray([...array]);
-    }
-    if (array[index] === "") {
-      setArray([...array.slice(0, index), ...array.slice(index + 1)]);
-      return;
-    }
-  };
-
-  const isValid = (_: string) => {
-    if (_ === "") return true;
-
-    if (!!_) {
-      const newestInput = _.at(-1);
-      const letterToFloat = parseFloat(newestInput!);
-      if (Number.isInteger(letterToFloat)) return true;
-    }
-    // setError("Please enter a valid integer");
-    return false;
-  };
-
-  const handleOnFocus = (index: number) => {
-    if (index + 1 < array.length) {
-      return;
-    }
-    array.push("");
-    setArray([...array]);
-  };
-
-  const handleOnChange = (
-    ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index: number
-  ) => {
-    const { value } = ev.target;
-    if (type === "integer") {
-      if (!isValid(value)) {
+      if (currentValue[index].length > 0) {
+        //if text field not empty save
+        setParams((prev) => updatePath(prev, path, currentValue));
         return;
       }
-    }
-    array[index] = value;
-    setArray([...array]);
-  };
+      currentValue.pop();
+      if (!(currentValue[index].length > 0)) {
+        //deletes text field if is empty
+        setParams((prev) =>
+          updatePath(prev, path, [
+            ...currentValue.slice(0, index),
+            ...currentValue.slice(index + 1),
+          ])
+        );
+        return;
+      }
+      setParams((prev) => updatePath(prev, path, currentValue));
+    },
+    [currentValue]
+  );
+
+  const handleOnFocus = useCallback(
+    (index: number) => {
+      //Adds a text field wehn cliked in the last text field
+      if (index + 1 === currentValue.length) {
+        currentValue.push("");
+        setParams((prev) => updatePath(prev, path, currentValue));
+      }
+    },
+    [currentValue]
+  );
+
+  const handleChange = useCallback(
+    (e: any, index: number) => {
+      const { value } = e.target;
+      setError("");
+      if (schema.items.type === "integer") {
+        if (value === "") {
+          currentValue[index] = e.target.value;
+          setParams((prev) => updatePath(prev, path, currentValue));
+          return;
+        }
+        const newestInput = value.at(-1)!;
+        const letterToFloat = parseFloat(newestInput);
+        if (isInteger(letterToFloat)) {
+          currentValue[index] = e.target.value;
+          setParams((prev) => updatePath(prev, path, currentValue));
+          return;
+        }
+        setError("Please enter a valid integer");
+        return;
+      }
+      currentValue[index] = e.target.value;
+      setParams((prev) => updatePath(prev, path, currentValue));
+    },
+    [path, setParams]
+  );
 
   return (
     <>
-      {array.map((_: any, index: number) => {
+      {currentValue.map((_: any, index: number) => {
         return (
           <TextField
-            type="text"
+            className="formant-integer-input "
             key={index}
+            type="text"
             sx={{ marginBottom: "16px" }}
+            label={capitalize(schema.title)}
             fullWidth={true}
             onFocus={() => handleOnFocus(index)}
-            value={array[index]}
             onBlur={() => handleOnBlur(index)}
-            onChange={(ev) => handleOnChange(ev, index)}
-            label={
-              jsonSchemaObject.properties[property].title[0].toUpperCase() +
-              jsonSchemaObject.properties[property].title.slice(1)
+            onChange={(e) => handleChange(e, index)}
+            value={currentValue[index] ?? ""}
+            helperText={
+              //Shows error if exist at the bottom of the last text input
+              index + 1 === currentValue.length && error.length > 1 ? error : ""
             }
             variant="filled"
           />

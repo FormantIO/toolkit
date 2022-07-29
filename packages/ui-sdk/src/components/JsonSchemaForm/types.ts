@@ -17,8 +17,13 @@ export interface JsonObjectSchema extends JsonBaseSchema<"object"> {
   properties: { [key: string]: JsonSchema };
 }
 
+export interface JsonArraySchema extends JsonBaseSchema<"array"> {
+  items: {
+    type: "string" | "integer" | "number" | "boolean";
+  };
+}
+
 export type JsonStringSchema = JsonBaseSchema<"string">;
-export type JsonArraySchema = JsonBaseSchema<"array">;
 export type JsonBooleanSchema = JsonBaseSchema<"boolean">;
 export type JsonIntegerSchema = JsonBaseSchema<"integer">;
 export type JsonNumberSchema = JsonBaseSchema<"number">;
