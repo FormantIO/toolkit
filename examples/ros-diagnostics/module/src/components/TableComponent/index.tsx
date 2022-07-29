@@ -33,6 +33,10 @@ export const TableComponent: FC<ITableProps> = ({
   currentConfiuration,
   openSnackBar,
 }) => {
+
+  useEffect(() => {
+    console.log(topicStats)
+  }, [topicStats])
   const [openDialog, setOpenDialog] = useState(false);
   const [topicName, setTopicName] = useState("");
   const [msg, setmsg] = useState("Configuration saved");
@@ -44,7 +48,6 @@ export const TableComponent: FC<ITableProps> = ({
       return;
     }
     let temp = currentConfiuration;
-
     delete temp[topicName];
     if (await Authentication.waitTilAuthenticated()) {
       await KeyValue.set("rosDiagnosticsConfiguration", JSON.stringify(temp));
@@ -73,12 +76,12 @@ export const TableComponent: FC<ITableProps> = ({
             return _.contents.map((content, index) => {
               return (
                 <TableRow key={content.name}>
-                  {index === 0 && (
+                  {/* {index === 0 && (
                     <TableSection
                       title={_.title === "undefined" ? "Other" : _.title}
                       rowSpan={_.contents.length}
                     />
-                  )}
+                  )} */}
                   <TableDataCell
                     content={content.name}
                     type={

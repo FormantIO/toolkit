@@ -5,7 +5,7 @@ import { KeyValue } from "@formant/data-sdk";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { AddTopic } from "./AddTopic";
-
+import { Section } from "./Section/index";
 interface IModuleConfig {
   topicStats: any;
   closeConfig: () => void;
@@ -60,12 +60,13 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   }, [topicStats]);
 
   const saveConfiguraton = async () => {
-    await KeyValue.set(
-      "rosDiagnosticsConfiguration",
-      JSON.stringify(config.current)
-    );
-    closeConfig();
-    showSnackBar();
+    console.log(config.current);
+    // await KeyValue.set(
+    //   "rosDiagnosticsConfiguration",
+    //   JSON.stringify(config.current)
+    // );
+    // closeConfig();
+    // showSnackBar();
   };
 
   return showAddTopic ? (
@@ -84,15 +85,15 @@ export const ModuleConfig: FC<IModuleConfig> = ({
       display={"flex"}
       flexDirection="column"
       alignItems="center"
-      paddingTop={"70px"}
       paddingBottom={"100px"}
     >
       <Header
         onBack={closeConfig}
         buttonLabel="ADD TOPIC"
         onClick={() => setShowAddTopic(true)}
-        label="Configuration"
+        label="Topics"
       />
+      <Section />
       <Box maxWidth={"50vw"} textAlign="left">
         <JsonSchemaForm
           jsonSchemaObject={
@@ -101,7 +102,11 @@ export const ModuleConfig: FC<IModuleConfig> = ({
           currentStateObject={config.current}
         />
       </Box>
-      <Footer onClick={saveConfiguraton} label={"Save"} />
+      <Footer
+        onCancel={closeConfig}
+        onClick={saveConfiguraton}
+        label={"Save"}
+      />
     </Box>
   );
 };

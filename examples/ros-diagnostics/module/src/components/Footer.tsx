@@ -5,9 +5,15 @@ interface IFooterProps {
   onClick: () => void;
   label: string;
   disabled?: boolean;
+  onCancel: () => void;
 }
 
-export const Footer: FC<IFooterProps> = ({ onClick, label, disabled }) => {
+export const Footer: FC<IFooterProps> = ({
+  onClick,
+  label,
+  onCancel,
+  disabled,
+}) => {
   return (
     <Box
       height={"80px"}
@@ -22,6 +28,14 @@ export const Footer: FC<IFooterProps> = ({ onClick, label, disabled }) => {
       }}
       textAlign="right"
     >
+      <Button
+        sx={{
+          marginRight: 2,
+        }}
+        onClick={onCancel}
+      >
+        Cancel
+      </Button>
       <Button
         onClick={onClick}
         variant="contained"

@@ -36,56 +36,29 @@ export const Header: FC<IHeaderProps> = ({
 
   return (
     <Box
-      position={"fixed"}
-      top={0}
-      left={0}
       height={"70px"}
       display={"flex"}
       alignItems="center"
       justifyContent="space-between"
-      paddingLeft={2}
-      paddingRight={2}
-      borderRadius={25}
+      paddingLeft={3}
+      paddingRight={3}
       width="100vw"
     >
       <Box display={"flex"} alignItems="center">
-        <Box
-          height={"40px"}
-          width="40px"
-          borderRadius={25}
-          display={"flex"}
-          alignItems="center"
-          justifyContent={"center"}
-          marginRight={1.5}
-          onClick={onBack}
+        <Typography
+          id="header-label"
           sx={{
-            ":hover": {
-              backgroundColor: "#3b4668",
-              cursor: "pointer",
-            },
+            color: "white",
           }}
+          variant="h2"
         >
-          <Icon name="arrow-left" />
-        </Box>
-        {label && (
-          <Typography
-            id="header-label"
-            sx={{
-              color: "white",
-              transitionTimingFunction: "ease-in",
-              transition: ".5s",
-            }}
-            variant="h2"
-          >
-            {label}
-          </Typography>
-        )}
+          {label}
+        </Typography>
       </Box>
-      {buttonLabel && (
-        <Button onClick={onClick} variant="contained" size="medium">
-          {buttonLabel}
-        </Button>
-      )}
+
+      <Button onClick={onClick} variant="contained" size="medium">
+        CREATE Section
+      </Button>
     </Box>
   );
 };

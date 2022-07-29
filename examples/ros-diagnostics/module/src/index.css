@@ -23,7 +23,7 @@ code {
   width: 0 !important;
 }
 
-.fade-in {
+/* .fade-in {
   -webkit-animation: fade-in 0.5s ease-in both;
   animation: fade-in 0.5s ease-in both;
 }
@@ -65,4 +65,4 @@ code {
   100% {
     opacity: 0;
   }
-}
+} */

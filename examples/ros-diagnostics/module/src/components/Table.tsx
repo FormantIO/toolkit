@@ -91,7 +91,7 @@ export const Table: FC = () => {
     <TableComponent
       currentConfiuration={currentConfig}
       topicStats={latestTopics.items}
-      tableHeaders={["Section", "Name", "Type", "Hz"]}
+      tableHeaders={[ "Name", "Type", "Hz"]}
       setOpenConfig={() => setOpenConfig(true)}
       cloudConfig={cloudConfig}
       setShowSnackBar={() => setShowSnackBar(false)}
