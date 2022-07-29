@@ -8,16 +8,21 @@ import {
   splitTopicsForSecction,
 } from "./TableComponent/utils/index";
 import { ErrorMsg } from "../components/ErrorMsg/ErrorMsg";
+import { RosTopicStats } from "../types/RosTopicStats";
 //Listens to the latest data publish to Formant
 
 type Topic = {
+  name: string;
   topic: string;
   minHz: string;
 };
 
 export const Table: FC = () => {
   const ros = useRef([]);
-  const [latestTopics, setLatestTopics] = useState({ items: [] });
+  const [latestTopics, setLatestTopics] = useState<{
+    [key: string]: RosTopicStats[];
+  }>({ default: [] });
+
   const [err, setErr] = useState("Loading Data");
   const [onlineTopics, setOnlineTopics] = useState<string[]>([]);
   const [openConfig, setOpenConfig] = useState(false);
@@ -39,25 +44,25 @@ export const Table: FC = () => {
     App.addModuleDataListener(receiveModuleData);
   }, []);
 
-  useEffect(() => {
-    getCurrentConfig();
-  }, [openConfig, showSnackBar]);
+  // useEffect(() => {
+  //   getCurrentConfig();
+  // }, [openConfig, showSnackBar]);
 
-  const getCurrentConfig = async () => {
-    if (await Authentication.waitTilAuthenticated()) {
-      try {
-        let config = await KeyValue.get("rosDiagnosticsConfiguration");
+  // const getCurrentConfig = async () => {
+  //   if (await Authentication.waitTilAuthenticated()) {
+  //     try {
+  //       let config = await KeyValue.get("rosDiagnosticsConfiguration");
 
-        setCurrenConfig(JSON.parse(config));
-        setJsonObjectFromCloud(
-          createJsonSchemaObjectFromConfig(JSON.parse(config))
-        );
-        setCloudConfig(splitTopicsForSecction(JSON.parse(config)));
-      } catch (e) {
-        throw new Error(e as string);
-      }
-    }
-  };
+  //       setCurrenConfig(JSON.parse(config));
+  //       setJsonObjectFromCloud(
+  //         createJsonSchemaObjectFromConfig(JSON.parse(config))
+  //       );
+  //       setCloudConfig(splitTopicsForSecction(JSON.parse(config)));
+  //     } catch (e) {
+  //       throw new Error(e as string);
+  //     }
+  //   }
+  // };
 
   const receiveModuleData = async (newValue: ModuleData) => {
     try {
@@ -66,10 +71,9 @@ export const Table: FC = () => {
         return;
       }
       const items = await (await fetch(url)).json();
-      if (JSON.stringify(items) === JSON.stringify(ros.current)) return;
-      ros.current = items;
-      setOnlineTopics(items.map((_: { name: string }) => _.name));
-      setLatestTopics({ items });
+      // setOnlineTopics(items.map((_: { name: string }) => _.name));
+      //Get online topics and group them under "default" section
+      setLatestTopics({ default: items });
       setErr("");
     } catch (error) {
       ros.current = [];
@@ -90,8 +94,8 @@ export const Table: FC = () => {
   ) : (
     <TableComponent
       currentConfiuration={currentConfig}
-      topicStats={latestTopics.items}
-      tableHeaders={[ "Name", "Type", "Hz"]}
+      topicStats={latestTopics}
+      tableHeaders={["Name", "Type", "Hz"]}
       setOpenConfig={() => setOpenConfig(true)}
       cloudConfig={cloudConfig}
       setShowSnackBar={() => setShowSnackBar(false)}

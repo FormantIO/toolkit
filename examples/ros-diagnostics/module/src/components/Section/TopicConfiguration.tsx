@@ -1,5 +1,17 @@
 import { Box, TextField, Icon } from "@formant/ui-sdk";
-export const TopicConfiguration = () => {
+import { FC } from "react";
+
+interface ITopicConfigurationProps {
+  name: string;
+  type: string;
+  hz: number;
+}
+
+export const TopicConfiguration: FC<ITopicConfigurationProps> = ({
+  name,
+  type,
+  hz,
+}) => {
   return (
     <Box
       sx={{
@@ -17,18 +29,21 @@ export const TopicConfiguration = () => {
         type="text"
         label={"Topic"}
         variant="filled"
+        value={name}
       />
       <TextField
         sx={{ marginRight: 1, width: "45%" }}
         type="text"
         label={"Type"}
         variant="filled"
+        value={type}
       />
       <TextField
         sx={{ marginRight: 1, width: 100 }}
         type="text"
         label={"Hz"}
         variant="filled"
+        value={hz}
       />
       <Box
         sx={{
