@@ -98,6 +98,14 @@ export const splitTopicStatsByConfig = (
   return topicsSplitBySection;
 };
 
+// export const splitOnlineTopicsBySection = (sections: {
+//   [key: string]: RosTopicStats[];
+// }) => {
+//   return Object.values(sections).map(_ => ({
+//     [_.name]: ""
+//   }) )
+// };
+
 export const splitTopicsForSecction = (topics: {
   [key: string]: {
     section: string;

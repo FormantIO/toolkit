@@ -1,7 +1,7 @@
 /* eslint-disable no-cond-assign */
 import { ModuleData, App, Authentication, KeyValue } from "@formant/data-sdk";
 import { TableComponent } from "./TableComponent/index";
-import { useState, FC, useEffect, useRef } from "react";
+import { useState, FC, useEffect, useRef, useCallback } from "react";
 import { ModuleConfig } from "./ModuleConfig";
 import {
   createJsonSchemaObjectFromConfig,
@@ -44,25 +44,25 @@ export const Table: FC = () => {
     App.addModuleDataListener(receiveModuleData);
   }, []);
 
-  // useEffect(() => {
-  //   getCurrentConfig();
-  // }, [openConfig, showSnackBar]);
+  useEffect(() => {
+    getCurrentConfig();
+  }, [openConfig, showSnackBar]);
 
-  // const getCurrentConfig = async () => {
-  //   if (await Authentication.waitTilAuthenticated()) {
-  //     try {
-  //       let config = await KeyValue.get("rosDiagnosticsConfiguration");
+  const getCurrentConfig = useCallback(async () => {
+    if (await Authentication.waitTilAuthenticated()) {
+      try {
+        let config = await KeyValue.get("rosDiagnosticsConfiguration");
 
-  //       setCurrenConfig(JSON.parse(config));
-  //       setJsonObjectFromCloud(
-  //         createJsonSchemaObjectFromConfig(JSON.parse(config))
-  //       );
-  //       setCloudConfig(splitTopicsForSecction(JSON.parse(config)));
-  //     } catch (e) {
-  //       throw new Error(e as string);
-  //     }
-  //   }
-  // };
+        setCurrenConfig(JSON.parse(config));
+        setJsonObjectFromCloud(
+          createJsonSchemaObjectFromConfig(JSON.parse(config))
+        );
+        setCloudConfig(splitTopicsForSecction(JSON.parse(config)));
+      } catch (e) {
+        throw new Error(e as string);
+      }
+    }
+  }, []);
 
   const receiveModuleData = async (newValue: ModuleData) => {
     try {

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState, useMemo } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
 import { Table } from "./Table";
 import { TableHeader } from "./TableHeader";
@@ -12,7 +12,7 @@ import { DialogComponent } from "../DialogComponent";
 import { KeyValue, Authentication } from "@formant/data-sdk";
 interface ITableProps {
   tableHeaders: string[];
-  topicStats: RosTopicStats[];
+  topicStats: { [key: string]: RosTopicStats[] };
   setOpenConfig: () => void;
   cloudConfig: any;
   showSnackBar: boolean;
@@ -33,10 +33,9 @@ export const TableComponent: FC<ITableProps> = ({
   currentConfiuration,
   openSnackBar,
 }) => {
-
   useEffect(() => {
-    console.log(topicStats)
-  }, [topicStats])
+    console.log(topicStats);
+  }, [topicStats]);
   const [openDialog, setOpenDialog] = useState(false);
   const [topicName, setTopicName] = useState("");
   const [msg, setmsg] = useState("Configuration saved");
@@ -65,63 +64,65 @@ export const TableComponent: FC<ITableProps> = ({
     setOpenDialog(false);
   };
 
-  if (topicStats === undefined || topicStats.length === 0) return <></>;
+  if (topicStats === undefined || topicStats.default.length === 0) return <></>;
 
   return (
     <>
       <Table columns={tableHeaders.length}>
         <TableHeader showConfig={setOpenConfig} headers={tableHeaders} />
         <TableBody>
-          {splitTopicStatsByConfig(topicStats, cloudConfig!).map((_) => {
-            return _.contents.map((content, index) => {
-              return (
-                <TableRow key={content.name}>
-                  {/* {index === 0 && (
+          {splitTopicStatsByConfig(topicStats.default, cloudConfig!).map(
+            (_) => {
+              return _.contents.map((content, index) => {
+                return (
+                  <TableRow key={content.name}>
+                    {/* {index === 0 && (
                     <TableSection
                       title={_.title === "undefined" ? "Other" : _.title}
                       rowSpan={_.contents.length}
                     />
                   )} */}
-                  <TableDataCell
-                    content={content.name}
-                    type={
-                      onlineTopics!.includes(content.name)
-                        ? minHzForTopic(content.name, cloudConfig!) <=
-                          content.hz
-                          ? "good"
-                          : "bad"
-                        : "unknown"
-                    }
-                  />
-                  <TableDataCell content={content.type} />
-                  <TableDataCell content={Math.trunc(content.hz)} />
-                  <TableDataCell
-                    center={true}
-                    content={
-                      <Box
-                        onClick={() => handleOpenDialog(content.name)}
-                        sx={{
-                          height: 41,
-                          width: 41,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          backgroundColor: "#282f45",
-                          borderRadius: 5,
-                          ":hover": {
-                            backgroundColor: "#657197",
-                            cursor: "pointer",
-                          },
-                        }}
-                      >
-                        <Icon name="delete" />
-                      </Box>
-                    }
-                  />
-                </TableRow>
-              );
-            });
-          })}
+                    <TableDataCell
+                      content={content.name}
+                      type={
+                        onlineTopics!.includes(content.name)
+                          ? minHzForTopic(content.name, cloudConfig!) <=
+                            content.hz
+                            ? "good"
+                            : "bad"
+                          : "unknown"
+                      }
+                    />
+                    <TableDataCell content={content.type} />
+                    <TableDataCell content={Math.trunc(content.hz)} />
+                    <TableDataCell
+                      center={true}
+                      content={
+                        <Box
+                          onClick={() => handleOpenDialog(content.name)}
+                          sx={{
+                            height: 41,
+                            width: 41,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "#282f45",
+                            borderRadius: 5,
+                            ":hover": {
+                              backgroundColor: "#657197",
+                              cursor: "pointer",
+                            },
+                          }}
+                        >
+                          <Icon name="delete" />
+                        </Box>
+                      }
+                    />
+                  </TableRow>
+                );
+              });
+            }
+          )}
         </TableBody>
       </Table>
       <DialogComponent
