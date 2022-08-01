@@ -3,3 +3,12 @@
   min-width: 100vw;
   height: auto;
 }
+
+.treshhold {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 18px;
+  border-bottom: 1px dashed white;
+  color: White;
+}

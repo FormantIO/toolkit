@@ -8,7 +8,7 @@ interface IRowProps {
 }
 
 export const Row: FC<IRowProps> = (props: any) => {
-  const { leftValue, rightValue } = props;
+  const { leftValue, rightValue, state } = props;
   return (
     <Box
       sx={{
@@ -36,24 +36,27 @@ export const Row: FC<IRowProps> = (props: any) => {
           {
             padding: 1,
             borderLeft: "1px solid black",
-            position: "relative"
+            position: "relative",
           },
           {
             "&:before": {
               content: "''",
               height: 25,
-              backgroundColor: "#58b7de",
+              backgroundColor: state === "good" ? "#58b7de" : "#f89973",
               width: "5px",
               position: "absolute",
               left: 0,
               borderTopRightRadius: 25,
               borderBottomRightRadius: 25,
-              marginTop: .1
+              marginTop: 0.1,
             },
           },
         ]}
       >
-        <Typography variant="body2" sx={{ color: "white", fontSize: 11, paddingLeft: 1 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "white", fontSize: 11, paddingLeft: 1 }}
+        >
           {rightValue}
         </Typography>
       </Box>

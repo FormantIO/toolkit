@@ -7,38 +7,68 @@ import { Configuration } from "./Configuration";
 import { Bitset, Text, Numeric } from "./types";
 
 const getValue = async () => {
-  if (await Authentication.waitTilAuthenticated()) {
-    return JSON.parse(await KeyValue.get("lastKnowValuesList"));
+  try {
+    if (await Authentication.waitTilAuthenticated()) {
+      return JSON.parse(await KeyValue.get("lastKnowValuesList"));
+    }
+    return [];
+  } catch (e) {
+    return [];
   }
 };
 
 export const Table = () => {
   const telemetry = useLatestTelemetry();
   const [showConfig, setShowCongif] = useState(false);
-  const [currentConfiguration, setCurrentConfiguration] = useState();
+  const [bitsetStreams, setBitsetStreams] = useState<Bitset[]>([]);
+  const [currentConfiguration, setCurrentConfiguration] = useState<any>();
   const [lastKnowValueList, setLastKnowValueList] = useState<
-    (Text | Numeric)[]
+    {
+      [key: string]: {
+        expectedValue: string;
+        enabled: boolean;
+      };
+    }[]
   >([]);
 
   useEffect(() => {
-    if (!telemetry) return;
-    const textAndNumericStreams = telemetry.filter(
-      (_: Text | Numeric) =>
-        _.streamType === "text" || _.streamType === "numeric"
-    );
-    const bitsetStreams = telemetry.filter((_: Bitset) => {
-      if (_.streamType === "bitset") {
-        return _.currentValue.keys.reduce((prev, key, idx) => {
-          return {
-            ...prev,
-            [key]: _.currentValue.values[idx],
-          };
-        }, {});
-      }
+    getValue().then((_) => {
+      console.log(_);
+      console.log(lastKnowValueList);
+      setCurrentConfiguration(_);
     });
-    console.log(textAndNumericStreams, bitsetStreams);
+  }, [showConfig]);
+
+  useEffect(() => {
+    if (!telemetry) return;
+
+    const textAndNumericStreams = telemetry.reduce(
+      (_: any, stream: Text | Numeric | Bitset) => {
+        if (stream.streamType === "text" || stream.streamType === "numeric") {
+          return { ..._, [stream.streamName]: stream.currentValue };
+        }
+        if (stream.streamType === "bitset") {
+          if (stream.streamName === "$.ros.node_online") return _;
+
+          let x = (
+            stream.currentValue as { keys: string[]; values: boolean[] }
+          ).keys.reduce((bitset, bit, idx) => {
+            return {
+              ...bitset,
+              [bit]: (stream as Bitset).currentValue.values[idx],
+            };
+          }, {});
+          return {
+            ..._,
+            ...x,
+          };
+        }
+        return _;
+      },
+      {}
+    );
+
     setLastKnowValueList(textAndNumericStreams);
-    getValue().then((_) => setCurrentConfiguration(_));
   }, [telemetry, showConfig]);
 
   return showConfig ? (
@@ -50,18 +80,25 @@ export const Table = () => {
   ) : (
     <>
       <Header setShow={() => setShowCongif(true)} />
-      {lastKnowValueList.map((_) => {
+      {Object.keys(lastKnowValueList).map((_) => {
         if (
           currentConfiguration !== undefined &&
-          currentConfiguration[_.streamName] === false
+          currentConfiguration[_].enabled === false
         ) {
           return;
         }
+
         return (
           <Row
-            key={_.id}
-            leftValue={_.streamName}
-            rightValue={_.currentValue}
+            key={_}
+            leftValue={_}
+            rightValue={lastKnowValueList[_ as any].toString()}
+            state={
+              lastKnowValueList[_ as any].toString() ===
+              currentConfiguration[_].expectedValue
+                ? "good"
+                : "warning"
+            }
           />
         );
       })}

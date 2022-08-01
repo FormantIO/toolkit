@@ -1,14 +1,27 @@
-import { Typography, Switch, Box, Icon, useDevice } from "@formant/ui-sdk";
+import {
+  Typography,
+  Switch,
+  Box,
+  Icon,
+  useDevice,
+  TextField,
+} from "@formant/ui-sdk";
 import { FC, useEffect } from "react";
-import { LastKnowValue, configuration } from "./types";
+import { configuration } from "./types";
 import { Footer } from "./Footer";
 import { KeyValue, Authentication } from "@formant/data-sdk";
-import { useState, useCallback } from "react";
+import { useState, useCallback, ChangeEventHandler } from "react";
+import "./App.css";
 
 interface IConfigurationProps {
   onBack: () => void;
-  streams: LastKnowValue[];
-  currentConfiguration?: { [key: string]: Boolean };
+  streams: any[];
+  currentConfiguration: {
+    [key: string]: {
+      enabled: boolean;
+      expectedValue: string;
+    };
+  };
 }
 
 export const Configuration: FC<IConfigurationProps> = ({
@@ -16,33 +29,39 @@ export const Configuration: FC<IConfigurationProps> = ({
   streams,
   currentConfiguration,
 }) => {
-  const [stremasList, setStreamsList] = useState<{ [key: string]: Boolean }>(
-    {}
-  );
+  const [streamList, setStreamsList] = useState<{
+    [key: string]: { enabled: boolean; expectedValue: string };
+  }>({});
 
   useEffect(() => {
-    console.log(streams)
-    if (currentConfiguration === undefined) {
+    console.log(currentConfiguration);
+    if (
+      currentConfiguration === undefined ||
+      (currentConfiguration as any).length === 0
+    ) {
       //If not configuration has been set all the streams are set to true
+      console.log("here");
       setStreamsList(
-        streams.reduce((_, item) => {
-          return { ..._, [item.streamName]: true };
+        Object.keys(streams).reduce((_, item) => {
+          return { ..._, [item]: { enabled: true, expectedValue: "" } };
         }, {})
       );
-    } else {
+    }
+    if (Object.keys(currentConfiguration).length > 0) {
       //If new streams is added, it is set to true as first value
-      setStreamsList(
-        streams.reduce((_, item) => {
-          return {
-            ..._,
-            [item.streamName]: Object.keys(currentConfiguration).includes(
-              item.streamName
-            )
-              ? currentConfiguration[item.streamName]
-              : true,
-          };
-        }, {})
-      );
+
+      console.log(currentConfiguration);
+      let x = Object.keys(streams).reduce((_, item) => {
+        return {
+          ..._,
+          [item]: {
+            expectedValue: currentConfiguration[item].expectedValue ?? "",
+            enabled: currentConfiguration[item as any].enabled ?? true,
+          },
+        };
+      }, {});
+      console.log(x);
+      setStreamsList(x);
     }
   }, [currentConfiguration]);
 
@@ -50,26 +69,54 @@ export const Configuration: FC<IConfigurationProps> = ({
     async (e: any, index: number) => {
       //toggle stream state
       setStreamsList({
-        ...stremasList,
-        [e.target.value]: !stremasList[e.target.value],
+        ...streamList,
+        [e.target.value]: {
+          ...streamList[e.target.value],
+          enabled: !streamList[e.target.value].enabled,
+        },
       });
       const changeList = {
-        ...stremasList,
-        [e.target.value]: !stremasList[e.target.value],
+        ...streamList,
+        [e.target.value]: {
+          ...streamList[e.target.value],
+          enabled: !streamList[e.target.value].enabled,
+        },
       };
+
       if (await Authentication.waitTilAuthenticated()) {
         await KeyValue.set("lastKnowValuesList", JSON.stringify(changeList));
       }
     },
-    [streams, stremasList]
+    [streams, streamList]
+  );
+
+  const handleExpectedValueChange = useCallback<any>(
+    async (e: any, stream: string) => {
+      setStreamsList({
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: e.target.value,
+        },
+      });
+      const changeList = {
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: e.target.value,
+        },
+      };
+
+      if (await Authentication.waitTilAuthenticated()) {
+        await KeyValue.set("lastKnowValuesList", JSON.stringify(changeList));
+      }
+    },
+    [streams, streamList]
   );
 
   const handleSubmit = useCallback(async () => {
-    if (await Authentication.waitTilAuthenticated()) {
-      await KeyValue.set("lastKnowValuesList", JSON.stringify(stremasList));
-      onBack();
-    }
-  }, [stremasList]);
+    console.log(streamList);
+  }, [streamList]);
 
   return (
     <Box
@@ -90,7 +137,7 @@ export const Configuration: FC<IConfigurationProps> = ({
         alignItems="center"
         justifyContent="space-between"
         paddingLeft={1}
-        paddingRight={2}
+        paddingRight={1}
         borderRadius={25}
         width="100vw"
       >
@@ -116,23 +163,56 @@ export const Configuration: FC<IConfigurationProps> = ({
         </Box>
       </Box>
       <Box display="flex" flexDirection="column">
-        {streams.map((_, index) => (
-          <Box
-            sx={{
-              display: "flex",
-              width: 210,
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography sx={{ fontSize: 11 }}>{`${_.streamName}: `}</Typography>{" "}
-            <Switch
-              value={_.streamName}
-              onChange={(e) => handleChange(e, index)}
-              checked={(stremasList[_.streamName] as boolean) ?? false}
-              size="small"
-            />
-          </Box>
-        ))}
+        {Object.keys(streams).map((_, index) => {
+          //Prevents undefined error for check property of 'switch' component
+          if (Object.keys(streamList).length === 0) return;
+
+          return (
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  width: 224,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  onChange={(ev) => handleExpectedValueChange(ev, _)}
+                  variant="standard"
+                  value={streamList[_].expectedValue}
+                  label={_}
+                />
+                {/* <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      marginRight: 1,
+                    }}
+                    variant="h6"
+                  >
+                    Stream name:{" "}
+                  </Typography>
+                  <input className="treshhold" />
+                  <span>{"< x < "}</span>
+                  <input className="treshhold" />
+                </Box> */}
+
+                <Switch
+                  value={_}
+                  onChange={(e) => handleChange(e, index)}
+                  checked={streamList[_].enabled}
+                  size="small"
+                />
+              </Box>
+            </Box>
+          );
+        })}
       </Box>
       {/* <Footer label={"Save"} onClick={handleSubmit} /> */}
     </Box>
