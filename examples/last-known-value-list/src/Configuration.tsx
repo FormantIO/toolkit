@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@formant/ui-sdk";
 import { FC, useEffect } from "react";
-import { configuration } from "./types";
+import { configuration, lastKnowValue } from "./types";
 import { Footer } from "./Footer";
 import { KeyValue, Authentication } from "@formant/data-sdk";
 import { useState, useCallback, ChangeEventHandler } from "react";
@@ -15,7 +15,7 @@ import "./App.css";
 
 interface IConfigurationProps {
   onBack: () => void;
-  streams: any[];
+  streams: lastKnowValue[];
   currentConfiguration: {
     [key: string]: {
       enabled: boolean;
@@ -30,17 +30,15 @@ export const Configuration: FC<IConfigurationProps> = ({
   currentConfiguration,
 }) => {
   const [streamList, setStreamsList] = useState<{
-    [key: string]: { enabled: boolean; expectedValue: string };
+    [key: string]: { enabled: boolean; expectedValue: any };
   }>({});
 
   useEffect(() => {
-    console.log(currentConfiguration);
     if (
       currentConfiguration === undefined ||
       (currentConfiguration as any).length === 0
     ) {
       //If not configuration has been set all the streams are set to true
-      console.log("here");
       setStreamsList(
         Object.keys(streams).reduce((_, item) => {
           return { ..._, [item]: { enabled: true, expectedValue: "" } };
@@ -50,7 +48,6 @@ export const Configuration: FC<IConfigurationProps> = ({
     if (Object.keys(currentConfiguration).length > 0) {
       //If new streams is added, it is set to true as first value
 
-      console.log(currentConfiguration);
       let x = Object.keys(streams).reduce((_, item) => {
         return {
           ..._,
@@ -60,7 +57,6 @@ export const Configuration: FC<IConfigurationProps> = ({
           },
         };
       }, {});
-      console.log(x);
       setStreamsList(x);
     }
   }, [currentConfiguration]);
@@ -114,8 +110,68 @@ export const Configuration: FC<IConfigurationProps> = ({
     [streams, streamList]
   );
 
+  const handleGreaterThanChange = useCallback<any>(
+    async (e: any, stream: string) => {
+      setStreamsList({
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: {
+            ...streamList[stream].expectedValue,
+            greaterThan: e.target.value,
+          },
+        },
+      });
+      const changeList = {
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: {
+            ...streamList[stream].expectedValue,
+            greaterThan: e.target.value,
+          },
+        },
+      };
+
+      if (await Authentication.waitTilAuthenticated()) {
+        await KeyValue.set("lastKnowValuesList", JSON.stringify(changeList));
+      }
+    },
+    [streams, streamList]
+  );
+
+  const handleLesserThanChange = useCallback<any>(
+    async (e: any, stream: string) => {
+      setStreamsList({
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: {
+            ...streamList[stream].expectedValue,
+            lesserThan: e.target.value,
+          },
+        },
+      });
+      const changeList = {
+        ...streamList,
+        [stream]: {
+          ...streamList[stream],
+          expectedValue: {
+            ...streamList[stream].expectedValue,
+            lesserThan: e.target.value,
+          },
+        },
+      };
+
+      if (await Authentication.waitTilAuthenticated()) {
+        await KeyValue.set("lastKnowValuesList", JSON.stringify(changeList));
+      }
+    },
+    [streams, streamList]
+  );
+
   const handleSubmit = useCallback(async () => {
-    console.log(streamList);
+    // console.log(streamList);
   }, [streamList]);
 
   return (
@@ -177,31 +233,55 @@ export const Configuration: FC<IConfigurationProps> = ({
                   alignItems: "center",
                 }}
               >
-                <TextField
-                  onChange={(ev) => handleExpectedValueChange(ev, _)}
-                  variant="standard"
-                  value={streamList[_].expectedValue}
-                  label={_}
-                />
-                {/* <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
+                {streams[_ as any].streamType !== "numeric" ? (
+                  <TextField
+                    onChange={(ev) => handleExpectedValueChange(ev, _)}
+                    variant="standard"
+                    value={streamList[_].expectedValue}
+                    label={_}
+                  />
+                ) : (
+                  <Box
                     sx={{
-                      marginRight: 1,
+                      display: "flex",
+                      alignItems: "left",
+                      justifyContent: "space-between",
+                      height: 48,
+                      width: "100%",
+                      flexDirection: "column",
+                      marginTop: 2,
                     }}
-                    variant="h6"
                   >
-                    Stream name:{" "}
-                  </Typography>
-                  <input className="treshhold" />
-                  <span>{"< x < "}</span>
-                  <input className="treshhold" />
-                </Box> */}
+                    <Typography
+                      sx={{
+                        marginRight: 1,
+                        fontSize: 14,
+                      }}
+                    >
+                      {`${_}: `}
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        alighitems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        onChange={(e) => handleGreaterThanChange(e, _)}
+                        className="treshhold"
+                        value={streamList[_].expectedValue.greaterThan}
+                      />
+                      <span>{"< x < "}</span>
+                      <input
+                        onChange={(e) => handleLesserThanChange(e, _)}
+                        className="treshhold"
+                        value={streamList[_].expectedValue.lesserThan}
+                      />
+                    </Box>
+                  </Box>
+                )}
 
                 <Switch
                   value={_}

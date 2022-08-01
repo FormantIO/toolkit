@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Row } from "./Row";
 import { Header } from "./Header";
 import { Configuration } from "./Configuration";
-import { Bitset, Text, Numeric } from "./types";
+import { Bitset, Text, Numeric, lastKnowValue } from "./types";
 
 const getValue = async () => {
   try {
@@ -20,21 +20,13 @@ const getValue = async () => {
 export const Table = () => {
   const telemetry = useLatestTelemetry();
   const [showConfig, setShowCongif] = useState(false);
-  const [bitsetStreams, setBitsetStreams] = useState<Bitset[]>([]);
   const [currentConfiguration, setCurrentConfiguration] = useState<any>();
-  const [lastKnowValueList, setLastKnowValueList] = useState<
-    {
-      [key: string]: {
-        expectedValue: string;
-        enabled: boolean;
-      };
-    }[]
-  >([]);
+  const [lastKnowValueList, setLastKnowValueList] = useState<lastKnowValue[]>(
+    []
+  );
 
   useEffect(() => {
     getValue().then((_) => {
-      console.log(_);
-      console.log(lastKnowValueList);
       setCurrentConfiguration(_);
     });
   }, [showConfig]);
@@ -45,7 +37,13 @@ export const Table = () => {
     const textAndNumericStreams = telemetry.reduce(
       (_: any, stream: Text | Numeric | Bitset) => {
         if (stream.streamType === "text" || stream.streamType === "numeric") {
-          return { ..._, [stream.streamName]: stream.currentValue };
+          return {
+            ..._,
+            [stream.streamName]: {
+              currentValue: stream.currentValue,
+              streamType: stream.streamType,
+            },
+          };
         }
         if (stream.streamType === "bitset") {
           if (stream.streamName === "$.ros.node_online") return _;
@@ -55,7 +53,10 @@ export const Table = () => {
           ).keys.reduce((bitset, bit, idx) => {
             return {
               ...bitset,
-              [bit]: (stream as Bitset).currentValue.values[idx],
+              [bit]: {
+                currentValue: (stream as Bitset).currentValue.values[idx],
+                streamType: "bitset",
+              },
             };
           }, {});
           return {
@@ -92,10 +93,20 @@ export const Table = () => {
           <Row
             key={_}
             leftValue={_}
-            rightValue={lastKnowValueList[_ as any].toString()}
+            rightValue={lastKnowValueList[_ as any].currentValue.toString()}
             state={
-              lastKnowValueList[_ as any].toString() ===
-              currentConfiguration[_].expectedValue
+              lastKnowValueList[_ as any].streamType === "numeric"
+                ? parseInt(currentConfiguration[_].expectedValue.lesserThan) >
+                  lastKnowValueList[_ as any].currentValue
+                  ? parseInt(
+                      currentConfiguration[_].expectedValue.greaterThan
+                    ) < lastKnowValueList[_ as any].currentValue
+                    ? "good"
+                    : "warning"
+                  : "warning"
+                : lastKnowValueList[_ as any].currentValue.toString() ===
+                    currentConfiguration[_].expectedValue.toString() ||
+                  currentConfiguration[_].expectedValue.length === 0
                 ? "good"
                 : "warning"
             }

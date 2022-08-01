@@ -25,3 +25,8 @@ export type configuration = {
   streamName: string;
   enable: boolean;
 };
+
+export interface lastKnowValue {
+  currentValue: string | number | boolean;
+  streamType: "numeric" | "text" | "bitset";
+}
