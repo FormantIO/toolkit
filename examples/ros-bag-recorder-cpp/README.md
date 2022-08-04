@@ -22,14 +22,32 @@ sudo apt install nlohmann-json-dev
 
 ## protobuf Install 
 
-You will need protobuf. You may download protobuf from
-https://github.com/protocolbuffers/protobuf/releases
+Protobuf is required to build this adapter. You will need to build 
+protobuf from source to use it with Cmake. To do so, follow the install
+instructions found at https://github.com/protocolbuffers/protobuf/blob/main/src/README.md
 
 ## gRPC Install
-To begin, you will need to first install the C++ gRPC library. 
 
-Please refer to https://grpc.io/blog/installation/ to find instructions
-for building and installing gRPC for C++ 
+gRPC is required, and also needs to be built from source to be 
+used with cmake. 
+
+Please refer to the `build from source` section at https://github.com/grpc/grpc/blob/master/BUILDING.md
+
+Note: after running 
+
+```
+$ mkdir -p cmake/build
+$ cd cmake/build
+$ cmake ../..
+$ make
+```
+
+as specified in the build instructions, you will need to also run
+```
+$ sudo make install 
+```
+
+This will ensure the headers are installed and the cmake config files are placed in their proper directories for building. 
 
 ## Additional ROS libraries
 
