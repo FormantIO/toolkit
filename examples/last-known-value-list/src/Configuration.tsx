@@ -236,7 +236,7 @@ export const Configuration: FC<IConfigurationProps> = ({
                 {streams[_ as any].streamType !== "numeric" ? (
                   <TextField
                     onChange={(ev) => handleExpectedValueChange(ev, _)}
-                    variant="standard"
+                    variant="filled"
                     value={streamList[_].expectedValue}
                     label={_}
                   />
@@ -246,7 +246,7 @@ export const Configuration: FC<IConfigurationProps> = ({
                       display: "flex",
                       alignItems: "left",
                       justifyContent: "space-between",
-                      height: 48,
+                      // height: 48,
                       width: "100%",
                       flexDirection: "column",
                       marginTop: 2,
@@ -268,7 +268,19 @@ export const Configuration: FC<IConfigurationProps> = ({
                         justifyContent: "center",
                       }}
                     >
-                      <input
+                      <TextField
+                        onChange={(ev) => handleExpectedValueChange(ev, _)}
+                        variant="filled"
+                        // value={streamList[_].expectedValue}
+                        label={"min"}
+                      />
+                      <TextField
+                        onChange={(ev) => handleExpectedValueChange(ev, _)}
+                        variant="filled"
+                        // value={streamList[_].expectedValue}
+                        label={"max"}
+                      />
+                      {/* <input
                         onChange={(e) => handleGreaterThanChange(e, _)}
                         className="treshhold"
                         value={streamList[_].expectedValue.greaterThan}
@@ -278,7 +290,7 @@ export const Configuration: FC<IConfigurationProps> = ({
                         onChange={(e) => handleLesserThanChange(e, _)}
                         className="treshhold"
                         value={streamList[_].expectedValue.lesserThan}
-                      />
+                      /> */}
                     </Box>
                   </Box>
                 )}
