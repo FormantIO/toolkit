@@ -1,0 +1,11 @@
+Outline for the ROS launch adapter
+
+
+The ros launch adapter will be split into a number of parts. 
+
+There will be an internal "roslaunch engine" which will power the adapter. 
+This engine will keep track which ros launches are running, which ros launches can be shut down,
+etc. There will be a standard interface which can be interacted with for the user.
+
+This roslaunch engine will then be hooked up to the "front-end" which will consist of a way for Formant to interact with 
+the ros launch engine. Once the engine is built it will be easily extendable for the front end. 
