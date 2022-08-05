@@ -17,3 +17,6 @@ each ros launch will be represented by a ros launch class with an abc roslaunchB
         * is running 
         * external launch? 
         * internal launch? 
+        * Is restart-able? 
+
+
