@@ -42,7 +42,7 @@ public:
     inline void write(const OutgoingMessage &outgoing)
     {
         if(!is_open){
-            std::cout << "Error: bag is not open" << std::endl; 
+            std::cout << "Error: bag is not open: " << name << std::endl; 
             return; 
         }
         bag->write(outgoing.get_topic(), outgoing.get_time(), outgoing.get_msg()); 
@@ -51,6 +51,7 @@ public:
     inline void operator=(RosBag &&rhs)
     {
         name = rhs.name;
+        is_open = rhs.is_open; 
         bag = rhs.bag;
         rhs.bag = bag;
     }
@@ -58,6 +59,7 @@ public:
     inline void operator=(RosBag &rhs)
     {
         name = rhs.name;
+        is_open = rhs.is_open; 
         bag = rhs.bag;
     }
 

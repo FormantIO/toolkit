@@ -22,7 +22,7 @@ if [ ! -d "protos/protos" ]; then
 
 fi
 
-if [ ! -f "devel/lib/adapter/main" ]; then
+if [ ! -f "devel/lib/ros_bag_adapter/main" ]; then
     echo "Executable needs to be built.."
     catkin_make -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-O3
 fi
