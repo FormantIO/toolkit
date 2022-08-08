@@ -13,7 +13,8 @@ class RosLaunchEngine:
         """
         Return all the currently running ros launches
         """
-        return [determine_launch_file(p) for p in list_ros_launches()]
+        launches = [determine_launch_file(p) for p in list_ros_launches()]
+        return [l for l in launches if l is not None] 
 
     def available_launch_files(self) -> List[str]: 
         """
@@ -35,21 +36,33 @@ class RosLaunchEngine:
         """
         pass
 
-    def kill(self, identifier: str):
+    def kill(self, identifier):
         """
         Kill the specified ros launch associated with identifier.
+        This can be either a PID or a string. 
+
+        @note: Use PID when possible. If a roslaunch file was launched,
+               multiple times, then it is not possible to kill the launch file
+               by name. 
         """
         pass
 
-    def restart(self, identifier: str):
+    def restart(self, identifier):
         """
         Restart the specified launch associate with the identifier.
+
+        @note: Use PID when possible. If a roslaunch file was launched,
+               multiple times, then it is not possible to restart by the name alone.
         """
         pass
     
-    def status(self, identifier: str) -> Dict:
+    def status(self, identifier) -> Dict:
         """
         Return a dictionary which holds the status information
         of the ros launch with the associated identifier
+
+        @note: Use PID when possible. If a roslaunch file was launched,
+               multiple times, then it is not possible to get the status 
+               of a launch via name alone.
         """
         pass

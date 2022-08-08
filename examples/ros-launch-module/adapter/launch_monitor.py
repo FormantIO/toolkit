@@ -2,9 +2,10 @@
 import subprocess
 import signal
 import os
+from typing import List
 import psutil
 
-def list_ros_launches():
+def list_ros_launches() -> List[psutil.Process]:
     """
     Return a list of all currently running external ros launches.
     """
@@ -35,5 +36,36 @@ def determine_launch_file(proc: psutil.Process):
         if ".launch" in elt:
             return elt
 
-print(list_ros_launches())
-print(determine_launch_file(list_ros_launches()[0]))
+def get_launch_dict(key="PID"):
+    """
+    Return a dictionary of launches. This maps either 
+    the PID or launchfile-name to a list of launches. In the case of PID, 
+    the list of launches will always be length 1. 
+    """
+    if key == "PID":
+        def get_key(proc: psutil.Process):
+            return proc.pid()
+    else:
+        def get_key(proc: psutil.Process):
+            return determine_launch_file(proc) 
+
+    launches = list_ros_launches()
+
+    launch_dict = {}
+
+    for launch in launches:
+        launch_key = get_key(launch) 
+
+        if launch_key not in launch_dict:
+            launch_dict[launch_key] = []
+        
+        launch_dict[launch_key].append(launch) 
+
+    return launch_dict
+
+def is_running(identifier):
+    pass
+
+def get_proc(identifier):
+    pass
+
