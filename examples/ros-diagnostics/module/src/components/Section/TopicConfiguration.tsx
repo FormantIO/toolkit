@@ -43,7 +43,7 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = ({
         type="text"
         label={"Hz"}
         variant="filled"
-        value={hz}
+        value={Math.floor(hz)}
       />
       <Box
         sx={{
@@ -53,7 +53,6 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#292f43",
           ":hover": {
             backgroundColor: "#3b4668",
             cursor: "pointer",

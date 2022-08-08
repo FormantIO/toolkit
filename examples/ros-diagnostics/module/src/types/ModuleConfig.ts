@@ -2,11 +2,11 @@ export default interface ModuleConfig {
   sections: Section[];
 }
 export interface Section {
-  title: string;
+  section: string;
   contents: SectionContent[];
 }
 export interface SectionContent {
   topic: string;
   minHz: number;
-  type: string
+  type: string;
 }

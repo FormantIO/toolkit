@@ -9,6 +9,7 @@ import {
 } from "./TableComponent/utils/index";
 import { ErrorMsg } from "../components/ErrorMsg/ErrorMsg";
 import { RosTopicStats } from "../types/RosTopicStats";
+
 //Listens to the latest data publish to Formant
 
 type Topic = {
@@ -19,9 +20,12 @@ type Topic = {
 
 export const Table: FC = () => {
   const ros = useRef([]);
-  const [latestTopics, setLatestTopics] = useState<{
-    [key: string]: RosTopicStats[];
-  }>({ default: [] });
+  const [latestTopics, setLatestTopics] = useState<
+    {
+      section: string;
+      contents: RosTopicStats[];
+    }[]
+  >([{ section: "default", contents: [] }]);
 
   const [err, setErr] = useState("Loading Data");
   const [onlineTopics, setOnlineTopics] = useState<string[]>([]);
@@ -73,7 +77,12 @@ export const Table: FC = () => {
       const items = await (await fetch(url)).json();
       // setOnlineTopics(items.map((_: { name: string }) => _.name));
       //Get online topics and group them under "default" section
-      setLatestTopics({ default: items });
+      setLatestTopics([
+        {
+          section: "default",
+          contents: items,
+        },
+      ]);
       setErr("");
     } catch (error) {
       ros.current = [];
@@ -86,7 +95,7 @@ export const Table: FC = () => {
   ) : openConfig ? (
     <ModuleConfig
       closeConfig={() => setOpenConfig(false)}
-      topicStats={latestTopics.items}
+      topicStats={latestTopics}
       showSnackBar={() => setShowSnackBar(true)}
       jsonObjectFromCloud={jsonObjectFromCloud}
       currentConfiuration={currentConfig}

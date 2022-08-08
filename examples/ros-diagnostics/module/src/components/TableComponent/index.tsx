@@ -12,7 +12,7 @@ import { DialogComponent } from "../DialogComponent";
 import { KeyValue, Authentication } from "@formant/data-sdk";
 interface ITableProps {
   tableHeaders: string[];
-  topicStats: { [key: string]: RosTopicStats[] };
+  topicStats: { section: string; contents: RosTopicStats[] }[];
   setOpenConfig: () => void;
   cloudConfig: any;
   showSnackBar: boolean;
@@ -33,9 +33,9 @@ export const TableComponent: FC<ITableProps> = ({
   currentConfiuration,
   openSnackBar,
 }) => {
-  useEffect(() => {
-    console.log(topicStats);
-  }, [topicStats]);
+  // useEffect(() => {
+  //   console.log(topicStats);
+  // }, [topicStats]);
   const [openDialog, setOpenDialog] = useState(false);
   const [topicName, setTopicName] = useState("");
   const [msg, setmsg] = useState("Configuration saved");
@@ -64,24 +64,87 @@ export const TableComponent: FC<ITableProps> = ({
     setOpenDialog(false);
   };
 
-  if (topicStats === undefined || topicStats.default.length === 0) return <></>;
+  // if (topicStats === undefined || topicStats.contents.length === 0)
+  //   return <></>;
+
+  // Probably merge online topics with configuration
+
+  const topics = useMemo(() => {
+    if (currentConfiuration === undefined) {
+      return topicStats;
+    }
+    return topicStats;
+    //This function should return clean topics whn configurttiaon
+  }, [topicStats]);
 
   return (
     <>
       <Table columns={tableHeaders.length}>
         <TableHeader showConfig={setOpenConfig} headers={tableHeaders} />
         <TableBody>
-          {splitTopicStatsByConfig(topicStats.default, cloudConfig!).map(
+          {topics.map((_: { section: string; contents: RosTopicStats[] }) => {
+            return (
+              <>
+                <TableRow>
+                  {/* Fix Color in background 
+                  Could add functionality to make collapse
+                  */}
+                  <TableDataCell content={_.section} />
+                  <TableDataCell content={""} />
+                  <TableDataCell content={""} />
+                  <TableDataCell content={""} />
+                </TableRow>
+                {_.contents.map((topic: RosTopicStats) => {
+                  return (
+                    <TableRow key={topic.name}>
+                      <TableDataCell
+                        content={topic.name}
+                        type={
+                          onlineTopics!.includes(topic.name)
+                            ? minHzForTopic(topic.name, cloudConfig!) <=
+                              topic.hz
+                              ? "good"
+                              : "bad"
+                            : "unknown"
+                        }
+                      />
+                      <TableDataCell content={topic.type} />
+                      <TableDataCell content={Math.trunc(topic.hz)} />
+                      <TableDataCell
+                        center={true}
+                        content={
+                          <Box
+                            onClick={() => handleOpenDialog(topic.name)}
+                            sx={{
+                              height: 41,
+                              width: 41,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+
+                              borderRadius: 5,
+                              ":hover": {
+                                backgroundColor: "#657197",
+                                cursor: "pointer",
+                              },
+                            }}
+                          >
+                            <Icon name="delete" />
+                          </Box>
+                        }
+                      />
+                    </TableRow>
+                  );
+                })}
+              </>
+            );
+          })}
+
+          {/* {splitTopicStatsByConfig(topicStats.content, cloudConfig!).map(
             (_) => {
               return _.contents.map((content, index) => {
                 return (
                   <TableRow key={content.name}>
-                    {/* {index === 0 && (
-                    <TableSection
-                      title={_.title === "undefined" ? "Other" : _.title}
-                      rowSpan={_.contents.length}
-                    />
-                  )} */}
                     <TableDataCell
                       content={content.name}
                       type={
@@ -122,7 +185,7 @@ export const TableComponent: FC<ITableProps> = ({
                 );
               });
             }
-          )}
+          )} */}
         </TableBody>
       </Table>
       <DialogComponent

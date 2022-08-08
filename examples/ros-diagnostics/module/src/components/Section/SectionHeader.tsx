@@ -37,7 +37,6 @@ export const SectionHeader: FC<ISectionHeader> = ({ name }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#292f43",
             marginRight: 1,
             ":hover": {
               backgroundColor: "#3b4668",
@@ -55,7 +54,6 @@ export const SectionHeader: FC<ISectionHeader> = ({ name }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#292f43",
             ":hover": {
               backgroundColor: "#3b4668",
               cursor: "pointer",
