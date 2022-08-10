@@ -1,14 +1,15 @@
 /* eslint-disable no-cond-assign */
 import { ModuleData, App, Authentication, KeyValue } from "@formant/data-sdk";
 import { TableComponent } from "./TableComponent/index";
-import { useState, FC, useEffect, useRef, useCallback } from "react";
+import { useState, FC, useEffect, useRef, useCallback, useMemo } from "react";
 import { ModuleConfig } from "./ModuleConfig";
 import {
   createJsonSchemaObjectFromConfig,
   splitTopicsForSecction,
 } from "./TableComponent/utils/index";
 import { ErrorMsg } from "../components/ErrorMsg/ErrorMsg";
-import { RosTopicStats } from "../types/RosTopicStats";
+import { OnlineTopics } from "../types/RosTopicStats";
+import { v4 as uuidv4 } from "uuid";
 
 //Listens to the latest data publish to Formant
 
@@ -20,13 +21,9 @@ type Topic = {
 
 export const Table: FC = () => {
   const ros = useRef([]);
-  const [latestTopics, setLatestTopics] = useState<
-    {
-      section: string;
-      contents: RosTopicStats[];
-    }[]
-  >([{ section: "default", contents: [] }]);
-
+  const [latestTopics, setLatestTopics] = useState<OnlineTopics>({
+    default: { section: "default", contents: {} },
+  });
   const [err, setErr] = useState("Loading Data");
   const [onlineTopics, setOnlineTopics] = useState<string[]>([]);
   const [openConfig, setOpenConfig] = useState(false);
@@ -56,12 +53,7 @@ export const Table: FC = () => {
     if (await Authentication.waitTilAuthenticated()) {
       try {
         let config = await KeyValue.get("rosDiagnosticsConfiguration");
-
         setCurrenConfig(JSON.parse(config));
-        setJsonObjectFromCloud(
-          createJsonSchemaObjectFromConfig(JSON.parse(config))
-        );
-        setCloudConfig(splitTopicsForSecction(JSON.parse(config)));
       } catch (e) {
         throw new Error(e as string);
       }
@@ -74,15 +66,30 @@ export const Table: FC = () => {
       if (!url) {
         return;
       }
-      const items = await (await fetch(url)).json();
+      const items: { name: string; type: string; hz: number }[] = await (
+        await fetch(url)
+      ).json();
       // setOnlineTopics(items.map((_: { name: string }) => _.name));
       //Get online topics and group them under "default" section
-      setLatestTopics([
-        {
+      //Using timestamp as Id to be able to reference path ex. state[id] = {section: ""}
+      setOnlineTopics(items.map((_) => _.name));
+      setLatestTopics({
+        [uuidv4()]: {
           section: "default",
-          contents: items,
+          contents: items.reduce(
+            (_, topic) => ({
+              ..._,
+              [uuidv4()]: {
+                //Had to use "topicName", because "name" had an issue when updating state
+                topicName: topic.name,
+                type: topic.type,
+                hz: topic.hz,
+              },
+            }),
+            {}
+          ),
         },
-      ]);
+      });
       setErr("");
     } catch (error) {
       ros.current = [];

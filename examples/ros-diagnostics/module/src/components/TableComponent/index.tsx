@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState, useMemo } from "react";
+import React, { FC, useEffect, useRef, useState, useMemo } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
 import { Table } from "./Table";
 import { TableHeader } from "./TableHeader";
@@ -10,15 +10,16 @@ import { Snackbar, Typography, Icon, Box } from "@formant/ui-sdk";
 import { minHzForTopic, splitTopicStatsByConfig } from "./utils/index";
 import { DialogComponent } from "../DialogComponent";
 import { KeyValue, Authentication } from "@formant/data-sdk";
+import { OnlineTopics } from "../../types/RosTopicStats";
 interface ITableProps {
   tableHeaders: string[];
-  topicStats: { section: string; contents: RosTopicStats[] }[];
+  topicStats: OnlineTopics;
   setOpenConfig: () => void;
   cloudConfig: any;
   showSnackBar: boolean;
   setShowSnackBar: () => void;
   onlineTopics: string[];
-  currentConfiuration: any;
+  currentConfiuration: OnlineTopics | undefined;
   openSnackBar: () => void;
 }
 
@@ -64,17 +65,13 @@ export const TableComponent: FC<ITableProps> = ({
     setOpenDialog(false);
   };
 
-  // if (topicStats === undefined || topicStats.contents.length === 0)
-  //   return <></>;
-
   // Probably merge online topics with configuration
 
   const topics = useMemo(() => {
     if (currentConfiuration === undefined) {
       return topicStats;
     }
-    return topicStats;
-    //This function should return clean topics whn configurttiaon
+    return currentConfiuration;
   }, [topicStats]);
 
   return (
@@ -82,110 +79,77 @@ export const TableComponent: FC<ITableProps> = ({
       <Table columns={tableHeaders.length}>
         <TableHeader showConfig={setOpenConfig} headers={tableHeaders} />
         <TableBody>
-          {topics.map((_: { section: string; contents: RosTopicStats[] }) => {
-            return (
-              <>
-                <TableRow>
-                  {/* Fix Color in background 
+          {Object.values(topics).map(
+            (_: { section: string; contents: RosTopicStats }) => {
+              return (
+                <React.Fragment key={_.section}>
+                  <TableRow>
+                    {/* Fix Color in background 
                   Could add functionality to make collapse
                   */}
-                  <TableDataCell content={_.section} />
-                  <TableDataCell content={""} />
-                  <TableDataCell content={""} />
-                  <TableDataCell content={""} />
-                </TableRow>
-                {_.contents.map((topic: RosTopicStats) => {
-                  return (
-                    <TableRow key={topic.name}>
-                      <TableDataCell
-                        content={topic.name}
-                        type={
-                          onlineTopics!.includes(topic.name)
-                            ? minHzForTopic(topic.name, cloudConfig!) <=
-                              topic.hz
-                              ? "good"
-                              : "bad"
-                            : "unknown"
-                        }
-                      />
-                      <TableDataCell content={topic.type} />
-                      <TableDataCell content={Math.trunc(topic.hz)} />
-                      <TableDataCell
-                        center={true}
-                        content={
-                          <Box
-                            onClick={() => handleOpenDialog(topic.name)}
-                            sx={{
-                              height: 41,
-                              width: 41,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-
-                              borderRadius: 5,
-                              ":hover": {
-                                backgroundColor: "#657197",
-                                cursor: "pointer",
-                              },
-                            }}
-                          >
-                            <Icon name="delete" />
-                          </Box>
-                        }
-                      />
-                    </TableRow>
-                  );
-                })}
-              </>
-            );
-          })}
-
-          {/* {splitTopicStatsByConfig(topicStats.content, cloudConfig!).map(
-            (_) => {
-              return _.contents.map((content, index) => {
-                return (
-                  <TableRow key={content.name}>
-                    <TableDataCell
-                      content={content.name}
-                      type={
-                        onlineTopics!.includes(content.name)
-                          ? minHzForTopic(content.name, cloudConfig!) <=
-                            content.hz
-                            ? "good"
-                            : "bad"
-                          : "unknown"
-                      }
-                    />
-                    <TableDataCell content={content.type} />
-                    <TableDataCell content={Math.trunc(content.hz)} />
-                    <TableDataCell
-                      center={true}
-                      content={
-                        <Box
-                          onClick={() => handleOpenDialog(content.name)}
-                          sx={{
-                            height: 41,
-                            width: 41,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: "#282f45",
-                            borderRadius: 5,
-                            ":hover": {
-                              backgroundColor: "#657197",
-                              cursor: "pointer",
-                            },
-                          }}
-                        >
-                          <Icon name="delete" />
-                        </Box>
-                      }
-                    />
+                    <TableDataCell content={_.section} />
+                    <TableDataCell content={""} />
+                    <TableDataCell content={""} />
+                    <TableDataCell content={""} />
                   </TableRow>
-                );
-              });
+                  {Object.values(_.contents).map(
+                    (topic: {
+                      topicName: string;
+                      type: string;
+                      hz: number;
+                      enable?: boolean;
+                    }) => {
+                      return (
+                        <TableRow key={topic.topicName}>
+                          <TableDataCell
+                            content={topic.topicName}
+                            type={
+                              onlineTopics.includes(topic.topicName)
+                                ? minHzForTopic(
+                                    topic.topicName,
+                                    cloudConfig!
+                                  ) <= topic.hz
+                                  ? "good"
+                                  : "bad"
+                                : "unknown"
+                            }
+                          />
+                          <TableDataCell content={topic.type} />
+                          <TableDataCell content={Math.trunc(topic.hz)} />
+                          <TableDataCell content={""} />
+                          {/* <TableDataCell
+                            center={true}
+                            content={
+                              <Box
+                                onClick={() =>
+                                  handleOpenDialog(topic.topicName)
+                                }
+                                sx={{
+                                  height: 41,
+                                  width: 41,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+
+                                  borderRadius: 5,
+                                  ":hover": {
+                                    backgroundColor: "#657197",
+                                    cursor: "pointer",
+                                  },
+                                }}
+                              >
+                                <Icon name="delete" />
+                              </Box>
+                            }
+                          /> */}
+                        </TableRow>
+                      );
+                    }
+                  )}
+                </React.Fragment>
+              );
             }
-          )} */}
+          )}
         </TableBody>
       </Table>
       <DialogComponent

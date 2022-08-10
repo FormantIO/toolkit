@@ -1,17 +1,30 @@
 import { Box, TextField, Icon } from "@formant/ui-sdk";
-import { FC } from "react";
-
+import { FC, useCallback, ChangeEventHandler } from "react";
+import { updatePath } from "../updatePath";
+import { get } from "lodash";
+import { Options } from "./Options";
 interface ITopicConfigurationProps {
   name: string;
   type: string;
   hz: number;
+  setParams: any;
+  path: any;
+  params: any;
 }
 
-export const TopicConfiguration: FC<ITopicConfigurationProps> = ({
-  name,
-  type,
-  hz,
-}) => {
+export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
+  const { setParams, path, params, type, hz, name } = props;
+
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      setParams((prev: any) =>
+        //use 'name' property in the 'event' object to extend the path
+        updatePath(prev, path + `[${e.target.name}]`, e.target.value)
+      );
+    },
+    [path]
+  );
+
   return (
     <Box
       sx={{
@@ -24,26 +37,34 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = ({
       }}
       display={"flex"}
     >
+      <Options sections={Object.values(params).map((_) => _.section)} />
       <TextField
         sx={{ marginRight: 1, width: "45%" }}
         type="text"
         label={"Topic"}
         variant="filled"
-        value={name}
+        name="topicName"
+        value={get(params, path + "[topicName]") ?? ""}
+        onChange={handleChange}
       />
+
       <TextField
         sx={{ marginRight: 1, width: "45%" }}
         type="text"
         label={"Type"}
         variant="filled"
-        value={type}
+        name="type"
+        value={get(params, path + "[type]") ?? ""}
+        onChange={handleChange}
       />
       <TextField
         sx={{ marginRight: 1, width: 100 }}
         type="text"
         label={"Hz"}
         variant="filled"
-        value={Math.floor(hz)}
+        name="hz"
+        value={Math.floor(get(params, path + "[hz]")) ?? ""}
+        onChange={handleChange}
       />
       <Box
         sx={{

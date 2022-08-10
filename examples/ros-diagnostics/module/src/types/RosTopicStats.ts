@@ -1,6 +1,15 @@
 export default interface RosTopicStats {
-  name: string;
-  type: string;
-  hz: number;
-  enable?: boolean;
+  [key: string]: {
+    topicName: string;
+    type: string;
+    hz: number;
+    enable?: boolean;
+  };
+}
+
+export interface OnlineTopics {
+  [key: string]: {
+    section: string;
+    contents: RosTopicStats;
+  };
 }

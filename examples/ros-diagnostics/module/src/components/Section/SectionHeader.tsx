@@ -1,11 +1,29 @@
 import { Box, Icon, TextField } from "@formant/ui-sdk";
-import { FC } from "react";
-
+import React, {
+  FC,
+  ChangeEventHandler,
+  useCallback,
+  SetStateAction,
+  useEffect,
+} from "react";
+import { updatePath } from "../updatePath";
+import { get } from "lodash";
 interface ISectionHeader {
-  name: string;
+  path: string;
+  setParams: React.Dispatch<SetStateAction<any>>;
+  params: any;
 }
 
-export const SectionHeader: FC<ISectionHeader> = ({ name }) => {
+export const SectionHeader: FC<ISectionHeader> = (props) => {
+  const { setParams, path, params } = props;
+
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      setParams((prev: any) => updatePath(prev, path, e.target.value));
+    },
+    [path, setParams]
+  );
+
   return (
     <Box
       sx={{
@@ -21,7 +39,8 @@ export const SectionHeader: FC<ISectionHeader> = ({ name }) => {
         sx={{ marginBottom: "16px", width: 230 }}
         label={"Section"}
         variant="standard"
-        value={name}
+        value={get(params, path) ?? ""}
+        onChange={handleChange}
       />
 
       <Box
