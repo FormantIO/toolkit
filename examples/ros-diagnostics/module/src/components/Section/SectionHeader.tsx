@@ -8,14 +8,17 @@ import React, {
 } from "react";
 import { updatePath } from "../updatePath";
 import { get } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+
 interface ISectionHeader {
   path: string;
   setParams: React.Dispatch<SetStateAction<any>>;
   params: any;
+  index: string;
 }
 
 export const SectionHeader: FC<ISectionHeader> = (props) => {
-  const { setParams, path, params } = props;
+  const { setParams, path, params, index } = props;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -23,6 +26,22 @@ export const SectionHeader: FC<ISectionHeader> = (props) => {
     },
     [path, setParams]
   );
+
+  const handleAddTopic = useCallback(() => {
+    const currentTopics = get(params, `[${index}][contents]`);
+
+    setParams((prev: any) =>
+      updatePath(prev, `[${index}][contents]`, {
+        [uuidv4()]: {
+          topicName: "",
+          type: "",
+          hz: "",
+          enabled: true,
+        },
+        ...currentTopics,
+      })
+    );
+  }, [path, setParams]);
 
   return (
     <Box
@@ -49,6 +68,7 @@ export const SectionHeader: FC<ISectionHeader> = (props) => {
         }}
       >
         <Box
+          onClick={handleAddTopic}
           sx={{
             height: 40,
             width: 40,

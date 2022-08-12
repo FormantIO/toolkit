@@ -34,12 +34,9 @@ export const TableComponent: FC<ITableProps> = ({
   currentConfiuration,
   openSnackBar,
 }) => {
-  // useEffect(() => {
-  //   console.log(topicStats);
-  // }, [topicStats]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [topicName, setTopicName] = useState("");
   const [msg, setmsg] = useState("Configuration saved");
+  const [topicName, setTopicName] = useState("");
   const deleteTopic = async () => {
     if (onlineTopics.includes(topicName)) {
       setmsg("Cannot delete online topic");

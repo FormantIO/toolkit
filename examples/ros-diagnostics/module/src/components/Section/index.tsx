@@ -3,12 +3,18 @@ import { TopicConfiguration } from "./TopicConfiguration";
 import { SectionHeader } from "./SectionHeader";
 import { FC, useEffect } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
+import { Options } from "./Options";
 
 interface ISectionProps {
   topicList: RosTopicStats;
   params: any;
   setParams: any;
   index: string;
+  handleOpenOptions: (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
+    _: string,
+    path: string[]
+  ) => void;
 }
 
 export const Section: FC<ISectionProps> = ({
@@ -16,6 +22,7 @@ export const Section: FC<ISectionProps> = ({
   params,
   setParams,
   index,
+  handleOpenOptions,
 }) => {
   return (
     <Box
@@ -28,6 +35,7 @@ export const Section: FC<ISectionProps> = ({
     >
       <SectionHeader
         path={`[${index}][section]`}
+        index={index}
         params={params}
         setParams={setParams}
       />
@@ -36,10 +44,9 @@ export const Section: FC<ISectionProps> = ({
           path={`[${index}][contents][${_}]`}
           params={params}
           setParams={setParams}
-          key={topicList[_].name}
-          name={topicList[_].name}
-          type={topicList[_].type}
-          hz={topicList[_].hz}
+          key={`[${index}][contents][${_}]`}
+          name={params[index].section}
+          handleOpenOptions={handleOpenOptions}
         />
       ))}
     </Box>

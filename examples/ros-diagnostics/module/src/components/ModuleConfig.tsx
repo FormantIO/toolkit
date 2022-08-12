@@ -1,5 +1,5 @@
 import { Box, Button, Icon } from "@formant/ui-sdk";
-import { FC, useState, useLayoutEffect, useMemo } from "react";
+import React, { FC, useState, useLayoutEffect, useMemo } from "react";
 import { JsonSchemaForm } from "./JsonSchemaForm/index";
 import { KeyValue } from "@formant/data-sdk";
 import { Footer } from "./Footer";
@@ -8,7 +8,11 @@ import { AddTopic } from "./AddTopic";
 import { Section } from "./Section/index";
 import RosTopicStats, { OnlineTopics } from "../types/RosTopicStats";
 import { v4 as uuidv4 } from "uuid";
-
+import { Options } from "./Section/Options";
+import styles from "./options.module.scss";
+import "../index.css";
+import _, { get, unset } from "lodash";
+import { updatePath } from "./updatePath";
 interface IModuleConfig {
   topicStats: OnlineTopics;
   closeConfig: () => void;
@@ -28,14 +32,60 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   showSnackBar,
   currentConfiuration,
 }) => {
-  const [schema, setSchema] = useState<any>();
+  const [path, setPath] = useState<string[]>([]);
   const [showAddTopic, setShowAddTopic] = useState(false);
+  const [availableSections, setAvailableSections] = useState<
+    { name: string; path: string }[]
+  >([]);
   const [configuration, setConfguration] = useState<OnlineTopics>({
-    default: {
-      section: "",
+    [uuidv4()]: {
+      section: "default",
       contents: { default: { topicName: "", type: "", hz: 0, enable: true } },
     },
   });
+
+  window.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const options = document.getElementById("options");
+    if (options) {
+      options.classList.add("fade-out");
+      options.classList.remove("fade-in");
+      options.style.display = "none";
+    }
+  });
+
+  const handleOpenOptions = (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
+    section: string,
+    path: string[]
+  ) => {
+    e.stopPropagation();
+    setPath(path);
+    const _sections = Object.keys(configuration).filter(
+      (_) => configuration[_].section !== section
+    );
+
+    setAvailableSections(
+      _sections.map((_) => ({ name: configuration[_].section, path: _ }))
+    );
+
+    const { innerHeight, innerWidth } = window;
+    const { clientY, clientX, pageY, pageX } = e; //Mouse coordinates
+
+    const options = document.getElementById("options")!;
+    options.style.display = "flex";
+    options.classList.remove("fade-out");
+    options.classList.add("fade-in");
+    let yOffset = 40;
+    let xOffset = options.clientWidth - 20;
+    //Handle if click close to the bottom
+    if (innerHeight - 80 < clientY + options.clientHeight) {
+      yOffset = options.clientHeight - 20;
+    }
+
+    options.style.top = pageY - yOffset + "px";
+    options.style.left = pageX - xOffset + "px";
+  };
 
   useLayoutEffect(() => {
     if (currentConfiuration === undefined) {
@@ -56,6 +106,31 @@ export const ModuleConfig: FC<IModuleConfig> = ({
     );
     closeConfig();
     showSnackBar();
+  };
+
+  const handleMoveToSection = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    sectionPath: string
+  ) => {
+    e.stopPropagation();
+    const options = document.getElementById("options")!;
+    const selectedTopic = get(configuration, path);
+
+    const deepConfigurationCopy = JSON.parse(JSON.stringify(configuration));
+    //creates a deep copy of the current configuration, to remove selected topic
+    //and updates the configuration adding the topic to desire section with a new id
+    unset(deepConfigurationCopy, path);
+    setConfguration(
+      updatePath(
+        deepConfigurationCopy,
+        `[${sectionPath}][contents][${uuidv4()}]`,
+        selectedTopic
+      )
+    );
+
+    options.classList.add("fade-out");
+    options.classList.remove("fade-in");
+    options.style.display = "none";
   };
 
   return showAddTopic ? (
@@ -93,7 +168,14 @@ export const ModuleConfig: FC<IModuleConfig> = ({
         }
         label="Topics"
       />
-
+      {
+        <div id="options" className={styles.options}>
+          <Options
+            handleMoveToSection={handleMoveToSection}
+            sections={availableSections}
+          />
+        </div>
+      }
       {Object.keys(configuration).map((_) => {
         return (
           <Section
@@ -102,6 +184,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
             params={configuration}
             setParams={setConfguration}
             topicList={configuration[_].contents}
+            handleOpenOptions={handleOpenOptions}
           />
         );
       })}

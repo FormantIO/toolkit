@@ -69,7 +69,6 @@ export const Table: FC = () => {
       const items: { name: string; type: string; hz: number }[] = await (
         await fetch(url)
       ).json();
-      // setOnlineTopics(items.map((_: { name: string }) => _.name));
       //Get online topics and group them under "default" section
       //Using timestamp as Id to be able to reference path ex. state[id] = {section: ""}
       setOnlineTopics(items.map((_) => _.name));

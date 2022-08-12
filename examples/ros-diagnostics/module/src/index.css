@@ -23,9 +23,9 @@ code {
   width: 0 !important;
 }
 
-/* .fade-in {
-  -webkit-animation: fade-in 0.5s ease-in both;
-  animation: fade-in 0.5s ease-in both;
+.fade-in {
+  -webkit-animation: fade-in 0.1s ease-in both;
+  animation: fade-in 0.1s ease-in both;
 }
 
 @-webkit-keyframes fade-in {
@@ -65,4 +65,4 @@ code {
   100% {
     opacity: 0;
   }
-} */
+}

@@ -1,19 +1,28 @@
 import { Box, TextField, Icon } from "@formant/ui-sdk";
-import { FC, useCallback, ChangeEventHandler } from "react";
+import {
+  FC,
+  useCallback,
+  ChangeEventHandler,
+  MouseEvent,
+  useEffect,
+} from "react";
 import { updatePath } from "../updatePath";
 import { get } from "lodash";
 import { Options } from "./Options";
 interface ITopicConfigurationProps {
   name: string;
-  type: string;
-  hz: number;
   setParams: any;
   path: any;
   params: any;
+  handleOpenOptions: (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
+    _: string,
+    _path: string[]
+  ) => void;
 }
 
 export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
-  const { setParams, path, params, type, hz, name } = props;
+  const { setParams, path, params, name, handleOpenOptions } = props;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -37,7 +46,6 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
       }}
       display={"flex"}
     >
-      <Options sections={Object.values(params).map((_) => _.section)} />
       <TextField
         sx={{ marginRight: 1, width: "45%" }}
         type="text"
@@ -59,7 +67,7 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
       />
       <TextField
         sx={{ marginRight: 1, width: 100 }}
-        type="text"
+        type="number"
         label={"Hz"}
         variant="filled"
         name="hz"
@@ -67,6 +75,7 @@ export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
         onChange={handleChange}
       />
       <Box
+        onClick={(e) => handleOpenOptions(e, name, path)}
         sx={{
           height: 35,
           width: 40,
