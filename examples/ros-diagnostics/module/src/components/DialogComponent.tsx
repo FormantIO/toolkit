@@ -7,21 +7,22 @@ import {
   DialogActions,
   Button,
 } from "@formant/ui-sdk";
-
 import { FC } from "react";
 
 interface IProps {
+  title: string;
+  description: string;
   openDialog: boolean;
   handleCloseDialog: () => void;
-  topicName: string;
-  deleteTopic: () => void;
+  onOk: () => void;
 }
 
 export const DialogComponent: FC<IProps> = ({
   openDialog,
   handleCloseDialog,
-  topicName,
-  deleteTopic,
+  description,
+  onOk,
+  title,
 }) => {
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth={true}>
@@ -31,13 +32,11 @@ export const DialogComponent: FC<IProps> = ({
           fontSize: 13,
         }}
       >
-        DELETE TOPIC
+        {title}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          <DialogContentText>
-            {`Delete topic "${topicName}"`}?
-          </DialogContentText>
+          <DialogContentText>{description}</DialogContentText>
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -48,8 +47,15 @@ export const DialogComponent: FC<IProps> = ({
           <Button
             size="medium"
             variant="contained"
-            color="secondary"
-            onClick={deleteTopic}
+            color="error"
+            onClick={onOk}
+            sx={{
+              color: "black",
+              ":hover": {
+                boxShadow: " 0 0 0 0.4rem #ea719d",
+                backgroundColor: "#ea719d",
+              },
+            }}
           >
             ok
           </Button>

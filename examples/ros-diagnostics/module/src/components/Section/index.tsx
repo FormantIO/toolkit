@@ -1,10 +1,11 @@
 import { Box } from "@formant/ui-sdk";
 import { TopicConfiguration } from "./TopicConfiguration";
 import { SectionHeader } from "./SectionHeader";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo, useCallback, useState } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
 import { Options } from "./Options";
-
+import { DialogComponent } from "../DialogComponent";
+import { unset, get } from "lodash";
 interface ISectionProps {
   topicList: RosTopicStats;
   params: any;
@@ -24,6 +25,21 @@ export const Section: FC<ISectionProps> = ({
   index,
   handleOpenOptions,
 }) => {
+  const [open, setOpen] = useState(false);
+  const handleDeleteSection = useCallback(() => {
+    const deepCopy = JSON.parse(JSON.stringify(params));
+    unset(deepCopy, index);
+    setParams(deepCopy);
+  }, [params]);
+
+  const handleOpenDialog = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    setOpen(false);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -38,6 +54,7 @@ export const Section: FC<ISectionProps> = ({
         index={index}
         params={params}
         setParams={setParams}
+        handleOnDelete={handleOpenDialog}
       />
       {Object.keys(topicList).map((_) => (
         <TopicConfiguration
@@ -47,8 +64,19 @@ export const Section: FC<ISectionProps> = ({
           key={`[${index}][contents][${_}]`}
           name={params[index].section}
           handleOpenOptions={handleOpenOptions}
+          enabled={topicList[_].enabled ?? true}
         />
       ))}
+      <DialogComponent
+        openDialog={open}
+        title={"Delete Topic"}
+        handleCloseDialog={handleCloseDialog}
+        description={`Delete section "${get(
+          params,
+          `[${index}][section]`
+        )}" and its topics ?`}
+        onOk={handleDeleteSection}
+      />
     </Box>
   );
 };

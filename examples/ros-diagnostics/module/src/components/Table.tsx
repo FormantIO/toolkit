@@ -70,7 +70,7 @@ export const Table: FC = () => {
         await fetch(url)
       ).json();
       //Get online topics and group them under "default" section
-      //Using timestamp as Id to be able to reference path ex. state[id] = {section: ""}
+      //Using uuid as key to be able to reference path ex. state[id] = {section: ""}
       setOnlineTopics(items.map((_) => _.name));
       setLatestTopics({
         [uuidv4()]: {
@@ -83,6 +83,7 @@ export const Table: FC = () => {
                 topicName: topic.name,
                 type: topic.type,
                 hz: topic.hz,
+                enabled: true,
               },
             }),
             {}

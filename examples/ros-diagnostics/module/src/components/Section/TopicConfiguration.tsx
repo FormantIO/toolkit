@@ -14,6 +14,7 @@ interface ITopicConfigurationProps {
   setParams: any;
   path: any;
   params: any;
+  enabled: boolean;
   handleOpenOptions: (
     e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     _: string,
@@ -22,7 +23,9 @@ interface ITopicConfigurationProps {
 }
 
 export const TopicConfiguration: FC<ITopicConfigurationProps> = (props) => {
-  const { setParams, path, params, name, handleOpenOptions } = props;
+  const { setParams, path, params, name, enabled, handleOpenOptions } = props;
+
+  if (!enabled) return <></>;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {

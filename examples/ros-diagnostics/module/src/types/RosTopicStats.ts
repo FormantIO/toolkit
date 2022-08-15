@@ -3,7 +3,7 @@ export default interface RosTopicStats {
     topicName: string;
     type: string;
     hz: number;
-    enable?: boolean;
+    enabled?: boolean;
   };
 }
 

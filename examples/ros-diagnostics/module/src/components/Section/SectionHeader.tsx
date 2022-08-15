@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { updatePath } from "../updatePath";
-import { get } from "lodash";
+import { get, unset } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 interface ISectionHeader {
@@ -15,10 +15,11 @@ interface ISectionHeader {
   setParams: React.Dispatch<SetStateAction<any>>;
   params: any;
   index: string;
+  handleOnDelete: () => void;
 }
 
 export const SectionHeader: FC<ISectionHeader> = (props) => {
-  const { setParams, path, params, index } = props;
+  const { setParams, path, params, index, handleOnDelete } = props;
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -85,22 +86,25 @@ export const SectionHeader: FC<ISectionHeader> = (props) => {
         >
           <Icon name="plus" />
         </Box>
-        <Box
-          sx={{
-            height: 40,
-            width: 40,
-            borderRadius: 25,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            ":hover": {
-              backgroundColor: "#3b4668",
-              cursor: "pointer",
-            },
-          }}
-        >
-          <Icon name="delete" />
-        </Box>
+        {Object.keys(params).length > 1 && (
+          <Box
+            onClick={handleOnDelete}
+            sx={{
+              height: 40,
+              width: 40,
+              borderRadius: 25,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              ":hover": {
+                backgroundColor: "#3b4668",
+                cursor: "pointer",
+              },
+            }}
+          >
+            <Icon name="delete" />
+          </Box>
+        )}
       </Box>
     </Box>
   );

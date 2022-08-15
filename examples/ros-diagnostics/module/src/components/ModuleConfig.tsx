@@ -1,5 +1,11 @@
 import { Box, Button, Icon } from "@formant/ui-sdk";
-import React, { FC, useState, useLayoutEffect, useMemo } from "react";
+import React, {
+  FC,
+  useState,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { JsonSchemaForm } from "./JsonSchemaForm/index";
 import { KeyValue } from "@formant/data-sdk";
 import { Footer } from "./Footer";
@@ -13,6 +19,8 @@ import styles from "./options.module.scss";
 import "../index.css";
 import _, { get, unset } from "lodash";
 import { updatePath } from "./updatePath";
+import { DialogComponent } from "./DialogComponent";
+
 interface IModuleConfig {
   topicStats: OnlineTopics;
   closeConfig: () => void;
@@ -21,17 +29,16 @@ interface IModuleConfig {
   currentConfiuration?: any;
 }
 
-// interface Configuration {
-//   section: string;
-//   contents: RosTopicStats[];
-// }
-
 export const ModuleConfig: FC<IModuleConfig> = ({
   topicStats,
   closeConfig,
   showSnackBar,
   currentConfiuration,
 }) => {
+  const [index, setIndex] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [path, setPath] = useState<string[]>([]);
   const [showAddTopic, setShowAddTopic] = useState(false);
   const [availableSections, setAvailableSections] = useState<
@@ -40,7 +47,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   const [configuration, setConfguration] = useState<OnlineTopics>({
     [uuidv4()]: {
       section: "default",
-      contents: { default: { topicName: "", type: "", hz: 0, enable: true } },
+      contents: { default: { topicName: "", type: "", hz: 0, enabled: true } },
     },
   });
 
@@ -96,6 +103,8 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   }, []);
 
   const saveConfiguraton = async () => {
+    // console.log(configuration);
+    // return;
     const err = Object.keys(configuration).filter(
       (_) => configuration[_].section.length < 1
     );
@@ -132,6 +141,19 @@ export const ModuleConfig: FC<IModuleConfig> = ({
     options.classList.remove("fade-in");
     options.style.display = "none";
   };
+
+  const handleCloseDialog = useCallback(() => {
+    setOpenDialog(false);
+  }, []);
+
+  const handleOpenDialog = useCallback(() => {
+    setOpenDialog(true);
+  }, []);
+
+  const handleDeleteTopic = useCallback(() => {
+    setConfguration((prev) => updatePath(prev, path + "[enabled]", false));
+    handleCloseDialog();
+  }, [path]);
 
   return showAddTopic ? (
     <AddTopic
@@ -173,6 +195,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
           <Options
             handleMoveToSection={handleMoveToSection}
             sections={availableSections}
+            handleDeleteTopic={handleOpenDialog}
           />
         </div>
       }
@@ -188,6 +211,17 @@ export const ModuleConfig: FC<IModuleConfig> = ({
           />
         );
       })}
+
+      <DialogComponent
+        openDialog={openDialog}
+        title={"DELETE TOPIC"}
+        handleCloseDialog={handleCloseDialog}
+        description={`Delete ${
+          get(configuration, path + "[topicName]") ?? ""
+        } ?`}
+        onOk={handleDeleteTopic}
+      />
+
       <Footer
         onCancel={closeConfig}
         onClick={saveConfiguraton}

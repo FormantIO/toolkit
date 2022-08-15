@@ -4,13 +4,13 @@ import { FC } from "react";
 interface IOption {
   label: string;
   path: string;
-  handleMoveToSection: (
+  handleMoveToSection: ( //This function can be move to section or delete topic
     e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     _: string
   ) => void;
 }
 
-export const Option: FC<IOption> = ({ label, handleMoveToSection, path }) => {
+export const Option: FC<IOption> = ({ label, path, handleMoveToSection }) => {
   return (
     <Box
       onClick={(e) => handleMoveToSection(e, path)}

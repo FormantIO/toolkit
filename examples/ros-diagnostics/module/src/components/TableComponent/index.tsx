@@ -37,6 +37,7 @@ export const TableComponent: FC<ITableProps> = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [msg, setmsg] = useState("Configuration saved");
   const [topicName, setTopicName] = useState("");
+
   const deleteTopic = async () => {
     if (onlineTopics.includes(topicName)) {
       setmsg("Cannot delete online topic");
@@ -114,31 +115,6 @@ export const TableComponent: FC<ITableProps> = ({
                           <TableDataCell content={topic.type} />
                           <TableDataCell content={Math.trunc(topic.hz)} />
                           <TableDataCell content={""} />
-                          {/* <TableDataCell
-                            center={true}
-                            content={
-                              <Box
-                                onClick={() =>
-                                  handleOpenDialog(topic.topicName)
-                                }
-                                sx={{
-                                  height: 41,
-                                  width: 41,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-
-                                  borderRadius: 5,
-                                  ":hover": {
-                                    backgroundColor: "#657197",
-                                    cursor: "pointer",
-                                  },
-                                }}
-                              >
-                                <Icon name="delete" />
-                              </Box>
-                            }
-                          /> */}
                         </TableRow>
                       );
                     }
@@ -149,12 +125,6 @@ export const TableComponent: FC<ITableProps> = ({
           )}
         </TableBody>
       </Table>
-      <DialogComponent
-        openDialog={openDialog}
-        handleCloseDialog={handleCloseDialog}
-        topicName={topicName}
-        deleteTopic={deleteTopic}
-      />
       <Snackbar
         open={showSnackBar}
         autoHideDuration={4000}
