@@ -90,11 +90,11 @@ class Adapter:
 
     def _post_service_data(self, service_name: str, data: str):
         """Post's a string to Formant given the service_name string."""
-        stream_name = rospy.resolve_name(service_name).replace("/", ".")
-        stream_name = stream_name[1:] if stream_name[0] == "." else stream_name
-        response_stream = f"ros.service.{stream_name}.response"
+        # stream_name = rospy.resolve_name(service_name).replace("/", ".")
+        # stream_name = stream_name[1:] if stream_name[0] == "." else stream_name
+        response_stream = f"ros.services.response"
         try:
-            self._fclient.post_text(response_stream, str(data))
+            self._fclient.post_text(stream=response_stream, value=str(data), tags={"ros_service":service_name})
         except Exception:
             logger.info("Failed to post response")
             return
