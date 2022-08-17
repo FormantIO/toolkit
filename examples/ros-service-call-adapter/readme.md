@@ -8,54 +8,35 @@ The ROS service call adapter allows a user to map Formant commands and Formant b
 ## Getting Started
 
 To get started with this adapter, first instal the adapter and make sure that the proper requirements are met via
-```console
+```bash
 pip install requirements.txt
 ```
+
 ### Command Mapping
 
-Now that the adapters requirements are met, you need to edit the 
-`config.json` file to configure commands and buttons that are mapped to 
-ROS service calls. To configure a Formant command that is mapped to a 
-service call, add the name of the command to the "service-commands" list.
-Now that name of the command is listed, the adapter will listen for 
-commands sent under this command name. 
-While we can now send commands under this name and the adapter will 
-receive them, we need to map the command to a service. This is done 
-in the command parameters, and looks as follows:
-![](image.png)
+By default, the adapter will listen for commands under the name 
+`rosservice`. This is the stream which the front-end module
+sends commands to, and thus should be left alone unless the user
+needs to change it for an advanced use case. 
 
-In this case, the name of the Command which we want the adapter to see 
-is 'Ros Service Command'. The Name of the service which the command 
-talks to is "ServiceName", and the parameters of the command are a 
-list, holding param1 through paramN. It is important that they are 
-wrapped with and opening and closing parenthesis as shown. 
-<br><br><i> *Technical note: </i> The command parameters are send as a 
-string to the adapter. Internally, the adapter will safely parse
-the passed parameter into a python tuple, where the first element 
-is the service name and the second is the service parameters. 
-Thus, its important that the command parameters are passed the 
-same way as the example image. <br><br>
-
-The command is now mapped to a ROS service call. Issuing the command 
-will successfully trigger the service call to be called by the 
-adapter.
 
 ### Button Mapping
 
-Mapping the button to a service call again requires editing the 
-`config.json` file. First, open the config.json file. We will
-be adding the button-to-service-call mapping under the `button-mapping`
-key in the config.json. The first thing we need to do is add a key 
-to the `button-mapping` dictionary with the name of the button
-that you would like to map. The value associated with this new key 
-is a list. The first element of the list needs to be the name of the
-service that you would like the button to call. The second element 
-of the list needs to be a list containing all the parameters that
-are going to be sent to the service. Below is an example of a 
-json file that maps a button named `i_am_a_button` to the service
-`/robot_status_check`. We are going to assume the service has 
-some options we can set as parameters, and thus send 
-`True` and `"Option On"` as our parameters.
+As mentioned earlier, the ros service call adapter is able to call
+services based on a button press from formant. The button can be 
+set-up as either a ROS button (in which case other sources can also
+request the adapter call a services by sending a boolean message) and 
+also as an API button. 
+
+To map a button press to a specified ROS service, go into the config.json file.
+Under either `ros-button-mapping` or `api-button-mapping`, we need to add a dictionary 
+entry. The key of this entry will be the name of either the ros topic or the api button. 
+The value of this entry will be a dictionary which holds the service call parameters, and this
+dictionary can be automatically generated via the `create_call.py` script. The usage of the 
+script is show in the section below.  
+
+This is a sample of a ROS button mapped to a call to the `/random` service looks like in
+the config.json:
 
 
 ```json
@@ -63,14 +44,33 @@ some options we can set as parameters, and thus send
     "service-commands": [
         "rosservice"
     ],
-    "button-mapping": {
-        "i_am_a_button": [
-            "/robot_status_check",
-            [
-                true,
-                "Option On"
-            ]
-        ]
+    "api-button-mapping": {},
+    "ros-button-mapping": {
+        "/ros_button": {
+            "/random": {
+                "string": "sample-string",
+                "int64_arr": [
+                    1.0,
+                    2.0
+                ],
+                "float32": 3.0,
+                "float64_arr": [
+                    4.0
+                ],
+                "twist": {
+                    "twist.linear": {
+                        "twist.linear.x": 5.0,
+                        "twist.linear.y": 6.0,
+                        "twist.linear.z": 7.0
+                    },
+                    "twist.angular": {
+                        "twist.angular.x": 8.0,
+                        "twist.angular.y": 9.0,
+                        "twist.angular.z": 10.0
+                    }
+                }
+            }
+        }
     }
 }
 ```
@@ -78,9 +78,58 @@ some options we can set as parameters, and thus send
 That's it. Now a button press to the `i_am_a_button` button will 
 map to the service call!
 
-## Using the ROS Service Call Custom View
+## Generate the service call using `create_call.py`
 
-Coming soon
+To generate the service call using `create_call.py` (which is highly recommended),
+first ensure that `roscore` and the service are both running. Further, ensure that 
+the proper catkin_ws has been sourced. Once that is done, run `python3 create_call.py`. 
+
+This will first output all the current running services. You will be prompted to 
+type the service you would like to generate the call json for. In our example case, 
+we input `/random`. Once we input the service name, the script will ask for an 
+input for each parameter in the service. Simply type the wanted value for each parameter. 
+Once complete, the script will print out the service call json. Copy this value and paste 
+it into the `config.json`, specifically, it is should be the value of the key we added 
+for the button which we would like to call the specified service. 
+
+Here is an example of using the `create_call.py` script:
+
+```
+$ python3 create_call.py
+
+INFO: Agent communication established.
+Current services: 
+
+        /rosout/get_loggers
+        /rosout/set_logger_level
+        /formant_tf2_lookup_transform_node/get_loggers
+        /formant_tf2_lookup_transform_node/set_logger_level
+        /formant_tf2_lookup_transform_node/tf2_frames
+        /formant_bridge_node/get_loggers
+        /formant_bridge_node/set_logger_level
+        /random_server/get_loggers
+        /random_server/set_logger_level
+        /random
+
+
+Please enter service: /random
+Please enter a value for parameter 'string': sample-string
+Please enter a comma separated array of numbers for parameter 'int64_arr':
+        1,2
+Please enter a number for parameter 'float32': 3
+Please enter a comma separated array of numbers for parameter 'float64_arr':
+        4
+Please enter a number for parameter 'twist.linear.x': 5
+Please enter a number for parameter 'twist.linear.y': 6
+Please enter a number for parameter 'twist.linear.z': 7
+Please enter a number for parameter 'twist.angular.x': 8
+Please enter a number for parameter 'twist.angular.y': 9
+Please enter a number for parameter 'twist.angular.z': 10
+Successfully Generated service call...
+
+
+{'/random': {'string': 'sample-string', 'int64_arr': [1.0, 2.0], 'float32': 3.0, 'float64_arr': [4.0], 'twist': {'twist.linear': {'twist.linear.x': 5.0, 'twist.linear.y': 6.0, 'twist.linear.z': 7.0}, 'twist.angular': {'twist.angular.x': 8.0, 'twist.angular.y': 9.0, 'twist.angular.z': 10.0}}}}
+```
 
 ## Updating current services in Formant.io
 
@@ -88,57 +137,19 @@ It is possible to get this adapter to send back all the currently
 active services along with their argument names and types.
 To do this, simply add the command `ros.services.update-services` to 
 Formant. Issuing this Command will cause the adapter to send back all
- currently active services to the stream `ros.services.json` with the 
-following json format:
+ currently active services to the stream `ros.services.json`.
 
-```json
-{
-    "service-1-name":[
-        ["Service Argument 1: Name", "Service Argument 1: Name"],
-        ["Service Argument 2: Name", "Service Argument 2: Name"],
-        ...
-    ],
-    "service-2-name":[
-        ...
-    ],
-    ...
-}
-```
+## Trouble Shooting
 
-For example, if we had a ROS service defined in `sample-service.srv` as 
-follows:
-```
-int32 size
-string name
-----
-bool success
-```
-
-The associated JSON for the message would be 
-
-```json
-{
-    "service-name":[
-        ["size", "int32"],
-        ["name", "string"]
-    ],
-    ...
-}
-```
-
-### Additional Notes
-
-The command parameters are parsed assuming they have a Python-Like 
-syntax. The parser can parse:<br>
-* Lists
-* Tuples
-* Sets
-* Integers
-* Booleans (True, False) 
-* Strings
-* ROS time
-* ROS duration
-* ROS Header 
-
-The parser does not evaluate expressions, so do not pass arithmetic
-expressions, as those will cause an error parsing.
+You may attempt to run the service call adapter and
+notice that one of the service's that is running
+on your machine is not showing up on the stream
+`ros.services.json`. The most common reason that this
+occurs is that the `export CATKIN_WS=<catkin_ws dir>` is not located in `/var/lib/formant/.bashrc`. You 
+can check by running `cat /var/lib/formant/.bashrc` and
+checking if the `export CATKIN_WS=<catkin_ws dir>` is 
+located in the file. If not, then simply add a new line
+in the bashrc file, and replace `<catkin_ws dir>` with
+the directory of your machines catkin workspace such
+that `setup.bash` may be found at 
+`<catkin_ws dir>/devel/setup.bash`.

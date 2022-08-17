@@ -79,6 +79,11 @@ class ServiceChecker:
         self._check_services()
         self._post_json()
 
+    def get_services_json(self):
+        """Return a json object containing the current services."""
+        self._check_services()
+        return self._services_json
+
     @staticmethod
     def _get_running_services():
         """Get current published services."""
