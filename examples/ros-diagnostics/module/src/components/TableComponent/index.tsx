@@ -1,23 +1,15 @@
-import React, { FC, useEffect, useRef, useState, useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import RosTopicStats from "../../types/RosTopicStats";
 import { Table } from "./Table";
 import { TableHeader } from "./TableHeader";
 import { TableBody } from "./TableBody";
 import { TableRow } from "./TableRow";
-import { TableSection } from "./TableSection";
 import { TableDataCell } from "./TableDataCell";
-import { Snackbar, Typography, Icon, Box } from "@formant/ui-sdk";
-import { minHzForTopic, splitTopicStatsByConfig } from "./utils/index";
-import { DialogComponent } from "../DialogComponent";
-import { KeyValue, Authentication } from "@formant/data-sdk";
 import { OnlineTopics } from "../../types/RosTopicStats";
 interface ITableProps {
   tableHeaders: string[];
   topicStats: OnlineTopics;
   setOpenConfig: () => void;
-  cloudConfig: any;
-  showSnackBar: boolean;
-  setShowSnackBar: () => void;
   onlineTopics: string[];
   currentConfiuration: OnlineTopics | undefined;
   openSnackBar: () => void;
@@ -27,43 +19,10 @@ export const TableComponent: FC<ITableProps> = ({
   tableHeaders,
   topicStats,
   setOpenConfig,
-  cloudConfig,
-  showSnackBar,
-  setShowSnackBar,
   onlineTopics,
   currentConfiuration,
-  openSnackBar,
 }) => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [msg, setmsg] = useState("Configuration saved");
-  const [topicName, setTopicName] = useState("");
-
-  const deleteTopic = async () => {
-    if (onlineTopics.includes(topicName)) {
-      setmsg("Cannot delete online topic");
-      handleCloseDialog();
-      openSnackBar();
-      return;
-    }
-    let temp = currentConfiuration;
-    delete temp[topicName];
-    if (await Authentication.waitTilAuthenticated()) {
-      await KeyValue.set("rosDiagnosticsConfiguration", JSON.stringify(temp));
-    }
-    handleCloseDialog();
-    openSnackBar();
-  };
-
-  const handleOpenDialog = (_: string) => {
-    setTopicName(_);
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  // Probably merge online topics with configuration
+  // TODO: merge new topics to configuration
 
   const topics = useMemo(() => {
     if (currentConfiuration === undefined) {
@@ -103,13 +62,8 @@ export const TableComponent: FC<ITableProps> = ({
                             content={topic.topicName}
                             type={
                               onlineTopics.includes(topic.topicName)
-                                ? minHzForTopic(
-                                    topic.topicName,
-                                    cloudConfig!
-                                  ) <= topic.hz
-                                  ? "good"
-                                  : "bad"
-                                : "unknown"
+                                ? "good"
+                                : "bad"
                             }
                           />
                           <TableDataCell content={topic.type} />
@@ -125,12 +79,6 @@ export const TableComponent: FC<ITableProps> = ({
           )}
         </TableBody>
       </Table>
-      <Snackbar
-        open={showSnackBar}
-        autoHideDuration={4000}
-        onClose={setShowSnackBar}
-        message={msg}
-      />
     </>
   );
 };

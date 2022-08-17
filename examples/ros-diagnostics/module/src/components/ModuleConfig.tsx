@@ -25,7 +25,6 @@ interface IModuleConfig {
   topicStats: OnlineTopics;
   closeConfig: () => void;
   showSnackBar: () => void;
-  jsonObjectFromCloud: any;
   currentConfiuration?: any;
 }
 
@@ -35,10 +34,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   showSnackBar,
   currentConfiuration,
 }) => {
-  const [index, setIndex] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [path, setPath] = useState<string[]>([]);
   const [showAddTopic, setShowAddTopic] = useState(false);
   const [availableSections, setAvailableSections] = useState<
@@ -103,8 +99,6 @@ export const ModuleConfig: FC<IModuleConfig> = ({
   }, []);
 
   const saveConfiguraton = async () => {
-    // console.log(configuration);
-    // return;
     const err = Object.keys(configuration).filter(
       (_) => configuration[_].section.length < 1
     );
@@ -127,7 +121,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
 
     const deepConfigurationCopy = JSON.parse(JSON.stringify(configuration));
     //creates a deep copy of the current configuration, to remove selected topic
-    //and updates the configuration adding the topic to desire section with a new id
+    //and updates the configuration adding the topic to desired section with a new id
     unset(deepConfigurationCopy, path);
     setConfguration(
       updatePath(
@@ -154,6 +148,23 @@ export const ModuleConfig: FC<IModuleConfig> = ({
     setConfguration((prev) => updatePath(prev, path + "[enabled]", false));
     handleCloseDialog();
   }, [path]);
+
+  const isSaveDisable = useMemo(() => {
+    const areSectionNamesValid =
+      Object.keys(configuration).filter(
+        (_) => configuration[_]["section"].length === 0
+      ).length !== 0;
+
+    const areSectionContentValid =
+      Object.keys(configuration).filter(
+        (_) =>
+          Object.values(configuration[_]["contents"]).filter(
+            (_) => _.topicName.length === 0
+          ).length !== 0
+      ).length !== 0;
+
+    return areSectionNamesValid || areSectionContentValid;
+  }, [configuration]);
 
   return showAddTopic ? (
     <AddTopic
@@ -226,6 +237,7 @@ export const ModuleConfig: FC<IModuleConfig> = ({
         onCancel={closeConfig}
         onClick={saveConfiguraton}
         label={"Save"}
+        disabled={isSaveDisable}
       />
     </Box>
   );

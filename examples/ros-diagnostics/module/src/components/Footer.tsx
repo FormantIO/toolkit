@@ -41,7 +41,7 @@ export const Footer: FC<IFooterProps> = ({
         variant="contained"
         size="large"
         color="secondary"
-        // disabled={disabled}
+        disabled={disabled}
       >
         {label}
       </Button>

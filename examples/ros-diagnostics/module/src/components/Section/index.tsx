@@ -47,6 +47,9 @@ export const Section: FC<ISectionProps> = ({
         flexDirection: "column",
         justifyContent: "left",
         textAlign: "left",
+        borderBottom: ".03px solid #3b4668",
+        marginTop: 4,
+        paddingBottom: 4
       }}
     >
       <SectionHeader

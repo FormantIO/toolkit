@@ -3,10 +3,6 @@ import { ModuleData, App, Authentication, KeyValue } from "@formant/data-sdk";
 import { TableComponent } from "./TableComponent/index";
 import { useState, FC, useEffect, useRef, useCallback, useMemo } from "react";
 import { ModuleConfig } from "./ModuleConfig";
-import {
-  createJsonSchemaObjectFromConfig,
-  splitTopicsForSecction,
-} from "./TableComponent/utils/index";
 import { ErrorMsg } from "../components/ErrorMsg/ErrorMsg";
 import { OnlineTopics } from "../types/RosTopicStats";
 import { v4 as uuidv4 } from "uuid";
@@ -29,18 +25,7 @@ export const Table: FC = () => {
   const [openConfig, setOpenConfig] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [currentConfig, setCurrenConfig] = useState();
-  const [jsonObjectFromCloud, setJsonObjectFromCloud] = useState<any>();
-  const [cloudConfig, setCloudConfig] = useState<{
-    [key: string]: {
-      title: string;
-      contents: Topic[];
-    };
-  }>({
-    other: {
-      title: "Other",
-      contents: [],
-    },
-  });
+
   useEffect(() => {
     App.addModuleDataListener(receiveModuleData);
   }, []);
@@ -104,7 +89,6 @@ export const Table: FC = () => {
       closeConfig={() => setOpenConfig(false)}
       topicStats={latestTopics}
       showSnackBar={() => setShowSnackBar(true)}
-      jsonObjectFromCloud={jsonObjectFromCloud}
       currentConfiuration={currentConfig}
     />
   ) : (
@@ -113,10 +97,7 @@ export const Table: FC = () => {
       topicStats={latestTopics}
       tableHeaders={["Name", "Type", "Hz"]}
       setOpenConfig={() => setOpenConfig(true)}
-      cloudConfig={cloudConfig}
-      setShowSnackBar={() => setShowSnackBar(false)}
       openSnackBar={() => setShowSnackBar(true)}
-      showSnackBar={showSnackBar}
       onlineTopics={onlineTopics}
     />
   );
