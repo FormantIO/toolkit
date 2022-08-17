@@ -138,3 +138,18 @@ active services along with their argument names and types.
 To do this, simply add the command `ros.services.update-services` to 
 Formant. Issuing this Command will cause the adapter to send back all
  currently active services to the stream `ros.services.json`.
+
+## Trouble Shooting
+
+You may attempt to run the service call adapter and
+notice that one of the service's that is running
+on your machine is not showing up on the stream
+`ros.services.json`. The most common reason that this
+occurs is that the `export CATKIN_WS=<catkin_ws dir>` is not located in `/var/lib/formant/.bashrc`. You 
+can check by running `cat /var/lib/formant/.bashrc` and
+checking if the `export CATKIN_WS=<catkin_ws dir>` is 
+located in the file. If not, then simply add a new line
+in the bashrc file, and replace `<catkin_ws dir>` with
+the directory of your machines catkin workspace such
+that `setup.bash` may be found at 
+`<catkin_ws dir>/devel/setup.bash`.
