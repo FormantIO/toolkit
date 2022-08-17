@@ -44,7 +44,7 @@ const App: FC = () => {
     setService(null);
     setShowSnackbar(true);
     setParams({});
-  }, [services]);
+  }, [services, params, service]);
 
   const handleSelectService = useCallback(
     (val: string) => {
@@ -64,7 +64,7 @@ const App: FC = () => {
           value: key,
         };
       }),
-    [service]
+    [service, services]
   );
 
   return (
@@ -98,7 +98,7 @@ const App: FC = () => {
         <Button
           sx={{ position: "absolute", bottom: -50, right: 0 }}
           onClick={handleSubmit}
-          disabled={service === undefined || services === undefined}
+          disabled={service === null || services === undefined}
           size="large"
           variant="contained"
           color="secondary"

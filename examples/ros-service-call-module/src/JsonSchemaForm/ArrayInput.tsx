@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { TextField } from "@formant/ui-sdk";
 import { capitalize } from "./capitalize";
 import { IInputProps, JsonArraySchema } from "./types";
@@ -16,8 +16,16 @@ export const ArrayInput: FC<IInputProps<JsonArraySchema>> = (props) => {
   const handleOnBlur = useCallback(
     (index: number) => {
       setError("");
-      //Avoids deleting the first textfield
-      if (currentValue.length === 2) return;
+
+      //Allow users 5 seconds to type something in the seconds text field
+      //After the 5 seconds it deletes the text field unless it has some text in it
+      if (currentValue.length === 2 && currentValue[1].length === 0) {
+        setTimeout(() => {
+          currentValue.pop();
+          setParams((prev) => updatePath(prev, path, currentValue));
+        }, 5000);
+        return;
+      }
 
       if (currentValue[index].length > 0) {
         //if text field not empty save
