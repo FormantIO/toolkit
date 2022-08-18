@@ -108,7 +108,8 @@ class Adapter:
         try:
             datum = parse(data.text)
         except Exception as e:
-            logger.warn(f"Failed parsing {data.text}. Dropping command. Reason: {e}")
+            print(f"Failed parsing {data.text}. Dropping command. Reason: {e}")
+            
             return
 
         service_name = datum[0]
@@ -125,13 +126,11 @@ class Adapter:
             rospy.resolve_name(service_name), *service_args)
 
         if response and len(str(response)):
-            self._post_service_data(service_name, str(response))
+            self._post_service_data(str(response))
 
-    def _post_service_data(self, service_name: str, data: str):
+    def _post_service_data(self, data: str):
         """Post's a string to Formant given the service_name string."""
-        stream_name = rospy.resolve_name(service_name).replace("/", ".")
-        stream_name = stream_name[1:] if stream_name[0] == "." else stream_name
-        response_stream = f"ros.service.{stream_name}.response"
+        response_stream = "ros.services.response"
         try:
             self._fclient.post_text(response_stream, str(data))
         except Exception:
