@@ -1,4 +1,3 @@
-import utils
 
 def ROS_to_json_schema_type_conversion(intype: str):
     """Convert a ROS type to it's corresponding python type."""
@@ -18,12 +17,25 @@ def ROS_to_json_schema_type_conversion(intype: str):
     }
 
     output = {}
-    intype_stripped = intype.replace("[]", "").lstrip().rstrip()
-    output_type = mapping[intype_stripped] if not "[]" in intype else "array"
+    intype = intype.lstrip().rstrip()
+    
+    array_type = intype[-1] == "]"
+    
+    if array_type and intype[-2] == "[": 
+        intype_stripped = intype[:-2]
+    elif array_type:
+        intype_stripped = intype[:-3]
+    else:
+        intype_stripped = intype
+    
+    output_type = mapping[intype_stripped] if not array_type else "array"
 
     output["type"] = output_type
     if output_type == "array":
         output["items"] = {"type": mapping[intype_stripped]}
+        if intype[-2] != '[':
+            output["minItems"] = int(intype[-2])
+            output["maxItems"] = int(intype[-2])
 
     return output
 

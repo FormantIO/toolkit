@@ -58,9 +58,9 @@ def _get_param_obj(param_value, param_def, parent_name):
     #       is primitive, and therefore can be evaluated easily.
     if not isinstance(param_value, dict)\
             and not isinstance(param_def['type'], dict):
-        arr_type = '[]' in param_def['ros_type']
+        arr_type = param_def['ros_type'][-1] == ']'
         pytype = utils.ROS_type_to_python(
-            param_def['ros_type'].replace('[]', ''))
+            get_primitive_type(param_def['ros_type']))
         if arr_type:
             return [pytype(value) for value in param_value]
         return pytype(param_value)
@@ -78,3 +78,11 @@ def _get_param_obj(param_value, param_def, parent_name):
     param_type_obj = ros_type_obj(**new_param_values)
 
     return param_type_obj
+
+def get_primitive_type(type_def):
+    """Given a type definition of an array type, get the array item type."""
+    if type_def[-1] != ']':
+        return type_def
+    if type_def[-2] != '[':
+        return type_def[:-3]
+    return type_def[:-2]

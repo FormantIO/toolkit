@@ -32,7 +32,7 @@ def service_call(service_name, *args):
             service_name, get_service_type_obj(service_name))
         try:
             result = service(*args)  # Call the service.
-        except TypeError as e:
+        except Exception as e:
             logger.info(f"Failed to execute service call. {e}")
             result = None
     except rospy.ServiceException as e:
