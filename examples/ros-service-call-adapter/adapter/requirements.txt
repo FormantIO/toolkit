@@ -1,6 +1,3 @@
-formant~=1.61.1
-rosgraph~=1.15.14
-rosmsg~=1.15.14
-rospy~=1.15.14
-rosservice~=1.15.14
-rostopic~=1.15.14
+formant
+rospkg
+catkin_pkg
