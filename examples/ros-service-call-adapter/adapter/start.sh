@@ -1,3 +1,7 @@
 #!/bin/bash
 
+export PYTHONUNBUFFERED=true
+pip3 install setuptools
+pip3 install wheel
+pip3 install -r requirements.txt
 /usr/bin/python3 main.py
