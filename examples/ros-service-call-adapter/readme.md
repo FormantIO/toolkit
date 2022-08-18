@@ -7,9 +7,16 @@ The ROS service call adapter allows a user to map Formant commands and Formant b
 
 ## Getting Started
 
-To get started with this adapter, first instal the adapter and make sure that the proper requirements are met via
+To get started with this adapter, first ensure that rosgraph is installed.
+
+Ubuntu 20.04
 ```bash
-pip install requirements.txt
+apt-get install python3-rosgraph
+```
+
+Ubuntu 18.04
+```bash
+apt-get install python-rosgraph
 ```
 
 ### Command Mapping
