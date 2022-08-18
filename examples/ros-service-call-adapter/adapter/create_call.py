@@ -23,11 +23,11 @@ def main():
     
     call_params = CallCreator(current_services[service])
 
-    call_full = {service:call_params.get_parsed()}
+    call_full =  json.dumps({service:call_params.get_parsed()})
     
     print("Successfully Generated service call...\n\n")
-
-    print(call_full)
+    
+    print(json.dumps(json.loads(call_full)))
     print()
 
 class CallCreator:
