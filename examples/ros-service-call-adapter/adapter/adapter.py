@@ -126,13 +126,14 @@ class Adapter:
             rospy.resolve_name(service_name), *service_args)
 
         if response and len(str(response)):
-            self._post_service_data(str(response))
+            self._post_service_data(service_name, str(response))
 
-    def _post_service_data(self, data: str):
+    def _post_service_data(self, service_name: str, data: str):
         """Post's a string to Formant given the service_name string."""
-        response_stream = "ros.services.response"
+        response_stream = f"ros.services.response"
+        print(f"Posting {data} to {response_stream}")
         try:
-            self._fclient.post_text(response_stream, str(data))
+            self._fclient.post_text(response_stream, str(data), tags={"ros_service":service_name})
         except Exception:
             logger.info("Failed to post response")
             return
