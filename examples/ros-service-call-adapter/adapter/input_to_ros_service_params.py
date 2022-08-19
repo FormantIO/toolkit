@@ -83,6 +83,4 @@ def get_primitive_type(type_def):
     """Given a type definition of an array type, get the array item type."""
     if type_def[-1] != ']':
         return type_def
-    if type_def[-2] != '[':
-        return type_def[:-3]
-    return type_def[:-2]
+    return type_def[:type_def.find("[")]

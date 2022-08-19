@@ -21,10 +21,8 @@ def ROS_to_json_schema_type_conversion(intype: str):
     
     array_type = intype[-1] == "]"
     
-    if array_type and intype[-2] == "[": 
-        intype_stripped = intype[:-2]
-    elif array_type:
-        intype_stripped = intype[:-3]
+    if array_type:
+        intype_stripped = intype[:intype.find("[")]
     else:
         intype_stripped = intype
     
