@@ -124,20 +124,22 @@ export class BinaryRequestDataChannel extends RequestDataChannel {
           if (success) {
             return payload;
           } else {
-            throw {
+            console.error({
               name: "AdapterError",
               message: this.decoder.decode(payload),
-            };
+            });
+            throw new Error("Binary request datachannel adapter error");
           }
         }
       }
     }
 
     requestIdToResponseMap.delete(id);
-    throw {
+    console.error({
       name: "TimeoutError",
       message: `Request timed out after ${timeout / 1000.0} seconds`,
-    };
+    });
+    throw new Error("Binary request data channel request timed out");
   }
 }
 
@@ -201,19 +203,21 @@ export class TextRequestDataChannel extends RequestDataChannel {
             return data;
           }
           if (error) {
-            throw {
+            console.error({
               name: "AdapterError",
               message: error,
-            };
+            });
+            throw new Error("Text request datachannel adapter error");
           }
         }
       }
     }
 
     requestIdToResponseMap.delete(id);
-    throw {
+    console.error({
       name: "TimeoutError",
       message: `Request timed out after ${timeout / 1000.0} seconds`,
-    };
+    });
+    throw new Error("Text request datachannel request timed out");
   }
 }
