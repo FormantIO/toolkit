@@ -31,20 +31,19 @@ export * from "./components/viewer/Controller";
 export * from "./components/viewer/HandheldController";
 export * from "./formantColor";
 export * from "./oculusQuest";
+export * from "./model/PositioningBuilder";
+export * from "./model/SceneGraphBuilder";
 
 export { defined, definedAndNotNull } from "../../common/defined";
 
-
 export type IGridMap =
-import("../../universe-core/src/model/IGridMap").IGridMap;
+  import("../../universe-core/src/model/IGridMap").IGridMap;
 export type IOdometry =
-import("../../universe-core/src/model/IOdometry").IOdometry;
+  import("../../universe-core/src/model/IOdometry").IOdometry;
 export type IUniverseData =
-import("../../universe-core/src/model/IUniverseData").IUniverseData;
-export type IPcd =
-import("../../universe-core/src/model/IPcd").IPcd;
-export type IPose =
-import("../../universe-core/src/model/IPose").IPose;
+  import("../../universe-core/src/model/IUniverseData").IUniverseData;
+export type IPcd = import("../../universe-core/src/model/IPcd").IPcd;
+export type IPose = import("../../universe-core/src/model/IPose").IPose;
 
 export type IH264VideoFrame =
   import("../../data-sdk/src/model/IH264VideoFrame").IH264VideoFrame;
