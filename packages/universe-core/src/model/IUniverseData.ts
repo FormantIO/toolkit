@@ -213,6 +213,18 @@ export interface IUniverseData {
     onDataSourceStateChange?: (state: DataSourceState) => void
   ): CloseSubscription;
 
+  subscribeToImage(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (image: HTMLImageElement | HTMLCanvasElement) => void
+  );
+
+  subcribeToVideo(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (frame: HTMLVideoElement) => void
+  );
+
   sendRealtimePose(
     deviceId: string,
     streamName: string,
