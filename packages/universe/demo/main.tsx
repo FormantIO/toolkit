@@ -12,7 +12,7 @@ LayerRegistry.register(TestLayer);
 function App() {
   const data = new SimulatedUniverseData();
   window.setInterval(() => {
-    data.setTime(Date.now());
+    data.setTime(new Date());
   }, 60 / 12);
   return (
     <Universe

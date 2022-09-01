@@ -229,11 +229,11 @@ export class SimulatedUniverseData implements IUniverseData {
   }
 
   time = Date.now();
-  setTime(time: number | "live"): void {
+  setTime(time: Date | "live"): void {
     if (time === "live") {
       throw new Error("Not implemented");
     } else {
-      this.time = time;
+      this.time = time.getTime();
     }
   }
   async getLatestTransformTrees(
