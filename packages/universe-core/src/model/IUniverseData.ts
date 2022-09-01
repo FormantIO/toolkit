@@ -102,7 +102,7 @@ export interface IUniverseData {
     callback: (interaction: Interaction) => void
   ) => () => void;
 
-  setTime(time: number | "live"): void;
+  setTime(time: Date | "live"): void;
 
   getLatestTransformTrees(deviceId: string): Promise<
     {
