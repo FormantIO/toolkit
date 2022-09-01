@@ -1,6 +1,6 @@
 import { Vector2 } from "three";
 import * as uuid from "uuid";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import { defined } from "../../../common/defined";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { TransformTree } from "../objects/TransformTree";
@@ -61,7 +61,12 @@ export class DeviceVisualTFLayer extends UniverseLayer {
     defined(this.universeData).subscribeToTransformTree(
       defined(this.getLayerContext()).deviceId,
       defined(dataSource),
-      this.onTransformTreeData
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onTransformTreeData(d as ITransformNode);
+      }
     );
   }
 

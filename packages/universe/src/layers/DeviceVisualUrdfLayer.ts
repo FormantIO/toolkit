@@ -1,6 +1,6 @@
 import * as JSZip from "jszip";
 import * as uuid from "uuid";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import { Object3D, Event, Group, Material, Mesh, BufferGeometry } from "three";
 import { defined } from "../../../common/defined";
 import { IJointState } from "../../../data-sdk/src/model/IJointState";
@@ -137,7 +137,12 @@ export class DeviceVisualUrdfLayer extends UniverseLayer {
       defined(this.universeData).subscribeToJointState(
         context,
         defined(dataSource),
-        this.onData
+        (d) => {
+          if (typeof d === "symbol") {
+            throw new Error("unhandled data status");
+          }
+          this.onData(d as IJointState);
+        }
       );
       defined(this.universeData)
         .getUrdfs(defined(context))

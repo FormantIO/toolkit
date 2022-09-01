@@ -120,7 +120,12 @@ export class ChartLayer extends UniverseLayer {
     this.universeData.subscribeToNumericSet(
       defined(this.getLayerContext()).deviceId,
       defined(this.layerDataSources)[0],
-      (d) => this.onData(d)
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onData(d as [number, INumericSetEntry[]][]);
+      }
     );
   }
 

@@ -7,6 +7,7 @@ import {
   ITelemetryStream,
   IUniverseStatistics,
   UniverseDataSource,
+  DataStatus,
 } from "@formant/universe-core";
 import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
@@ -33,16 +34,8 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToImage(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (image: HTMLCanvasElement | HTMLImageElement) => void
-  ) : CloseSubscription{
-    throw new Error("Method not implemented.");
-  }
-
-  subcribeToVideo(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (frame: HTMLVideoElement) => void
-  ) : CloseSubscription {
+    _callback: (image: HTMLCanvasElement | DataStatus) => void
+  ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
 
@@ -180,14 +173,15 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToGridMap(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IGridMap) => void
+    _callback: (data: IGridMap | DataStatus) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
+
   subscribeToVideo(
     _deviceId: string,
     _source: UniverseDataSource,
-    callback: (data: HTMLCanvasElement) => void
+    callback: (data: HTMLCanvasElement | DataStatus) => void
   ): () => void {
     const image = new Image();
     image.crossOrigin = "Anonymous";
@@ -212,14 +206,14 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToJson<T>(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: T) => void
+    _callback: (data: T | DataStatus) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
   subscribeToText(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (text: string) => void
+    _callback: (text: string | DataStatus) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
   }
@@ -315,7 +309,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToPointCloud(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IPcd) => void
+    _callback: (data: IPcd | DataStatus) => void
   ): () => void {
     const points: number[] = [];
     for (let i = 0; i < 100; i++) {
@@ -344,7 +338,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToGeometry(
     _deviceId: string,
     _source: UniverseDataSource,
-    callback: (data: IMarker3DArray) => void
+    callback: (data: IMarker3DArray | DataStatus) => void
   ): () => void {
     callback({
       markers: [...Array(100).keys()].map(() => ({
@@ -387,7 +381,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToJointState(
     _deviceId: string,
     _source: UniverseDataSource,
-    callback: (data: IJointState) => void
+    callback: (data: IJointState | DataStatus) => void
   ): () => void {
     if (_deviceId === SPOT_ID) {
       window.setInterval(() => {
@@ -495,7 +489,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToMap(
     _deviceId: string,
     _source: UniverseDataSource,
-    _callback: (data: IMap) => void
+    _callback: (data: IMap | DataStatus) => void
   ): () => void {
     return () => {};
   }
@@ -546,7 +540,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToTransformTree(
     deviceId: string,
     _source: UniverseDataSource,
-    callback: (data: ITransformNode) => void
+    callback: (data: ITransformNode | DataStatus) => void
   ): () => void {
     if (deviceId === SPOT_ID) {
       callback({
@@ -559,7 +553,7 @@ export class SimulatedUniverseData implements IUniverseData {
   subscribeToLocation(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: ILocation) => void
+    callback: (data: ILocation | DataStatus) => void
   ): () => void {
     if (source.sourceType === "telemetry") {
       const delta = 0.00001;

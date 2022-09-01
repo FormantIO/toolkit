@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.225",
+  "version": "0.0.226",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 9146",
     "dev_vr": "vite --host 0.0.0.0 --https --port 9146",
@@ -51,10 +51,10 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
-    "@types/three": "0.140.0",
     "@formant/ui-sdk": "0.0.26",
-    "@formant/universe-core": "0.0.4",
+    "@formant/universe-core": "0.0.7",
     "@types/react": "^18.0.8",
+    "@types/three": "0.140.0",
     "@types/uuid": "^8.3.4",
     "chart.js": "^3.8.0",
     "geolib": "^3.3.3",

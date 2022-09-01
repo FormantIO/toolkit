@@ -1,6 +1,6 @@
 import * as uuid from "uuid";
 import { getDistance } from "geolib";
-import { IUniverseData } from  "@formant/universe-core";
+import { ILocation, IUniverseData } from "@formant/universe-core";
 import {
   Euler,
   Matrix4,
@@ -15,6 +15,7 @@ import { Positioning } from "../model/SceneGraph";
 import { TreePath } from "../model/ITreeElement";
 
 import { UniverseLayer } from "./UniverseLayer";
+import { IOdometry } from "../main";
 
 export class TransformLayer extends Object3D {
   static layerTypeId: string = "transform";
@@ -115,7 +116,11 @@ export class TransformLayer extends Object3D {
           streamName: positioning.stream,
           streamType: "location",
         },
-        (location) => {
+        (d) => {
+          if (typeof d === "symbol") {
+            throw new Error("unhandled data status");
+          }
+          const location = d as ILocation;
           const h1 = {
             longitude: location.longitude,
             latitude: location.latitude,
@@ -163,7 +168,11 @@ export class TransformLayer extends Object3D {
           streamName: positioning.stream,
           streamType: "transform tree",
         },
-        (transformTree) => {
+        (d) => {
+          if (typeof d === "symbol") {
+            throw new Error("unhandled data status");
+          }
+          const transformTree = d as ITransformNode;
           fetch(defined(transformTree.url))
             .then((res) => res.json())
             .then((tree) => {
@@ -201,7 +210,11 @@ export class TransformLayer extends Object3D {
           streamName: positioning.stream,
           streamType: "localization",
         },
-        (odom) => {
+        (d) => {
+          if (typeof d === "symbol") {
+            throw new Error("unhandled data status");
+          }
+          const odom = d as IOdometry;
           const pos = odom.pose.translation;
           const rot = odom.pose.rotation;
           this.position.set(pos.x, pos.y, pos.z);
@@ -219,7 +232,11 @@ export class TransformLayer extends Object3D {
           rosTopicName: positioning.rtcStream,
           rosTopicType: "json",
         },
-        (odom) => {
+        (d) => {
+          if (typeof d === "symbol") {
+            throw new Error("unhandled data status");
+          }
+          const odom = d as IOdometry;
           const pos = odom.pose.translation;
           const rot = odom.pose.rotation;
           this.position.set(pos.x, pos.y, pos.z);

@@ -1,5 +1,5 @@
 import * as uuid from "uuid";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import { defined } from "../../../common/defined";
 import { IGridMap } from "../main";
 import { GridMap } from "../objects/GridMap";
@@ -56,7 +56,12 @@ export class GridMapLayer extends UniverseLayer {
     defined(this.universeData).subscribeToGridMap(
       defined(this.getLayerContext()).deviceId,
       defined(dataSource),
-      this.onData
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onData(d as IGridMap);
+      }
     );
     this.add(this.map);
   }

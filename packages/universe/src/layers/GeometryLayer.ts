@@ -12,7 +12,7 @@ import {
   Texture,
   Vector3,
 } from "three";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import * as uuid from "uuid";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
@@ -65,7 +65,12 @@ export class GeometryLayer extends UniverseLayer {
     defined(this.universeData).subscribeToGeometry(
       defined(this.getLayerContext()).deviceId,
       defined(dataSource),
-      this.onData
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onData(d as IMarker3DArray);
+      }
     );
   }
 

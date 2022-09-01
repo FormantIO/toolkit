@@ -12,7 +12,7 @@ import {
   SphereGeometry,
 } from "three";
 import * as uuid from "uuid";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import { UniverseLayer } from "./UniverseLayer";
 import { defined, definedAndNotNull } from "../../../common/defined";
 import { LayerSuggestion } from "./LayerRegistry";
@@ -78,7 +78,12 @@ export class VideoLayer extends UniverseLayer {
     defined(this.universeData).subscribeToVideo(
       defined(this.getLayerContext()).deviceId,
       defined(dataSource),
-      this.onData
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onData(d as HTMLCanvasElement);
+      }
     );
   }
 

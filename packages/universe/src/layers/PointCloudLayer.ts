@@ -5,7 +5,7 @@ import {
   PointsMaterial,
   TextureLoader,
 } from "three";
-import { IUniverseData, IPcd } from  "@formant/universe-core";
+import { IUniverseData, IPcd } from "@formant/universe-core";
 import * as uuid from "uuid";
 import { defined } from "../../../common/defined";
 import { UniverseLayer } from "./UniverseLayer";
@@ -115,7 +115,12 @@ export class PointCloudLayer extends UniverseLayer {
     defined(this.universeData).subscribeToPointCloud(
       defined(this.getLayerContext()).deviceId,
       defined(this.layerDataSources)[0],
-      (d) => this.onData(d)
+      (d) => {
+        if (typeof d === "symbol") {
+          throw new Error("unhandled data status");
+        }
+        this.onData(d as IPcd);
+      }
     );
   }
 
