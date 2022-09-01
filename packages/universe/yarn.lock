@@ -296,10 +296,10 @@
     sass "^1.51.0"
     styled-components "^5.3.5"
 
-"@formant/universe-core@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@formant/universe-core/-/universe-core-0.0.8.tgz#48bfde57aa9359f0fd1c96df88722343802e56ea"
-  integrity sha512-Xqbr5fHlE54NutCsMkV2UeuN8ChBquTxJQt9/lPMs7yKnyH33c67j3jLsMLCLGpkg4VtTEZ2WCaWQLF/pJBc8g==
+"@formant/universe-core@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@formant/universe-core/-/universe-core-0.0.9.tgz#b884a3a8fd04336ccb194de8bb76b611422ee423"
+  integrity sha512-zgALcyIowKUdz/+qY46l+ZT+7FysxIRcqt5WcaTuBCuqj7l7hI6eTQbDKoQbjYwrdKIQSqxf1PWNeZUPFW/JEQ==
 
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"

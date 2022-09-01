@@ -37,7 +37,7 @@ export class GridMapLayer extends UniverseLayer {
                   id: uuid.v4(),
                   sourceType: "telemetry",
                   streamName: stream.name,
-                  streamType: stream.configuration.type,
+                  streamType: "localization",
                 },
               ],
               layerType: GridMapLayer.layerTypeId,

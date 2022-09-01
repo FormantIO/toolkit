@@ -1,7 +1,7 @@
 import {
   CloseSubscription,
   DataSourceState,
-  IHardwareStream,
+  IRealtimeStream,
   Interaction,
   ITelemetryRosStream,
   ITelemetryStream,
@@ -533,7 +533,7 @@ export class SimulatedUniverseData implements IUniverseData {
     return ["https://formant-3d-models.s3.us-west-2.amazonaws.com/arm.zip"];
   }
 
-  async getHardwareStreams(_deviceId: string): Promise<IHardwareStream[]> {
+  async getHardwareStreams(_deviceId: string): Promise<IRealtimeStream[]> {
     return [];
   }
 
