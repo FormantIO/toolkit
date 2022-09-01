@@ -16,6 +16,11 @@ export type DataSourceState =
   | "connecting"
   | "disconnecting";
 
+export const NoData = Symbol("no_data");
+export const LoadingData = Symbol("loading_data");
+export const FailedData = Symbol("failed_data");
+export type DataStatus = typeof NoData | typeof LoadingData | typeof FailedData;
+
 export type CloseSubscription = () => void;
 
 export interface UniverseRosDataSource {
@@ -130,79 +135,79 @@ export interface IUniverseData {
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IPcd) => void
+    callback: (data: IPcd | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IOdometry) => void
+    callback: (data: IOdometry | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToPose(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IPose) => void
+    callback: (data: IPose | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToGeometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IMarker3DArray) => void
+    callback: (data: IMarker3DArray | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToJointState(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IJointState) => void
+    callback: (data: IJointState | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToGridMap(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IGridMap) => void
+    callback: (data: IGridMap | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (frame: HTMLCanvasElement) => void
+    callback: (frame: HTMLCanvasElement | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToTransformTree(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: ITransformNode) => void
+    callback: (data: ITransformNode | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToLocation(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: ILocation) => void
+    callback: (data: ILocation | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToJson<T>(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: T) => void
+    callback: (data: T | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToText(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (text: string) => void
+    callback: (text: string | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToNumeric(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (num: [number, number][]) => void
+    callback: (num: [number, number][] | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToNumericSet(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (entry: [number, INumericSetEntry[]][]) => void
+    callback: (entry: [number, INumericSetEntry[]][] | DataStatus) => void
   ): CloseSubscription;
 
   getStatistics(): Promise<IUniverseStatistics>;
@@ -210,19 +215,19 @@ export interface IUniverseData {
   subscribeDataSourceStateChange(
     deviceId: string,
     source: UniverseDataSource,
-    onDataSourceStateChange?: (state: DataSourceState) => void
+    onDataSourceStateChange?: (state: DataSourceState | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToImage(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (image: HTMLImageElement | HTMLCanvasElement) => void
+    callback: (image: HTMLImageElement | HTMLCanvasElement | DataStatus) => void
   ): CloseSubscription;
 
-  subcribeToVideo(
+  subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (frame: HTMLVideoElement) => void
+    callback: (frame: HTMLVideoElement | DataStatus) => void
   ): CloseSubscription;
 
   sendRealtimePose(
