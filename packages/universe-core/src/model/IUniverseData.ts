@@ -20,6 +20,42 @@ export const NoData = Symbol("no_data");
 export const LoadingData = Symbol("loading_data");
 export const FailedData = Symbol("failed_data");
 export type DataStatus = Symbol;
+export type StreamType =
+  | "bitset"
+  | "localization"
+  | "point cloud"
+  | "location"
+  | "file"
+  | "health"
+  | "transform tree"
+  | "battery"
+  | "video"
+  | "numeric set"
+  | "image"
+  | "numeric"
+  | "text";
+
+export type RtcStreamType =
+  | "ping"
+  | "pong"
+  | "stream-control"
+  | "streams-info"
+  | "agent-info"
+  | "numeric"
+  | "boolean"
+  | "bitset"
+  | "twist"
+  | "compressed-image"
+  | "h264-video-frame"
+  | "audio-chunk"
+  | "pose"
+  | "goal-id"
+  | "joint-state"
+  | "pose-with-covariance"
+  | "point-cloud"
+  | "marker-array"
+  | "point"
+  | "json-string";
 
 export type CloseSubscription = () => void;
 
@@ -40,7 +76,7 @@ export interface UniverseTelemetrySource {
   id: string;
   sourceType: "telemetry";
   streamName: string;
-  streamType: string;
+  streamType: StreamType;
 }
 
 export type UniverseDataSource =
@@ -63,8 +99,8 @@ export interface ITelemetryRosStream {
   topicName: string;
   topicType: string;
 }
-export interface IHardwareStream {
-  rtcStreamType: string;
+export interface IRealtimeStream {
+  rtcStreamType: RtcStreamType;
   name: string;
 }
 
@@ -130,7 +166,7 @@ export interface IUniverseData {
 
   getUrdfs(deviceId: string): Promise<string[]>;
 
-  getHardwareStreams(deviceId: string): Promise<IHardwareStream[]>;
+  getHardwareStreams(deviceId: string): Promise<IRealtimeStream[]>;
 
   subscribeToPointCloud(
     deviceId: string,
