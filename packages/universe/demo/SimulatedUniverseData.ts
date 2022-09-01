@@ -12,7 +12,14 @@ import { ITransformNode } from "../../data-sdk/src/model/ITransformNode";
 import { ILocation } from "../../data-sdk/src/model/ILocation";
 import { IMarker3DArray } from "../../data-sdk/src/model/IMarker3DArray";
 import { IJointState } from "../../data-sdk/src/model/IJointState";
-import { IGridMap, IMap, IOdometry, IPcd, IPose, IUniverseData } from "../src/main";
+import {
+  IGridMap,
+  IMap,
+  IOdometry,
+  IPcd,
+  IPose,
+  IUniverseData,
+} from "../src/main";
 import { INumericSetEntry } from "../../data-sdk/src/model/INumericSetEntry";
 import { ITransform } from "../../model/ITransform";
 import { IBitset } from "../../data-sdk/src/model/IBitset";
@@ -23,6 +30,22 @@ export const ARM2_ID = "124fasd";
 export const ARM3_ID = "77hrtesgdafdsh";
 
 export class SimulatedUniverseData implements IUniverseData {
+  subscribeToImage(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (image: HTMLCanvasElement | HTMLImageElement) => void
+  ) : CloseSubscription{
+    throw new Error("Method not implemented.");
+  }
+
+  subcribeToVideo(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (frame: HTMLVideoElement) => void
+  ) : CloseSubscription {
+    throw new Error("Method not implemented.");
+  }
+
   addInteraction(_interaction: Interaction) {
     throw new Error("Method not implemented.");
   }
