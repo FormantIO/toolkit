@@ -217,13 +217,13 @@ export interface IUniverseData {
     deviceId: string,
     source: UniverseDataSource,
     callback: (image: HTMLImageElement | HTMLCanvasElement) => void
-  );
+  ): CloseSubscription;
 
   subcribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
     callback: (frame: HTMLVideoElement) => void
-  );
+  ): CloseSubscription;
 
   sendRealtimePose(
     deviceId: string,
