@@ -3,7 +3,7 @@ import * as React from "react";
 import { Component } from "react";
 import { Howler } from "howler";
 import * as THREE from "three";
-import { IUniverseData } from  "@formant/universe-core";
+import { IUniverseData } from "@formant/universe-core";
 import {
   PointLight,
   Vector3,
@@ -318,10 +318,10 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   .applyMatrix4(controllerTempMatrix);
                 controller.raycaster = raycaster;
 
-                if (handedness === "left") {
-                  hands[1].raycaster = raycaster;
-                } else if (handedness === "right") {
+                if (i === 0) {
                   hands[0].raycaster = raycaster;
+                } else if (i === 1) {
+                  hands[1].raycaster = raycaster;
                 }
 
                 if (oldState) {
