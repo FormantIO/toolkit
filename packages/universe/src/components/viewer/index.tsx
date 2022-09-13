@@ -41,13 +41,6 @@ import { Hand, HandPose } from "./Hand";
 import { Controller } from "./Controller";
 import { HandheldController } from "./HandheldController";
 
-const queryParams = new URLSearchParams(window.location.search);
-
-let SWAP_HANDS = false;
-if (queryParams.has("swap_hands")) {
-  SWAP_HANDS = true;
-}
-
 const MeasureContainer = styled.div`
   width: 100%;
   height: 100vh;
@@ -325,21 +318,6 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   .applyMatrix4(controllerTempMatrix);
                 controller.raycaster = raycaster;
 
-                if (SWAP_HANDS === false) {
-                  if (handedness === "left") {
-                    hands[1].raycaster = raycaster;
-                  } else if (handedness === "right") {
-                    hands[0].raycaster = raycaster;
-                  }
-                } else {
-                  // eslint-disable-next-line no-lonely-if
-                  if (handedness === "left") {
-                    hands[0].raycaster = raycaster;
-                  } else if (handedness === "right") {
-                    hands[1].raycaster = raycaster;
-                  }
-                }
-
                 if (oldState) {
                   for (let p = 0; p < newState.buttons.length; p += 1) {
                     if (newState.buttons[p] !== oldState.buttons[p]) {
@@ -368,11 +346,43 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
               this.notifyControllers(controllers);
             }
             if (hands.length > 0) {
+              const updateHandRaycasters = () => {
+                if (!hands[0].raycaster) {
+                  hands[0].raycaster = new Raycaster();
+                }
+                if (!hands[1].raycaster) {
+                  hands[1].raycaster = new Raycaster();
+                }
+
+                // give hands their independent raycasters
+                let controllerTempMatrix = new THREE.Matrix4();
+                controllerTempMatrix
+                  .identity()
+                  .extractRotation(controller1.matrixWorld);
+                hands[0].raycaster.ray.origin.setFromMatrixPosition(
+                  controller1.matrixWorld
+                );
+                hands[0].raycaster.ray.direction
+                  .set(0, 0, -1)
+                  .applyMatrix4(controllerTempMatrix);
+
+                controllerTempMatrix = new THREE.Matrix4();
+                controllerTempMatrix
+                  .identity()
+                  .extractRotation(controller2.matrixWorld);
+                hands[1].raycaster.ray.origin.setFromMatrixPosition(
+                  controller2.matrixWorld
+                );
+                hands[1].raycaster.ray.direction
+                  .set(0, 0, -1)
+                  .applyMatrix4(controllerTempMatrix);
+              };
               if (
                 hands[0].controller.visible === true &&
                 hands[1].controller.visible === true &&
                 this.usingHands === false
               ) {
+                updateHandRaycasters();
                 this.notifyHandsEnter(hands);
                 this.usingHands = true;
               }
@@ -381,12 +391,14 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                 hands[1].controller.visible !== true &&
                 this.usingHands === true
               ) {
+                updateHandRaycasters();
                 this.notifyHandsLeave(hands);
                 this.usingHands = false;
                 this.currentHandPoses = ["unknown", "unknown"];
                 this.notifyHandPosesChanged(hands);
               }
               if (this.usingHands) {
+                updateHandRaycasters();
                 this.notifyHandsMoved(hands);
               }
               const hand1Pose = hands[0].getHandPose();
