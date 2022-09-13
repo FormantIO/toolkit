@@ -41,6 +41,13 @@ import { Hand, HandPose } from "./Hand";
 import { Controller } from "./Controller";
 import { HandheldController } from "./HandheldController";
 
+const queryParams = new URLSearchParams(window.location.search);
+
+let SWAP_HANDS = false;
+if (queryParams.has("swap_hands")) {
+  SWAP_HANDS = true;
+}
+
 const MeasureContainer = styled.div`
   width: 100%;
   height: 100vh;
@@ -318,10 +325,19 @@ export class UniverseViewer extends Component<IUniverseViewerProps> {
                   .applyMatrix4(controllerTempMatrix);
                 controller.raycaster = raycaster;
 
-                if (i === 0) {
-                  hands[0].raycaster = raycaster;
-                } else if (i === 1) {
-                  hands[1].raycaster = raycaster;
+                if (SWAP_HANDS === false) {
+                  if (handedness === "left") {
+                    hands[1].raycaster = raycaster;
+                  } else if (handedness === "right") {
+                    hands[0].raycaster = raycaster;
+                  }
+                } else {
+                  // eslint-disable-next-line no-lonely-if
+                  if (handedness === "left") {
+                    hands[0].raycaster = raycaster;
+                  } else if (handedness === "right") {
+                    hands[1].raycaster = raycaster;
+                  }
                 }
 
                 if (oldState) {
