@@ -136,6 +136,7 @@ export class SceneBuilder {
     this.scene.push({
       id: uuid.v4(),
       editing: false,
+      deviceContext: this.deviceId,
       type: customLayer.layerTypeId,
       name: customLayer.commonName,
       children: [],
