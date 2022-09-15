@@ -63,9 +63,10 @@ export class DeviceVisualTFLayer extends UniverseLayer {
       defined(dataSource),
       (d) => {
         if (typeof d === "symbol") {
-          throw new Error("unhandled data status");
+          this.onTransformTreeData({});
+        } else {
+          this.onTransformTreeData(d as ITransformNode);
         }
-        this.onTransformTreeData(d as ITransformNode);
       }
     );
   }
