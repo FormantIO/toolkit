@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import { UniverseDataSource } from "@formant/universe-core";
 import { PositioningBuilder } from "./PositioningBuilder";
-import { Positioning, SceneGraph } from "./SceneGraph";
+import { Positioning, SceneGraph, SceneGraphElement } from "./SceneGraph";
 import { LayerRegistry } from "../layers/LayerRegistry";
 import { UniverseLayer } from "../layers/UniverseLayer";
 
@@ -36,6 +36,12 @@ export class SceneBuilder {
       },
       data: {},
     });
+    return this;
+  }
+
+  addLayer(layer: SceneGraphElement) {
+    layer.deviceContext = this.deviceId;
+    this.scene.push(layer);
     return this;
   }
 
