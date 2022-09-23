@@ -1,6 +1,5 @@
 #! /bin/bash
 
-### Source Availiable ROS
 if [ ! -d "/opt/ros" ]; then
     sleep 1d
 fi
@@ -8,8 +7,11 @@ fi
 export PYTHONUNBUFFERED=true
 pip3 install setuptools
 pip3 install wheel
+pip3 install rospkg
 python3 -m pip install -r requirements.txt
-for dir in $(ls /opt/ros | sort -r); do
+
+### Source Availiable ROS
+for dir in `ls /opt/ros | sort -r`; do
     if [ -f "/opt/ros/$dir/setup.bash" ]; then
         echo "Sourcing /opt/ros/$dir/setup.bash."
         . /opt/ros/$dir/setup.bash
@@ -18,4 +20,5 @@ for dir in $(ls /opt/ros | sort -r); do
 done
 source config.env
 export PYTHONPATH=/usr/lib/formant/agent/dist-packages/:$PYTHONPATH
+pip3 install python-lzf
 python3 main.py

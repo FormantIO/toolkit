@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ ! -d "/opt/ros" ]; then
+    sleep 1d
+fi
+
 export PYTHONUNBUFFERED=true
 pip3 install setuptools
 pip3 install wheel

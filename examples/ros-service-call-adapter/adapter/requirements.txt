@@ -1,3 +1,4 @@
 formant
 rospkg
 catkin_pkg
+numpy

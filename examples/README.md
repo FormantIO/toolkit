@@ -31,7 +31,9 @@ A series of examples about how to extend Formants capabilities; including views,
 - #### [Desktop](https://github.com/FormantIO/toolkit/tree/master/examples#desktop)
   - [Login and list devices](https://github.com/FormantIO/toolkit/tree/master/examples#login-and-list-devices-electron) (Electron)
 - #### [Adapters](https://github.com/FormantIO/toolkit/tree/master/examples#login-and-list-devices-electron)
-  - [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples#adapter) (Python)
+  - [ROS Topics Monitor](https://github.com/FormantIO/toolkit/tree/master/examples#adapter) (Python)
+  - [ROS Services](https://github.com/FormantIO/toolkit/tree/master/examples#adapter) (Python)
+
 
 ### Views/Moules
 
@@ -180,6 +182,10 @@ With this in your html head you will get default colors, appropriate fonts, and 
 
 - Examples of how to extend Formant's agent caplabilities to perform communication with our APIs
 
-### [ROS Topics Diagnostics](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
+### [ROS Topics Monitor](https://github.com/FormantIO/toolkit/tree/master/examples/ros-diagnostics) (Python)
 
 This adapter collects all the online ROS topics and publish them to our API
+
+### [ROS Services](https://github.com/FormantIO/toolkit/tree/master/examples/ros-service-call-adapter) (Python)
+
+This adapter collects all the available ROS services and publish them to our API
