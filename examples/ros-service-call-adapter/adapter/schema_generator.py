@@ -13,7 +13,8 @@ def ROS_to_json_schema_type_conversion(intype: str):
         "uint64": "integer",
         "float32": "number",
         "float64": "number",
-        "string": "string"
+        "string": "string",
+        "byte" : "integer"
     }
 
     output = {}
