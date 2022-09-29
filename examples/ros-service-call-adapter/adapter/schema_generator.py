@@ -1,4 +1,3 @@
-
 def ROS_to_json_schema_type_conversion(intype: str):
     """Convert a ROS type to it's corresponding python type."""
     mapping = {
@@ -14,19 +13,20 @@ def ROS_to_json_schema_type_conversion(intype: str):
         "float32": "number",
         "float64": "number",
         "string": "string",
-        "byte" : "integer"
+        "byte": "integer"
+        ## NOTE for ROS2 this will cause an issue as ROS2 byte doesn't accept an int.
     }
 
     output = {}
     intype = intype.lstrip().rstrip()
-    
+
     array_type = intype[-1] == "]"
-    
+
     if array_type:
         intype_stripped = intype[:intype.find("[")]
     else:
         intype_stripped = intype
-    
+
     output_type = mapping[intype_stripped] if not array_type else "array"
 
     output["type"] = output_type
