@@ -216,22 +216,32 @@ export class Fleet {
     if (!Array.isArray(streamNameOrStreamNames)) {
       streamNames = [streamNameOrStreamNames];
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
-      method: "POST",
-      body: JSON.stringify({
+    const query = JSON.parse(
+      JSON.stringify({
         deviceIds,
-        end: end.toISOString(),
         names: streamNames,
-        start: start.toISOString(),
+        start,
+        end,
         tags,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    const telemetry = await data.json();
-    return telemetry.items;
+      })
+    );
+    let nextToken = null;
+    let results: any = { items: [] };
+    do {
+      if (nextToken) query.next = nextToken;
+      const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
+        method: "POST",
+        body: JSON.stringify(query),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      });
+      const telemetry = await data.json();
+      nextToken = telemetry.next;
+      results.items = [...results.items, ...telemetry.items];
+    } while (nextToken !== undefined);
+    return results.items;
   }
 
   static async getFileUrl(uuid: string) {
