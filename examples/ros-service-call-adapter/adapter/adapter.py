@@ -1,5 +1,5 @@
-
 import json
+import yaml
 import logging
 import time
 from typing import List
@@ -17,56 +17,55 @@ logger = logging.getLogger()
 
 
 class Adapter:
-
     def __init__(self):
         """Initialize the adapter"""
 
-        self._fclient = FormantClient()
+        self._fclient = FormantClient(ignore_throttled=True)
         self._config = Config().get_config()
         self._api_button_map = self._config["api-button-mapping"]
         self._ros_button_map = self._config["ros-button-mapping"]
         self._service_checker = ServiceChecker()
-        rospy.init_node('service_call_adapter')
+        rospy.init_node("service_call_adapter")
 
     def run(self):
         """Run the adapter. This function will never return, but is non-blocking."""
 
         self._service_checker.start()
 
-        self._fclient.register_teleop_callback(
-            self._handle_button_press, ["Buttons"])
+        self._fclient.register_teleop_callback(self._handle_button_press, ["Buttons"])
         self._fclient.register_command_request_callback(
-            self._handle_command, self._config["service-commands"])
+            self._handle_command, self._config["service-commands"]
+        )
 
         self.subscribers = []
         for topic in self._ros_button_map:
             self.subscribers.append(
-                rospy.Subscriber(
-                    topic, 
-                    Bool,
-                    self._handle_ros_button_press,
-                    topic))
+                rospy.Subscriber(topic, Bool, self._handle_ros_button_press, topic)
+            )
 
         logger.info(
-            "Callback's have successfully been registered with the Formant client.")
+            "Callback's have successfully been registered with the Formant client."
+        )
 
         while True:
-            time.sleep(1)
+            time.sleep(0.2)
 
     def _handle_ros_button_press(self, msg, topic):
         """Handle a button press from a ROS topic."""
 
         if not msg.data:
-            return 
+            return
 
-        logger.info(f"ROS button press received from {topic}")        
+        logger.info(f"ROS button press received from {topic}")
 
         service_json = json.dumps(self._ros_button_map.get(topic, {}))
 
         try:
-            datum = parse(service_json) 
+            datum = parse(service_json)
         except:
-            logger.warn(f"Failed parsing json for service call mapped to ROS topic {topic}")
+            logger.warn(
+                f"Failed parsing json for service call mapped to ROS topic {topic}"
+            )
 
         service_name = datum[0]
         service_args = datum[1]
@@ -85,12 +84,14 @@ class Adapter:
         if button_name not in self._api_button_map:
             logger.info(f"Button {button_name} has not service mapping")
 
-        service_json = json.dumps(self._api_button_map[button_name]) 
-        
+        service_json = json.dumps(self._api_button_map[button_name])
+
         try:
-            datum = parse(service_json) 
+            datum = parse(service_json)
         except:
-            logger.warn(f"Failed parsing json for service call mapped to API button {button_name}")
+            logger.warn(
+                f"Failed parsing json for service call mapped to API button {button_name}"
+            )
 
         service_name = datum[0]
         service_args = datum[1]
@@ -100,46 +101,66 @@ class Adapter:
     def _handle_command(self, data):
         """Handles an incoming formant command as specified in service-commands in config.json"""
 
-        logger.info(
-            f"New command received. Parsing and executing: {data.text}")
+        logger.info(f"New command received. Parsing and executing: {data.text}")
 
         print(f"New command received. Parsing and executing: {data.text}")
 
         try:
             datum = parse(data.text)
         except Exception as e:
+            self._fclient.send_command_response(data.id, False)
+            self._handle_event_notification(successful=False)
             print(f"Failed parsing {data.text}. Dropping command. Reason: {e}")
-            
+
             return
 
         service_name = datum[0]
         service_args = datum[1]
- 
-        self._handle_service_call(service_name, service_args)
 
-    def _handle_service_call(self, service_name: str, service_args: List[str]):
+        self._handle_service_call(service_name, service_args, data.id)
+
+    def _handle_service_call(
+        self, service_name: str, service_args: List[str], request_id: str
+    ):
         """This allows the adapter to call a ROS service, then post the response."""
 
         logger.info(
-            f"Sending service call to service {rospy.resolve_name(service_name)}")
-        response = service_call(
-            rospy.resolve_name(service_name), *service_args)
+            f"Sending service call to service {rospy.resolve_name(service_name)}"
+        )
+        response = service_call(rospy.resolve_name(service_name), *service_args)
 
         if response and len(str(response)):
-            self._post_service_data(service_name, str(response))
+            self._post_service_data(service_name, str(response), request_id)
 
-    def _post_service_data(self, service_name: str, data: str):
+    def _post_service_data(self, service_name: str, data: str, request_id: str):
         """Post's a string to Formant given the service_name string."""
         response_stream = f"ros.services.response"
+        yaml_response = yaml.safe_load(data)
+        json_data = json.dumps(yaml_response)
         print(f"Posting {data} to {response_stream}")
+        self._fclient.send_command_response(request_id, False)
+        self._handle_event_notification(successful=True)
         try:
-            self._fclient.post_text(response_stream, str(data), tags={"ros_service":service_name})
+            self._fclient.post_json(
+                response_stream, json_data, tags={"ros_service": service_name}
+            )
         except Exception:
             logger.info("Failed to post response")
             return
 
         logger.info(
-            f"Successfully send '{str(data)}' to Formant stream '{response_stream}'")
+            f"Successfully send '{str(data)}' to Formant stream '{response_stream}'"
+        )
+
+    def _handle_event_notification(self, successful: bool):
+        if successful == True:
+            self._fclient.create_event(
+                message="Service delivered", notify=False, severity="info"
+            )
+        if successful == False:
+            self._fclient.create_event(
+                message="Service error", notify=False, severity="error"
+            )
 
     def shutdown(self):
         self._service_checker.shutdown()

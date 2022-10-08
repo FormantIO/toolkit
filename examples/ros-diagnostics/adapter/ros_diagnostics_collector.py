@@ -19,18 +19,28 @@ class RosDiagnosticsCollector:
         agent_url = os.getenv("AGENT_URL", "unix: // /var/lib/formant/agent.sock")
 
         self._r = rostopic.ROSTopicHz(-1)
-        self._fclient = FormantClient(agent_url=agent_url,ignore_throttled=True)
+        self._fclient = FormantClient(agent_url=agent_url, ignore_throttled=True)
         self._subscribers = {}  # type: Dict[str,rospy.Subscriber]
         self._topic_stats = []  # type: List[RosTopicStats]
+        self._desired_topics = FilterTopics()
         self._lock = Lock()
         self._refresh_topics()
         self._lookup_timer = rospy.Timer(rospy.Duration(0.2), self._lookup_and_post)
         self._refresh_timer = rospy.Timer(rospy.Duration(10), self._refresh_topics)
+        self._fclient.register_command_request_callback(
+            f=self._set_desired_topics, command_filter=["update_topic_list"]
+        )
         rospy.spin()
+
+    def _set_desired_topics(self, data):
+        filter_topics = json.loads(data.text)
+        self._desired_topics.set_filter(filter_topics)
 
     def _refresh_topics(self, event=None):
         self._lock.acquire()
         remaining_topics = list(self._subscribers.keys())
+        if len(self._desired_topics._filter_topics) != 0:
+            remaining_topics = list(self._desired_topics._filter_topics)
         pubs_out, _ = rostopic.get_topic_list()
         for topic_tuple in pubs_out:
             topic_name = topic_tuple[0]
@@ -40,28 +50,40 @@ class RosDiagnosticsCollector:
             topic_type = topic_tuple[1]
             self._topic_stats.append(RosTopicStats(topic_name, topic_type))
             self._subscribers[topic_name] = rospy.Subscriber(
-                topic_name, rospy.AnyMsg, self._r.callback_hz, callback_args=topic_name,
+                topic_name,
+                rospy.AnyMsg,
+                self._r.callback_hz,
+                callback_args=topic_name,
             )
 
         for topic in remaining_topics:
             self._subscribers[topic].unregister()
             del self._subscribers[topic]
-            self._topic_stats = [stat for stat in self._topic_stats if stat.name != topic]
+            self._topic_stats = [
+                stat for stat in self._topic_stats if stat.name != topic
+            ]
         rospy.sleep(1)
         self._lock.release()
 
     def _lookup_and_post(self, event=None):
         self._lock.acquire()
         for topic_stat in self._topic_stats:
-            topic_name = topic_stat.name
-            stats = self._r.get_hz(topic=topic_name)
-            hz = 0
-            if stats is not None:
-                hz = stats[0]
-            topic_stat.set_hz(hz)
+            if True:
+                topic_name = topic_stat.name
+                stats = self._r.get_hz(topic=topic_name)
+                hz = 0
+                if stats is not None:
+                    hz = stats[0]
+                topic_stat.set_hz(hz)
 
         json_string = json.dumps([stat.__dict__ for stat in self._topic_stats])
         self._fclient.post_json(self._stream_name, json_string)
-        print(json_string)
         self._lock.release()
 
+
+class FilterTopics:
+    def __init__(self):
+        self._filter_topics = []
+
+    def set_filter(self, _filter):
+        self._filter_topics = _filter

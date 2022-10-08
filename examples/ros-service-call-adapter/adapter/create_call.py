@@ -28,7 +28,6 @@ def main():
     print("Successfully Generated service call...\n\n")
     
     print(json.dumps(json.loads(call_full)))
-    print()
 
 class CallCreator:
 
