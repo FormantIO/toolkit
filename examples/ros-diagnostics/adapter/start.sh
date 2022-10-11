@@ -19,6 +19,5 @@ for dir in `ls /opt/ros | sort -r`; do
     fi
 done
 source config.env
-export PYTHONPATH=/usr/lib/formant/agent/dist-packages/:$PYTHONPATH
 pip3 install python-lzf
 python3 main.py

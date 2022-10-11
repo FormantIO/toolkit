@@ -3,10 +3,16 @@
 import json
 import os
 from multiprocessing import Lock
-from typing import Dict, List
-
-import rospy
-import rostopic
+try: 
+    from typing import Dict, List
+    import rospy
+    import rostopic
+except:
+    import sys
+    sys.path.insert(1,"/usr/lib/formant/agent/dist-packages/")
+    import rospy
+    import rostopic
+    from typing import Dict, List
 from formant.sdk.agent.v1 import Client as FormantClient
 
 from ros_topic_stats import RosTopicStats
