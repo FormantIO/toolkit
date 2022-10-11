@@ -22,7 +22,8 @@ class RosDiagnosticsCollector:
         self._fclient = FormantClient(agent_url=agent_url, ignore_throttled=True)
         self._subscribers = {}  # type: Dict[str,rospy.Subscriber]
         self._topic_stats = []  # type: List[RosTopicStats]
-        self._desired_topics = FilterTopics()
+        self._requested_topics = []
+        self._updated = True
         self._lock = Lock()
         self._refresh_topics()
         self._lookup_timer = rospy.Timer(rospy.Duration(0.2), self._lookup_and_post)
@@ -32,21 +33,28 @@ class RosDiagnosticsCollector:
         )
         rospy.spin()
 
+    def _set_requested_topics(self, _requested_topics):
+        self._requested_topics = _requested_topics
+
+    def _set_updated(self, _update):
+        self._updated = _update
+
     def _set_desired_topics(self, data):
         filter_topics = json.loads(data.text)
-        self._desired_topics.set_filter(filter_topics)
+        self._set_requested_topics(filter_topics)
+        self._set_updated(False)
 
     def _refresh_topics(self, event=None):
         self._lock.acquire()
         remaining_topics = list(self._subscribers.keys())
-        if len(self._desired_topics._filter_topics) != 0:
-            remaining_topics = list(self._desired_topics._filter_topics)
         pubs_out, _ = rostopic.get_topic_list()
+
         for topic_tuple in pubs_out:
             topic_name = topic_tuple[0]
-            if topic_name in remaining_topics:
-                remaining_topics.remove(topic_name)
-                continue
+            if self._updated == True:
+                if topic_name in remaining_topics:
+                    remaining_topics.remove(topic_name)
+                    continue
             topic_type = topic_tuple[1]
             self._topic_stats.append(RosTopicStats(topic_name, topic_type))
             self._subscribers[topic_name] = rospy.Subscriber(
@@ -55,6 +63,14 @@ class RosDiagnosticsCollector:
                 self._r.callback_hz,
                 callback_args=topic_name,
             )
+
+        if len(self._requested_topics) != 0:
+            new_list = []
+            for topic in self._topic_stats:
+                if topic.name in self._requested_topics:
+                    new_list.append(topic)
+            self._topic_stats = new_list
+            self._set_updated(True)
 
         for topic in remaining_topics:
             self._subscribers[topic].unregister()
@@ -68,22 +84,13 @@ class RosDiagnosticsCollector:
     def _lookup_and_post(self, event=None):
         self._lock.acquire()
         for topic_stat in self._topic_stats:
-            if True:
-                topic_name = topic_stat.name
-                stats = self._r.get_hz(topic=topic_name)
-                hz = 0
-                if stats is not None:
-                    hz = stats[0]
-                topic_stat.set_hz(hz)
+            topic_name = topic_stat.name
+            stats = self._r.get_hz(topic=topic_name)
+            hz = 0
+            if stats is not None:
+                hz = stats[0]
+            topic_stat.set_hz(hz)
 
         json_string = json.dumps([stat.__dict__ for stat in self._topic_stats])
         self._fclient.post_json(self._stream_name, json_string)
         self._lock.release()
-
-
-class FilterTopics:
-    def __init__(self):
-        self._filter_topics = []
-
-    def set_filter(self, _filter):
-        self._filter_topics = _filter
