@@ -1,15 +1,15 @@
-import { Device } from "./Device";
-import { Authentication } from "./Authentication";
-import { FORMANT_API_URL } from "./config";
-import { defined } from "../../common/defined";
 import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
-import { IEventQuery } from "./model/IEventQuery";
+import { defined } from "../../common/defined";
+import { Authentication } from "./Authentication";
+import { FORMANT_API_URL } from "./config";
+import { Device } from "./Device";
 import { IEvent } from "./model/IEvent";
+import { IEventQuery } from "./model/IEventQuery";
 import { IQuery } from "./model/IQuery";
+import { IStreamAggregateData } from "./model/IStreamAggregateData";
 import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
-
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -266,6 +266,22 @@ export class Fleet {
     });
 
     return (await data.json()).items as IStreamData[];
+  }
+
+  static async aggregateTelemetry(query: IQuery) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+
+    return (await data.json()).aggregates as IStreamAggregateData[];
   }
 
   static async queryEvents(query: IEventQuery): Promise<IEvent[]> {
