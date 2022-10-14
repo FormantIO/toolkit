@@ -2,7 +2,7 @@ import { INumericAggregate } from "./INumericAggregate";
 import { INumericSetAggregateMap } from "./INumericSetAggregateMap";
 import { StreamType } from "./StreamType";
 
-interface ISupportedStreamAggregateTypeMap {
+export interface ISupportedStreamAggregateTypeMap {
   "numeric set": INumericSetAggregateMap;
   numeric: INumericAggregate;
 }
