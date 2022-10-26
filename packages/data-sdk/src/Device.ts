@@ -19,10 +19,26 @@ import {
 import { InterventionType } from "./main";
 import { IInterventionTypeMap } from "./main";
 import { IInterventionResponse } from "./main";
+import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 export interface ConfigurationDocument {
   urdfFiles: string[];
   telemetry?: {
     streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
+  };
+  teleop?: {
+    customStreams?: {
+      name: string;
+      rtcStreamType: RtcStreamType;
+    }[];
+    hardwareStreams?: {
+      name: string;
+      rtcStreamType: RtcStreamType;
+    }[];
+    rosStreams?: {
+      rtcStreamType: RtcStreamType;
+      topicName: string;
+      topicType: string;
+    }[];
   };
 }
 
@@ -56,7 +72,7 @@ export type RealtimeMessage = {
     stream: {
       entityId: string;
       streamName: string;
-      streamType: string;
+      streamType: RtcStreamType;
     };
   };
   payload: IRtcStreamPayload;
@@ -66,6 +82,10 @@ export type RealtimeListener = (
   peerId: string,
   message: RealtimeMessage
 ) => void;
+
+export type RealtimeAudioStream = {
+  name: string;
+};
 
 export type RealtimeVideoStream = {
   name: string;
@@ -251,25 +271,53 @@ export class Device implements IRealtimeDevice {
     this.realtimeListeners.splice(i, 1);
   }
 
-  async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
-    const document = (await this.getConfiguration()) as any;
-    const streams = [];
+  async getRealtimeAudioStreams(): Promise<RealtimeAudioStream[]> {
+    const document = await this.getConfiguration();
+    const streams: { name: string }[] = [];
 
-    for (const _ of document.teleop.hardwareStreams ?? []) {
+    for (const _ of document.teleop?.hardwareStreams ?? []) {
+      if (_.rtcStreamType === "audio-chunk") {
+        streams.push({
+          name: _.name,
+        });
+      }
+    }
+    for (const _ of document.teleop?.rosStreams ?? []) {
+      if (_.topicType == "audio_common_msgs/AudioData") {
+        streams.push({
+          name: _.topicName,
+        });
+      }
+    }
+    for (const _ of document.teleop?.customStreams ?? []) {
+      if (_.rtcStreamType === "audio-chunk") {
+        streams.push({
+          name: _.name,
+        });
+      }
+    }
+    return streams;
+  }
+
+  async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
+    const document = await this.getConfiguration();
+    const streams: { name: string }[] = [];
+
+    for (const _ of document.teleop?.hardwareStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name,
         });
       }
     }
-    for (const _ of document.teleop.rosStreams ?? []) {
+    for (const _ of document.teleop?.rosStreams ?? []) {
       if (_.topicType == "formant/H264VideoFrame") {
         streams.push({
           name: _.topicName,
         });
       }
     }
-    for (const _ of document.teleop.customStreams ?? []) {
+    for (const _ of document.teleop?.customStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name,
@@ -372,6 +420,19 @@ export class Device implements IRealtimeDevice {
       streamName: streamName,
       enablePriorityUpload: true,
       pipeline: "telemetry",
+    });
+  }
+
+  async changeStreamAudioType(streamName: string, newFormat: "wav" | "opus") {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.controlRemoteStream(defined(devicePeer).id, {
+      streamName,
+      setAudioFormat: newFormat,
     });
   }
 
