@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+ 
   text-align: center;
 }
 
@@ -38,4 +38,31 @@
 
 .read-the-docs {
   color: #888;
+}
+.gear {
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 35px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+.gear:hover {
+  background-color: #3d4665;
+}
+canvas{
+  height: 500px;
+  width: auto;
+}
+.App{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100vh;
 }

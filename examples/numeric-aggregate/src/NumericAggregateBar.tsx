@@ -1,25 +1,20 @@
 import { Authentication, Fleet, INumericAggregate } from "@formant/data-sdk";
 import { BarChart } from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { aggregateFunctionMap } from "./utils/aggregateFunctionUtils";
 import {
   reduceNumericSetStreamAggregates,
   reduceNumericStreamAggregates,
 } from "./utils/numericAggregateUtils";
+import { AggregateType, AggregatePeriod } from "./types";
 
 interface INumericAggregateBarProps {
   streamName: string;
-  aggregateType:
-    | "min"
-    | "max"
-    | "standard deviation"
-    | "average"
-    | "sum"
-    | "count";
+  aggregateType: AggregateType;
   numericSetKey?: string;
-  aggregateBy?: "day" | "week" | "month";
+  aggregateBy?: AggregatePeriod;
   numAggregates?: number;
 }
 
@@ -45,6 +40,7 @@ const aggregateByDateFunctions = {
 };
 
 export function NumericAggregateBar(props: INumericAggregateBarProps) {
+  const [arr, setArr] = useState([0]);
   const [aggregations, setAggregations] = useState<
     { start: Date; aggregate: INumericAggregate }[] | undefined
   >();
@@ -58,39 +54,45 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
   const aggregateBy = propsAggregateBy ?? defaultAggregtateBy;
   const numAggregates = propsNumAggregates ?? defaultNumAggregates;
   const dateFunctions = aggregateByDateFunctions[aggregateBy];
+  useEffect(() => {
+    setArr(new Array(numAggregates).fill(0));
+  }, [numAggregates]);
+
+  const something = useMemo(() => {
+    const _ = new Array(parseInt(numAggregates)).fill(0);
+    console.log(_, numAggregates);
+    return _;
+  }, [numAggregates]);
 
   useEffect(() => {
     loadValues();
-  }, []);
+  }, [numAggregates]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
       const currentDevice = await Fleet.getCurrentDevice();
       const aggregatedData = await Promise.all(
-        Array(numAggregates)
-          .fill(0)
-          .map(async (_, dateOffset) => {
-            const now = new Date();
-            const startDate = dateFunctions.sub(
-              dateFunctions.start(now),
-              dateOffset
-            );
-            const endDate = dateFunctions.sub(
-              dateFunctions.end(now),
-              dateOffset
-            );
-            return {
-              start: startDate,
-              data: await Fleet.aggregateTelemetry({
-                start: startDate.toISOString(),
-                end: endDate.toISOString(),
-                aggregate: aggregateBy,
-                deviceIds: [currentDevice.id],
-                names: [streamName],
-              }),
-            };
-          })
+        something.map(async (_, dateOffset) => {
+          const now = new Date();
+          const startDate = dateFunctions.sub(
+            dateFunctions.start(now),
+            dateOffset
+          );
+          const endDate = dateFunctions.sub(dateFunctions.end(now), dateOffset);
+          return {
+            start: startDate,
+            data: await Fleet.aggregateTelemetry({
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+              aggregate: aggregateBy,
+              deviceIds: [currentDevice.id],
+              names: [streamName],
+            }),
+          };
+        })
       );
+
+      console.log(aggregatedData);
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
@@ -123,6 +125,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
         (_): _ is { start: Date; aggregate: INumericAggregate } =>
           !!_?.aggregate
       );
+      console.log(filteredAggregations);
       setAggregations(filteredAggregations.reverse());
     }
   };
@@ -158,7 +161,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
             labels={labels}
             xMax={generateReasonableNearest(xMax)}
             data={data}
-            height={400}
+            height={250}
             width={400}
           />
         </>
