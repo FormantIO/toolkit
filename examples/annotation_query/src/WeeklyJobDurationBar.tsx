@@ -54,21 +54,23 @@ export function AnnotationDurationBarWeekly() {
         });
         let dates = first_day_readable + "-" + last_day_readable;
         let job_durations = eventQueryResponse;
-        console.log(job_durations.length);
-        let weekly_durations = [];
-        for (let j = 0; j < job_durations.length; j++) {
-          let string_duration = job_durations[j].tags["operation_duration"];
-          let num_duration = durationToMinutes(string_duration);
-          console.log(num_duration);
-          weekly_durations.push(num_duration);
-          if (num_duration > max_duration) {
-            max_duration = num_duration;
+        let average_weekly_duration = 0;
+        if (job_durations.length > 0) {
+          let weekly_durations = [];
+          for (let j = 0; j < job_durations.length; j++) {
+            let string_duration = job_durations[j].tags["operation_duration"];
+            let num_duration = durationToMinutes(string_duration);
+            weekly_durations.push(num_duration);
           }
+
+          average_weekly_duration = average(weekly_durations);
+          if (average_weekly_duration > max_duration) {
+            max_duration = average_weekly_duration;
+          }
+
+          annotation_data.unshift(average_weekly_duration);
+          date_labels.unshift(dates);
         }
-        console.log(weekly_durations);
-        console.log(average(weekly_durations));
-        annotation_data.unshift(average(weekly_durations));
-        date_labels.unshift(dates);
       }
       setAnnotations(annotation_data);
     }
@@ -79,9 +81,9 @@ export function AnnotationDurationBarWeekly() {
       <BarChart
         labels={date_labels}
         data={annotation_data}
-        xMax={max_duration * 1.25}
-        height={400}
-        width={400}
+        xMax={max_duration * 1.1}
+        height={600}
+        width={600}
       />
     </>
   );

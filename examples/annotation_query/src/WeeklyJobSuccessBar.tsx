@@ -57,8 +57,8 @@ export function AnnotationSuccessBarWeekly() {
         labels={date_labels}
         data={annotation_data}
         xMax={10}
-        height={400}
-        width={400}
+        height={600}
+        width={600}
       />
     </>
   );

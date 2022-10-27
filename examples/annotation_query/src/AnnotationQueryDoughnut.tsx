@@ -5,9 +5,18 @@ import { useDevice, DoughnutChart, BarChart } from "@formant/ui-sdk";
 import { App as FormantApp } from "@formant/data-sdk";
 import { Authentication, Fleet, Device, IEvent } from "@formant/data-sdk";
 
-let t1 = new Date("2022-10-05T00:00:00");
+let today = new Date();
+today.setDate(today.getDate());
+let t1 = today.getDate() - today.getDay();
+let t2 = t1 + 6;
 
-let t2 = new Date("2022-10-06T14:30:00");
+let first_day = new Date(today.setDate(t1));
+let first_day_iso = first_day.toISOString();
+let first_day_readable = first_day.toLocaleDateString();
+
+let last_day = new Date(today.setDate(t2));
+let last_day_iso = last_day.toISOString();
+let last_day_readable = last_day.toLocaleDateString();
 
 interface AnnotationQueryProps {
   start_date: Date;
@@ -18,7 +27,15 @@ interface AnnotationQueryProps {
   // severities?: [];
 }
 
-export function AnnotationQueryDoughnut(props: AnnotationQueryProps) {
+const Annotation_params = {
+  start_date: first_day,
+  end_date: last_day,
+  operation_status: ["Success", "Aborted"],
+};
+
+export function AnnotationQueryDoughnut(
+  props: AnnotationQueryProps = Annotation_params
+) {
   const { start_date, end_date, operation_status } = props;
   const start_date_iso = start_date.toISOString();
   const end_date_iso = end_date.toISOString();
@@ -59,6 +76,7 @@ export function AnnotationQueryDoughnut(props: AnnotationQueryProps) {
 
   return (
     <>
+      Date Range: {first_day_readable} -- {last_day_readable}
       <DoughnutChart
         height={400}
         width={400}

@@ -9,6 +9,7 @@ import { AnnotationQueryBar } from "./AnnotationQueryBar";
 import { AnnotationSuccessBarWeekly } from "./WeeklyJobSuccessBar";
 import { AnnotationAbortBarWeekly } from "./WeeklyJobAbortBar";
 import { AnnotationDurationBarWeekly } from "./WeeklyJobDurationBar";
+import { WeeklyAvgAlertPerRun } from "./WeeklyAvgAlertPerRun";
 
 let t1 = new Date("2022-10-04T00:00:00");
 const t1_readable = t1.toLocaleString();
@@ -31,12 +32,16 @@ function App() {
 
   return (
     <div className="App">
-      {t1_readable} : {t2_readable}
-      {AnnotationQueryDoughnut(Annotation_params)}
-      {AnnotationQueryBar(Annotation_params)}
+      {AnnotationQueryDoughnut()}
+      {AnnotationQueryBar()}
+      Completed Jobs per Week
       {AnnotationSuccessBarWeekly()}
+      Aborted Jobs per Week
       {AnnotationAbortBarWeekly()}
+      Weekly Average Runtime (Minutes)
       {AnnotationDurationBarWeekly()}
+      Weekly Average Alerts Per Run
+      {WeeklyAvgAlertPerRun()}
     </div>
   );
 }
