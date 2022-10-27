@@ -1,2 +1,1 @@
-exclude:
-	- examples/ros-bag-recorder-cpp/
+exclude: ["examples/ros-bag-recorder-cpp/"]
