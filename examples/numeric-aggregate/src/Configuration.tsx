@@ -2,7 +2,11 @@ import { Select, TextField } from "@formant/ui-sdk";
 import { Authentication } from "@formant/data-sdk";
 import { baseUrl } from "./config";
 import { FC, useEffect, useMemo, useState } from "react";
-
+import {
+  AggregatePeriod,
+  AggregateType,
+  IAggregateConfiguration,
+} from "./types";
 
 const getAvailableStreams = async () => {
   if (await Authentication.waitTilAuthenticated()) {
@@ -16,10 +20,9 @@ const getAvailableStreams = async () => {
       });
       const parseResult = await result.json();
       if (parseResult.message) return null;
-      //1361
 
       const items = parseResult.items.filter(
-        (_) =>
+        (_: { streamType: string; active: boolean }) =>
           _.active &&
           (_.streamType === "numeric set" || _.streamType === "numeric")
       );
@@ -34,28 +37,20 @@ const getAvailableStreams = async () => {
 };
 
 interface IProps {
-  numberAgg: any;
-  setNumberAgg: any;
-  type: any;
-  setType: any;
-  by: any;
-  setBy: any;
-  streamName: any;
-  setStreamName: any;
-  streamKey: any;
-  setStreamKey: any;
+  state: IAggregateConfiguration;
+  setNumberAgg: (_: number) => void;
+  setType: (_: AggregateType) => void;
+  setPeriod: (_: AggregatePeriod) => void;
+  setStreamName: (_: string) => void;
+  setStreamKey: (_: string) => void;
 }
 
 export const Configuration: FC<IProps> = ({
-  numberAgg,
+  state,
   setNumberAgg,
-  type,
   setType,
-  by,
-  setBy,
-  streamName,
+  setPeriod,
   setStreamName,
-  streamKey,
   setStreamKey,
 }) => {
   const [streams, setStreams] = useState<any>(null);
@@ -66,11 +61,10 @@ export const Configuration: FC<IProps> = ({
   const streamList = useMemo(() => {
     if (!streams) return [];
 
-    const list = streams.map((_) => ({
+    const list = streams.map((_: { streamName: string }) => ({
       value: _.streamName,
       label: _.streamName,
     }));
-    console.log(list);
     return list;
   }, [streams]);
 
@@ -112,33 +106,45 @@ export const Configuration: FC<IProps> = ({
           type={"number"}
           fullWidth={true}
           label="Numer of agregates"
-          value={numberAgg}
-          onChange={(e) => setNumberAgg(e.target.value)}
+          value={state.numAggregates}
+          onChange={(e) => setNumberAgg(parseInt(e.target.value))}
+          //TODO: Handle Negatives
         />
         <Select
-          value={type}
-          onChange={(value) => setType(value)}
+          sx={{
+            textAlign: "left",
+          }}
+          value={state.aggregateType}
+          onChange={(value) => setType(value as AggregateType)}
           items={aggregateTypes}
           label="Type"
         />
         <Select
-          value={by}
-          onChange={(value) => setBy(value)}
+          sx={{
+            textAlign: "left",
+          }}
+          value={state.aggregateBy}
+          onChange={(value) => setPeriod(value as AggregatePeriod)}
           items={aggregateBy}
           label="Aggregate by"
         />
         <Select
-          value={streamName}
+          sx={{
+            textAlign: "left",
+          }}
+          value={state.streamName}
           onChange={(values) => setStreamName(values)}
           items={streamList}
           label="Stream Name"
         />
-         {/* <Select
-          value={streamName}
-          onChange={(values) => setStreamName(values)}
-          items={streamList}
-          label="Key"
-        /> */}
+        <TextField
+          variant="filled"
+          type={"text"}
+          fullWidth={true}
+          label="Stream Key (Numeric set)"
+          value={state.numericSetKey}
+          onChange={(e) => setStreamKey(e.target.value)}
+        />
       </div>
     </div>
   );

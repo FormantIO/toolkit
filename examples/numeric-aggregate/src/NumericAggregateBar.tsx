@@ -9,6 +9,7 @@ import {
   reduceNumericStreamAggregates,
 } from "./utils/numericAggregateUtils";
 import { AggregateType, AggregatePeriod } from "./types";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 interface INumericAggregateBarProps {
   streamName: string;
@@ -60,7 +61,6 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
 
   const something = useMemo(() => {
     const _ = new Array(parseInt(numAggregates)).fill(0);
-    console.log(_, numAggregates);
     return _;
   }, [numAggregates]);
 
@@ -125,7 +125,6 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
         (_): _ is { start: Date; aggregate: INumericAggregate } =>
           !!_?.aggregate
       );
-      console.log(filteredAggregations);
       setAggregations(filteredAggregations.reverse());
     }
   };
@@ -166,7 +165,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
           />
         </>
       ) : (
-        "Loading..."
+        <LoadingIndicator />
       )}
     </>
   );

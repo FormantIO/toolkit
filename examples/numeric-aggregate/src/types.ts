@@ -15,3 +15,24 @@ export interface IAggregateConfiguration {
   aggregateBy: AggregatePeriod;
   numAggregates: number;
 }
+
+export enum ACTIONS {
+  SET_NUMBER,
+  SET_TYPE,
+  SET_PERIOD,
+  SET_STREAM_NAME,
+  SET_STREAM_KEY,
+  LOAD_CONFIGURATION,
+}
+
+export interface IActions {
+  type: ACTIONS;
+  payload: {
+    value:
+      | string
+      | number
+      | AggregatePeriod
+      | AggregateType
+      | IAggregateConfiguration;
+  };
+}
