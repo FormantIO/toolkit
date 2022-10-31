@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Authentication, App, KeyValue } from "@formant/data-sdk";
 import { baseUrl } from "./config";
-import { useQuery } from "react-query";
 import { IAggregateConfiguration } from "./types";
 
 const getCloudConfiguration = async () => {

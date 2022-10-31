@@ -60,7 +60,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
   }, [numAggregates]);
 
   const something = useMemo(() => {
-    const _ = new Array(parseInt(numAggregates)).fill(0);
+    const _ = new Array(numAggregates).fill(0);
     return _;
   }, [numAggregates]);
 
