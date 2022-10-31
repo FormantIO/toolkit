@@ -1,4 +1,5 @@
 import imageSrc from "./assets/loading.png";
+
 export const LoadingIndicator = () => {
   return (
     <div>

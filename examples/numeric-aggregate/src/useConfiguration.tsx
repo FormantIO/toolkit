@@ -3,6 +3,14 @@ import { Authentication, App, KeyValue } from "@formant/data-sdk";
 import { baseUrl } from "./config";
 import { IAggregateConfiguration } from "./types";
 
+const initialState: IAggregateConfiguration = {
+  aggregateType: "sum",
+  streamName: "$.host.disk",
+  numericSetKey: "utilization",
+  aggregateBy: "day",
+  numAggregates: 5,
+};
+
 const getCloudConfiguration = async () => {
   if (await Authentication.waitTilAuthenticated()) {
     const context = App.getCurrentModuleContext();
@@ -16,16 +24,15 @@ const getCloudConfiguration = async () => {
       });
       const parseResult = await result.json();
 
-      if (parseResult.message) return null;
-
+      if (parseResult.message) return initialState;
       return JSON.parse(parseResult.value);
     } catch (e) {
       console.log(e);
-      return null;
+      return initialState;
     }
   }
 
-  return null;
+  return initialState;
 };
 
 export const useConfiguration = (
@@ -34,6 +41,7 @@ export const useConfiguration = (
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getCloudConfiguration().then((_) => {
+      console.log(_);
       if (!!_) {
         setter(_);
         setIsLoading(false);
