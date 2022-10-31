@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "git add -f dist/ && git commit -m 'publish demo' && git push"
   },
   "dependencies": {
     "@formant/data-sdk": "0.0.100",
