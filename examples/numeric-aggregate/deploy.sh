@@ -1,0 +1,1 @@
+cd dist/assets && index=$(ls | grep *.js) && sed -i'' -e 's/"\/assets/"\.\/assets/g' $index
