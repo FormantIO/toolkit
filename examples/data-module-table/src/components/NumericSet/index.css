@@ -1,0 +1,3 @@
+.numeric-set div:last-child > p {
+  border-bottom: none;
+}
