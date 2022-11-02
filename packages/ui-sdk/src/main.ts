@@ -25,3 +25,4 @@ export * from "./Select";
 export * from "./HelpIcon";
 export * from "./hooks";
 export * from "./components/Charts";
+export * from "./components/LoadingIndicator";

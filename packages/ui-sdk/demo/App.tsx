@@ -31,6 +31,7 @@ import {
   RadarChart,
   InputBase,
   JsonSchemaForm,
+  LoadingIndicator,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -154,6 +155,8 @@ function App() {
   let x = y.random.properties.my_int_array;
   return (
     <>
+      <BarChart labels={["stream a", "stream b"]} data={[100, 50]} />
+      <LoadingIndicator />
       <JsonSchemaForm
         params={params}
         path={[]}

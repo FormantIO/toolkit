@@ -13,6 +13,8 @@ interface IBarChartProps {
   width?: number;
   xMax?: number;
   xMin?: number;
+  showYGrid?: boolean;
+  showXGrid?: boolean;
 }
 
 export const BarChart: React.FC<IBarChartProps> = ({
@@ -22,6 +24,8 @@ export const BarChart: React.FC<IBarChartProps> = ({
   width,
   xMax,
   xMin,
+  showXGrid,
+  showYGrid,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"bar">>({
@@ -63,14 +67,14 @@ export const BarChart: React.FC<IBarChartProps> = ({
     scales: {
       x: {
         grid: {
-          color: "black",
+          color: showXGrid == undefined || showXGrid ? "black" : "transparent",
           tickColor: "transparent",
         },
         ticks: {
           color: "#bac4e2",
           font: {
             size: 16,
-            family: "Atkinson Hyperlegible",
+            family: "inter",
             weight: "400",
           },
         },
@@ -79,14 +83,15 @@ export const BarChart: React.FC<IBarChartProps> = ({
         min: xMin ?? 0,
         max: xMax ?? 100,
         grid: {
-          color: "#1C1E2D",
+          color:
+            showYGrid == undefined || showYGrid ? "#1C1E2D" : "transparent",
           tickColor: "transparent",
         },
         ticks: {
           color: "#bac4e2",
           font: {
             size: 9,
-            family: "Atkinson Hyperlegible",
+            family: "inter",
             weight: "400",
           },
         },
@@ -95,7 +100,10 @@ export const BarChart: React.FC<IBarChartProps> = ({
   };
 
   return (
-    <div style={{ height: height, width: width }} className={styles.chart}>
+    <div
+      style={{ height: height, width: width }}
+      className={styles["formant-bar-chart"]}
+    >
       <Chart
         // id="Line"
         options={options}

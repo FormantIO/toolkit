@@ -7,18 +7,12 @@ import { colors } from "../colors";
 ChartJS.register(...registerables);
 
 interface IChartProps {
-  height: string | number;
-  width: string | number;
+  size: string | number;
   labels: string[];
   data: number[];
 }
 
-export const DoughnutChart: FC<IChartProps> = ({
-  height,
-  width,
-  labels,
-  data,
-}) => {
+export const DoughnutChart: FC<IChartProps> = ({ size, labels, data }) => {
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"doughnut">>({
     datasets: [],
@@ -34,7 +28,7 @@ export const DoughnutChart: FC<IChartProps> = ({
       datasets: [
         {
           data,
-          backgroundColor:colors,
+          backgroundColor: colors,
           borderColor: "#2d3855",
           borderWidth: 3,
           fill: true,
@@ -48,7 +42,7 @@ export const DoughnutChart: FC<IChartProps> = ({
 
   const options = {
     responsive: true,
-    cutout: 165,
+    cutout: parseInt(size as string) / 2.5,
     plugins: {
       legend: {
         display: false,
@@ -59,7 +53,10 @@ export const DoughnutChart: FC<IChartProps> = ({
     },
   };
   return (
-    <div style={{ height: height, width: width }} className={styles.chart}>
+    <div
+      style={{ height: size, width: size }}
+      className={styles["formant-doughnut-chart"]}
+    >
       <Chart
         options={options}
         ref={chartRef}
