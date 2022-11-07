@@ -1,5 +1,7 @@
 import {
   IRtcConnectConfiguration,
+  IRtcSendConfiguration,
+  IRtcStreamMessage,
   IRtcStreamPayload,
   RtcClient,
   SignalingPromiseClient,
@@ -257,6 +259,21 @@ export class Device implements IRealtimeDevice {
         `Already created realtime connection to device ${this.id}`
       );
     }
+  }
+
+  async sendRealtimeMessage(
+    message: IRtcStreamMessage,
+    config: IRtcSendConfiguration = {
+      channelLabel: "stream.reliable",
+    }
+  ) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.send(defined(devicePeer).id, message, config);
   }
 
   addRealtimeListener(listener: RealtimeListener) {
