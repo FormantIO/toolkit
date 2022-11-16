@@ -9,22 +9,20 @@ const rtcAudioChunkStreamType = "audio-chunk";
 export class AudioPlayer {
   private muted: boolean = false;
 
-  public async pause() {
+  public async play() {
     if (this.audioContext?.state === "suspended") {
       await this.audioContext?.resume();
     }
     this.muted = false;
   }
 
-  public async play() {
+  public async pause() {
     await this.audioContext.suspend();
-    this.source.stop(0);
     this.muted = true;
   }
 
   private hasReceivedData: boolean = false;
   private audioContext: AudioContext;
-  private source: AudioBufferSourceNode;
   private chunks: Array<AudioBufferSourceNode> = [];
   private isPlaying: boolean = false;
   private startTime: number = 0;
