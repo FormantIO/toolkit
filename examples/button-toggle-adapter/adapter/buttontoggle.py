@@ -56,7 +56,7 @@ class ButtonHandler:
             except Exception:
                 continue
 
-            self._buttons[resolved_topic] = Button(
+            self._buttons[button_topic] = Button(
                 self._config.get_button_config(
                     "ROS-buttons",
                     button_topic)
