@@ -92,7 +92,10 @@ class ButtonHandler:
 class Button:
     """Encapsulates information for a button"""
 
-    def __init__(self, config: ButtonConfiguration):
+    def __init__(
+        self,
+        config # type: ButtonConfiguration
+    ):
         self._state = config.get("initial_state", False)
         self._output_topic = config.get("output_topic")
         self._config = config
