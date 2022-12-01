@@ -8,6 +8,7 @@ export * from "./Manipulator";
 export * from "./RequestDataChannel";
 export * from "./App";
 export * from "./KeyValue";
+export * from "./utils";
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
