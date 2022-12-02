@@ -1,7 +1,4 @@
-import { Icon } from "@formant/ui-sdk";
 import { NumericAggregateBar } from "./NumericAggregateBar";
-import { Configuration } from "./Configuration";
-import { useState, useReducer, useMemo, useRef } from "react";
 import "./App.css";
 import { LoadingIndicator } from "./LoadingIndicator";
 import { useConfiguration } from "./hooks/useConfiguration";
