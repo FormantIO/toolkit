@@ -14,6 +14,7 @@ import { LoadingIndicator } from "./LoadingIndicator";
 interface INumericAggregateBarProps {
   streamName: string;
   aggregateType: AggregateType;
+  deviceIds?: string[];
   numericSetKey?: string;
   aggregateBy?: AggregatePeriod;
   numAggregates?: number;
@@ -51,6 +52,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
     numericSetKey,
     aggregateBy: propsAggregateBy,
     numAggregates: propsNumAggregates,
+    deviceIds,
   } = props;
   const aggregateBy = propsAggregateBy ?? defaultAggregtateBy;
   const numAggregates = propsNumAggregates ?? defaultNumAggregates;
@@ -66,7 +68,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
 
   useEffect(() => {
     loadValues();
-  }, [numAggregates]);
+  }, [numAggregates, streamName]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
@@ -85,14 +87,12 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
               start: startDate.toISOString(),
               end: endDate.toISOString(),
               aggregate: aggregateBy,
-              deviceIds: [currentDevice.id],
+              deviceIds: deviceIds ?? [currentDevice.id],
               names: [streamName],
             }),
           };
         })
       );
-
-      console.log(aggregatedData);
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
@@ -121,10 +121,12 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
         }
         return undefined;
       });
+
       const filteredAggregations = aggregations.filter(
         (_): _ is { start: Date; aggregate: INumericAggregate } =>
           !!_?.aggregate
       );
+
       setAggregations(filteredAggregations.reverse());
     }
   };

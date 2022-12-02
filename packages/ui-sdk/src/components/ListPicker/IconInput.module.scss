@@ -1,0 +1,41 @@
+.icon-input {
+  box-sizing: border-box;
+  position: relative;
+  height: 38.18px;
+  background-color: #3d4665;
+  display: flex;
+  transition: all ease-in 0.2s;
+  border-radius: 25px;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  border: 1px solid transparent;
+  &:focus-within {
+    background-color: black;
+    border: 1px solid #18d2ff;
+  }
+  input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #bac4e2;
+    height: 100%;
+    width: 100%;
+    font-family: "inter";
+    letter-spacing: .2px;
+  }
+  svg {
+    fill: #bac4e2;
+  }
+  button {
+    height: 100%;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    outline: none ;
+    border: none;
+  }
+}

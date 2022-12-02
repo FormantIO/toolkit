@@ -6,8 +6,6 @@ import { FormantProvider } from "@formant/ui-sdk";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <FormantProvider>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </FormantProvider>
 );
