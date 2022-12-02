@@ -14,6 +14,7 @@ export interface IAggregateConfiguration {
   numericSetKey: string;
   aggregateBy: AggregatePeriod;
   numAggregates: number;
+  deviceIds?: string[];
 }
 
 export enum ACTIONS {
