@@ -12,7 +12,7 @@ class ButtonHandler:
     
     def __init__(self):
 
-        self._fclient = FormantClient()
+        self._fclient = FormantClient(ignore_unavailable=True)
         self._config = Config()
 
         rospy.init_node("button_toggle_adapter")
@@ -51,12 +51,12 @@ class ButtonHandler:
                     self._ros_topic_button_callback,
                     button_topic)
 
-                logger.debug(f"Registered subscriber for topic: {button_topic}")
+                logger.debug("Registered subscriber for topic: %s" % button_topic)
 
             except Exception:
                 continue
 
-            self._buttons[resolved_topic] = Button(
+            self._buttons[button_topic] = Button(
                 self._config.get_button_config(
                     "ROS-buttons",
                     button_topic)
@@ -82,7 +82,7 @@ class ButtonHandler:
 
     @staticmethod
     def get_API_button_name(base_name):
-        return f"api.{base_name}"
+        return "api.%s" % base_name
 
     @staticmethod
     def get_ROS_button_name(topic):
@@ -92,7 +92,10 @@ class ButtonHandler:
 class Button:
     """Encapsulates information for a button"""
 
-    def __init__(self, config: ButtonConfiguration):
+    def __init__(
+        self,
+        config # type: ButtonConfiguration
+    ):
         self._state = config.get("initial_state", False)
         self._output_topic = config.get("output_topic")
         self._config = config

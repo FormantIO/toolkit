@@ -9,6 +9,8 @@ export * from "./RequestDataChannel";
 export * from "./App";
 export * from "./KeyValue";
 export * from "./utils";
+export * from "./AudioPlayer";
+
 
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";

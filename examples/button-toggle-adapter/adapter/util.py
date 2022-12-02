@@ -56,5 +56,7 @@ def get_topic_type_obj(topic):
     return roslib.message.get_message_class(data_type)
 
 
-def get_ros_type_obj(type: str):
+def get_ros_type_obj(
+    type # type: str
+):
     return roslib.message.get_message_class(type)
