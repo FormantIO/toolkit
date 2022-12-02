@@ -32,6 +32,7 @@ import {
   InputBase,
   JsonSchemaForm,
   LoadingIndicator,
+  ListPicker,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -153,10 +154,17 @@ let y: { [key: string]: JsonObjectSchema } = {
 function App() {
   const [params, setParams] = React.useState<ServiceParameters>({});
   let x = y.random.properties.my_int_array;
+
+  const sample = ["device one", "device two"];
+
+  const [en, setEn] = React.useState<string[]>([]);
+
   return (
     <>
       <BarChart labels={["stream a", "stream b"]} data={[100, 50]} />
       <LoadingIndicator />
+      <button onClick={() => console.log(en)}>Clicl</button>
+      <ListPicker options={sample} list={en} setList={setEn} />
       <JsonSchemaForm
         params={params}
         path={[]}
