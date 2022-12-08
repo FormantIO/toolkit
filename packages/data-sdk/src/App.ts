@@ -1,3 +1,6 @@
+import { Authentication } from "./Authentication";
+import { FORMANT_API_URL } from "./config";
+
 export type AppMessage =
   | { type: "go_to_time"; time: number }
   | { type: "go_to_device"; deviceId: string }
@@ -84,6 +87,32 @@ export class App {
     const moduleName = urlParams.get("module");
 
     return moduleName;
+  }
+
+  static async getCurrentModuleConfiguration(): Promise<string | undefined> {
+    let urlParams = new URLSearchParams("");
+
+    if (typeof window !== "undefined") {
+      urlParams = new URLSearchParams(window.location.search);
+    }
+
+    const configurationId = urlParams.get("configuration");
+
+    if (configurationId === null || configurationId.trim() === "") {
+      return undefined;
+    }
+
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/module-configurations/` + configurationId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    const moduleConfiguration = await response.json();
+    return moduleConfiguration.configuration;
   }
 
   static isModule(): boolean {

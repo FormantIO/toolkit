@@ -175,7 +175,7 @@ export class Device implements IRealtimeDevice {
     const result = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
       method: "POST",
       body: JSON.stringify({
-        fileId: [fileId],
+        fileIds: [fileId],
       }),
       headers: {
         "Content-Type": "application/json",
