@@ -89,5 +89,5 @@ App.addModuleDataListener((data: ModuleData) => {
   await Authentication.waitTilAuthenticated();
   const config = await App.getCurrentModuleConfiguration();
   const el = document.querySelector("#config") as HTMLElement;
-  el.innerText = JSON.stringify(config);
+  el.innerText = config ? JSON.stringify(config) : "no configuration found";
 })();
