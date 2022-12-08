@@ -1,4 +1,4 @@
-import { App, ModuleData, Fleet } from "@formant/data-sdk";
+import { App, ModuleData, Fleet, Authentication } from "@formant/data-sdk";
 
 if (App.isModule()) {
   App.showMessage("This running as a module");
@@ -84,3 +84,10 @@ App.addAccessTokenRefreshListener((token: string) => {
 App.addModuleDataListener((data: ModuleData) => {
   console.log("recieved data", data);
 });
+
+(async function () {
+  await Authentication.waitTilAuthenticated();
+  const config = await App.getCurrentModuleConfiguration();
+  const el = document.querySelector("#config") as HTMLElement;
+  el.innerText = JSON.stringify(config);
+})();
