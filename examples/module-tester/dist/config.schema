@@ -1,5 +1,5 @@
 {
-    title: "Test Value",
-    description: "This is a test value to show how schema configs work",
-    type: "number"
+    "title": "Test Value",
+    "description": "This is a test value to show how schema configs work",
+    "type": "number"
 }
