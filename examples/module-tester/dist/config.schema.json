@@ -1,11 +1,16 @@
 {
-	"title": "Product",
+	"title": "Farm Universe Module",
 	"description": "A product from Acme's catalog",
 	"type": "object",
 	"properties": {
-		"productId": {
-			"title": "Blah",
-			"description": "The unique identifier for a product",
+		"latitude": {
+			"title": "Latitude",
+			"description": "",
+			"type": "number"
+		},
+        "longitude": {
+			"title": "Longitude",
+			"description": "",
 			"type": "number"
 		}
 	}
