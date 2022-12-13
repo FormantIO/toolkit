@@ -1,5 +1,12 @@
 {
-    "title": "Test Value",
-    "description": "This is a test value to show how schema configs work",
-    "type": "number"
+	"title": "Product",
+	"description": "A product from Acme's catalog",
+	"type": "object",
+	"properties": {
+		"productId": {
+			"title": "Blah",
+			"description": "The unique identifier for a product",
+			"type": "number"
+		}
+	}
 }
