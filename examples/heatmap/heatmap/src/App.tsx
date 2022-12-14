@@ -61,9 +61,8 @@ export default function Apps() {
 
     Object.keys(streams).forEach((stream) => {
       const latestState = getLatestData(streams, stream);
-      let features = point;
       if (typeof latestState !== "string" && latestState !== undefined) {
-        if (streams[stream].data[0].name === "heatmap_point_location") {
+        if (streams[stream].data[0].name === "$.host.geoip") {
           latitude = latestState[1].latitude;
           longitude = latestState[1].longitude;
         }
@@ -71,6 +70,7 @@ export default function Apps() {
           weight = latestState[1];
         }
       }
+      weight = 1;
       if (!!latitude && !!longitude && !!weight) {
         let feature: feature = {
           type: "Feature",
@@ -79,11 +79,11 @@ export default function Apps() {
           },
           geometry: {
             type: "Point",
-            coordinates: [latitude, longitude],
+            coordinates: [longitude, latitude],
           },
         };
-        features.push(feature);
-        setPoint([...features]);
+
+        setPoint((point) => [...point, feature]);
       }
     });
   };
@@ -93,8 +93,8 @@ export default function Apps() {
     map.current = new mapboxgl.Map({
       container: mapContainer.current!,
       style: "mapbox://styles/alenjdev/ckwcflbv8201814n10hxbqz6q",
-      center: [-86.78843321115833, 36.15309705831918],
-      zoom: 11,
+      center: [-77.47419738769531, 39.043701171875],
+      zoom: 18,
     });
   }, []);
 
@@ -120,10 +120,7 @@ export default function Apps() {
             "heatmap-weight": {
               property: "weight",
               type: "exponential",
-              stops: [
-                [1, 0],
-                [62, 1],
-              ],
+              stops: [[1, 16]],
             },
             // increase intensity as zoom level increases
             "heatmap-intensity": {
@@ -146,7 +143,7 @@ export default function Apps() {
               0.6,
               "rgb(103,169,207)",
               0.8,
-              "rgb(28,144,153)",
+              "rgb(155, 21, 0)",
             ],
             // increase radius as zoom increases
             "heatmap-radius": {
@@ -212,7 +209,7 @@ export default function Apps() {
         "waterway-label"
       );
     });
-  }, [point]);
+  }, [map.current]);
 
   useLayoutEffect(() => {
     if (!map.current) return; // wait for map to initialize
@@ -247,6 +244,8 @@ export default function Apps() {
     const heatmap = heatMapGeoJSON();
     if (heatmap.features.length === 1) return;
     let current = map.current.getSource("numeric-example") as GeoJSONSource;
+
+    if (!current) return;
     current.setData(heatmap as any);
   }, [point]);
 
