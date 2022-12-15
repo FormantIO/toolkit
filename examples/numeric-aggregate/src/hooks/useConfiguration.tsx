@@ -22,6 +22,7 @@ export const useConfiguration = (): [
   useEffect(() => {
     if (!device) return;
     getConfiguraion().then((_) => {
+      _.numAggregates = parseInt(_.numAggregates)
       Object.keys(_).includes("deviceIds")
         ? setConfig(_)
         : setConfig({ ..._, deviceIds: [device.id] });
