@@ -1,0 +1,8 @@
+* {
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
+h3 {
+  color: #bac4e2;
+}
