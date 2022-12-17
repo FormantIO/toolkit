@@ -5,9 +5,11 @@ import { IPath } from "./IPath";
 import { IPointCloud } from "./IPointCloud";
 
 export interface ILocalization {
-    odometry: IOdometry;
-    map?: IMap;
-    pointClouds?: IPointCloud[];
-    path?: IPath;
-    goal?: IGoal;
+  odometry?: IOdometry;
+  map?: IMap;
+  pointClouds?: IPointCloud[];
+  path?: IPath;
+  goal?: IGoal;
+  url?: string;
+  size?: number;
 }
