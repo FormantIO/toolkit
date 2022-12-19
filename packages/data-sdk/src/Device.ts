@@ -1,9 +1,10 @@
 import {
-  IRtcConnectConfiguration,
   IRtcSendConfiguration,
   IRtcStreamMessage,
   IRtcStreamPayload,
   RtcClient,
+  RtcClientV1,
+  RtcSignalingClient,
   SignalingPromiseClient,
 } from "@formant/realtime-sdk";
 import { FORMANT_API_URL } from "./config";
@@ -22,6 +23,11 @@ import { InterventionType } from "./main";
 import { IInterventionTypeMap } from "./main";
 import { IInterventionResponse } from "./main";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
+
+// get query param for "rtc_client"
+const urlParams = new URLSearchParams(window.location.search);
+const rtcClientVersion = urlParams.get("rtc_client");
+
 export interface ConfigurationDocument {
   urdfFiles: string[];
   telemetry?: {
@@ -103,7 +109,7 @@ export const SessionType = {
 };
 
 export interface IRealtimeDevice {
-  startRealtimeConnection(config?: IRtcConnectConfiguration): Promise<void>;
+  startRealtimeConnection(sessionType?: number): Promise<void>;
   startListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
   stopListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
   addRealtimeListener(listener: RealtimeListener): void;
@@ -115,7 +121,7 @@ export interface IRealtimeDevice {
 }
 
 export class Device implements IRealtimeDevice {
-  rtcClient: RtcClient | undefined;
+  rtcClient: RtcClient | RtcClientV1 | undefined;
   remoteDevicePeerId: string | undefined;
 
   realtimeListeners: RealtimeListener[] = [];
@@ -206,25 +212,42 @@ export class Device implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(config?: IRtcConnectConfiguration) {
+  async startRealtimeConnection(sessionType?: number) {
     if (!this.rtcClient) {
-      const rtcClient = new RtcClient({
-        signalingClient: new SignalingPromiseClient(
-          FORMANT_API_URL,
-          null,
-          null
-        ),
-        getToken: async () => {
-          return defined(
-            Authentication.token,
-            "Realtime when user isn't authorized"
-          );
-        },
-        receive: this.handleMessage,
-      });
+      let rtcClient;
 
-      while (!rtcClient.isReady()) {
-        await delay(100);
+      if (rtcClientVersion === "1") {
+        rtcClient = new RtcClientV1({
+          signalingClient: new RtcSignalingClient(FORMANT_API_URL),
+          getToken: async () =>
+            defined(
+              Authentication.token,
+              "Realtime when user isn't authorized"
+            ),
+          receive: this.handleMessage,
+        });
+      } else {
+        rtcClient = new RtcClient({
+          signalingClient: new SignalingPromiseClient(
+            FORMANT_API_URL,
+            null,
+            null
+          ),
+          getToken: async () => {
+            return defined(
+              Authentication.token,
+              "Realtime when user isn't authorized"
+            );
+          },
+          receive: this.handleMessage,
+          sessionType: sessionType,
+        });
+      }
+
+      if ((rtcClient as any).isReady) {
+        while (!(rtcClient as RtcClient).isReady()) {
+          await delay(100);
+        }
       }
 
       // Each online device and user has a peer in the system
@@ -239,12 +262,7 @@ export class Device implements IRealtimeDevice {
 
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
-      await rtcClient.connect(
-        this.remoteDevicePeerId,
-        config || {
-          sessionType: SessionType.Teleop as number,
-        }
-      );
+      await (rtcClient as RtcClient).connect(this.remoteDevicePeerId);
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
@@ -580,6 +598,11 @@ export class Device implements IRealtimeDevice {
     channelName: string,
     rtcConfig?: RTCDataChannelInit
   ): Promise<DataChannel> {
+    if (rtcClientVersion === "1") {
+      throw new Error(
+        "createCustomDataChannel is not supported in rtcClientVersion 1"
+      );
+    }
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"
@@ -587,7 +610,7 @@ export class Device implements IRealtimeDevice {
 
     const devicePeer = await this.getRemotePeer();
     const p = await new Promise<DataChannel>((resolve) => {
-      client.createCustomDataChannel(
+      (client as RtcClient).createCustomDataChannel(
         defined(devicePeer).id,
         channelName,
         {

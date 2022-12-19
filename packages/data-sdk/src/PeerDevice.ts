@@ -1,4 +1,4 @@
-import { IRtcConnectConfiguration, RtcClient } from "@formant/realtime-sdk";
+import { RtcClient } from "@formant/realtime-sdk";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 import { DataChannel } from "./DataChannel";
@@ -76,11 +76,12 @@ export class PeerDevice implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(_config?: IRtcConnectConfiguration) {
+  async startRealtimeConnection(sessionType?: number) {
     if (!this.rtcClient) {
       const rtcClient = new RtcClient({
         lanOnlyMode: true,
         receive: this.handleMessage,
+        sessionType,
       });
 
       await rtcClient.connectLan(this.peerUrl);
