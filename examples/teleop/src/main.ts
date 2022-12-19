@@ -15,7 +15,9 @@ el("button").addEventListener("click", async () => {
 
     // start connecting
     log("Waiting for authentication ...");
-    if (!(await Authentication.waitTilAuthenticated())) {
+    const username = (el("#username") as HTMLInputElement).value;
+    const password = (el("#password") as HTMLInputElement).value;
+    if (!(await Authentication.login(username, password))) {
       log("Not Authenticated");
       return;
     }
@@ -28,6 +30,7 @@ el("button").addEventListener("click", async () => {
     log("Getting a realtime connection ... ");
     await device.startRealtimeConnection();
     device.addRealtimeListener((_peerId: any, message: any) => {
+      console.log(message);
       (el("formant-realtime-player") as RealtimePlayer).drawVideoFrame(
         message.payload.h264VideoFrame
       );
@@ -35,18 +38,11 @@ el("button").addEventListener("click", async () => {
     let videoStreams = await device.getRealtimeVideoStreams();
     log("Video streams: " + JSON.stringify(videoStreams));
     log("Starting to listen to video stream " + videoStreams[0].name + " ... ");
+    debugger;
     device.startListeningToRealtimeVideo(videoStreams[0]);
 
     // show the player
     el("formant-realtime-player").style.display = "block";
-
-    // show joysticks and connect them up
-    let j = await device.createCustomDataChannel("joystick");
-    el("formant-joystick").style.display = "block";
-    el("formant-joystick").addEventListener("joystick", (e) => {
-      const ce = e as CustomEvent;
-      j.send(JSON.stringify(ce.detail));
-    });
   } catch (e) {
     log((e as Error).message);
   }
