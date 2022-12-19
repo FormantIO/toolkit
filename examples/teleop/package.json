@@ -7,10 +7,13 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@formant/data-sdk": "0.0.72",
+    "@formant/data-sdk": "0.0.107",
     "@formant/ui-sdk-joystick": "latest",
     "@formant/ui-sdk-realtime-player": "latest",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
+  },
+  "dependencies": {
+    "grpc-web": "^1.4.2"
   }
 }
