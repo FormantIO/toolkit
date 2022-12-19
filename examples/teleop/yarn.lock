@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
-"@formant/data-sdk@0.0.109":
-  version "0.0.109"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.109.tgz#d1b704a05b6dd1134fa241ac2a4bc1a9e10df4d8"
-  integrity sha512-ndFP0MOK0eM50XBUjubyGEaLL89tu5tiZQZlDePmmPiEmuwHcnStHiWY8Tq65WCSXrZoq3RQKw55SrsG9RWr9g==
+"@formant/data-sdk@0.0.110":
+  version "0.0.110"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.110.tgz#ee763b3f6bad713665918bd6335791bd5a5fa85e"
+  integrity sha512-Gt89ZgP3EzrsaipHrOOZ6qAOzX6pig3aun+mwWvkJyKLKV26JUrokM3u+4cX3kphrJkV5zNQ7L1BZHKXqJLPUA==
   dependencies:
     "@formant/realtime-sdk" "^0.0.18"
     "@types/google-protobuf" "^3.15.5"
