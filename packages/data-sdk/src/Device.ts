@@ -218,7 +218,9 @@ export class Device implements IRealtimeDevice {
 
       if (rtcClientVersion === "1") {
         rtcClient = new RtcClientV1({
-          signalingClient: new RtcSignalingClient(FORMANT_API_URL),
+          signalingClient: new RtcSignalingClient(
+            FORMANT_API_URL + "/v1/signaling/"
+          ),
           getToken: async () =>
             defined(
               Authentication.token,

@@ -19,3 +19,8 @@ const envStage = urlParams.get("formant_stage");
 if (envStage) {
   FORMANT_API_URL = "https://api-stage.formant.io";
 }
+
+const envLocal = urlParams.get("formant_local");
+if (envLocal) {
+  FORMANT_API_URL = "https://api.formant.local";
+}
