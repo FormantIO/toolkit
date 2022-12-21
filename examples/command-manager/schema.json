@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/numeric-aggregate/schema.json",
+  "title": "Numeric aggregate",
+  "description": "Aggregate chart configuration.",
+  "type": "object",
+  "properties": {
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "enabledParameters": {
+            "type": "boolean"
+          },
+          "streamName": {
+            "type": "string"
+          },
+          "needsConfirmation": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

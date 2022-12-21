@@ -1,20 +1,39 @@
 import { Button } from "@formant/ui-sdk";
 import { FC, useCallback, useState } from "react";
-import { ICommand } from "../../types";
+import { ICommandConfiguration } from "../../types";
+import { useDispatch } from "react-redux";
+import { setModalState } from "../../features/modal/modalSlice";
+
 interface ICommandIssuer {
-  command: ICommand;
-  handleIssueCommand: (_: string, value: string | null) => void;
+  command: ICommandConfiguration;
+  onClick: (_: string, p: string) => void;
 }
 
-export const CommandIssuer: FC<ICommandIssuer> = ({
-  command,
-  handleIssueCommand,
-}) => {
+export const CommandIssuer: FC<ICommandIssuer> = ({ command, onClick }) => {
+  const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
 
   const handleOnclick = useCallback(() => {
     setDisabled(true);
-    handleIssueCommand(command.name, command.parameterValue);
+    if (command.enabledParameters || command.needsConfirmation) {
+      dispatch(
+        setModalState({
+          state: {
+            title: command.name,
+            open: true,
+            content: `issue command ${command.name} ?`,
+            streamName: command.streamName.length > 0 ? command.streamName : "",
+            paramType: command.enabledParameters
+              ? command.streamName.length > 0
+                ? "dropDown"
+                : "textField"
+              : command.parameterValue,
+          },
+        })
+      );
+    } else {
+      onClick(command.name, command.parameterValue ?? "");
+    }
     setTimeout(() => {
       setDisabled(false);
     }, 5000);
