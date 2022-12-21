@@ -1,0 +1,28 @@
+{
+    "commands":[
+        {
+            "name": "Audio Announcement",
+            "enabledParameters": false,
+            "streamName": "",
+            "needsConfirmation": false
+        },
+        {
+            "name": "rosservice",
+            "enabledParameters": true,
+            "streamName": "",
+            "needsConfirmation": false
+        },
+        {
+            "name": "test",
+            "enabledParameters": true,
+            "streamName": "blade.mode",
+            "needsConfirmation": false
+        },
+        {
+            "name": "update_topic_list",
+            "enabledParameters": true,
+            "streamName": "",
+            "needsConfirmation": true
+        }
+    ]
+}
