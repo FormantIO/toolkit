@@ -1,104 +1,76 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import "./App.css";
-import { useDevice } from "@formant/ui-sdk";
-import { Authentication, KeyValue } from "@formant/data-sdk";
-import { Configuration } from "./components/Configuration";
-import { ICommand } from "./types";
+import { useDevice, LoadingIndicator } from "@formant/ui-sdk";
+import { Authentication, KeyValue, Device } from "@formant/data-sdk";
+import { IConfiguration } from "./types";
 import { useSelector, useDispatch } from "react-redux";
 import { Commands } from "./components/Commands";
-import { updateActiveCommands } from "./features/configuration/configurationSlice";
+import { setCommands } from "./features/configuration/configurationSlice";
+import { useConfiguration } from "./hooks/useConfiguration";
+import { useStreams } from "./hooks/useStreams";
 
-const getCommands = async (): Promise<ICommand[]> => {
+interface IStream {
+  streamName: string;
+  active: boolean;
+}
+
+const setStreamAsActive = async (stream: any) => {
   if (await Authentication.waitTilAuthenticated()) {
-    const result = await fetch(
-      `https://api.formant.io/v1/admin/command-templates/`,
+    const response = await fetch(
+      `https://api.formant.io/v1/admin/streams/${stream.id}`,
       {
-        method: "GET",
+        method: "PATCH",
+        body: JSON.stringify({ ...stream, active: true }),
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + Authentication.token,
         },
       }
     );
-    const commandsList = await result.json();
-    return commandsList.items.filter((_: ICommand) => _.enabled);
-  }
-  return [];
-};
-
-const getCloudConfiguration = async (moduleName: string) => {
-  if (await Authentication.waitTilAuthenticated()) {
-    const result = await fetch(
-      `https://api.formant.io/v1/admin/key-value/${moduleName}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
-    const parseResult = await result.json();
-    if (parseResult.message) return [];
-    return JSON.parse(parseResult.value);
   }
 };
 
 function App() {
-  const device = useDevice();
-  const moduleName = useSelector((state: any) => state.moduleName.moduleName);
-  const activeCommands = useSelector(
-    (state: any) => state.configuration.activeCommands
-  );
-
   const dispatch = useDispatch();
-  const [commands, setCommands] = useState<ICommand[]>([]);
-  const [showConfig, setShowConfig] = useState(false);
+  const [configuration, loading] = useConfiguration();
+  const [paramsFromStreams, setParamsFromStreams] = useState<IStream[]>([]);
+  const device = useDevice();
+  const streams: IStream[] = useStreams(device);
 
   useEffect(() => {
-    if (!device) return;
-    getCommands().then((_) => setCommands(_));
-    getCloudConfiguration(moduleName).then((_) =>
-      dispatch(updateActiveCommands({ items: _ }))
+    if (!device || !configuration) return;
+    const paramStream = configuration.commands.filter(
+      (_) => _.streamName.length > 0
     );
-  }, [device]);
+    const streamsInfo = streams.filter(
+      (_) =>
+        paramStream.map((p) => p.streamName).includes(_.streamName) && !_.active
+    );
 
-  const displayCommands = useMemo(() => {
-    return commands.filter((_) => activeCommands.includes(_.id));
-  }, [activeCommands, commands]);
+    setParamsFromStreams(streamsInfo);
+    dispatch(setCommands({ items: configuration }));
+  }, [device, configuration]);
 
-  const handleOpenconfiguration = useCallback(() => {
-    setShowConfig(true);
-  }, []);
-
-  const handleCloseconfiguration = useCallback(async () => {
-    setShowConfig(false);
-
-    if (await Authentication.waitTilAuthenticated()) {
-      await KeyValue.set(moduleName, JSON.stringify(activeCommands));
-    }
-  }, [activeCommands]);
-
-  const handleIssueCommand = useCallback(
-    (name: string, value: string | null) => {
-      device.sendCommand(name, value === null ? "" : value);
-    },
-    [device]
-  );
+  useEffect(() => {
+    if (paramsFromStreams.length === 0) return;
+    paramsFromStreams.map((_) => setStreamAsActive(_));
+  }, [paramsFromStreams]);
 
   return (
     <div className="App">
-      {showConfig ? (
-        <Configuration
-          handleCloseconfiguration={handleCloseconfiguration}
-          commands={commands}
-        />
+      {loading || !configuration ? (
+        <div
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <LoadingIndicator />
+        </div>
       ) : (
-        <Commands
-          handleIssueCommand={handleIssueCommand}
-          commands={displayCommands}
-          openConfiguration={handleOpenconfiguration}
-        />
+        <Commands device={device as any} configuration={configuration} />
       )}
     </div>
   );

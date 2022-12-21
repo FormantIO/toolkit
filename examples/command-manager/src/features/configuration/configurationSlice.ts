@@ -1,25 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { activeCommands } from "../../types";
+import { IConfiguration } from "../../types";
 
-const initialState: activeCommands = {
-  activeCommands: [],
+const initialState: IConfiguration = {
+  commands: [],
 };
 
 export const configurationSlice = createSlice({
   name: "configuration",
   initialState,
   reducers: {
-    updateActiveCommands: (state, action) => {
-      state.activeCommands = action.payload.items;
+    setCommands: (state, action) => {
+      state.commands = action.payload.items;
     },
     handleCommandChange: (state, action) => {
       const { id, checked } = action.payload;
       switch (checked) {
         case true:
-          state.activeCommands.push(id);
+          state.commands.push(id);
           return;
         case false:
-          state.activeCommands = state.activeCommands.filter((_) => _ !== id);
+          state.commands = state.commands.filter((_) => _ !== id);
           return;
         default:
           return state;
@@ -28,7 +28,6 @@ export const configurationSlice = createSlice({
   },
 });
 
-export const { updateActiveCommands, handleCommandChange } =
-  configurationSlice.actions;
+export const { setCommands, handleCommandChange } = configurationSlice.actions;
 
 export default configurationSlice.reducer;
