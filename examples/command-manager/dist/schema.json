@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/command-manager/schema.json",
+  "title": "Command Manager",
+  "description": "Grid of buttons to issue commands",
+  "type": "object",
+  "properties": {
+    "commands": {
+      "description": "List of Formant's commands",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Formant's command name"
+        },
+        "enabledParameters": {
+          "type": "boolean",
+          "descriptions": "Show text input to send with command"
+        },
+        "streamName": {
+          "type": "string",
+          "description": "Text stream of csv to populate dropdown paramters"
+        },
+        "needsConfirmation": {
+          "type": "boolean",
+          "description": "Show pop up asking for confirmation before issuing the command"
+        }
+      }
+    }
+  },
+  "required": ["commands"]
+}
