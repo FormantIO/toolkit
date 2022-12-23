@@ -18,7 +18,7 @@
       "require": "./dist/universe.umd.js"
     }
   },
-  "version": "0.0.235",
+  "version": "0.0.236",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 9146",
     "dev_vr": "vite --host 0.0.0.0 --https --port 9146",
@@ -51,7 +51,7 @@
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
-    "@formant/ui-sdk": "0.0.26",
+    "@formant/ui-sdk": "0.0.29",
     "@formant/universe-core": "^0.0.9",
     "@types/react": "^18.0.8",
     "@types/three": "0.140.0",
