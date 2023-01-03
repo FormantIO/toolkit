@@ -15,7 +15,7 @@
     "@types/offscreencanvas" "^2019.6.4"
     h264decoder "^1.0.0"
 
-"@formant/ui-sdk-realtime-player-core@0.0.2":
+"@formant/ui-sdk-realtime-player-core@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
   integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
