@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.mapboxgl-control-container {
+  display: none !important;
+}
+.mapboxgl-ctrl {
+  display: none;
+}
+.mapboxgl-ctrl-bottom-left {
+  display: none;
+}
+
+.mapboxgl-ctrl-bottom-right {
+  display: none;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

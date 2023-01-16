@@ -1,0 +1,13 @@
+.app {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.map-container {
+  max-height: 100vh;
+  height: 100vh;
+  min-width: 100vw;
+  overflow: hidden;
+}
