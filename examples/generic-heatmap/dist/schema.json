@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/generic-heatmap/schema.json",
+  "title": "Heatmap",
+  "description": "Aggregate chart configuration.",
+  "type": "object",
+  "properties": {
+    "locationStream": {
+      "type": "string"
+    },
+    "numericStream": {
+      "type": "string"
+    },
+    "start": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["timeRange", "Event"]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "end": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["timeRange", "Event", "Annotation", "scrubber"]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "center": {
+      "type": "object",
+      "properties": {
+        "longitude": {
+          "type": "float"
+        },
+        "latitude": {
+          "type": "float"
+        }
+      }
+    },
+    "zoom": {
+      "type": "integer",
+      "description": "Zoom in center of map"
+    }
+  }
+}
