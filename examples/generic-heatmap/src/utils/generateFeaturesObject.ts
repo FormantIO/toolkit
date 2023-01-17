@@ -13,7 +13,7 @@ export const generateFeaturesObject = (
       },
       geometry: {
         type: "Point",
-        coordinates: [d.latitude, d.longitude],
+        coordinates: [d.longitude, d.latitude],
       },
     })),
   };

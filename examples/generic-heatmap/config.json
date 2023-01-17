@@ -1,5 +1,13 @@
 {
   "locationStream": "heatmap_point_location",
+  "start": {
+    "type": "timeRange",
+    "value": 800
+  },
+  "end": {
+    "type": "scrubber",
+    "value": ""
+  },
   "eventName": "",
   "scrubber": "",
   "zoom": 0,
