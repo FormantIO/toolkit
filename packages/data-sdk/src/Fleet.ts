@@ -10,6 +10,7 @@ import { IQuery } from "./model/IQuery";
 import { IStreamAggregateData } from "./model/IStreamAggregateData";
 import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
+import { IDeviceQuery } from "./model/IDeviceQuery";
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -106,6 +107,25 @@ export class Fleet {
     return devices.items.map(
       (_: any) =>
         new Device(_.id as string, _.name as string, _.organizationId as string)
+    );
+  }
+
+  static async queryDevices(query: IDeviceQuery): Promise<Device[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/query`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const devices = await data.json();
+
+    return devices.items.map(
+      (_: any) => new Device(_.id, _.name, _.organizationId)
     );
   }
 
@@ -332,5 +352,41 @@ export class Fleet {
       }
     );
     return (await interventions.json()).items as IEvent[];
+  }
+
+  static async getCurrentGroup(): Promise<Device[] | undefined> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    let urlParams = new URLSearchParams("");
+
+    if (typeof window !== "undefined") {
+      urlParams = new URLSearchParams(window.location.search);
+    }
+
+    const groupId = urlParams.get("group");
+
+    if (groupId === null || groupId.trim() === "") {
+      return undefined;
+    }
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/groups/` + groupId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+
+    const { tagKey, tagValue } = await response.json();
+
+    const devices = await this.queryDevices({
+      tags: { [tagKey]: [tagValue] },
+      enabled: true,
+      type: "default",
+    });
+
+    return devices;
   }
 }
