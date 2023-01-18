@@ -23,7 +23,8 @@ export type AppMessage =
       channel: string;
       source: string;
       data: any;
-    };
+    }
+  | { type: "request_devices" };
 
 export type EmbeddedAppMessage =
   | {
@@ -243,6 +244,14 @@ export class App {
           data: msg.data,
         });
       }
+    });
+  }
+
+  static requestOverviewDevices(handler: (data: any) => void) {
+    this.sendAppMessage({ type: "request_devices" });
+    window.addEventListener("message", (event) => {
+      const msg = event.data as EmbeddedAppMessage;
+      handler(msg);
     });
   }
 }
