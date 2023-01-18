@@ -125,8 +125,7 @@ export class Fleet {
     const devices = await data.json();
 
     return devices.items.map(
-      (_: any) =>
-        new Device(_.id as string, _.name as string, _.organizationId as string)
+      (_: any) => new Device(_.id, _.name, _.organizationId)
     );
   }
 
@@ -370,28 +369,24 @@ export class Fleet {
     if (groupId === null || groupId.trim() === "") {
       return undefined;
     }
-    try {
-      const response = await fetch(
-        `${FORMANT_API_URL}/v1/admin/groups/` + groupId,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + Authentication.token,
-          },
-        }
-      );
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/groups/` + groupId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
 
-      const { tagKey, tagValue } = await response.json();
+    const { tagKey, tagValue } = await response.json();
 
-      const devices = await this.queryDevices({
-        tags: { [tagKey]: [tagValue] },
-        enabled: true,
-        type: "default",
-      });
+    const devices = await this.queryDevices({
+      tags: { [tagKey]: [tagValue] },
+      enabled: true,
+      type: "default",
+    });
 
-      return devices;
-    } catch (error) {
-      throw error;
-    }
+    return devices;
   }
 }
