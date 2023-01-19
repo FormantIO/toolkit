@@ -11,7 +11,6 @@ export * from "./KeyValue";
 export * from "./utils";
 export * from "./AudioPlayer";
 
-
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
 
@@ -48,6 +47,7 @@ export * from "./model/eventTypes";
 export * from "./model/EventType";
 export * from "./model/healthStatuses";
 export * from "./model/HealthStatus";
+export * from "./model/IColorRGBA";
 export * from "./model/HexRgbColor";
 export * from "./model/IAnnotationAreaTypeMap";
 export * from "./model/IAnnotation";
