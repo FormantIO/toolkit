@@ -1,5 +1,6 @@
 export * from "./FormantProvider";
 export {
+  Autocomplete,
   Box,
   Grid,
   Typography,
@@ -13,6 +14,7 @@ export {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Select,
   Switch,
   Link,
   Snackbar,
