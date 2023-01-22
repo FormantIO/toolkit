@@ -90,4 +90,8 @@ App.addModuleDataListener((data: ModuleData) => {
   const config = await App.getCurrentModuleConfiguration();
   const el = document.querySelector("#config") as HTMLElement;
   el.innerText = config ? JSON.stringify(config) : "no configuration found";
+  App.addModuleConfigurationListener((event) => {
+    const el = document.querySelector("#config") as HTMLElement;
+    el.innerText = event.configuration;
+  });
 })();
