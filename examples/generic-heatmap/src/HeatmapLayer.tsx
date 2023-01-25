@@ -1,5 +1,6 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useLayoutEffect } from "react";
 import { FeatureCollection } from "geojson";
+import { GeoJSONSource } from "mapbox-gl";
 interface IHeatmapLayerProps {
   map: mapboxgl.Map | null;
   featureCollection: FeatureCollection;
@@ -23,7 +24,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
           id: "numeric-heat",
           type: "heatmap",
           source: "numeric",
-          maxzoom: 15,
+          maxzoom: 24,
           paint: {
             // increase weight as diameter breast height increases
             "heatmap-weight": {
@@ -37,7 +38,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
             // increase intensity as zoom level increases
             "heatmap-intensity": {
               stops: [
-                [11, 1],
+                [15, 1],
                 [15, 3],
               ],
             },
@@ -55,7 +56,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               0.6,
               "rgb(103,169,207)",
               0.8,
-              "rgb(28,144,153)",
+              "rgb(234,113,157)",
             ],
             // increase radius as zoom increases
             "heatmap-radius": {
@@ -65,13 +66,13 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               ],
             },
             // decrease opacity to transition into the circle layer
-            "heatmap-opacity": {
-              default: 1,
-              stops: [
-                [14, 1],
-                [15, 0],
-              ],
-            },
+            // "heatmap-opacity": {
+            //   default: 1,
+            //   stops: [
+            //     [14, 1],
+            //     [15, 0],
+            //   ],
+            // },
           },
         },
         "waterway-label"
@@ -82,7 +83,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
           id: "numeric-point",
           type: "circle",
           source: "numeric",
-          minzoom: 14,
+          minzoom: 24,
           paint: {
             // increase the radius of the circle as the zoom level and weight value increases
             "circle-radius": {
@@ -121,7 +122,24 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
         "waterway-label"
       );
     });
+    console.log("Layer added");
   }, [map]);
 
-  return null;
+  useLayoutEffect(() => {
+  
+    console.log("update");
+    if (!map || featureCollection.features.length < 1) return;
+    const current = map.getSource("numeric") as GeoJSONSource;
+    console.log(current);
+    if (!current) return;
+    current.setData(featureCollection as any);
+    map.flyTo({
+      center: featureCollection.features[0].geometry.coordinates,
+      zoom: 12, // Fly to the selected target
+      duration: 5000, // Animate over 12 seconds
+      essential: true,
+    });
+  }, [JSON.stringify(featureCollection.features)]);
+
+  return <></>;
 };

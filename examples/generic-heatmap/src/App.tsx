@@ -33,13 +33,6 @@ function App() {
     });
   }, [config]);
 
-  useLayoutEffect(() => {
-    if (!map.current || featureCollection.features.length < 1) return;
-    const current = map.current.getSource("numeric") as GeoJSONSource;
-    if (!current) return;
-    current.setData(featureCollection as any);
-  }, [featureCollection, config]);
-
   return (
     <div className={styles.app}>
       {!config ? (

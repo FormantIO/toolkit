@@ -71,6 +71,7 @@ const handleConfiguration = async (
     end: "",
   };
   const { start, end } = config;
+
   switch (start.type) {
     case "Event":
       const events = await getEvents(start.value, deviceId);
@@ -105,6 +106,7 @@ const handleConfiguration = async (
     default:
   }
 
+  if (Number.isNaN(query.start) || !query.end) return null;
   query.start = millisecondsToISODate(query.start as number);
   query.end = millisecondsToISODate(query.end as number);
 
@@ -130,9 +132,10 @@ export const useLocationDataPoints = (
   }, [config]);
 
   useEffect(() => {
-    if (!config) return;
-    if (config.end.type !== "scrubber") return;
-    handleConfiguration(config, device.id, time?.time).then((_) => {
+    if (!config || config.end.type !== "scrubber") return;
+
+    handleConfiguration(config, device.id, time).then((_) => {
+      if (_ === null) return;
       setStartTime(_.start as string);
       setEndTime(_.end as string);
     });
@@ -146,7 +149,10 @@ export const useLocationDataPoints = (
         if (_ === undefined) {
           console.warn("No streams");
           return;
-          //HANDLE NO DATA
+        }
+        if (_.length === 0) {
+          setDatapoints([]);
+          return;
         }
         setDatapoints(_[0].points.map((d) => d[1]));
       }
