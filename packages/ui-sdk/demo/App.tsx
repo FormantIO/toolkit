@@ -33,6 +33,10 @@ import {
   JsonSchemaForm,
   LoadingIndicator,
   ListPicker,
+  useConfiguration,
+  useScrubberTime,
+  useQueryDevices,
+  useFormant,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -153,11 +157,22 @@ let y: { [key: string]: JsonObjectSchema } = {
 };
 function App() {
   const [params, setParams] = React.useState<ServiceParameters>({});
+  // const config = useConfiguration({ parse: true });
+  const time = useScrubberTime();
+  const devices = useQueryDevices({
+    name: "Ember",
+  });
+
+  const { configuration } = useFormant();
   let x = y.random.properties.my_int_array;
 
   const sample = ["device one", "device two"];
 
   const [en, setEn] = React.useState<string[]>([]);
+
+  React.useLayoutEffect(() => {
+    console.log(configuration);
+  }, [configuration]);
 
   return (
     <>
@@ -165,6 +180,7 @@ function App() {
       <LoadingIndicator />
       <button onClick={() => console.log(en)}>Clicl</button>
       <ListPicker options={sample} list={en} setList={setEn} />
+      <LoadingIndicator />
       <JsonSchemaForm
         params={params}
         path={[]}
@@ -179,7 +195,7 @@ const container = document.getElementById("app");
 if (container) {
   const root = createRoot(container);
   root.render(
-    <FormantProvider>
+    <FormantProvider parseConfiguration>
       <App />
     </FormantProvider>
   );
