@@ -1,7 +1,5 @@
 build:
 	yarn build
-	cd dist &&  sed -i 's/"assets/"\.\/assets/' index.html
-
 pub_demo: yarn build
 	git add -f dist
 	git commit -m 'publish demo'
