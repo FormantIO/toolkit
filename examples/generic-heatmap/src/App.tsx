@@ -1,20 +1,19 @@
 import { useRef, useLayoutEffect } from "react";
 import mapboxgl, { GeoJSONSource } from "mapbox-gl";
 import styles from "./App.module.scss";
-import { useConfiguration } from "./hooks/useConfiguration";
 import { useLocationDataPoints } from "./hooks/useLocationDataPoints";
-import { useDevice } from "@formant/ui-sdk";
+import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { useFeatures } from "./hooks/useFeatures";
 import { HeatmapLayer } from "./HeatmapLayer";
-import { LoadingIndicator } from "@formant/ui-sdk";
+import { IConfiguration } from "./types";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYWxlbmpkZXYiLCJhIjoiY2t3NWt5ZmExMTcxMDJvbW5kdDR2eGs1diJ9.aYT7nc_i5rp2hY4dt3CLrw";
 
 function App() {
-  const device = useDevice();
-  const config = useConfiguration();
-  const locationDataPoints = useLocationDataPoints(device as any, config!);
+  const context = useFormant();
+  const config = context.configuration as IConfiguration;
+  const locationDataPoints = useLocationDataPoints();
   const featureCollection = useFeatures(locationDataPoints);
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);

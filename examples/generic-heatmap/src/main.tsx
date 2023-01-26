@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <FormantProvider>
+  <FormantProvider parseConfiguration>
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
         <App />

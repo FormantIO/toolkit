@@ -1,4 +1,4 @@
-import { FC, useEffect, useLayoutEffect } from "react";
+import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { FeatureCollection } from "geojson";
 import { GeoJSONSource } from "mapbox-gl";
 interface IHeatmapLayerProps {
@@ -10,7 +10,8 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
   map,
   featureCollection,
 }) => {
-  useEffect(() => {
+  const [isLayerLoaded, setIsLayerLoaded] = useState(false);
+  useLayoutEffect(() => {
     if (!map) return; // wait for map to initialize
 
     map.on("load", () => {
@@ -122,24 +123,24 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
         "waterway-label"
       );
     });
-    console.log("Layer added");
+    setIsLayerLoaded(true);
   }, [map]);
 
   useLayoutEffect(() => {
-  
-    console.log("update");
-    if (!map || featureCollection.features.length < 1) return;
-    const current = map.getSource("numeric") as GeoJSONSource;
-    console.log(current);
-    if (!current) return;
-    current.setData(featureCollection as any);
-    map.flyTo({
-      center: featureCollection.features[0].geometry.coordinates,
-      zoom: 12, // Fly to the selected target
-      duration: 5000, // Animate over 12 seconds
-      essential: true,
-    });
-  }, [JSON.stringify(featureCollection.features)]);
+    if (!map || featureCollection.features.length < 1 || !isLayerLoaded) return;
+    setTimeout(() => {
+      const current = map.getSource("numeric") as GeoJSONSource;
+      map.addLayer;
+      if (!current) return;
+      current.setData(featureCollection as any);
+      // map.flyTo({
+      //   center: featureCollection.features[0].geometry.coordinates,
+      //   zoom: 12, // Fly to the selected target
+      //   duration: 5000, // Animate over 12 seconds
+      //   essential: true,
+      // });
+    }, 3000);
+  }, [JSON.stringify(featureCollection.features), isLayerLoaded]);
 
   return <></>;
 };

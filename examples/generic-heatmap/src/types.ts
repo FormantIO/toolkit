@@ -13,3 +13,11 @@ export interface IConfiguration {
   longitude?: number;
   zoom?: number;
 }
+
+export interface ILocationAndNumericDataPoint {
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  weight: number;
+}
