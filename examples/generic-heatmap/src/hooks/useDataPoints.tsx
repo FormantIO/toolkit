@@ -133,6 +133,7 @@ export const useDataPoints = (): IHeatMapDataPoint[] => {
     if (!config) return;
     if (config.end.type === "scrubber" || !device) return;
     handleConfiguration(config, device.id).then((_) => {
+      if (_ === null) return;
       setStartTime(_.start as string);
       setEndTime(_.end as string);
     });
