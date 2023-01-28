@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import { ILocation } from "@formant/data-sdk";
-import { generateFeaturesObject } from "../utils/generateFeaturesObject";
-import { FeatureCollection } from "geojson";
+import { useEffect, useState } from "react";
+import { generateFeaturesObject } from "../utils/utils";
+import { FeatureCollection, Point } from "geojson";
+import { IHeatMapDataPoint } from "../types";
 
 export const useFeatures = (
-  locationDataPoints: ILocation[]
-): FeatureCollection => {
-  const [features, setFeatures] = useState<FeatureCollection>({
+  locationDataPoints: IHeatMapDataPoint[]
+): FeatureCollection<Point> => {
+  const [features, setFeatures] = useState<FeatureCollection<Point>>({
     type: "FeatureCollection",
     features: [],
   });

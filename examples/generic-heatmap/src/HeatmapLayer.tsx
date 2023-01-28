@@ -1,14 +1,21 @@
-import { FC, useEffect, useLayoutEffect, useState } from "react";
-import { FeatureCollection } from "geojson";
-import { GeoJSONSource } from "mapbox-gl";
+import { FC, useLayoutEffect, useState } from "react";
+import { FeatureCollection, Point } from "geojson";
+import { GeoJSONSource, LngLatLike } from "mapbox-gl";
+
 interface IHeatmapLayerProps {
   map: mapboxgl.Map | null;
-  featureCollection: FeatureCollection;
+  featureCollection: FeatureCollection<Point>;
+  distinctZoomLevel?: number;
+  circleRadius?: number;
 }
+
+const DEFAULT_DISTINCT_ZOOM_LEVEL = 15;
 
 export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
   map,
   featureCollection,
+  distinctZoomLevel,
+  circleRadius,
 }) => {
   const [isLayerLoaded, setIsLayerLoaded] = useState(false);
   useLayoutEffect(() => {
@@ -33,7 +40,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               type: "exponential",
               stops: [
                 [1, 0],
-                [62, 1],
+                [100, 1],
               ],
             },
             // increase intensity as zoom level increases
@@ -51,13 +58,13 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               0,
               "rgba(236,222,239,0)",
               0.2,
-              "rgb(208,209,230)",
+              "#FF72CC",
               0.4,
               "rgb(166,189,219)",
               0.6,
               "rgb(103,169,207)",
               0.8,
-              "rgb(234,113,157)",
+              "#18D2FF",
             ],
             // increase radius as zoom increases
             "heatmap-radius": {
@@ -67,13 +74,13 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               ],
             },
             // decrease opacity to transition into the circle layer
-            // "heatmap-opacity": {
-            //   default: 1,
-            //   stops: [
-            //     [14, 1],
-            //     [15, 0],
-            //   ],
-            // },
+            "heatmap-opacity": {
+              default: 1,
+              stops: [
+                [14, 1],
+                [distinctZoomLevel ?? DEFAULT_DISTINCT_ZOOM_LEVEL + 1, 0],
+              ],
+            },
           },
         },
         "waterway-label"
@@ -84,17 +91,20 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
           id: "numeric-point",
           type: "circle",
           source: "numeric",
-          minzoom: 24,
+          minzoom: !!distinctZoomLevel
+            ? distinctZoomLevel - 1
+            : DEFAULT_DISTINCT_ZOOM_LEVEL - 1,
           paint: {
             // increase the radius of the circle as the zoom level and weight value increases
             "circle-radius": {
               property: "weight",
               type: "exponential",
               stops: [
-                [{ zoom: 15, value: 1 }, 5],
-                [{ zoom: 15, value: 62 }, 10],
-                [{ zoom: 22, value: 1 }, 20],
-                [{ zoom: 22, value: 62 }, 50],
+                [
+                  { zoom: DEFAULT_DISTINCT_ZOOM_LEVEL, value: 1 },
+                  circleRadius ?? 5,
+                ],
+                [{ zoom: 22, value: 100 }, circleRadius ?? 20],
               ],
             },
             "circle-color": {
@@ -128,17 +138,19 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
 
   useLayoutEffect(() => {
     if (!map || featureCollection.features.length < 1 || !isLayerLoaded) return;
+
     setTimeout(() => {
       const current = map.getSource("numeric") as GeoJSONSource;
       map.addLayer;
       if (!current) return;
       current.setData(featureCollection as any);
-      // map.flyTo({
-      //   center: featureCollection.features[0].geometry.coordinates,
-      //   zoom: 12, // Fly to the selected target
-      //   duration: 5000, // Animate over 12 seconds
-      //   essential: true,
-      // });
+      map.flyTo({
+        center: featureCollection.features[0].geometry
+          .coordinates as LngLatLike,
+        zoom: DEFAULT_DISTINCT_ZOOM_LEVEL - 3, // Fly to the selected target
+        duration: 5000, // Animate over 12 seconds
+        essential: true,
+      });
     }, 3000);
   }, [JSON.stringify(featureCollection.features), isLayerLoaded]);
 

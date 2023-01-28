@@ -1,83 +1,27 @@
-import {
-  Authentication,
-  Fleet,
-  Device,
-  IStreamData,
-  ILocation,
-  IEvent,
-  IDataPoint,
-} from "@formant/data-sdk";
+import { IStreamData, IDataPoint } from "@formant/data-sdk";
 import { useEffect, useState } from "react";
-import { IConfiguration, ILocationAndNumericDataPoint } from "../types";
+import { IConfiguration, IHeatMapDataPoint, IQuery } from "../types";
 import { useScrubberTime, useFormant, useDevice } from "@formant/ui-sdk";
+import {
+  getEvents,
+  getDataPoints,
+  generateStreamsMap,
+  areDatapointsWithInValidRange,
+  updateDifference,
+  isoDateToMilliseconds,
+  millisecondsToISODate,
+} from "../utils/utils";
 
-const MINUTES = 60000;
+const SECONDS = 1000;
+const MINUTES = 60 * SECONDS;
 const HOURS = MINUTES * 60;
 
-const getEvents = async (
-  eventName: string,
-  deviceId: string
-): Promise<IEvent[]> => {
-  try {
-    if (await Authentication.waitTilAuthenticated()) {
-      const events = await Fleet.queryEvents({
-        names: [eventName],
-        deviceIds: [deviceId],
-      });
-      return events;
-    }
-    return [] as IEvent[];
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getDataPoints = async (
-  locationStream: string,
-  deviceId: string,
-  start: string,
-  end: string,
-  numericStream?: string
-): Promise<
-  IStreamData<"location" | "numeric">[] | IStreamData<"location">[] | undefined
-> => {
-  try {
-    if (await Authentication.waitTilAuthenticated()) {
-      const streamsValues = await Fleet.queryTelemetry({
-        start,
-        end,
-        names: [locationStream, numericStream ?? ""],
-        deviceIds: [deviceId],
-      });
-
-      return streamsValues as IStreamData<"location" | "numeric">[];
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const handleNumericStream = (
-  streams: IStreamData<"location" | "numeric">[]
-): ILocationAndNumericDataPoint[] => {
-  const streamsMap = streams.reduce<{
-    // locationStream: IDataPoint<"localization">;
-    // numericStream: IDataPoint<"numeric">;
-    locationStream: any;
-    numericStream: any;
-  }>(
-    (prev, current) => {
-      if (current.type === "location") {
-        prev.locationStream = current.points;
-        return prev;
-      }
-      prev.numericStream = current.points;
-      return prev;
-    },
-    { locationStream: [], numericStream: [] }
-  );
-
-  const numericAndLocationMerge: ILocationAndNumericDataPoint[] = [];
+  streams: IStreamData<"location" | "numeric">[],
+  maxSecondsBetweenDatapoints: number = MINUTES * 1
+): IHeatMapDataPoint[] => {
+  const streamsMap = generateStreamsMap(streams);
+  const heatmapDataPoints: IHeatMapDataPoint[] = [];
   let numericIndex = 0;
   let previusDifference = 0;
 
@@ -85,45 +29,44 @@ const handleNumericStream = (
     (locationDataPoint: IDataPoint<"location">, idx: number) => {
       const numericDataPointTimeStamp =
         streamsMap.numericStream[numericIndex][0];
-      const locationDataPointtimeStamp = locationDataPoint[0];
+      const locationDataPointTimeStamp = locationDataPoint[0];
 
-      //GET difference between numeric time stamp and location time stamp
       const currentDifference =
-        numericDataPointTimeStamp - locationDataPointtimeStamp;
+        numericDataPointTimeStamp - locationDataPointTimeStamp;
 
-      //if current difference is negative compare absolute value of current
-      // and previus difference
+      const validTimeRange = areDatapointsWithInValidRange(
+        currentDifference,
+        maxSecondsBetweenDatapoints
+      );
+      if (!validTimeRange) return;
+
       if (currentDifference < 0) {
-        //TODO: HANDLE when there's no location data before the first numeriv value
+        //TODO: HANDLE when there's no location data before the first numeric value
         Math.abs(currentDifference) < previusDifference
-          ? numericAndLocationMerge.push({
-              location: locationDataPoint[1],
+          ? heatmapDataPoints.push({
+              latitude: locationDataPoint[1].latitude,
+              longitude: locationDataPoint[1].longitude,
               weight: streamsMap.numericStream[numericIndex][1],
             })
-          : numericAndLocationMerge.push({
-              location: streamsMap.locationStream[idx - 1][1],
+          : heatmapDataPoints.push({
+              latitude: streamsMap.locationStream[idx - 1][1].latitude,
+              longitude: streamsMap.locationStream[idx - 1][1].longitude,
               weight: streamsMap.numericStream[numericIndex][1],
             });
         numericIndex += 1;
+        if (numericIndex === streamsMap.numericStream.length)
+          numericIndex = streamsMap.numericStream.length - 1;
         previusDifference = 0;
       }
-      //If the current diference is smaller than the previus diferences
-      // update the value of the difference holder
-      if (currentDifference < previusDifference) {
-        previusDifference = currentDifference;
-      }
+
+      previusDifference = updateDifference(
+        currentDifference,
+        previusDifference
+      );
     }
   );
-  return numericAndLocationMerge;
+  return heatmapDataPoints;
 };
-
-const isoDateToMilliseconds = (d: string) => new Date(d).getTime();
-const millisecondsToISODate = (m: number) => new Date(m).toISOString();
-
-interface IQuery {
-  start: string | number;
-  end: string | number;
-}
 
 const handleConfiguration = async (
   config: IConfiguration,
@@ -177,16 +120,12 @@ const handleConfiguration = async (
   return query;
 };
 
-export const useLocationDataPoints = ():
-  | ILocation[]
-  | ILocationAndNumericDataPoint[] => {
+export const useDataPoints = (): IHeatMapDataPoint[] => {
   const device = useDevice();
   const context = useFormant();
   const config = context.configuration as IConfiguration;
   const time = useScrubberTime();
-  const [datapoints, setDatapoints] = useState<
-    ILocation[] | ILocationAndNumericDataPoint[]
-  >([]);
+  const [datapoints, setDatapoints] = useState<IHeatMapDataPoint[]>([]);
   const [startTime, setStartTime] = useState<string>();
   const [endTime, setEndTime] = useState<string>();
 
@@ -228,11 +167,14 @@ export const useLocationDataPoints = ():
         return;
       }
       if (!!numericStream) {
-        const points = handleNumericStream(_);
+        const points = handleNumericStream(
+          _,
+          config.maxSecondsBetweenDatapoints
+        );
         setDatapoints(points);
         return;
       }
-      setDatapoints(_[0].points.map((d) => d[1]) as ILocation[]);
+      setDatapoints(_[0].points.map((d) => d[1]) as IHeatMapDataPoint[]);
     });
   }, [device, startTime, endTime]);
 

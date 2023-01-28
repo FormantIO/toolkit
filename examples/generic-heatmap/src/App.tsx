@@ -1,8 +1,8 @@
 import { useRef, useLayoutEffect } from "react";
-import mapboxgl, { GeoJSONSource } from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 import styles from "./App.module.scss";
-import { useLocationDataPoints } from "./hooks/useLocationDataPoints";
-import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
+import { useDataPoints } from "./hooks/useDataPoints";
+import { LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { useFeatures } from "./hooks/useFeatures";
 import { HeatmapLayer } from "./HeatmapLayer";
 import { IConfiguration } from "./types";
@@ -13,8 +13,8 @@ mapboxgl.accessToken =
 function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
-  const locationDataPoints = useLocationDataPoints();
-  const featureCollection = useFeatures(locationDataPoints);
+  const dataPoints = useDataPoints();
+  const featureCollection = useFeatures(dataPoints);
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -42,6 +42,8 @@ function App() {
           <HeatmapLayer
             map={map.current}
             featureCollection={featureCollection}
+            distinctZoomLevel={config.distinctZoomLevel}
+            circleRadius={config.circleRadius}
           />
         </>
       )}

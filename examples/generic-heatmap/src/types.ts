@@ -12,12 +12,18 @@ export interface IConfiguration {
   latitude?: number;
   longitude?: number;
   zoom?: number;
+  maxSecondsBetweenDatapoints?: number;
+  distinctZoomLevel?: number;
+  circleRadius?: number;
 }
 
-export interface ILocationAndNumericDataPoint {
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-  weight: number;
+export interface IHeatMapDataPoint {
+  latitude: number;
+  longitude: number;
+  weight?: number;
+}
+
+export interface IQuery {
+  start: string | number;
+  end: string | number;
 }
