@@ -27,3 +27,4 @@ export * from "./hooks";
 export * from "./components/Charts";
 export * from "./components/LoadingIndicator";
 export * from "./components/ListPicker/index";
+export * from "./components/RealtimeVideoPlayer";

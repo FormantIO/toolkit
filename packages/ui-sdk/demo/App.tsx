@@ -33,6 +33,8 @@ import {
   JsonSchemaForm,
   LoadingIndicator,
   ListPicker,
+  RealtimeVideoPlayer,
+  useDevice,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -152,6 +154,7 @@ let y: { [key: string]: JsonObjectSchema } = {
   },
 };
 function App() {
+  const device = useDevice();
   const [params, setParams] = React.useState<ServiceParameters>({});
   let x = y.random.properties.my_int_array;
 
@@ -161,6 +164,7 @@ function App() {
 
   return (
     <>
+      {device && <RealtimeVideoPlayer deviceId={device?.id} />}
       <BarChart labels={["stream a", "stream b"]} data={[100, 50]} />
       <LoadingIndicator />
       <button onClick={() => console.log(en)}>Clicl</button>
