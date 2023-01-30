@@ -1,15 +1,24 @@
-import { FC, useEffect } from "react";
-import { FeatureCollection } from "geojson";
+import { FC, useLayoutEffect, useState } from "react";
+import { FeatureCollection, Point } from "geojson";
+import { GeoJSONSource, LngLatLike } from "mapbox-gl";
+
 interface IHeatmapLayerProps {
   map: mapboxgl.Map | null;
-  featureCollection: FeatureCollection;
+  featureCollection: FeatureCollection<Point>;
+  distinctZoomLevel?: number;
+  circleRadius?: number;
 }
+
+const DEFAULT_DISTINCT_ZOOM_LEVEL = 15;
 
 export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
   map,
   featureCollection,
+  distinctZoomLevel,
+  circleRadius,
 }) => {
-  useEffect(() => {
+  const [isLayerLoaded, setIsLayerLoaded] = useState(false);
+  useLayoutEffect(() => {
     if (!map) return; // wait for map to initialize
 
     map.on("load", () => {
@@ -23,7 +32,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
           id: "numeric-heat",
           type: "heatmap",
           source: "numeric",
-          maxzoom: 15,
+          maxzoom: 24,
           paint: {
             // increase weight as diameter breast height increases
             "heatmap-weight": {
@@ -31,13 +40,13 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               type: "exponential",
               stops: [
                 [1, 0],
-                [62, 1],
+                [100, 1],
               ],
             },
             // increase intensity as zoom level increases
             "heatmap-intensity": {
               stops: [
-                [11, 1],
+                [15, 1],
                 [15, 3],
               ],
             },
@@ -49,27 +58,32 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               0,
               "rgba(236,222,239,0)",
               0.2,
-              "rgb(208,209,230)",
+              "rgb(169,97,228)",
               0.4,
-              "rgb(166,189,219)",
+              "rgb(46,196,149)",
               0.6,
-              "rgb(103,169,207)",
+              "rgb(249,195,110)",
               0.8,
-              "rgb(28,144,153)",
+              "rgb(234,113,157)", //red
             ],
             // increase radius as zoom increases
             "heatmap-radius": {
               stops: [
-                [11, 15],
-                [15, 20],
+                [11, distinctZoomLevel ?? 15],
+                [15, distinctZoomLevel ? distinctZoomLevel + 2 : 20],
               ],
             },
             // decrease opacity to transition into the circle layer
             "heatmap-opacity": {
               default: 1,
               stops: [
-                [14, 1],
-                [15, 0],
+                [
+                  distinctZoomLevel
+                    ? distinctZoomLevel - 1
+                    : DEFAULT_DISTINCT_ZOOM_LEVEL - 1,
+                  1,
+                ],
+                [distinctZoomLevel ?? DEFAULT_DISTINCT_ZOOM_LEVEL + 1, 0],
               ],
             },
           },
@@ -82,17 +96,20 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
           id: "numeric-point",
           type: "circle",
           source: "numeric",
-          minzoom: 14,
+          minzoom: !!distinctZoomLevel
+            ? distinctZoomLevel - 1
+            : DEFAULT_DISTINCT_ZOOM_LEVEL - 1,
           paint: {
             // increase the radius of the circle as the zoom level and weight value increases
             "circle-radius": {
               property: "weight",
               type: "exponential",
               stops: [
-                [{ zoom: 15, value: 1 }, 5],
-                [{ zoom: 15, value: 62 }, 10],
-                [{ zoom: 22, value: 1 }, 20],
-                [{ zoom: 22, value: 62 }, 50],
+                [
+                  { zoom: DEFAULT_DISTINCT_ZOOM_LEVEL, value: 1 },
+                  circleRadius ?? 5,
+                ],
+                [{ zoom: 22, value: 100 }, circleRadius ?? 20],
               ],
             },
             "circle-color": {
@@ -100,12 +117,10 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               type: "exponential",
               stops: [
                 [0, "rgba(236,222,239,0)"],
-                [10, "rgb(236,222,239)"],
-                [20, "rgb(208,209,230)"],
-                [30, "rgb(166,189,219)"],
-                [40, "rgb(103,169,207)"],
-                [50, "rgb(28,144,153)"],
-                [60, "rgb(1,108,89)"],
+                [25, "rgb(169,97,228)"],
+                [50, "rgb(46,196,149)"],
+                [75, "rgb(249,195,110)"],
+                [100, "rgb(234,113,157)"],
               ],
             },
             "circle-stroke-color": "white",
@@ -121,7 +136,26 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
         "waterway-label"
       );
     });
+    setIsLayerLoaded(true);
   }, [map]);
 
-  return null;
+  useLayoutEffect(() => {
+    if (!map || featureCollection.features.length < 1 || !isLayerLoaded) return;
+
+    setTimeout(() => {
+      const current = map.getSource("numeric") as GeoJSONSource;
+      map.addLayer;
+      if (!current) return;
+      current.setData(featureCollection as any);
+      map.flyTo({
+        center: featureCollection.features[0].geometry
+          .coordinates as LngLatLike,
+        zoom: DEFAULT_DISTINCT_ZOOM_LEVEL - 3, // Fly to the selected target
+        duration: 5000, // Animate over 12 seconds
+        essential: true,
+      });
+    }, 3000);
+  }, [JSON.stringify(featureCollection.features), isLayerLoaded]);
+
+  return <></>;
 };

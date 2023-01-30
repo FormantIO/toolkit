@@ -1,21 +1,20 @@
 import { useRef, useLayoutEffect } from "react";
-import mapboxgl, { GeoJSONSource } from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 import styles from "./App.module.scss";
-import { useConfiguration } from "./hooks/useConfiguration";
-import { useLocationDataPoints } from "./hooks/useLocationDataPoints";
-import { useDevice } from "@formant/ui-sdk";
+import { useDataPoints } from "./hooks/useDataPoints";
+import { LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { useFeatures } from "./hooks/useFeatures";
 import { HeatmapLayer } from "./HeatmapLayer";
-import { LoadingIndicator } from "@formant/ui-sdk";
+import { IConfiguration } from "./types";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYWxlbmpkZXYiLCJhIjoiY2t3NWt5ZmExMTcxMDJvbW5kdDR2eGs1diJ9.aYT7nc_i5rp2hY4dt3CLrw";
 
 function App() {
-  const device = useDevice();
-  const config = useConfiguration();
-  const locationDataPoints = useLocationDataPoints(device as any, config!);
-  const featureCollection = useFeatures(locationDataPoints);
+  const context = useFormant();
+  const config = context.configuration as IConfiguration;
+  const dataPoints = useDataPoints();
+  const featureCollection = useFeatures(dataPoints);
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -33,13 +32,6 @@ function App() {
     });
   }, [config]);
 
-  useLayoutEffect(() => {
-    if (!map.current || featureCollection.features.length < 1) return;
-    const current = map.current.getSource("numeric") as GeoJSONSource;
-    if (!current) return;
-    current.setData(featureCollection as any);
-  }, [featureCollection, config]);
-
   return (
     <div className={styles.app}>
       {!config ? (
@@ -50,6 +42,8 @@ function App() {
           <HeatmapLayer
             map={map.current}
             featureCollection={featureCollection}
+            distinctZoomLevel={config.distinctZoomLevel}
+            circleRadius={config.circleRadius}
           />
         </>
       )}
