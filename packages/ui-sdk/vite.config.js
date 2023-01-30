@@ -23,6 +23,7 @@ module.exports = defineConfig({
         "@mui/material/styles",
         "classnames",
         "styled-components",
+        "sass"
       ],
       output: {
         // Provide global variables to use in the UMD build

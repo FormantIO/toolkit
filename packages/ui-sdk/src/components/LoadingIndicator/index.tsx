@@ -1,10 +1,10 @@
 import React from "react";
 import loading from "../../images/loading.png";
-import styles from "./index.module.scss";
+import "./index.css";
 
 export const LoadingIndicator = () => {
   return (
-    <div className={styles["formant-loading-indicator"]}>
+    <div className={"formant-loading-indicator"}>
       <img src={loading} />
     </div>
   );

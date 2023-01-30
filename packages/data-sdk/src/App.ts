@@ -26,6 +26,12 @@ export type AppMessage =
     }
   | { type: "request_devices" };
 
+export type ModuleConfigurationMessage = {
+  type: "module_configuration";
+  temporary: boolean;
+  configuration: string;
+};
+
 export type EmbeddedAppMessage =
   | {
       type: "module_menu_item_clicked";
@@ -46,7 +52,8 @@ export type EmbeddedAppMessage =
       channel: string;
       source: string;
       data: any;
-    };
+    }
+  | ModuleConfigurationMessage;
 export interface ModuleData {
   queryRange: QueryRange;
   time: number;
@@ -220,6 +227,10 @@ export class App {
   }
 
   static addModuleDataListener(handler: (data: ModuleData) => void) {
+    const moduleName = this.getCurrentModuleContext();
+    if (moduleName) {
+      this.sendAppMessage({ type: "request_module_data", module: moduleName });
+    }
     window.addEventListener("message", (event) => {
       const msg = event.data as EmbeddedAppMessage;
       if (msg.type === "module_data") {
@@ -228,6 +239,17 @@ export class App {
           time: msg.time,
           queryRange: msg.queryRange,
         });
+      }
+    });
+  }
+
+  static addModuleConfigurationListener(
+    handler: (event: ModuleConfigurationMessage) => void
+  ) {
+    window.addEventListener("message", (event) => {
+      const msg = event.data as EmbeddedAppMessage;
+      if (msg.type === "module_configuration") {
+        handler(msg as ModuleConfigurationMessage);
       }
     });
   }

@@ -33,7 +33,8 @@ export type StreamType =
   | "numeric set"
   | "image"
   | "numeric"
-  | "text";
+  | "text"
+  | "json";
 
 export type RtcStreamType =
   | "ping"

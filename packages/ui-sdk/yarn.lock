@@ -1302,21 +1302,20 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz"
   "version" "0.2.5"
 
-"@formant/data-sdk@^0.0.112":
-  "integrity" "sha512-3wOMZRJh69Z05aLfIc7QbGALpx+rG+xTynsJmg+gFqHUNpzK2RqgFBEC8t0xn406spnFTW+8+gFKIR7kqe7P1Q=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.112.tgz"
-  "version" "0.0.112"
+"@formant/data-sdk@^0.0.115":
+  "integrity" "sha512-q0AG06OQxy9DfK5ZxkW8JnPiwvhWtdZGisrn9PcYJYnzFZ0Y2nA8P+4vlOHBRphXo+T5Gces+St1XyjvnzheDQ=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.115.tgz"
+  "version" "0.0.115"
   dependencies:
-    "@formant/realtime-sdk" "^0.0.18"
-    "@types/google-protobuf" "^3.15.5"
+    "@formant/realtime-sdk" "^0.0.19"
 
-"@formant/realtime-sdk@^0.0.18":
-  "integrity" "sha512-G5sz9IZ02Q6Bdw0gXr0gRTie3A92UYmcXUeWX+kOa2vqWy96BdrAEoSu8IVCEIIJjyFZu04j1anYnelCIGS7Xg=="
-  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.18.tgz"
-  "version" "0.0.18"
+"@formant/realtime-sdk@^0.0.19":
+  "integrity" "sha512-P8EITCk8Pyg10UvB3f9Y7kbEMfOZ+gk1/tQRbjKnhuR+cN5Wcz6gyjo8i21JToogdgbe8iq3bb6Ghltz/hTmRA=="
+  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.19.tgz"
+  "version" "0.0.19"
   dependencies:
+    "@types/google-protobuf" "~3.7.0"
     "env-var" "^7.3.0"
-    "google-protobuf" "^3.17.3"
     "grpc-web" "^1.2.1"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
@@ -2532,10 +2531,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/google-protobuf@^3.15.5":
-  "integrity" "sha512-6bgv24B+A2bo9AfzReeg5StdiijKzwwnRflA8RLd1V4Yv995LeTmo0z69/MPbBDFSiZWdZHQygLo/ccXhMEDgw=="
-  "resolved" "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.15.5.tgz"
-  "version" "3.15.5"
+"@types/google-protobuf@~3.7.0":
+  "integrity" "sha512-6PjMFKl13cgB4kRdYtvyjKl8VVa0PXS2IdVxHhQ8GEKbxBkyJtSbaIeK1eZGjDKN7dvUh4vkOvU9FMwYNv4GQQ=="
+  "resolved" "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.7.4.tgz"
+  "version" "3.7.4"
 
 "@types/graceful-fs@^4.1.2":
   "integrity" "sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw=="
@@ -5624,11 +5623,6 @@
     "ignore" "^4.0.3"
     "pify" "^4.0.1"
     "slash" "^2.0.0"
-
-"google-protobuf@^3.17.3":
-  "integrity" "sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA=="
-  "resolved" "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.21.2.tgz"
-  "version" "3.21.2"
 
 "graceful-fs@^4.1.11", "graceful-fs@^4.1.15", "graceful-fs@^4.1.2", "graceful-fs@^4.1.6", "graceful-fs@^4.2.0", "graceful-fs@^4.2.4":
   "integrity" "sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA=="
