@@ -24,7 +24,10 @@ class HeatmapClient:
         self._agent_client.post_geolocation(
             self._geolocation_stream_name, latitude=latitude, longitude=longitud,
         )
-        self._agent_client.post_numeric(self._numeric_stream_name, weight)
+        self._agent_client.post_text("test_alert.level.1.condition", "Alert")
+        if weight % 5 == 0:
+            self._agent_client.post_numeric(self._numeric_stream_name, weight)
+            print("numeric")
 
     def run(self):
         try:
@@ -39,9 +42,9 @@ class HeatmapClient:
                 longitud = float(longitud)
                 weight = randint(1, 50)
                 time.sleep(1)
-                print(latitude, longitud, weight)
+                print("location")
                 self._publish_to_heatmap(
-                    latitude=latitude, longitud=longitud, weight=weight
+                    latitude=longitud, longitud=latitude, weight=weight
                 )
         except KeyboardInterrupt:
             pass
