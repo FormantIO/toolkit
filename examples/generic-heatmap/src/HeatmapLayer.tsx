@@ -58,26 +58,31 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               0,
               "rgba(236,222,239,0)",
               0.2,
-              "#FF72CC",
+              "rgb(208,209,230)",
               0.4,
               "rgb(166,189,219)",
               0.6,
               "rgb(103,169,207)",
               0.8,
-              "#18D2FF",
+              "rgb(28,144,153)",
             ],
             // increase radius as zoom increases
             "heatmap-radius": {
               stops: [
-                [11, 15],
-                [15, 20],
+                [11, distinctZoomLevel ?? 15],
+                [15, distinctZoomLevel ? distinctZoomLevel + 2 : 20],
               ],
             },
             // decrease opacity to transition into the circle layer
             "heatmap-opacity": {
               default: 1,
               stops: [
-                [14, 1],
+                [
+                  distinctZoomLevel
+                    ? distinctZoomLevel - 1
+                    : DEFAULT_DISTINCT_ZOOM_LEVEL - 1,
+                  1,
+                ],
                 [distinctZoomLevel ?? DEFAULT_DISTINCT_ZOOM_LEVEL + 1, 0],
               ],
             },

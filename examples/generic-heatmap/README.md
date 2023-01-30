@@ -81,7 +81,7 @@ In the following example, we set a numeric data stream and correlate it with the
 ### URL
 
 
-https://formantio.github.io/toolkit/examples/generic-heatmap/dist/index.html?auth={auth}&device={device_id}&configuration={configuration}
+https://formantio.github.io/toolkit/examples/generic-heatmap/dist/index.html?auth={auth}&device={device_id}&configuration={configuration}&module={module}
 
 
 ![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/generic-heatmap/src/images/heatmap.png)

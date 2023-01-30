@@ -141,7 +141,6 @@ export const useDataPoints = (): IHeatMapDataPoint[] => {
 
   useEffect(() => {
     if (!config || config.end.type !== "scrubber" || !device) return;
-
     handleConfiguration(config, device.id, time).then((_) => {
       if (_ === null) return;
       setStartTime(_.start as string);

@@ -13,7 +13,7 @@ export const generateFeaturesObject = (
   features: heatMapDataPoints.map((d) => ({
     type: "Feature",
     properties: {
-      weight: d.weight ?? 1,
+      weight: d.weight ?? 50,
     },
     geometry: {
       type: "Point",
