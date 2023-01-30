@@ -220,11 +220,6 @@ export class App {
   }
 
   static addModuleDataListener(handler: (data: ModuleData) => void) {
-    const moduleName = this.getCurrentModuleContext();
-    this.sendAppMessage({
-      type: "request_module_data",
-      module: moduleName!,
-    });
     window.addEventListener("message", (event) => {
       const msg = event.data as EmbeddedAppMessage;
       if (msg.type === "module_data") {
