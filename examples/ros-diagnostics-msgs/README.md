@@ -1,5 +1,5 @@
 # ROS Diagnostic Message Table
-This module displayes the structure of a JSON object used to represent the status of individual components of a robot. The JSON object contains information about the level of operation, the name and description of the test/component, a hardware ID, and an array of values associated with the status.
+This module displays the structure of a JSON object used to represent the status of individual components of a robot. The JSON object contains information about the level of operation, the name and description of the test/component, a hardware ID, and an array of values associated with the status.
 
 
 ### JSON Object Structure
@@ -61,3 +61,8 @@ Expected JSON object
 }
 
 ```
+
+
+###  URL
+
+https://formantio.github.io/toolkit/examples/ros-diagnostics-msgs/dist/index.html?auth={auth}&device={device_id}
