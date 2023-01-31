@@ -1,0 +1,12 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/colors.scss";
+.message-table {
+  display: flex;
+  flex-direction: column;
+  background-color: $messages-bg;
+  height: calc(100vh - 60px);
+  min-width: 500px;
+  @include sm {
+    width: 100vw;
+  }
+}

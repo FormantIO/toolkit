@@ -1,0 +1,11 @@
+.loading {
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  overflow: hidden;
+  top: calc(50vh - 12px);
+  left: calc(50vw - 12px);
+  img {
+    height: 100%;
+  }
+}
