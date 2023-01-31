@@ -28,10 +28,9 @@ interface IRealtimeVideoPlayerProps {
 
 export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
   deviceId,
-  cameraName,
-}): any => {
+  cameraName = "",
+}) => {
   const [loading, setIsLoading] = useState(true);
-  const load = useRef(true);
 
   const start = async (realTimePlayer: RealtimePlayer) => {
     await Authentication.waitTilAuthenticated();
@@ -54,7 +53,8 @@ export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
     async (device: Device) => {
       const videoStreams = await device.getRealtimeVideoStreams();
       let videoStream = videoStreams[0];
-      if (cameraName) videoStream = videoStreams.filter((c) => c.name)[0];
+      if (cameraName)
+        videoStream = videoStreams.filter((c) => c.name === cameraName)[0];
       return videoStream;
     },
     [cameraName]

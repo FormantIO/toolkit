@@ -39,10 +39,10 @@
     },
 
     "longitude": {
-      "type": "float"
+      "type": "number"
     },
     "latitude": {
-      "type": "float"
+      "type": "number"
     },
     "zoom": {
       "type": "integer",

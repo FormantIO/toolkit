@@ -348,12 +348,7 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz"
   "version" "0.3.0"
 
-"@esbuild/darwin-arm64@0.16.17":
-  "integrity" "sha512-/2agbUEfmxWHi9ARTX6OQ/KgXnOWfsNlTeLcoV7HSuSTv63E4DqtAc+2XqGw1KHxKMHGZgbVCZge7HXWX9Vn+w=="
-  "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.16.17.tgz"
-  "version" "0.16.17"
-
-"@formant/data-sdk@^0.0.110", "@formant/data-sdk@0.0.110":
+"@formant/data-sdk@^0.0.110":
   "integrity" "sha512-Gt89ZgP3EzrsaipHrOOZ6qAOzX6pig3aun+mwWvkJyKLKV26JUrokM3u+4cX3kphrJkV5zNQ7L1BZHKXqJLPUA=="
   "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.110.tgz"
   "version" "0.0.110"
@@ -362,13 +357,12 @@
     "@types/google-protobuf" "^3.15.5"
     "typedoc" "^0.22.13"
 
-"@formant/realtime-sdk@^0.0.15":
-  "integrity" "sha512-DpFYBh1cW6Q1l3TqHrxoyctg8oqZ8H3CAz5qxAVPrD7djs/jdWcj1VzE9ZhviNuwjj8Y03AH3eI/cl7yjxew3A=="
-  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.15.tgz"
-  "version" "0.0.15"
+"@formant/data-sdk@0.0.117":
+  "integrity" "sha512-hqYxUqywSdgBqpv3cEnkaPEOc2R/nqsNRLy3NBe/d77fcLK/yEcgufl4QNkIhkOYhYkpBbyZ4n+H4WXoRZl+tA=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.117.tgz"
+  "version" "0.0.117"
   dependencies:
-    "google-protobuf" "3.17.3"
-    "grpc-web" "1.2.1"
+    "@formant/realtime-sdk" "^0.0.19"
 
 "@formant/realtime-sdk@^0.0.18":
   "integrity" "sha512-G5sz9IZ02Q6Bdw0gXr0gRTie3A92UYmcXUeWX+kOa2vqWy96BdrAEoSu8IVCEIIJjyFZu04j1anYnelCIGS7Xg=="
@@ -377,6 +371,15 @@
   dependencies:
     "env-var" "^7.3.0"
     "google-protobuf" "^3.17.3"
+    "grpc-web" "^1.2.1"
+
+"@formant/realtime-sdk@^0.0.19":
+  "integrity" "sha512-P8EITCk8Pyg10UvB3f9Y7kbEMfOZ+gk1/tQRbjKnhuR+cN5Wcz6gyjo8i21JToogdgbe8iq3bb6Ghltz/hTmRA=="
+  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.19.tgz"
+  "version" "0.0.19"
+  dependencies:
+    "@types/google-protobuf" "~3.7.0"
+    "env-var" "^7.3.0"
     "grpc-web" "^1.2.1"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
@@ -412,16 +415,15 @@
     "sass" "^1.51.0"
     "styled-components" "^5.3.5"
 
-"@formant/universe-connector@0.0.9":
-  "integrity" "sha512-dqcdBc9kPcQqP7gchewFSlaUeD3dJ2i7hgr+2Nvdk09gCJNRixUSflyMb9ho3XQc4grbCd5wgKBtiTBgm1i37g=="
-  "resolved" "https://registry.npmjs.org/@formant/universe-connector/-/universe-connector-0.0.9.tgz"
-  "version" "0.0.9"
+"@formant/universe-connector@^0.0.15":
+  "integrity" "sha512-7rIo0b5RcSuUpwBoq51e+0UXuKH9gWUx25c/dWlMvk9c2liJGoIqj7Ne/+LanLflAdZ28S0s++XEZrQE4MeoMw=="
+  "resolved" "https://registry.npmjs.org/@formant/universe-connector/-/universe-connector-0.0.15.tgz"
+  "version" "0.0.15"
   dependencies:
-    "@formant/data-sdk" "0.0.110"
-    "@formant/realtime-sdk" "^0.0.15"
+    "@formant/data-sdk" "0.0.117"
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
     "@formant/ui-sdk-realtime-player-core-worker" "^0.0.4"
-    "@formant/universe-core" "^0.0.9"
+    "@formant/universe-core" "0.0.11"
     "date-fns" "^2.29.3"
     "lzfjs" "^1.0.1"
     "validator" "^13.7.0"
@@ -431,7 +433,12 @@
   "resolved" "https://registry.npmjs.org/@formant/universe-core/-/universe-core-0.0.9.tgz"
   "version" "0.0.9"
 
-"@formant/universe@0.0.242":
+"@formant/universe-core@0.0.11":
+  "integrity" "sha512-AuEz+vZeqqG2wdtbvLq9o9EgiDqWXXN0aGn7/j7GraieT8dGDl8EPUWd/tw2yixlwC1Xza/SM1XcvuMg2k5WpQ=="
+  "resolved" "https://registry.npmjs.org/@formant/universe-core/-/universe-core-0.0.11.tgz"
+  "version" "0.0.11"
+
+"@formant/universe@^0.0.242":
   "integrity" "sha512-uYSfjqf1v7pEB1cUftrcp9y3uGU47nZZtOzP01phLfs7MyVJGmUtAgqtRWggv3lwWunbN7jr5bYt0wLzYAr2bQ=="
   "resolved" "https://registry.npmjs.org/@formant/universe/-/universe-0.0.242.tgz"
   "version" "0.0.242"
@@ -591,6 +598,11 @@
   "integrity" "sha512-pYVNNJ+winC4aek+lZp93sIKxnXt5qMkuKmaqS3WGuTq0Bw1ZDYNBgzG5kkdtwcv+GmYJGo3yEg6z2cKKAiEdw=="
   "resolved" "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.15.6.tgz"
   "version" "3.15.6"
+
+"@types/google-protobuf@~3.7.0":
+  "integrity" "sha512-6PjMFKl13cgB4kRdYtvyjKl8VVa0PXS2IdVxHhQ8GEKbxBkyJtSbaIeK1eZGjDKN7dvUh4vkOvU9FMwYNv4GQQ=="
+  "resolved" "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.7.4.tgz"
+  "version" "3.7.4"
 
 "@types/hoist-non-react-statics@*":
   "integrity" "sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA=="
@@ -967,11 +979,6 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@~2.3.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
-
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -1015,20 +1022,10 @@
   "resolved" "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.21.2.tgz"
   "version" "3.21.2"
 
-"google-protobuf@3.17.3":
-  "integrity" "sha512-OVPzcSWIAJ+d5yiHyeaLrdufQtrvaBrF4JQg+z8ynTkbO3uFcujqXszTumqg1cGsAsjkWnI+M5B1xZ19yR4Wyg=="
-  "resolved" "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.17.3.tgz"
-  "version" "3.17.3"
-
 "grpc-web@^1.2.1":
   "integrity" "sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw=="
   "resolved" "https://registry.npmjs.org/grpc-web/-/grpc-web-1.4.2.tgz"
   "version" "1.4.2"
-
-"grpc-web@1.2.1":
-  "integrity" "sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw=="
-  "resolved" "https://registry.npmjs.org/grpc-web/-/grpc-web-1.2.1.tgz"
-  "version" "1.2.1"
 
 "h264decoder@^1.0.0":
   "integrity" "sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ=="
