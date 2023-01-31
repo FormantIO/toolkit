@@ -1,0 +1,28 @@
+{
+  "streams": [
+    {
+      "name": "blade.mode",
+      "expectedValue": "manual",
+      "fullWidth": true,
+      "streamType": "text"
+    },
+    {
+      "name": "blade.range",
+      "streamType": "numeric",
+      "fullWidth": true,
+      "expectedValue": {
+        "greaterThan": 10,
+        "lesserThan": 60
+      }
+    },
+    {
+      "name": "blade.set",
+      "fullWidth": true,
+      "streamType": "bitset",
+      "expectedValue": {
+        "keys": ["isOn", "isManual", "isAutonomous"],
+        "values": [true, true, true]
+      }
+    }
+  ]
+}
