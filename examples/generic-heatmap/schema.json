@@ -6,10 +6,12 @@
   "type": "object",
   "properties": {
     "locationStream": {
-      "type": "string"
+      "type": "string",
+      "description": "Formant's location stream name"
     },
     "numericStream": {
-      "type": "string"
+      "type": "string",
+      "description": "Formant's numeric stream name"
     },
     "start": {
       "type": "object",
@@ -35,20 +37,29 @@
         }
       }
     },
-    "center": {
-      "type": "object",
-      "properties": {
-        "longitude": {
-          "type": "float"
-        },
-        "latitude": {
-          "type": "float"
-        }
-      }
+
+    "longitude": {
+      "type": "float"
+    },
+    "latitude": {
+      "type": "float"
     },
     "zoom": {
       "type": "integer",
       "description": "Zoom in center of map"
+    },
+    "maxSecondsBetweenDatapoints": {
+      "type": "integer",
+      "description": "Max time allow between datapoints numeric and location datapoins"
+    },
+    "distinctZoomLevel": {
+      "type": "integer"
+    },
+    "circleRadius": {
+      "type": "integer"
+    },
+    "tooltipLabel": {
+      "type": "string"
     }
   }
 }

@@ -15,6 +15,7 @@ export interface IConfiguration {
   maxSecondsBetweenDatapoints?: number;
   distinctZoomLevel?: number;
   circleRadius?: number;
+  tooltipLabel?: string;
 }
 
 export interface IHeatMapDataPoint {

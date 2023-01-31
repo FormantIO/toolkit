@@ -47,7 +47,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
             "heatmap-intensity": {
               stops: [
                 [15, 1],
-                [15, 3],
+                // [15, 3],
               ],
             },
             // assign color values be applied to points depending on their density
@@ -151,7 +151,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
         center: featureCollection.features[0].geometry
           .coordinates as LngLatLike,
         zoom: DEFAULT_DISTINCT_ZOOM_LEVEL - 3, // Fly to the selected target
-        duration: 5000, // Animate over 12 seconds
+        duration: 5000,
         essential: true,
       });
     }, 3000);
