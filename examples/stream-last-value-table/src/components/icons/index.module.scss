@@ -1,0 +1,17 @@
+.icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    cursor: pointer;
+    background-color: #657197;
+    border-radius: 4px;
+  }
+}
+
+.active {
+  background-color: #657197;
+  border-radius: 4px;
+}

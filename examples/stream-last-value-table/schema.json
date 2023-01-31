@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/last-known-value/configuration.schema.json",
+  "title": "Last known value table",
+  "description": "Available streams to display on the table.",
+  "type": "object",
+  "properties": {
+    "streams": {
+      "description": "Enabled streams",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "type": "string",
+            "enum": ["text", "numeric", "bitset"]
+          },
+          "streamType": {
+            "description": "Formant's stream type",
+            "type": "string"
+          },
+          "fullWidth": {
+            "description": "Condition to take full row on the table",
+            "type": "boolean"
+          },
+          "expectedValue": {
+            "description": "Value to evaluate the current stream value against",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+
+              {
+                "type": "object",
+                "properties": {
+                  "description": "Value to evaluate the current stream value against",
+                  "greaterThan": { "type": "integer" },
+                  "lesserThan": { "type": "integer" }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "description": "Value to evaluate the current stream value against",
+                  "keys": { "type": "array", "items": "string" },
+                  "values": { "type": "array", "items": "boolean" }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": ["streams"]
+}

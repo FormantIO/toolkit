@@ -1,0 +1,10 @@
+* {
+  box-sizing: border-box;
+  font-family: "Inter";
+  transition: all 0.2s ease-in;
+  overflow-x: hidden;
+}
+
+/* ::-webkit-scrollbar {
+  display: none;
+} */

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/realtime-video/schema.json",
+  "title": "Heatmap",
+  "description": "Real time video connection.",
+  "type": "object",
+  "properties": {
+    "camera": {
+      "type": "string",
+      "description": "Camera name"
+    }
+  }
+}

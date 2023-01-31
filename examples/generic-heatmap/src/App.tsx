@@ -6,6 +6,7 @@ import { LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { useFeatures } from "./hooks/useFeatures";
 import { HeatmapLayer } from "./HeatmapLayer";
 import { IConfiguration } from "./types";
+import { DetailsCard } from "./DetailsCard";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYWxlbmpkZXYiLCJhIjoiY2t3NWt5ZmExMTcxMDJvbW5kdDR2eGs1diJ9.aYT7nc_i5rp2hY4dt3CLrw";
@@ -45,6 +46,7 @@ function App() {
             distinctZoomLevel={config.distinctZoomLevel}
             circleRadius={config.circleRadius}
           />
+          <DetailsCard map={map.current} />
         </>
       )}
     </div>

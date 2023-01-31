@@ -1,0 +1,26 @@
+@import "../styles/colors.scss";
+
+.ok {
+  border: 1px solid $level-stale;
+  svg {
+    fill: white;
+  }
+}
+
+.warning {
+  border: 1px solid $level-stale;
+  svg {
+    fill: white;
+  }
+}
+
+.error {
+  border: 1px solid $level-stale;
+  svg {
+    fill: white;
+  }
+}
+
+.stale {
+  border: 1px solid $level-stale;
+}

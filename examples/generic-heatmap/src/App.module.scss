@@ -11,3 +11,70 @@
   min-width: 100vw;
   overflow: hidden;
 }
+
+.card {
+  position: absolute;
+
+  width: auto;
+  height: auto;
+  background-color: black;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  border-radius: 4px;
+  color: #bac4e2;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  padding-right: 19px;
+}
+
+.fade-in {
+  -webkit-animation: fade-in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-out {
+  -webkit-animation: fade-out 0.2s ease-out both;
+  animation: fade-out 0.2s ease-out both;
+}
+
+@-webkit-keyframes fade-out {
+  0% {
+    opacity: 1;
+    z-index: 5;
+  }
+  100% {
+    opacity: 0;
+    z-index: 0;
+  }
+}
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    z-index: 5;
+  }
+  100% {
+    opacity: 0;
+    z-index: 0;
+  }
+}
