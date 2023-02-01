@@ -2,11 +2,13 @@ export interface IConfiguration {
   locationStream: string;
   start: {
     type: "timeRange" | "Event";
-    value: string;
+    value?: string;
+    hours?: number;
   };
   end: {
     type: "timeRange" | "Event" | "Annotation" | "scrubber";
-    value: string;
+    value?: string;
+    hours?: number;
   };
   numericStream?: string;
   latitude?: number;
@@ -16,6 +18,7 @@ export interface IConfiguration {
   distinctZoomLevel?: number;
   circleRadius?: number;
   tooltipLabel?: string;
+  mapboxKey?: string;
 }
 
 export interface IHeatMapDataPoint {

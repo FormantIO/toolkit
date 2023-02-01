@@ -8,9 +8,6 @@ import { HeatmapLayer } from "./HeatmapLayer";
 import { IConfiguration } from "./types";
 import { DetailsCard } from "./DetailsCard";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiYWxlbmpkZXYiLCJhIjoiY2t3NWt5ZmExMTcxMDJvbW5kdDR2eGs1diJ9.aYT7nc_i5rp2hY4dt3CLrw";
-
 function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
@@ -23,13 +20,17 @@ function App() {
     if (map.current || !config) return; // initialize map only once
 
     map.current = new mapboxgl.Map({
+      accessToken:
+        config.mapboxKey ??
+        "pk.eyJ1IjoiYWxlbmpkZXYiLCJhIjoiY2t3NWt5ZmExMTcxMDJvbW5kdDR2eGs1diJ9.aYT7nc_i5rp2hY4dt3CLrw",
       container: mapContainer.current!,
       style: "mapbox://styles/alenjdev/ckwcflbv8201814n10hxbqz6q",
       center: [
         config?.longitude ?? -77.47419738769531,
         config?.latitude ?? 39.043701171875,
       ],
-      zoom: config?.zoom ?? 0,
+      zoom:
+        config.zoom && config.latitude && config.longitude ? config.zoom : 0,
     });
   }, [config]);
 

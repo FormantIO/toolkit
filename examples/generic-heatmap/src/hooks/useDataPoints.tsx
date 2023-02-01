@@ -81,26 +81,26 @@ const handleConfiguration = async (
 
   switch (start.type) {
     case "Event":
-      const events = await getEvents(start.value, deviceId);
+      const events = await getEvents(start.value!, deviceId);
       if (events.length < 1) console.error("No events");
       const startTime = isoDateToMilliseconds(events[0].createdAt!);
       query.start = startTime;
       break;
     case "timeRange":
-      query.start = time! - HOURS * parseInt(start.value);
+      query.start = time! - HOURS * start.hours!;
       break;
     default:
   }
   switch (end.type) {
     case "Annotation":
       //Start must be name of the event
-      let events = await getEvents(start.value, deviceId);
+      let events = await getEvents(start.value!, deviceId);
       if (events.length < 1) console.error("No events");
       query.start = events[0].createdAt!;
       query.end = events[0].endTime!;
       break;
     case "Event":
-      events = await getEvents(end.value, deviceId);
+      events = await getEvents(end.value!, deviceId);
       if (events.length < 1) console.error("No events");
       query.end = isoDateToMilliseconds(events[0].createdAt!);
       break;
@@ -108,7 +108,7 @@ const handleConfiguration = async (
       query.end = time!;
       break;
     case "timeRange":
-      query.end = (query.start as number) + HOURS * parseInt(end.value);
+      query.end = (query.start as number) + HOURS * end.hours!;
       break;
     default:
   }
