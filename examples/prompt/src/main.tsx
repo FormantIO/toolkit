@@ -12,12 +12,22 @@ const Demo = () => {
           (async () => {
             const r = await App.prompt(
               {
-                title: "Hello",
+                title: "Send to location",
+                description:
+                  "This is a description of some action this prompt is going to do",
                 type: "object",
+                "$formant.documentationUrl":
+                  "https://www.youtube.com/watch?v=jfKfPfyJRdk",
                 properties: {
-                  name: {
+                  speed: {
                     type: "string",
-                    title: "Name",
+                    title: "How fast?",
+                    enum: ["slow", "fast"],
+                  },
+                  afterWards: {
+                    type: "string",
+                    title: "What should the device do after?",
+                    enum: ["stop", "return to home base"],
                   },
                 },
               },
