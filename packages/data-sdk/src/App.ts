@@ -2,11 +2,13 @@ import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { QueryStore } from "./cache/queryStore";
 import { IStreamData, StreamType } from "./main";
+import { JsonSchema } from "./model/JsonSchema";
 
 const queryStore = new QueryStore();
 
 export type AppMessage =
   | { type: "go_to_time"; time: number }
+  | { type: "prompt"; promptId: string; schema: JsonSchema }
   | { type: "go_to_device"; deviceId: string }
   | { type: "request_module_data"; module: string }
   | { type: "show_message"; message: string }
@@ -56,6 +58,11 @@ export type EmbeddedAppMessage =
       channel: string;
       source: string;
       data: any;
+    }
+  | {
+      type: "prompt_response";
+      promptId: string;
+      data: string;
     }
   | ModuleConfigurationMessage;
 export interface ModuleData {
@@ -305,5 +312,22 @@ export class App {
       handler(msg);
     });
   }
+
+  static async prompt(schema: JsonSchema): Promise<any> {
+    return new Promise((resolve) => {
+      this.sendAppMessage({
+        type: "prompt",
+        promptId: Math.random().toString(),
+        schema,
+      });
+      const handler = (event: any) => {
+        const msg = event.data as EmbeddedAppMessage;
+        if (msg.type === "prompt_response") {
+          resolve(msg.data);
+        }
+        window.removeEventListener("message", handler);
+      };
+      window.addEventListener("message", handler);
+    });
+  }
 }
-(";");

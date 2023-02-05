@@ -142,3 +142,4 @@ export {
   IRtcStreamMessage,
   IRtcStreamPayload,
 } from "@formant/realtime-sdk";
+export * from "./model/JsonSchema";
