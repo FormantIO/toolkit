@@ -40,7 +40,8 @@ export interface IJsonArraySchema extends IJsonBaseSchema<"array"> {
   };
 }
 
-export interface IJsonStringSchema extends IJsonBaseSchema<"string"> {
+export interface IJsonStringSchema
+  extends IJsonBaseSchemaWithDefault<"string", string> {
   enum?: string[];
   "$formant.streams.byType"?: StreamType;
   "$formant.placeholder"?: string;
