@@ -315,14 +315,15 @@ export class App {
 
   static async prompt(schema: JsonSchema): Promise<any> {
     return new Promise((resolve) => {
+      const promptId = Math.random().toString();
       this.sendAppMessage({
         type: "prompt",
-        promptId: Math.random().toString(),
+        promptId,
         schema,
       });
       const handler = (event: any) => {
         const msg = event.data as EmbeddedAppMessage;
-        if (msg.type === "prompt_response") {
+        if (msg.type === "prompt_response" && msg.promptId === promptId) {
           resolve(msg.data);
         }
         window.removeEventListener("message", handler);
