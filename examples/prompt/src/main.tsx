@@ -23,10 +23,12 @@ const Demo = () => {
                     type: "string",
                     title: "How fast?",
                     enum: ["slow", "fast"],
+                    default: "slow",
                   },
                   afterWards: {
                     type: "string",
                     title: "What should the device do after?",
+                    default: "return to home base",
                     enum: ["stop", "return to home base"],
                   },
                 },
