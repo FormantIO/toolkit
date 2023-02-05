@@ -8,7 +8,13 @@ const queryStore = new QueryStore();
 
 export type AppMessage =
   | { type: "go_to_time"; time: number }
-  | { type: "prompt"; promptId: string; schema: JsonSchema }
+  | {
+      type: "prompt";
+      promptId: string;
+      schema: JsonSchema;
+      okText?: string;
+      cancelText?: string;
+    }
   | { type: "go_to_device"; deviceId: string }
   | { type: "request_module_data"; module: string }
   | { type: "show_message"; message: string }
@@ -313,13 +319,18 @@ export class App {
     });
   }
 
-  static async prompt(schema: JsonSchema): Promise<any> {
+  static async prompt(
+    schema: JsonSchema,
+    options?: { okText?: string; cancelText?: string }
+  ): Promise<any> {
     return new Promise((resolve) => {
       const promptId = Math.random().toString();
       this.sendAppMessage({
         type: "prompt",
         promptId,
         schema,
+        okText: options?.okText,
+        cancelText: options?.cancelText,
       });
       const handler = (event: any) => {
         const msg = event.data as EmbeddedAppMessage;
