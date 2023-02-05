@@ -6,9 +6,7 @@ export type FieldType =
   | "number"
   | "array"
   | "object"
-  | "bool"
-  | "boolean"
-  | "$formant.stream";
+  | "boolean";
 
 export interface IJsonBaseSchema<T extends FieldType> {
   title?: string;
