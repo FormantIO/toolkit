@@ -9,9 +9,9 @@ const Demo = () => {
     <>
       <button
         onClick={() => {
-          (async () =>
-            setResult(
-              await App.prompt({
+          (async () => {
+            const r = await App.prompt(
+              {
                 title: "Hello",
                 type: "object",
                 properties: {
@@ -20,8 +20,14 @@ const Demo = () => {
                     title: "Name",
                   },
                 },
-              })
-            ))();
+              },
+              {
+                okText: "Go To Location",
+                cancelText: "Do nothing",
+              }
+            );
+            setResult(r);
+          })();
         }}
       >
         Click me

@@ -319,10 +319,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.16.17.tgz#c5a1a4bfe1b57f0c3e61b29883525c6da3e5c091"
   integrity sha512-y+EHuSchhL7FjHgvQL/0fnnFmO4T1bhvWANX6gcnqTjtnKWbTvUMCpGnv2+t+31d7RzyEAYAd4u2fnIhHL6N/Q==
 
-"@formant/data-sdk@0.0.123":
-  version "0.0.123"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.123.tgz#78b1eb1494b066da852b56e9e0b3fd5c321d8fd9"
-  integrity sha512-4QeZQw5gBHAYGitPEjoMBcORNeJVoQ9zIo9dAW0H3QBn7t0D1Z9196bb5zKUB2HY7AbUzORCpmJBUxl0psR9yA==
+"@formant/data-sdk@0.0.125":
+  version "0.0.125"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.125.tgz#ed3822785da55373692ed8657b3d764d03f21315"
+  integrity sha512-mqzbPm41lWmD4l/Su8FZE0nqBu3EvMzdOWCoRAmIT3RD+QmJ965XKNKnCpTgmxUz65fKj87K65r6dBh50xvPhw==
   dependencies:
     "@formant/realtime-sdk" "^0.0.19"
     date-fns "^2.29.3"
