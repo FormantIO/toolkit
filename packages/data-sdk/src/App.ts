@@ -1,5 +1,9 @@
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
+import { QueryStore } from "./cache/queryStore";
+import { IStreamData, StreamType } from "./main";
+
+const queryStore = new QueryStore();
 
 export type AppMessage =
   | { type: "go_to_time"; time: number }
@@ -241,6 +245,31 @@ export class App {
         });
       }
     });
+  }
+
+  static addStreamListener<T extends StreamType>(
+    streamName: string,
+    streamType: T,
+    handler: (response: IStreamData<T>[] | "too much data" | undefined) => void
+  ): () => void {
+    const listener = (event: any) => {
+      const msg = event.data as EmbeddedAppMessage;
+      if (msg.type === "module_data") {
+        const { start, end } = msg.queryRange;
+        handler(
+          queryStore.moduleQuery(
+            {},
+            streamName,
+            streamType,
+            new Date(start),
+            new Date(end),
+            false
+          )
+        );
+      }
+    };
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
   }
 
   static addModuleConfigurationListener(
