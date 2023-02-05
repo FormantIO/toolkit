@@ -62,7 +62,7 @@ export type EmbeddedAppMessage =
   | {
       type: "prompt_response";
       promptId: string;
-      data: string;
+      data: any;
     }
   | ModuleConfigurationMessage;
 export interface ModuleData {
