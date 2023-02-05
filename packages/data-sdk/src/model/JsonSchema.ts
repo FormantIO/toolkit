@@ -8,14 +8,18 @@ export type FieldType =
   | "object"
   | "boolean";
 
-export interface IJsonBaseSchema<T extends FieldType> {
+interface IJsonBaseSchema<T extends FieldType> {
   title?: string;
   description?: string;
   type: T;
-  default?: string;
   required?: string[];
   $schema?: string;
   "$formant.visible.when"?: [string, "=", string];
+}
+
+interface IJsonBaseSchemaWithDefault<T extends FieldType, U>
+  extends IJsonBaseSchema<T> {
+  default?: U;
 }
 
 export interface IPropertyObject {
@@ -43,9 +47,9 @@ export interface IJsonStringSchema extends IJsonBaseSchema<"string"> {
   "$formant.groups"?: boolean;
   "$formant.date"?: boolean;
 }
-export type IJsonBooleanSchema = IJsonBaseSchema<"boolean">;
-export type IJsonIntegerSchema = IJsonBaseSchema<"integer">;
-export type IJsonNumberSchema = IJsonBaseSchema<"number">;
+export type IJsonBooleanSchema = IJsonBaseSchemaWithDefault<"boolean", boolean>;
+export type IJsonIntegerSchema = IJsonBaseSchemaWithDefault<"integer", number>;
+export type IJsonNumberSchema = IJsonBaseSchemaWithDefault<"number", number>;
 
 export type JsonSchema =
   | IJsonObjectSchema
