@@ -25,8 +25,7 @@ export interface IPropertyObject {
 }
 
 export interface IJsonObjectSchema extends IJsonBaseSchema<"object"> {
-  items: IPropertyObject;
-  properties: IPropertyObject;
+  properties?: IPropertyObject;
   "$formant.documentationUrl"?: string;
 }
 
