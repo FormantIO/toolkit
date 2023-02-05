@@ -1302,12 +1302,13 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz"
   "version" "0.2.5"
 
-"@formant/data-sdk@^0.0.116":
-  "integrity" "sha512-w2HTNHX6spbI3ep7pPO6JhvYa1pEkKPs3w73MCd31XhtYSnS7hxc4avKvR1MKrJy15BRnk3zfZN2UvChNR5i9Q=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.116.tgz"
-  "version" "0.0.116"
+"@formant/data-sdk@^0.0.128":
+  "integrity" "sha512-vUyciy9FUDg5iS/Ka0mbA5d/KNgPxxFrRyuObGb12/lB87V0Ad8OgxFbtRytQSetoklHhy54uS9xGz/GRaWa4w=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.128.tgz"
+  "version" "0.0.128"
   dependencies:
     "@formant/realtime-sdk" "^0.0.19"
+    "date-fns" "^2.29.3"
 
 "@formant/realtime-sdk@^0.0.19":
   "integrity" "sha512-P8EITCk8Pyg10UvB3f9Y7kbEMfOZ+gk1/tQRbjKnhuR+cN5Wcz6gyjo8i21JToogdgbe8iq3bb6Ghltz/hTmRA=="
@@ -4435,6 +4436,11 @@
   "integrity" "sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk="
   "resolved" "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
   "version" "1.0.1"
+
+"date-fns@^2.29.3":
+  "integrity" "sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA=="
+  "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.29.3.tgz"
+  "version" "2.29.3"
 
 "debug@^2.2.0":
   "integrity" "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="
