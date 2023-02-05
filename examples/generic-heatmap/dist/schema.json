@@ -2,9 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/generic-heatmap/schema.json",
   "title": "Heatmap",
-  "description": "Aggregate chart configuration.",
+  "description": "Graphical representation of data ingested in Formant",
   "type": "object",
   "properties": {
+    "mapboxKey": {
+      "title": "Mapbox key",
+      "type": "string"
+    },
     "locationStream": {
       "type": "string",
       "description": "Formant's location stream name"
@@ -21,7 +25,13 @@
           "enum": ["timeRange", "Event"]
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "title": "Event Name",
+          "$formant.visible.when": ["type", "=", "Event"]
+        },
+        "hours": {
+          "type": "number",
+          "$formant.visible.when": ["type", "=", "timeRange"]
         }
       }
     },
@@ -30,10 +40,16 @@
       "properties": {
         "type": {
           "type": "string",
+          "title": "Event Name",
           "enum": ["timeRange", "Event", "Annotation", "scrubber"]
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "$formant.visible.when": ["type", "=", "Event"]
+        },
+        "hours": {
+          "type": "number",
+          "$formant.visible.when": ["type", "=", "timeRange"]
         }
       }
     },
@@ -49,16 +65,20 @@
       "description": "Zoom in center of map"
     },
     "maxSecondsBetweenDatapoints": {
+      "title": "Valid time offset",
       "type": "integer",
-      "description": "Max time allow between datapoints numeric and location datapoins"
+      "description": "Max time allow between numeric and location datapoins"
     },
     "distinctZoomLevel": {
+      "title": "Distinct zoom level",
       "type": "integer"
     },
     "circleRadius": {
+      "title": "Circle radius (px)",
       "type": "integer"
     },
     "tooltipLabel": {
+      "title": "Tooltip Label",
       "type": "string"
     }
   }
