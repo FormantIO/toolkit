@@ -1,4 +1,4 @@
-import { IStreamData } from "@formant/data-sdk";
+import { IStreamData } from "../model/IStreamData";
 
 export function filterDataByTime(
   datas: IStreamData[],

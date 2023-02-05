@@ -1,4 +1,5 @@
-import { IStreamData, StreamType } from "@formant/data-sdk";
+import { IStreamData } from "../model/IStreamData";
+import { StreamType } from "../model/StreamType";
 
 export function filterDataByType<T extends StreamType>(
   datas: IStreamData[],

@@ -10,8 +10,8 @@ import {
   startOfMinute,
 } from "date-fns";
 import { duration } from "../../../common/duration";
-import { filterDataByType } from "../../../common/filterDataByType";
-import { filterDataByTime } from "../../../common/filterDataByTime";
+import { filterDataByType } from "./filterDataByType";
+import { filterDataByTime } from "./filterDataByTime";
 import { StoreCache } from "./StoreCache";
 
 export class QueryStore {
