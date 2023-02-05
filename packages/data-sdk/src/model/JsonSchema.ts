@@ -11,8 +11,8 @@ export type FieldType =
   | "$formant.stream";
 
 export interface IJsonBaseSchema<T extends FieldType> {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   type: T;
   default?: string;
   required?: string[];
@@ -43,8 +43,8 @@ export interface IJsonStringSchema extends IJsonBaseSchema<"string"> {
   enum?: string[];
   "$formant.streams.byType"?: StreamType;
   "$formant.placeholder"?: string;
-  "$formant.groups": boolean;
-  "$formant.date": boolean;
+  "$formant.groups"?: boolean;
+  "$formant.date"?: boolean;
 }
 export type IJsonBooleanSchema = IJsonBaseSchema<"boolean">;
 export type IJsonIntegerSchema = IJsonBaseSchema<"integer">;
