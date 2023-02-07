@@ -1,8 +1,10 @@
-from turtle import st
-from formant.sdk.agent.v1 import Client as AgentClient
 import os
+import datetime
 import time
 from random import randint
+
+
+from formant.sdk.agent.v1 import Client as AgentClient
 
 
 class HeatmapClient:
@@ -20,31 +22,35 @@ class HeatmapClient:
             agent_url=self.agent_url, ignore_throttled=True
         )
 
-    def _publish_to_heatmap(self, latitude, longitud, weight):
+    def _publish_to_heatmap(self, latitude, longitude, weight):
+        print(f"{datetime.datetime.now()}\nGeolocation: {latitude}, {longitude}")
+
         self._agent_client.post_geolocation(
-            self._geolocation_stream_name, latitude=latitude, longitude=longitud,
+            self._geolocation_stream_name, latitude=latitude, longitude=longitude,
         )
-        self._agent_client.post_text("test_alert.level.1.condition", "Alert")
         if weight % 5 == 0:
+            print(f"Weight: {weight}")
             self._agent_client.post_numeric(self._numeric_stream_name, weight)
-            print("numeric")
 
     def run(self):
         try:
             while True:
-                latitude = randint(-8678933143615723, -8678791522979736)
+                # Around California:
+                # https://www.latlong.net/place/san-francisco-ca-usa-594.html
+                # https://www.latlong.net/place/los-angeles-ca-usa-1531.html
+                latitude = randint(34000000, 38000000)
+                longitude = randint(-122000000, -118000000)
                 latitude = str(latitude)
-                start_string = latitude[0:3] + "." + latitude[3:]
-                latitude = float(start_string)
-                longitud = randint(3614002351236823, 3615648409409885)
-                longitud = str(longitud)
-                longitud = longitud[0:2] + "." + longitud[2:]
-                longitud = float(longitud)
+                latitude = latitude[0:2] + "." + latitude[2:]
+                latitude = float(latitude)
+                longitude = str(longitude)
+                longitude = longitude[0:4] + "." + longitude[4:]
+                longitude = float(longitude)
+
                 weight = randint(1, 50)
                 time.sleep(1)
-                print("location")
                 self._publish_to_heatmap(
-                    latitude=longitud, longitud=latitude, weight=weight
+                    latitude=latitude, longitude=longitude, weight=weight
                 )
         except KeyboardInterrupt:
             pass
