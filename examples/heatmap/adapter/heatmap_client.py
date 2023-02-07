@@ -3,7 +3,6 @@ import datetime
 import time
 from random import randint
 
-
 from formant.sdk.agent.v1 import Client as AgentClient
 
 
@@ -17,14 +16,12 @@ class HeatmapClient:
         self._numeric_stream_name = os.getenv(
             "NUMERIC_STREAM_NAME", "heatmap_point_weight"
         )
-
         self._agent_client = AgentClient(
             agent_url=self.agent_url, ignore_throttled=True
         )
 
     def _publish_to_heatmap(self, latitude, longitude, weight):
         print(f"{datetime.datetime.now()}\nGeolocation: {latitude}, {longitude}")
-
         self._agent_client.post_geolocation(
             self._geolocation_stream_name, latitude=latitude, longitude=longitude,
         )
@@ -46,7 +43,6 @@ class HeatmapClient:
                 longitude = str(longitude)
                 longitude = longitude[0:4] + "." + longitude[4:]
                 longitude = float(longitude)
-
                 weight = randint(1, 50)
                 time.sleep(1)
                 self._publish_to_heatmap(
