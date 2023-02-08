@@ -32,11 +32,10 @@ class HeatmapClient:
     def run(self):
         try:
             while True:
-                # Around California:
-                # https://www.latlong.net/place/san-francisco-ca-usa-594.html
-                # https://www.latlong.net/place/los-angeles-ca-usa-1531.html
-                latitude = randint(34000000, 38000000)
-                longitude = randint(-122000000, -118000000)
+                # Around Fort Collins, CO, where Walter is:
+                # ~ 40.72, -104.77
+                latitude = randint(40000000, 41000000)
+                longitude = randint(-105000000, -104000000)
                 latitude = str(latitude)
                 latitude = latitude[0:2] + "." + latitude[2:]
                 latitude = float(latitude)
