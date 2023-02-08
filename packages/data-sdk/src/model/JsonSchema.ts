@@ -8,7 +8,7 @@ export type FieldType =
   | "object"
   | "boolean";
 
-interface IJsonBaseSchema<T extends FieldType> {
+export interface IJsonBaseSchema<T extends FieldType> {
   title?: string;
   description?: string;
   type: T;
@@ -17,7 +17,7 @@ interface IJsonBaseSchema<T extends FieldType> {
   "$formant.visible.when"?: [string, "=", string];
 }
 
-interface IJsonBaseSchemaWithDefault<T extends FieldType, U>
+export interface IJsonBaseSchemaWithDefault<T extends FieldType, U>
   extends IJsonBaseSchema<T> {
   default?: U;
 }
