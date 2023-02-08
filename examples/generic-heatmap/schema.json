@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/generic-heatmap/schema.json",
   "title": "Heatmap",
-  "description": "Graphical representation of data ingested in Formant",
+  "description": "Display location data over time as a heat map.",
   "type": "object",
   "properties": {
     "mapboxKey": {
@@ -11,18 +11,56 @@
     },
     "locationStream": {
       "type": "string",
-      "description": "Formant's location stream name"
+      "title": "Location data stream",
+      "description": "Name of location stream in Formant to view as heatmap"
     },
-    "numericStream": {
+    "weightStream": {
+      "title": "Heat Weights",
       "type": "string",
-      "description": "Formant's numeric stream name"
+      "description": "Name of a numeric stream in Formant. If timestamps are within the search window, the datapoint’s value will scale the size of the heat circle. If not, a value of 1 will be used."
+    },
+    "weightSearchWindow": {
+      "title": "Weight Search Window (s)",
+      "type": "integer",
+      "description": "Max window around location timestamp to search for a corresponding weight value in the numeric stream"
+    },
+
+    "queryType": {
+      "title": "Query data by",
+      "type": "string",
+      "enum": ["Events", "Annotation", "Active Timeline point"]
+    },
+    "annotationQuery": {
+      "title": "Annotation",
+      "$formant.visible.when": ["queryType", "=", "Annotation"],
+      "type": "object",
+      "properties": {
+        "annotationName": {
+          "type": "string"
+        },
+        "useEndTime": {
+          "type": "boolean"
+        },
+        "timeDelta": {
+          "type": "number",
+          "$formant.visible.when": ["useEndTime", "=", "false"]
+        }
+      }
+    },
+    "eventQuery": {
+      "type": "object",
+      "properties": {
+        "eventName": {
+          "type": "string"
+        }
+      }
     },
     "start": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["timeRange", "Event"]
+          "enum": ["timeDelta", "Event"]
         },
         "value": {
           "type": "string",
@@ -31,7 +69,7 @@
         },
         "hours": {
           "type": "number",
-          "$formant.visible.when": ["type", "=", "timeRange"]
+          "$formant.visible.when": ["type", "=", "timeDelta"]
         }
       }
     },
@@ -41,7 +79,7 @@
         "type": {
           "type": "string",
           "title": "Event Name",
-          "enum": ["timeRange", "Event", "Annotation", "scrubber"]
+          "enum": ["timeDelta", "Event", "Annotation", "Active Timeline point"]
         },
         "value": {
           "type": "string",
@@ -49,7 +87,7 @@
         },
         "hours": {
           "type": "number",
-          "$formant.visible.when": ["type", "=", "timeRange"]
+          "$formant.visible.when": ["type", "=", "timeDelta"]
         }
       }
     },
@@ -60,25 +98,22 @@
     "latitude": {
       "type": "number"
     },
-    "zoom": {
+    "defaultZoomLevel": {
+      "range": "from 1 (farthest) to 20 (closest)",
       "type": "integer",
-      "description": "Zoom in center of map"
+      "description": "Default zoom level. 1 is closest, 24 furthest away."
     },
-    "maxSecondsBetweenDatapoints": {
-      "title": "Valid time offset",
-      "type": "integer",
-      "description": "Max time allow between numeric and location datapoins"
-    },
-    "distinctZoomLevel": {
+    "distinctPointZoomLevel": {
       "title": "Distinct zoom level",
-      "type": "integer"
+      "type": "integer",
+      "description": "At what zoom level to fade the heatmap and show individual locations."
     },
     "circleRadius": {
-      "title": "Circle radius (px)",
+      "title": "Circle heat radius (px)",
       "type": "integer"
     },
     "tooltipLabel": {
-      "title": "Tooltip Label",
+      "title": "Hover Tooltip Label",
       "type": "string"
     }
   }

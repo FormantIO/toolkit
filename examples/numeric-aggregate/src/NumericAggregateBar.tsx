@@ -93,6 +93,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
           };
         })
       );
+      console.log(aggregatedData)
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;

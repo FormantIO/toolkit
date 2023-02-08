@@ -13,8 +13,8 @@ export interface IConfiguration {
   numericStream?: string;
   latitude?: number;
   longitude?: number;
-  zoom?: number;
-  maxSecondsBetweenDatapoints?: number;
+  defaultZoomLevel?: number;
+  weightSearchWindow?: number;
   distinctZoomLevel?: number;
   circleRadius?: number;
   tooltipLabel?: string;

@@ -3,6 +3,5 @@
   "streamName": "$.host.disk",
   "numericSetKey": "utilization",
   "aggregateBy": "day",
-  "numAggregates": 7,
-  "deviceIds": ["f5ca4b36-413d-43c5-b03c-91bd4b92a492"]
+  "numAggregates": 7
 }
