@@ -35,7 +35,11 @@ brace-expansion@^2.0.1:
 
 date-fns@^2.29.3:
   version "2.29.3"
+<<<<<<< HEAD
   resolved "https://registry.npmjs.org/date-fns/-/date-fns-2.29.3.tgz"
+=======
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+>>>>>>> 9fdf7123397ce091c72cc25ab69e0e307d5acba2
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 env-var@^7.3.0:
@@ -60,7 +64,11 @@ esbuild-darwin-64@0.14.54:
 
 esbuild-darwin-arm64@0.14.54:
   version "0.14.54"
+<<<<<<< HEAD
   resolved "https://registry.yarnpkg.com/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.14.54.tgz#3f7cdb78888ee05e488d250a2bdaab1fa671bf73"
+=======
+  resolved "https://registry.npmjs.org/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.14.54.tgz"
+>>>>>>> 9fdf7123397ce091c72cc25ab69e0e307d5acba2
   integrity sha512-OPafJHD2oUPyvJMrsCvDGkRrVCar5aVyHfWGQzY1dWnzErjrDuSETxwA2HSsyg2jORLY8yBfzc1MIpUkXlctmw==
 
 esbuild-freebsd-64@0.14.54:
@@ -177,7 +185,11 @@ fs.realpath@^1.0.0:
 
 fsevents@~2.3.2:
   version "2.3.2"
+<<<<<<< HEAD
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+=======
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+>>>>>>> 9fdf7123397ce091c72cc25ab69e0e307d5acba2
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
@@ -328,9 +340,15 @@ typedoc@^0.22.13:
     shiki "^0.10.1"
 
 typescript@^4.3.2:
+<<<<<<< HEAD
   version "4.7.4"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.7.4.tgz"
   integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
+=======
+  version "4.9.4"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.4.tgz"
+  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
+>>>>>>> 9fdf7123397ce091c72cc25ab69e0e307d5acba2
 
 vite@^2.5.4:
   version "2.9.15"

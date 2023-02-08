@@ -11,9 +11,7 @@ import { IStreamAggregateData } from "./model/IStreamAggregateData";
 import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
-import { ITagSets } from "./main";
 import { IAnnotationQuery } from "./model/IAnnotationQuery";
-import * as dateFns from "date-fns";
 
 export interface TelemetryResult {
   deviceId: string;

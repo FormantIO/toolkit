@@ -1,8 +1,20 @@
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
+import { QueryStore } from "./cache/queryStore";
+import { IStreamData, StreamType } from "./main";
+import { JsonSchema } from "./model/JsonSchema";
+
+const queryStore = new QueryStore();
 
 export type AppMessage =
   | { type: "go_to_time"; time: number }
+  | {
+      type: "prompt";
+      promptId: string;
+      schema: JsonSchema;
+      okText?: string;
+      cancelText?: string;
+    }
   | { type: "go_to_device"; deviceId: string }
   | { type: "request_module_data"; module: string }
   | { type: "show_message"; message: string }
@@ -51,6 +63,11 @@ export type EmbeddedAppMessage =
       type: "channel_data";
       channel: string;
       source: string;
+      data: any;
+    }
+  | {
+      type: "prompt_response";
+      promptId: string;
       data: any;
     }
   | ModuleConfigurationMessage;
@@ -243,6 +260,31 @@ export class App {
     });
   }
 
+  static addStreamListener<T extends StreamType>(
+    streamName: string,
+    streamType: T,
+    handler: (response: IStreamData<T>[] | "too much data" | undefined) => void
+  ): () => void {
+    const listener = (event: any) => {
+      const msg = event.data as EmbeddedAppMessage;
+      if (msg.type === "module_data") {
+        const { start, end } = msg.queryRange;
+        handler(
+          queryStore.moduleQuery(
+            {},
+            streamName,
+            streamType,
+            new Date(start),
+            new Date(end),
+            false
+          )
+        );
+      }
+    };
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
+  }
+
   static addModuleConfigurationListener(
     handler: (event: ModuleConfigurationMessage) => void
   ) {
@@ -276,5 +318,28 @@ export class App {
       handler(msg);
     });
   }
+
+  static async prompt(
+    schema: JsonSchema,
+    options?: { okText?: string; cancelText?: string }
+  ): Promise<any> {
+    return new Promise((resolve) => {
+      const promptId = Math.random().toString();
+      this.sendAppMessage({
+        type: "prompt",
+        promptId,
+        schema,
+        okText: options?.okText,
+        cancelText: options?.cancelText,
+      });
+      const handler = (event: any) => {
+        const msg = event.data as EmbeddedAppMessage;
+        if (msg.type === "prompt_response" && msg.promptId === promptId) {
+          resolve(msg.data);
+        }
+        window.removeEventListener("message", handler);
+      };
+      window.addEventListener("message", handler);
+    });
+  }
 }
-(";");

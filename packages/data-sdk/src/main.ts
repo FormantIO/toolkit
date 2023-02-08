@@ -136,8 +136,10 @@ export * from "./model/Timestamp";
 export * from "./model/Uuid";
 export * from "./model/videoMimeTypes";
 export * from "./model/VideoMimeType";
+export * from "./model/IDeviceQuery";
 export {
   IRtcSendConfiguration,
   IRtcStreamMessage,
   IRtcStreamPayload,
 } from "@formant/realtime-sdk";
+export * from "./model/JsonSchema";
