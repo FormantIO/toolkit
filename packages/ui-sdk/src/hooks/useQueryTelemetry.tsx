@@ -43,7 +43,6 @@ const useQueryTelemetry = (
   const getQueryTelemetry = async () => {
     if (device === undefined) return;
     let telemetry: any[] = [];
-    console.log(start, end);
     if (await Authentication.waitTilAuthenticated()) {
       telemetry = await Fleet.queryTelemetry({
         start,

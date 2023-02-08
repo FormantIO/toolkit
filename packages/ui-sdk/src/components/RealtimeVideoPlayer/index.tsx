@@ -5,7 +5,6 @@ import React, {
   FC,
   useCallback,
   useLayoutEffect,
-  useRef,
   useState,
 } from "react";
 import { LoadingIndicator } from "../LoadingIndicator";

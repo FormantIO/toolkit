@@ -1,17 +1,18 @@
 import React, { useRef, useState, useEffect } from "react";
-import styles from "./index.module.scss";
 import { Chart as ChartJS, ChartData, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { colors } from "../colors";
-
+import styled from "@emotion/styled";
+import { ICustomTooltipParameters } from "../types";
+import { Tooltip } from "../Tooltip";
 ChartJS.register(...registerables);
 
 interface IBubbleChartProps {
-  labels?: string[];
   data: BubbleCoordinate[];
+  labels?: string[];
   height?: number | string;
   width?: number | string;
-  id: string; // unique string
+  customTooltip?: ICustomTooltipParameters;
 }
 
 type BubbleCoordinate = {
@@ -25,7 +26,11 @@ export const BubbleChart: React.FC<IBubbleChartProps> = ({
   data,
   height,
   width,
+  customTooltip,
 }) => {
+  const [_containerId] = useState(crypto.randomUUID());
+  const [_labelId] = useState(crypto.randomUUID());
+  const [_valueId] = useState(crypto.randomUUID());
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"bubble">>({
     datasets: [],
@@ -35,6 +40,9 @@ export const BubbleChart: React.FC<IBubbleChartProps> = ({
     if (!chart) {
       return;
     }
+
+    const tooltipEl = document.getElementById(_containerId);
+    tooltipEl!.style.display = "none";
 
     const chartData = {
       labels,
@@ -61,6 +69,65 @@ export const BubbleChart: React.FC<IBubbleChartProps> = ({
       },
       title: {
         display: false,
+      },
+      tooltip: {
+        enabled: false,
+        external: (context: any) => {
+          let containerId = _containerId;
+          let labelId = _labelId;
+          let valueId = _valueId;
+
+          if (customTooltip) {
+            containerId = customTooltip.toolTipContainerId;
+            labelId = customTooltip.toolTipContainerId;
+            valueId = customTooltip.toolTipYContainerId;
+          }
+
+          const tooltipEl = document.getElementById(containerId)!;
+          tooltipEl.style.display = "flex";
+
+          // Hide if no tooltip
+          const tooltipModel = context.tooltip;
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = "0";
+            return;
+          }
+
+          // Set caret Position
+          tooltipEl.classList.remove("above", "below", "no-transform");
+          if (tooltipModel.yAlign) {
+            tooltipEl.classList.add(tooltipModel.yAlign);
+          } else {
+            tooltipEl.classList.add("no-transform");
+          }
+
+          const tooltipLabel = document.getElementById(labelId)!;
+          const tooltipValue = document.getElementById(valueId)!;
+
+          if (tooltipModel.body) {
+            const data = tooltipModel.dataPoints[0];
+            const label = data.label;
+            const x = data.raw.x;
+            const y = data.raw.y;
+            const r = data.raw.r;
+            tooltipLabel.innerHTML = label;
+            tooltipValue.innerHTML = `: { x:${x} y:${y} r: ${r} }`;
+          }
+
+          const position = context.chart.canvas.getBoundingClientRect();
+
+          // Display, position, and set styles for font
+          tooltipEl.style.opacity = "1";
+          tooltipEl.style.position = "absolute";
+          tooltipEl.style.left =
+            position.left + window.pageXOffset + tooltipModel.caretX + "px";
+          tooltipEl.style.top =
+            position.top + window.pageYOffset + tooltipModel.caretY + "px";
+          tooltipEl.style.font = "Atkinson Hyperlegible";
+          tooltipEl.style.padding =
+            tooltipModel.padding + "px " + tooltipModel.padding + "px";
+          tooltipEl!.style.pointerEvents = "none";
+        },
       },
     },
     scales: {
@@ -97,8 +164,27 @@ export const BubbleChart: React.FC<IBubbleChartProps> = ({
   };
 
   return (
-    <div style={{ height: height, width: width }} className={styles.chart}>
+    <Container style={{ height: height, width: width }}>
+      {!customTooltip && (
+        <Tooltip
+          containerId={_containerId}
+          labelId={_labelId}
+          valueId={_valueId}
+        />
+      )}
       <Chart options={options} ref={chartRef} type="bubble" data={chartData} />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 70vw;
+  height: 90vh;
+  canvas {
+    height: 100%;
+    width: 100%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;

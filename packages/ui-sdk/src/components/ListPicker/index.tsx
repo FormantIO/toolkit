@@ -2,8 +2,8 @@ import { ListItem } from "./ListItem";
 import React, { FC, useCallback, useMemo } from "react";
 import { useState } from "react";
 import styles from "./index.module.scss";
-import { IconInput } from "./IconButton";
-
+import { SearchBar } from "./SearchBar";
+import styled from "@emotion/styled";
 interface IListPicker {
   options: string[];
   list: string[];
@@ -44,8 +44,8 @@ export const ListPicker: FC<IListPicker> = ({
   }, [filters, options]);
 
   return (
-    <div className={styles["list-picker"]}>
-      <IconInput
+    <Container>
+      <SearchBar
         value={filters}
         onClick={handleClearFilter}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -67,6 +67,13 @@ export const ListPicker: FC<IListPicker> = ({
             />
           );
         })}
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;

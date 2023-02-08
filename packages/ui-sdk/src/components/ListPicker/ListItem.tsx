@@ -1,6 +1,6 @@
-import styles from "./ListItem.module.scss";
 import { Switch, Typography } from "../../main";
 import React, { FC } from "react";
+import styled from "@emotion/styled";
 
 interface IListItemProps {
   name: string;
@@ -11,13 +11,9 @@ interface IListItemProps {
   ) => void;
 }
 
-export const ListItem: FC<IListItemProps> = ({
-  name,
-  enabled,
-  onChange,
-}) => {
+export const ListItem: FC<IListItemProps> = ({ name, enabled, onChange }) => {
   return (
-    <div className={styles["list-item"]}>
+    <Container>
       <Typography variant="body2">{name}</Typography>{" "}
       <Switch
         size="small"
@@ -25,6 +21,14 @@ export const ListItem: FC<IListItemProps> = ({
         checked={enabled}
         value={enabled}
       />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.03938rem solid #282f45;
+  height: 3.625rem;
+  align-items: center;
+`;

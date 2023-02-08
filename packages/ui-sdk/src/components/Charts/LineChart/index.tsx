@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
-import styles from "./LineChart.module.scss";
 import { Chart as ChartJS, ChartData, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { getOptions } from "./getOptions";
 import { getGradient } from "./getGradient";
+import styled from "@emotion/styled";
+import { Tooltip } from "../Tooltip";
+import { ICustomTooltipParameters } from "../types";
 
 ChartJS.register(...registerables);
 
@@ -14,28 +16,25 @@ export type Coordinate = { x: number; y: number };
 interface ILineChartProps {
   data: Coordinate[];
   color: string;
-  CustomTooltip?: React.FC;
-  toolTipContainerId?: string;
-  toolTipXContainerId?: string;
-  toolTipYContainerId?: string;
   height?: number;
   width?: number;
   Ymin?: number;
   Ymax?: number;
+  customTooltip?: ICustomTooltipParameters;
 }
 
 export const LineChart: React.FC<ILineChartProps> = ({
   data,
   color,
-  CustomTooltip,
-  toolTipContainerId,
-  toolTipXContainerId,
-  toolTipYContainerId,
+  customTooltip,
   height,
   width,
   Ymax,
   Ymin,
 }) => {
+  const [_containerId] = useState(crypto.randomUUID());
+  const [_labelId] = useState(crypto.randomUUID());
+  const [_valueId] = useState(crypto.randomUUID());
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"line">>({
     datasets: [],
@@ -45,10 +44,8 @@ export const LineChart: React.FC<ILineChartProps> = ({
     if (!chart) {
       return;
     }
-    if (!!toolTipContainerId) {
-      let tooltipEl = document.getElementById(toolTipContainerId);
-      tooltipEl!.style.display = "none";
-    }
+    const tooltipEl = document.getElementById(_containerId);
+    tooltipEl!.style.display = "none";
     const chartData = {
       datasets: [
         {
@@ -68,18 +65,25 @@ export const LineChart: React.FC<ILineChartProps> = ({
   }, [data]);
 
   return (
-    <div style={{ height: height, width: width }} className={styles.chart}>
-      {!!CustomTooltip && <CustomTooltip />}
+    <Container style={{ height: height, width: width }}>
+      {!customTooltip && (
+        <Tooltip
+          containerId={_containerId}
+          labelId={_labelId}
+          valueId={_valueId}
+        />
+      )}
       <Chart
         id="Line"
         options={getOptions(
           data,
           color,
-          toolTipContainerId,
-          toolTipXContainerId,
-          toolTipYContainerId,
+          _containerId,
+          _labelId,
+          _valueId,
           Ymin,
-          Ymax
+          Ymax,
+          customTooltip
         )}
         ref={chartRef}
         type="scatter"
@@ -105,6 +109,18 @@ export const LineChart: React.FC<ILineChartProps> = ({
           },
         ]}
       />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 70vw;
+  height: 90vh;
+  canvas {
+    height: 100%;
+    width: 100%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;

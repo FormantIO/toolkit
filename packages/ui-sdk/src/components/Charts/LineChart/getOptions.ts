@@ -1,11 +1,14 @@
+import { ICustomTooltipParameters } from "../types";
+
 export const getOptions = (
   data: { x: number; y: number }[],
   color: string,
-  toolTipContainerId?: string,
-  toolTipXContainerId?: string,
-  toolTipYContainerId?: string,
+  _containerId: string,
+  _labelId: string,
+  _valueId: string,
   Ymin?: number,
-  Ymax?: number
+  Ymax?: number,
+  customTooltip?: ICustomTooltipParameters
 ) => {
   const getXaxisandYaxisMinAndMax = () => {
     let Xmax: number = data[0].x;
@@ -42,52 +45,59 @@ export const getOptions = (
     responsive: true,
     plugins: {
       tooltip: {
-        enabled: !!toolTipContainerId ? false : true,
+        enabled: false,
         external: (context: any) => {
-          // Tooltip Element
-          if (!!!toolTipContainerId) return;
-          let tooltipEl = document.getElementById(toolTipContainerId);
-          tooltipEl!.style.display = "flex";
+          let containerId = _containerId;
+          let labelId = _labelId;
+          let valueId = _valueId;
+
+          if (customTooltip) {
+            containerId = customTooltip.toolTipContainerId;
+            labelId = customTooltip.toolTipContainerId;
+            valueId = customTooltip.toolTipYContainerId;
+          }
+
+          const tooltipEl = document.getElementById(containerId)!;
+          tooltipEl.style.display = "flex";
 
           // Hide if no tooltip
           const tooltipModel = context.tooltip;
           if (tooltipModel.opacity === 0) {
-            tooltipEl!.style.opacity = "0";
+            tooltipEl.style.opacity = "0";
             return;
           }
 
           // Set caret Position
-          tooltipEl!.classList.remove("above", "below", "no-transform");
+          tooltipEl.classList.remove("above", "below", "no-transform");
           if (tooltipModel.yAlign) {
-            tooltipEl!.classList.add(tooltipModel.yAlign);
+            tooltipEl.classList.add(tooltipModel.yAlign);
           } else {
-            tooltipEl!.classList.add("no-transform");
+            tooltipEl.classList.add("no-transform");
           }
 
-          let xContainer = document.getElementById(toolTipXContainerId!);
-          let yContainer = document.getElementById(toolTipYContainerId!);
+          const tooltipLabel = document.getElementById(labelId)!;
+          const tooltipValue = document.getElementById(valueId)!;
 
           if (tooltipModel.body) {
-            const coordinate = tooltipModel.body[0].lines[0];
-            let xindex = coordinate.indexOf(",");
-            let yindex = coordinate.indexOf(")");
-            const x = coordinate.slice(1, xindex);
-            const y = coordinate.slice(xindex + 1, yindex);
-            xContainer!.innerHTML = x;
-            yContainer!.innerHTML = y;
+            const data = tooltipModel.dataPoints[0].raw;
+            const label = data.label;
+            const x = data.x
+            const y = data.y
+            tooltipLabel.innerHTML = label ?? "";
+            tooltipValue.innerHTML = `x: ${x}  y: ${y}`;
           }
 
           const position = context.chart.canvas.getBoundingClientRect();
 
           // Display, position, and set styles for font
-          tooltipEl!.style.opacity = "1";
-          tooltipEl!.style.position = "absolute";
-          tooltipEl!.style.left =
+          tooltipEl.style.opacity = "1";
+          tooltipEl.style.position = "absolute";
+          tooltipEl.style.left =
             position.left + window.pageXOffset + tooltipModel.caretX + "px";
-          tooltipEl!.style.top =
+          tooltipEl.style.top =
             position.top + window.pageYOffset + tooltipModel.caretY + "px";
-          tooltipEl!.style.font = "Atkinson Hyperlegible";
-          tooltipEl!.style.padding =
+          tooltipEl.style.font = "Atkinson Hyperlegible";
+          tooltipEl.style.padding =
             tooltipModel.padding + "px " + tooltipModel.padding + "px";
           tooltipEl!.style.pointerEvents = "none";
         },

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { MobileView, BrowserView } from "react-device-detect";
-import styled from "styled-components";
+
 export interface ISelectProps<T> {
   label: string;
   sx?: SxProps<Theme>;

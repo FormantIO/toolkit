@@ -1,11 +1,19 @@
 import React from "react";
 import loading from "../../images/loading.png";
-import "./index.css";
+import styled from "@emotion/styled";
 
 export const LoadingIndicator = () => {
   return (
-    <div className={"formant-loading-indicator"}>
+    <Container>
       <img src={loading} />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  height: 24px;
+  width: 24px;
+  img {
+    height: 100%;
+  }
+`;

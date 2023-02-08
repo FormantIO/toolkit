@@ -22,20 +22,22 @@ import {
   Snackbar,
   icons,
   Icon,
-  LineChart,
-  BarChart,
-  DoughnutChart,
-  PolarChart,
-  BubbleChart,
-  ScatterChart,
-  RadarChart,
   InputBase,
   JsonSchemaForm,
+  BarChart,
   LoadingIndicator,
-  ListPicker,
   RealtimeVideoPlayer,
   useDevice,
+  ListPicker,
+  DoughnutChart,
+  LineChart,
+  BubbleChart,
+  PolarChart,
+  RadarChart,
+  ScatterChart,
 } from "../src/main";
+
+import { Card } from "../src/components/Charts/LineChart/Card";
 
 import { ServiceParameters } from "../src/components/JsonSchemaForm/ServiceParameters";
 
@@ -50,9 +52,81 @@ function App() {
   return (
     <>
       {device && <RealtimeVideoPlayer deviceId={device?.id} />}
-      <BarChart labels={["stream a", "stream b"]} data={[100, 50]} />
+      <BarChart
+        height={100}
+        width={100}
+        labels={["stream a", "stream b"]}
+        data={[100, 50]}
+      />
+      <DoughnutChart
+        size={100}
+        labels={[
+          "donaaaaaaaaaaaaaaaaaaaaaaaaaaae",
+          "bbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "cccccccccccccccccccccccccccc",
+        ]}
+        data={[100, 20, 30]}
+      />
+      <DoughnutChart
+        size={100}
+        labels={[
+          "donaaaaaaaaaaaaaaaaaaaaaaaaaaae",
+          "bbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "cccccccccccccccccccccccccccc",
+        ]}
+        data={[100, 20, 30]}
+      />
+      <BubbleChart
+        labels={["one", "two", "three"]}
+        data={[
+          { x: 10, y: 10, r: 2 },
+          { x: 15, y: 1, r: 2 },
+          { x: 11, y: 5, r: 1 },
+        ]}
+      />
+      <LineChart
+        color="#FF0000"
+        data={[
+          { x: 10, y: 20 },
+          { x: 15, y: 25 },
+          { x: 20, y: 40 },
+        ]}
+      />
       <LoadingIndicator />
-      <button onClick={() => console.log(en)}>Clicl</button>
+      <LineChart
+        color="#FF0000"
+        height={100}
+        width={100}
+        data={[
+          { x: 10, y: 50 },
+          { x: 15, y: 50 },
+          { x: 20, y: 50 },
+          { x: 25, y: 50 },
+        ]}
+      />
+      <PolarChart
+        labels={[
+          "donaaaaaaaaaaaaaaaaaaaaaaaaaaae",
+          "bbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "cccccccccccccccccccccccccccc",
+        ]}
+        data={[100, 20, 30]}
+      />
+      <RadarChart
+        labels={[
+          "donaaaaaaaaaaaaaaaaaaaaaaaaaaae",
+          "bbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "cccccccccccccccccccccccccccc",
+        ]}
+        data={[100, 20, 30]}
+      />
+      <ScatterChart
+        data={[
+          { x: 10, y: 20 },
+          { x: 15, y: 25 },
+          { x: 20, y: 40 },
+        ]}
+      />
       <ListPicker options={sample} list={en} setList={setEn} />
       <LoadingIndicator />
     </>
