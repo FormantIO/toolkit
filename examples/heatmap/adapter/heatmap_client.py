@@ -11,10 +11,10 @@ class HeatmapClient:
         agent_url = "unix:///var/lib/formant/agent.sock"
         self.agent_url = os.getenv("AGENT_URL", agent_url)
         self._geolocation_stream_name = os.getenv(
-            "LOCATION_STREAM_NAME", "heatmap_point_location"
+            "LOCATION_STREAM_NAME", "heatmap.point.location"
         )
         self._numeric_stream_name = os.getenv(
-            "NUMERIC_STREAM_NAME", "heatmap_point_weight"
+            "NUMERIC_STREAM_NAME", "heatmap.point.weight"
         )
         self._agent_client = AgentClient(
             agent_url=self.agent_url, ignore_throttled=True
