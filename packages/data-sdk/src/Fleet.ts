@@ -11,6 +11,10 @@ import { IStreamAggregateData } from "./model/IStreamAggregateData";
 import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
+import { ITagSets } from "./main";
+import { IAnnotationQuery } from "./model/IAnnotationQuery";
+import * as dateFns from "date-fns";
+
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -388,5 +392,33 @@ export class Fleet {
     });
 
     return devices;
+  }
+
+  static async getAnnotationCount(query: IAnnotationQuery) {
+    const tagKey = query.tagKey!;
+    delete query.tagKey, delete query.aggregate;
+
+    const annotations = await this.queryEvents({
+      ...query,
+      eventTypes: ["annotation"],
+    });
+
+    const validAnnotations = annotations.filter(
+      (_) => !!_.tags && Object.keys(_.tags!).includes(tagKey)
+    );
+
+    const annotationCounter = validAnnotations.reduce<{
+      [key: string]: number;
+    }>((prev, current) => {
+      const value = current.tags![tagKey];
+      if (value in prev) {
+        prev[value] += 1;
+        return prev;
+      }
+      prev[value] = 1;
+      return prev;
+    }, {});
+
+    return annotationCounter;
   }
 }

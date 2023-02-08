@@ -27,12 +27,13 @@
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
+    "typedoc": "^0.22.13",
     "typescript": "^4.3.2",
-    "vite": "^2.5.4",
-    "typedoc": "^0.22.13"
+    "vite": "^2.5.4"
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
-    "@formant/realtime-sdk": "^0.0.19"
+    "@formant/realtime-sdk": "^0.0.19",
+    "date-fns": "^2.29.3"
   }
 }

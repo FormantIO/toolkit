@@ -1,16 +1,23 @@
-import { Authentication } from "../src/main";
+import { Authentication, Fleet } from "../src/main";
 import "./style.css";
-
+import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
 (async function () {
   const el = document.querySelector("#app");
   if (el) {
+    const seconds = 1000;
+    const minutes = 60 * seconds;
+    const hours = 60 * minutes;
+    const days = 24 * hours;
+
+    const query: IAnnotationQuery = {
+      start: new Date(Date.now() - 90 * days).toISOString(),
+      end: new Date(Date.now()).toISOString(),
+      tagKey: "operation_type",
+      aggregate: "month",
+    };
     if (await Authentication.waitTilAuthenticated()) {
-      /*const events = await Fleet.queryEvents({});
-      const data = await Fleet.queryTelemetry({
-        start: new Date(Date.now() - 1000 * 60).toISOString(),
-        end: new Date().toISOString(),
-        deviceIds: Fleet.defaultDeviceId ? [Fleet.defaultDeviceId] : [],
-      });*/
+      const annotations = await Fleet.getAnnotationCount(query);
+      console.log(annotations);
     }
   }
 })();
