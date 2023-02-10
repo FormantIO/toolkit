@@ -1,7 +1,7 @@
 import styles from "./App.module.scss";
 import { FC, useEffect, useState } from "react";
 import { Typography, useFormant } from "@formant/ui-sdk";
-import { IConfiguration } from "./types";
+import { IConfiguration, HeatmapConfiguration } from "./types";
 
 interface IDetailsCardPros {
   map: mapboxgl.Map | null;
@@ -9,7 +9,7 @@ interface IDetailsCardPros {
 
 export const DetailsCard: FC<IDetailsCardPros> = ({ map }) => {
   const context = useFormant();
-  const config = context.configuration as IConfiguration;
+  const config = context.configuration as HeatmapConfiguration;
   const [weight, setWeight] = useState(1);
 
   useEffect(() => {

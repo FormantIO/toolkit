@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect, useState } from "react";
+import { FC, useLayoutEffect, useState, useRef } from "react";
 import { FeatureCollection, Point } from "geojson";
 import { GeoJSONSource, LngLatLike } from "mapbox-gl";
 
@@ -18,6 +18,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
   circleRadius,
 }) => {
   const [isLayerLoaded, setIsLayerLoaded] = useState(false);
+  const flyingToCounter = useRef(0);
   useLayoutEffect(() => {
     if (!map) return; // wait for map to initialize
 
@@ -147,13 +148,16 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
       map.addLayer;
       if (!current) return;
       current.setData(featureCollection as any);
-      map.flyTo({
-        center: featureCollection.features[0].geometry
-          .coordinates as LngLatLike,
-        zoom: DEFAULT_DISTINCT_ZOOM_LEVEL - 3, // Fly to the selected target
-        duration: 5000,
-        essential: true,
-      });
+      if (flyingToCounter.current === 0) {
+        map.flyTo({
+          center: featureCollection.features[0].geometry
+            .coordinates as LngLatLike,
+          zoom: DEFAULT_DISTINCT_ZOOM_LEVEL - 3, // Fly to the selected target
+          duration: 5000,
+          essential: true,
+        });
+        flyingToCounter.current = 1;
+      }
     }, 3000);
   }, [JSON.stringify(featureCollection.features), isLayerLoaded]);
 

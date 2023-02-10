@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Authentication, App } from "@formant/data-sdk";
 import { useDevice } from "@formant/ui-sdk";
-import { IConfiguration } from "../types";
+import { HeatmapConfiguration } from "../types";
 
 const getConfiguraion = async () => {
   if (await Authentication.waitTilAuthenticated()) {
@@ -13,7 +13,7 @@ const getConfiguraion = async () => {
 
 export const useConfiguration = () => {
   const device = useDevice();
-  const [config, setConfig] = useState<IConfiguration | null>(null);
+  const [config, setConfig] = useState<HeatmapConfiguration | null>(null);
 
   useEffect(() => {
     if (!device) return;
@@ -24,13 +24,3 @@ export const useConfiguration = () => {
 
   return config;
 };
-// locationStream: "heatmap_point_location",
-// numericStream: "",
-// start: {
-//   type: "timeRange",
-//   value: "1",
-// },
-// end: {
-//   type: "scrubber",
-//   value: "",
-// },
