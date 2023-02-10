@@ -2,84 +2,125 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/generic-heatmap/schema.json",
   "title": "Heatmap",
-  "description": "Graphical representation of data ingested in Formant",
+  "description": "Display location data over time as a heat map.",
   "type": "object",
   "properties": {
-    "mapboxKey": {
-      "title": "Mapbox key",
-      "type": "string"
-    },
-    "locationStream": {
+    "queryType": {
+      "title": "Query data by",
       "type": "string",
-      "description": "Formant's location stream name"
+      "enum": ["Events", "Annotation", "Active Timeline point"]
     },
-    "numericStream": {
-      "type": "string",
-      "description": "Formant's numeric stream name"
-    },
-    "start": {
+    "scrubber": {
       "type": "object",
+      "title": "Active Timeline point",
+      "$formant.visible.when": ["queryType", "=", "Active Timeline point"],
       "properties": {
-        "type": {
+        "startFrom": {
+          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
           "type": "string",
-          "enum": ["timeRange", "Event"]
+          "enum": ["Time Delta", "Event"]
         },
-        "value": {
+        "timeDelta": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
+        "eventName": {
           "type": "string",
-          "title": "Event Name",
-          "$formant.visible.when": ["type", "=", "Event"]
-        },
-        "hours": {
-          "type": "number",
-          "$formant.visible.when": ["type", "=", "timeRange"]
-        }
-      }
-    },
-    "end": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "title": "Event Name",
-          "enum": ["timeRange", "Event", "Annotation", "scrubber"]
-        },
-        "value": {
-          "type": "string",
-          "$formant.visible.when": ["type", "=", "Event"]
-        },
-        "hours": {
-          "type": "number",
-          "$formant.visible.when": ["type", "=", "timeRange"]
+          "$formant.visible.when": ["startFrom", "=", "Event"]
         }
       }
     },
 
+    "annotation": {
+      "title": "Annotation Name",
+      "description": "It will use annotation start, and end time to query data.",
+      "type": "string",
+      "$formant.visible.when": ["queryType", "=", "Annotation"]
+    },
+    "eventsQuery": {
+      "description": "Query can start from some time before the active timeline point or the last event.",
+      "title": "Events",
+      "type": "object",
+      "$formant.visible.when": ["queryType", "=", "Events"],
+      "properties": {
+        "startFrom": {
+          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
+          "type": "string",
+          "enum": ["Time Delta", "Event"]
+        },
+        "timeDelta": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
+        "startEvent": {
+          "title": "Start Event Name",
+          "type": "string",
+          "$formant.visible.when": ["startFrom", "=", "Event"]
+        },
+        "endEvent": {
+          "title": "End Event Name",
+          "type": "string"
+        }
+      }
+    },
+    "locationStream": {
+      "type": "string",
+      "title": "Location data stream",
+      "$formant.streams.byType": "location",
+      "description": "Name of location stream in Formant to view as heatmap"
+    },
+    "advanceSettings": {
+      "title": "Enable advance settings",
+      "type": "boolean"
+    },
+    "mapboxKey": {
+      "title": "Mapbox key",
+      "type": "string",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+    "weightStream": {
+      "title": "Heat Weights",
+      "type": "string",
+      "$formant.streams.byType": "numeric",
+      "description": "Name of a numeric stream in Formant. If timestamps are within the search window, the datapoint’s value will scale the size of the heat circle. If not, a value of 1 will be used.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+    "weightSearchWindow": {
+      "title": "Weight Search Window (s)",
+      "type": "integer",
+      "description": "Max window around location timestamp to search for a corresponding weight value in the numeric stream",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+
     "longitude": {
-      "type": "number"
+      "type": "number",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "latitude": {
-      "type": "number"
+      "type": "number",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
-    "zoom": {
+    "defaultZoomLevel": {
+      "range": "from 1 (farthest) to 20 (closest)",
       "type": "integer",
-      "description": "Zoom in center of map"
+      "description": "Default zoom level. 1 is closest, 24 furthest away.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
-    "maxSecondsBetweenDatapoints": {
-      "title": "Valid time offset",
-      "type": "integer",
-      "description": "Max time allow between numeric and location datapoins"
-    },
-    "distinctZoomLevel": {
+    "distinctPointZoomLevel": {
       "title": "Distinct zoom level",
-      "type": "integer"
+      "type": "integer",
+      "description": "At what zoom level to fade the heatmap and show individual locations.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "circleRadius": {
-      "title": "Circle radius (px)",
-      "type": "integer"
+      "title": "Circle heat radius (px)",
+      "type": "integer",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "tooltipLabel": {
-      "title": "Tooltip Label",
-      "type": "string"
+      "title": "Hover Tooltip Label",
+      "type": "string",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     }
   }
 }
