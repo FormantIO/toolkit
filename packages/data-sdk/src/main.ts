@@ -137,6 +137,7 @@ export * from "./model/Uuid";
 export * from "./model/videoMimeTypes";
 export * from "./model/VideoMimeType";
 export * from "./model/IDeviceQuery";
+export * from "./model/IAnnotationQuery";
 export {
   IRtcSendConfiguration,
   IRtcStreamMessage,
