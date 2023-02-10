@@ -5,116 +5,122 @@
   "description": "Display location data over time as a heat map.",
   "type": "object",
   "properties": {
-    "mapboxKey": {
-      "title": "Mapbox key",
-      "type": "string"
-    },
-    "locationStream": {
-      "type": "string",
-      "title": "Location data stream",
-      "description": "Name of location stream in Formant to view as heatmap"
-    },
-    "weightStream": {
-      "title": "Heat Weights",
-      "type": "string",
-      "description": "Name of a numeric stream in Formant. If timestamps are within the search window, the datapoint’s value will scale the size of the heat circle. If not, a value of 1 will be used."
-    },
-    "weightSearchWindow": {
-      "title": "Weight Search Window (s)",
-      "type": "integer",
-      "description": "Max window around location timestamp to search for a corresponding weight value in the numeric stream"
-    },
-
     "queryType": {
       "title": "Query data by",
       "type": "string",
       "enum": ["Events", "Annotation", "Active Timeline point"]
     },
-    "annotationQuery": {
-      "title": "Annotation",
-      "$formant.visible.when": ["queryType", "=", "Annotation"],
+    "scrubber": {
       "type": "object",
+      "title": "Active Timeline point",
+      "$formant.visible.when": ["queryType", "=", "Active Timeline point"],
       "properties": {
-        "annotationName": {
-          "type": "string"
-        },
-        "useEndTime": {
-          "type": "boolean"
+        "startFrom": {
+          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
+          "type": "string",
+          "enum": ["Time Delta", "Event"]
         },
         "timeDelta": {
-          "type": "number",
-          "$formant.visible.when": ["useEndTime", "=", "false"]
-        }
-      }
-    },
-    "eventQuery": {
-      "type": "object",
-      "properties": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
         "eventName": {
-          "type": "string"
-        }
-      }
-    },
-    "start": {
-      "type": "object",
-      "properties": {
-        "type": {
           "type": "string",
-          "enum": ["timeDelta", "Event"]
-        },
-        "value": {
-          "type": "string",
-          "title": "Event Name",
-          "$formant.visible.when": ["type", "=", "Event"]
-        },
-        "hours": {
-          "type": "number",
-          "$formant.visible.when": ["type", "=", "timeDelta"]
-        }
-      }
-    },
-    "end": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "title": "Event Name",
-          "enum": ["timeDelta", "Event", "Annotation", "Active Timeline point"]
-        },
-        "value": {
-          "type": "string",
-          "$formant.visible.when": ["type", "=", "Event"]
-        },
-        "hours": {
-          "type": "number",
-          "$formant.visible.when": ["type", "=", "timeDelta"]
+          "$formant.visible.when": ["startFrom", "=", "Event"]
         }
       }
     },
 
+    "annotation": {
+      "title": "Annotation Name",
+      "description": "It will use annotation start, and end time to query data.",
+      "type": "string",
+      "$formant.visible.when": ["queryType", "=", "Annotation"]
+    },
+    "eventsQuery": {
+      "description": "Query can start from some time before the active timeline point or the last event.",
+      "title": "Events",
+      "type": "object",
+      "$formant.visible.when": ["queryType", "=", "Events"],
+      "properties": {
+        "startFrom": {
+          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
+          "type": "string",
+          "enum": ["Time Delta", "Event"]
+        },
+        "timeDelta": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
+        "startEvent": {
+          "title": "Start Event Name",
+          "type": "string",
+          "$formant.visible.when": ["startFrom", "=", "Event"]
+        },
+        "endEvent": {
+          "title": "End Event Name",
+          "type": "string"
+        }
+      }
+    },
+    "locationStream": {
+      "type": "string",
+      "title": "Location data stream",
+      "$formant.streams.byType": "location",
+      "description": "Name of location stream in Formant to view as heatmap"
+    },
+    "advanceSettings": {
+      "title": "Enable advance settings",
+      "type": "boolean"
+    },
+    "mapboxKey": {
+      "title": "Mapbox key",
+      "type": "string",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+    "weightStream": {
+      "title": "Heat Weights",
+      "type": "string",
+      "$formant.streams.byType": "numeric",
+      "description": "Name of a numeric stream in Formant. If timestamps are within the search window, the datapoint’s value will scale the size of the heat circle. If not, a value of 1 will be used.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+    "weightSearchWindow": {
+      "title": "Weight Search Window (s)",
+      "type": "integer",
+      "description": "Max window around location timestamp to search for a corresponding weight value in the numeric stream",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+
     "longitude": {
-      "type": "number"
+      "type": "number",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "latitude": {
-      "type": "number"
+      "type": "number",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "defaultZoomLevel": {
       "range": "from 1 (farthest) to 20 (closest)",
       "type": "integer",
-      "description": "Default zoom level. 1 is closest, 24 furthest away."
+      "description": "Default zoom level. 1 is closest, 24 furthest away.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "distinctPointZoomLevel": {
       "title": "Distinct zoom level",
       "type": "integer",
-      "description": "At what zoom level to fade the heatmap and show individual locations."
+      "description": "At what zoom level to fade the heatmap and show individual locations.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "circleRadius": {
       "title": "Circle heat radius (px)",
-      "type": "integer"
+      "type": "integer",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "tooltipLabel": {
       "title": "Hover Tooltip Label",
-      "type": "string"
+      "type": "string",
+      "$formant.visible.when": ["advanceSettings", "=", true]
     }
   }
 }

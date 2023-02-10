@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@formant/data-sdk": "^0.0.116",
-    "@formant/ui-sdk": "^0.0.35",
+    "@formant/ui-sdk": "^0.0.40",
     "@types/geojson": "^7946.0.10",
     "geojson": "^0.5.0",
     "mapbox-gl": "^2.11.1",

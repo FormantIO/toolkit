@@ -5,12 +5,15 @@ import { useDataPoints } from "./hooks/useDataPoints";
 import { LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { useFeatures } from "./hooks/useFeatures";
 import { HeatmapLayer } from "./HeatmapLayer";
-import { IConfiguration } from "./types";
+import { HeatmapConfiguration } from "./types";
 import { DetailsCard } from "./DetailsCard";
+import { getTypedConfiguration } from "./utils/utils";
 
 function App() {
   const context = useFormant();
-  const config = context.configuration as IConfiguration;
+  const config = getTypedConfiguration(
+    context.configuration as HeatmapConfiguration
+  );
   const dataPoints = useDataPoints();
   const featureCollection = useFeatures(dataPoints);
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -30,7 +33,9 @@ function App() {
         config?.latitude ?? 39.043701171875,
       ],
       zoom:
-        config.zoom && config.latitude && config.longitude ? config.zoom : 0,
+        config.defaultZoomLevel && config.latitude && config.longitude
+          ? config.defaultZoomLevel
+          : 0,
     });
   }, [config]);
 

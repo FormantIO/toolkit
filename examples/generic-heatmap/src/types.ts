@@ -1,15 +1,21 @@
-export interface IConfiguration {
+const queryTypes = ["Events", "Annotation", "Active Timeline point"] as const;
+const startPoints = ["Time Delta", "Event"] as const;
+
+export type HeatmapConfiguration =
+  | IScrubberConfiguration
+  | IAnnotationConfiguration
+  | IEventConfiguration;
+
+type StartPoint = typeof startPoints[number];
+type QueryType = typeof queryTypes[number];
+
+interface IStartFrom<T extends StartPoint> {
+  startFrom: T;
+}
+
+export interface IConfiguration<T extends QueryType> {
   locationStream: string;
-  start: {
-    type: "timeRange" | "Event";
-    value?: string;
-    hours?: number;
-  };
-  end: {
-    type: "timeRange" | "Event" | "Annotation" | "scrubber";
-    value?: string;
-    hours?: number;
-  };
+  queryType: T;
   numericStream?: string;
   latitude?: number;
   longitude?: number;
@@ -19,6 +25,38 @@ export interface IConfiguration {
   circleRadius?: number;
   tooltipLabel?: string;
   mapboxKey?: string;
+}
+export interface ITimeDeltaScrubber extends IStartFrom<"Time Delta"> {
+  timeDelta: number;
+}
+
+export interface IEventScrubber extends IStartFrom<"Event"> {
+  eventName: string;
+}
+
+export interface IScrubberConfiguration
+  extends IConfiguration<"Active Timeline point"> {
+  scrubber: ITimeDeltaScrubber | IEventScrubber;
+}
+
+export interface IAnnotationConfiguration extends IConfiguration<"Annotation"> {
+  annotation: string;
+}
+
+export interface ITimeDeltaEvent {
+  startFrom: "Time Delta";
+  timeDelta: number;
+  endEvent: string;
+}
+
+export interface IFromEventToEventQuery {
+  startFrom: "Event";
+  startEvent: string;
+  endEvent: string;
+}
+
+export interface IEventConfiguration extends IConfiguration<"Events"> {
+  eventsQuery: ITimeDeltaEvent | IFromEventToEventQuery;
 }
 
 export interface IHeatMapDataPoint {

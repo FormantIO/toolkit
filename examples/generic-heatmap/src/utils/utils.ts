@@ -1,5 +1,10 @@
 import { FeatureCollection, Point } from "geojson";
-import { IHeatMapDataPoint } from "../types";
+import {
+  IAnnotationConfiguration,
+  IEventConfiguration,
+  IHeatMapDataPoint,
+  IScrubberConfiguration,
+} from "../types";
 import { IEvent, Fleet, Authentication, IStreamData } from "@formant/data-sdk";
 
 const SECONDS = 1000;
@@ -93,3 +98,41 @@ export const updateDifference = (currentValue: number, previusValue: number) =>
 
 export const isoDateToMilliseconds = (d: string) => new Date(d).getTime();
 export const millisecondsToISODate = (m: number) => new Date(m).toISOString();
+
+export const isScrubberConfiguration = (
+  _: IScrubberConfiguration | IAnnotationConfiguration | IEventConfiguration
+): _ is IScrubberConfiguration =>
+  (_ as IScrubberConfiguration).scrubber !== undefined;
+
+export const isAnnotationConfiguration = (
+  _: IScrubberConfiguration | IAnnotationConfiguration | IEventConfiguration
+): _ is IAnnotationConfiguration =>
+  (_ as IAnnotationConfiguration).annotation !== undefined;
+
+export const isEventConfiguration = (
+  _: IScrubberConfiguration | IAnnotationConfiguration | IEventConfiguration
+): _ is IEventConfiguration =>
+  (_ as IEventConfiguration).eventsQuery !== undefined;
+
+export const getTypedConfiguration = (
+  _: IScrubberConfiguration | IAnnotationConfiguration | IEventConfiguration
+) =>
+  isScrubberConfiguration(_)
+    ? _
+    : isAnnotationConfiguration(_)
+    ? _
+    : isEventConfiguration(_)
+    ? _
+    : null;
+
+export const isTimeDeltaScrubber = (_: IScrubberConfiguration) =>
+  _.scrubber.startFrom === "Time Delta";
+
+export const isEventScrubber = (_: IScrubberConfiguration) =>
+  _.scrubber.startFrom === "Event";
+
+export const isTimeDeltaEvent = (_: IEventConfiguration) =>
+  _.eventsQuery.startFrom === "Time Delta";
+
+export const isFromEventToEvent = (_: IEventConfiguration) =>
+  _.eventsQuery.startFrom === "Event";

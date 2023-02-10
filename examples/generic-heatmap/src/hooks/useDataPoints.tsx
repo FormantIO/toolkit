@@ -1,6 +1,16 @@
-import { IStreamData, IDataPoint } from "@formant/data-sdk";
+import { IStreamData, IDataPoint, Fleet } from "@formant/data-sdk";
 import { useEffect, useState } from "react";
-import { IConfiguration, IHeatMapDataPoint, IQuery } from "../types";
+import {
+  IHeatMapDataPoint,
+  IScrubberConfiguration,
+  IAnnotationConfiguration,
+  IEventConfiguration,
+  ITimeDeltaScrubber,
+  IEventScrubber,
+  ITimeDeltaEvent,
+  IFromEventToEventQuery,
+  HeatmapConfiguration,
+} from "../types";
 import { useScrubberTime, useFormant, useDevice } from "@formant/ui-sdk";
 import {
   getEvents,
@@ -10,6 +20,12 @@ import {
   updateDifference,
   isoDateToMilliseconds,
   millisecondsToISODate,
+  isAnnotationConfiguration,
+  isEventConfiguration,
+  isScrubberConfiguration,
+  isTimeDeltaScrubber,
+  isTimeDeltaEvent,
+  getTypedConfiguration,
 } from "../utils/utils";
 
 const SECONDS = 1000;
@@ -68,62 +84,135 @@ const handleNumericStream = (
   return heatmapDataPoints;
 };
 
-const handleConfiguration = async (
-  config: IConfiguration,
-  deviceId: string,
-  time?: number
+const handleEventConfiguration = async (
+  config: IEventConfiguration,
+  deviceId: string
 ) => {
-  let query: IQuery = {
-    start: "",
-    end: "",
+  if (isTimeDeltaEvent(config)) {
+    return handleEventTimeDelta(config, deviceId);
+  } else {
+    return handeFromEventToEvent(config, deviceId);
+  }
+};
+
+const handeFromEventToEvent = async (
+  config: IEventConfiguration,
+  deviceId: string
+) => {
+  const eventQuery = config.eventsQuery as IFromEventToEventQuery;
+  const endEvent = eventQuery.endEvent;
+  const startEvent = eventQuery.startEvent;
+  const events = await Fleet.queryEvents({
+    names: [endEvent, startEvent],
+    deviceIds: [deviceId],
+  });
+  if (events.length < 1) console.error("No events");
+
+  const query = [];
+  let index = 0;
+  while (query.length < 2) {
+    if (events[index].message === endEvent && query.length === 0) {
+      query.push(events[index].time);
+    }
+    if (query.length === 1 && events[index].message === startEvent) {
+      const end = isoDateToMilliseconds(query[0] as string);
+      const start = isoDateToMilliseconds(events[index].time);
+      if (start < end) {
+        query.push(events[index].time);
+      }
+    }
+    if (index === events.length - 1) {
+      query.push("", "");
+    }
+    index += 1;
+  }
+
+  return {
+    start: query[1],
+    end: query[0],
   };
-  const { start, end } = config;
+};
 
-  switch (start.type) {
-    case "Event":
-      const events = await getEvents(start.value!, deviceId);
-      if (events.length < 1) console.error("No events");
-      const startTime = isoDateToMilliseconds(events[0].createdAt!);
-      query.start = startTime;
-      break;
-    case "timeRange":
-      query.start = time! - HOURS * start.hours!;
-      break;
-    default:
+const handleEventTimeDelta = async (
+  config: IEventConfiguration,
+  deviceId: string
+) => {
+  const eventQuery = config.eventsQuery as ITimeDeltaEvent;
+  const endEvent = eventQuery.endEvent;
+  const timeDelta = eventQuery.timeDelta;
+  const events = await Fleet.queryEvents({
+    names: [endEvent],
+    deviceIds: [deviceId],
+  });
+  if (events.length < 1) console.error("No events");
+  const end = events[0].time!;
+  const start = isoDateToMilliseconds(end) - HOURS * timeDelta;
+  return {
+    start: millisecondsToISODate(start),
+    end: end,
+  };
+};
+
+const handleScrubberConfiguration = async (
+  config: IScrubberConfiguration,
+  time: number,
+  deviceId: string
+) => {
+  if (isTimeDeltaScrubber(config)) {
+    return handleScrrubberDeltaTime(config, time);
+  } else {
+    return handleEventScrubber(config, deviceId, time);
   }
-  switch (end.type) {
-    case "Annotation":
-      //Start must be name of the event
-      let events = await getEvents(start.value!, deviceId);
-      if (events.length < 1) console.error("No events");
-      query.start = events[0].createdAt!;
-      query.end = events[0].endTime!;
-      break;
-    case "Event":
-      events = await getEvents(end.value!, deviceId);
-      if (events.length < 1) console.error("No events");
-      query.end = isoDateToMilliseconds(events[0].createdAt!);
-      break;
-    case "scrubber":
-      query.end = time!;
-      break;
-    case "timeRange":
-      query.end = (query.start as number) + HOURS * end.hours!;
-      break;
-    default:
-  }
+};
 
-  if (Number.isNaN(query.start) || !query.end) return null;
-  query.start = millisecondsToISODate(query.start as number);
-  query.end = millisecondsToISODate(query.end as number);
+const handleScrrubberDeltaTime = (
+  config: IScrubberConfiguration,
+  time: number
+) => {
+  const scrubber = config.scrubber as ITimeDeltaScrubber;
+  const start = time - HOURS * scrubber.timeDelta;
+  return {
+    start: millisecondsToISODate(start),
+    end: millisecondsToISODate(time),
+  };
+};
 
-  return query;
+const handleEventScrubber = async (
+  config: IScrubberConfiguration,
+  deviceId: string,
+  time: number
+) => {
+  const scrubber = config.scrubber as IEventScrubber;
+  const events = await getEvents(scrubber.eventName, deviceId);
+  if (events.length < 1) console.error("No events");
+  return {
+    start: events[0].time,
+    end: millisecondsToISODate(time),
+  };
+};
+
+const handleAnnotationConfiguration = async (
+  config: IAnnotationConfiguration,
+  deviceId: string
+) => {
+  const annotation = config.annotation;
+  const annotations = await Fleet.queryEvents({
+    deviceIds: [deviceId],
+    eventTypes: ["annotation"],
+    names: [annotation],
+  });
+  return {
+    start: annotations[0].time,
+    end: annotations[0].endTime,
+  };
 };
 
 export const useDataPoints = (): IHeatMapDataPoint[] => {
   const device = useDevice();
   const context = useFormant();
-  const config = context.configuration as IConfiguration;
+  const config = getTypedConfiguration(
+    context.configuration as HeatmapConfiguration
+  );
   const time = useScrubberTime();
   const [datapoints, setDatapoints] = useState<IHeatMapDataPoint[]>([]);
   const [startTime, setStartTime] = useState<string>();
@@ -131,22 +220,36 @@ export const useDataPoints = (): IHeatMapDataPoint[] => {
 
   useEffect(() => {
     if (!config) return;
-    if (config.end.type === "scrubber" || !device) return;
-    handleConfiguration(config, device.id).then((_) => {
+    const isAnnotation = isAnnotationConfiguration(config);
+    if (!isAnnotation || !device) return;
+    handleAnnotationConfiguration(config, device.id).then((_) => {
       if (_ === null) return;
       setStartTime(_.start as string);
       setEndTime(_.end as string);
     });
-  }, [config]);
+  }, [config, device]);
 
   useEffect(() => {
-    if (!config || config.end.type !== "scrubber" || !device) return;
-    handleConfiguration(config, device.id, time).then((_) => {
+    if (!config) return;
+    const isScrubber = isScrubberConfiguration(config);
+    if (!isScrubber || !device) return;
+    handleScrubberConfiguration(config, time as any, device.id).then((_) => {
       if (_ === null) return;
-      setStartTime(_.start as string);
-      setEndTime(_.end as string);
+      setStartTime(_.start);
+      setEndTime(_.end);
     });
   }, [config, time, device]);
+
+  useEffect(() => {
+    if (!config) return;
+    const isEvent = isEventConfiguration(config);
+    if (!isEvent || !device) return;
+    handleEventConfiguration(config, device.id).then((_) => {
+      if (_ === null) return;
+      setStartTime(_.start);
+      setEndTime(_.end);
+    });
+  }, [config]);
 
   useEffect(() => {
     if (!startTime || !endTime || !config) return;
@@ -167,10 +270,7 @@ export const useDataPoints = (): IHeatMapDataPoint[] => {
         return;
       }
       if (!!numericStream) {
-        const points = handleNumericStream(
-          _,
-          config.maxSecondsBetweenDatapoints
-        );
+        const points = handleNumericStream(_, config.weightSearchWindow);
         setDatapoints(points);
         return;
       }
