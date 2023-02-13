@@ -8,6 +8,7 @@ import { IOdometry } from "./IOdometry";
 import { IPose } from "./IPose";
 import { IPcd } from "./IPcd";
 import { IGridMap } from "./IGridMap";
+import { IUniversePointCloud } from "./IUniversePointCloud";
 
 export type DataSourceState =
   | "missing_data"
@@ -173,7 +174,7 @@ export interface IUniverseData {
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IPcd | DataStatus) => void
+    callback: (data: IUniversePointCloud | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToOdometry(

@@ -12,6 +12,11 @@ export type ILocation = import("../../data-sdk/src/model/ILocation").ILocation;
 export type IMap = import("../../data-sdk/src/model/IMap").IMap;
 export type IMarker3DArray =
   import("../../data-sdk/src/model/IMarker3DArray").IMarker3DArray;
+export type ITransform =
+  import("../../data-sdk/src/model/ITransform").ITransform;
+export type IQuaternion =
+  import("../../data-sdk/src/model/IQuaternion").IQuaternion;
+export type IVector3 = import("../../data-sdk/src/model/IVector3").IVector3;
 export type ITransformNode =
   import("../../data-sdk/src/model/ITransformNode").ITransformNode;
 export type IRtcPointCloud =
@@ -23,5 +28,3 @@ export type IPcd = import("./model/IPcd").IPcd;
 export type INumericSetEntry =
   import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
 export type IBitset = import("../../data-sdk/src/model/IBitset").IBitset;
-export type ITransform =
-  import("../../data-sdk/src/model/ITransform").ITransform;
