@@ -1,5 +1,5 @@
 export * from "./model/IPose";
-export * from "./model/IOdometry";
+export * from "./model/IUniverseOdometry";
 export * from "./model/IUniverseData";
 
 export { defined, definedAndNotNull } from "../../common/defined";
@@ -23,7 +23,10 @@ export type IRtcPointCloud =
   import("../../data-sdk/src/model/IRtcPointCloud").IRtcPointCloud;
 export type IPointCloud =
   import("../../data-sdk/src/model/IPointCloud").IPointCloud;
-export type IGridMap = import("./model/IGridMap").IGridMap;
+export type IUniverseGridMap =
+  import("./model/IUniverseGridMap").IUniverseGridMap;
+export type IUniverseOdometry =
+  import("./model/IUniverseOdometry").IUniverseOdometry;
 export type IPcd = import("./model/IPcd").IPcd;
 export type INumericSetEntry =
   import("../../data-sdk/src/model/INumericSetEntry").INumericSetEntry;
