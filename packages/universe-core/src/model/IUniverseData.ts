@@ -8,6 +8,7 @@ import { IUniverseOdometry } from "./IUniverseOdometry";
 import { IPose } from "./IPose";
 import { IUniverseGridMap } from "./IUniverseGridMap";
 import { IUniversePointCloud } from "./IUniversePointCloud";
+import { IUniversePath } from "./IUniversePath";
 
 export type DataSourceState =
   | "missing_data"
@@ -180,6 +181,12 @@ export interface IUniverseData {
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IUniverseOdometry | DataStatus) => void
+  ): CloseSubscription;
+
+  subscribeToPath(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IUniversePath | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToPose(

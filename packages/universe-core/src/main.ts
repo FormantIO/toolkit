@@ -14,6 +14,7 @@ export type IMarker3DArray =
   import("../../data-sdk/src/model/IMarker3DArray").IMarker3DArray;
 export type ITransform =
   import("../../data-sdk/src/model/ITransform").ITransform;
+export type IPath = import("../../data-sdk/src/model/IPath").IPath;
 export type IQuaternion =
   import("../../data-sdk/src/model/IQuaternion").IQuaternion;
 export type IVector3 = import("../../data-sdk/src/model/IVector3").IVector3;
