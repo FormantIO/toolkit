@@ -1,13 +1,21 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import "./App.css";
-import { useDevice, LoadingIndicator } from "@formant/ui-sdk";
+import {
+  useDevice,
+  LoadingIndicator,
+  useFormant,
+  TextField,
+  Button,
+} from "@formant/ui-sdk";
 import { Authentication, KeyValue, Device } from "@formant/data-sdk";
 import { IConfiguration } from "./types";
 import { useSelector, useDispatch } from "react-redux";
 import { Commands } from "./components/Commands";
 import { setCommands } from "./features/configuration/configurationSlice";
-import { useConfiguration } from "./hooks/useConfiguration";
 import { useStreams } from "./hooks/useStreams";
+import { CommandRow } from "./CommandRow";
+
+import styled from "@emotion/styled";
 
 interface IStream {
   streamName: string;
@@ -32,48 +40,45 @@ const setStreamAsActive = async (stream: any) => {
 
 function App() {
   const dispatch = useDispatch();
-  const [configuration, loading] = useConfiguration();
+  const context = useFormant();
+  const config = context.configuration as IConfiguration;
   const [paramsFromStreams, setParamsFromStreams] = useState<IStream[]>([]);
   const device = useDevice();
   const streams: IStream[] = useStreams(device);
 
-  useEffect(() => {
-    if (!device || !configuration) return;
-    const paramStream = configuration.commands.filter(
-      (_) => _.streamName.length > 0
-    );
-    const streamsInfo = streams.filter(
-      (_) =>
-        paramStream.map((p) => p.streamName).includes(_.streamName) && !_.active
-    );
-
-    setParamsFromStreams(streamsInfo);
-    dispatch(setCommands({ items: configuration }));
-  }, [device, configuration]);
-
-  useEffect(() => {
-    if (paramsFromStreams.length === 0) return;
-    paramsFromStreams.map((_) => setStreamAsActive(_));
-  }, [paramsFromStreams]);
-
   return (
     <div className="App">
-      {loading || !configuration ? (
-        <div
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <LoadingIndicator />
-        </div>
+      {!config ? (
+        <LoadingIndicator />
       ) : (
-        <Commands device={device as any} configuration={configuration} />
+        <Table>
+          {config.commands.map((_) => {
+            return (
+              <CommandRow
+                name={_.name}
+                description={
+                  " Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+                }
+              />
+            );
+          })}
+        </Table>
       )}
     </div>
   );
 }
 
 export default App;
+
+const Table = styled.table`
+  with: 100%;
+`;
+
+const Desciption = styled.td`
+  width: 50%;
+  text-align: left;
+`;
+
+const Name = styled.span`
+  color: white;
+`;

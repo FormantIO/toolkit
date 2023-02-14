@@ -11,8 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formant/data-sdk": "^0.0.106",
-    "@formant/ui-sdk": "^0.0.28",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@formant/data-sdk": "^0.0.130",
+    "@formant/ui-sdk": "^0.0.41",
     "@reduxjs/toolkit": "^1.8.5",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",

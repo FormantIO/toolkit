@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
-    <FormantProvider>
+    <FormantProvider parseConfiguration>
       <React.StrictMode>
         <App />
       </React.StrictMode>

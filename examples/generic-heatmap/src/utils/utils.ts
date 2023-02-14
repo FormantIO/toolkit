@@ -5,7 +5,7 @@ import {
   IHeatMapDataPoint,
   IScrubberConfiguration,
 } from "../types";
-import { IEvent, Fleet, Authentication, IStreamData } from "@formant/data-sdk";
+import { IEvent, , Authentication, IStreamData } from "@formant/data-sdk";
 
 const SECONDS = 1000;
 const MINUTES = 60 * SECONDS;
