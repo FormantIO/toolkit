@@ -1,7 +1,6 @@
 import { NumericAggregateBar } from "./NumericAggregateBar";
 import "./App.css";
-import { LoadingIndicator } from "./LoadingIndicator";
-import { useFormant } from "@formant/ui-sdk";
+import { useFormant, LoadingIndicator } from "@formant/ui-sdk";
 
 function App() {
   const config = useFormant();
