@@ -1,5 +1,5 @@
-import { Authentication, Fleet, INumericAggregate } from "@formant/data-sdk";
-import { BarChart } from "@formant/ui-sdk";
+import { Authentication, INumericAggregate, Fleet } from "@formant/data-sdk";
+import { BarChart, useFormant } from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
@@ -8,17 +8,17 @@ import {
   reduceNumericSetStreamAggregates,
   reduceNumericStreamAggregates,
 } from "./utils/numericAggregateUtils";
-import { AggregateType, AggregatePeriod } from "./types";
+import {
+  ConfigurationTypes,
+  INumericConfiguration,
+  INumericSetConfiguration,
+} from "./types";
 import { LoadingIndicator } from "./LoadingIndicator";
-
-interface INumericAggregateBarProps {
-  streamName: string;
-  aggregateType: AggregateType;
-  deviceIds?: string[];
-  numericSetKey?: string;
-  aggregateBy?: AggregatePeriod;
-  numAggregates?: number;
-}
+import {
+  getTypedConfiguration,
+  isNumericConfiguration,
+  isNumericSetConfiguration,
+} from "./utils/getTypedConfiguration";
 
 const defaultAggregtateBy = "week";
 const defaultNumAggregates = 4;
@@ -41,34 +41,38 @@ const aggregateByDateFunctions = {
   },
 };
 
-export function NumericAggregateBar(props: INumericAggregateBarProps) {
+export function NumericAggregateBar() {
+  const context = useFormant();
+  const config = getTypedConfiguration(
+    context.configuration as ConfigurationTypes
+  );
   const [arr, setArr] = useState([0]);
   const [aggregations, setAggregations] = useState<
     { start: Date; aggregate: INumericAggregate }[] | undefined
   >();
-  const {
-    streamName,
-    aggregateType,
-    numericSetKey,
-    aggregateBy: propsAggregateBy,
-    numAggregates: propsNumAggregates,
-    deviceIds,
-  } = props;
-  const aggregateBy = propsAggregateBy ?? defaultAggregtateBy;
-  const numAggregates = propsNumAggregates ?? defaultNumAggregates;
-  const dateFunctions = aggregateByDateFunctions[aggregateBy];
+  const { aggregateType, aggregateBy, numAggregates, deviceIds, streamType } =
+    config;
+
+  const _aggregateBy = aggregateBy ?? defaultAggregtateBy;
+  const _numAggregates = numAggregates ?? defaultNumAggregates;
+  const dateFunctions = aggregateByDateFunctions[_aggregateBy];
+
   useEffect(() => {
-    setArr(new Array(numAggregates).fill(0));
-  }, [numAggregates]);
+    setArr(new Array(_numAggregates).fill(0));
+  }, [_numAggregates]);
 
   const something = useMemo(() => {
-    const _ = new Array(numAggregates).fill(0);
+    const _ = new Array(_numAggregates).fill(0);
     return _;
-  }, [numAggregates]);
+  }, [_numAggregates]);
 
   useEffect(() => {
     loadValues();
-  }, [numAggregates, streamName]);
+  }, [
+    _numAggregates,
+    (config as INumericSetConfiguration).numericSetStream,
+    (config as INumericConfiguration).numericStream,
+  ]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
@@ -86,38 +90,45 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
             data: await Fleet.aggregateTelemetry({
               start: startDate.toISOString(),
               end: endDate.toISOString(),
-              aggregate: aggregateBy,
+              aggregate: _aggregateBy,
               deviceIds: deviceIds ?? [currentDevice.id],
-              names: [streamName],
+              names: [
+                streamType === "numeric"
+                  ? config.numericStream
+                  : config.numericSetStream,
+              ],
             }),
           };
         })
       );
-      console.log(aggregatedData)
+      console.log(aggregatedData);
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
         }
-        if (streamDatas.data.length > 1) {
-          console.log("stream data is long");
-          return undefined;
-        }
+        //TODO: HANLDE TAGGED DATA
         const { start, data } = streamDatas;
         const stream = data[0];
-        if (stream.type == "numeric") {
+        if (stream.type === "numeric") {
           return {
             start,
             aggregate: reduceNumericStreamAggregates(stream),
           };
         }
-        if (stream.type == "numeric set") {
-          if (numericSetKey === undefined) {
+        if (stream.type === "numeric set") {
+          if (
+            (config as INumericSetConfiguration).numericSetKey === undefined
+          ) {
             console.log("Is numeric set but no key");
             return undefined;
           }
+          console.log("he");
           return {
             start,
-            aggregate: reduceNumericSetStreamAggregates(stream, numericSetKey),
+            aggregate: reduceNumericSetStreamAggregates(
+              stream,
+              (config as INumericSetConfiguration).numericSetKey
+            ),
           };
         }
         return undefined;
@@ -127,7 +138,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
         (_): _ is { start: Date; aggregate: INumericAggregate } =>
           !!_?.aggregate
       );
-
+      console.log(aggregations);
       setAggregations(filteredAggregations.reverse());
     }
   };
@@ -140,7 +151,7 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
     aggregations?.map(
       (_, i) =>
         `${capitalizeFirstLetter(
-          aggregateBy
+          _aggregateBy
         )} ${_.start.getDate()}/${_.start.getMonth()}`
     ) ?? [];
 
@@ -150,9 +161,13 @@ export function NumericAggregateBar(props: INumericAggregateBarProps) {
     month: "monthly",
   };
   const titleString = `${capitalizeFirstLetter(
-    aggregateByAdverb[aggregateBy]
-  )} ${aggregateType} of ${streamName}${
-    numericSetKey ? "." + numericSetKey : ""
+    aggregateByAdverb[_aggregateBy]
+  )} ${aggregateType} of ${
+    streamType === "numeric" ? config.numericStream : config.numericSetStream
+  }${
+    (config as INumericSetConfiguration).numericSetKey
+      ? "." + (config as INumericSetConfiguration).numericSetKey
+      : ""
   }`;
   return (
     <>

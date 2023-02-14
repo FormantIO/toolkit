@@ -5,17 +5,30 @@
   "description": "Aggregate chart configuration.",
   "type": "object",
   "properties": {
-    "aggregateType": {
+    "streamType": {
       "type": "string",
-      "enum": ["min", "max", "standard deviation", "average", "sum", "count"]
+      "enum": ["numeric", "numeric set"]
     },
-    "streamName": {
+    "numericStream": {
+      "$formant.streams.byType": "numeric",
       "description": "Formant's data stream name",
-      "type": "string"
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric"]
+    },
+    "numericSetStream": {
+      "$formant.streams.byType": "numeric set",
+      "description": "Formant's data stream name",
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric set"]
     },
     "numericSetKey": {
       "description": "Key to aggregate from a numeric set",
-      "type": "string"
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric set"]
+    },
+    "aggregateType": {
+      "type": "string",
+      "enum": ["min", "max", "standard deviation", "average", "sum", "count"]
     },
     "aggregateBy": {
       "description": "Aggregate period",
@@ -27,7 +40,7 @@
       "type": "integer"
     },
     "deviceIds": {
-      "description": "List of devices",
+      "description": "List of devices (optional)",
       "type": "array",
       "items": {
         "type": "string"

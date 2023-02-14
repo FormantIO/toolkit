@@ -8,32 +8,25 @@ export type AggregateType =
 
 export type AggregatePeriod = "day" | "week" | "month";
 
-export interface IAggregateConfiguration {
+type StreamType = "numeric" | "numeric set";
+
+export interface IConfiguration<T extends StreamType> {
+  streamType: T;
   aggregateType: AggregateType;
-  streamName: string;
-  numericSetKey: string;
   aggregateBy: AggregatePeriod;
   numAggregates: number;
   deviceIds?: string[];
 }
 
-export enum ACTIONS {
-  SET_NUMBER,
-  SET_TYPE,
-  SET_PERIOD,
-  SET_STREAM_NAME,
-  SET_STREAM_KEY,
-  LOAD_CONFIGURATION,
+export interface INumericConfiguration extends IConfiguration<"numeric"> {
+  numericStream: string;
 }
 
-export interface IActions {
-  type: ACTIONS;
-  payload: {
-    value:
-      | string
-      | number
-      | AggregatePeriod
-      | AggregateType
-      | IAggregateConfiguration;
-  };
+export interface INumericSetConfiguration
+  extends IConfiguration<"numeric set"> {
+  numericSetStream: string;
+  numericSetKey: string;
 }
+export type ConfigurationTypes =
+  | INumericConfiguration
+  | INumericSetConfiguration;

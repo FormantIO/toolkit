@@ -1,24 +1,14 @@
 import { NumericAggregateBar } from "./NumericAggregateBar";
 import "./App.css";
 import { LoadingIndicator } from "./LoadingIndicator";
-import { useConfiguration } from "./hooks/useConfiguration";
+import { useFormant } from "@formant/ui-sdk";
 
 function App() {
-  const [config, loading] = useConfiguration();
+  const config = useFormant();
 
   return (
     <div className="App">
-      {loading ? (
-        <LoadingIndicator />
-      ) : (
-        <NumericAggregateBar
-          aggregateType={config!.aggregateType}
-          streamName={config!.streamName}
-          numericSetKey={config!.numericSetKey}
-          aggregateBy={config!.aggregateBy}
-          numAggregates={config!.numAggregates}
-        />
-      )}
+      {!config.configuration ? <LoadingIndicator /> : <NumericAggregateBar />}
     </div>
   );
 }
