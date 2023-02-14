@@ -21,9 +21,7 @@ class HeatmapClient:
         self._publish_frequency = os.getenv(
             "PUBLISH_FREQUENCY", PUBLISH_FREQUENCY
         )
-        self._agent_client = AgentClient(
-            agent_url=self.agent_url, ignore_throttled=True
-        )
+        self._agent_client = AgentClient(ignore_throttled=True)
 
     def _publish_to_heatmap(self, latitude, longitude, weight):
         print(f"{datetime.datetime.now()}\nGeolocation: {latitude}, {longitude}")
