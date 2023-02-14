@@ -1,7 +1,7 @@
 import { Authentication, Fleet, Device } from "@formant/data-sdk";
 import * as React from "react";
 
-const useDevice = (deviceId?: string) => {
+const useDevice = (deviceId?: string): Device => {
   const [device, setDevice] = React.useState<Device | undefined>();
 
   React.useEffect(() => {

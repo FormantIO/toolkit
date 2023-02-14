@@ -1,12 +1,15 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
 import { useEffect, useState } from "react";
 
-const useLatestTelemetry = (deviceIdOrDeviceIds?: string | string[]) => {
+const useLatestTelemetry = (
+  deviceIdOrDeviceIds?: string | string[],
+  dependencies: any[] = []
+) => {
   const [latestTelemetry, setLatestTelemetry] = useState<any>();
 
   useEffect(() => {
     getLatestTelemetry();
-  }, []);
+  }, dependencies);
 
   const getLatestTelemetry = async () => {
     let _telemetry = null;
