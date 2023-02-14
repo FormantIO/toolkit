@@ -6,15 +6,22 @@ from random import randint
 from formant.sdk.agent.v1 import Client as AgentClient
 
 
+AGENT_URL = "unix:///var/lib/formant/agent.sock"
+LOCATION_STREAM_NAME = "heatmap.point.location"
+NUMERIC_STREAM_NAME = "heatmap.point.weight"
+PUBLISH_FREQUENCY = 30
+
 class HeatmapClient:
     def __init__(self) -> None:
-        agent_url = "unix:///var/lib/formant/agent.sock"
-        self.agent_url = os.getenv("AGENT_URL", agent_url)
+        self.agent_url = os.getenv("AGENT_URL", AGENT_URL)
         self._geolocation_stream_name = os.getenv(
-            "LOCATION_STREAM_NAME", "heatmap.point.location"
+            "LOCATION_STREAM_NAME", LOCATION_STREAM_NAME
         )
         self._numeric_stream_name = os.getenv(
-            "NUMERIC_STREAM_NAME", "heatmap.point.weight"
+            "NUMERIC_STREAM_NAME", NUMERIC_STREAM_NAME
+        )
+        self._publish_frequency = os.getenv(
+            "PUBLISH_FREQUENCY", PUBLISH_FREQUENCY
         )
         self._agent_client = AgentClient(
             agent_url=self.agent_url, ignore_throttled=True
@@ -34,18 +41,16 @@ class HeatmapClient:
             while True:
                 # Around Fort Collins, CO, where Walter is:
                 # ~ 40.72, -104.77
-                latitude = randint(40000000, 41000000)
-                longitude = randint(-105000000, -104000000)
-                latitude = str(latitude)
+                latitude = str(randint(40700000, 40800000))
                 latitude = latitude[0:2] + "." + latitude[2:]
                 latitude = float(latitude)
-                longitude = str(longitude)
+                longitude = str(randint(-104800000, -104700000))
                 longitude = longitude[0:4] + "." + longitude[4:]
                 longitude = float(longitude)
                 weight = randint(1, 50)
-                time.sleep(1)
                 self._publish_to_heatmap(
                     latitude=latitude, longitude=longitude, weight=weight
                 )
+                time.sleep(self._publish_frequency)
         except KeyboardInterrupt:
             pass
