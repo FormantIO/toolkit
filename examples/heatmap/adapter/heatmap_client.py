@@ -6,14 +6,12 @@ from random import randint
 from formant.sdk.agent.v1 import Client as AgentClient
 
 
-AGENT_URL = "unix:///var/lib/formant/agent.sock"
 LOCATION_STREAM_NAME = "heatmap.point.location"
 NUMERIC_STREAM_NAME = "heatmap.point.weight"
 PUBLISH_FREQUENCY = 30
 
 class HeatmapClient:
     def __init__(self) -> None:
-        self.agent_url = os.getenv("AGENT_URL", AGENT_URL)
         self._geolocation_stream_name = os.getenv(
             "LOCATION_STREAM_NAME", LOCATION_STREAM_NAME
         )
