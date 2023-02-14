@@ -38,13 +38,6 @@
     "numAggregates": {
       "description": "Number of bars to show in the chart",
       "type": "integer"
-    },
-    "deviceIds": {
-      "description": "List of devices (optional)",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
     }
   }
 }
