@@ -1,8 +1,8 @@
 import { ITransform } from "../../../model/ITransform";
 
-export interface IGridMap {
+export interface IUniverseGridMap {
   canvas: HTMLCanvasElement;
-  worldToLocal: ITransform;
+  worldToLocal?: ITransform;
   width: number;
   height: number;
   resolution: number;

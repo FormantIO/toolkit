@@ -4,10 +4,11 @@ import { IMarker3DArray } from "../../../data-sdk/src/model/IMarker3DArray";
 import { ITransformNode } from "../../../data-sdk/src/model/ITransformNode";
 import { INumericSetEntry } from "../../../data-sdk/src/model/INumericSetEntry";
 import { IBitset } from "../../../data-sdk/src/model/IBitset";
-import { IOdometry } from "./IOdometry";
+import { IUniverseOdometry } from "./IUniverseOdometry";
 import { IPose } from "./IPose";
-import { IPcd } from "./IPcd";
-import { IGridMap } from "./IGridMap";
+import { IUniverseGridMap } from "./IUniverseGridMap";
+import { IUniversePointCloud } from "./IUniversePointCloud";
+import { IUniversePath } from "./IUniversePath";
 
 export type DataSourceState =
   | "missing_data"
@@ -173,13 +174,19 @@ export interface IUniverseData {
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IPcd | DataStatus) => void
+    callback: (data: IUniversePointCloud | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IOdometry | DataStatus) => void
+    callback: (data: IUniverseOdometry | DataStatus) => void
+  ): CloseSubscription;
+
+  subscribeToPath(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IUniversePath | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToPose(
@@ -203,7 +210,7 @@ export interface IUniverseData {
   subscribeToGridMap(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IGridMap | DataStatus) => void
+    callback: (data: IUniverseGridMap | DataStatus) => void
   ): CloseSubscription;
 
   subscribeToVideo(
