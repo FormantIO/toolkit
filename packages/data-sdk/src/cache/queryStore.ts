@@ -2,7 +2,7 @@ import { IQuery } from "../model/IQuery";
 import { IStreamData } from "../model/IStreamData";
 import { StreamType } from "../model/StreamType";
 import { IFilter } from "../model/IFilter";
-import { Fleet } from "../fleet";
+import { Fleet } from "../Fleet";
 import {
   addMinutes,
   addSeconds,
