@@ -1,5 +1,5 @@
 import { Authentication, INumericAggregate, Fleet } from "@formant/data-sdk";
-import { BarChart, useFormant } from "@formant/ui-sdk";
+import { BarChart, useFormant, LoadingIndicator } from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
@@ -13,12 +13,7 @@ import {
   INumericConfiguration,
   INumericSetConfiguration,
 } from "./types";
-import { LoadingIndicator } from "./LoadingIndicator";
-import {
-  getTypedConfiguration,
-  isNumericConfiguration,
-  isNumericSetConfiguration,
-} from "./utils/getTypedConfiguration";
+import { getTypedConfiguration } from "./utils/getTypedConfiguration";
 
 const defaultAggregtateBy = "week";
 const defaultNumAggregates = 4;
@@ -101,7 +96,6 @@ export function NumericAggregateBar() {
           };
         })
       );
-      console.log(aggregatedData);
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
@@ -122,7 +116,6 @@ export function NumericAggregateBar() {
             console.log("Is numeric set but no key");
             return undefined;
           }
-          console.log("he");
           return {
             start,
             aggregate: reduceNumericSetStreamAggregates(
@@ -138,7 +131,6 @@ export function NumericAggregateBar() {
         (_): _ is { start: Date; aggregate: INumericAggregate } =>
           !!_?.aggregate
       );
-      console.log(aggregations);
       setAggregations(filteredAggregations.reverse());
     }
   };
