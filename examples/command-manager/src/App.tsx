@@ -22,22 +22,6 @@ interface IStream {
   active: boolean;
 }
 
-const setStreamAsActive = async (stream: any) => {
-  if (await Authentication.waitTilAuthenticated()) {
-    const response = await fetch(
-      `https://api.formant.io/v1/admin/streams/${stream.id}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify({ ...stream, active: true }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
-  }
-};
-
 function App() {
   const dispatch = useDispatch();
   const context = useFormant();
@@ -59,6 +43,7 @@ function App() {
                 description={
                   " Lorem ipsum dolor, sit amet consectetur adipisicing elit."
                 }
+                streamName={_.streamName ?? ""}
               />
             );
           })}
@@ -71,7 +56,8 @@ function App() {
 export default App;
 
 const Table = styled.table`
-  with: 100%;
+  width: 100%;
+  border-collapse: collapse;
 `;
 
 const Desciption = styled.td`
