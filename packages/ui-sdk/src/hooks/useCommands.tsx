@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { Command, Device } from "@formant/data-sdk";
+import { authenticate } from "../utils/authenticate";
 
-export const useCommands = (device: Device | undefined): Command[] => {
+const getCommands = async (device: Device) =>
+  await authenticate(await device.getAvailableCommands());
+
+const useCommands = (device: Device | undefined): Command[] => {
   const [commands, setCommands] = useState<Command[]>([]);
 
   useEffect(() => {
     if (!device) return;
-    device.getAvailableCommands().then((_) => setCommands(_));
+    getCommands(device).then((_) => setCommands(_));
   }, [device]);
   return commands;
 };
+
+export default useCommands;

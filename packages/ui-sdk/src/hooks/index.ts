@@ -6,3 +6,5 @@ export { default as useDevices } from "./useDevices";
 export { default as useConfiguration } from "./useConfiguration";
 export { default as useScrubberTime } from "./useScrubberTime";
 export { default as useQueryDevices } from "./useQueryDevices";
+export { default as useCommands } from "./useCommands";
+export { default as useStreams } from "./useStreams";

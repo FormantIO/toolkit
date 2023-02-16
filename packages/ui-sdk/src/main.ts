@@ -14,7 +14,6 @@ export {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Select,
   Switch,
   Link,
   Snackbar,
