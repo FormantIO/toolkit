@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/command-manager/schema.json",
+  "title": "Command Manager",
+  "description": "Aggregate chart configuration.",
+  "type": "object",
+  "properties": {
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "enabledParameters": {
+            "type": "boolean"
+          },
+          "useStreamValue": {
+            "$formant.visible.when": ["enabledParameters", "=", true],
+            "title": "CSV from a text stream",
+            "type": "boolean"
+          },
+          "streamName": {
+            "$formant.visible.when": ["useStreamValue", "=", true],
+            "type": "string",
+            "$formant.streams.byType": "text"
+          }
+        }
+      }
+    }
+  }
+}
