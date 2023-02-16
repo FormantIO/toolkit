@@ -21,7 +21,9 @@ function App() {
   return (
     <div className="App">
       {!config ? (
-        <LoadingIndicator />
+        <Conatiner>
+          <LoadingIndicator />
+        </Conatiner>
       ) : (
         <Table>
           {config.commands.map((_) => {
@@ -47,6 +49,13 @@ function App() {
 }
 
 export default App;
+
+const Conatiner = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direcction: column;
+`;
 
 const Table = styled.table`
   width: 100%;
