@@ -12,7 +12,7 @@ import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IAnnotationQuery } from "./model/IAnnotationQuery";
-
+import { IStream } from "./model/IStream";
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -418,5 +418,40 @@ export class Fleet {
     }, {});
 
     return annotationCounter;
+  }
+
+  static async getStreams(): Promise<IStream[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(`${FORMANT_API_URL}/v1/admin/streams`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const streams = await response.json();
+    return streams.items.filter(
+      (_: { enabled: boolean }) => _.enabled
+    ) as IStream[];
+  }
+
+  static async patchStream(stream: IStream): Promise<IStream> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/streams/${stream.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(stream),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await response.json()) as IStream;
   }
 }
