@@ -5,7 +5,7 @@ const getStreams = async () => {
   return await authenticate(await Fleet.getStreams());
 };
 
-export const useStreams = (dependencies: any[] = []) => {
+const useStreams = (dependencies: any[] = []) => {
   const [streams, setStreams] = useState([]);
 
   useEffect(() => {
@@ -14,3 +14,5 @@ export const useStreams = (dependencies: any[] = []) => {
 
   return streams;
 };
+
+export default useStreams
