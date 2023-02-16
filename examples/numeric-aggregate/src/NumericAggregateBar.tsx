@@ -1,5 +1,10 @@
 import { Authentication, INumericAggregate, Fleet } from "@formant/data-sdk";
-import { BarChart, useFormant, LoadingIndicator } from "@formant/ui-sdk";
+import {
+  BarChart,
+  useFormant,
+  LoadingIndicator,
+  useScrubberTime,
+} from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
@@ -36,7 +41,7 @@ const aggregateByDateFunctions = {
   },
 };
 
-export function NumericAggregateBar() {
+export function NumericAggregateBar({ time }) {
   const context = useFormant();
   const config = getTypedConfiguration(
     context.configuration as ConfigurationTypes
@@ -67,6 +72,7 @@ export function NumericAggregateBar() {
     _numAggregates,
     (config as INumericSetConfiguration).numericSetStream,
     (config as INumericConfiguration).numericStream,
+    time,
   ]);
 
   const loadValues = async () => {
@@ -74,7 +80,7 @@ export function NumericAggregateBar() {
       const currentDevice = await Fleet.getCurrentDevice();
       const aggregatedData = await Promise.all(
         something.map(async (_, dateOffset) => {
-          const now = new Date();
+          const now = new Date(time);
           const startDate = dateFunctions.sub(
             dateFunctions.start(now),
             dateOffset
