@@ -37,6 +37,6 @@ simple configuration with only list of names
 ### URL
 
 
-https://formantio.github.io/toolkit/examples/numeric-aggregate/dist/index.html?auth={auth}&device={device_id}&configuration={configuration}&module={module_id}
+https://formantio.github.io/toolkit/examples/numeric-aggregate/dist/index.html?auth={auth}&device={device_id}&configuration={configuration}&module={module}
 
 
