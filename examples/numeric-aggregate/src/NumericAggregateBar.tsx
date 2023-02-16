@@ -6,7 +6,7 @@ import {
   useScrubberTime,
 } from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { aggregateFunctionMap } from "./utils/aggregateFunctionUtils";
 import {
@@ -41,7 +41,13 @@ const aggregateByDateFunctions = {
   },
 };
 
-export function NumericAggregateBar({ time }) {
+interface INumericAggregateBarProps {
+  time: number;
+}
+
+export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
+  time,
+}) => {
   const context = useFormant();
   const config = getTypedConfiguration(
     context.configuration as ConfigurationTypes
@@ -185,7 +191,7 @@ export function NumericAggregateBar({ time }) {
       )}
     </>
   );
-}
+};
 
 function capitalizeFirstLetter(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);

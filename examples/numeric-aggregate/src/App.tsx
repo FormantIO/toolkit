@@ -11,7 +11,7 @@ function App() {
       {!config.configuration ? (
         <LoadingIndicator />
       ) : (
-        <NumericAggregateBar time={time} />
+        <NumericAggregateBar time={time!} />
       )}
     </div>
   );
