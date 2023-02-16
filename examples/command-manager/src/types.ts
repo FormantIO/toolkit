@@ -16,9 +16,8 @@ export interface activeCommands {
 export interface ICommandConfiguration {
   name: string;
   enabledParameters: boolean;
+  useStreamValue: boolean;
   streamName: string;
-  needsConfirmation: boolean;
-  parameterValue: string | null;
 }
 
 export interface IConfiguration {

@@ -1,34 +1,22 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
 import "./App.css";
-import {
-  useDevice,
-  LoadingIndicator,
-  useFormant,
-  TextField,
-  Button,
-} from "@formant/ui-sdk";
-import { Authentication, KeyValue, Device } from "@formant/data-sdk";
+import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { IConfiguration } from "./types";
-import { useSelector, useDispatch } from "react-redux";
-import { Commands } from "./components/Commands";
-import { setCommands } from "./features/configuration/configurationSlice";
-import { useStreams } from "./hooks/useStreams";
 import { CommandRow } from "./CommandRow";
-
+import { useStreams } from "./hooks/useStreams";
+import { useCommands } from "./hooks/useCommands";
 import styled from "@emotion/styled";
 
-interface IStream {
+export interface IStream {
   streamName: string;
   active: boolean;
 }
 
 function App() {
-  const dispatch = useDispatch();
   const context = useFormant();
   const config = context.configuration as IConfiguration;
-  const [paramsFromStreams, setParamsFromStreams] = useState<IStream[]>([]);
   const device = useDevice();
   const streams: IStream[] = useStreams(device);
+  const commands = useCommands();
 
   return (
     <div className="App">
@@ -39,11 +27,16 @@ function App() {
           {config.commands.map((_) => {
             return (
               <CommandRow
+                device={device}
                 name={_.name}
                 description={
-                  " Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+                  commands?.filter((command) => _.name === command.name)[0]
+                    ?.description ?? ""
                 }
                 streamName={_.streamName ?? ""}
+                streams={!!_.streamName ? streams : []}
+                useStreamValue={_.useStreamValue}
+                enabledParameters={_.enabledParameters}
               />
             );
           })}
@@ -58,13 +51,4 @@ export default App;
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-`;
-
-const Desciption = styled.td`
-  width: 50%;
-  text-align: left;
-`;
-
-const Name = styled.span`
-  color: white;
 `;
