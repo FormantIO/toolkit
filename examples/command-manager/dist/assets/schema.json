@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/command-manager/schema.json",
-  "title": "Numeric aggregate",
+  "title": "Command Manager",
   "description": "Aggregate chart configuration.",
   "type": "object",
   "properties": {
@@ -16,11 +16,15 @@
           "enabledParameters": {
             "type": "boolean"
           },
-          "streamName": {
-            "type": "string"
-          },
-          "needsConfirmation": {
+          "useStreamValue": {
+            "$formant.visible.when": ["enabledParameters", "=", true],
+            "title": "CSV from a text stream",
             "type": "boolean"
+          },
+          "streamName": {
+            "$formant.visible.when": ["useStreamValue", "=", true],
+            "type": "string",
+            "$formant.streams.byType": "text"
           }
         }
       }
