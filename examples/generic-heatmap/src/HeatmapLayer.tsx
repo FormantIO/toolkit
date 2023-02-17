@@ -7,15 +7,18 @@ interface IHeatmapLayerProps {
   featureCollection: FeatureCollection<Point>;
   distinctZoomLevel?: number;
   circleRadius?: number;
+  intensity?: number;
 }
 
 const DEFAULT_DISTINCT_ZOOM_LEVEL = 15;
+const DEFAULT_HEATMAP_INTENSITY = 5;
 
 export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
   map,
   featureCollection,
   distinctZoomLevel,
   circleRadius,
+  intensity,
 }) => {
   const [isLayerLoaded, setIsLayerLoaded] = useState(false);
   const flyingToCounter = useRef(0);
@@ -45,12 +48,7 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
               ],
             },
             // increase intensity as zoom level increases
-            "heatmap-intensity": {
-              stops: [
-                [15, 1],
-                // [15, 3],
-              ],
-            },
+            "heatmap-intensity": intensity ?? DEFAULT_HEATMAP_INTENSITY,
             // assign color values be applied to points depending on their density
             "heatmap-color": [
               "interpolate",
@@ -70,8 +68,8 @@ export const HeatmapLayer: FC<IHeatmapLayerProps> = ({
             // increase radius as zoom increases
             "heatmap-radius": {
               stops: [
-                [11, distinctZoomLevel ?? 15],
-                [15, distinctZoomLevel ? distinctZoomLevel + 2 : 20],
+                [11, distinctZoomLevel ?? 10],
+                [14, distinctZoomLevel ? distinctZoomLevel + 2 : 20],
               ],
             },
             // decrease opacity to transition into the circle layer

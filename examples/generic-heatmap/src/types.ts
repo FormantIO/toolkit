@@ -25,9 +25,11 @@ export interface IConfiguration<T extends QueryType> {
   circleRadius?: number;
   tooltipLabel?: string;
   mapboxKey?: string;
+  heatmapIntensity?: number;
 }
 export interface ITimeDeltaScrubber extends IStartFrom<"Time Delta"> {
-  timeDelta: number;
+  hours: number;
+  minutes: number;
 }
 
 export interface IEventScrubber extends IStartFrom<"Event"> {
@@ -45,7 +47,8 @@ export interface IAnnotationConfiguration extends IConfiguration<"Annotation"> {
 
 export interface ITimeDeltaEvent {
   startFrom: "Time Delta";
-  timeDelta: number;
+  hours: number;
+  minutes: number;
   endEvent: string;
 }
 

@@ -20,7 +20,11 @@
           "type": "string",
           "enum": ["Time Delta", "Event"]
         },
-        "timeDelta": {
+        "hours": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
+        "minutes": {
           "type": "integer",
           "$formant.visible.when": ["startFrom", "=", "Time Delta"]
         },
@@ -48,7 +52,11 @@
           "type": "string",
           "enum": ["Time Delta", "Event"]
         },
-        "timeDelta": {
+        "hours": {
+          "type": "integer",
+          "$formant.visible.when": ["startFrom", "=", "Time Delta"]
+        },
+        "minutes": {
           "type": "integer",
           "$formant.visible.when": ["startFrom", "=", "Time Delta"]
         },
@@ -110,6 +118,12 @@
       "title": "Distinct zoom level",
       "type": "integer",
       "description": "At what zoom level to fade the heatmap and show individual locations.",
+      "$formant.visible.when": ["advanceSettings", "=", true]
+    },
+    "heatmapIntensity": {
+      "title": "Heatmap intensity",
+      "type": "integer",
+      "description": "increase intensity as zoom level increases.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "circleRadius": {

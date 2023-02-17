@@ -51,6 +51,7 @@ function App() {
             featureCollection={featureCollection}
             distinctZoomLevel={config.distinctZoomLevel}
             circleRadius={config.circleRadius}
+            intensity={config.heatmapIntensity}
           />
           <DetailsCard map={map.current} />
         </>

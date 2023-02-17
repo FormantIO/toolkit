@@ -139,14 +139,16 @@ const handleEventTimeDelta = async (
 ) => {
   const eventQuery = config.eventsQuery as ITimeDeltaEvent;
   const endEvent = eventQuery.endEvent;
-  const timeDelta = eventQuery.timeDelta;
+  const hours = !!eventQuery.hours ? eventQuery.hours * HOURS : 0;
+  const minutes = !!eventQuery.minutes ? eventQuery.minutes * MINUTES : 0;
+  const timeDelta = hours + minutes;
   const events = await Fleet.queryEvents({
     names: [endEvent],
     deviceIds: [deviceId],
   });
   if (events.length < 1) console.error("No events");
   const end = events[0].time!;
-  const start = isoDateToMilliseconds(end) - HOURS * timeDelta;
+  const start = isoDateToMilliseconds(end) - timeDelta;
   return {
     start: millisecondsToISODate(start),
     end: end,
@@ -170,7 +172,9 @@ const handleScrrubberDeltaTime = (
   time: number
 ) => {
   const scrubber = config.scrubber as ITimeDeltaScrubber;
-  const start = time - HOURS * scrubber.timeDelta;
+  const hours = !!scrubber.hours ? scrubber.hours * HOURS : 0;
+  const minutes = !!scrubber.minutes ? scrubber.minutes : 0;
+  const start = time - hours - minutes;
   return {
     start: millisecondsToISODate(start),
     end: millisecondsToISODate(time),
