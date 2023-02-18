@@ -1,4 +1,5 @@
 import { Authentication, Fleet } from "@formant/data-sdk";
+import { PeerDevice } from "./PeerDevice";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
@@ -14,8 +15,10 @@ el("button").addEventListener("click", async () => {
     el("#log").style.display = "block";
 
     // get current device from url context
-    const device = await Fleet.getPeerDevice("https://localhost:8000");
-
+    const peer = new PeerDevice("http://127.0.0.1:5502");
+    peer.id = await peer.getDeviceId();
+    console.log(peer.getConfiguration())
+    const device = peer
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
     log("Getting a realtime connection ... ");
@@ -26,6 +29,10 @@ el("button").addEventListener("click", async () => {
       );
     });
     let videoStreams = await device.getRealtimeVideoStreams();
+
+    const twistStreams = await device.getRealtimeTwistStreams()
+    const twistStream = twistStreams[0]
+    console.log(twistStream)
     log("Video streams: " + JSON.stringify(videoStreams));
     log("Starting to listen to video stream " + videoStreams[0].name + " ... ");
     device.startListeningToRealtimeVideo(videoStreams[0]);
@@ -34,12 +41,36 @@ el("button").addEventListener("click", async () => {
     el("formant-realtime-player").style.display = "block";
 
     // show joysticks and connect them up
-    let j = await device.createCustomDataChannel("joystick");
     el("formant-joystick").style.display = "block";
     el("formant-joystick").addEventListener("joystick", (e) => {
       const ce = e as CustomEvent;
-      j.send(JSON.stringify(ce.detail));
+      console.log(ce.detail)
+      device.sendRealtimeMessage({
+        header: {
+          stream: {
+            entityId: device.id,
+            streamName: twistStream.name,
+            streamType: "twist",
+          },
+          created: 0,
+        },
+        payload: {
+          twist: {
+            linear: {
+              x: ce.detail.y,
+              y: 0,
+              z: 0,
+            },
+            angular: {
+              x: 0,
+              y: 0,
+              z: ce.detail.x,
+            },
+          },
+        },
+      });   
     });
+
   } catch (e) {
     log((e as Error).message);
   }
