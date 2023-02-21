@@ -260,10 +260,10 @@ export class App {
     });
   }
 
-  static addStreamListener<T extends StreamType>(
-    streamName: string,
-    streamType: T,
-    handler: (response: IStreamData<T>[] | "too much data" | undefined) => void
+  static addStreamListener(
+    streamNames: string[],
+    streamTypes: StreamType[],
+    handler: (response: IStreamData[] | "too much data" | undefined) => void
   ): () => void {
     const listener = (event: any) => {
       const msg = event.data as EmbeddedAppMessage;
@@ -272,8 +272,8 @@ export class App {
         handler(
           queryStore.moduleQuery(
             {},
-            streamName,
-            streamType,
+            streamNames,
+            streamTypes,
             new Date(start),
             new Date(end),
             false

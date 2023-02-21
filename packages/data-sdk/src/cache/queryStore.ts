@@ -31,18 +31,18 @@ export class QueryStore {
     timeout: 200 * duration.millisecond,
   });
 
-  public moduleQuery<T extends StreamType>(
+  public moduleQuery(
     filter: IFilter,
-    name: string,
-    type: T,
+    name: string[],
+    type: StreamType[],
     start: Date,
     end: Date,
     latestOnly: boolean = false
-  ): IStreamData<T>[] | "too much data" | undefined {
+  ): IStreamData[] | "too much data" | undefined {
     const q: IFilter = {
       ...filter,
-      names: [name],
-      types: [type],
+      names: [...name],
+      types: [...type],
     };
     const data = this.query(q, start, end, latestOnly);
     if (data === undefined || data === "too much data") {
