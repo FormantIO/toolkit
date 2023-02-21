@@ -35,6 +35,7 @@ import {
   PolarChart,
   RadarChart,
   ScatterChart,
+  Joystick,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -52,6 +53,8 @@ function App() {
   return (
     <>
       {device && <RealtimeVideoPlayer deviceId={device?.id} />}
+      <Joystick />
+      <Icon sx={{ height: 48, width: 48 }} name="joystick-star" />
       <BarChart
         height={100}
         width={100}

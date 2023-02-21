@@ -2,6 +2,13 @@ const path = require("path");
 const { defineConfig } = require("vite");
 
 module.exports = defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src/"),
+      "@style": `${path.resolve(__dirname, "./src/style")}`,
+      "@images": `${path.resolve(__dirname, "./src/images")}`,
+    },
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
@@ -23,7 +30,7 @@ module.exports = defineConfig({
         "@mui/material/styles",
         "classnames",
         "styled-components",
-        "sass"
+        "sass",
       ],
       output: {
         // Provide global variables to use in the UMD build

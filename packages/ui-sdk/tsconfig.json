@@ -13,6 +13,14 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
-  }
+    "noImplicitReturns": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*", "./dist/*", ""],
+      "@style/*": ["src/style/*"],
+      "@images/*": ["src/images/*"]
+    }
+  },
+  "include": ["src"]
 }
