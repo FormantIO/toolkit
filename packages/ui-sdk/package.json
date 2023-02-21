@@ -14,12 +14,12 @@
   "exports": {
     ".": "./dist/ui-sdk.es.js"
   },
-  "version": "0.0.42",
+  "version": "0.0.43",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "vite build",
     "serve": "vite preview",
-    "types": "tsc src/**/*.ts src/**/*.tsx --jsx react --excludeDirectories src/stories --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
+    "types": "tsc src/**/*.ts src/**/*.tsx --jsx react --excludeDirectories src/stories --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --experimentalDecorators --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/ui-sdk/",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -46,7 +46,7 @@
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@formant/data-sdk": "0.0.131",
+    "@formant/data-sdk": "0.0.132",
     "@formant/ui-sdk-realtime-player": "^0.0.9",
     "@mui/material": "^5.6.1",
     "@mui/utils": "^5.6.1",
