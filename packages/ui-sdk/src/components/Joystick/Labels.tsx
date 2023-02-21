@@ -70,6 +70,13 @@ export const Labels: FC<ILabelsProps> = ({
 
 const Container = styled.div`
   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right; 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%
   -moz-user-select: none;
   -ms-user-select: none;
   -khtml-user-select: none;

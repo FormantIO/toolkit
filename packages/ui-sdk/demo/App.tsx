@@ -42,6 +42,8 @@ import { Card } from "../src/components/Charts/LineChart/Card";
 
 import { ServiceParameters } from "../src/components/JsonSchemaForm/ServiceParameters";
 
+import { Authentication, Fleet } from "@formant/data-sdk";
+
 function App() {
   const device = useDevice();
   const [params, setParams] = React.useState<ServiceParameters>({});
@@ -52,7 +54,7 @@ function App() {
 
   return (
     <>
-      {device && <RealtimeVideoPlayer deviceId={device?.id} />}
+      {/* {device && <RealtimeVideoPlayer deviceId={device?.id} />} */}
       <Joystick />
       <Icon sx={{ height: 48, width: 48 }} name="joystick-star" />
       <BarChart

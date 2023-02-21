@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
-import { css, SerializedStyles } from "@emotion/react";
+import { SerializedStyles } from "@emotion/react";
 import React, { FC } from "react";
 import { primary, spacing } from "@style/common";
 import classNames from "classnames";
+import { css } from "@emotion/css";
 
 const positions = ["top", "left", "bottom", "right"] as const;
 type Position = typeof positions[number];
@@ -42,7 +43,7 @@ const on = css`
   opacity: 1;
   color: white;
 `;
-const styles: { [key in Position]: SerializedStyles } = {
+const styles: { [key in Position]: any } = {
   top,
   left,
   right,
@@ -55,5 +56,6 @@ const Container = styled.div`
   width: 1.25rem;
   font-size: 0.8125rem;
   color: ${primary.foreground};
+  position: absolute;
   opacity: 0.5;
 `;

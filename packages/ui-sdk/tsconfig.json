@@ -1,4 +1,5 @@
 {
+  "files": ["main.ts"],
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -14,6 +15,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "experimentalDecorators": true,
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
@@ -22,5 +24,6 @@
       "@images/*": ["src/images/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
