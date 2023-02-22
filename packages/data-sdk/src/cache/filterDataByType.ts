@@ -1,9 +1,9 @@
 import { IStreamData } from "../model/IStreamData";
 import { StreamType } from "../model/StreamType";
 
-export function filterDataByType<T extends StreamType>(
+export function filterDataByType(
   datas: IStreamData[],
-  type: T
-): IStreamData<T>[] {
-  return datas.filter((_) => _.type === type) as IStreamData<T>[];
+  type: StreamType[]
+): IStreamData[] {
+  return datas.filter((_) => type.includes(_.type)) as IStreamData[];
 }

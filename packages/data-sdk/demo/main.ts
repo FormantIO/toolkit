@@ -1,4 +1,4 @@
-import { Authentication, Fleet } from "../src/main";
+import { Authentication, Fleet, App } from "../src/main";
 import "./style.css";
 import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
 (async function () {
@@ -16,6 +16,11 @@ import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
       aggregate: "month",
     };
     if (await Authentication.waitTilAuthenticated()) {
+      App.addStreamListener(
+        ["table.text", "table.numeric"],
+        ["text", "numeric"],
+        (e) => console.log(e)
+      );
       const annotations = await Fleet.getAnnotationCount(query);
       console.log(annotations);
     }

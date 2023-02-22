@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { SerializedStyles } from "@emotion/react";
 import React, { FC } from "react";
-import { primary, spacing } from "@style/common";
 import classNames from "classnames";
 import { css } from "@emotion/css";
+import { primary, spacing } from "../../style/common";
 
 const positions = ["top", "left", "bottom", "right"] as const;
 type Position = typeof positions[number];
