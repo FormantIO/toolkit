@@ -38,7 +38,7 @@ export interface Iconfiguration {
   name: string;
   fullWidth: boolean;
   streamType: DataType;
-  expectedValue: any
+  expectedValue: any;
 }
 
 export interface lastKnowValue {
@@ -53,3 +53,48 @@ export type Configuration = {
 export interface ICurrentValues {
   [key: string]: string | number | boolean;
 }
+export interface INumericConfiguration {
+  name: string;
+  greaterThan: number;
+  lesserThan: number;
+}
+
+export interface InumericExpectedValue {
+  greaterThan: number;
+  lesserThan: number;
+}
+
+export interface ITextConfiguration {
+  name: string;
+  expectedValue: string;
+}
+
+export interface IBitsetConfiguration {
+  name: string;
+  expectedValue: IBit[];
+}
+
+interface IBit {
+  key: string;
+  value: boolean;
+}
+
+export interface IReducedConfiguration {
+  [key: string]: string | boolean | InumericExpectedValue;
+}
+
+const streamTypes = ["textStreams", "bitsetStreams", "numericStreams"] as const;
+
+export type StreamConfigurationType = typeof streamTypes[number];
+export interface IConfiguration {
+  textStreams: ITextConfiguration[];
+  numericStreams: INumericConfiguration[];
+  bitsetStreams: IBitsetConfiguration[];
+}
+
+export type ConfigurationTypes =
+  | ITextConfiguration
+  | IBitsetConfiguration
+  | INumericConfiguration;
+
+export type Status = "warning" | "good" | "offline";

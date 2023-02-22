@@ -1,2 +1,1 @@
-export * from "./useConfiguration";
-export * from "./useCurrentValues";
+export * from "./useCurrentStreamsValues";

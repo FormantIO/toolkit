@@ -1,54 +1,61 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-
   "title": "Last known value table",
   "description": "Available streams to display on the table.",
   "type": "object",
   "properties": {
-    "streams": {
-      "description": "Enabled streams",
+    "textStreams": {
+      "description": "Text streams",
       "type": "array",
-      "$formant.itemName": "Stream Name",
       "items": {
         "type": "object",
         "properties": {
-          "mapLayers": {
-            "title": "Add Stream",
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "text",
+            "type": "string"
+          },
+          "expectedValue": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "numericStreams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "numeric",
+            "type": "string"
+          },
+          "greaterThan": { "type": "integer" },
+          "lesserThan": { "type": "integer" }
+        }
+      }
+    },
+    "bitsetStreams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "bitset",
+            "type": "string"
+          },
+          "expectedValue": {
             "type": "array",
             "items": {
               "type": "object",
-              "$formant.itemName": "Streams",
               "properties": {
-                "name": {
-                  "description": "Formant stream name",
+                "key": {
                   "type": "string"
                 },
-                "streamType": {
-                  "description": "Formant's stream type",
-                  "enum": ["text", "numeric", "bitset"],
-                  "type": "string"
-                },
-                "fullWidth": {
-                  "description": "Condition to take full row on the table",
+                "value": {
                   "type": "boolean"
-                },
-                "expectedString": {
-                  "type": "string",
-                  "$formant.visible.when": ["streamType", "=", "text"]
-                },
-                "expectedNumber": {
-                  "type": "object",
-                  "properties": {
-                    "description": "Value to evaluate the current stream value against",
-                    "greaterThan": { "type": "integer" },
-                    "lesserThan": { "type": "integer" }
-                  },
-                  "$formant.visible.when": ["streamType", "=", "numeric"]
-                },
-                "expectedBool": {
-                  "type": "string",
-                  
-                  "$formant.visible.when": ["streamType", "=", "bitset"]
                 }
               }
             }

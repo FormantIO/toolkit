@@ -6,7 +6,7 @@ import { FormantProvider } from "@formant/ui-sdk";
 import { RecoilRoot } from "recoil";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <FormantProvider>
+  <FormantProvider parseConfiguration >
     <App />
   </FormantProvider>
 );

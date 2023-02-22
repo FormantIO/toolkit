@@ -1,16 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./index.module.scss";
+import { Status } from "types";
 interface IRowProps {
   leftValue: string;
   rightValue: string;
-  state: "warning" | "good" | "offline";
+  state: Status;
   height?: number | null;
   fullWidth?: boolean;
 }
 
 export const Row: FC<IRowProps> = (props: any) => {
   const { leftValue, rightValue, state, height, fullWidth } = props;
-
   const [teleopMode, setTeleopMode] = useState(false);
 
   useEffect(() => {
