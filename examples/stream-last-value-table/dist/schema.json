@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Last known value table",
+  "description": "Available streams to display on the table.",
+  "type": "object",
+  "properties": {
+    "textStreams": {
+      "description": "Text streams",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "text",
+            "type": "string"
+          },
+          "expectedValue": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "numericStreams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "numeric",
+            "type": "string"
+          },
+          "greaterThan": { "type": "integer" },
+          "lesserThan": { "type": "integer" }
+        }
+      }
+    },
+    "bitsetStreams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "bitset",
+            "type": "string"
+          },
+          "expectedValue": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
