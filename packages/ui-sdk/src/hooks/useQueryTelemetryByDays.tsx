@@ -2,14 +2,7 @@ import { Authentication, Fleet } from "@formant/data-sdk";
 import useDevice from "./useDevice";
 import { useState, useEffect } from "react";
 
-type AggregateLevel =
-  | "year"
-  | "month"
-  | "week"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second";
+type AggregateLevel = "year" | "month" | "week" | "day" | "hour" | "minute";
 
 type DataType =
   | "bitset"
@@ -44,11 +37,14 @@ const useQueryTelemetryByDays = (
   const setQuery = async (days: string | number | undefined) => {
     if (device === undefined) return;
     if (days === undefined) return;
+    const start = getStartISODate(days);
+    if (start === undefined) return;
+    const end = new Date().toISOString();
     setIsLoading(true);
     if (await Authentication.waitTilAuthenticated()) {
       let telemetry = await Fleet.queryTelemetry({
-        start: getStartISODate(days),
-        end: new Date().toISOString(),
+        start,
+        end,
         aggregate,
         types: types,
         deviceIds: [device.id],

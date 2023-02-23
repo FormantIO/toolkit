@@ -14,7 +14,7 @@
   "exports": {
     ".": "./dist/ui-sdk.es.js"
   },
-  "version": "0.0.43",
+  "version": "0.0.44",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "vite build",
@@ -46,7 +46,7 @@
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@formant/data-sdk": "0.0.132",
+    "@formant/data-sdk": "0.0.133",
     "@formant/ui-sdk-realtime-player": "^0.0.9",
     "@mui/material": "^5.6.1",
     "@mui/utils": "^5.6.1",

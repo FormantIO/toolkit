@@ -1315,10 +1315,10 @@
   "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.16.17.tgz"
   "version" "0.16.17"
 
-"@formant/data-sdk@0.0.132":
-  "integrity" "sha512-t85pq2uVsvaNGyfbq1XnmW+13Zprjn4kCJ984yyzGy6Nj2AfobO5TtNTHAFD8jPbakfcc5V5mizD6pGa8h/KyA=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.132.tgz"
-  "version" "0.0.132"
+"@formant/data-sdk@0.0.133":
+  "integrity" "sha512-X7jMJGgaJBDoP+Vqf64RKBS0DhTMt+IBLtNw1R+lXtQOD4SCAl0MP1+YHC8NtQxEovSGjveBXgE6yiwuENwU/g=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.133.tgz"
+  "version" "0.0.133"
   dependencies:
     "@formant/realtime-sdk" "^0.0.19"
     "date-fns" "^2.29.3"

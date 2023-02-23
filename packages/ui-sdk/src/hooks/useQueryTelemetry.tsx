@@ -2,14 +2,7 @@ import { Authentication, Fleet } from "@formant/data-sdk";
 import { useEffect, useState } from "react";
 import useDevice from "./useDevice";
 
-type AggregateLevel =
-  | "year"
-  | "month"
-  | "week"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second";
+type AggregateLevel = "year" | "month" | "week" | "day" | "hour" | "minute";
 
 type DataType =
   | "bitset"
