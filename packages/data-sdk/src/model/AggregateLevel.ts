@@ -1,8 +1,7 @@
 export type AggregateLevel =
-    | "year"
-    | "month"
-    | "week"
-    | "day"
-    | "hour"
-    | "minute"
-    | "second";
+  | "year"
+  | "month"
+  | "week"
+  | "day"
+  | "hour"
+  | "minute";

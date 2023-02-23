@@ -1,4 +1,4 @@
-import { Authentication, Fleet, App } from "../src/main";
+import { Authentication, Fleet } from "../src/main";
 import "./style.css";
 import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
 (async function () {
@@ -12,16 +12,15 @@ import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
     const query: IAnnotationQuery = {
       start: new Date(Date.now() - 90 * days).toISOString(),
       end: new Date(Date.now()).toISOString(),
-      tagKey: "operation_type",
-      aggregate: "month",
     };
     if (await Authentication.waitTilAuthenticated()) {
-      App.addStreamListener(
-        ["table.text", "table.numeric"],
-        ["text", "numeric"],
-        (e) => console.log(e)
+      const device = await Fleet.getCurrentDevice();
+      const annotations = await device.getAnnotationCountByIntervals(
+        query,
+        "Alen ESR",
+        "counter",
+        "week"
       );
-      const annotations = await Fleet.getAnnotationCount(query);
       console.log(annotations);
     }
   }

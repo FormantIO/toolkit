@@ -23,6 +23,8 @@ import { InterventionType } from "./main";
 import { IInterventionTypeMap } from "./main";
 import { IInterventionResponse } from "./main";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
+import { IEventQuery } from "./main";
+import { AggregateLevel } from "./main";
 
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
@@ -766,5 +768,31 @@ export class Device implements IRealtimeDevice {
     );
     const interventionResponse = await response.json();
     return interventionResponse;
+  }
+
+  async getAnnotationCount(
+    query: IEventQuery,
+    annotationName: string,
+    tagKey: string
+  ) {
+    return await Fleet.getAnnotationCount(
+      { ...query, deviceIds: [this.id] },
+      annotationName,
+      tagKey
+    );
+  }
+
+  async getAnnotationCountByIntervals(
+    query: IEventQuery,
+    annotationName: string,
+    tagKey: string,
+    aggregate: AggregateLevel
+  ) {
+    return await Fleet.getAnnotationCountByIntervals(
+      { ...query, deviceIds: [this.id] },
+      annotationName,
+      tagKey,
+      aggregate
+    );
   }
 }

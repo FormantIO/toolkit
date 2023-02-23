@@ -11,8 +11,10 @@ import { IStreamAggregateData } from "./model/IStreamAggregateData";
 import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
-import { IAnnotationQuery } from "./model/IAnnotationQuery";
 import { IStream } from "./model/IStream";
+import { AggregateLevel } from "./main";
+import { aggregateByDateFunctions } from "./main";
+
 export interface TelemetryResult {
   deviceId: string;
   name: string;
@@ -392,19 +394,20 @@ export class Fleet {
     return devices;
   }
 
-  static async getAnnotationCount(query: IAnnotationQuery) {
-    const tagKey = query.tagKey!;
-    delete query.tagKey, delete query.aggregate;
-
+  static async getAnnotationCount(
+    query: IEventQuery,
+    annotationName: string,
+    tagKey: string
+  ) {
     const annotations = await this.queryEvents({
       ...query,
+      message: annotationName,
       eventTypes: ["annotation"],
     });
 
     const validAnnotations = annotations.filter(
       (_) => !!_.tags && Object.keys(_.tags!).includes(tagKey)
     );
-
     const annotationCounter = validAnnotations.reduce<{
       [key: string]: number;
     }>((prev, current) => {
@@ -418,6 +421,43 @@ export class Fleet {
     }, {});
 
     return annotationCounter;
+  }
+
+  static async getAnnotationCountByIntervals(
+    query: IEventQuery,
+    annotationName: string,
+    tagKey: string,
+    aggregate: AggregateLevel
+  ) {
+    const { end, start } = query;
+    const dateFunctions = aggregateByDateFunctions[aggregate];
+    const intervals: Date[] = dateFunctions.interval({
+      start: new Date(start!),
+      end: new Date(end!),
+    });
+
+    const annotationsQuery = intervals.map((_, idx) => {
+      const startDate = new Date(_).toISOString();
+      const endDate =
+        idx === intervals.length - 1
+          ? new Date(Date.now()).toISOString()
+          : new Date(intervals[idx + 1]);
+      return this.getAnnotationCount(
+        {
+          ...query,
+          start: startDate,
+          end: endDate as string,
+        },
+        annotationName,
+        tagKey
+      );
+    });
+    const responses = await Promise.all(annotationsQuery);
+
+    return intervals.map((_, idx) => ({
+      date: new Date(_).toISOString(),
+      annotations: responses[idx],
+    }));
   }
 
   static async getStreams(): Promise<IStream[]> {
