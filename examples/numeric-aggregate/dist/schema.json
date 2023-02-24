@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/numeric-aggregate/schema.json",
+  "title": "Numeric aggregate",
+  "description": "Aggregate chart configuration.",
+  "type": "object",
+  "properties": {
+    "streamType": {
+      "type": "string",
+      "enum": ["numeric", "numeric set"]
+    },
+    "numericStream": {
+      "$formant.streams.byType": "numeric",
+      "description": "Formant's data stream name",
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric"]
+    },
+    "numericSetStream": {
+      "$formant.streams.byType": "numeric set",
+      "description": "Formant's data stream name",
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric set"]
+    },
+    "numericSetKey": {
+      "description": "Key to aggregate from a numeric set",
+      "type": "string",
+      "$formant.visible.when": ["streamType", "=", "numeric set"]
+    },
+    "aggregateType": {
+      "type": "string",
+      "enum": ["min", "max", "standard deviation", "average", "sum", "count"]
+    },
+    "aggregateBy": {
+      "description": "Aggregate period",
+      "type": "string",
+      "enum": ["day", "week", "month"]
+    },
+    "numAggregates": {
+      "description": "Number of bars to show in the chart",
+      "type": "integer"
+    }
+  }
+}
