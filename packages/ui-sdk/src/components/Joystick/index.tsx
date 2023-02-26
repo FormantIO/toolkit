@@ -1,48 +1,66 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useRef, useState } from "react";
+import React, { createRef, FC, useEffect, useRef, useState } from "react";
 import { Icon } from "../../Icon";
 import border from "@images/joystick.svg";
 import { Labels } from "./Labels";
-interface IVector2 {
-  x: number;
-  y: number;
+import { css } from "@emotion/css";
+import classNames from "classnames";
+import {
+  ITeleopJoystickConfiguration,
+  ITeleopTwistValue,
+  IVector2,
+} from "./types";
+
+import {
+  clamp,
+  clampVectorLength,
+  deadzone,
+  debounce,
+  range,
+  defaultNewValueJoystickDebounce,
+  defaultSameValueJoystickDebounce,
+  duration,
+  addVectors,
+  vectorLength,
+} from "./utils";
+import { TeleopActions } from "./TeleopActions";
+import { Timer } from "./Timer";
+import { WindowEvent } from "./WindowEvent";
+
+const dotSize = 1.875;
+const center = { x: 0, y: 0 };
+interface IJoystickProps {
+  joystickConfiguration: ITeleopJoystickConfiguration;
+  armed: boolean;
+  onSendTwistValues: (
+    twistValues: ITeleopTwistValue[],
+    reliable: boolean
+  ) => void;
 }
 
-const dotSize = "1.875rem";
-
-const deadzone = (value: number, threshold = 0.1) => {
-  const deadzoneValue =
-    Math.abs(value) < threshold
-      ? 0
-      : value < 0
-      ? value + threshold
-      : value - threshold;
-  return deadzoneValue * (1 / (1 - threshold));
-};
-
-function vectorLength(v: IVector2) {
-  const { x, y } = v;
-  return Math.sqrt(x * x + y * y);
-}
-
-function clampVectorLength(v: IVector2, l: number) {
-  const length = vectorLength(v);
-  const { x, y } = v;
-  if (length > l) {
-    return { x: (x / length) * l, y: (y / length) * l };
-  } else {
-    return v;
-  }
-}
-
-export function clamp(value: number, min = -1, max = 1) {
-  return value < min ? min : value > max ? max : value;
-}
-
-export const Joystick = () => {
+export const Joystick: FC<IJoystickProps> = ({
+  joystickConfiguration,
+  armed,
+  onSendTwistValues,
+}) => {
   const pad = useRef<HTMLDivElement>();
+  const label: React.RefObject<HTMLDivElement> = createRef();
   const [joystickCoordinates, setJoystickCoordinates] = useState<IVector2>();
   const [dotCoordinates, setDotCoordinates] = useState<IVector2>();
+  const [mouseDown, setMouseDown] = useState<boolean>(false);
+  const [startTarget, setStartTarget] = useState<EventTarget>();
+  const [lastValues, setLastValues] = useState<ITeleopTwistValue[]>([]);
+  const [canSendSameValue, setCanSendSameValue] = useState(true);
+  const [canSendNewValue, setCanSendNewValue] = useState(true);
+  const [tryingToInteract, setTryingToInteract] = useState(false);
+
+  const [up, setUp] = useState<IVector2>({ x: 0, y: 0 });
+  const [down, setDown] = useState<IVector2>({ x: 0, y: 0 });
+  const [left, setLeft] = useState<IVector2>({ x: 0, y: 0 });
+  const [right, setRight] = useState<IVector2>({ x: 0, y: 0 });
+  const [xAxis, setXAxis] = useState<IVector2>({ x: 0, y: 0 });
+  const [yAxis, setYAxis] = useState<IVector2>({ x: 0, y: 0 });
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     pad.current?.addEventListener("contextmenu", (e) => {
@@ -50,8 +68,6 @@ export const Joystick = () => {
     });
   }, []);
   const updateJoystickCoordinates = (x: number, y: number) => {
-    // const { armed } = this.props;
-    const armed = true;
     if (!pad.current) {
       return;
     }
@@ -85,25 +101,321 @@ export const Joystick = () => {
       event.stopPropagation();
       return;
     }
-    // this.mouseDown = true;
-    // this.startTarget = target;
+    setMouseDown(true);
+    setStartTarget(target);
+    updateJoystickCoordinates(x, y);
+    sendCommand({
+      coordinates: joystickCoordinates,
+      reliable: false,
+    });
+  };
+
+  const onTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const { touches } = event;
+    const touchList = range(0, touches.length)
+      .map((_) => touches.item(_))
+      .filter((_) => _?.target === pad.current || _?.target === label.current);
+
+    if (!touchList[0]) {
+      return;
+    }
+    const { clientX: x, clientY: y, target } = touchList[0];
+    setMouseDown(true);
+    setStartTarget(target);
     updateJoystickCoordinates(x, y);
     // this.sendCommand({
-    //     coordinates: this.joystickCoordinates,
-    //     reliable: false
+    //   coordinates: this.joystickCoordinates,
+    //   reliable: false,
     // });
+  };
+
+  const setDotFromJoystickCoordinates = (joystickCoords: IVector2) => {
+    if (!pad.current) {
+      return;
+    }
+    const { height, width } = pad.current.getBoundingClientRect();
+
+    const { x, y } = clampVectorLength(joystickCoords, 0.8);
+
+    setDotCoordinates({
+      x: ((x + 1) / 2) * width,
+      y: ((y - 1) / -2) * height,
+    });
+  };
+
+  const sendCommand = (config: {
+    coordinates?: IVector2;
+    reliable: boolean;
+  }) => {
+    const { coordinates, reliable } = config;
+    const { x, y } = coordinates || { x: 0, y: 0 };
+    const outputDimensions: ITeleopTwistValue[] = [];
+    // const { joystick: ftue } = ftueStore;
+    if (!joystickConfiguration) {
+      return;
+    }
+    // if (ftue) {
+    //   ftueStore.joystick = false;
+    // }
+
+    const { x: xAxis, y: yAxis } = joystickConfiguration;
+
+    if (xAxis?.dimension) {
+      outputDimensions.push({
+        dimension: xAxis?.dimension,
+        value:
+          Math.abs(Math.pow(Math.abs(x), xAxis.expo || 2)) *
+            (xAxis.scale || 1) *
+            Math.sign(x) || 0,
+      });
+    }
+
+    if (yAxis?.dimension) {
+      outputDimensions.push({
+        dimension: yAxis.dimension,
+        value:
+          Math.abs(Math.pow(Math.abs(y), yAxis.expo || 2)) *
+            (yAxis.scale || 1) *
+            Math.sign(y) || 0,
+      });
+    }
+
+    if (joystickCoordinates && !mouseDown) {
+      setDotFromJoystickCoordinates(joystickCoordinates);
+    }
+
+    const equivalent = lastValues === outputDimensions;
+    if (
+      !reliable &&
+      ((equivalent && !canSendSameValue) || (!equivalent && !canSendNewValue))
+    ) {
+      return;
+    }
+
+    setCanSendSameValue(false);
+    setCanSendNewValue(false);
+
+    newValueCooldown();
+    sameValueCooldown();
+    setLastValues(outputDimensions);
+    onSendTwistValues(outputDimensions, reliable);
+  };
+
+  const sameValueCooldown = debounce(
+    () => setCanSendSameValue(true),
+    (joystickConfiguration.sameValueDebounce ??
+      defaultSameValueJoystickDebounce) * duration.second
+  );
+  const newValueCooldown = debounce(
+    () => setCanSendNewValue(true),
+    (joystickConfiguration.newValueDebounce ??
+      defaultNewValueJoystickDebounce) * duration.second
+  );
+  const onTryToInteract = () => {
+    setTryingToInteract(true);
+
+    setTimeout(() => {
+      setTryingToInteract(false);
+    }, 300);
+  };
+
+  const onUp = (value: number) => {
+    setUp((prev) => ({ ...prev, y: value }));
+    if (!armed) {
+      onTryToInteract();
+    }
+  };
+
+  const onDown = (value: number) => {
+    setDown((prev) => ({ ...prev, y: -value }));
+
+    if (!armed) {
+      setTryingToInteract(true);
+      onTryToInteract();
+    }
+  };
+
+  const onLeft = (value: number) => {
+    setLeft((prev) => ({ ...prev, x: -value }));
+
+    if (!armed) {
+      setTryingToInteract(true);
+      onTryToInteract();
+    }
+  };
+
+  const onRight = (value: number) => {
+    setRight((prev) => ({ ...prev, x: value }));
+    if (!armed) {
+      setTryingToInteract(true);
+      onTryToInteract();
+    }
+  };
+
+  const addInputs = (reliable: boolean) => {
+    if (mouseDown) {
+      return;
+    }
+
+    const coords = armed
+      ? [up, down, left, right, xAxis, yAxis].reduce((agg, _) =>
+          addVectors(agg, _)
+        )
+      : { x: 0, y: 0 };
+
+    setJoystickCoordinates(coords);
+
+    setActive(vectorLength(coords) > 0);
+
+    sendCommand({
+      coordinates: joystickCoordinates,
+      reliable,
+    });
+  };
+
+  const onJoystickPressed = () => {
+    addInputs(true);
+  };
+
+  const onJoystickReleased = () => {
+    addInputs(true);
+  };
+
+  const onXAxis = (value: number) => {
+    setXAxis((prev) => ({ ...prev, x: clamp(deadzone(value)) }));
+    addInputs(false);
+  };
+
+  const onYAxis = (value: number) => {
+    setYAxis((prev) => ({ ...prev, y: clamp(deadzone(value)) * -1 }));
+    addInputs(false);
+  };
+
+  const onStop = () => {
+    setJoystickCoordinates({ ...center });
+    setActive(false);
+    sendCommand({
+      coordinates: center,
+      reliable: false,
+    });
+  };
+
+  const onTick = () => {
+    if (mouseDown || active) {
+      sendCommand({
+        coordinates: joystickCoordinates,
+        reliable: false,
+      });
+    }
+  };
+
+  const onTouchMove = (event: TouchEvent) => {
+    if (event.target !== startTarget) {
+      return;
+    }
+
+    const { touches } = event;
+    const touchList = range(0, touches.length)
+      .map((_) => touches.item(_))
+      .filter((_) => _?.target === pad.current || _?.target === label.current);
+
+    if (!touchList[0]) {
+      return;
+    }
+    const { clientX: x, clientY: y } = touchList[0];
+    updateJoystickCoordinates(x, y);
+  };
+
+  const onMouseUp = () => {
+    setMouseDown(false);
+    setJoystickCoordinates({ ...center });
+    if (startTarget) {
+      sendCommand({
+        coordinates: center,
+        reliable: true,
+      });
+    }
+    setStartTarget(undefined);
+  };
+
+  const onMouseMove = (event: MouseEvent) => {
+    const { clientX: x, clientY: y } = event;
+    if (event.button !== 0 || !mouseDown) {
+      return;
+    }
+    updateJoystickCoordinates(x, y);
+  };
+
+  const onTouchEnd = (event: TouchEvent) => {
+    if (event.target !== startTarget) {
+      return;
+    }
+    setMouseDown(false);
+    setJoystickCoordinates({ ...center });
+    sendCommand({
+      coordinates: center,
+      reliable: true,
+    });
+
+    setStartTarget(undefined);
   };
 
   return (
     <TeleopJoystick>
+      {joystickConfiguration.position === "left" && (
+        <TeleopActions
+          configuration={joystickConfiguration}
+          onLeftJoystickUp={onUp}
+          onLeftJoystickDown={onDown}
+          onLeftJoystickLeft={onLeft}
+          onLeftJoystickRight={onRight}
+          onLeftJoystickPressed={onJoystickPressed}
+          onLeftJoystickReleased={onJoystickReleased}
+          onLeftJoystickXAxis={onXAxis}
+          onLeftJoystickYAxis={onYAxis}
+          onStop={onStop}
+        />
+      )}
+      {joystickConfiguration.position === "right" && (
+        <TeleopActions
+          configuration={joystickConfiguration}
+          onRightJoystickUp={onUp}
+          onRightJoystickDown={onDown}
+          onRightJoystickLeft={onLeft}
+          onRightJoystickRight={onRight}
+          onRightJoystickPressed={onJoystickPressed}
+          onRightJoystickReleased={onJoystickReleased}
+          onRightJoystickXAxis={onXAxis}
+          onRightJoystickYAxis={onYAxis}
+          onStop={onStop}
+        />
+      )}
+      <WindowEvent
+        type="touchmove"
+        onEvent={onTouchMove}
+        options={{ passive: false }}
+      />
+      <WindowEvent type="mouseup" onEvent={onMouseUp} />
+      <WindowEvent type="mousemove" onEvent={onMouseMove} />
+      <WindowEvent type="touchend" onEvent={onTouchEnd} />
       <Pad
         onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
         ref={(_) => (pad.current = _ || undefined)}
+        className={classNames(mouseDown && isActive)}
       >
-        <Icon sx={{ height: 48, width: 48 }} name="joystick-star" />
-        <Border />
-        <Labels position="right" armed onStop={() => {}} />
+        <Timer interval={duration.second * 0.05} onTick={onTick} />
+        <Star name="joystick-star" />
+        <Border mousedown={mouseDown} />
+        <Labels
+          targetRef={label}
+          mouseDown={mouseDown}
+          position="right"
+          armed
+          onStop={onStop}
+        />
         <Dot
+          mousedown={mouseDown}
           style={{
             top: dotCoordinates?.y,
             left: dotCoordinates?.x,
@@ -114,16 +426,37 @@ export const Joystick = () => {
   );
 };
 
-const Dot = styled.div`
+interface IActiveProps {
+  mousedown: boolean;
+}
+
+const Star = styled(Icon)`
+  height: 48px;
+  width: 48px;
+  opacity: 0.1;
+  transition: inherit;
+
+  &:hover {
+    opacity: 0.25;
+  }
+`;
+
+const isActive = css`
+  background: rgba(black, 0.5);
+  cursor: pointer;
+  opacity: 1 !important;
+`;
+
+const Dot = styled.div<IActiveProps>`
   touch-action: none;
   pointer-events: none;
   position: absolute;
-  height: ${dotSize};
-  width: ${dotSize};
+  height: ${dotSize}rem;
+  width: ${dotSize}rem;
   border-radius: 50%;
   background: white;
-  opacity: 1;
-  margin: (-${dotSize} * 0.5) 0 0 (-${dotSize} * 0.5);
+  opacity: ${(props: any) => (props.mousedown ? 1 : 0)};
+  margin: -${dotSize * 0.5}rem 0 0 -${dotSize * 0.5}rem;
   z-index: 2;
   top: 0;
   left: 0;
@@ -133,6 +466,18 @@ const TeleopJoystick = styled.div`
   display: flex;
   align-items: flex-start;
   touch-action: none;
+  transition: all ease-in-out 200ms;
+`;
+
+const Border = styled.div<IActiveProps>`
+  touch-action: none;
+  pointer-events: none;
+  background: url(${border}) no-repeat;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: ${(props) => (props.mousedown ? 1 : 0.25)};
+  transition: inherit;
 `;
 
 const Pad = styled.div`
@@ -146,13 +491,12 @@ const Pad = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Border = styled.div`
-  touch-action: none;
-  pointer-events: none;
-  background: url(${border}) no-repeat;
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  transition: all ease-in-out 0.2s;
+  &:hover {
+    transition: all ease-in-out 0.2s;
+    cursor: pointer;
+    ${Star}, ${Border} {
+      opacity: 1;
+    }
+  }
 `;

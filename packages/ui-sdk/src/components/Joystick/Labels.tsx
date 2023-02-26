@@ -4,7 +4,7 @@ import { Label } from "./Label";
 import { Icon } from "../../Icon";
 interface ILabelsProps {
   position?: "left" | "right";
-  className?: string;
+  mouseDown: boolean;
   targetRef?: React.RefObject<HTMLDivElement>;
   armed: boolean;
   onStop: () => void;
@@ -12,17 +12,17 @@ interface ILabelsProps {
 
 export const Labels: FC<ILabelsProps> = ({
   position,
-  className,
   targetRef,
   armed,
   onStop,
+  mouseDown,
 }) => {
   const [downKeys, setDownKeys] = useState<string[]>([]);
 
   if (position === undefined) false;
 
   return (
-    <Container ref={targetRef}>
+    <Container mouseDown={mouseDown} ref={targetRef}>
       {position === "right" && (
         <>
           <Label position="top" active={armed && downKeys.includes("arrowup")}>
@@ -68,7 +68,11 @@ export const Labels: FC<ILabelsProps> = ({
   );
 };
 
-const Container = styled.div`
+interface IActiveProps {
+  mouseDown: boolean;
+}
+
+const Container = styled.div<IActiveProps>`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -83,4 +87,8 @@ const Container = styled.div`
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   user-select: none;
+  opacity: ${(props) => (props.mouseDown ? 1 : 0.5)}
+  &:hover {
+    opacity: 1
+  }
 `;
