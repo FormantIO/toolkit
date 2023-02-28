@@ -4,6 +4,9 @@
   "description": "Available streams to display on the table.",
   "type": "object",
   "properties": {
+    "fullScreenMode": {
+      "type": "boolean"
+    },
     "textStreams": {
       "description": "Text streams",
       "type": "array",

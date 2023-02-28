@@ -7,6 +7,7 @@ import {
   ICurrentValues,
   Status,
   InumericExpectedValue,
+  IConfiguration,
 } from "types";
 
 export const listStreamNames = (streams: IReducedConfiguration) => [
@@ -111,4 +112,30 @@ export const handleTableCurrentValue = (
   if (Object.keys(currentValues).length === 0) return "-";
   if (streamName in currentValues) return currentValues[streamName].toString();
   return "-";
+};
+
+const sampleTextStreams: ITextConfiguration[] = [
+  { name: "Set a stream", expectedValue: "bot" },
+];
+
+const sampleNumericStream = [
+  {
+    name: "To track your data",
+    greaterThan: 0,
+    lesserThan: 500,
+  },
+];
+
+const sampleBitsetStream = [
+  {
+    name: "stream",
+    expectedValue: [{ key: "bit.one", value: true }],
+  },
+];
+
+export const dummyData: IConfiguration = {
+  fullScreenMode: true,
+  textStreams: sampleTextStreams,
+  numericStreams: sampleNumericStream,
+  bitsetStreams: sampleBitsetStream,
 };
