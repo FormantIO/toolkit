@@ -5,6 +5,9 @@
   "description": "Aggregate chart configuration.",
   "type": "object",
   "properties": {
+    "fullScreenMode": {
+      "type": "boolean"
+    },
     "streamType": {
       "type": "string",
       "enum": ["numeric", "numeric set"]
