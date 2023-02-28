@@ -19,6 +19,7 @@ import {
   INumericSetConfiguration,
 } from "./types";
 import { getTypedConfiguration } from "./utils/getTypedConfiguration";
+import { dummyData } from "./utils/dummyData";
 
 const defaultAggregtateBy = "week";
 const defaultNumAggregates = 4;
@@ -43,16 +44,34 @@ const aggregateByDateFunctions = {
 
 interface INumericAggregateBarProps {
   time: number;
+  config: INumericConfiguration | INumericSetConfiguration;
 }
 
 export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   time,
+  config,
 }) => {
-  const context = useFormant();
-  const config = getTypedConfiguration(
-    context.configuration as ConfigurationTypes
-  );
+  const [height, setHeight] = useState(200);
+  const [width, setWidth] = useState(400);
   const [arr, setArr] = useState([0]);
+
+  const handleResize = (e: UIEvent) => {
+    const newHeight =
+      window.innerHeight * 0.7 < 250 ? 250 : window.innerHeight * 0.7;
+    const newWidth =
+      window.innerWidth * 0.8 < 300 ? 300 : window.innerWidth * 0.8;
+
+    setHeight(newHeight);
+    setWidth(newWidth);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const [aggregations, setAggregations] = useState<
     { start: Date; aggregate: INumericAggregate }[] | undefined
   >();
@@ -78,15 +97,17 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
     _numAggregates,
     (config as INumericSetConfiguration).numericSetStream,
     (config as INumericConfiguration).numericStream,
+    config.fullScreenMode,
     time,
   ]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
+      const { fullScreenMode } = config;
       const currentDevice = await Fleet.getCurrentDevice();
       const aggregatedData = await Promise.all(
         something.map(async (_, dateOffset) => {
-          const now = new Date(time);
+          const now = new Date(fullScreenMode ? Date.now() : time);
           const startDate = dateFunctions.sub(
             dateFunctions.start(now),
             dateOffset
@@ -174,22 +195,29 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
       : ""
   }`;
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
       {data ? (
         <>
-          <h3>{titleString}</h3>
+          <h3 style={{ fontSize: height < 251 ? 14 : 18 }}>{titleString}</h3>
           <BarChart
             labels={labels}
             xMax={generateReasonableNearest(xMax)}
             data={data}
-            height={250}
-            width={400}
+            height={height}
+            width={width}
           />
         </>
       ) : (
         <LoadingIndicator />
       )}
-    </>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ export type AggregatePeriod = "day" | "week" | "month";
 type StreamType = "numeric" | "numeric set";
 
 export interface IConfiguration<T extends StreamType> {
+  fullScreenMode: boolean;
   streamType: T;
   aggregateType: AggregateType;
   aggregateBy: AggregatePeriod;
