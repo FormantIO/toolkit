@@ -6,11 +6,13 @@
   "type": "object",
   "properties": {
     "queryType": {
+      "description": "Specifies what timeframe of data is shown in the heatmap",
       "title": "Query data by",
       "type": "string",
       "enum": ["Events", "Annotation", "Active Timeline point"]
     },
     "scrubber": {
+      "description": "Use the scrubber's position in the timeline to specify the time range of data to show in the heatmap",
       "type": "object",
       "title": "Active Timeline point",
       "$formant.visible.when": ["queryType", "=", "Active Timeline point"],
@@ -42,13 +44,13 @@
       "$formant.visible.when": ["queryType", "=", "Annotation"]
     },
     "eventsQuery": {
-      "description": "Query can start from some time before the active timeline point or the last event.",
-      "title": "Events",
+      "description": "Use events to specify the timerange of data shown in the heatmap",
+      "title": "Time Range",
       "type": "object",
       "$formant.visible.when": ["queryType", "=", "Events"],
       "properties": {
         "startFrom": {
-          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
+          "description": "Choose either a time delta before the end event or another event to specify the start time of the data shown",
           "type": "string",
           "enum": ["Time Delta", "Event"]
         },
@@ -82,15 +84,16 @@
       "type": "boolean"
     },
     "mapboxKey": {
+      "description": "To use the heatmap, you'll need a Mapbox access token.",
       "title": "Mapbox key",
       "type": "string",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "weightStream": {
-      "title": "Heat Weights",
+      "title": "Weight",
       "type": "string",
       "$formant.streams.byType": "numeric",
-      "description": "Name of a numeric stream in Formant. If timestamps are within the search window, the datapoint’s value will scale the size of the heat circle. If not, a value of 1 will be used.",
+      "description": "The size of the heatmap marker will scale to the value of the integer stream specified.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "weightSearchWindow": {
@@ -101,10 +104,12 @@
     },
 
     "longitude": {
+      "description": "Optional center position of the map",
       "type": "number",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "latitude": {
+      "description": "Optional center position of the map",
       "type": "number",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
@@ -122,8 +127,8 @@
     },
     "heatmapIntensity": {
       "title": "Heatmap intensity",
+      "description": "Integer between 1 - 20, it will make the map more dense based on the zoom lebel.",
       "type": "integer",
-      "description": "increase intensity as zoom level increases.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "circleRadius": {
