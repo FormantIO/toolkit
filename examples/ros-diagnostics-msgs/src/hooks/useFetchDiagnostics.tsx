@@ -7,7 +7,8 @@ const fetchDiagnostics = async (
   const isInvalid = Object.values(diagnostics).includes(null);
   if (isInvalid) return null;
 
-  const promises = Object.values(diagnostics).map((_: any) => fetch(_.value));
+  const promises = Object.values(diagnostics).map((_: any) => fetch(_));
+
   const results = await Promise.all(promises);
   const parsedResults = results.map((_) => _.json());
   const jsonReponse = await Promise.all(parsedResults);
@@ -19,10 +20,8 @@ export const useFetchDiagnostics = (_diagnostics: Streams | null) => {
     DiagnosticStatusMessage[] | null
   >([]);
 
-  // if (_diagnostics === null) return null;
-
   useEffect(() => {
-    if (_diagnostics)
+    if (_diagnostics !== null)
       fetchDiagnostics(_diagnostics).then((_) => setDiagnosticMessages(_));
   }, [_diagnostics]);
   return diagnosticMessages;

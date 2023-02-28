@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/ros-diagnostics-msgs/schema.json",
+  "title": "Numeric aggregate",
+  "description": "ROS Diagnostics Messages.",
+  "type": "object",
+  "properties": {
+    "stream": {
+      "title": "JSON stream",
+      "type": "string",
+      "$formant.streams.byType": "json"
+    },
+    "fullScreenMode": {
+      "type": "boolean"
+    }
+  }
+}

@@ -45,3 +45,8 @@ interface Stream {
 }
 
 export type Streams = { [key: string]: any };
+
+export interface IConfiguration {
+  fullScreenMode: boolean;
+  stream: string;
+}

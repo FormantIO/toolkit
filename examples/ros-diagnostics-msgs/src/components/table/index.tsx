@@ -1,18 +1,23 @@
 import styles from "./index.module.scss";
 import { StatusHeader } from "../StatusHeader";
-import { useCallback, useState, useMemo } from "react";
-import { useFetchDiagnostics } from "../../hooks/useFetchDiagnostics";
-import useModuleDataListener from "../../hooks/useDataModuleListener";
-import { StatusFilter, KeyValue, SeverityLevel } from "../../types/types";
+import { useCallback, useState, useMemo, FC } from "react";
+import {
+  StatusFilter,
+  KeyValue,
+  SeverityLevel,
+  DiagnosticStatusMessage,
+  IConfiguration,
+} from "../../types/types";
 import { DiagnosticsTable } from "../DiagnosticsTable";
 import { MessageTable } from "../MessageTable";
 import { LoadingIndicator } from "../LoadingIndicator";
 import { Typography } from "@formant/ui-sdk";
 
-export const Table = () => {
-  const diagnostics = useModuleDataListener();
-  const messages = useFetchDiagnostics(diagnostics);
-
+interface ITableProps {
+  messages: DiagnosticStatusMessage[] | null;
+  config: IConfiguration;
+}
+export const Table: FC<ITableProps> = ({ messages, config }) => {
   const [active, setActive] = useState<string | null>(null);
   const [filters, setFilters] = useState<StatusFilter>({
     ok: false,
@@ -58,22 +63,26 @@ export const Table = () => {
     setActive(_);
   }, []);
 
-  return !!diagnostics && !!messages ? (
+  if (messages === null || messages.length === 0) {
+    return (
+      <div className={styles.offline}>
+        <Typography>No current data</Typography>
+      </div>
+    );
+  }
+
+  return (
     <>
       <StatusHeader filters={filters} handleFilter={handleFilter} />
       <div className={styles.table}>
         <MessageTable
           handleSetActive={handleSetActive}
-          messages={currentDiagnostics}
+          messages={messages}
           active={active}
         />
         <DiagnosticsTable active={active} diagnosticsDetails={activeValues} />
         {messages.length === 0 && <LoadingIndicator />}
       </div>
     </>
-  ) : (
-    <div className={styles.offline}>
-      <Typography>No current data</Typography>
-    </div>
   );
 };
