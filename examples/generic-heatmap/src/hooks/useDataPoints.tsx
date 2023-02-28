@@ -173,12 +173,13 @@ const handleScrrubberDeltaTime = (
 ) => {
   const scrubber = config.scrubber as ITimeDeltaScrubber;
   const hours = !!scrubber.hours ? scrubber.hours * HOURS : 0;
-  const minutes = !!scrubber.minutes ? scrubber.minutes : 0;
+  const minutes = !!scrubber.minutes ? scrubber.minutes * MINUTES : 0;
   const start = time - hours - minutes;
-  return {
+  const times = {
     start: millisecondsToISODate(start),
     end: millisecondsToISODate(time),
   };
+  return times;
 };
 
 const handleEventScrubber = async (

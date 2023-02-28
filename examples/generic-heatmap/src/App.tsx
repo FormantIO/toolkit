@@ -16,6 +16,7 @@ function App() {
   );
   const dataPoints = useDataPoints();
   const featureCollection = useFeatures(dataPoints);
+  console.log(dataPoints);
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
