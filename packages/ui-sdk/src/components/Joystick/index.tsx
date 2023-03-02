@@ -45,9 +45,10 @@ export const Joystick: FC<IJoystickProps> = ({
 }) => {
   const pad = useRef<HTMLDivElement>();
   const label: React.RefObject<HTMLDivElement> = createRef();
-  const [joystickCoordinates, setJoystickCoordinates] = useState<IVector2>();
-  const [dotCoordinates, setDotCoordinates] = useState<IVector2>();
-  const [mouseDown, setMouseDown] = useState<boolean>(false);
+  const [dotCoordinates, setDotCoordinates] = useState<IVector2>({
+    x: 0,
+    y: 0,
+  });
   const [startTarget, setStartTarget] = useState<EventTarget>();
   const [lastValues, setLastValues] = useState<ITeleopTwistValue[]>([]);
   const [canSendSameValue, setCanSendSameValue] = useState(true);
@@ -62,12 +63,34 @@ export const Joystick: FC<IJoystickProps> = ({
   const [yAxis, setYAxis] = useState<IVector2>({ x: 0, y: 0 });
   const [active, setActive] = useState(false);
 
+  const mouseDown = useRef(false);
+  const joystickCoordinates = useRef(center);
+
   useEffect(() => {
     pad.current?.addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
   }, []);
-  const updateJoystickCoordinates = (x: number, y: number) => {
+
+  useEffect(() => {
+    if (armed) {
+      addInputs(true);
+    } else {
+      joystickCoordinates.current = { x: 0, y: 0 };
+      setActive(false);
+      sendCommand({
+        coordinates: joystickCoordinates.current,
+        reliable: true,
+      });
+    }
+  }, [
+    armed,
+    active,
+    joystickCoordinates?.current.x,
+    joystickCoordinates?.current.y,
+  ]);
+
+  const setJoystickCoordinates = (x: number, y: number) => {
     if (!pad.current) {
       return;
     }
@@ -81,10 +104,10 @@ export const Joystick: FC<IJoystickProps> = ({
         }
       : { x: 0, y: 0 };
 
-    setJoystickCoordinates({
+    joystickCoordinates.current = {
       x: clamp(deadzone(coords.x)),
       y: clamp(deadzone(coords.y)),
-    });
+    };
 
     const { x: clampedX, y: clampedY } = clampVectorLength(coords, 0.8);
 
@@ -101,15 +124,16 @@ export const Joystick: FC<IJoystickProps> = ({
       event.stopPropagation();
       return;
     }
-    setMouseDown(true);
+    mouseDown.current = true;
     setStartTarget(target);
-    updateJoystickCoordinates(x, y);
+    setJoystickCoordinates(x, y);
     sendCommand({
-      coordinates: joystickCoordinates,
+      coordinates: joystickCoordinates.current,
       reliable: false,
     });
   };
 
+  //Mobile Logic
   const onTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
     const { touches } = event;
     const touchList = range(0, touches.length)
@@ -120,27 +144,30 @@ export const Joystick: FC<IJoystickProps> = ({
       return;
     }
     const { clientX: x, clientY: y, target } = touchList[0];
-    setMouseDown(true);
+    mouseDown.current = true;
     setStartTarget(target);
-    updateJoystickCoordinates(x, y);
-    // this.sendCommand({
-    //   coordinates: this.joystickCoordinates,
-    //   reliable: false,
-    // });
+    setJoystickCoordinates(x, y);
+    sendCommand({
+      coordinates: joystickCoordinates.current,
+      reliable: false,
+    });
   };
 
   const setDotFromJoystickCoordinates = (joystickCoords: IVector2) => {
     if (!pad.current) {
       return;
     }
+
     const { height, width } = pad.current.getBoundingClientRect();
 
     const { x, y } = clampVectorLength(joystickCoords, 0.8);
 
-    setDotCoordinates({
+    const newCoordinates = {
       x: ((x + 1) / 2) * width,
       y: ((y - 1) / -2) * height,
-    });
+    };
+
+    setDotCoordinates({ ...newCoordinates });
   };
 
   const sendCommand = (config: {
@@ -179,9 +206,8 @@ export const Joystick: FC<IJoystickProps> = ({
             Math.sign(y) || 0,
       });
     }
-
-    if (joystickCoordinates && !mouseDown) {
-      setDotFromJoystickCoordinates(joystickCoordinates);
+    if (joystickCoordinates.current && !mouseDown.current) {
+      setDotFromJoystickCoordinates(joystickCoordinates.current);
     }
 
     const equivalent = lastValues === outputDimensions;
@@ -253,7 +279,7 @@ export const Joystick: FC<IJoystickProps> = ({
   };
 
   const addInputs = (reliable: boolean) => {
-    if (mouseDown) {
+    if (mouseDown.current) {
       return;
     }
 
@@ -263,12 +289,12 @@ export const Joystick: FC<IJoystickProps> = ({
         )
       : { x: 0, y: 0 };
 
-    setJoystickCoordinates(coords);
+    joystickCoordinates.current = coords;
 
     setActive(vectorLength(coords) > 0);
 
     sendCommand({
-      coordinates: joystickCoordinates,
+      coordinates: joystickCoordinates.current,
       reliable,
     });
   };
@@ -292,7 +318,7 @@ export const Joystick: FC<IJoystickProps> = ({
   };
 
   const onStop = () => {
-    setJoystickCoordinates({ ...center });
+    joystickCoordinates.current = center;
     setActive(false);
     sendCommand({
       coordinates: center,
@@ -301,9 +327,9 @@ export const Joystick: FC<IJoystickProps> = ({
   };
 
   const onTick = () => {
-    if (mouseDown || active) {
+    if (mouseDown.current || active) {
       sendCommand({
-        coordinates: joystickCoordinates,
+        coordinates: joystickCoordinates.current,
         reliable: false,
       });
     }
@@ -323,12 +349,12 @@ export const Joystick: FC<IJoystickProps> = ({
       return;
     }
     const { clientX: x, clientY: y } = touchList[0];
-    updateJoystickCoordinates(x, y);
+    setJoystickCoordinates(x, y);
   };
 
   const onMouseUp = () => {
-    setMouseDown(false);
-    setJoystickCoordinates({ ...center });
+    mouseDown.current = false;
+    joystickCoordinates.current = center;
     if (startTarget) {
       sendCommand({
         coordinates: center,
@@ -340,18 +366,18 @@ export const Joystick: FC<IJoystickProps> = ({
 
   const onMouseMove = (event: MouseEvent) => {
     const { clientX: x, clientY: y } = event;
-    if (event.button !== 0 || !mouseDown) {
+    if (event.button !== 0 || !mouseDown.current) {
       return;
     }
-    updateJoystickCoordinates(x, y);
+    setJoystickCoordinates(x, y);
   };
 
   const onTouchEnd = (event: TouchEvent) => {
     if (event.target !== startTarget) {
       return;
     }
-    setMouseDown(false);
-    setJoystickCoordinates({ ...center });
+    mouseDown.current = false;
+    joystickCoordinates.current = center;
     sendCommand({
       coordinates: center,
       reliable: true,
@@ -402,20 +428,20 @@ export const Joystick: FC<IJoystickProps> = ({
         onMouseDown={onMouseDown}
         onTouchStart={onTouchStart}
         ref={(_) => (pad.current = _ || undefined)}
-        className={classNames(mouseDown && isActive)}
+        className={classNames(mouseDown.current && isActive)}
       >
         <Timer interval={duration.second * 0.05} onTick={onTick} />
         <Star name="joystick-star" />
-        <Border mousedown={mouseDown} />
+        <Border mousedown={mouseDown.current} />
         <Labels
           targetRef={label}
-          mouseDown={mouseDown}
+          mouseDown={mouseDown.current}
           position="right"
           armed
           onStop={onStop}
         />
         <Dot
-          mousedown={mouseDown}
+          mousedown={mouseDown.current}
           style={{
             top: dotCoordinates?.y,
             left: dotCoordinates?.x,

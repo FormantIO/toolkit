@@ -52,6 +52,11 @@ function App() {
 
   const [en, setEn] = React.useState<string[]>([]);
 
+  React.useEffect(() => {
+    if (!device) return;
+    device.startRealtimeConnection();
+  }, [device]);
+
   return (
     <div
       style={{
@@ -61,11 +66,49 @@ function App() {
         minHeight: "100vh",
       }}
     >
-      <Joystick
-        joystickConfiguration={{ position: "left" }}
-        onSendTwistValues={() => {}}
-        armed
-      />
+      {!device ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <RealtimeVideoPlayer deviceId={device.id} />
+          <Joystick
+            joystickConfiguration={{
+              position: "left",
+              x: {
+                dimension: "angular-z",
+                scale: 1,
+                expo: 2,
+                gamepadAxis: 2,
+              },
+              y: {
+                dimension: "linear-x",
+                scale: 1,
+                expo: 2,
+                gamepadAxis: 3,
+              },
+            }}
+            onSendTwistValues={(twistValues, b) => {
+              device.sendRealtimeMessage({
+                header: {
+                  stream: {
+                    entityId: device.id,
+                    streamName: "/turtle1/cmd_vel",
+                    streamType: "twist",
+                  },
+                  created: 0,
+                },
+                payload: {
+                  twist: {
+                    linear: { x: twistValues[1].value, y: 0, z: 0 },
+                    angular: { x: 0, y: 0, z: twistValues[0].value },
+                  },
+                },
+              });
+            }}
+            armed
+          />
+        </>
+      )}
     </div>
   );
 }
