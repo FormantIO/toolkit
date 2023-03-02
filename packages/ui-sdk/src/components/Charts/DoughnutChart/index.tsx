@@ -102,8 +102,8 @@ export const DoughnutChart: FC<IChartProps> = ({
             const data = tooltipModel.dataPoints[0];
             const label = data.label;
             const value = data.parsed;
-            tooltipLabel.innerHTML = label;
-            tooltipValue.innerHTML = `: ${value}`;
+            tooltipLabel.innerHTML = `${label} : ${value}`;
+            // tooltipValue.innerHTML = `: ${value}`;
           }
 
           const position = context.chart.canvas.getBoundingClientRect();

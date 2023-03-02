@@ -57,6 +57,8 @@ function App() {
     device.startRealtimeConnection();
   }, [device]);
 
+  const y = [20, 50, 60, 10, 90, 23, 1, 17];
+  const z = "";
   return (
     <div
       style={{
@@ -66,49 +68,22 @@ function App() {
         minHeight: "100vh",
       }}
     >
-      {!device ? (
-        <LoadingIndicator />
-      ) : (
-        <>
-          <RealtimeVideoPlayer deviceId={device.id} />
-          <Joystick
-            joystickConfiguration={{
-              position: "left",
-              x: {
-                dimension: "angular-z",
-                scale: 1,
-                expo: 2,
-                gamepadAxis: 2,
-              },
-              y: {
-                dimension: "linear-x",
-                scale: 1,
-                expo: 2,
-                gamepadAxis: 3,
-              },
-            }}
-            onSendTwistValues={(twistValues, b) => {
-              device.sendRealtimeMessage({
-                header: {
-                  stream: {
-                    entityId: device.id,
-                    streamName: "/turtle1/cmd_vel",
-                    streamType: "twist",
-                  },
-                  created: 0,
-                },
-                payload: {
-                  twist: {
-                    linear: { x: twistValues[1].value, y: 0, z: 0 },
-                    angular: { x: 0, y: 0, z: twistValues[0].value },
-                  },
-                },
-              });
-            }}
-            armed
-          />
-        </>
-      )}
+      <BarChart
+      xTicksFontSize={8}
+        data={[20, 50, 60, 10, 90, 23, 1, 17]}
+        labels={y.map(
+          (_) =>
+            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
+        )}
+      />
+        <DoughnutChart
+        size={300}
+        data={[20, 50, 60, 10, 90, 23, 1, 17]}
+        labels={y.map(
+          (_) =>
+            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
+        )}
+      />
     </div>
   );
 }

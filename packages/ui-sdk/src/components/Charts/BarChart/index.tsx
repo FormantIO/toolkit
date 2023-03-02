@@ -9,7 +9,7 @@ import { ICustomTooltipParameters } from "../types";
 ChartJS.register(...registerables);
 
 interface IBarChartProps {
-  labels: string[];
+  labels: string[] | string[][];
   data: number[];
   height?: number;
   width?: number;
@@ -18,6 +18,7 @@ interface IBarChartProps {
   showYGrid?: boolean;
   showXGrid?: boolean;
   customTooltip?: ICustomTooltipParameters;
+  xTicksFontSize?: number;
 }
 
 export const BarChart: React.FC<IBarChartProps> = ({
@@ -30,6 +31,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
   showXGrid,
   showYGrid,
   customTooltip,
+  xTicksFontSize,
 }) => {
   const [_containerId] = useState(crypto.randomUUID());
   const [_labelId] = useState(crypto.randomUUID());
@@ -103,10 +105,11 @@ export const BarChart: React.FC<IBarChartProps> = ({
 
           if (tooltipModel.body) {
             const data = tooltipModel.dataPoints[0];
-            const label = data.label;
+            let label: string = data.label;
             const value = data.raw;
-            tooltipLabel.innerHTML = label;
-            tooltipValue.innerHTML = `: ${value}`;
+
+            tooltipLabel.innerHTML = `${label}: ${value}`;
+            // tooltipValue.innerHTML = `: ${value}`;
           }
 
           const position = context.chart.canvas.getBoundingClientRect();
@@ -138,9 +141,14 @@ export const BarChart: React.FC<IBarChartProps> = ({
         ticks: {
           color: "#bac4e2",
           font: {
-            size: 16,
+            size: xTicksFontSize ?? 14,
             family: "inter",
             weight: "400",
+          },
+          callback: (t: number) => {
+            return labels[t].length > 10
+              ? `${labels[t].slice(0, 6)}...`
+              : labels[t];
           },
         },
       },

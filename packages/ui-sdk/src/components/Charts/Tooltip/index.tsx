@@ -15,18 +15,21 @@ export const Tooltip: FC<ITooltipProps> = ({
   return (
     <Container id={containerId}>
       <span id={labelId}></span>
-      <span id={valueId}></span>
+      {/* <span id={valueId}></span> */}
     </Container>
   );
 };
 
 const Container = styled.div`
-  height: 43px;
+  position: absolute;
+  min-height: 43px;
+  height: auto;
   background-color: black;
   display: flex;
   padding: 8px 20px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
+  overflow: break-word;
   span {
     color: white;
   }
