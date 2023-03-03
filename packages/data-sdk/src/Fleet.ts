@@ -13,7 +13,8 @@ import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IStream } from "./model/IStream";
 import { AggregateLevel } from "./main";
-import { aggregateByDateFunctions } from "./main";
+import { aggregateByDateFunctions, formatTimeFrameText } from "./main";
+import { EventType } from "./main";
 
 export interface TelemetryResult {
   deviceId: string;
@@ -493,5 +494,43 @@ export class Fleet {
       }
     );
     return (await response.json()) as IStream;
+  }
+
+  static async eventsCounter(
+    eventTypes: EventType[],
+    timeFrame: AggregateLevel,
+    range: number,
+    time: number,
+    query?: IEventQuery
+  ) {
+    const dateFunctions = aggregateByDateFunctions[timeFrame];
+
+    return await Promise.all(
+      Array(range)
+        .fill(0)
+        .map(async (_, dateOffset) => {
+          const activePointInTimeLine = new Date(time);
+
+          const startDate: Date = dateFunctions.sub(
+            dateFunctions.start(activePointInTimeLine),
+            range - dateOffset - 1
+          );
+          const endDate: Date = dateFunctions.sub(
+            dateFunctions.end(activePointInTimeLine),
+            range - dateOffset - 1
+          );
+          const date = formatTimeFrameText(
+            startDate.toLocaleDateString(),
+            endDate.toLocaleDateString()
+          );
+          const events = await Fleet.queryEvents({
+            ...query,
+            eventTypes,
+            start: new Date(startDate).toISOString(),
+            end: new Date(endDate).toISOString(),
+          });
+          return { date, events };
+        })
+    );
   }
 }

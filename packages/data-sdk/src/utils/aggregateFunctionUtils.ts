@@ -5,11 +5,11 @@ type IAggregateByDateFunctions = {
   [key in AggregateLevel]: AggregateFunction;
 };
 
-const aggregateFunctions = ["interval", "start", "end", "sub"] as const;
+const aggregateFunctions = ["interval", "start", "end", "sub", "get"] as const;
 
-type AggregateFunctions = typeof aggregateFunctions[number];
+export type AggregateFunctions = typeof aggregateFunctions[number];
 
-type AggregateFunction = {
+export type AggregateFunction = {
   [key in AggregateFunctions]: any;
 };
 
@@ -58,35 +58,57 @@ export const aggregateByDateFunctions: IAggregateByDateFunctions = {
     start: dateFns.startOfDay,
     end: dateFns.endOfDay,
     sub: dateFns.subDays,
+    get: dateFns.getDay,
   },
   week: {
     interval: dateFns.eachWeekOfInterval,
     start: dateFns.startOfWeek,
     end: dateFns.endOfWeek,
     sub: dateFns.subWeeks,
+    get: dateFns.getWeek,
   },
   month: {
     interval: dateFns.eachMonthOfInterval,
     start: dateFns.startOfMonth,
     end: dateFns.endOfMonth,
     sub: dateFns.subMonths,
+    get: dateFns.getMonth,
   },
   year: {
     interval: dateFns.eachYearOfInterval,
     start: dateFns.startOfYear,
     end: dateFns.endOfYear,
     sub: dateFns.subYears,
+    get: dateFns.getYear,
   },
   hour: {
     interval: dateFns.eachHourOfInterval,
     start: dateFns.startOfHour,
     end: dateFns.endOfHour,
     sub: dateFns.subHours,
+    get: dateFns.getHours,
   },
   minute: {
     interval: dateFns.eachMinuteOfInterval,
     start: dateFns.startOfMinute,
     end: dateFns.endOfMinute,
     sub: dateFns.subMinutes,
+    get: dateFns.getMinutes,
+  },
+  quarter: {
+    interval: dateFns.eachQuarterOfInterval,
+    start: dateFns.startOfQuarter,
+    end: dateFns.endOfQuarter,
+    sub: dateFns.subQuarters,
+    get: dateFns.getQuarter,
   },
 };
+
+export const formatTimeFrameText = (start: string, end: string) =>
+  start.split("/")[0] +
+  "/" +
+  start.split("/")[1] +
+  "–" +
+  end.split("/")[0] +
+  "/" +
+  end.split("/")[1];

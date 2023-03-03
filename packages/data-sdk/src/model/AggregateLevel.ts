@@ -4,4 +4,5 @@ export type AggregateLevel =
   | "week"
   | "day"
   | "hour"
-  | "minute";
+  | "minute"
+  | "quarter";

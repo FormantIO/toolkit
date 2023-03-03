@@ -25,6 +25,7 @@ import { IInterventionResponse } from "./main";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IEventQuery } from "./main";
 import { AggregateLevel } from "./main";
+import { EventType } from "./main";
 
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
@@ -794,5 +795,18 @@ export class Device implements IRealtimeDevice {
       tagKey,
       aggregate
     );
+  }
+
+  async eventsCounter(
+    eventTypes: EventType[],
+    timeFrame: AggregateLevel,
+    range: number,
+    time: number,
+    query?: IEventQuery
+  ) {
+    return await Fleet.eventsCounter(eventTypes, timeFrame, range, time, {
+      ...query,
+      deviceIds: [this.id],
+    });
   }
 }
