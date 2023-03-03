@@ -19,6 +19,8 @@ interface IBarChartProps {
   showXGrid?: boolean;
   customTooltip?: ICustomTooltipParameters;
   xTicksFontSize?: number;
+  tooltipFontSize?: number;
+  XAxisMaxLengthLabel?: number;
 }
 
 export const BarChart: React.FC<IBarChartProps> = ({
@@ -32,6 +34,8 @@ export const BarChart: React.FC<IBarChartProps> = ({
   showYGrid,
   customTooltip,
   xTicksFontSize,
+  tooltipFontSize,
+  XAxisMaxLengthLabel,
 }) => {
   const [_containerId] = useState(crypto.randomUUID());
   const [_labelId] = useState(crypto.randomUUID());
@@ -122,6 +126,9 @@ export const BarChart: React.FC<IBarChartProps> = ({
           tooltipEl.style.top =
             position.top + window.pageYOffset + tooltipModel.caretY + "px";
           tooltipEl.style.font = "Atkinson Hyperlegible";
+          tooltipEl.style.fontSize = !!tooltipFontSize
+            ? `${tooltipFontSize}px`
+            : "16px";
           tooltipEl.style.padding =
             tooltipModel.padding + "px " + tooltipModel.padding + "px";
           tooltipEl!.style.pointerEvents = "none";
@@ -146,8 +153,13 @@ export const BarChart: React.FC<IBarChartProps> = ({
             weight: "400",
           },
           callback: (t: number) => {
-            return labels[t].length > 10
-              ? `${labels[t].slice(0, 6)}...`
+            let l = 10;
+            if (!!XAxisMaxLengthLabel) {
+              l = XAxisMaxLengthLabel;
+            }
+
+            return labels[t].length > l
+              ? `${labels[t].slice(0, l - 4)}...`
               : labels[t];
           },
         },

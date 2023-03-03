@@ -13,6 +13,7 @@ interface IChartProps {
   labels: string[];
   data: number[];
   customTooltip?: ICustomTooltipParameters;
+  tooltipFontSize?: number;
 }
 
 export const DoughnutChart: FC<IChartProps> = ({
@@ -20,6 +21,7 @@ export const DoughnutChart: FC<IChartProps> = ({
   labels,
   data,
   customTooltip,
+  tooltipFontSize,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [_containerId] = useState(crypto.randomUUID());
@@ -116,6 +118,9 @@ export const DoughnutChart: FC<IChartProps> = ({
           tooltipEl.style.top =
             position.top + window.pageYOffset + tooltipModel.caretY + "px";
           tooltipEl.style.font = "Atkinson Hyperlegible";
+          tooltipEl.style.fontSize = !!tooltipFontSize
+            ? `${tooltipFontSize}px`
+            : "16px";
           tooltipEl.style.padding =
             tooltipModel.padding + "px " + tooltipModel.padding + "px";
           tooltipEl!.style.pointerEvents = "none";

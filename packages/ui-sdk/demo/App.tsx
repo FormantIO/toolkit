@@ -69,14 +69,14 @@ function App() {
       }}
     >
       <BarChart
-      xTicksFontSize={8}
+        xTicksFontSize={8}
         data={[20, 50, 60, 10, 90, 23, 1, 17]}
         labels={y.map(
           (_) =>
             "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
         )}
       />
-        <DoughnutChart
+      <DoughnutChart
         size={300}
         data={[20, 50, 60, 10, 90, 23, 1, 17]}
         labels={y.map(
