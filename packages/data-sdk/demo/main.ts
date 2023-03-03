@@ -18,7 +18,6 @@ import { IAnnotationQuery } from "../src/model/IAnnotationQuery";
       const annotations = await device.getAnnotationCountByIntervals(
         query,
         "Alen ESR",
-        "counter",
         "week"
       );
       console.log(annotations);

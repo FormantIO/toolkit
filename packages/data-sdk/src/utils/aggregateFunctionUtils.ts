@@ -1,11 +1,17 @@
 import { INumericAggregate } from "../model/INumericAggregate";
 import * as dateFns from "date-fns";
 import { AggregateLevel } from "../main";
-type IAggregateByDateFunctions = {
+export type IAggregateByDateFunctions = {
   [key in AggregateLevel]: AggregateFunction;
 };
 
-const aggregateFunctions = ["interval", "start", "end", "sub", "get"] as const;
+export const aggregateFunctions = [
+  "interval",
+  "start",
+  "end",
+  "sub",
+  "get",
+] as const;
 
 export type AggregateFunctions = typeof aggregateFunctions[number];
 
