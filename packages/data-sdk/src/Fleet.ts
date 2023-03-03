@@ -397,12 +397,10 @@ export class Fleet {
 
   static async getAnnotationCount(
     query: IEventQuery,
-    annotationName: string,
     tagKey: string
   ) {
     const annotations = await this.queryEvents({
       ...query,
-      message: annotationName,
       eventTypes: ["annotation"],
     });
 
@@ -426,7 +424,6 @@ export class Fleet {
 
   static async getAnnotationCountByIntervals(
     query: IEventQuery,
-    annotationName: string,
     tagKey: string,
     aggregate: AggregateLevel
   ) {
@@ -449,7 +446,6 @@ export class Fleet {
           start: startDate,
           end: endDate as string,
         },
-        annotationName,
         tagKey
       );
     });
