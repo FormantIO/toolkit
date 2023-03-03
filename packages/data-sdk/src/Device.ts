@@ -771,27 +771,20 @@ export class Device implements IRealtimeDevice {
     return interventionResponse;
   }
 
-  async getAnnotationCount(
-    query: IEventQuery,
-    annotationName: string,
-    tagKey: string
-  ) {
+  async getAnnotationCount(query: IEventQuery, tagKey: string) {
     return await Fleet.getAnnotationCount(
       { ...query, deviceIds: [this.id] },
-      annotationName,
       tagKey
     );
   }
 
   async getAnnotationCountByIntervals(
     query: IEventQuery,
-    annotationName: string,
     tagKey: string,
     aggregate: AggregateLevel
   ) {
     return await Fleet.getAnnotationCountByIntervals(
       { ...query, deviceIds: [this.id] },
-      annotationName,
       tagKey,
       aggregate
     );
