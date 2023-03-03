@@ -21,6 +21,7 @@ interface IBarChartProps {
   xTicksFontSize?: number;
   tooltipFontSize?: number;
   XAxisMaxLengthLabel?: number;
+  tooltipUnits?: string;
 }
 
 export const BarChart: React.FC<IBarChartProps> = ({
@@ -36,6 +37,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
   xTicksFontSize,
   tooltipFontSize,
   XAxisMaxLengthLabel,
+  tooltipUnits,
 }) => {
   const [_containerId] = useState(crypto.randomUUID());
   const [_labelId] = useState(crypto.randomUUID());
@@ -112,7 +114,7 @@ export const BarChart: React.FC<IBarChartProps> = ({
             let label: string = data.label;
             const value = data.raw;
 
-            tooltipLabel.innerHTML = `${label}: ${value}`;
+            tooltipLabel.innerHTML = `${label}: ${value}${tooltipUnits ?? ""}`;
             // tooltipValue.innerHTML = `: ${value}`;
           }
 

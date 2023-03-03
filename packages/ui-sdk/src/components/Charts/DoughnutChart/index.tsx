@@ -14,6 +14,7 @@ interface IChartProps {
   data: number[];
   customTooltip?: ICustomTooltipParameters;
   tooltipFontSize?: number;
+  tooltipUnits?: string;
 }
 
 export const DoughnutChart: FC<IChartProps> = ({
@@ -22,6 +23,7 @@ export const DoughnutChart: FC<IChartProps> = ({
   data,
   customTooltip,
   tooltipFontSize,
+  tooltipUnits,
 }) => {
   const chartRef = useRef<ChartJS>(null);
   const [_containerId] = useState(crypto.randomUUID());
@@ -104,7 +106,7 @@ export const DoughnutChart: FC<IChartProps> = ({
             const data = tooltipModel.dataPoints[0];
             const label = data.label;
             const value = data.parsed;
-            tooltipLabel.innerHTML = `${label} : ${value}`;
+            tooltipLabel.innerHTML = `${label} : ${value}${tooltipUnits ?? ""}`;
             // tooltipValue.innerHTML = `: ${value}`;
           }
 
