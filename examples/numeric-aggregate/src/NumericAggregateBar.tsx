@@ -91,23 +91,35 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
     return _;
   }, [_numAggregates]);
 
+  const currentTime = useMemo(() => {
+    if (!time || !config) return;
+
+    const date = new Date(config.fullScreenMode ? Date.now() : time);
+
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+    const day = date.getUTCDate();
+
+    return `${month + 1}/${day}/${year}`;
+  }, [time]);
+
   useEffect(() => {
+    if (!currentTime) return;
     loadValues();
   }, [
     _numAggregates,
     (config as INumericSetConfiguration).numericSetStream,
     (config as INumericConfiguration).numericStream,
     config.fullScreenMode,
-    time,
+    currentTime,
   ]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
-      const { fullScreenMode } = config;
       const currentDevice = await Fleet.getCurrentDevice();
       const aggregatedData = await Promise.all(
         something.map(async (_, dateOffset) => {
-          const now = new Date(fullScreenMode ? Date.now() : time);
+          const now = new Date(currentTime!);
           const startDate = dateFunctions.sub(
             dateFunctions.start(now),
             dateOffset
