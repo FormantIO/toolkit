@@ -12,24 +12,13 @@ function App() {
   const config = context.configuration as IConfiguration;
   const diagnostics = useModuleDataListener();
   const messages = useFetchDiagnostics(diagnostics);
-  const loading = useMemo(() => {
-    if (!config) return true;
-
-    return false;
-  }, [config]);
 
   const handleConfiguration =
     config.stream?.length > 1 ? messages : [dummyData];
 
   return (
     <div className="App">
-      {loading ? (
-        <div className="container">
-          <LoadingIndicator />
-        </div>
-      ) : (
-        <Table messages={handleConfiguration} config={config} />
-      )}
+      <Table messages={handleConfiguration} config={config} />
     </div>
   );
 }
