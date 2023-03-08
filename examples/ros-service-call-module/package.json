@@ -15,8 +15,8 @@
     "@rjsf/material-ui": "^4.2.0",
     "lodash": "^4.17.21",
     "lodash.capitalize": "^4.2.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/lodash.capitalize": "^4.2.7",
