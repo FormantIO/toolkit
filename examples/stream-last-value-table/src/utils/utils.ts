@@ -23,10 +23,16 @@ export const listStreamNames = (streams: IReducedConfiguration) => [
 ];
 
 const handleBitsetStreams = (stream: IBitsetConfiguration) => {
-  return stream.expectedValue.reduce<any>((prev, current) => {
-    prev[`${stream.name}/${current.key}`] = current.value;
-    return prev;
-  }, {});
+  if ("expectedValue" in stream) {
+    return stream.expectedValue.reduce<any>((prev, current) => {
+      prev[`${stream.name}/${current.key}`] = current.value;
+      return prev;
+    }, {});
+  } else {
+    return {
+      [`${(stream as IBitsetConfiguration).name}/undefined`]: undefined,
+    };
+  }
 };
 
 export const handleReduceConfigurationStreams = (
@@ -139,3 +145,15 @@ export const dummyData: IConfiguration = {
   numericStreams: sampleNumericStream,
   bitsetStreams: sampleBitsetStream,
 };
+
+export const reduceStreams = (streams: IConfiguration) =>
+  Object.entries(streams).reduce((prev, current) => {
+    if (current[0] === "fullScreenMode") return prev;
+    const streamsType: any = current[0];
+    const streams: any[] = current[1];
+    const reucedStreams = handleReduceConfigurationStreams(
+      streams,
+      streamsType
+    );
+    return { ...prev, ...reucedStreams };
+  }, {});
