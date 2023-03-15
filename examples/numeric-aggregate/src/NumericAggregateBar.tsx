@@ -17,6 +17,7 @@ import {
   ConfigurationTypes,
   INumericConfiguration,
   INumericSetConfiguration,
+  ITag,
 } from "./types";
 import { getTypedConfiguration } from "./utils/getTypedConfiguration";
 import { dummyData } from "./utils/dummyData";
@@ -46,6 +47,14 @@ interface INumericAggregateBarProps {
   time: number;
   config: INumericConfiguration | INumericSetConfiguration;
 }
+
+const formatTags = (tagArray?: ITag[]) => {
+  if (!tagArray) return undefined;
+  return tagArray.reduce<any>((p, c) => {
+    p[c.key] = [c.value];
+    return p;
+  }, {});
+};
 
 export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   time,
@@ -137,15 +146,17 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
                   ? config.numericStream
                   : config.numericSetStream,
               ],
+              tags: formatTags(config.tags),
             }),
           };
         })
       );
+
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
         }
-        //TODO: HANLDE TAGGED DATA
+
         const { start, data } = streamDatas;
         const stream = data[0];
         if (stream.type === "numeric") {
@@ -187,9 +198,9 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   const labels =
     aggregations?.map(
       (_, i) =>
-        `${capitalizeFirstLetter(
-          _aggregateBy
-        )} ${_.start.getDate()}/${_.start.getMonth()}`
+        `${capitalizeFirstLetter(_aggregateBy)} ${_.start.getDate()}/${
+          _.start.getMonth() + 1
+        }`
     ) ?? [];
 
   const aggregateByAdverb = {
