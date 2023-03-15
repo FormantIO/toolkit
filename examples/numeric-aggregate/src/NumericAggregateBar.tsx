@@ -197,10 +197,7 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   const xMax = data ? Math.max(...data) : 100;
   const labels =
     aggregations?.map(
-      (_, i) =>
-        `${capitalizeFirstLetter(_aggregateBy)} ${_.start.getDate()}/${
-          _.start.getMonth() + 1
-        }`
+      (_, i) => `${_.start.getMonth() + 1}/${_.start.getDate()}`
     ) ?? [];
 
   const aggregateByAdverb = {
