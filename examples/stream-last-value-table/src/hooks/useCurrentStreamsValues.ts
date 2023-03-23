@@ -94,6 +94,7 @@ export const useCurrentStreamsValues = (streams: string[]): ICurrentValues => {
         const reducedValues = reduceStreamValues(
           deviceStreams as IStreamData[]
         );
+
         setCurrentValues(reducedValues);
       }
     );

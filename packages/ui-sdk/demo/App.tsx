@@ -36,6 +36,7 @@ import {
   RadarChart,
   ScatterChart,
   Joystick,
+  Chart,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -84,6 +85,14 @@ function App() {
           (_) =>
             "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
         )}
+      />
+      <Chart
+        type="doughnut"
+        labels={y.map(
+          (_) =>
+            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
+        )}
+        data={[20, 50, 60, 10, 90, 23, 1, 17]}
       />
     </div>
   );

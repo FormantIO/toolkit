@@ -43,7 +43,7 @@ export const handleReduceConfigurationStreams = (
   )[],
   streamType: StreamConfigurationType
 ) => {
-  return streams.reduce<any>((prevactualStream, currentActualStream) => {
+  const x = streams.reduce<any>((prevactualStream, currentActualStream) => {
     if (streamType === "textStreams") {
       prevactualStream[currentActualStream.name] = (
         currentActualStream as ITextConfiguration
@@ -60,9 +60,10 @@ export const handleReduceConfigurationStreams = (
     const bits = handleBitsetStreams(
       currentActualStream as IBitsetConfiguration
     );
-
     return { ...prevactualStream, ...bits };
   }, {});
+
+  return x;
 };
 
 export const handleStreamStatus = (
@@ -146,9 +147,10 @@ export const dummyData: IConfiguration = {
   bitsetStreams: sampleBitsetStream,
 };
 
-export const reduceStreams = (streams: IConfiguration) =>
-  Object.entries(streams).reduce((prev, current) => {
-    if (current[0] === "fullScreenMode") return prev;
+export const reduceStreams = (streams: IConfiguration) => {
+  const x = Object.entries(streams).reduce((prev, current) => {
+    if (["fullScreenMode", "rowHeight", "fontSize"].includes(current[0]))
+      return prev;
     const streamsType: any = current[0];
     const streams: any[] = current[1];
     const reucedStreams = handleReduceConfigurationStreams(
@@ -157,3 +159,6 @@ export const reduceStreams = (streams: IConfiguration) =>
     );
     return { ...prev, ...reucedStreams };
   }, {});
+
+  return { ...x };
+};

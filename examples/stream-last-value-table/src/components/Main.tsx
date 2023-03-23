@@ -4,12 +4,10 @@ import { useCurrentStreamsValues } from "hooks/useCurrentStreamsValues";
 import { useEffect, useMemo, useState } from "react";
 import { IConfiguration, IReducedConfiguration } from "types";
 import { listStreamNames, dummyData, reduceStreams } from "utils/utils";
-import { LoadingIndicator } from "@formant/ui-sdk";
 
 export const Main = () => {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
-  const [loading, setLoading] = useState(true);
 
   const areStreamsConfigured = (s: IConfiguration) =>
     Object.entries(s).filter(
@@ -26,22 +24,10 @@ export const Main = () => {
     listStreamNames(reducedConfiguration)
   );
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
   return (
-    <>
-      {loading ? (
-        <LoadingIndicator />
-      ) : (
-        <Table
-          currentConfiguration={reducedConfiguration}
-          currentValues={streams}
-        />
-      )}
-    </>
+    <Table
+      currentConfiguration={reducedConfiguration}
+      currentValues={streams}
+    />
   );
 };

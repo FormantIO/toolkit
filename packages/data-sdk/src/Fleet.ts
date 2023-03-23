@@ -12,6 +12,7 @@ import { IStreamData } from "./model/IStreamData";
 import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IStream } from "./model/IStream";
+import { IView } from "./model/IView";
 import { AggregateLevel } from "./main";
 import { aggregateByDateFunctions, formatTimeFrameText } from "./main";
 import { EventType } from "./main";
@@ -395,10 +396,7 @@ export class Fleet {
     return devices;
   }
 
-  static async getAnnotationCount(
-    query: IEventQuery,
-    tagKey: string
-  ) {
+  static async getAnnotationCount(query: IEventQuery, tagKey: string) {
     const annotations = await this.queryEvents({
       ...query,
       eventTypes: ["annotation"],
@@ -490,6 +488,39 @@ export class Fleet {
       }
     );
     return (await response.json()) as IStream;
+  }
+
+  static async getViews(): Promise<IView[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(`${FORMANT_API_URL}/v1/admin/views`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const views = await response.json();
+    return views.items;
+  }
+
+  static async patchView(view: IView): Promise<IView> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/views/${view.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(view),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await response.json()) as IView;
   }
 
   static async eventsCounter(

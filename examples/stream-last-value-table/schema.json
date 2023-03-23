@@ -7,6 +7,12 @@
     "fullScreenMode": {
       "type": "boolean"
     },
+    "fontSize": {
+      "type": "integer"
+    },
+    "rowHeight": {
+      "type": "integer"
+    },
     "textStreams": {
       "description": "Text streams",
       "type": "array",

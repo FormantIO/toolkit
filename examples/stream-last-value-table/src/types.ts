@@ -88,6 +88,8 @@ const streamTypes = ["textStreams", "bitsetStreams", "numericStreams"] as const;
 export type StreamConfigurationType = typeof streamTypes[number];
 export interface IConfiguration {
   fullScreenMode: boolean;
+  rowHeight?: number;
+  fontSize?: number;
   textStreams: ITextConfiguration[];
   numericStreams: INumericConfiguration[];
   bitsetStreams: IBitsetConfiguration[];

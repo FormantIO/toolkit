@@ -1,11 +1,14 @@
-import { Box, Typography, Icon } from "@formant/ui-sdk";
+import { Box, Typography, Icon, useFormant } from "@formant/ui-sdk";
 import { FC } from "react";
+import { IConfiguration } from "types";
 
 interface IHeaderProps {
   height?: number | null;
 }
 
 export const Header: FC<IHeaderProps> = ({ height }) => {
+  const context = useFormant();
+  const configuration = context.configuration as IConfiguration;
   return (
     <Box
       sx={{
@@ -29,7 +32,7 @@ export const Header: FC<IHeaderProps> = ({ height }) => {
         <span
           style={{
             color: "#bac4e2",
-            fontSize: !!height ? (height / 2 > 14 ? 12 : height / 2) : 14,
+            fontSize: !!configuration?.fontSize ? `${configuration?.fontSize}px` : "14px",
           }}
         >
           Stream
@@ -47,7 +50,7 @@ export const Header: FC<IHeaderProps> = ({ height }) => {
         <span
           style={{
             color: "#bac4e2",
-            fontSize: !!height ? (height / 2 > 14 ? 12 : height / 2) : 14,
+            fontSize: !!configuration?.fontSize ? `${configuration?.fontSize}px` : "14px",
           }}
         >
           Value
