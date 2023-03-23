@@ -17,6 +17,12 @@ export interface IConfiguration<T extends StreamType> {
   aggregateBy: AggregatePeriod;
   numAggregates: number;
   deviceIds?: string[];
+  tags?: ITag[];
+}
+
+export interface ITag {
+  key: string;
+  value: string;
 }
 
 export interface INumericConfiguration extends IConfiguration<"numeric"> {

@@ -23,10 +23,16 @@ export const listStreamNames = (streams: IReducedConfiguration) => [
 ];
 
 const handleBitsetStreams = (stream: IBitsetConfiguration) => {
-  return stream.expectedValue.reduce<any>((prev, current) => {
-    prev[`${stream.name}/${current.key}`] = current.value;
-    return prev;
-  }, {});
+  if ("expectedValue" in stream) {
+    return stream.expectedValue.reduce<any>((prev, current) => {
+      prev[`${stream.name}/${current.key}`] = current.value;
+      return prev;
+    }, {});
+  } else {
+    return {
+      [`${(stream as IBitsetConfiguration).name}/undefined`]: undefined,
+    };
+  }
 };
 
 export const handleReduceConfigurationStreams = (
@@ -37,7 +43,7 @@ export const handleReduceConfigurationStreams = (
   )[],
   streamType: StreamConfigurationType
 ) => {
-  return streams.reduce<any>((prevactualStream, currentActualStream) => {
+  const x = streams.reduce<any>((prevactualStream, currentActualStream) => {
     if (streamType === "textStreams") {
       prevactualStream[currentActualStream.name] = (
         currentActualStream as ITextConfiguration
@@ -54,9 +60,10 @@ export const handleReduceConfigurationStreams = (
     const bits = handleBitsetStreams(
       currentActualStream as IBitsetConfiguration
     );
-
     return { ...prevactualStream, ...bits };
   }, {});
+
+  return x;
 };
 
 export const handleStreamStatus = (
@@ -138,4 +145,20 @@ export const dummyData: IConfiguration = {
   textStreams: sampleTextStreams,
   numericStreams: sampleNumericStream,
   bitsetStreams: sampleBitsetStream,
+};
+
+export const reduceStreams = (streams: IConfiguration) => {
+  const x = Object.entries(streams).reduce((prev, current) => {
+    if (["fullScreenMode", "rowHeight", "fontSize"].includes(current[0]))
+      return prev;
+    const streamsType: any = current[0];
+    const streams: any[] = current[1];
+    const reucedStreams = handleReduceConfigurationStreams(
+      streams,
+      streamsType
+    );
+    return { ...prev, ...reucedStreams };
+  }, {});
+
+  return { ...x };
 };

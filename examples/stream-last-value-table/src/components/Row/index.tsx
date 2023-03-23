@@ -1,15 +1,19 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import { Status } from "types";
+import { IConfiguration, Status } from "types";
+import { useFormant } from "@formant/ui-sdk";
 interface IRowProps {
   leftValue: string;
   rightValue: string;
   state: Status;
   height?: number | null;
   fullWidth?: boolean;
+  idx?: number;
 }
 
 export const Row: FC<IRowProps> = (props: any) => {
+  const context = useFormant();
+  const config = context.configuration as IConfiguration;
   const { leftValue, rightValue, state, height, fullWidth } = props;
   const [teleopMode, setTeleopMode] = useState(false);
 
@@ -30,6 +34,7 @@ export const Row: FC<IRowProps> = (props: any) => {
       style={{
         width: !!fullWidth ? "100vw" : teleopMode ? "50vw" : "100%",
         height: !!height ? (height < 30 ? 30 : height) : 40,
+        borderRight: "solid black 1px",
       }}
       className={styles.row}
     >
@@ -37,6 +42,7 @@ export const Row: FC<IRowProps> = (props: any) => {
         style={{
           width: !!fullWidth && teleopMode ? "40%" : "50%",
           overflow: "hidden",
+          fontSize: !!config?.fontSize ? `${config?.fontSize}px` : "14px",
         }}
         className={styles["row-stream"]}
       >
@@ -53,7 +59,13 @@ export const Row: FC<IRowProps> = (props: any) => {
           ]
         }`}
       >
-        <span style={{}}>{rightValue}</span>
+        <span
+          style={{
+            fontSize: !!config?.fontSize ? `${config?.fontSize}px` : "14px",
+          }}
+        >
+          {rightValue}
+        </span>
       </div>
     </div>
   );

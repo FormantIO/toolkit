@@ -7,6 +7,12 @@
     "fullScreenMode": {
       "type": "boolean"
     },
+    "fontSize": {
+      "type": "integer"
+    },
+    "rowHeight": {
+      "type": "integer"
+    },
     "textStreams": {
       "description": "Text streams",
       "type": "array",
@@ -20,6 +26,10 @@
           },
           "expectedValue": {
             "type": "string"
+          },
+          "fullwidth": {
+            "type": "boolean",
+            "default": true
           }
         }
       }
@@ -35,7 +45,11 @@
             "type": "string"
           },
           "greaterThan": { "type": "integer" },
-          "lesserThan": { "type": "integer" }
+          "lesserThan": { "type": "integer" },
+          "fullwidth": {
+            "type": "boolean",
+            "default": true
+          }
         }
       }
     },
@@ -59,6 +73,10 @@
                 },
                 "value": {
                   "type": "boolean"
+                },
+                "fullwidth": {
+                  "type": "boolean",
+                  "default": true
                 }
               }
             }

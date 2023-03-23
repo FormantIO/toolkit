@@ -13,6 +13,7 @@ export const LoadingIndicator = () => {
 const Container = styled.div`
   height: 24px;
   width: 24px;
+  overflow: hidden;
   img {
     height: 100%;
   }

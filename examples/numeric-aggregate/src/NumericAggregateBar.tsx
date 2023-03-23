@@ -17,6 +17,7 @@ import {
   ConfigurationTypes,
   INumericConfiguration,
   INumericSetConfiguration,
+  ITag,
 } from "./types";
 import { getTypedConfiguration } from "./utils/getTypedConfiguration";
 import { dummyData } from "./utils/dummyData";
@@ -46,6 +47,14 @@ interface INumericAggregateBarProps {
   time: number;
   config: INumericConfiguration | INumericSetConfiguration;
 }
+
+const formatTags = (tagArray?: ITag[]) => {
+  if (!tagArray) return undefined;
+  return tagArray.reduce<any>((p, c) => {
+    p[c.key] = [c.value];
+    return p;
+  }, {});
+};
 
 export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   time,
@@ -91,23 +100,35 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
     return _;
   }, [_numAggregates]);
 
+  const currentTime = useMemo(() => {
+    if (!time || !config) return;
+
+    const date = new Date(config.fullScreenMode ? Date.now() : time);
+
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+    const day = date.getUTCDate();
+
+    return `${month + 1}/${day}/${year}`;
+  }, [time]);
+
   useEffect(() => {
+    if (!currentTime) return;
     loadValues();
   }, [
     _numAggregates,
     (config as INumericSetConfiguration).numericSetStream,
     (config as INumericConfiguration).numericStream,
     config.fullScreenMode,
-    time,
+    currentTime,
   ]);
 
   const loadValues = async () => {
     if (await Authentication.waitTilAuthenticated()) {
-      const { fullScreenMode } = config;
       const currentDevice = await Fleet.getCurrentDevice();
       const aggregatedData = await Promise.all(
         something.map(async (_, dateOffset) => {
-          const now = new Date(fullScreenMode ? Date.now() : time);
+          const now = new Date(currentTime!);
           const startDate = dateFunctions.sub(
             dateFunctions.start(now),
             dateOffset
@@ -125,15 +146,17 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
                   ? config.numericStream
                   : config.numericSetStream,
               ],
+              tags: formatTags(config.tags),
             }),
           };
         })
       );
+
       const aggregations = aggregatedData.map((streamDatas) => {
         if (streamDatas.data === undefined) {
           return undefined;
         }
-        //TODO: HANLDE TAGGED DATA
+
         const { start, data } = streamDatas;
         const stream = data[0];
         if (stream.type === "numeric") {
@@ -174,10 +197,7 @@ export const NumericAggregateBar: FC<INumericAggregateBarProps> = ({
   const xMax = data ? Math.max(...data) : 100;
   const labels =
     aggregations?.map(
-      (_, i) =>
-        `${capitalizeFirstLetter(
-          _aggregateBy
-        )} ${_.start.getDate()}/${_.start.getMonth()}`
+      (_, i) => `${_.start.getMonth() + 1}/${_.start.getDate()}`
     ) ?? [];
 
   const aggregateByAdverb = {

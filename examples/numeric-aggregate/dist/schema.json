@@ -41,6 +41,20 @@
     "numAggregates": {
       "description": "Number of bars to show in the chart",
       "type": "integer"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }
