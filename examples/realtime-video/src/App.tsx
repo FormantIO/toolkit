@@ -13,10 +13,10 @@ function App() {
 
   return (
     <div className="App">
-      {!device ? (
+      {!device || !camera ? (
         <LoadingIndicator />
       ) : (
-        <RealtimeVideoPlayer cameraName={camera ?? ""} deviceId={device.id} />
+        <RealtimeVideoPlayer cameraName={camera} deviceId={device.id} />
       )}
     </div>
   );

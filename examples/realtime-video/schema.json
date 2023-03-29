@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/realtime-video/schema.json",
-  "title": "Heatmap",
+  "title": "RTC Video",
   "description": "Real time video connection.",
   "type": "object",
   "properties": {
     "camera": {
       "type": "string",
-      "description": "Camera name"
+      "description": "Camera name i.e. Integrated Camera Integrated C - dev.video0"
     }
   }
 }
