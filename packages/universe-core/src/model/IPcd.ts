@@ -18,7 +18,7 @@ export interface IPcdHeader {
 
 export interface IPcd {
   header: IPcdHeader;
-  positions?: Float32Array;
-  colors?: Float32Array;
-  intensity?: Float32Array;
+  positions?: Float32Array | number[];
+  colors?: Float32Array | number[];
+  intensity?: Float32Array | number[];
 }
