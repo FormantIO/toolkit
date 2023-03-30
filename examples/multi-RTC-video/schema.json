@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/numeric-aggregate/schema.json",
+  "title": "Multi RTC Video",
+  "description": "List of cameras",
+  "type": "object",
+  "properties": {
+    "cameras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
