@@ -37,13 +37,15 @@ import {
   ScatterChart,
   Joystick,
   Chart,
+  RealtimeConnection,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
 
 import { ServiceParameters } from "../src/components/JsonSchemaForm/ServiceParameters";
 
-import { Authentication, Fleet } from "@formant/data-sdk";
+import { Authentication, Fleet, SessionType } from "@formant/data-sdk";
+import { randomUUID } from "crypto";
 
 function App() {
   const device = useDevice();
@@ -52,14 +54,19 @@ function App() {
   const sample = ["device one", "device two"];
 
   const [en, setEn] = React.useState<string[]>([]);
+  const [loading, setIsLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    if (!device) return;
-    device.startRealtimeConnection();
-  }, [device]);
+  // React.useEffect(() => {
+  //   if (!device) return;
+  //   device
+  //     .startRealtimeConnection(SessionType.Observe)
+  //     .then((_) => setIsLoading(false));
+  // }, [device]);
 
   const y = [20, 50, 60, 10, 90, 23, 1, 17];
+
   const z = "";
+  if (!device) return <></>;
   return (
     <div
       style={{
@@ -69,31 +76,23 @@ function App() {
         minHeight: "100vh",
       }}
     >
-      <BarChart
-        xTicksFontSize={8}
-        data={[20, 50, 60, 10, 90, 23, 1, 17]}
-        // tooltipUnits={"%"}
-        labels={y.map(
-          (_) =>
-            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
-        )}
-      />
-      <DoughnutChart
-        size={300}
-        data={[20, 50, 60, 10, 90, 23, 1, 17]}
-        labels={y.map(
-          (_) =>
-            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
-        )}
-      />
-      <Chart
-        type="doughnut"
-        labels={y.map(
-          (_) =>
-            "Driver Front Change And Balance, Rear Change And Balance Passenger Front Change And Balance, Rear Change And Balance"
-        )}
-        data={[20, 50, 60, 10, 90, 23, 1, 17]}
-      />
+      <RealtimeConnection device={device}>
+        <RealtimeVideoPlayer
+          id={"one"}
+          device={device}
+          cameraName="rtsp.192.168.131.11.554"
+        />
+        <RealtimeVideoPlayer
+          id={"two"}
+          device={device}
+          cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera2"
+        />
+        <RealtimeVideoPlayer
+          id={"three"}
+          device={device}
+          cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera1"
+        />
+      </RealtimeConnection>
     </div>
   );
 }

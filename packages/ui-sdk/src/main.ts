@@ -31,3 +31,4 @@ export * from "./components/ListPicker/index";
 export * from "./components/RealtimeVideoPlayer";
 export * from "./components/Joystick";
 export * from "./components/Chart.V2";
+export * from "./components/RealtimeConnection"
