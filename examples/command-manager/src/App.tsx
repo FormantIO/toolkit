@@ -42,7 +42,7 @@ function App() {
                 enabledParameters={_.enabledParameters}
                 parameterValue={
                   commands?.filter((command) => _.name === command.name)[0]
-                    ?.parameterValue ?? {}
+                    ?.parameterValue ?? ""
                 }
                 meta={
                   commands?.filter((command) => _.name === command.name)[0]
