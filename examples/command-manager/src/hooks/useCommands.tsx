@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Authentication, App, Device, Command } from "@formant/data-sdk";
 import { useDevice } from "@formant/ui-sdk";
-import { IConfiguration } from "../types";
 
 const getCommands = async (device: Device) => {
   if (await Authentication.waitTilAuthenticated()) {
     const commands = await device.getAvailableCommands();
-    return commands;
+    return commands.filter((_: any) => _.enabled);
   }
 };
 

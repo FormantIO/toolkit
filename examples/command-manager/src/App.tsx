@@ -5,6 +5,7 @@ import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
 import { useCommands } from "./hooks/useCommands";
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 
 export interface IStream {
   streamName: string;
@@ -39,6 +40,14 @@ function App() {
                 streams={!!_.streamName ? streams : []}
                 useStreamValue={_.useStreamValue}
                 enabledParameters={_.enabledParameters}
+                parameterValue={
+                  commands?.filter((command) => _.name === command.name)[0]
+                    ?.parameterValue ?? {}
+                }
+                meta={
+                  commands?.filter((command) => _.name === command.name)[0]
+                    ?.parameterMeta ?? {}
+                }
               />
             );
           })}
