@@ -78,7 +78,7 @@ export interface UniverseTelemetrySource {
   id: string;
   sourceType: "telemetry";
   streamName: string;
-  streamType: StreamType;
+  streamType?: StreamType;
   latestDataPoint?: boolean;
 }
 
