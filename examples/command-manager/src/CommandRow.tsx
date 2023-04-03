@@ -13,6 +13,8 @@ interface ICommandRowProps {
   streamName?: string;
   device?: Device;
   streams?: IStream[];
+  meta?: {};
+  parameterValue?: string;
 }
 
 const setStreamAsActive = async (stream: any) => {
@@ -29,8 +31,10 @@ export const CommandRow: FC<ICommandRowProps> = ({
   streams,
   enabledParameters,
   useStreamValue,
+  meta,
+  parameterValue,
 }) => {
-  const [param, setParam] = useState("");
+  const [param, setParam] = useState(parameterValue);
   const [disabled, setDisabled] = useState(false);
   const dropdownItem = useDropDownItems(device, streamName);
   const [responsiveDescription, setResponisveDescription] = useState("");
@@ -64,7 +68,7 @@ export const CommandRow: FC<ICommandRowProps> = ({
       setDisabled(true);
       if (!device) return;
 
-      device.sendCommand(name, param ?? "");
+      device.sendCommand(name, param ?? "", undefined, meta);
       setTimeout(() => {
         setDisabled(false);
       }, 3000);
