@@ -17,24 +17,6 @@ function App() {
     context.configuration as ConfigurationTypes
   );
   const time = useScrubberTime();
-
-  const isConfiguraionReady = (_: any) => _ !== undefined;
-
-  const waitForConfiguration = useCallback(async () => {
-    let configurationReady = false;
-    let tries = 5;
-    while (!configurationReady && tries !== 0) {
-      configurationReady = isConfiguraionReady(configuration);
-      tries -= 1;
-      await timeout(2000);
-    }
-    setLoading(false);
-  }, [configuration]);
-
-  useEffect(() => {
-    waitForConfiguration();
-  }, [configuration]);
-
   const config = useMemo(() => {
     return !!configuration && Object.keys(configuration).length > 3
       ? configuration
@@ -43,10 +25,10 @@ function App() {
 
   return (
     <div className="App">
-      {loading ? (
+      {!configuration ? (
         <LoadingIndicator />
       ) : (
-        <NumericAggregateBar config={config} time={time!} />
+        <NumericAggregateBar config={configuration} time={time!} />
       )}
     </div>
   );
