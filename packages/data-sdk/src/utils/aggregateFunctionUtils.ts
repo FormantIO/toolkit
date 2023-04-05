@@ -70,7 +70,7 @@ export const aggregateFunctionMap = {
   count: getCount,
 };
 
-export const aggregateByDateFunctions: IAggregateByDateFunctions = {
+export const aggregateByDateFunctions: any = {
   day: {
     interval: dateFns.eachDayOfInterval,
     start: dateFns.startOfDay,
