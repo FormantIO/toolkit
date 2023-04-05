@@ -5,11 +5,22 @@ import "./style.css";
   const el = document.querySelector("#app");
   if (el) {
     if (await Authentication.waitTilAuthenticated()) {
-      const views = await Fleet.getViews();
+      const tables = await Fleet.getTaskReportTables();
 
-      const fg = views.filter((_) => _.name === "FoxGlove")[0];
-      const r = await Fleet.patchView({ ...fg, url: `${fg.url}/?auth={auth}` });
-      console.log(r);
+      const sum = tables.map((tab) => {
+        return Fleet.getTaskReportRows({
+          taskColumns: [
+            {
+              columns: tab.columns,
+              name: "DURATION_SECONDS",
+              tableName: tab.tableName,
+            },
+          ],
+        });
+      });
+
+      const aggregates = await Promise.all(sum);
+      console.log(aggregates);
     }
   }
 })();

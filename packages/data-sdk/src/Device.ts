@@ -26,7 +26,7 @@ import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IEventQuery } from "./main";
 import { AggregateLevel } from "./main";
 import { EventType } from "./main";
-
+import { IShare } from "./model/IShare";
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -559,15 +559,11 @@ export class Device implements IRealtimeDevice {
       throw new Error(`Could not find command with name "${name}"`);
     }
 
-    let d: string;
+    let d: string = "";
 
     if (data === undefined) {
       if (command.parameterEnabled && command.parameterValue) {
         d = command.parameterValue;
-      } else {
-        throw new Error(
-          "Command has no default parameter value, you must provide one"
-        );
       }
     } else {
       d = data;
@@ -801,5 +797,22 @@ export class Device implements IRealtimeDevice {
       ...query,
       deviceIds: [this.id],
     });
+  }
+
+  async createShareLink(params: IShare) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
+      method: "POST",
+      body: JSON.stringify({ ...params, deviceIds: [this.id] }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+
+    return await response.json();
   }
 }

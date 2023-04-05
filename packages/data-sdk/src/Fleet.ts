@@ -16,6 +16,13 @@ import { IView } from "./model/IView";
 import { AggregateLevel } from "./main";
 import { aggregateByDateFunctions, formatTimeFrameText } from "./main";
 import { EventType } from "./main";
+import { IAnalyticsModule } from "./model/IAnalyticsModule";
+import { IStreamColumn } from "./model/IStreamColumn";
+import { ITaskReportColumn } from "./model/ITaskReportColumn";
+import { ISqlQuery } from "./model/ISqlQuery";
+import { ISqlResult } from "./model/ISqlResult";
+import { IShare } from "./model/IShare";
+import { deflateSync, inflateSync } from "zlib";
 
 export interface TelemetryResult {
   deviceId: string;
@@ -559,5 +566,222 @@ export class Fleet {
           return { date, events };
         })
     );
+  }
+
+  static async getAnalyticsModules() {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/analytics-modules`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await response.json()).items as IAnalyticsModule;
+  }
+
+  /**
+   * retrieves a list of all available data streams that can be used for running analytics. 
+   * This function takes no arguments and returns a list of stream names that can be used for analyzing data. 
+   * @example
+   * // Returns
+   *  [
+   *    { 
+   *      streamName:  "$.agent.health",
+          streamType :  "health"
+        },
+        { 
+   *      streamName:  "up.hours",
+          streamType :  "numeric"
+        }
+      ]
+   */
+
+  static async getAnalyticStreams() {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/queries/analytics/streams`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await response.json()).items as IStreamColumn[];
+  }
+
+  /**
+   * retrieves a list of all available tables  that can be used to create task reports.
+   * This function takes no arguments and returns a list of table names that can be used for creating task reports.
+   * @returns List all available tables
+   * @example
+   * // Returns
+   *[
+   *    {
+   *       name: "",
+   *       tableName: "TASK_REPORTS_CLEANING_MODE",
+   *       columns: [
+   *                 {
+   *                    name: "TYPE",
+   *                    isNullable: true,
+   *                    dataType: "string",
+   *                    tableName: "custom"
+   *                 }
+   *                ]
+   *    }
+   *]
+   */
+
+  static async getTaskReportTables() {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/queries/analytics/task-reports`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return (await response.json()).items as ITaskReportColumn[];
+  }
+
+  /**
+   *Retrieves all stream rows
+   * @example
+   * // Body
+   * const analytics = await Fleet.queryAnalytics({
+   *     aggregateLevel: "day",
+   *     orderByColumn: "TIMESTAMP",
+   *     streamColumns: [
+   *       {
+   *         streamName: "consumables_residual_percentage",
+   *         streamType: "numeric set",
+   *       },
+   *     ],
+   *   });
+   * //Returns
+   * {
+   *    aggregates: [],
+   *    columns: [
+   *              {
+   *                name: 'TIMESTAMP',
+   *                isNullable: true,
+   *                dataType: 'string',
+   *                tableName: 'NUMERIC_SET_MAIN'
+   *               }
+   * ],
+   *    items: [
+   *              {
+   *                axisLabel: "suction_blade",
+   *                name: "consumables_residual_percentage",
+   *                tableName: "NUMERIC_SET_TEST",
+   *                time: "2020-04-20T08:00:00.000Z",
+   *                type: "numeric set",
+   *                unitLabel: "percent"
+   *                }
+   * ],
+   *    rowCount: 14,
+   *    rows: []
+   *    sqlText: "SELECT dateadd(day, dayofweek(TIMESTAMP), to_timestamp_tz('4/20/2020')) AS TIMESTAMP, SUM(VALUE)"
+   * }
+   */
+
+  static async queryAnalytics(query: ISqlQuery) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(`${FORMANT_API_URL}/v1/queries/analytics`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return (await response.json()) as ISqlResult;
+  }
+
+  /**
+   * Retrieves all rows
+   * sqlQuery is required
+   * @param query
+   * @returns
+   */
+
+  static async getAnalyticsRows(query: ISqlQuery) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/queries/analytics/rows`,
+      {
+        method: "POST",
+        body: JSON.stringify(query),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return await response.json();
+  }
+
+  /**
+   * @param taskColumns is required
+   * @returns
+   * All task reports
+   * @example
+   * // Body
+   * const tasks = await Fleet.getTaskReports({
+   *     taskColumns: [
+   *       {
+   *         columns: [
+   *           {
+   *             dataType: "string",
+   *             isNullable: true,
+   *             name: "TYPE",
+   *             tableName: "custom",
+   *           },
+   *         ],
+   *         name: "DURATION_SECONDS",
+   *         tableName: "TASK_REPORTS_CLEANING_MODE",
+   *         yAxis: "DURATION_SECONDS",
+   *       },
+   *     ],
+   *   });
+   */
+
+  static async getTaskReportRows(query: ISqlQuery) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/queries/analytics/task-report-rows`,
+      {
+        method: "POST",
+        body: JSON.stringify(query),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return await response.json();
   }
 }

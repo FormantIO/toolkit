@@ -27,6 +27,7 @@
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
+    "@types/node": "^18.15.11",
     "typedoc": "^0.22.13",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
