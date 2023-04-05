@@ -3,7 +3,9 @@ import {
   useDevice,
   RealtimeVideoPlayer,
   LoadingIndicator,
+  RealtimeConnection,
 } from "@formant/ui-sdk";
+import { useEffect } from "react";
 import "./App.css";
 
 function App() {
@@ -13,10 +15,16 @@ function App() {
 
   return (
     <div className="App">
-      {!device || !camera ? (
+      {!device || camera === undefined ? (
         <LoadingIndicator />
       ) : (
-        <RealtimeVideoPlayer cameraName={camera} deviceId={device.id} />
+        <RealtimeConnection device={device}>
+          <RealtimeVideoPlayer
+            cameraName={camera}
+            device={device}
+            id="rtc-video"
+          />
+        </RealtimeConnection>
       )}
     </div>
   );

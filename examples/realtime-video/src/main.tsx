@@ -5,8 +5,6 @@ import "./index.css";
 import { FormantProvider } from "@formant/ui-sdk";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <FormantProvider parseConfiguration>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </FormantProvider>
 );
