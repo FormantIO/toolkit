@@ -4,8 +4,9 @@ import { useCurrentStreamsValues } from "hooks/useCurrentStreamsValues";
 import { useEffect, useMemo, useState } from "react";
 import { IConfiguration, IReducedConfiguration } from "types";
 import { listStreamNames, dummyData, reduceStreams } from "utils/utils";
-
+import { useScrubberTime } from "@formant/ui-sdk";
 export const Main = () => {
+  const time = useScrubberTime();
   const context = useFormant();
   const config = context.configuration as IConfiguration;
 
@@ -21,7 +22,8 @@ export const Main = () => {
   }, [config]);
 
   const streams = useCurrentStreamsValues(
-    listStreamNames(reducedConfiguration)
+    listStreamNames(reducedConfiguration),
+    time
   );
 
   return (

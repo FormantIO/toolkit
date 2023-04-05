@@ -7,18 +7,27 @@ import {
   Fleet,
 } from "@formant/data-sdk";
 import { ICurrentValues } from "types";
-import { useFormant } from "@formant/ui-sdk";
+import { useFormant, useScrubberTime } from "@formant/ui-sdk";
 
 const SECONDS = 1000;
 const MINUTES = 60 * SECONDS;
 
-const reduceStreamValues = (currentValue: IStreamData[]) =>
-  currentValue.reduce<any>((prev, currentStream) => {
+const reduceStreamValues = (
+  currentValue: IStreamData[],
+  scrubberTime?: number,
+  teleopMode?: boolean
+) => {
+  const reducedValues = currentValue.reduce<any>((prev, currentStream) => {
     const latesPoint = currentStream.points.at(-1);
     if (!latesPoint) return prev;
     const value = latesPoint[1];
     const timeStamp = latesPoint[0];
-    if (timeStamp < Date.now() - 10 * SECONDS) return prev;
+    if (
+      (!!scrubberTime && scrubberTime > Date.now() - 5 * SECONDS) ||
+      teleopMode
+    ) {
+      if (timeStamp < Date.now() - 10 * SECONDS) return prev;
+    }
 
     if (currentStream.type === "bitset") {
       const bits = (value as IBitset).keys.reduce<any>(
@@ -36,7 +45,13 @@ const reduceStreamValues = (currentValue: IStreamData[]) =>
     return prev;
   }, {});
 
-export const useCurrentStreamsValues = (streams: string[]): ICurrentValues => {
+  return reducedValues;
+};
+
+export const useCurrentStreamsValues = (
+  streams: string[],
+  time: any
+): ICurrentValues => {
   const context = useFormant();
   const config = context.configuration as { fullScreenMode: boolean };
   const [currentValues, setCurrentValues] = useState<ICurrentValues>({});
@@ -59,7 +74,6 @@ export const useCurrentStreamsValues = (streams: string[]): ICurrentValues => {
   const handleFullScreenMode = async () => {
     await Authentication.waitTilAuthenticated();
     const device = await Fleet.getCurrentDevice();
-
     const curentDeviceStreams = await Fleet.queryTelemetry({
       deviceIds: [device.id],
       start: new Date(Date.now() - MINUTES * 2).toISOString(),
@@ -69,7 +83,9 @@ export const useCurrentStreamsValues = (streams: string[]): ICurrentValues => {
     });
 
     const reducedValues = reduceStreamValues(
-      curentDeviceStreams as IStreamData[]
+      curentDeviceStreams as IStreamData[],
+      undefined,
+      true
     );
     setCurrentValues(reducedValues);
   };
@@ -86,13 +102,13 @@ export const useCurrentStreamsValues = (streams: string[]): ICurrentValues => {
           setCurrentValues({});
           return;
         }
-
         const deviceStreams = (currentValue as IStreamData[]).filter(
           (_) => _.deviceId === device.id
         );
 
         const reducedValues = reduceStreamValues(
-          deviceStreams as IStreamData[]
+          deviceStreams as IStreamData[],
+          time
         );
 
         setCurrentValues(reducedValues);
