@@ -23,7 +23,7 @@ export const Main = () => {
 
   const streams = useCurrentStreamsValues(
     listStreamNames(reducedConfiguration),
-    time
+    time as any
   );
 
   return (

@@ -50,7 +50,7 @@ const reduceStreamValues = (
 
 export const useCurrentStreamsValues = (
   streams: string[],
-  time: any
+  time: number
 ): ICurrentValues => {
   const context = useFormant();
   const config = context.configuration as { fullScreenMode: boolean };
