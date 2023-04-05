@@ -8,12 +8,17 @@ import {
 } from "@formant/ui-sdk";
 import styled from "@emotion/styled";
 import { IConfiguration } from "./types";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+
+function timeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
   const device = useDevice();
+  const [loading, setLoading] = useState(true);
 
   const cameras = useMemo(() => {
     if (!config || config.cameras.length === 0) return <></>;
@@ -28,7 +33,24 @@ function App() {
     ));
   }, [config, device]);
 
-  return !device || !context ? (
+  const waitForConnection = useCallback(async () => {
+    let connected = false;
+    while (!connected) {
+      connected = await device.isInRealtimeSession();
+      console.warn("Waiting for the main connection to establish.");
+      await timeout(2000);
+    }
+    console.warn("Main connection completed");
+
+    setLoading(false);
+  }, [device]);
+
+  useEffect(() => {
+    if (!device || !context) return;
+    waitForConnection();
+  }, [device, context]);
+
+  return loading ? (
     <PageLoading>
       <LoadingIndicator />
     </PageLoading>
