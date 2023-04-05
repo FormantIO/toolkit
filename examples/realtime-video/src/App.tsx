@@ -5,17 +5,39 @@ import {
   LoadingIndicator,
   RealtimeConnection,
 } from "@formant/ui-sdk";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
+
+function timeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function App() {
   const context = useFormant();
   const { camera } = context.configuration as { camera: string };
   const device = useDevice();
+  const [loading, setLoading] = useState(true);
+
+  const waitForConnection = useCallback(async () => {
+    let connected = false;
+    while (!connected) {
+      connected = await device.isInRealtimeSession();
+      console.warn("Waiting for the main connection to establish.");
+      await timeout(2000);
+    }
+    console.warn("Main connection completed");
+
+    setLoading(false);
+  }, [device]);
+
+  useEffect(() => {
+    if (!device || !camera) return;
+    waitForConnection();
+  }, [device, camera]);
 
   return (
     <div className="App">
-      {!device || camera === undefined ? (
+      {loading ? (
         <LoadingIndicator />
       ) : (
         <RealtimeConnection device={device}>
