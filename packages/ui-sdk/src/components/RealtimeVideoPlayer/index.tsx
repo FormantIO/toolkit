@@ -3,6 +3,7 @@ import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "@formant/ui-sdk-realtime-player";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { LoadingIndicator } from "../LoadingIndicator";
+import styled from "@emotion/styled";
 
 declare global {
   namespace JSX {
@@ -69,7 +70,7 @@ export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
   }, [device]);
 
   return (
-    <div>
+    <Container>
       {loading && <LoadingIndicator></LoadingIndicator>}
       <formant-realtime-player
         id={id}
@@ -78,6 +79,14 @@ export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
           backgroundColor: "transparent",
         }}
       />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+`;
