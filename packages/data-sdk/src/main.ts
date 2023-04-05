@@ -145,3 +145,16 @@ export {
   IRtcStreamPayload,
 } from "@formant/realtime-sdk";
 export * from "./model/JsonSchema";
+export * from "./utils/aggregateFunctionUtils";
+export * from "./model/IStreamColumn";
+export * from "./model/IAnalyticsModule";
+export * from "./model/ITaskReportColumn";
+export * from "./model/IView";
+export * from "./model/IShare";
+export * from "./model/ISqlQuery";
+export * from "./model/IScopeFilter";
+export * from "./model/ISqlColumn";
+export * from "./model/ISqlResult";
+export * from "./model/IAnalyticsModuleConfiguration";
+export * from "./model/IAggregateRow";
+export * from "./model/ISqlRow";
