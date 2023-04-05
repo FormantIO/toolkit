@@ -21,8 +21,6 @@ import { IStreamColumn } from "./model/IStreamColumn";
 import { ITaskReportColumn } from "./model/ITaskReportColumn";
 import { ISqlQuery } from "./model/ISqlQuery";
 import { ISqlResult } from "./model/ISqlResult";
-import { IShare } from "./model/IShare";
-import { deflateSync, inflateSync } from "zlib";
 
 export interface TelemetryResult {
   deviceId: string;
