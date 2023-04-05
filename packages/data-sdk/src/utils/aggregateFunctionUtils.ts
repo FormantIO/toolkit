@@ -1,8 +1,20 @@
 import { INumericAggregate } from "../model/INumericAggregate";
 import * as dateFns from "date-fns";
-import { AggregateLevel } from "../main";
+
+const vailableAggregationIntervals = [
+  "day",
+  "week",
+  "month",
+  "year",
+  "hour",
+  "minute",
+  "quarter",
+] as const;
+
+type ValidAggregationInterval = typeof vailableAggregationIntervals[number];
+
 export type IAggregateByDateFunctions = {
-  [key in AggregateLevel]: AggregateFunction;
+  [key in ValidAggregationInterval]: AggregateFunction;
 };
 
 export const aggregateFunctions = [
