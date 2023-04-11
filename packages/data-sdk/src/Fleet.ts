@@ -821,7 +821,7 @@ export class Fleet {
         Authorization: "Bearer " + Authentication.token,
       },
     });
-    const origin = "https://app.formant.io";
+    const origin = FORMANT_API_URL.replace("api", "app");
     const { code } = await response.json();
 
     return `${origin}/shares/${code}/${serializeHash({
