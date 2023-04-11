@@ -1,3 +1,5 @@
+import { Buffer } from "buffer";
+window.Buffer = Buffer;
 export * from "./Fleet";
 export * from "./Authentication";
 export * from "./Device";

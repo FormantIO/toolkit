@@ -16,6 +16,18 @@ export interface IAuthentication {
   userId: string;
 }
 
+export interface IConfirmForgotPasswordRequest {
+  email: string;
+  confirmationCode: string;
+  newPassword: string;
+}
+
+export interface IRespondToNewPasswordRequiredChallengeRequest {
+  userId: string;
+  session: string;
+  newPassword: string;
+}
+
 export class Authentication {
   static token: string | undefined;
   static refreshToken: string | undefined;
@@ -152,5 +164,70 @@ export class Authentication {
     setInterval(async () => {
       App.refreshAuthToken();
     }, 1000 * 60 * 60);
+  }
+
+  static async forgotPassword(email: string) {
+    await fetch(`${FORMANT_API_URL}/v1/admin/auth/forgot-password`, {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  /**
+   * @example
+   * // Body
+   * await Authentication.confirmForgotPassword({
+   *     email: "joe@gmail.com"
+   *     confirmationCode: "1",
+   *     newPassword: "NewPassword"
+   *   });
+   */
+
+  static async confirmForgotPassword(request: IConfirmForgotPasswordRequest) {
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/auth/confirm-forgot-password`,
+      {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.ok;
+  }
+
+  static async respondToNewPasswordRequiredChallenge(
+    request: IRespondToNewPasswordRequiredChallengeRequest
+  ) {
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/auth/respond-to-new-password-required-challenge`,
+      {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return await response.json();
+  }
+
+  static async loginWithGoogle(token: string) {
+    const response = await fetch(
+      `${FORMANT_API_URL}/v1/admin/auth/login-google`,
+      {
+        method: "POST",
+        body: JSON.stringify(token),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return await response.json();
   }
 }

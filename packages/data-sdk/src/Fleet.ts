@@ -13,9 +13,14 @@ import { PeerDevice } from "./PeerDevice";
 import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IStream } from "./model/IStream";
 import { IView } from "./model/IView";
-import { AggregateLevel } from "./main";
-import { aggregateByDateFunctions, formatTimeFrameText } from "./main";
-import { EventType } from "./main";
+import {
+  aggregateByDateFunctions,
+  EventType,
+  serializeHash,
+  formatTimeFrameText,
+  AggregateLevel,
+  IShare,
+} from "./main";
 import { IAnalyticsModule } from "./model/IAnalyticsModule";
 import { IStreamColumn } from "./model/IStreamColumn";
 import { ITaskReportColumn } from "./model/ITaskReportColumn";
@@ -781,5 +786,48 @@ export class Fleet {
       }
     );
     return await response.json();
+  }
+
+  /**
+   * @param scope is required
+   * @param time is required
+   * @returns
+   * Share link
+   * @example
+   * // Body
+   * const link = await Fleet.createShareLink({
+   *     delegateTeleop: false
+   *     message: "See bot in action",
+   *     scope: {
+   *       deviceIds: ["d64520a6-a308-4a59-9267-b7f8a7bfc7ab"],
+   *       start: "2023-04-04T19:51:47.125Z",
+   *       end: "2023-04-04T20:51:47.125Z"
+   *      },
+   *      time: "2023-04-04T20:21:47.125Z",
+   *      userName: "User",
+   *   });
+   */
+
+  static async createShareLink(share: IShare) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
+      method: "POST",
+      body: JSON.stringify(share),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const origin = "https://app.formant.io";
+    const { code } = await response.json();
+
+    return `${origin}/shares/${code}/${serializeHash({
+      module: "pause",
+      speed: 1,
+      time: share.time,
+    })}`;
   }
 }
