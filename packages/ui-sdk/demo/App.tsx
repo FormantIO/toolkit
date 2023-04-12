@@ -38,7 +38,9 @@ import {
   Joystick,
   Chart,
   RealtimeConnection,
+  AuthPage,
 } from "../src/main";
+import bg from "../src/images/bg.jpg";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
 
@@ -56,44 +58,37 @@ function App() {
   const [en, setEn] = React.useState<string[]>([]);
   const [loading, setIsLoading] = React.useState(true);
 
-  // React.useEffect(() => {
-  //   if (!device) return;
-  //   device
-  //     .startRealtimeConnection(SessionType.Observe)
-  //     .then((_) => setIsLoading(false));
-  // }, [device]);
-
-  const y = [20, 50, 60, 10, 90, 23, 1, 17];
-
-  const z = "";
-  if (!device) return <></>;
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
+    <AuthPage
+      // backgroundImage={bg}
+      cardBackgroundColor="white"
+      backgroundColor="white"
+      inputSXProps={{
+        width: "auto",
+        marginBottom: 2,
+        marginTop: 2,
+        backgroundColor: "red",
+        color: "red",
+        borderRadius: 10,
       }}
-    >
-      <RealtimeConnection device={device}>
-        <RealtimeVideoPlayer
-          id={"one"}
-          device={device}
-          cameraName="rtsp.192.168.131.11.554"
-        />
-        <RealtimeVideoPlayer
-          id={"two"}
-          device={device}
-          cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera2"
-        />
-        <RealtimeVideoPlayer
-          id={"three"}
-          device={device}
-          cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera1"
-        />
-      </RealtimeConnection>
-    </div>
+      cardSXProps={{
+        padding: "64px 112px",
+        borderRadius: 8,
+      }}
+      logoProps={{ width: "50%", marginBottom: 20 }}
+      loginButtonProps={{
+        backgroundColor: "#ff8ab7",
+        height: 50,
+        borderRadius: 8,
+        marginTop: 34,
+        color: "black",
+      }}
+      signInWithGoogleButtonProps={{
+        height: 30,
+        background: "white",
+        color: "black",
+      }}
+    />
   );
 }
 

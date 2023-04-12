@@ -226,12 +226,12 @@ function createComponents(theme: Theme) {
             "&.Mui-focused": {
               background: theme.palette.common.black,
               border: `1px solid ${theme.palette.secondary.main}`,
-              borderBottom: "none",
+              borderBottom: "none !important",
               borderTop: `1px solid ${theme.palette.secondary.main}`,
             },
-            ":after": {
-              borderBottom: `1px solid ${theme.palette.secondary.main}`,
-            },
+            // ":after": {
+            //   borderBottom: `1px solid ${theme.palette.secondary.main}`,
+            // },
           },
         },
       },
