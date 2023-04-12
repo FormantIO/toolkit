@@ -17,6 +17,7 @@ export const Header: FC<IHeaderProps> = ({ height }) => {
         borderBottom: "1px solid black",
         display: "flex",
         position: "relative",
+        backgroundColor: "#2D3855",
       }}
     >
       <Box
@@ -32,7 +33,9 @@ export const Header: FC<IHeaderProps> = ({ height }) => {
         <span
           style={{
             color: "#bac4e2",
-            fontSize: !!configuration?.fontSize ? `${configuration?.fontSize}px` : "14px",
+            fontSize: !!configuration?.fontSize
+              ? `${configuration?.fontSize}px`
+              : "14px",
           }}
         >
           Stream
@@ -50,7 +53,9 @@ export const Header: FC<IHeaderProps> = ({ height }) => {
         <span
           style={{
             color: "#bac4e2",
-            fontSize: !!configuration?.fontSize ? `${configuration?.fontSize}px` : "14px",
+            fontSize: !!configuration?.fontSize
+              ? `${configuration?.fontSize}px`
+              : "14px",
           }}
         >
           Value

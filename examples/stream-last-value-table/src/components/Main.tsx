@@ -17,7 +17,7 @@ export const Main = () => {
 
   const reducedConfiguration: IReducedConfiguration = useMemo(() => {
     if (!config || areStreamsConfigured(config)) return {};
-    console.log(config)
+
     return reduceStreams(config);
   }, [config]);
 

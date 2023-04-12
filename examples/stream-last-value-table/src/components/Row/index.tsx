@@ -43,30 +43,47 @@ export const Row: FC<IRowProps> = (props: any) => {
           width: !!fullWidth && teleopMode ? "40%" : "50%",
           overflow: "hidden",
           fontSize: !!config?.fontSize ? `${config?.fontSize}px` : "14px",
+          backgroundColor: rightValue === "Header" && "#1C1E2D",
         }}
         className={styles["row-stream"]}
       >
         <span>{leftValue}</span>
       </div>
-      <div
-        className={`${styles["row-value"]} ${
-          styles[
-            state === "warning"
-              ? "warning"
-              : state === "good"
-              ? "good"
-              : "offline"
-          ]
-        }`}
-      >
-        <span
+      {rightValue === "Header" && (
+        <div
           style={{
-            fontSize: !!config?.fontSize ? `${config?.fontSize}px` : "14px",
+            width: !!fullWidth && teleopMode ? "60%" : "50%",
+            backgroundColor: rightValue === "Header" && "#1C1E2D",
+            height: "100%",
           }}
         >
-          {rightValue}
-        </span>
-      </div>
+          {" "}
+        </div>
+      )}
+      {rightValue !== "Header" && (
+        <div
+        style={{
+          width: !!fullWidth && teleopMode ? "60%" : "50%",
+        }}
+          className={`${styles["row-value"]} ${
+            styles[
+              state === "warning"
+                ? "warning"
+                : state === "good"
+                ? "good"
+                : "offline"
+            ]
+          }`}
+        >
+          <span
+            style={{
+              fontSize: !!config?.fontSize ? `${config?.fontSize}px` : "14px",
+            }}
+          >
+            {rightValue}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

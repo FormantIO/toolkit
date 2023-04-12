@@ -51,6 +51,25 @@ export const Table: FC<IMainProps> = ({
     return currentConfiguration;
   }, [currentValues]);
 
+  const numericSetsFilter = useMemo(() => {
+    return Object.keys(currentValues).filter((_) =>
+      Array.isArray(currentValues[_])
+    );
+  }, [currentValues]);
+
+  const subsets = useMemo(() => {
+    const numericSets = Object.entries(currentValues).filter((_) =>
+      Array.isArray(_[1])
+    );
+
+    const s = numericSets.reduce((p, c) => {
+      p[c[0]] = c[1];
+      return p;
+    }, {});
+
+    return numericSets;
+  }, [currentValues]);
+
   const widths = useMemo(() => {
     const fullWidthStreams: string[] = [];
     Object.values(config ?? {}).forEach((s) => {
@@ -69,11 +88,38 @@ export const Table: FC<IMainProps> = ({
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       <Header height={config.rowHeight} />
+      {subsets.map((stream) => {
+        return stream.map((s, idx) => {
+          if (idx === 0) {
+            return (
+              <Row
+                key={s}
+                leftValue={s}
+                rightValue={"Header"}
+                fullWidth={true}
+                height={config.rowHeight}
+                state={"good"}
+              />
+            );
+          }
+          return s.map((_) => (
+            <Row
+              key={Object.keys(_)}
+              leftValue={Object.keys(_)}
+              rightValue={Object.values(_)}
+              fullWidth={true}
+              height={config.rowHeight}
+              state={"good"}
+            />
+          ));
+        });
+      })}
       {Object.entries(configuration)
         .sort()
         .filter((str) => widths.includes(str[0]))
         .map((s) => {
           const streamName = s[0];
+          if (numericSetsFilter.includes(streamName)) return <></>;
           return (
             <Row
               key={streamName}
@@ -94,6 +140,8 @@ export const Table: FC<IMainProps> = ({
         .filter((str) => !widths.includes(str[0]))
         .map((s, idx) => {
           const streamName = s[0];
+          if (numericSetsFilter.includes(streamName)) return <></>;
+
           return (
             <Row
               idx={idx}

@@ -27,7 +27,7 @@ const reduceStreamValues = (
       (!!scrubberTime && scrubberTime > Date.now() - 5 * SECONDS) ||
       teleopMode
     ) {
-      if (timeStamp < Date.now() - 10 * SECONDS) return prev;
+      if (timeStamp < Date.now() - 30 * SECONDS) return prev;
     }
 
     if (currentStream.type === "numeric set") {
@@ -35,7 +35,8 @@ const reduceStreamValues = (
         [_.label]: `${Math.floor(_.value)}${_.unit}`,
       }));
       const numericSet = { [currentStream.name]: keys };
-      return { ...prev, numericSet };
+
+      return { ...prev, ...numericSet };
     }
 
     if (currentStream.type === "bitset") {
@@ -53,7 +54,6 @@ const reduceStreamValues = (
     prev[currentStream.name] = value;
     return prev;
   }, {});
-
   return reducedValues;
 };
 

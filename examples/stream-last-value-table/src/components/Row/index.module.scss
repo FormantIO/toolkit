@@ -9,15 +9,17 @@
     display: flex;
     padding-left: 8px;
     align-items: center;
+    background-color: #282f45;
     span {
       color: white;
     }
   }
   &-value {
+    width: 50%;
     height: 100%;
     display: flex;
     align-items: center;
-
+    background-color: #282f45;
     padding: 1;
     border-left: 1px solid black;
     position: relative;
@@ -25,7 +27,7 @@
     align-items: center;
     overflow: hidden;
     span {
-      color: white;
+      color: #bac4e2;
       font-size: 14px;
       padding-left: 10px;
     }

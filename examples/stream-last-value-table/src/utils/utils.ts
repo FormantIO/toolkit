@@ -47,9 +47,9 @@ export const handleReduceConfigurationStreams = (
   streamType: StreamConfigurationType
 ) => {
   const x = streams.reduce<any>((prevactualStream, currentActualStream) => {
-
-    if(streamType === "numericSetStreams"){
-
+    if (streamType === "numericSetStreams") {
+      prevactualStream[currentActualStream.name] = "";
+      return prevactualStream;
     }
 
     if (streamType === "textStreams") {
@@ -161,7 +161,6 @@ export const reduceStreams = (streams: IConfiguration) => {
       return prev;
     const streamsType: any = current[0];
     const streams: any[] = current[1];
-    console.log(streams)
     const reucedStreams = handleReduceConfigurationStreams(
       streams,
       streamsType
