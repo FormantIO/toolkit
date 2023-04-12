@@ -230,4 +230,21 @@ export class Authentication {
     );
     return await response.json();
   }
+
+  static async refresh(token: string) {
+    const result = await fetch(`${FORMANT_API_URL}/v1/admin/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        refreshToken: token,
+      }),
+    });
+    const refreshData = await result.json();
+    await Authentication.loginWithToken(
+      refreshData.authentication.accessToken,
+      token
+    );
+  }
 }

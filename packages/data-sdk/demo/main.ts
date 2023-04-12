@@ -5,11 +5,13 @@ import "./style.css";
   const el = document.querySelector("#app");
   if (el) {
     try {
-      await Authentication.confirmForgotPassword({
-        email: "",
-        confirmationCode: ``,
-        newPassword: "",
-      });
+      const t = await Authentication.refresh("");
+      console.log(
+        t,
+        Authentication.token,
+        Authentication.refreshToken,
+        Authentication.currentUser
+      );
     } catch (error) {
       console.log(error);
     }
