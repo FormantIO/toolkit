@@ -5,6 +5,7 @@ import {
   IBitset,
   Authentication,
   Fleet,
+  INumericSetEntry,
 } from "@formant/data-sdk";
 import { ICurrentValues } from "types";
 import { useFormant, useScrubberTime } from "@formant/ui-sdk";
@@ -27,6 +28,14 @@ const reduceStreamValues = (
       teleopMode
     ) {
       if (timeStamp < Date.now() - 10 * SECONDS) return prev;
+    }
+
+    if (currentStream.type === "numeric set") {
+      const keys = (value as INumericSetEntry[]).map((_) => ({
+        [_.label]: `${Math.floor(_.value)}${_.unit}`,
+      }));
+      const numericSet = { [currentStream.name]: keys };
+      return { ...prev, numericSet };
     }
 
     if (currentStream.type === "bitset") {
@@ -79,7 +88,7 @@ export const useCurrentStreamsValues = (
       start: new Date(Date.now() - MINUTES * 2).toISOString(),
       end: new Date(Date.now()).toISOString(),
       names: streams,
-      types: ["text", "numeric", "bitset"],
+      types: ["text", "numeric", "bitset", "numeric set"],
     });
 
     const reducedValues = reduceStreamValues(
@@ -95,7 +104,7 @@ export const useCurrentStreamsValues = (
     const device = await Fleet.getCurrentDevice();
     App.addStreamListener(
       streams,
-      ["text", "numeric", "bitset"],
+      ["text", "numeric", "bitset", "numeric set"],
       (currentValue) => {
         if (!currentValue) return;
         if (currentValue.length === 0) {

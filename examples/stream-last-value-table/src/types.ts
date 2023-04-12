@@ -74,6 +74,11 @@ export interface IBitsetConfiguration {
   expectedValue: IBit[];
 }
 
+export interface INumericSetConfiguration {
+  name: string;
+  expectedValue: { [key: string]: string }[];
+}
+
 interface IBit {
   key: string;
   value: boolean;
@@ -83,7 +88,12 @@ export interface IReducedConfiguration {
   [key: string]: string | boolean | InumericExpectedValue;
 }
 
-const streamTypes = ["textStreams", "bitsetStreams", "numericStreams"] as const;
+const streamTypes = [
+  "textStreams",
+  "bitsetStreams",
+  "numericStreams",
+  "numericSetStreams",
+] as const;
 
 export type StreamConfigurationType = typeof streamTypes[number];
 export interface IConfiguration {

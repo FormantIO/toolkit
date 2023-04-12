@@ -34,6 +34,36 @@
         }
       }
     },
+    "numericSetStreams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Formant stream name",
+            "$formant.streams.byType": "numeric set",
+            "type": "string"
+          },
+          "expectedValue": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "greaterThan": { "type": "integer" },
+                "lesserThan": { "type": "integer" },
+                "fullwidth": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "numericStreams": {
       "type": "array",
       "items": {

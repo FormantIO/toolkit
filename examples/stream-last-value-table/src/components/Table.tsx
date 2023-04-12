@@ -47,6 +47,7 @@ export const Table: FC<IMainProps> = ({
       undefinedBitsets.forEach((_) => unset(currentConfiguration, _));
       newkeys.forEach((_) => set(currentConfiguration, [_], undefined));
     }
+
     return currentConfiguration;
   }, [currentValues]);
 
@@ -65,13 +66,9 @@ export const Table: FC<IMainProps> = ({
     return fullWidthStreams;
   }, [config]);
 
-  // const orderConfiguration = useMemo(() => {
-  //   Object.entries(configuration)
-  // }, []);
-
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
-      <Header  height={config.rowHeight} />
+      <Header height={config.rowHeight} />
       {Object.entries(configuration)
         .sort()
         .filter((str) => widths.includes(str[0]))

@@ -1,3 +1,4 @@
+import { INumericSetEntry } from "@formant/data-sdk";
 import {
   StreamConfigurationType,
   IBitsetConfiguration,
@@ -8,6 +9,7 @@ import {
   Status,
   InumericExpectedValue,
   IConfiguration,
+  INumericSetConfiguration,
 } from "types";
 
 export const listStreamNames = (streams: IReducedConfiguration) => [
@@ -40,10 +42,16 @@ export const handleReduceConfigurationStreams = (
     | IBitsetConfiguration
     | INumericConfiguration
     | ITextConfiguration
+    | INumericSetConfiguration
   )[],
   streamType: StreamConfigurationType
 ) => {
   const x = streams.reduce<any>((prevactualStream, currentActualStream) => {
+
+    if(streamType === "numericSetStreams"){
+
+    }
+
     if (streamType === "textStreams") {
       prevactualStream[currentActualStream.name] = (
         currentActualStream as ITextConfiguration
@@ -153,6 +161,7 @@ export const reduceStreams = (streams: IConfiguration) => {
       return prev;
     const streamsType: any = current[0];
     const streams: any[] = current[1];
+    console.log(streams)
     const reucedStreams = handleReduceConfigurationStreams(
       streams,
       streamsType
