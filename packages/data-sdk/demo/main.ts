@@ -1,6 +1,5 @@
 import { Authentication, Fleet } from "../src/main";
 import "./style.css";
-import { deserializeHash } from "../src/main";
 
 (async function () {
   const el = document.querySelector("#app");
