@@ -799,20 +799,8 @@ export class Device implements IRealtimeDevice {
     });
   }
 
-  async createShareLink(params: IShare) {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-
-    const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
-      method: "POST",
-      body: JSON.stringify({ ...params, deviceIds: [this.id] }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-
-    return await response.json();
+  async createShareLink(share: IShare, view: string) {
+    share.scope.deviceIds = [this.id];
+    return await Fleet.createShareLink(share, view);
   }
 }

@@ -791,6 +791,7 @@ export class Fleet {
   /**
    * @param scope is required
    * @param time is required
+   * @param view View name
    * @returns
    * Share link
    * @example
@@ -808,9 +809,18 @@ export class Fleet {
    *   });
    */
 
-  static async createShareLink(share: IShare) {
+  static async createShareLink(share: IShare, view: string) {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
+    }
+
+    const views = await this.getViews();
+
+    const selectedView = views.filter((_) => _.name === view);
+
+    if (selectedView.length === 0) {
+      console.warn("View does not exist or it is misspell");
+      return null;
     }
 
     const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
@@ -824,10 +834,8 @@ export class Fleet {
     const origin = FORMANT_API_URL.replace("api", "app");
     const { code } = await response.json();
 
-    return `${origin}/shares/${code}/${serializeHash({
-      module: "pause",
-      speed: 1,
-      time: share.time,
+    return `${origin}/shares/${code}#${serializeHash({
+      viewId: selectedView[0].id,
     })}`;
   }
 }
