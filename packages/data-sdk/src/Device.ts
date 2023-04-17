@@ -284,7 +284,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         await delay(100);
       }
       this.rtcClient = rtcClient;
-      this.emit('connect');
+      this.emit("connect");
 
       this.initConnectionMonitoring();
     } else {
@@ -297,7 +297,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   private initConnectionMonitoring() {
     this.connectionMonitorInterval = setInterval(() => {
       if (!this.rtcClient || !this.remoteDevicePeerId || this.rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected") {
-        this.emit('disconnect');
+        this.emit("disconnect");
         this.stopRealtimeConnection().catch((err) => {
           console.error(err);
         })
