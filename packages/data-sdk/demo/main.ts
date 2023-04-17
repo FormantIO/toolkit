@@ -7,20 +7,10 @@ import "./style.css";
   if (el) {
     try {
       await Authentication.waitTilAuthenticated();
-      const d = await Fleet.getCurrentDevice();
+      const c = await Fleet.getCurrentDevice();
+      console.log(await c.getRealtimeVideoStreams());
 
-      const l = await d.createShareLink(
-        {
-          scope: {
-            start: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-            end: new Date(Date.now() + 1000 * 60 * 30).toISOString(),
-          },
-          time: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-        },
-        "Dev"
-      );
-
-      console.log(l);
+      // console.log(l);
     } catch (error) {
       console.log(error);
     }

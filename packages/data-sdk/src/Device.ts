@@ -340,7 +340,7 @@ export class Device implements IRealtimeDevice {
   }
 
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
-    const document = await this.getConfiguration();
+    const document = (await this.getConfiguration()) as any;
     const streams: { name: string }[] = [];
 
     for (const _ of document.teleop?.hardwareStreams ?? []) {
@@ -352,6 +352,15 @@ export class Device implements IRealtimeDevice {
     }
     for (const _ of document.teleop?.rosStreams ?? []) {
       if (_.topicType == "formant/H264VideoFrame") {
+        streams.push({
+          name: _.topicName,
+        });
+      }
+      if (
+        (_.topicType === "sensor_msgs/Image" ||
+          _.topicType === "sensor_msgs/CompressedImage") &&
+        _.encodeVideo
+      ) {
         streams.push({
           name: _.topicName,
         });
