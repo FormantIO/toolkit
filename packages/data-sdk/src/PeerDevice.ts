@@ -128,6 +128,15 @@ export class PeerDevice implements IRealtimeDevice {
           name: _.topicName,
         });
       }
+      if (
+        (_.topicType === "sensor_msgs/Image" ||
+          _.topicType === "sensor_msgs/CompressedImage") &&
+        _.encodeVideo
+      ) {
+        streams.push({
+          name: _.topicName,
+        });
+      }
     }
     for (const _ of document.teleop.customStreams ?? []) {
       if (_.rtcStreamType === "h264-video-frame") {
