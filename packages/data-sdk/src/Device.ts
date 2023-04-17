@@ -27,6 +27,7 @@ import { IEventQuery } from "./main";
 import { AggregateLevel } from "./main";
 import { EventType } from "./main";
 import { IShare } from "./model/IShare";
+import { EventEmitter } from 'events';
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -123,16 +124,22 @@ export interface IRealtimeDevice {
   ): Promise<DataChannel>;
 }
 
-export class Device implements IRealtimeDevice {
+export class Device extends EventEmitter implements IRealtimeDevice {
   rtcClient: RtcClient | RtcClientV1 | undefined;
   remoteDevicePeerId: string | undefined;
 
   realtimeListeners: RealtimeListener[] = [];
+
+  private connectionMonitorInterval: NodeJS.Timeout | undefined;
+
   constructor(
     public id: string,
     public name: string,
     private organizationId: string
-  ) {}
+  ) {
+    super();
+  }
+
   async getLatestTelemetry() {
     const data = await fetch(
       `${FORMANT_API_URL}/v1/queries/stream-current-value`,
@@ -277,11 +284,30 @@ export class Device implements IRealtimeDevice {
         await delay(100);
       }
       this.rtcClient = rtcClient;
+      this.emit("connect");
+
+      this.initConnectionMonitoring();
     } else {
       throw new Error(
         `Already created realtime connection to device ${this.id}`
       );
     }
+  }
+
+  private initConnectionMonitoring() {
+    this.connectionMonitorInterval = setInterval(() => {
+      if (!this.rtcClient || !this.remoteDevicePeerId || this.rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected") {
+        this.emit("disconnect");
+        this.stopRealtimeConnection().catch((err) => {
+          console.error(err);
+        })
+      }
+    }, 1000);
+  }
+
+  private stopConnectionMonitoring() {
+    clearInterval(this.connectionMonitorInterval);
+    this.connectionMonitorInterval = undefined;
   }
 
   async sendRealtimeMessage(
@@ -516,7 +542,9 @@ export class Device implements IRealtimeDevice {
 
   async stopRealtimeConnection() {
     if (this.rtcClient) {
+      this.stopConnectionMonitoring();
       await this.rtcClient.disconnect(this.id);
+      this.rtcClient = undefined;
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
