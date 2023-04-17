@@ -59,36 +59,15 @@ function App() {
   const [loading, setIsLoading] = React.useState(true);
 
   return (
-    <AuthPage
-      // backgroundImage={bg}
-      cardBackgroundColor="white"
-      backgroundColor="white"
-      inputSXProps={{
-        width: "auto",
-        marginBottom: 2,
-        marginTop: 2,
-        backgroundColor: "red",
-        color: "red",
-        borderRadius: 10,
-      }}
-      cardSXProps={{
-        padding: "64px 112px",
-        borderRadius: 8,
-      }}
-      logoProps={{ width: "50%", marginBottom: 20 }}
-      loginButtonProps={{
-        backgroundColor: "#ff8ab7",
-        height: 50,
-        borderRadius: 8,
-        marginTop: 34,
-        color: "black",
-      }}
-      signInWithGoogleButtonProps={{
-        height: 30,
-        background: "white",
-        color: "black",
-      }}
-    />
+    <div>
+      {!device ? (
+        <></>
+      ) : (
+        <RealtimeConnection device={device}>
+          <RealtimeVideoPlayer device={device} id="aa" cameraName="aaa" />
+        </RealtimeConnection>
+      )}
+    </div>
   );
 }
 
