@@ -102,7 +102,7 @@ export const AuthPage: FC<IAuthPageProps> = ({
             },
           }}
           // sx={inputSXProps}
-          variant={textFieldType}
+          variant={textFieldType as any}
           label="Email"
         ></TextField>
         {textFieldType === "standard" && <label>Password</label>}
