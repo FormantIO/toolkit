@@ -64,7 +64,11 @@ function App() {
         <></>
       ) : (
         <RealtimeConnection device={device}>
-          <RealtimeVideoPlayer device={device} id="aa" cameraName="aaa" />
+          <RealtimeVideoPlayer
+            device={device}
+            id="aa"
+            cameraName="/camera/front/left/image_raw/compressed"
+          />
         </RealtimeConnection>
       )}
     </div>

@@ -48,7 +48,6 @@ export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
 
   const getCamera = useCallback(async () => {
     const videoStreams = await device.getRealtimeVideoStreams();
-
     const cameras = videoStreams.filter((c) => c.name === cameraName);
     if (cameras.length === 0)
       console.error("Error: Camera name is incorrect or doesn't exist");
