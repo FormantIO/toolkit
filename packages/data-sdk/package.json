@@ -18,7 +18,7 @@
       "require": "./dist/data-sdk.umd.js"
     }
   },
-  "version": "0.0.140",
+  "version": "0.0.141",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
@@ -33,11 +33,12 @@
     "@types/node": "^18.15.11",
     "typedoc": "^0.22.13",
     "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "grpc-web": "1.2.1"
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
-    "@formant/realtime-sdk": "^0.0.19",
+    "@formant/realtime-sdk": "0.0.20",
     "date-fns": "^2.29.3"
   }
 }
