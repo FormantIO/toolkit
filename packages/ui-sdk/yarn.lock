@@ -1332,10 +1332,10 @@
   "resolved" "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.16.17.tgz"
   "version" "0.16.17"
 
-"@formant/data-sdk@^0.0.141":
-  "integrity" "sha512-bbsXsy4AMGvIaCnCugSARWwmrx3xQsMNO8b+If9+ohcqO4vo8P+lPFK+cYS7d8ik1tBWghg3grsWJ4AvWLeN2w=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.141.tgz"
-  "version" "0.0.141"
+"@formant/data-sdk@^0.0.142":
+  "integrity" "sha512-955qt4fH7IA/0IhhpqOEppjOrCO3VIPG2x1XamR+YKxfmkMk80vEIucgfeA8IHCB8tRl353NVf/2BuPqi8VyrQ=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.142.tgz"
+  "version" "0.0.142"
   dependencies:
     "@formant/realtime-sdk" "0.0.20"
     "date-fns" "^2.29.3"
@@ -5652,10 +5652,10 @@
   "resolved" "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
   "version" "4.2.10"
 
-"grpc-web@^1.2.1":
-  "integrity" "sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw=="
-  "resolved" "https://registry.npmjs.org/grpc-web/-/grpc-web-1.4.2.tgz"
-  "version" "1.4.2"
+"grpc-web@^1.2.1", "grpc-web@1.2.1":
+  "integrity" "sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw=="
+  "resolved" "https://registry.npmjs.org/grpc-web/-/grpc-web-1.2.1.tgz"
+  "version" "1.2.1"
 
 "h264decoder@^1.0.0":
   "integrity" "sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ=="
