@@ -8,6 +8,11 @@
     "camera": {
       "type": "string",
       "description": "Camera name i.e. Integrated Camera Integrated C - dev.video0"
+    },
+    "isTeleopModule": {
+      "name": "Enable teleop mode",
+      "type": "boolean",
+      "default": false
     }
   }
 }
