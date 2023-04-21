@@ -30,7 +30,7 @@ function App() {
           {config.commands.map((_) => {
             return (
               <CommandRow
-                device={device}
+                device={device as any}
                 name={_.name}
                 description={
                   commands?.filter((command) => _.name === command.name)[0]
