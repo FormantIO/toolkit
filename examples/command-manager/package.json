@@ -13,7 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@formant/data-sdk": "^0.0.131",
+    "@formant/data-sdk": "^0.0.140",
     "@formant/ui-sdk": "^0.0.42",
     "@reduxjs/toolkit": "^1.8.5",
     "gh-pages": "^4.0.0",
