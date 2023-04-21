@@ -634,6 +634,18 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     return res;
   }
 
+  async getCommand(id:string):Promise<Response>{
+    const res = await fetch(
+      `${FORMANT_API_URL}/v1/admin/commands/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+    });
+    return res;
+  }
+
   async createCustomDataChannel(
     channelName: string,
     rtcConfig?: RTCDataChannelInit
