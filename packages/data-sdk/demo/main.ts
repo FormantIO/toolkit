@@ -1,4 +1,4 @@
-import { Authentication, Fleet } from "../src/main";
+import { Authentication, App } from "../src/main";
 import "./style.css";
 
 (async function () {
@@ -7,8 +7,8 @@ import "./style.css";
   if (el) {
     try {
       await Authentication.waitTilAuthenticated();
-      const c = await Fleet.getCurrentDevice();
-      console.log(await c.getRealtimeVideoStreams());
+
+      App.addOverviewDeviceListener((_) => console.log(_));
 
       // console.log(l);
     } catch (error) {

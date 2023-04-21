@@ -1,10 +1,16 @@
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { QueryStore } from "./cache/queryStore";
-import { IStreamData, StreamType } from "./main";
+import { IStreamData, ITags, StreamType } from "./main";
 import { JsonSchema } from "./model/JsonSchema";
 
 const queryStore = new QueryStore();
+
+export interface IDevice {
+  name: string;
+  id: string;
+  tags: ITags;
+}
 
 export type AppMessage =
   | { type: "go_to_time"; time: number }
@@ -45,6 +51,10 @@ export type ModuleConfigurationMessage = {
 };
 
 export type EmbeddedAppMessage =
+  | {
+      type: "overview_devices";
+      data: IDevice[];
+    }
   | {
       type: "module_menu_item_clicked";
       menu: string;
@@ -260,6 +270,19 @@ export class App {
     });
   }
 
+  static addOverviewDeviceListener(handler: (devices: IDevice[]) => void) {
+    this.sendAppMessage({ type: "request_devices" });
+    const listener = (event: MessageEvent<any>) => {
+      const msg = event.data as EmbeddedAppMessage;
+      if (msg.type === "overview_devices") {
+        handler(msg.data);
+      }
+    };
+    window.addEventListener("message", listener);
+
+    return () => window.removeEventListener("message", listener);
+  }
+
   static addStreamListener(
     streamNames: string[],
     streamTypes: StreamType[],
@@ -308,14 +331,6 @@ export class App {
           data: msg.data,
         });
       }
-    });
-  }
-
-  static requestOverviewDevices(handler: (data: any) => void) {
-    this.sendAppMessage({ type: "request_devices" });
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      handler(msg);
     });
   }
 
