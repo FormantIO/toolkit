@@ -295,14 +295,22 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   private initConnectionMonitoring() {
-    this.connectionMonitorInterval = setInterval(() => {
-      if (!this.rtcClient || !this.remoteDevicePeerId || this.rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected") {
+    this.connectionMonitorInterval = setInterval(async () => {
+      if (!this.isV2Signaling(this.rtcClient)) {
+        return;
+      }
+
+      if (!this.rtcClient || !this.remoteDevicePeerId || await this.rtcClient.getConnectionStatsInfo(this.remoteDevicePeerId) === undefined) {
         this.emit("disconnect");
         this.stopRealtimeConnection().catch((err) => {
           console.error(err);
         })
       }
     }, 1000);
+  }
+
+  private isV2Signaling(rtcClient: RtcClient | RtcClientV1 | undefined): rtcClient is RtcClient {
+    return (rtcClient as RtcClient).getConnectionStatsInfo !== undefined;
   }
 
   private stopConnectionMonitoring() {
