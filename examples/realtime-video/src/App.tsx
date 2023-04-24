@@ -14,7 +14,10 @@ function timeout(ms: number) {
 
 function App() {
   const context = useFormant();
-  const { camera } = context.configuration as { camera: string };
+  const { camera, isTeleopModule } = context.configuration as {
+    camera: string;
+    isTeleopModule: boolean;
+  };
   const device = useDevice();
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +35,15 @@ function App() {
 
   useEffect(() => {
     if (!device || !camera) return;
+    if (!isTeleopModule) {
+      setLoading(false);
+      return;
+    }
     waitForConnection();
+
+    return () => {
+      device.stopRealtimeConnection();
+    };
   }, [device, camera]);
 
   return (
