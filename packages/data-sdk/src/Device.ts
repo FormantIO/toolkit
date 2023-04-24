@@ -597,7 +597,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     data?: string,
     time?: Date,
     metadata?: {}
-  ): Promise<void> {
+  ): Promise<Response> {
     const commands = await this.getAvailableCommands();
     const command = commands.find((_) => _.name === name);
     if (!command) {
@@ -623,7 +623,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       },
     };
 
-    await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
+   const res =  await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
       method: "POST",
       body: JSON.stringify({
         commandTemplateId: command.id,
@@ -638,6 +638,20 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         Authorization: "Bearer " + Authentication.token,
       },
     });
+
+    return res;
+  }
+
+  async getCommand(id:string):Promise<Response>{
+    const res = await fetch(
+      `${FORMANT_API_URL}/v1/admin/commands/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+    });
+    return res;
   }
 
   async createCustomDataChannel(
