@@ -32,7 +32,7 @@ const reduceStreamValues = (
 
     if (currentStream.type === "numeric set") {
       const keys = (value as INumericSetEntry[]).map((_) => ({
-        [_.label]: `${Math.floor(_.value)}${_.unit}`,
+        [_.label]: `${_.value.toFixed(2)}${_.unit ?? ""}`,
       }));
       const numericSet = { [currentStream.name]: keys };
 

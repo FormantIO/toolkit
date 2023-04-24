@@ -66,7 +66,6 @@ export const Table: FC<IMainProps> = ({
       p[c[0]] = c[1];
       return p;
     }, {});
-
     return numericSets;
   }, [currentValues]);
 

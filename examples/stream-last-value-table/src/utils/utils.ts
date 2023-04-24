@@ -82,12 +82,12 @@ export const handleStreamStatus = (
   if (Object.keys(currentValues).length === 0) return "offline";
   if (!Object.keys(currentValues).includes(streamName)) return "offline";
   if (configuration[streamName] === undefined) return "good";
-  if (configuration[streamName] instanceof String) {
+  if (typeof configuration[streamName] === "string") {
     return configuration[streamName] === currentValues[streamName]
       ? "good"
       : "warning";
   }
-  if (configuration[streamName] instanceof Boolean) {
+  if (typeof configuration[streamName] === "boolean") {
     return configuration[streamName] === currentValues[streamName]
       ? "good"
       : "warning";
