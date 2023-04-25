@@ -69,8 +69,6 @@ export const CommandRow: FC<ICommandRowProps> = ({
       setDisabled(true);
       if (!device) return;
 
-      console.log(param, parameterValue)
-
       device.sendCommand(name,  parameterValue ?? param, undefined, meta);
       setTimeout(() => {
         setDisabled(false);
@@ -78,7 +76,7 @@ export const CommandRow: FC<ICommandRowProps> = ({
     } catch (error) {
       throw error;
     }
-  }, [device, param]);
+  }, [device, param, parameterValue]);
 
   return (
     <Row>
