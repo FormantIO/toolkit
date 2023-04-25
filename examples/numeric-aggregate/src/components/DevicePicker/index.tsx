@@ -1,9 +1,10 @@
 import { useDevices } from "./useDevices";
 import { DeviceSwitch } from "./DeviceSwitch";
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { useState, useReducer } from "react";
 import styles from "./index.module.scss";
 import { IconInput } from "./IconInput";
+import { Authentication } from "@formant/data-sdk";
 
 interface IListPicker {
   options: string[];
@@ -18,6 +19,11 @@ export const DevicePicker: FC<IListPicker> = ({
   maxList,
   setEnabled,
 }) => {
+  useEffect(() => {
+    Authentication.waitTilAuthenticated().then((_) => {
+      Authentication.listenForRefresh();
+    });
+  }, []);
   const [filters, setFilters] = useState<string>("");
 
   const handleFilterDevices = useCallback((value: string | null) => {

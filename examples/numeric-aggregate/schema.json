@@ -6,6 +6,7 @@
   "type": "object",
   "properties": {
     "fullScreenMode": {
+      "name": "Teleop Mode",
       "type": "boolean"
     },
     "streamType": {
