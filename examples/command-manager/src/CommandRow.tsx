@@ -34,7 +34,7 @@ export const CommandRow: FC<ICommandRowProps> = ({
   meta,
   parameterValue,
 }) => {
-  const [param, setParam] = useState(parameterValue);
+  const [param, setParam] = useState("");
   const [disabled, setDisabled] = useState(false);
   const dropdownItem = useDropDownItems(device, streamName);
   const [responsiveDescription, setResponisveDescription] = useState("");
@@ -53,6 +53,7 @@ export const CommandRow: FC<ICommandRowProps> = ({
   }, [description]);
 
   useEffect(() => {
+    console.log(meta, parameterValue,)
     if (!description) return;
     handleResponsiveDescription();
     window.addEventListener("resize", handleResponsiveDescription);
@@ -68,7 +69,9 @@ export const CommandRow: FC<ICommandRowProps> = ({
       setDisabled(true);
       if (!device) return;
 
-      device.sendCommand(name, param ?? "", undefined, meta);
+      console.log(param, parameterValue)
+
+      device.sendCommand(name,  parameterValue ?? param, undefined, meta);
       setTimeout(() => {
         setDisabled(false);
       }, 3000);
