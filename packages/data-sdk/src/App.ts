@@ -13,6 +13,8 @@ export interface IDevice {
 }
 
 export type AppMessage =
+  | { type: "get_end_date"; minTime?: Date }
+  | { type: "get_start_date"; maxTime?: Date }
   | { type: "go_to_time"; time: number }
   | {
       type: "prompt";
@@ -51,6 +53,14 @@ export type ModuleConfigurationMessage = {
 };
 
 export type EmbeddedAppMessage =
+  | {
+      type: "start_date";
+      data: string;
+    }
+  | {
+      type: "end_date";
+      data: string;
+    }
   | {
       type: "overview_devices";
       data: IDevice[];
@@ -350,6 +360,40 @@ export class App {
       const handler = (event: any) => {
         const msg = event.data as EmbeddedAppMessage;
         if (msg.type === "prompt_response" && msg.promptId === promptId) {
+          resolve(msg.data);
+        }
+        window.removeEventListener("message", handler);
+      };
+      window.addEventListener("message", handler);
+    });
+  }
+
+  static async getStartDate(maxTime?: Date) {
+    return new Promise((resolve) => {
+      this.sendAppMessage({
+        type: "get_start_date",
+        maxTime,
+      });
+      const handler = (event: any) => {
+        const msg = event.data as EmbeddedAppMessage;
+        if (msg.type === "start_date") {
+          resolve(msg.data);
+        }
+        window.removeEventListener("message", handler);
+      };
+      window.addEventListener("message", handler);
+    });
+  }
+
+  static async getEndDate(minTime?: Date) {
+    return new Promise((resolve) => {
+      this.sendAppMessage({
+        type: "get_end_date",
+        minTime,
+      });
+      const handler = (event: any) => {
+        const msg = event.data as EmbeddedAppMessage;
+        if (msg.type === "end_date") {
           resolve(msg.data);
         }
         window.removeEventListener("message", handler);

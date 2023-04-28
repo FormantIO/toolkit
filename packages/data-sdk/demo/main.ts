@@ -7,10 +7,13 @@ import "./style.css";
   if (el) {
     try {
       await Authentication.waitTilAuthenticated();
-
-      App.addOverviewDeviceListener((_) => console.log(_));
-
-      // console.log(l);
+      const b = document.getElementById("btn");
+      b?.addEventListener("click", async () => {
+        const d = await App.getEndDate(
+          new Date("Sat Apr 20 2023 00:00:00 GMT-0500 (Central Daylight Time)")
+        );
+        console.log(d);
+      });
     } catch (error) {
       console.log(error);
     }
