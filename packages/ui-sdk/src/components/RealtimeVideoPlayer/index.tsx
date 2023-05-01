@@ -20,12 +20,16 @@ interface IRealtimeVideoPlayerProps {
   device: Device;
   id: string;
   cameraName: string;
+  width?: string;
+  height?: string;
 }
 
 export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
   device,
   id,
   cameraName,
+  height,
+  width,
 }) => {
   const [loading, setIsLoading] = useState(true);
 
@@ -69,23 +73,30 @@ export const RealtimeVideoPlayer: FC<IRealtimeVideoPlayerProps> = ({
   }, [device]);
 
   return (
-    <Container>
+    <Container height={height} width={width}>
       {loading && <LoadingIndicator></LoadingIndicator>}
       <formant-realtime-player
         id={id}
         style={{
           display: loading ? "none" : "block",
           backgroundColor: "transparent",
+          height: "100%",
+          width: "100%",
         }}
       />
     </Container>
   );
 };
 
-const Container = styled.div`
+interface IContainer {
+  height?: string;
+  width?: string;
+}
+
+const Container = styled.div<IContainer>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  width: ${(props) => (!!props.width ? props.width : "100%")};
+  height: ${(props) => (!!props.height ? props.height : "100%")};
 `;
