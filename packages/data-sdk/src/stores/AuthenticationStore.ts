@@ -21,6 +21,8 @@ export class AuthenticationStore implements IAuthenticationStore {
   #defaultDeviceId: string | undefined;
   #token: string | undefined;
   #waitingForAuth: Set<(result: boolean) => void> = new Set();
+  #refreshTimer: ReturnType<typeof setTimeout> | undefined;
+
   readonly #apiUrl: string;
   readonly #refreshAuthToken: () => void;
   readonly #addAccessTokenRefreshListener: (
@@ -105,6 +107,7 @@ export class AuthenticationStore implements IAuthenticationStore {
       this.#isShareToken =
         tokenData["formant:claims"] &&
         tokenData["formant:claims"].type == "share";
+
       if (tokenData["formant:claims"]) {
         this.#currentOrganization = tokenData["formant:claims"].organizationId;
       }
@@ -184,13 +187,23 @@ export class AuthenticationStore implements IAuthenticationStore {
 
   async listenForRefresh() {
     // refresh token every hour
+    const hour = 1000 * 60 * 60;
+    const askForFreshToken = () => {
+      this.#refreshTimer = undefined;
+      this.#refreshAuthToken();
+    };
+
     this.#addAccessTokenRefreshListener((token: string) => {
+      if (this.#refreshTimer) {
+        // unless I get a fresh token sooner
+        clearTimeout(this.#refreshTimer);
+      }
       this.loginWithToken(token);
+      this.#refreshTimer = setTimeout(askForFreshToken, hour);
     });
 
-    setInterval(async () => {
-      this.#refreshAuthToken();
-    }, 1000 * 60 * 60);
+    // refresh token every hour
+    this.#refreshTimer = setTimeout(askForFreshToken, hour);
   }
 
   async forgotPassword(email: string) {
