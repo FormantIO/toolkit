@@ -26,9 +26,11 @@ export class AuthenticationStore implements IAuthenticationStore {
   #currentUser: User | undefined;
   #defaultDeviceId: string | undefined;
   #token: string | undefined;
-  #apiUrl: string;
-  #refreshAuthToken: () => void;
-  #addAccessTokenRefreshListener: (callback: (token: string) => void) => void;
+  readonly #apiUrl: string;
+  readonly #refreshAuthToken: () => void;
+  readonly #addAccessTokenRefreshListener: (
+    callback: (token: string) => void
+  ) => void;
 
   private waitingForAuth: ((result: boolean) => void)[] = [];
 
