@@ -14,14 +14,8 @@ interface IAuthenticationStoreOptions {
 }
 
 export class AuthenticationStore implements IAuthenticationStore {
-  /**
-   * @deprecated Do not use directly. This will be removed in future versions of the API
-   */
-  refreshToken: string | undefined;
-  /**
-   * @deprecated Do not use directly. This will be removed in future versions of the API
-   */
-  isShareToken: boolean = false;
+  #refreshToken: string | undefined;
+  #isShareToken: boolean = false;
   #currentOrganization: string | undefined;
   #currentUser: User | undefined;
   #defaultDeviceId: string | undefined;
@@ -60,6 +54,20 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this.#defaultDeviceId;
   }
 
+  /**
+   * @deprecated Do not use directly. This will be removed in future versions of the API
+   */
+  get refreshToken(): string | undefined {
+    return this.#refreshToken;
+  }
+
+  /**
+   * @deprecated Do not use directly. This will be removed in future versions of the API
+   */
+  get isShareToken(): boolean {
+    return this.#isShareToken;
+  }
+
   async login(
     email: string,
     password: string
@@ -95,7 +103,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       let userId: string | undefined;
-      this.isShareToken =
+      this.#isShareToken =
         tokenData["formant:claims"] &&
         tokenData["formant:claims"].type == "share";
       if (tokenData["formant:claims"]) {
@@ -104,7 +112,8 @@ export class AuthenticationStore implements IAuthenticationStore {
       if (tokenData["custom:organization_id"]) {
         this.#currentOrganization = tokenData["custom:organization_id"];
       }
-      if (!this.isShareToken) {
+
+      if (!this.#isShareToken) {
         userId = tokenData.sub;
       }
       if (tokenData["formant:claims"] && tokenData["formant:claims"].userId) {
@@ -133,9 +142,9 @@ export class AuthenticationStore implements IAuthenticationStore {
     this.waitingForAuth = [];
 
     if (refreshToken) {
-      this.refreshToken = refreshToken;
+      this.#refreshToken = refreshToken;
       setInterval(async () => {
-        if (this.refreshToken) {
+        if (this.#refreshToken) {
           const result = await fetch(`${this.#apiUrl}/v1/admin/auth/refresh`, {
             method: "POST",
             headers: {
