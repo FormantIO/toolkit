@@ -121,7 +121,8 @@ export class AuthenticationStore implements IAuthenticationStore {
       if (tokenData["formant:claims"] && tokenData["formant:claims"].userId) {
         userId = tokenData["formant:claims"].userId;
       }
-      if (userId) {
+
+      if (userId && this.#currentUser?.id !== userId) {
         const result = await fetch(`${this.#apiUrl}/v1/admin/users/${userId}`, {
           method: "GET",
           headers: {
@@ -154,7 +155,7 @@ export class AuthenticationStore implements IAuthenticationStore {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              refreshToken: this.refreshToken,
+              refreshToken: this.#refreshToken,
             }),
           });
           const refreshData = await result.json();
