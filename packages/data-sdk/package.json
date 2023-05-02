@@ -23,6 +23,8 @@
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "test": "concurrently --kill-others-on-fail npm:test:*",
+    "test:unit": "vitest",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
@@ -31,10 +33,12 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@types/node": "^18.16.3",
+    "concurrently": "^8.0.1",
+    "grpc-web": "1.2.1",
     "typedoc": "^0.24.6",
     "typescript": "^5.0.4",
     "vite": "^4.3.3",
-    "grpc-web": "1.2.1"
+    "vitest": "^0.30.1"
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
