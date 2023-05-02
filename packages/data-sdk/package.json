@@ -40,5 +40,8 @@
   "dependencies": {
     "@formant/realtime-sdk": "0.0.20",
     "date-fns": "^2.30.0"
+  },
+  "engines": {
+    "node": "^18.12.0"
   }
 }
