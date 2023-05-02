@@ -27,7 +27,7 @@ import { IEventQuery } from "./main";
 import { AggregateLevel } from "./main";
 import { EventType } from "./main";
 import { IShare } from "./model/IShare";
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -300,16 +300,24 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         return;
       }
 
-      if (!this.rtcClient || !this.remoteDevicePeerId || await this.rtcClient.getConnectionStatsInfo(this.remoteDevicePeerId) === undefined) {
+      if (
+        !this.rtcClient ||
+        !this.remoteDevicePeerId ||
+        (await this.rtcClient.getConnectionStatsInfo(
+          this.remoteDevicePeerId
+        )) === undefined
+      ) {
         this.emit("disconnect");
         this.stopRealtimeConnection().catch((err) => {
           console.error(err);
-        })
+        });
       }
     }, 1000);
   }
 
-  private isV2Signaling(rtcClient: RtcClient | RtcClientV1 | undefined): rtcClient is RtcClient {
+  private isV2Signaling(
+    rtcClient: RtcClient | RtcClientV1 | undefined
+  ): rtcClient is RtcClient {
     return (rtcClient as RtcClient).getConnectionStatsInfo !== undefined;
   }
 
@@ -623,7 +631,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       },
     };
 
-   const res =  await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
+    const res = await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
       method: "POST",
       body: JSON.stringify({
         commandTemplateId: command.id,
@@ -642,14 +650,13 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     return res;
   }
 
-  async getCommand(id:string):Promise<Response>{
-    const res = await fetch(
-      `${FORMANT_API_URL}/v1/admin/commands/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
+  async getCommand(id: string): Promise<Response> {
+    const res = await fetch(`${FORMANT_API_URL}/v1/admin/commands/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
     });
     return res;
   }

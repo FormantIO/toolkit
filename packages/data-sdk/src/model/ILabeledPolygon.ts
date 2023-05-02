@@ -1,4 +1,4 @@
 export interface ILabeledPolygon {
-    vertices: [number, number][];
-    labels: string[];
+  vertices: [number, number][];
+  labels: string[];
 }

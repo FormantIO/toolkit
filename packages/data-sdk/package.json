@@ -23,6 +23,10 @@
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "test": "concurrently --kill-others-on-fail npm:test:*",
+    "test:unit": "vitest",
+    "prettier:check": "prettier --check src/",
+    "prettier:write": "prettier --write src/",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
@@ -30,15 +34,21 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@rollup/plugin-node-resolve": "^15.0.2",
-    "@types/node": "^18.15.11",
-    "typedoc": "^0.22.13",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0",
-    "grpc-web": "1.2.1"
+    "@types/node": "^18.16.3",
+    "concurrently": "^8.0.1",
+    "grpc-web": "1.2.1",
+    "prettier": "2.8.8",
+    "typedoc": "^0.24.6",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.3",
+    "vitest": "^0.30.1"
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
     "@formant/realtime-sdk": "0.0.20",
-    "date-fns": "^2.29.3"
+    "date-fns": "^2.30.0"
+  },
+  "engines": {
+    "node": "^18.12.0 || ^16.13.0"
   }
 }

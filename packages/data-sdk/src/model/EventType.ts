@@ -1,3 +1,3 @@
 import { eventTypes } from "./eventTypes";
 
-export type EventType = typeof eventTypes[number];
+export type EventType = (typeof eventTypes)[number];

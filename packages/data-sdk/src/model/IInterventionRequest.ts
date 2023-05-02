@@ -4,9 +4,9 @@ import { IInterventionTypeMap } from "./IInterventionTypeMap";
 import { InterventionType } from "./InterventionType";
 
 export interface IInterventionRequest<
-    T extends InterventionType = InterventionType
+  T extends InterventionType = InterventionType
 > extends IBaseEvent<"intervention-request"> {
-    interventionType: T;
-    data: IInterventionTypeMap[T]["request"];
-    responses?: IInterventionResponse<T>[];
+  interventionType: T;
+  data: IInterventionTypeMap[T]["request"];
+  responses?: IInterventionResponse<T>[];
 }

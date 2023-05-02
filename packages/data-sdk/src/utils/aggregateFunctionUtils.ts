@@ -12,7 +12,7 @@ export const vailableAggregationIntervals = [
 ] as const;
 
 export type ValidAggregationInterval =
-  typeof vailableAggregationIntervals[number];
+  (typeof vailableAggregationIntervals)[number];
 
 export type IAggregateByDateFunctions = {
   [key in ValidAggregationInterval]: AggregateFunction;
@@ -26,7 +26,7 @@ export const aggregateFunctions = [
   "get",
 ] as const;
 
-export type AggregateFunctions = typeof aggregateFunctions[number];
+export type AggregateFunctions = (typeof aggregateFunctions)[number];
 
 export type AggregateFunction = {
   [key in AggregateFunctions]: any;

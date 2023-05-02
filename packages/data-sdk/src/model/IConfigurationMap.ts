@@ -1,3 +1,3 @@
 export interface IConfigurationMap {
-    [key: string]: string;
+  [key: string]: string;
 }
