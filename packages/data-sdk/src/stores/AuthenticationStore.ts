@@ -20,13 +20,12 @@ export class AuthenticationStore implements IAuthenticationStore {
   #currentUser: User | undefined;
   #defaultDeviceId: string | undefined;
   #token: string | undefined;
+  #waitingForAuth: Set<(result: boolean) => void> = new Set();
   readonly #apiUrl: string;
   readonly #refreshAuthToken: () => void;
   readonly #addAccessTokenRefreshListener: (
     callback: (token: string) => void
   ) => void;
-
-  private waitingForAuth: ((result: boolean) => void)[] = [];
 
   constructor({
     apiUrl,
@@ -92,8 +91,8 @@ export class AuthenticationStore implements IAuthenticationStore {
       return auth.authentication;
     } catch (err: unknown) {
       console.error("login() failed", { err });
-      this.waitingForAuth.forEach((_) => _(false));
-      this.waitingForAuth = [];
+      this.#waitingForAuth.forEach((_) => _(false));
+      this.#waitingForAuth.clear();
 
       return Promise.reject(err);
     }
@@ -134,12 +133,13 @@ export class AuthenticationStore implements IAuthenticationStore {
         this.#currentUser = data;
       }
       this.#token = token;
-      this.waitingForAuth.forEach((_) => _(true));
+      this.#waitingForAuth.forEach((_) => _(true));
     } catch (err: unknown) {
       console.error("loginWithToken() failed", { err });
-      this.waitingForAuth.forEach((_) => _(false));
+      this.#waitingForAuth.forEach((_) => _(false));
+    } finally {
+      this.#waitingForAuth.clear();
     }
-    this.waitingForAuth = [];
 
     if (refreshToken) {
       this.#refreshToken = refreshToken;
@@ -177,9 +177,7 @@ export class AuthenticationStore implements IAuthenticationStore {
       return true;
     } else {
       return new Promise((resolve) => {
-        this.waitingForAuth.push(function (result: boolean) {
-          resolve(result);
-        });
+        this.#waitingForAuth.add(resolve);
       });
     }
   }
@@ -214,7 +212,6 @@ export class AuthenticationStore implements IAuthenticationStore {
    *     newPassword: "NewPassword"
    *   });
    */
-
   async confirmForgotPassword(request: IConfirmForgotPasswordRequest) {
     const response = await fetch(
       `${this.#apiUrl}/v1/admin/auth/confirm-forgot-password`,
