@@ -24,7 +24,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
-    "test:unit": "vitest",
+    "test:unit": "vitest run",
     "prettier:check": "prettier --check src/",
     "prettier:write": "prettier --write src/",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
