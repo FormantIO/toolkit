@@ -7,16 +7,16 @@ import { ITeleopRequestData } from "./ITeleopRequestData";
 import { ITeleopResponseData } from "./ITeleopResponseData";
 
 export interface IInterventionTypeMap {
-    selection: {
-        request: ISelectionRequestData;
-        response: ISelectionResponseData;
-    };
-    labeling: {
-        request: ILabelingRequestData;
-        response: ILabelingResponseData;
-    };
-    teleop: {
-        request: ITeleopRequestData;
-        response: ITeleopResponseData;
-    };
+  selection: {
+    request: ISelectionRequestData;
+    response: ISelectionResponseData;
+  };
+  labeling: {
+    request: ILabelingRequestData;
+    response: ILabelingResponseData;
+  };
+  teleop: {
+    request: ITeleopRequestData;
+    response: ITeleopResponseData;
+  };
 }

@@ -6,11 +6,11 @@ import { Uuid } from "./Uuid";
 // Result of a command
 // Sent by device when responding to a command
 export interface ICommandResponse {
-    time: IsoDate;
-    message: string;
-    success: boolean;
-    replyToCommandRequestId: Uuid;
-    streamName?: string;
-    streamType?: StreamType;
-    tags?: ITags;
+  time: IsoDate;
+  message: string;
+  success: boolean;
+  replyToCommandRequestId: Uuid;
+  streamName?: string;
+  streamType?: StreamType;
+  tags?: ITags;
 }

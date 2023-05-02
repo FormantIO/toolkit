@@ -1,3 +1,3 @@
 import { severities } from "./severities";
 
-export type Severity = typeof severities[number];
+export type Severity = (typeof severities)[number];

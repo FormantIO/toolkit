@@ -1,3 +1,3 @@
 import { analyticsAggregateTypes } from "./analyticsAggregteTypes";
 
-export type AnalyticsAggregateType = typeof analyticsAggregateTypes[number];
+export type AnalyticsAggregateType = (typeof analyticsAggregateTypes)[number];

@@ -1,4 +1,4 @@
 export interface ISpreadsheetIdRange {
-    spreadsheetId: string;
-    range: string;
+  spreadsheetId: string;
+  range: string;
 }

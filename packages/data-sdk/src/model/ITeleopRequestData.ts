@@ -1,3 +1,3 @@
 export interface ITeleopRequestData {
-    instruction: string;
+  instruction: string;
 }

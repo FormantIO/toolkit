@@ -1,3 +1,3 @@
 import { aggregateTypes } from "./aggregateTypes";
 
-export type AggregateType = typeof aggregateTypes[number];
+export type AggregateType = (typeof aggregateTypes)[number];

@@ -25,6 +25,8 @@
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest",
+    "prettier:check": "prettier --check src/",
+    "prettier:write": "prettier --write src/",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
@@ -35,6 +37,7 @@
     "@types/node": "^18.16.3",
     "concurrently": "^8.0.1",
     "grpc-web": "1.2.1",
+    "prettier": "2.8.8",
     "typedoc": "^0.24.6",
     "typescript": "^5.0.4",
     "vite": "^4.3.3",
