@@ -305,8 +305,13 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         (_) => _.getRemotePeerId() === this.remoteDevicePeerId && _.isActive()
       );
       let dataChannelClosed = false;
-      if (!connection?.isReady()) {
+      if (connection === undefined || !connection.isReady()) {
+        console.debug(`${new Date().toISOString()} :: data channel closed`);
         dataChannelClosed = true;
+      } else {
+        console.debug(
+          `${new Date().toISOString()} :: data channel appears active`
+        );
       }
 
       if (
