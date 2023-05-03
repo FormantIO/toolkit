@@ -24,11 +24,7 @@ describe("AuthenticationStore", () => {
     expect(authStore.currentUser).toBeUndefined();
     expect(authStore.currentOrganization).toBeUndefined();
 
-    authStore.loginWithToken(
-      fakeJwt({
-        // TODO this kind of concerns me that this doesn't do any validation of the JWT, or ask if its _valid_, before trusting it
-      })
-    );
+    authStore.loginWithToken(fakeJwt({}));
 
     expect(authStore.isAuthenticated()).toBe(true);
     expect(authStore.token).toBeDefined();
