@@ -199,8 +199,8 @@ export class AuthenticationStore implements IAuthenticationStore {
         // unless I get a fresh token sooner
         clearTimeout(this.#refreshTimer);
       }
-      this.loginWithToken(token);
       this.#refreshTimer = setTimeout(askForFreshToken, hour);
+      this.loginWithToken(token);
     });
 
     // refresh token every hour
