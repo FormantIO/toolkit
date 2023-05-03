@@ -223,7 +223,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async startRealtimeConnection(sessionType?: number) {
-    if (!this.rtcClient) {
+    if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
       let rtcClient;
 
       if (rtcClientVersion === "1") {
@@ -575,7 +575,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     if (this.rtcClient) {
       this.stopConnectionMonitoring();
       await this.rtcClient.disconnect(this.id);
-      this.rtcClient = undefined;
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
