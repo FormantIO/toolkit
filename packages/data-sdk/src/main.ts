@@ -160,3 +160,11 @@ export * from "./model/ISqlResult";
 export * from "./model/IAnalyticsModuleConfiguration";
 export * from "./model/IAggregateRow";
 export * from "./model/ISqlRow";
+
+export type {
+  IAuthenticationStore,
+  User,
+  IAuthentication,
+  IConfirmForgotPasswordRequest,
+  IRespondToNewPasswordRequiredChallengeRequest,
+} from "./stores/IAuthenticationStore";

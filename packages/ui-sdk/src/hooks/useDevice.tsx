@@ -1,30 +1,29 @@
 import { Authentication, Fleet, Device } from "@formant/data-sdk";
-import * as React from "react";
+import { useState, useEffect } from "react";
 
-const useDevice = (deviceId?: string): Device => {
-  const [device, setDevice] = React.useState<Device | undefined>();
+async function getCurrentDevice(deviceId: string | undefined): Promise<Device> {
+  if (!(await Authentication.waitTilAuthenticated())) {
+    throw new Error("Unauthenticated");
+  }
 
-  React.useEffect(() => {
-    getCurrentDevice();
-  }, []);
+  return !!deviceId
+    ? await Fleet.getDevice(deviceId)
+    : await Fleet.getCurrentDevice();
+}
 
-  const getCurrentDevice = async () => {
-    try {
-      if (await Authentication.waitTilAuthenticated()) {
-        if (!!deviceId) {
-          const _selectedDevice = await Fleet.getDevice(deviceId);
-          setDevice(_selectedDevice);
-          return;
-        }
-        const _current = await Fleet.getCurrentDevice();
-        setDevice(_current);
-      }
-    } catch (err) {
-      throw new Error(
-        "Authentication failed, please authenticate and try again"
-      );
-    }
-  };
+const useDevice = (deviceId?: string): Device | undefined => {
+  const [device, setDevice] = useState<Device | undefined>();
+
+  useEffect(() => {
+    getCurrentDevice(deviceId)
+      .then((device) => setDevice(device))
+      .catch((err: unknown) => {
+        console.log("Failed fetching device", { err });
+        throw new Error(
+          "Authentication failed, please authenticate and try again"
+        );
+      });
+  }, [deviceId]);
 
   return device;
 };
