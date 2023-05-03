@@ -1,4 +1,5 @@
 prepublish:
-	yarn build
-	yarn types
-	yarn docs
+	npm run test
+	npm run build
+	npm run types
+	npm run docs
