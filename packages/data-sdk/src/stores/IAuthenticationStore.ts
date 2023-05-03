@@ -47,9 +47,6 @@ export interface IAuthenticationStore {
 
   isAuthenticated(): boolean;
 
-  /**
-   * @deprecated use currentUser property instead.
-   */
   getCurrentUser(): User | undefined;
 
   waitTilAuthenticated(): Promise<boolean>;
