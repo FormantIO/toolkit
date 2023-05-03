@@ -300,12 +300,27 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         return;
       }
 
+      const rtcConnections = this.rtcClient.getConnections();
+      const connection = rtcConnections.find(
+        (_) => _.getRemotePeerId() === this.remoteDevicePeerId && _.isActive()
+      );
+      let dataChannelClosed = false;
+      if (connection === undefined || !connection.isReady()) {
+        console.debug(`${new Date().toISOString()} :: data channel closed`);
+        dataChannelClosed = true;
+      } else {
+        console.debug(
+          `${new Date().toISOString()} :: data channel appears active`
+        );
+      }
+
       if (
         !this.rtcClient ||
         !this.remoteDevicePeerId ||
         (await this.rtcClient.getConnectionStatsInfo(
           this.remoteDevicePeerId
-        )) === undefined
+        )) === undefined ||
+        dataChannelClosed
       ) {
         this.emit("disconnect");
         this.stopRealtimeConnection().catch((err) => {
