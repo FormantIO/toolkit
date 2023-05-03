@@ -24,7 +24,6 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
-    "test:unit": "vitest",
     "prettier:check": "prettier --check src/",
     "prettier:write": "prettier --write src/",
     "types": "tsc src/*.ts --lib ESNext,DOM --declaration --emitDeclarationOnly --downlevelIteration --outDir dist/types",
@@ -40,8 +39,7 @@
     "prettier": "2.8.8",
     "typedoc": "^0.24.6",
     "typescript": "^5.0.4",
-    "vite": "^4.3.3",
-    "vitest": "^0.30.1"
+    "vite": "^4.3.3"
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
