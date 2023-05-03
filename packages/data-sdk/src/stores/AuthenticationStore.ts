@@ -14,18 +14,18 @@ interface IAuthenticationStoreOptions {
 }
 
 export class AuthenticationStore implements IAuthenticationStore {
-  #refreshToken: string | undefined;
-  #isShareToken: boolean = false;
-  #currentOrganization: string | undefined;
-  #currentUser: User | undefined;
-  #defaultDeviceId: string | undefined;
-  #token: string | undefined;
-  #waitingForAuth: Set<(result: boolean) => void> = new Set();
-  #refreshTimer: ReturnType<typeof setTimeout> | undefined;
+  private _refreshToken: string | undefined;
+  private _isShareToken: boolean = false;
+  private _currentOrganization: string | undefined;
+  private _currentUser: User | undefined;
+  private _defaultDeviceId: string | undefined;
+  private _token: string | undefined;
+  private _waitingForAuth: Set<(result: boolean) => void> = new Set();
+  private _refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
-  readonly #apiUrl: string;
-  readonly #refreshAuthToken: () => void;
-  readonly #addAccessTokenRefreshListener: (
+  private readonly _apiUrl: string;
+  private readonly _refreshAuthToken: () => void;
+  private readonly _addAccessTokenRefreshListener: (
     callback: (token: string) => void
   ) => void;
 
@@ -34,39 +34,39 @@ export class AuthenticationStore implements IAuthenticationStore {
     refreshAuthToken,
     addAccessTokenRefreshListener,
   }: IAuthenticationStoreOptions) {
-    this.#apiUrl = apiUrl;
-    this.#refreshAuthToken = refreshAuthToken;
-    this.#addAccessTokenRefreshListener = addAccessTokenRefreshListener;
+    this._apiUrl = apiUrl;
+    this._refreshAuthToken = refreshAuthToken;
+    this._addAccessTokenRefreshListener = addAccessTokenRefreshListener;
   }
 
   get token(): string | undefined {
-    return this.#token;
+    return this._token;
   }
 
   get currentUser(): User | undefined {
-    return this.#currentUser;
+    return this._currentUser;
   }
 
   get currentOrganization(): string | undefined {
-    return this.#currentOrganization;
+    return this._currentOrganization;
   }
 
   get defaultDeviceId(): string | undefined {
-    return this.#defaultDeviceId;
+    return this._defaultDeviceId;
   }
 
   /**
    * @deprecated Do not use directly. This will be removed in future versions of the API
    */
   get refreshToken(): string | undefined {
-    return this.#refreshToken;
+    return this._refreshToken;
   }
 
   /**
    * @deprecated Do not use directly. This will be removed in future versions of the API
    */
   get isShareToken(): boolean {
-    return this.#isShareToken;
+    return this._isShareToken;
   }
 
   async login(
@@ -74,7 +74,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     password: string
   ): Promise<IAuthentication | Error> {
     try {
-      const result = await fetch(`${this.#apiUrl}/v1/admin/auth/login`, {
+      const result = await fetch(`${this._apiUrl}/v1/admin/auth/login`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -93,8 +93,8 @@ export class AuthenticationStore implements IAuthenticationStore {
       return auth.authentication;
     } catch (err: unknown) {
       console.error("login() failed", { err });
-      this.#waitingForAuth.forEach((_) => _(false));
-      this.#waitingForAuth.clear();
+      this._waitingForAuth.forEach((_) => _(false));
+      this._waitingForAuth.clear();
 
       return Promise.reject(err);
     }
@@ -104,26 +104,26 @@ export class AuthenticationStore implements IAuthenticationStore {
     const tokenData = JSON.parse(atob(token.split(".")[1]));
     try {
       let userId: string | undefined;
-      this.#isShareToken =
+      this._isShareToken =
         tokenData["formant:claims"] &&
         tokenData["formant:claims"].type == "share";
 
       if (tokenData["formant:claims"]) {
-        this.#currentOrganization = tokenData["formant:claims"].organizationId;
+        this._currentOrganization = tokenData["formant:claims"].organizationId;
       }
       if (tokenData["custom:organization_id"]) {
-        this.#currentOrganization = tokenData["custom:organization_id"];
+        this._currentOrganization = tokenData["custom:organization_id"];
       }
 
-      if (!this.#isShareToken) {
+      if (!this._isShareToken) {
         userId = tokenData.sub;
       }
       if (tokenData["formant:claims"] && tokenData["formant:claims"].userId) {
         userId = tokenData["formant:claims"].userId;
       }
 
-      if (userId && this.#currentUser?.id !== userId) {
-        const result = await fetch(`${this.#apiUrl}/v1/admin/users/${userId}`, {
+      if (userId && this._currentUser?.id !== userId) {
+        const result = await fetch(`${this._apiUrl}/v1/admin/users/${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -134,46 +134,46 @@ export class AuthenticationStore implements IAuthenticationStore {
         if (result.status !== 200) {
           throw new Error(data.message);
         }
-        this.#currentUser = data;
+        this._currentUser = data;
       }
-      this.#token = token;
-      this.#waitingForAuth.forEach((_) => _(true));
+      this._token = token;
+      this._waitingForAuth.forEach((_) => _(true));
     } catch (err: unknown) {
       console.error("loginWithToken() failed", { err });
-      this.#waitingForAuth.forEach((_) => _(false));
+      this._waitingForAuth.forEach((_) => _(false));
     } finally {
-      this.#waitingForAuth.clear();
+      this._waitingForAuth.clear();
     }
 
     if (refreshToken) {
-      this.#refreshToken = refreshToken;
+      this._refreshToken = refreshToken;
       setInterval(async () => {
-        if (this.#refreshToken) {
-          const result = await fetch(`${this.#apiUrl}/v1/admin/auth/refresh`, {
+        if (this._refreshToken) {
+          const result = await fetch(`${this._apiUrl}/v1/admin/auth/refresh`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              refreshToken: this.#refreshToken,
+              refreshToken: this._refreshToken,
             }),
           });
           const refreshData = await result.json();
-          this.#token = refreshData.authentication.accessToken;
+          this._token = refreshData.authentication.accessToken;
         }
       }, 1000 * 60 * 60);
     }
   }
 
   isAuthenticated(): boolean {
-    return this.#token !== undefined;
+    return this._token !== undefined;
   }
 
   /**
    * @deprecated use currentUser property instead.
    */
   getCurrentUser(): User | undefined {
-    return this.#currentUser;
+    return this._currentUser;
   }
 
   async waitTilAuthenticated(): Promise<boolean> {
@@ -181,7 +181,7 @@ export class AuthenticationStore implements IAuthenticationStore {
       return true;
     } else {
       return new Promise((resolve) => {
-        this.#waitingForAuth.add(resolve);
+        this._waitingForAuth.add(resolve);
       });
     }
   }
@@ -190,25 +190,25 @@ export class AuthenticationStore implements IAuthenticationStore {
     // refresh token every hour
     const hour = 1000 * 60 * 60;
     const askForFreshToken = () => {
-      this.#refreshTimer = undefined;
-      this.#refreshAuthToken();
+      this._refreshTimer = undefined;
+      this._refreshAuthToken();
     };
 
-    this.#addAccessTokenRefreshListener((token: string) => {
-      if (this.#refreshTimer) {
+    this._addAccessTokenRefreshListener((token: string) => {
+      if (this._refreshTimer) {
         // unless I get a fresh token sooner
-        clearTimeout(this.#refreshTimer);
+        clearTimeout(this._refreshTimer);
       }
-      this.#refreshTimer = setTimeout(askForFreshToken, hour);
+      this._refreshTimer = setTimeout(askForFreshToken, hour);
       this.loginWithToken(token);
     });
 
     // refresh token every hour
-    this.#refreshTimer = setTimeout(askForFreshToken, hour);
+    this._refreshTimer = setTimeout(askForFreshToken, hour);
   }
 
   async forgotPassword(email: string) {
-    await fetch(`${this.#apiUrl}/v1/admin/auth/forgot-password`, {
+    await fetch(`${this._apiUrl}/v1/admin/auth/forgot-password`, {
       method: "POST",
       body: JSON.stringify({ email }),
       headers: {
@@ -228,7 +228,7 @@ export class AuthenticationStore implements IAuthenticationStore {
    */
   async confirmForgotPassword(request: IConfirmForgotPasswordRequest) {
     const response = await fetch(
-      `${this.#apiUrl}/v1/admin/auth/confirm-forgot-password`,
+      `${this._apiUrl}/v1/admin/auth/confirm-forgot-password`,
       {
         method: "POST",
         body: JSON.stringify(request),
@@ -245,9 +245,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     request: IRespondToNewPasswordRequiredChallengeRequest
   ) {
     const response = await fetch(
-      `${
-        this.#apiUrl
-      }/v1/admin/auth/respond-to-new-password-required-challenge`,
+      `${this._apiUrl}/v1/admin/auth/respond-to-new-password-required-challenge`,
       {
         method: "POST",
         body: JSON.stringify(request),
@@ -260,7 +258,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async loginWithGoogle(token: string) {
-    const response = await fetch(`${this.#apiUrl}/v1/admin/auth/login-google`, {
+    const response = await fetch(`${this._apiUrl}/v1/admin/auth/login-google`, {
       method: "POST",
       body: JSON.stringify(token),
       headers: {
@@ -271,7 +269,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async refresh(token: string) {
-    const result = await fetch(`${this.#apiUrl}/v1/admin/auth/refresh`, {
+    const result = await fetch(`${this._apiUrl}/v1/admin/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
