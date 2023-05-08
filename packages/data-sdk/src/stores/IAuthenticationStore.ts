@@ -3,6 +3,7 @@ export interface User {
   lastName: string;
   email: string;
   organizationId: string;
+  roleId: string;
   id: string;
 }
 
