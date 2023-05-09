@@ -32,7 +32,10 @@ import { EventEmitter } from "events";
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
 
+export type Uuid = string;
+
 export interface ConfigurationDocument {
+  tags: { [key: string]: string };
   urdfFiles: string[];
   telemetry?: {
     streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
@@ -52,6 +55,7 @@ export interface ConfigurationDocument {
       topicType: string;
     }[];
   };
+  adapters?: IAdapterConfiguration[];
 }
 
 export interface Command {
@@ -76,6 +80,14 @@ export interface IJointState {
 export interface TelemetryStream {
   name: string;
   onDemand: boolean;
+}
+
+export interface IAdapterConfiguration {
+  id: Uuid;
+  name: string;
+  fileId: Uuid;
+  execCommand: string;
+  configuration?: string;
 }
 
 export type RealtimeMessage = {
