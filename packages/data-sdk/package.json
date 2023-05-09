@@ -14,11 +14,17 @@
   "module": "./dist/data-sdk.es.js",
   "exports": {
     ".": {
-      "import": "./dist/data-sdk.es.js",
-      "require": "./dist/data-sdk.umd.js"
+      "import": {
+        "types": "./dist/types/data-sdk/src/main.d.ts",
+        "default": "./dist/data-sdk.es.js"
+      },
+      "require": {
+        "types": "./dist/types/data-sdk/src/main.d.ts",
+        "default": "./dist/data-sdk.umd.js"
+      }
     }
   },
-  "version": "0.0.146",
+  "version": "0.0.147",
   "scripts": {
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
