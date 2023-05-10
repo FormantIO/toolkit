@@ -26,7 +26,7 @@
   },
   "version": "0.0.147",
   "scripts": {
-    "dev": "vite --port 9146",
+    "dev": "vite --port 5173",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",

@@ -28,6 +28,7 @@ import { AggregateLevel } from "./main";
 import { EventType } from "./main";
 import { IShare } from "./model/IShare";
 import { EventEmitter } from "events";
+import { timeout } from "./main";
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -261,7 +262,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
           await delay(100);
         }
       }
-
       // Each online device and user has a peer in the system
       const peers = await rtcClient.getPeers();
 
@@ -274,7 +274,13 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
       // We can connect our real-time communication client to device peers by their ID
       this.remoteDevicePeerId = devicePeer.id;
-      await (rtcClient as RtcClient).connect(this.remoteDevicePeerId);
+      let isConnected = null;
+      while (typeof isConnected !== "string") {
+        isConnected = await (rtcClient as RtcClient).connect(
+          this.remoteDevicePeerId
+        );
+        await timeout(2000);
+      }
 
       // WebRTC requires a signaling phase when forming a new connection.
       // Wait for the signaling process to complete...
