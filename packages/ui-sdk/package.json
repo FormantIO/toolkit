@@ -12,9 +12,18 @@
   "homepage": "https://github.com/formantio/toolkit",
   "main": "./dist/ui-sdk.es.js",
   "exports": {
-    ".": "./dist/ui-sdk.es.js"
+    ".": {
+      "import": {
+        "types": "./dist/types/ui-sdk/src/main.d.ts",
+        "default": "./dist/ui-sdk.es.js"
+      },
+      "require": {
+        "types": "./dist/types/ui-sdk/src/main.d.ts",
+        "default": "./dist/ui-sdk.umd.js"
+      }
+    }
   },
-  "version": "0.0.50",
+  "version": "0.0.51",
   "scripts": {
     "dev": "vite --port 5173",
     "build": "vite build",
@@ -47,7 +56,7 @@
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@formant/data-sdk": "^0.0.144",
+    "@formant/data-sdk": "^0.0.147",
     "@formant/ui-sdk-realtime-player": "^0.0.9",
     "@mui/material": "^5.6.1",
     "@mui/utils": "^5.6.1",

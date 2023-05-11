@@ -71,9 +71,25 @@ function App() {
     });
   }, [device]);
 
+  const waitForConnection = React.useCallback(async () => {
+    let connected = false;
+    while (!connected) {
+      connected = await device.isInRealtimeSession();
+      console.warn("Waiting for the main connection to establish.");
+    }
+    console.warn("Main connection completed");
+
+    setIsLoading(false);
+  }, [device]);
+
+  React.useEffect(() => {
+    if (!device) return;
+    waitForConnection();
+  }, [device]);
+
   return (
     <div>
-      {!device ? (
+      {!device || loading ? (
         <></>
       ) : (
         <Container>
@@ -82,10 +98,10 @@ function App() {
               <RealtimeVideoPlayer
                 device={device}
                 id="aa"
-                cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera1"
+                cameraName=""
               />
             </Cell>
-            <Cell>
+            {/* <Cell>
               <RealtimeVideoPlayer
                 device={device}
                 id="dos"
@@ -105,7 +121,7 @@ function App() {
                 id="cuatro"
                 cameraName="rtsp.192.168.131.11.554"
               />
-            </Cell>
+            </Cell> */}
           </RealtimeConnection>
         </Container>
       )}
