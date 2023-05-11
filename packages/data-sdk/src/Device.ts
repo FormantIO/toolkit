@@ -28,7 +28,7 @@ import { AggregateLevel } from "./main";
 import { EventType } from "./main";
 import { IShare } from "./model/IShare";
 import { EventEmitter } from "events";
-import { timeout } from "./main";
+import { timeout, isRtcPeer } from "./main";
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -262,42 +262,62 @@ export class Device extends EventEmitter implements IRealtimeDevice {
           await delay(100);
         }
       }
-      // Each online device and user has a peer in the system
-      const peers = await rtcClient.getPeers();
-
-      // Find the device peer corresponding to the device's ID
-      const devicePeer = peers.find((_) => _.deviceId === this.id);
-      if (!devicePeer) {
-        // If the device is offline, we won't be able to find its peer.
-        throw new Error("Cannot find peer, is the robot offline?");
-      }
-
-      // We can connect our real-time communication client to device peers by their ID
-      this.remoteDevicePeerId = devicePeer.id;
-      let isConnected = null;
-      while (typeof isConnected !== "string") {
-        isConnected = await (rtcClient as RtcClient).connect(
-          this.remoteDevicePeerId
-        );
-        await timeout(2000);
-      }
 
       // WebRTC requires a signaling phase when forming a new connection.
-      // Wait for the signaling process to complete...
-      while (
-        rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
-      ) {
-        await delay(100);
-      }
-      this.rtcClient = rtcClient;
-      this.emit("connect");
 
-      this.initConnectionMonitoring();
+      this.remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
+
+      const sessionId = await this.createSession(rtcClient);
+
+      // Wait for the signaling process to complete...
+      if (!!sessionId) {
+        while (
+          rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
+        ) {
+          await delay(100);
+        }
+        this.rtcClient = rtcClient;
+        this.emit("connect");
+
+        this.initConnectionMonitoring();
+      } else {
+        throw new Error(`Unable to establish a connection at this time.`);
+      }
     } else {
       throw new Error(
         `Already created realtime connection to device ${this.id}`
       );
     }
+  }
+
+  private async getRemoteDevicePeerId(rtcClient: RtcClient | RtcClientV1) {
+    // Each online device and user has a peer in the system
+    const peers = await rtcClient.getPeers();
+
+    // Find the device peer corresponding to the device's ID
+    const devicePeer = peers.find((_) => _.deviceId === this.id);
+
+    if (!isRtcPeer(devicePeer)) {
+      // If the device is offline, we won't be able to find its peer.
+      throw new Error("Cannot find peer, is the robot offline?");
+    }
+    return devicePeer.id;
+  }
+
+  private async createSession(rtcClient: RtcClient | RtcClientV1) {
+    // We can connect our real-time communication client to device peers by their ID
+    let tries = 3;
+    if (this.remoteDevicePeerId) {
+      for (let i = 0; i < tries; i++) {
+        const connectionId = await (rtcClient as RtcClient).connect(
+          this.remoteDevicePeerId
+        );
+        if (!!connectionId) {
+          return connectionId;
+        }
+      }
+    }
+    return;
   }
 
   private initConnectionMonitoring() {

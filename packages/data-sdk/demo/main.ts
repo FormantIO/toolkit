@@ -14,12 +14,13 @@ function timeout(ms: number) {
       const d = await Fleet.getCurrentDevice();
       let conected = false;
       while (!conected) {
-        console.warn("waiitng for main connection");
+        console.warn("waiting for main connection");
         conected = await d.isInRealtimeSession();
         await timeout(2000);
       }
       console.warn("star onnection");
       await d.startRealtimeConnection(SessionType.Observe);
+      console.error("complete");
     } catch (error) {
       console.log(error);
     }
