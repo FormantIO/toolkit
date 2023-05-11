@@ -28,7 +28,7 @@ import { AggregateLevel } from "./main";
 import { EventType } from "./main";
 import { IShare } from "./model/IShare";
 import { EventEmitter } from "events";
-import { timeout, isRtcPeer } from "./main";
+import { isRtcPeer } from "./main";
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
@@ -306,7 +306,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
   private async createSession(rtcClient: RtcClient | RtcClientV1) {
     // We can connect our real-time communication client to device peers by their ID
-    let tries = 3;
+    const tries = 3;
     if (this.remoteDevicePeerId) {
       for (let i = 0; i < tries; i++) {
         const connectionId = await (rtcClient as RtcClient).connect(
