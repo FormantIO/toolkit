@@ -24,8 +24,9 @@
       }
     }
   },
-  "version": "0.0.147",
+  "version": "1.0.0-rc.0",
   "scripts": {
+    "preversion": "make",
     "dev": "vite --port 9146",
     "build": "tsc && vite build",
     "serve": "vite preview",
