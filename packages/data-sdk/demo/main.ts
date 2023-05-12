@@ -18,7 +18,7 @@ function timeout(ms: number) {
         conected = await d.isInRealtimeSession();
         await timeout(2000);
       }
-      console.warn("star onnection");
+      console.warn("start connection");
       await d.startRealtimeConnection(SessionType.Observe);
       console.error("complete");
     } catch (error) {

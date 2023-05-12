@@ -223,7 +223,14 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(sessionType?: number) {
+  /**
+   * Starts a real-time connection with the remote device using WebRTC.
+   * @param {number} [sessionType] - Optional session type to be used for the connection.
+   * @throws `Error`  If the connection could not be established or if a connection already exists.
+   * @returns {void}
+   */
+
+  async startRealtimeConnection(sessionType?: number): Promise<void> {
     if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
       let rtcClient;
 
@@ -270,16 +277,24 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       const sessionId = await this.createSession(rtcClient);
 
       // Wait for the signaling process to complete...
+
+      const tries = 5;
       if (!!sessionId) {
-        while (
-          rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
-        ) {
+        for (let i = 0; i < tries; i++) {
+          const connectionCompleted =
+            rtcClient.getConnectionStatus(this.remoteDevicePeerId) !==
+            "connected";
+          if (connectionCompleted) {
+            this.initConnectionMonitoring();
+            this.rtcClient = rtcClient;
+            this.emit("connect");
+            return;
+          }
           await delay(100);
         }
-        this.rtcClient = rtcClient;
-        this.emit("connect");
-
-        this.initConnectionMonitoring();
+        throw new Error(
+          "A session was created, but the connection could not be established, possibly due to network issues or misconfigured settings."
+        );
       } else {
         throw new Error(`Unable to establish a connection at this time.`);
       }
@@ -315,6 +330,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         if (!!connectionId) {
           return connectionId;
         }
+        delay(100);
       }
     }
     return;
