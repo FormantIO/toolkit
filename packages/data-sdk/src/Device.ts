@@ -30,14 +30,15 @@ import { IEventQuery } from "./model/IEventQuery";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
+import { ITags } from "./model/ITags";
 
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
 
 export interface ConfigurationDocument {
-  tags: { [key: string]: string };
-  urdfFiles: string[];
+  tags: ITags;
+  urdfFiles: Uuid[];
   telemetry?: {
     streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
   };
@@ -57,6 +58,20 @@ export interface ConfigurationDocument {
     }[];
   };
   adapters?: IAdapterConfiguration[];
+  application?: IDeviceApplicationConfiguration;
+  blobData?: IDeviceBlobData;
+}
+
+export interface IDeviceBlobData {
+  data: string;
+}
+
+export interface IDeviceApplicationConfiguration {
+  configurationMap?: IConfigurationMap;
+}
+
+export interface IConfigurationMap {
+  [key: string]: string;
 }
 
 export interface Command {
