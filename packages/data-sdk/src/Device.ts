@@ -278,8 +278,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
       // Wait for the signaling process to complete...
 
-      const tries = 5;
       if (!!sessionId) {
+        const tries = 5;
         for (let i = 0; i < tries; i++) {
           const connectionCompleted =
             rtcClient.getConnectionStatus(this.remoteDevicePeerId) !==
