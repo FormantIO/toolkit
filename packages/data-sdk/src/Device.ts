@@ -1,3 +1,4 @@
+import { EventEmitter } from "events";
 import {
   IRtcSendConfiguration,
   IRtcStreamMessage,
@@ -7,6 +8,8 @@ import {
   RtcSignalingClient,
   SignalingPromiseClient,
 } from "@formant/realtime-sdk";
+import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
+
 import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
@@ -19,21 +22,23 @@ import {
   TextRequestDataChannel,
   BinaryRequestDataChannel,
 } from "./RequestDataChannel";
-import { InterventionType } from "./main";
-import { IInterventionTypeMap } from "./main";
-import { IInterventionResponse } from "./main";
-import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
-import { IEventQuery } from "./main";
-import { AggregateLevel } from "./main";
-import { EventType } from "./main";
+import { Uuid } from "./model/Uuid";
+import { InterventionType } from "./model/InterventionType";
+import { IInterventionTypeMap } from "./model/IInterventionTypeMap";
+import { IInterventionResponse } from "./model/IInterventionResponse";
+import { IEventQuery } from "./model/IEventQuery";
+import { AggregateLevel } from "./model/AggregateLevel";
+import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
 import { EventEmitter } from "events";
 import { isRtcPeer } from "./main";
+
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
 
 export interface ConfigurationDocument {
+  tags: { [key: string]: string };
   urdfFiles: string[];
   telemetry?: {
     streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
@@ -53,6 +58,7 @@ export interface ConfigurationDocument {
       topicType: string;
     }[];
   };
+  adapters?: IAdapterConfiguration[];
 }
 
 export interface Command {
@@ -77,6 +83,14 @@ export interface IJointState {
 export interface TelemetryStream {
   name: string;
   onDemand: boolean;
+}
+
+export interface IAdapterConfiguration {
+  id: Uuid;
+  name: string;
+  fileId: Uuid;
+  execCommand: string;
+  configuration?: string;
 }
 
 export type RealtimeMessage = {
@@ -614,9 +628,9 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async stopRealtimeConnection() {
-    if (this.rtcClient) {
+    if (this.rtcClient && this.remoteDevicePeerId) {
       this.stopConnectionMonitoring();
-      await this.rtcClient.disconnect(this.id);
+      await this.rtcClient.disconnect(this.remoteDevicePeerId);
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }

@@ -8,7 +8,11 @@ interface IRealtimeConnectionProps {
 
 const startConnection = async (device: Device) => {
   await Authentication.waitTilAuthenticated();
-  await device.startRealtimeConnection(SessionType.Observe);
+  try {
+    await device.startRealtimeConnection(SessionType.Observe);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const RealtimeConnection: FC<IRealtimeConnectionProps> = ({

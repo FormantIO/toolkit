@@ -20,6 +20,8 @@ import {
   formatTimeFrameText,
   AggregateLevel,
   IShare,
+  IStreamTypeMap,
+  IStreamCurrentValue,
 } from "./main";
 import { IAnalyticsModule } from "./model/IAnalyticsModule";
 import { IStreamColumn } from "./model/IStreamColumn";
@@ -215,11 +217,15 @@ export class Fleet {
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 
-  static async getLatestTelemetry(deviceIdOrDeviceIds?: string | string[]) {
-    let deviceIds = deviceIdOrDeviceIds;
-    if (deviceIdOrDeviceIds && !Array.isArray(deviceIdOrDeviceIds)) {
-      deviceIdOrDeviceIds = [deviceIdOrDeviceIds];
+  static async getLatestTelemetry(
+    ...ids: (string | string[])[]
+  ): Promise<IStreamCurrentValue<keyof IStreamTypeMap>[]> {
+    const deviceIds = ids.flat().filter((_) => !!_);
+
+    if (deviceIds.length === 0) {
+      return [];
     }
+
     const data = await fetch(
       `${FORMANT_API_URL}/v1/queries/stream-current-value`,
       {
