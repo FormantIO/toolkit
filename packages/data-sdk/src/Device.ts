@@ -282,7 +282,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         const tries = 5;
         for (let i = 0; i < tries; i++) {
           const connectionCompleted =
-            rtcClient.getConnectionStatus(this.remoteDevicePeerId) !==
+            rtcClient.getConnectionStatus(this.remoteDevicePeerId) ===
             "connected";
           if (connectionCompleted) {
             this.initConnectionMonitoring();
