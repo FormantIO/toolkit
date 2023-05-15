@@ -30,7 +30,6 @@ import { IEventQuery } from "./model/IEventQuery";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
-import { EventEmitter } from "events";
 import { isRtcPeer } from "./main";
 
 // get query param for "rtc_client"
