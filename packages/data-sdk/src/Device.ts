@@ -585,9 +585,9 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async stopRealtimeConnection() {
-    if (this.rtcClient) {
+    if (this.rtcClient && this.remoteDevicePeerId) {
       this.stopConnectionMonitoring();
-      await this.rtcClient.disconnect(this.id);
+      await this.rtcClient.disconnect(this.remoteDevicePeerId);
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
