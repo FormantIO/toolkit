@@ -27,7 +27,7 @@
   "version": "1.0.0-rc.0",
   "scripts": {
     "preversion": "make",
-    "dev": "vite --port 9146",
+    "dev": "vite --port 5173",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",

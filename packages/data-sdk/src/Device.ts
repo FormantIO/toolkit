@@ -30,6 +30,8 @@ import { IEventQuery } from "./model/IEventQuery";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
+import { EventEmitter } from "events";
+import { isRtcPeer } from "./main";
 
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
@@ -235,7 +237,14 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     }
   }
 
-  async startRealtimeConnection(sessionType?: number) {
+  /**
+   * Starts a real-time connection with the remote device using WebRTC.
+   * @param {number} [sessionType] - Optional session type to be used for the connection.
+   * @throws `Error`  If the connection could not be established or if a connection already exists.
+   * @returns {void}
+   */
+
+  async startRealtimeConnection(sessionType?: number): Promise<void> {
     if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
       let rtcClient;
 
@@ -275,36 +284,70 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         }
       }
 
-      // Each online device and user has a peer in the system
-      const peers = await rtcClient.getPeers();
-
-      // Find the device peer corresponding to the device's ID
-      const devicePeer = peers.find((_) => _.deviceId === this.id);
-      if (!devicePeer) {
-        // If the device is offline, we won't be able to find its peer.
-        throw new Error("Cannot find peer, is the robot offline?");
-      }
-
-      // We can connect our real-time communication client to device peers by their ID
-      this.remoteDevicePeerId = devicePeer.id;
-      await (rtcClient as RtcClient).connect(this.remoteDevicePeerId);
-
       // WebRTC requires a signaling phase when forming a new connection.
-      // Wait for the signaling process to complete...
-      while (
-        rtcClient.getConnectionStatus(this.remoteDevicePeerId) !== "connected"
-      ) {
-        await delay(100);
-      }
-      this.rtcClient = rtcClient;
-      this.emit("connect");
 
-      this.initConnectionMonitoring();
+      this.remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
+
+      const sessionId = await this.createSession(rtcClient);
+
+      // Wait for the signaling process to complete...
+
+      if (!!sessionId) {
+        const tries = 5;
+        for (let i = 0; i < tries; i++) {
+          const connectionCompleted =
+            rtcClient.getConnectionStatus(this.remoteDevicePeerId) ===
+            "connected";
+          if (connectionCompleted) {
+            this.initConnectionMonitoring();
+            this.rtcClient = rtcClient;
+            this.emit("connect");
+            return;
+          }
+          await delay(100);
+        }
+        throw new Error(
+          "A session was created, but the connection could not be established, possibly due to network issues or misconfigured settings."
+        );
+      } else {
+        throw new Error(`Unable to establish a connection at this time.`);
+      }
     } else {
       throw new Error(
         `Already created realtime connection to device ${this.id}`
       );
     }
+  }
+
+  private async getRemoteDevicePeerId(rtcClient: RtcClient | RtcClientV1) {
+    // Each online device and user has a peer in the system
+    const peers = await rtcClient.getPeers();
+
+    // Find the device peer corresponding to the device's ID
+    const devicePeer = peers.find((_) => _.deviceId === this.id);
+
+    if (!isRtcPeer(devicePeer)) {
+      // If the device is offline, we won't be able to find its peer.
+      throw new Error("Cannot find peer, is the robot offline?");
+    }
+    return devicePeer.id;
+  }
+
+  private async createSession(rtcClient: RtcClient | RtcClientV1) {
+    // We can connect our real-time communication client to device peers by their ID
+    const tries = 3;
+    if (this.remoteDevicePeerId) {
+      for (let i = 0; i < tries; i++) {
+        const connectionId = await (rtcClient as RtcClient).connect(
+          this.remoteDevicePeerId
+        );
+        if (!!connectionId) {
+          return connectionId;
+        }
+        delay(100);
+      }
+    }
+    return;
   }
 
   private initConnectionMonitoring() {

@@ -1,5 +1,9 @@
-import { Authentication, App } from "../src/main";
+import { Authentication, App, Fleet, SessionType } from "../src/main";
 import "./style.css";
+
+function timeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 (async function () {
   const el = document.querySelector("#app");
@@ -7,14 +11,16 @@ import "./style.css";
   if (el) {
     try {
       await Authentication.waitTilAuthenticated();
-      const b = document.getElementById("btn");
-      b?.addEventListener("click", async () => {
-        const d = await App.getDate(
-          undefined,
-          new Date("Sat Apr 20 2023 00:00:00 GMT-0500 (Central Daylight Time)")
-        );
-        console.log(d);
-      });
+      const d = await Fleet.getCurrentDevice();
+      let conected = false;
+      while (!conected) {
+        console.warn("waiting for main connection");
+        conected = await d.isInRealtimeSession();
+        await timeout(2000);
+      }
+      console.warn("start connection");
+      await d.startRealtimeConnection(SessionType.Observe);
+      console.error("complete");
     } catch (error) {
       console.log(error);
     }
