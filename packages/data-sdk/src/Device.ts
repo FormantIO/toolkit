@@ -9,6 +9,7 @@ import {
   SignalingPromiseClient,
 } from "@formant/realtime-sdk";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
+import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
@@ -140,7 +141,7 @@ export interface IRealtimeDevice {
 
 export class Device extends EventEmitter implements IRealtimeDevice {
   rtcClient: RtcClient | RtcClientV1 | undefined;
-  remoteDevicePeerId: string | undefined;
+  remoteDevicePeerId: string | null = null;
 
   realtimeListeners: RealtimeListener[] = [];
 
@@ -407,8 +408,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.send(defined(devicePeer).id, message, config);
+    const devicePeerId = await this.getRemotePeerId();
+    client.send(devicePeerId, message, config);
   }
 
   addRealtimeListener(listener: RealtimeListener) {
@@ -523,8 +524,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: stream.name,
       enable: true,
       pipeline: "rtc",
@@ -536,8 +537,9 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       this.rtcClient,
       "Realtime connection has not been started"
     );
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: stream.name,
       enable: false,
       pipeline: "rtc",
@@ -552,8 +554,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: stream.name,
       enable: true,
       pipeline: "rtc",
@@ -565,8 +567,9 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       this.rtcClient,
       "Realtime connection has not been started"
     );
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: stream.name,
       enable: false,
       pipeline: "rtc",
@@ -580,8 +583,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: streamName,
       enablePriorityUpload: true,
       pipeline: "telemetry",
@@ -594,8 +597,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName,
       setAudioFormat: newFormat,
     });
@@ -607,15 +610,15 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
-    client.controlRemoteStream(defined(devicePeer).id, {
+    const devicePeerId = await this.getRemotePeerId();
+    client.controlRemoteStream(devicePeerId, {
       streamName: streamName,
       enablePriorityUpload: false,
       pipeline: "telemetry",
     });
   }
 
-  async getRemotePeer() {
+  async getRemotePeer(): Promise<IRtcPeer> {
     // Each online device and user has a peer in the system
     const peers = await defined(
       this.rtcClient,
@@ -634,6 +637,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     if (this.rtcClient && this.remoteDevicePeerId) {
       this.stopConnectionMonitoring();
       await this.rtcClient.disconnect(this.remoteDevicePeerId);
+      this.remoteDevicePeerId = null;
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
@@ -748,10 +752,10 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       "Realtime connection has not been started"
     );
 
-    const devicePeer = await this.getRemotePeer();
+    const devicePeerId = await this.getRemotePeerId();
     const p = await new Promise<DataChannel>((resolve) => {
       (client as RtcClient).createCustomDataChannel(
-        defined(devicePeer).id,
+        devicePeerId,
         channelName,
         {
           ordered: true,
@@ -941,5 +945,9 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   async createShareLink(share: IShare, view: string) {
     share.scope.deviceIds = [this.id];
     return await Fleet.createShareLink(share, view);
+  }
+
+  private async getRemotePeerId(): Promise<Uuid> {
+    return this.remoteDevicePeerId ?? (await this.getRemotePeer()).id;
   }
 }
