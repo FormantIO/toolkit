@@ -517,6 +517,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
+    console.debug(`RealtimeVideo(${this.id}).start(${stream.name})`);
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"
@@ -541,9 +542,11 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       enable: false,
       pipeline: "rtc",
     });
+    console.debug(`RealtimeVideo(${this.id}).stop(${stream.name})`);
   }
 
   async startListeningToRealtimeDataStream(stream: RealtimeDataStream) {
+    console.debug(`RealtimeDataStream(${this.id}).start(${stream.name})`);
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"
@@ -568,6 +571,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       enable: false,
       pipeline: "rtc",
     });
+    console.debug(`RealtimeDataStream(${this.id}).stop(${stream.name})`);
   }
 
   async enableRealtimeTelemetryPriorityIngestion(streamName: string) {
