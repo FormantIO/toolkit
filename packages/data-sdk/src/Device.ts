@@ -141,7 +141,7 @@ export interface IRealtimeDevice {
 
 export class Device extends EventEmitter implements IRealtimeDevice {
   rtcClient: RtcClient | RtcClientV1 | undefined;
-  remoteDevicePeerId: string | undefined;
+  remoteDevicePeerId: string | null = null;
 
   realtimeListeners: RealtimeListener[] = [];
 
@@ -637,6 +637,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     if (this.rtcClient && this.remoteDevicePeerId) {
       this.stopConnectionMonitoring();
       await this.rtcClient.disconnect(this.remoteDevicePeerId);
+      this.remoteDevicePeerId = null;
     } else {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
