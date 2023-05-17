@@ -426,4 +426,28 @@ export class App {
       this.sendAppMessage({ type: "formant_online" });
     });
   }
+
+  static waitForConnection(deadlineMs: number = 5_000): Promise<void> {
+    let aborted = false;
+    const deadline = new Promise<void>((_, reject) => {
+      setTimeout(() => {
+        aborted = true;
+        reject(new Error("deadline expired: took too long"));
+      }, deadlineMs);
+    });
+
+    const delay = (ms: number) => new Promise((done) => setTimeout(done, ms));
+
+    const loop = async (): Promise<void> => {
+      await delay(50); // allow for initialization jitter to settle
+      while (!aborted) {
+        if (this.isOnline || (await this.checkConnection)) {
+          break;
+        }
+        await delay(500);
+      }
+    };
+
+    return Promise.race([deadline, loop()]);
+  }
 }
