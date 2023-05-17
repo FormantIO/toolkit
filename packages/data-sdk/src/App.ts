@@ -44,6 +44,7 @@ export type AppMessage =
       data: any;
     }
   | { type: "request_devices" }
+  | { type: "hide_analytics_date_picker" }
   | { type: "formant_online" };
 
 export type ModuleConfigurationMessage = {
@@ -387,6 +388,11 @@ export class App {
     });
   }
 
+  static async disableAnalyticsBottomBar() {
+    this.sendAppMessage({
+      type: "hide_analytics_date_picker",
+    });
+  }
   private static _isOnline: boolean | null = null;
 
   private static _handleOnlineEvent = (e: MessageEvent<EmbeddedAppMessage>) => {
