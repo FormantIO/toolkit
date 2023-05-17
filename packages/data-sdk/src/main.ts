@@ -13,14 +13,14 @@ export * from "./KeyValue";
 export * from "./utils";
 export * from "./AudioPlayer";
 
+import { App } from "./App";
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
 
-let urlParams = new URLSearchParams("");
-
-if (typeof window !== "undefined") {
-  urlParams = new URLSearchParams(window.location.search);
-}
+const urlParams =
+  typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search)
+    : new URLSearchParams("");
 
 const urlDevice = urlParams.get("device");
 if (urlDevice) {
@@ -35,6 +35,10 @@ if (urlAuth) {
 const moduleName = urlParams.get("module");
 if (moduleName) {
   Authentication.listenForRefresh();
+}
+
+if (typeof window !== "undefined") {
+  App.listenForConnectionEvents();
 }
 
 export * from "./model/accessLevels";
