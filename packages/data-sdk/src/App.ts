@@ -43,7 +43,8 @@ export type AppMessage =
       source: string;
       data: any;
     }
-  | { type: "request_devices" };
+  | { type: "request_devices" }
+  | { type: "formant_online" };
 
 export type ModuleConfigurationMessage = {
   type: "module_configuration";
@@ -401,5 +402,28 @@ export class App {
 
   static listenForConnectionEvents() {
     window.addEventListener("message", this._handleOnlineEvent);
+  }
+
+  static checkConnection(deadlineMs: number = 1_000): Promise<boolean> {
+    return new Promise((done, reject) => {
+      const deadline = setTimeout(
+        () => reject(new Error("deadline expired: took too long")),
+        deadlineMs
+      );
+
+      const handler = (e: MessageEvent<EmbeddedAppMessage>) => {
+        window.removeEventListener("message", handler);
+        clearTimeout(deadline);
+
+        const { data } = e;
+        if (data.type === "formant_online") {
+          this._isOnline = data.online;
+          done(data.online);
+        }
+      };
+
+      window.addEventListener("message", handler);
+      this.sendAppMessage({ type: "formant_online" });
+    });
   }
 }
