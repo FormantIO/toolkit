@@ -43,7 +43,8 @@ export type AppMessage =
       source: string;
       data: any;
     }
-  | { type: "request_devices" };
+  | { type: "request_devices" }
+  | { type: "formant_online" };
 
 export type ModuleConfigurationMessage = {
   type: "module_configuration";
@@ -85,7 +86,12 @@ export type EmbeddedAppMessage =
       promptId: string;
       data: any;
     }
+  | {
+      type: "formant_online";
+      online: boolean;
+    }
   | ModuleConfigurationMessage;
+
 export interface ModuleData {
   queryRange: QueryRange;
   time: number;
@@ -379,5 +385,69 @@ export class App {
       };
       window.addEventListener("message", handler);
     });
+  }
+
+  private static _isOnline: boolean | null = null;
+
+  private static _handleOnlineEvent = (e: MessageEvent<EmbeddedAppMessage>) => {
+    const { data } = e;
+    if (data.type === "formant_online") {
+      this._isOnline = data.online;
+    }
+  };
+
+  static get isOnline(): boolean | null {
+    return App._isOnline;
+  }
+
+  static listenForConnectionEvents() {
+    window.addEventListener("message", this._handleOnlineEvent);
+  }
+
+  static checkConnection(deadlineMs: number = 1_000): Promise<boolean> {
+    return new Promise((done, reject) => {
+      const deadline = setTimeout(
+        () => reject(new Error("deadline expired: took too long")),
+        deadlineMs
+      );
+
+      const handler = (e: MessageEvent<EmbeddedAppMessage>) => {
+        window.removeEventListener("message", handler);
+        clearTimeout(deadline);
+
+        const { data } = e;
+        if (data.type === "formant_online") {
+          this._isOnline = data.online;
+          done(data.online);
+        }
+      };
+
+      window.addEventListener("message", handler);
+      this.sendAppMessage({ type: "formant_online" });
+    });
+  }
+
+  static waitForConnection(deadlineMs: number = 5_000): Promise<void> {
+    let aborted = false;
+    const deadline = new Promise<void>((_, reject) => {
+      setTimeout(() => {
+        aborted = true;
+        reject(new Error("deadline expired: took too long"));
+      }, deadlineMs);
+    });
+
+    const delay = (ms: number) => new Promise((done) => setTimeout(done, ms));
+
+    const loop = async (): Promise<void> => {
+      await delay(50); // allow for initialization jitter to settle
+      while (!aborted) {
+        if (this.isOnline || (await this.checkConnection)) {
+          break;
+        }
+        await delay(500);
+      }
+    };
+
+    return Promise.race([deadline, loop()]);
   }
 }
