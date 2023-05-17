@@ -85,7 +85,12 @@ export type EmbeddedAppMessage =
       promptId: string;
       data: any;
     }
+  | {
+      type: "formant_online";
+      online: boolean;
+    }
   | ModuleConfigurationMessage;
+
 export interface ModuleData {
   queryRange: QueryRange;
   time: number;
@@ -379,5 +384,22 @@ export class App {
       };
       window.addEventListener("message", handler);
     });
+  }
+
+  private static _isOnline: boolean | null = null;
+
+  private static _handleOnlineEvent = (e: MessageEvent<EmbeddedAppMessage>) => {
+    const { data } = e;
+    if (data.type === "formant_online") {
+      this._isOnline = data.online;
+    }
+  };
+
+  static get isOnline(): boolean | null {
+    return App._isOnline;
+  }
+
+  static listenForConnectionEvents() {
+    window.addEventListener("message", this._handleOnlineEvent);
   }
 }
