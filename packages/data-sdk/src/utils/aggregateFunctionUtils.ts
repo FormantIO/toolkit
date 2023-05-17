@@ -1,5 +1,6 @@
 import { INumericAggregate } from "../model/INumericAggregate";
 import * as dateFns from "date-fns";
+import { AggregateLevel } from "../model/AggregateLevel";
 
 export const vailableAggregationIntervals = [
   "day",
@@ -71,7 +72,18 @@ export const aggregateFunctionMap = {
   count: getCount,
 };
 
-export const aggregateByDateFunctions: any = {
+interface IAggregateFunctions {
+  interval: (interval: dateFns.Interval) => Date[];
+  start: (date: Date | number) => Date;
+  end: (date: Date | number) => Date;
+  sub: (date: Date | number, amount: number) => Date;
+  get: (date: Date | number) => number;
+}
+
+export const aggregateByDateFunctions: Record<
+  AggregateLevel,
+  IAggregateFunctions
+> = {
   day: {
     interval: dateFns.eachDayOfInterval,
     start: dateFns.startOfDay,
@@ -124,6 +136,10 @@ export const aggregateByDateFunctions: any = {
 };
 
 export const formatTimeFrameText = (start: string, end: string) =>
+  // FIXME this doesn't work for *a lot* locales, other than en-US
+  // en-GB: 'dd/mm/YYYY'
+  // ja-jp: 'YYYY/mm/dd'
+  // bg-BG: 'dd.mm.YYYY'
   start.split("/")[0] +
   "/" +
   start.split("/")[1] +
