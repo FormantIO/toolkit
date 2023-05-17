@@ -3,13 +3,6 @@ export type AggregateLevel =
   | "month"
   | "week"
   | "day"
-  | "12 hours"
-  | "4 hours"
   | "hour"
-  | "30 minutes"
-  | "5 minutes"
   | "minute"
-  | "30 seconds"
-  | "5 seconds"
-  | "second"
   | "quarter";
