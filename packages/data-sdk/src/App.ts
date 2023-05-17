@@ -43,7 +43,8 @@ export type AppMessage =
       source: string;
       data: any;
     }
-  | { type: "request_devices" };
+  | { type: "request_devices" }
+  | { type: "hide_analytics_date_picker" };
 
 export type ModuleConfigurationMessage = {
   type: "module_configuration";
@@ -378,6 +379,12 @@ export class App {
         window.removeEventListener("message", handler);
       };
       window.addEventListener("message", handler);
+    });
+  }
+
+  static async disableAnalyticsBottomBar() {
+    this.sendAppMessage({
+      type: "hide_analytics_date_picker",
     });
   }
 }
