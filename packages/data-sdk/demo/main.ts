@@ -1,4 +1,4 @@
-import { Authentication, App, Fleet, SessionType } from "../src/main";
+import { Authentication, Fleet, SessionType } from "../src/main";
 import "./style.css";
 
 function timeout(ms: number) {
