@@ -24,4 +24,4 @@
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
 
-[1.0.0-rc.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.0..1.0.0-rc.1
+[1.0.0-rc.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.0..release/data-sdk/1.0.0-rc.1~
