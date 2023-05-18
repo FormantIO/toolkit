@@ -145,7 +145,7 @@ export * from "./model/VideoMimeType";
 export * from "./model/IDeviceQuery";
 export * from "./model/IAnnotationQuery";
 export * from "./model/IStream";
-export {
+export type {
   IRtcSendConfiguration,
   IRtcStreamMessage,
   IRtcStreamPayload,

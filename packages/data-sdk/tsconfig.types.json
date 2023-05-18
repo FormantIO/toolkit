@@ -1,15 +1,13 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "downlevelIteration": true,
     "outDir": "dist/types"
   },
   "include": [
-    "src/main.ts"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

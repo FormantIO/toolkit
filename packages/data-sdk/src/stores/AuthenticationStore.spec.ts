@@ -90,7 +90,7 @@ describe("AuthenticationStore", () => {
 
       const waiting = authStore.waitTilAuthenticated();
 
-      const timeout = (ms) =>
+      const timeout = (ms: number) =>
         new Promise((_, reject) => setTimeout(() => reject("pending"), ms));
 
       await expect(Promise.race([waiting, timeout(100)])).rejects.toThrow(

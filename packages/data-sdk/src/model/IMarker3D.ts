@@ -1,6 +1,5 @@
 import { IColorRGBA } from "./IColorRGBA";
 import { IQuaternion } from "./IQuaternion";
-import { ITransform } from "./ITransform";
 import { IVector3 } from "./IVector3";
 
 export interface IMarker3D {

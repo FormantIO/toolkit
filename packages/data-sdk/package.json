@@ -28,7 +28,7 @@
   "scripts": {
     "preversion": "make",
     "dev": "vite --port 5173",
-    "build": "tsc && vite build",
+    "build": "tsc -p ./tsconfig.demo.json && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest run",
