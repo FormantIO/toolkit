@@ -1,3 +1,8 @@
+## [1.0.0-rc.2] - 2023-05-18
+- Increase number of tries to create a connection (#88)
+- Re-enforce type constraints on aggregateByDateFunctions (#85)
+- Added App.disableAnalyticsBottomBar() to hide date picker in analytics view (#84)
+
 ## [1.0.0-rc.1] - 2023-05-17
 
 ### Added
