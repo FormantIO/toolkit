@@ -4,16 +4,16 @@
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "dist/types"
+    "outDir": "../dist/types"
   },
   "include": [
-    "src/**/*"
+    "../src/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.tsx"
+    "../node_modules",
+    "../src/**/*.spec.ts",
+    "../src/**/*.test.ts",
+    "../src/**/*.spec.tsx",
+    "../src/**/*.test.tsx"
   ]
 }
