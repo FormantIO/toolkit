@@ -181,7 +181,11 @@ export class Fleet {
       throw new Error("Not authenticated");
     }
     const rtcClient = AppRtcClientPool.teleop.get();
-    return await rtcClient.getSessions();
+    try {
+      return await rtcClient.getSessions();
+    } finally {
+      await rtcClient.release();
+    }
   }
 
   static async getRealtimeDevices(): Promise<Device[]> {

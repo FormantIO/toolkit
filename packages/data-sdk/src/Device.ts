@@ -651,8 +651,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async isInRealtimeSession(): Promise<boolean> {
-    let peers = await Fleet.getPeers();
-    let sessions = await Fleet.getRealtimeSessions();
+    const peers = await Fleet.getPeers();
+    const sessions = await Fleet.getRealtimeSessions();
     let peer = peers.find((_) => _.deviceId === this.id);
     if (peer) {
       return sessions[peer.id].length > 0;
