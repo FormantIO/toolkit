@@ -62,8 +62,16 @@ export const AppRtcClientPool = {
 
 export function debug() {
   console.group("RtcClientPool Sizes");
-  (["unknown", "teleop", "portForward", "observe"] as const).forEach((key) =>
-    console.log("%s(%d)", key, NamedRtcClientPools[key].size)
+  console.table(
+    (["unknown", "teleop", "portForward", "observe"] as const).map((key) => {
+      const pool = NamedRtcClientPools[key];
+      return {
+        name: key,
+        size: pool.size,
+        active: pool.isActive ? "🔥" : "🧊",
+      };
+    })
   );
+
   console.groupEnd();
 }

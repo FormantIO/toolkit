@@ -28,6 +28,10 @@ export class RtcClientPool {
     this.ttl = Math.max(ttl, 0);
   }
 
+  get isActive(): boolean {
+    return this[singleton] !== null;
+  }
+
   get size(): number {
     return this.proxyReceivers.size;
   }
