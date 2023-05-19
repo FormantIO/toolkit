@@ -1,33 +1,33 @@
-import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { Device } from "./Device";
+import { AppRtcClientPool } from "./AppRtcClientPool";
+import { AggregateLevel } from "./model/AggregateLevel";
+import { EventType } from "./model/EventType";
+import { IAnalyticsModule } from "./model/IAnalyticsModule";
+import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IEvent } from "./model/IEvent";
 import { IEventQuery } from "./model/IEventQuery";
 import { IQuery } from "./model/IQuery";
-import { IStreamAggregateData } from "./model/IStreamAggregateData";
-import { IStreamData } from "./model/IStreamData";
-import { PeerDevice } from "./PeerDevice";
-import { IDeviceQuery } from "./model/IDeviceQuery";
-import { IStream } from "./model/IStream";
-import { IView } from "./model/IView";
-import {
-  aggregateByDateFunctions,
-  EventType,
-  serializeHash,
-  formatTimeFrameText,
-  AggregateLevel,
-  IShare,
-  IStreamTypeMap,
-  IStreamCurrentValue,
-} from "./main";
-import { IAnalyticsModule } from "./model/IAnalyticsModule";
-import { IStreamColumn } from "./model/IStreamColumn";
-import { ITaskReportColumn } from "./model/ITaskReportColumn";
+import { IShare } from "./model/IShare";
 import { ISqlQuery } from "./model/ISqlQuery";
 import { ISqlResult } from "./model/ISqlResult";
+import { IStream } from "./model/IStream";
+import { IStreamAggregateData } from "./model/IStreamAggregateData";
+import { IStreamColumn } from "./model/IStreamColumn";
+import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
+import { IStreamData } from "./model/IStreamData";
+import { IStreamTypeMap } from "./model/IStreamTypeMap";
+import { ITaskReportColumn } from "./model/ITaskReportColumn";
+import { IView } from "./model/IView";
+import { PeerDevice } from "./PeerDevice";
+import {
+  aggregateByDateFunctions,
+  formatTimeFrameText,
+  serializeHash,
+} from "./utils";
 
 export interface TelemetryResult {
   deviceId: string;
@@ -168,33 +168,19 @@ export class Fleet {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const rtcClient = new RtcClient({
-      signalingClient: new SignalingPromiseClient(FORMANT_API_URL, null, null),
-      getToken: async () => {
-        return defined(
-          Authentication.token,
-          "Realtime when user isn't authorized"
-        );
-      },
-      receive: () => {},
-    });
-    return await rtcClient.getPeers();
+    const rtcClient = AppRtcClientPool.teleop.get();
+    try {
+      return await rtcClient.getPeers();
+    } finally {
+      await rtcClient.release();
+    }
   }
 
   static async getRealtimeSessions(): Promise<{ [key in string]: string[] }> {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const rtcClient = new RtcClient({
-      signalingClient: new SignalingPromiseClient(FORMANT_API_URL, null, null),
-      getToken: async () => {
-        return defined(
-          Authentication.token,
-          "Realtime when user isn't authorized"
-        );
-      },
-      receive: () => {},
-    });
+    const rtcClient = AppRtcClientPool.teleop.get();
     return await rtcClient.getSessions();
   }
 
