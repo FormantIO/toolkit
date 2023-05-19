@@ -11,11 +11,6 @@ export interface IRtcClientPoolOptions {
   createClient: CreateClientFn;
 }
 
-const notAllowed = (err: string) => () => {
-  throw new Error(err);
-};
-const shutdownNotAllowed = notAllowed("shutdown not allowed for pooled client");
-
 const singleton = Symbol("RtcClientPool.instance");
 
 export class RtcClientPool {
@@ -36,7 +31,9 @@ export class RtcClientPool {
           case "release":
             return () => this.releaseInstance(receiver);
           case "shutdown":
-            return shutdownNotAllowed;
+            return () => {
+              throw new Error("shutdown not allowed for pooled client");
+            };
           default:
             return Reflect.get(target, prop, receiver);
         }
