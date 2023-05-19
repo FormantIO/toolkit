@@ -24,6 +24,10 @@ export class RtcClientPool {
     this.createClient = createClient;
   }
 
+  get size(): number {
+    return this.proxyReceivers.size;
+  }
+
   get(onReceive?: ReceiveFn): PooledRtcClient {
     const proxy = new Proxy(this.allocate(), {
       get: (target, prop, receiver) => {

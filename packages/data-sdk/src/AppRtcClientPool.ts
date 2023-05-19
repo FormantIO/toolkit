@@ -55,3 +55,11 @@ export const AppRtcClientPool = {
   ["2"]: NamedRtcClientPools.portForward,
   ["3"]: NamedRtcClientPools.observe,
 } as const;
+
+export function debug() {
+  console.group("RtcClientPool Sizes");
+  (["unknown", "teleop", "portForward", "observe"] as const).forEach((key) =>
+    console.log("%s(%d)", key, NamedRtcClientPools[key].size)
+  );
+  console.groupEnd();
+}
