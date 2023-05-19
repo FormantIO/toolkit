@@ -11,6 +11,7 @@ const getToken = async () =>
 
 const NamedRtcClientPools = {
   unknown: new RtcClientPool({
+    ttl: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -20,6 +21,7 @@ const NamedRtcClientPools = {
       }),
   }),
   teleop: new RtcClientPool({
+    ttl: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -29,6 +31,7 @@ const NamedRtcClientPools = {
       }),
   }),
   portForward: new RtcClientPool({
+    ttl: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -38,6 +41,7 @@ const NamedRtcClientPools = {
       }),
   }),
   observe: new RtcClientPool({
+    ttl: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),

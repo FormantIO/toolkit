@@ -1,7 +1,7 @@
 import { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
 
 export interface PooledRtcClient extends RtcClient {
-  release(): Promise<boolean>;
+  release(): boolean;
 }
 
 type ReceiveFn = IRtcClientConfiguration["receive"];
@@ -9,6 +9,7 @@ type CreateClientFn = (receive: ReceiveFn) => RtcClient;
 
 export interface IRtcClientPoolOptions {
   createClient: CreateClientFn;
+  ttl?: number;
 }
 
 const singleton = Symbol("RtcClientPool.instance");
@@ -17,11 +18,14 @@ export class RtcClientPool {
   [singleton]: RtcClient | null = null;
 
   private readonly createClient: CreateClientFn;
+  private readonly ttl: number;
   private proxyReceivers: Map<PooledRtcClient, ReceiveFn> = new Map();
+  private teardownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options: IRtcClientPoolOptions) {
-    const { createClient } = options;
+    const { createClient, ttl = 0 } = options;
     this.createClient = createClient;
+    this.ttl = Math.max(ttl, 0);
   }
 
   get size(): number {
@@ -50,6 +54,12 @@ export class RtcClientPool {
 
   private allocate(): RtcClient {
     if (this[singleton]) {
+      // cancel any outstanding teardown request/keep this singleton alive
+      if (this.teardownTimeout) {
+        clearTimeout(this.teardownTimeout);
+        this.teardownTimeout = null;
+      }
+
       return this[singleton];
     }
 
@@ -73,7 +83,7 @@ export class RtcClientPool {
     this.proxyReceivers.forEach((it) => it(peerId, message));
   };
 
-  private async releaseInstance(proxy: PooledRtcClient) {
+  private releaseInstance(proxy: PooledRtcClient) {
     if (!this.proxyReceivers.delete(proxy)) {
       console.warn("this instance has already been released!");
       return false;
@@ -83,7 +93,14 @@ export class RtcClientPool {
       return false;
     }
 
-    await this.teardown();
+    if (!this.teardownTimeout && Number.isFinite(this.ttl)) {
+      this.teardownTimeout = setTimeout(() => {
+        this.teardown()
+          .catch((err) => console.error("teardown failed", { err }))
+          .finally(() => (this.teardownTimeout = null));
+      }, this.ttl);
+    }
+
     return true;
   }
 }

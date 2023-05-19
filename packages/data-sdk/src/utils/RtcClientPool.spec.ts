@@ -1,10 +1,19 @@
-import { describe, it, vi, expect } from "vitest";
+import { describe, it, vi, expect, beforeEach, afterEach } from "vitest";
 import type { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
 
 import { RtcClientPool } from "./RtcClientPool";
 
 describe("RtcClientPool", () => {
-  it("should release when no more poxies are active", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
+  it("should release when no more poxies are active", async () => {
     const singleton = {
       shutdown: vi.fn(),
     } as unknown as RtcClient;
@@ -20,8 +29,10 @@ describe("RtcClientPool", () => {
     const client2 = pool.get(() => {});
     expect(singleton.shutdown).not.toBeCalled();
     client1.release();
+    vi.runAllTimers();
     expect(singleton.shutdown).not.toBeCalled();
     client2.release();
+    vi.runAllTimers();
     expect(singleton.shutdown).toBeCalled();
   });
 
@@ -156,7 +167,43 @@ describe("RtcClientPool", () => {
     });
 
     const client = pool.get(vi.fn());
-    expect(client.release()).resolves.toBe(true);
-    expect(client.release()).resolves.toBe(false);
+    expect(client.release()).toBe(true);
+    expect(client.release()).toBe(false);
+  });
+
+  describe("with ttl", () => {
+    it("should wait the duration before tearing down the singleton", () => {
+      const shutdown = vi.fn();
+      const pool = new RtcClientPool({
+        ttl: 1_000,
+        createClient: () => ({ shutdown } as any),
+      });
+
+      pool.get().release();
+      vi.advanceTimersByTime(100);
+      expect(shutdown).not.toBeCalled();
+      vi.advanceTimersByTime(875);
+      expect(shutdown).not.toBeCalled();
+      vi.advanceTimersByTime(50);
+      expect(shutdown).toBeCalled();
+    });
+
+    it("should not release the singleton if another consumer allocates a reference", () => {
+      const shutdown = vi.fn();
+      const pool = new RtcClientPool({
+        ttl: 1_000,
+        createClient: () => ({ shutdown } as any),
+      });
+
+      pool.get().release();
+      vi.advanceTimersByTime(975);
+      expect(shutdown).not.toBeCalled();
+
+      const client = pool.get();
+      vi.advanceTimersByTime(50);
+      expect(shutdown).not.toBeCalled();
+      vi.runAllTimers();
+      expect(shutdown).not.toBeCalled();
+    });
   });
 });
