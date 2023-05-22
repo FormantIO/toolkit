@@ -142,7 +142,7 @@ describe("RtcClientPool", () => {
     expect(handle2).not.toHaveBeenCalled();
   });
 
-  it("should warn about releasing multiple times", () => {
+  it("should warn about releasing multiple times", async () => {
     const pool = new RtcClientPool({
       createClient() {
         return {
@@ -152,8 +152,8 @@ describe("RtcClientPool", () => {
     });
 
     const client = pool.get(vi.fn());
-    expect(client.shutdown()).resolves.toBe(true);
-    expect(client.shutdown()).resolves.toBe(false);
+    await expect(client.shutdown()).resolves.toBe(true);
+    await expect(client.shutdown()).resolves.toBe(false);
   });
 
   describe("with ttl", () => {
@@ -166,14 +166,14 @@ describe("RtcClientPool", () => {
       vi.useRealTimers();
     });
 
-    it("should wait the duration before tearing down the singleton", () => {
+    it("should wait the duration before tearing down the singleton", async () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
         ttl: 1_000,
         createClient: () => ({ shutdown } as any),
       });
 
-      pool.get().shutdown();
+      await expect(pool.get().shutdown()).resolves.toBe(true);
       vi.advanceTimersByTime(100);
       expect(shutdown).not.toBeCalled();
       vi.advanceTimersByTime(875);
@@ -198,7 +198,7 @@ describe("RtcClientPool", () => {
       expect(shutdown).not.toBeCalled();
       vi.runAllTimers();
       expect(shutdown).not.toBeCalled();
-      await client.shutdown();
+      await expect(client.shutdown()).resolves.toBe(true);
       await vi.advanceTimersByTimeAsync(1000);
       expect(shutdown).toBeCalled();
     });
