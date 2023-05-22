@@ -305,13 +305,10 @@ export class Device extends EventEmitter implements IRealtimeDevice {
             this.initConnectionMonitoring();
             this.rtcClient = rtcClient;
             this.emit("connect");
-            return;
+            i = 100;
           }
           await delay(100);
         }
-        throw new Error(
-          "A session was created, but the connection could not be established, possibly due to network issues or misconfigured settings."
-        );
       } else {
         throw new Error(`Unable to establish a connection at this time.`);
       }
