@@ -1,9 +1,5 @@
 import { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
 
-export interface PooledRtcClient extends RtcClient {
-  release(): boolean;
-}
-
 type ReceiveFn = IRtcClientConfiguration["receive"];
 type CreateClientFn = (receive: ReceiveFn) => RtcClient;
 
@@ -20,7 +16,7 @@ export class RtcClientPool {
   private readonly createClient: CreateClientFn;
   private readonly ttl: number;
   private readonly proxyHandler: ProxyHandler<RtcClient>;
-  private proxyReceivers: Map<PooledRtcClient, ReceiveFn> = new Map();
+  private proxyReceivers: Map<RtcClient, ReceiveFn | null> = new Map();
   private teardownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options: IRtcClientPoolOptions) {
@@ -28,20 +24,10 @@ export class RtcClientPool {
     this.createClient = createClient;
     this.ttl = Math.max(ttl, 0);
     this.proxyHandler = {
-      has(target, prop) {
-        return Reflect.has(target, prop) || "release" === prop;
-      },
-      ownKeys(target) {
-        return [...Reflect.ownKeys(target), "release"];
-      },
       get: (target, prop, receiver) => {
         switch (prop) {
-          case "release":
-            return () => this.releaseInstance(receiver);
           case "shutdown":
-            return () => {
-              throw new Error("shutdown not allowed for pooled client");
-            };
+            return () => this.releaseInstance(receiver);
           default:
             return Reflect.get(target, prop, receiver);
         }
@@ -57,13 +43,9 @@ export class RtcClientPool {
     return this.proxyReceivers.size;
   }
 
-  get(onReceive?: ReceiveFn): PooledRtcClient {
-    const proxy = new Proxy(
-      this.allocate(),
-      this.proxyHandler
-    ) as PooledRtcClient;
-
-    this.proxyReceivers.set(proxy, onReceive ?? (() => {}));
+  get(onReceive?: ReceiveFn): RtcClient {
+    const proxy = new Proxy(this.allocate(), this.proxyHandler);
+    this.proxyReceivers.set(proxy, onReceive ?? null);
     return proxy;
   }
 
@@ -95,10 +77,10 @@ export class RtcClientPool {
   }
 
   private dispatch: ReceiveFn = (peerId, message) => {
-    this.proxyReceivers.forEach((it) => it(peerId, message));
+    this.proxyReceivers.forEach((it) => it?.(peerId, message));
   };
 
-  private releaseInstance(proxy: PooledRtcClient) {
+  private async releaseInstance(proxy: RtcClient): Promise<boolean> {
     if (!this.proxyReceivers.delete(proxy)) {
       console.warn("this instance has already been released!");
       return false;
@@ -109,13 +91,16 @@ export class RtcClientPool {
     }
 
     if (!this.teardownTimeout && Number.isFinite(this.ttl)) {
-      this.teardownTimeout = setTimeout(() => {
-        this.teardown()
-          .catch((err) => console.error("teardown failed", { err }))
-          .finally(() => (this.teardownTimeout = null));
-      }, this.ttl);
+      if (this.ttl === 0) {
+        await this.teardown();
+      } else {
+        this.teardownTimeout = setTimeout(() => {
+          this.teardown()
+            .catch((err) => console.error("teardown failed", { err }))
+            .finally(() => (this.teardownTimeout = null));
+        }, this.ttl);
+      }
     }
-
     return true;
   }
 }

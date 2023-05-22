@@ -4,16 +4,7 @@ import type { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
 import { RtcClientPool } from "./RtcClientPool";
 
 describe("RtcClientPool", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.runOnlyPendingTimers();
-    vi.useRealTimers();
-  });
-
-  it("should think it has a release() method", () => {
+  it("should think it has a shutdown() method", () => {
     const pool = new RtcClientPool({
       createClient() {
         return {
@@ -23,12 +14,11 @@ describe("RtcClientPool", () => {
     });
 
     const client = pool.get(() => {});
-    expect("release" in client).toBe(true);
-    expect(client.release).toBeTypeOf("function");
-    client.release();
+    expect("shutdown" in client).toBe(true);
+    expect(client.shutdown).toBeTypeOf("function");
   });
 
-  it("should release when no more poxies are active", async () => {
+  it("should shutdown() when no more proxies are active", async () => {
     const singleton = {
       shutdown: vi.fn(),
     } as unknown as RtcClient;
@@ -43,11 +33,9 @@ describe("RtcClientPool", () => {
     expect(singleton.shutdown).not.toBeCalled();
     const client2 = pool.get(() => {});
     expect(singleton.shutdown).not.toBeCalled();
-    client1.release();
-    vi.runAllTimers();
+    await client1.shutdown();
     expect(singleton.shutdown).not.toBeCalled();
-    client2.release();
-    vi.runAllTimers();
+    await client2.shutdown();
     expect(singleton.shutdown).toBeCalled();
   });
 
@@ -84,24 +72,6 @@ describe("RtcClientPool", () => {
     expect(singleton.isReady).toHaveBeenCalled();
   });
 
-  it("should not be able to shutdown a proxy", () => {
-    const singleton = {
-      shutdown: vi.fn(),
-    } as unknown as RtcClient;
-
-    const pool = new RtcClientPool({
-      createClient() {
-        return singleton;
-      },
-    });
-
-    const client = pool.get(() => {});
-    expect(() => client.shutdown()).toThrowError(
-      "shutdown not allowed for pooled client"
-    );
-    expect(singleton.shutdown).not.toBeCalled();
-  });
-
   it("should call all the handlers that are listening", () => {
     let emit: IRtcClientConfiguration["receive"] = vi.fn();
     const pool = new RtcClientPool({
@@ -126,7 +96,7 @@ describe("RtcClientPool", () => {
     expect(handle2).toHaveBeenCalledWith(zeroUuid, fakeMessage);
   });
 
-  it("should not call handle if been releases", () => {
+  it("should not call handle if been releases", async () => {
     let emit: IRtcClientConfiguration["receive"] = vi.fn();
     const pool = new RtcClientPool({
       createClient(receive) {
@@ -154,7 +124,7 @@ describe("RtcClientPool", () => {
     handle1.mockReset();
     handle2.mockReset();
 
-    client2.release();
+    await client2.shutdown();
 
     emit(zeroUuid, fakeMessage);
 
@@ -164,7 +134,7 @@ describe("RtcClientPool", () => {
     handle1.mockReset();
     handle2.mockReset();
 
-    client1.release();
+    await client1.shutdown();
 
     emit(zeroUuid, fakeMessage);
 
@@ -182,11 +152,20 @@ describe("RtcClientPool", () => {
     });
 
     const client = pool.get(vi.fn());
-    expect(client.release()).toBe(true);
-    expect(client.release()).toBe(false);
+    expect(client.shutdown()).resolves.toBe(true);
+    expect(client.shutdown()).resolves.toBe(false);
   });
 
   describe("with ttl", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    });
+
     it("should wait the duration before tearing down the singleton", () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
@@ -194,7 +173,7 @@ describe("RtcClientPool", () => {
         createClient: () => ({ shutdown } as any),
       });
 
-      pool.get().release();
+      pool.get().shutdown();
       vi.advanceTimersByTime(100);
       expect(shutdown).not.toBeCalled();
       vi.advanceTimersByTime(875);
@@ -203,14 +182,14 @@ describe("RtcClientPool", () => {
       expect(shutdown).toBeCalled();
     });
 
-    it("should not release the singleton if another consumer allocates a reference", () => {
+    it("should not release the singleton if another consumer allocates a reference", async () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
         ttl: 1_000,
         createClient: () => ({ shutdown } as any),
       });
 
-      pool.get().release();
+      await pool.get().shutdown();
       vi.advanceTimersByTime(975);
       expect(shutdown).not.toBeCalled();
 
@@ -219,6 +198,9 @@ describe("RtcClientPool", () => {
       expect(shutdown).not.toBeCalled();
       vi.runAllTimers();
       expect(shutdown).not.toBeCalled();
+      await client.shutdown();
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(shutdown).toBeCalled();
     });
   });
 });

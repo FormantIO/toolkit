@@ -11,7 +11,7 @@ import {
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { AppRtcClientPool, PooledRtcClient } from "./AppRtcClientPool";
+import { AppRtcClientPool } from "./AppRtcClientPool";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
@@ -146,7 +146,7 @@ export interface IRealtimeDevice {
 }
 
 export class Device extends EventEmitter implements IRealtimeDevice {
-  rtcClient: PooledRtcClient | RtcClientV1 | undefined;
+  rtcClient: RtcClient | RtcClientV1 | undefined;
   remoteDevicePeerId: string | null = null;
 
   realtimeListeners: RealtimeListener[] = [];
@@ -646,10 +646,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         throwNotStartedError = true;
       }
 
-      if ("release" in this.rtcClient) {
-        await this.rtcClient.release();
-        this.rtcClient = undefined;
-      }
+      await this.rtcClient.shutdown();
+      this.rtcClient = undefined;
     }
 
     if (throwNotStartedError) {
