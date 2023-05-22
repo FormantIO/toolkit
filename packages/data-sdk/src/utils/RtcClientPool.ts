@@ -19,6 +19,7 @@ export class RtcClientPool {
 
   private readonly createClient: CreateClientFn;
   private readonly ttl: number;
+  private readonly proxyHandler: ProxyHandler<RtcClient>;
   private proxyReceivers: Map<PooledRtcClient, ReceiveFn> = new Map();
   private teardownTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -26,18 +27,13 @@ export class RtcClientPool {
     const { createClient, ttl = 0 } = options;
     this.createClient = createClient;
     this.ttl = Math.max(ttl, 0);
-  }
-
-  get isActive(): boolean {
-    return this[singleton] !== null;
-  }
-
-  get size(): number {
-    return this.proxyReceivers.size;
-  }
-
-  get(onReceive?: ReceiveFn): PooledRtcClient {
-    const proxy = new Proxy(this.allocate(), {
+    this.proxyHandler = {
+      has(target, prop) {
+        return Reflect.has(target, prop) || "release" === prop;
+      },
+      ownKeys(target) {
+        return [...Reflect.ownKeys(target), "release"];
+      },
       get: (target, prop, receiver) => {
         switch (prop) {
           case "release":
@@ -50,7 +46,22 @@ export class RtcClientPool {
             return Reflect.get(target, prop, receiver);
         }
       },
-    }) as PooledRtcClient;
+    };
+  }
+
+  get isActive(): boolean {
+    return this[singleton] !== null;
+  }
+
+  get size(): number {
+    return this.proxyReceivers.size;
+  }
+
+  get(onReceive?: ReceiveFn): PooledRtcClient {
+    const proxy = new Proxy(
+      this.allocate(),
+      this.proxyHandler
+    ) as PooledRtcClient;
 
     this.proxyReceivers.set(proxy, onReceive ?? (() => {}));
     return proxy;

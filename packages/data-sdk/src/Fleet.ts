@@ -172,7 +172,7 @@ export class Fleet {
     try {
       return await rtcClient.getPeers();
     } finally {
-      await rtcClient.release();
+      rtcClient.release();
     }
   }
 
@@ -184,7 +184,7 @@ export class Fleet {
     try {
       return await rtcClient.getSessions();
     } finally {
-      await rtcClient.release();
+      rtcClient.release();
     }
   }
 

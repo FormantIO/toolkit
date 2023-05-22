@@ -13,6 +13,21 @@ describe("RtcClientPool", () => {
     vi.useRealTimers();
   });
 
+  it("should think it has a release() method", () => {
+    const pool = new RtcClientPool({
+      createClient() {
+        return {
+          shutdown: vi.fn(),
+        } as unknown as RtcClient;
+      },
+    });
+
+    const client = pool.get(() => {});
+    expect("release" in client).toBe(true);
+    expect(client.release).toBeTypeOf("function");
+    client.release();
+  });
+
   it("should release when no more poxies are active", async () => {
     const singleton = {
       shutdown: vi.fn(),

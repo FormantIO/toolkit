@@ -252,6 +252,12 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
   async startRealtimeConnection(sessionType?: SessionType): Promise<void> {
     if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
+      if (this.rtcClient) {
+        console.error(
+          "overwriting existing rtcClient due to missing connectionMonitorInterval"
+        );
+      }
+
       let rtcClient;
 
       if (rtcClientVersion === "1") {
@@ -630,9 +636,10 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   async stopRealtimeConnection() {
     let throwNotStartedError = false;
 
-    if (this.rtcClient && this.remoteDevicePeerId) {
+    if (this.rtcClient) {
+      this.stopConnectionMonitoring();
+
       if (this.remoteDevicePeerId) {
-        this.stopConnectionMonitoring();
         await this.rtcClient.disconnect(this.remoteDevicePeerId);
         this.remoteDevicePeerId = null;
       } else {
@@ -653,7 +660,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   async isInRealtimeSession(): Promise<boolean> {
     const peers = await Fleet.getPeers();
     const sessions = await Fleet.getRealtimeSessions();
-    let peer = peers.find((_) => _.deviceId === this.id);
+    const peer = peers.find((_) => _.deviceId === this.id);
     if (peer) {
       return sessions[peer.id].length > 0;
     }
