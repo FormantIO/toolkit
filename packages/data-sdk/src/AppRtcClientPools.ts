@@ -4,59 +4,54 @@ import {
   RtcSignalingClient,
   SignalingPromiseClient,
 } from "@formant/realtime-sdk";
+
+import { SessionType, SessionTypes } from "./model/SessionType";
 import { RtcClientPool } from "./utils/RtcClientPool";
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
 
-export enum SessionType {
-  UNKNOWN = 0,
-  TELEOP = 1,
-  PORT_FORWARD = 2,
-  OBSERVE = 3,
-}
-
 const getToken = async () =>
   defined(Authentication.token, "Realtime when user isn't authorized");
 
 const EnumRtcClientPools = {
-  [SessionType.UNKNOWN]: new RtcClientPool({
+  [SessionTypes.UNKNOWN]: new RtcClientPool({
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
         getToken,
-        sessionType: SessionType.UNKNOWN,
+        sessionType: SessionTypes.UNKNOWN,
         receive: receiveFn,
       }),
   }),
-  [SessionType.TELEOP]: new RtcClientPool({
+  [SessionTypes.TELEOP]: new RtcClientPool({
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
         getToken,
-        sessionType: SessionType.TELEOP,
+        sessionType: SessionTypes.TELEOP,
         receive: receiveFn,
       }),
   }),
-  [SessionType.PORT_FORWARD]: new RtcClientPool({
+  [SessionTypes.PORT_FORWARD]: new RtcClientPool({
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
         getToken,
-        sessionType: SessionType.PORT_FORWARD,
+        sessionType: SessionTypes.PORT_FORWARD,
         receive: receiveFn,
       }),
   }),
-  [SessionType.OBSERVE]: new RtcClientPool({
+  [SessionTypes.OBSERVE]: new RtcClientPool({
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
         getToken,
-        sessionType: SessionType.OBSERVE,
+        sessionType: SessionTypes.OBSERVE,
         receive: receiveFn,
       }),
   }),
@@ -64,13 +59,13 @@ const EnumRtcClientPools = {
 
 export const AppRtcClientPools = {
   ...EnumRtcClientPools,
-  unknown: EnumRtcClientPools[SessionType.UNKNOWN],
-  teleop: EnumRtcClientPools[SessionType.TELEOP],
-  portForward: EnumRtcClientPools[SessionType.PORT_FORWARD],
-  observe: EnumRtcClientPools[SessionType.OBSERVE],
+  unknown: EnumRtcClientPools[SessionTypes.UNKNOWN],
+  teleop: EnumRtcClientPools[SessionTypes.TELEOP],
+  portForward: EnumRtcClientPools[SessionTypes.PORT_FORWARD],
+  observe: EnumRtcClientPools[SessionTypes.OBSERVE],
 } as const;
 
-export const defaultRtcClientPool = EnumRtcClientPools[SessionType.TELEOP];
+export const defaultRtcClientPool = EnumRtcClientPools[SessionTypes.TELEOP];
 
 export const v1RtcClientPool = new RtcClientPool({
   ttlMs: 2_500,
