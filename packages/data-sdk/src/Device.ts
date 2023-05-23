@@ -5,13 +5,12 @@ import {
   IRtcStreamPayload,
   RtcClient,
   RtcClientV1,
-  RtcSignalingClient,
   IRtcClientConfiguration,
 } from "@formant/realtime-sdk";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { AppRtcClientPools, defaultRtcClientPool } from "./AppRtcClientPools";
+import { getRtcClientPool } from "./AppRtcClientPools";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
@@ -35,13 +34,9 @@ import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
 import { ITags } from "./model/ITags";
-import { isRtcPeer } from "./utils";
+import { isRtcPeer, getRtcClientVersion } from "./utils";
 
 type SessionType = IRtcClientConfiguration["sessionType"];
-
-// get query param for "rtc_client"
-const urlParams = new URLSearchParams(window.location.search);
-const rtcClientVersion = urlParams.get("rtc_client");
 
 export interface ConfigurationDocument {
   tags: ITags;
@@ -265,23 +260,11 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       );
     }
 
-    let rtcClient;
-
-    if (rtcClientVersion === "1") {
-      rtcClient = new RtcClientV1({
-        signalingClient: new RtcSignalingClient(
-          FORMANT_API_URL + "/v1/signaling"
-        ),
-        getToken: async () =>
-          defined(Authentication.token, "Realtime when user isn't authorized"),
-        receive: this.handleMessage,
-      });
-    } else {
-      const pool = sessionType
-        ? AppRtcClientPools[sessionType]
-        : defaultRtcClientPool;
-      rtcClient = pool.get(this.handleMessage);
-    }
+    const pool = getRtcClientPool({
+      version: getRtcClientVersion() ?? "2",
+      sessionType,
+    });
+    const rtcClient = pool.get(this.handleMessage);
 
     if ("isReady" in rtcClient) {
       while (!rtcClient.isReady()) {
@@ -778,11 +761,12 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     channelName: string,
     rtcConfig?: RTCDataChannelInit
   ): Promise<DataChannel> {
-    if (rtcClientVersion === "1") {
+    if (getRtcClientVersion() === "1") {
       throw new Error(
         "createCustomDataChannel is not supported in rtcClientVersion 1"
       );
     }
+
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"
