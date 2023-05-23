@@ -169,7 +169,7 @@ describe("RtcClientPool", () => {
     it("should wait the duration before tearing down the singleton", async () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
-        ttl: 1_000,
+        ttlMs: 1_000,
         createClient: () => ({ shutdown } as any),
       });
 
@@ -185,7 +185,7 @@ describe("RtcClientPool", () => {
     it("should not release the singleton if another consumer allocates a reference", async () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
-        ttl: 1_000,
+        ttlMs: 1_000,
         createClient: () => ({ shutdown } as any),
       });
 

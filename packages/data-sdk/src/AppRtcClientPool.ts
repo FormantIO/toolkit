@@ -4,14 +4,12 @@ import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
 
-export type { PooledRtcClient } from "./utils/RtcClientPool";
-
 const getToken = async () =>
   defined(Authentication.token, "Realtime when user isn't authorized");
 
 const NamedRtcClientPools = {
   unknown: new RtcClientPool({
-    ttl: 2_500,
+    ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -21,7 +19,7 @@ const NamedRtcClientPools = {
       }),
   }),
   teleop: new RtcClientPool({
-    ttl: 2_500,
+    ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -31,7 +29,7 @@ const NamedRtcClientPools = {
       }),
   }),
   portForward: new RtcClientPool({
-    ttl: 2_500,
+    ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
@@ -41,7 +39,7 @@ const NamedRtcClientPools = {
       }),
   }),
   observe: new RtcClientPool({
-    ttl: 2_500,
+    ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
         signalingClient: new SignalingPromiseClient(FORMANT_API_URL),

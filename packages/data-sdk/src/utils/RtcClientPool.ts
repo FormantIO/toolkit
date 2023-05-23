@@ -5,7 +5,7 @@ type CreateClientFn = (receive: ReceiveFn) => RtcClient;
 
 export interface IRtcClientPoolOptions {
   createClient: CreateClientFn;
-  ttl?: number;
+  ttlMs?: number;
 }
 
 const singleton = Symbol("RtcClientPool.instance");
@@ -14,15 +14,15 @@ export class RtcClientPool {
   [singleton]: RtcClient | null = null;
 
   private readonly createClient: CreateClientFn;
-  private readonly ttl: number;
+  private readonly ttlMs: number;
   private readonly proxyHandler: ProxyHandler<RtcClient>;
   private proxyReceivers: Map<RtcClient, ReceiveFn | null> = new Map();
   private teardownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options: IRtcClientPoolOptions) {
-    const { createClient, ttl = 0 } = options;
+    const { createClient, ttlMs = 0 } = options;
     this.createClient = createClient;
-    this.ttl = Math.max(ttl, 0);
+    this.ttlMs = Math.max(ttlMs, 0);
     this.proxyHandler = {
       get: (target, prop, receiver) => {
         switch (prop) {
@@ -90,15 +90,15 @@ export class RtcClientPool {
       return false;
     }
 
-    if (!this.teardownTimeout && Number.isFinite(this.ttl)) {
-      if (this.ttl === 0) {
+    if (!this.teardownTimeout && Number.isFinite(this.ttlMs)) {
+      if (this.ttlMs === 0) {
         await this.teardown();
       } else {
         this.teardownTimeout = setTimeout(() => {
           this.teardown()
             .catch((err) => console.error("teardown failed", { err }))
             .finally(() => (this.teardownTimeout = null));
-        }, this.ttl);
+        }, this.ttlMs);
       }
     }
     return true;

@@ -646,8 +646,11 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         throwNotStartedError = true;
       }
 
-      await this.rtcClient.shutdown();
-      this.rtcClient = undefined;
+      try {
+        await this.rtcClient.shutdown();
+      } finally {
+        this.rtcClient = undefined;
+      }
     }
 
     if (throwNotStartedError) {
