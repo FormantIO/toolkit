@@ -28,14 +28,14 @@
   "scripts": {
     "preversion": "make",
     "dev": "vite --port 5173",
-    "build": "tsc && vite build",
+    "build": "tsc -p ./configs/tsconfig.demo.json && vite build",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest run",
     "coverage": "vitest run --coverage",
     "prettier:check": "prettier --check src/",
     "prettier:write": "prettier --write src/",
-    "types": "tsc --project ./tsconfig.types.json",
+    "types": "tsc --project ./configs/tsconfig.types.json",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
