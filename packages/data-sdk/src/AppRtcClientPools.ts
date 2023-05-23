@@ -1,4 +1,9 @@
-import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
+import {
+  RtcClient,
+  RtcClientV1,
+  RtcSignalingClient,
+  SignalingPromiseClient,
+} from "@formant/realtime-sdk";
 import { RtcClientPool } from "./utils/RtcClientPool";
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
@@ -66,6 +71,31 @@ export const AppRtcClientPools = {
 } as const;
 
 export const defaultRtcClientPool = EnumRtcClientPools[SessionType.TELEOP];
+
+export const v1RtcClientPool = new RtcClientPool({
+  ttlMs: 2_500,
+  createClient: (receiveFn) =>
+    new RtcClientV1({
+      signalingClient: new RtcSignalingClient(
+        FORMANT_API_URL + "/v1/signaling"
+      ),
+      getToken,
+      receive: receiveFn,
+    }),
+});
+
+export const getRtcClientPool = (options: {
+  version: string;
+  sessionType?: SessionType;
+}) => {
+  const { version, sessionType } = options;
+
+  if (version === "1") {
+    return v1RtcClientPool;
+  }
+
+  return sessionType ? AppRtcClientPools[sessionType] : defaultRtcClientPool;
+};
 
 export function debug() {
   console.group("RtcClientPool Sizes");
