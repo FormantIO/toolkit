@@ -6,14 +6,12 @@ import {
   RtcClient,
   RtcClientV1,
   RtcSignalingClient,
-  SignalingPromiseClient,
+  IRtcClientConfiguration,
 } from "@formant/realtime-sdk";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { FORMANT_API_URL } from "./config";
-import { delay } from "../../common/delay";
-import { defined } from "../../common/defined";
+import { AppRtcClientPools, defaultRtcClientPool } from "./AppRtcClientPools";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
@@ -23,6 +21,11 @@ import {
   TextRequestDataChannel,
   BinaryRequestDataChannel,
 } from "./RequestDataChannel";
+import { FORMANT_API_URL } from "./config";
+
+import { delay } from "../../common/delay";
+import { defined } from "../../common/defined";
+
 import { Uuid } from "./model/Uuid";
 import { InterventionType } from "./model/InterventionType";
 import { IInterventionTypeMap } from "./model/IInterventionTypeMap";
@@ -31,14 +34,17 @@ import { IEventQuery } from "./model/IEventQuery";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
-import { isRtcPeer } from "./main";
+import { ITags } from "./model/ITags";
+import { isRtcPeer } from "./utils";
+
+type SessionType = IRtcClientConfiguration["sessionType"];
 
 // get query param for "rtc_client"
 const urlParams = new URLSearchParams(window.location.search);
 const rtcClientVersion = urlParams.get("rtc_client");
 
 export interface ConfigurationDocument {
-  tags: { [key: string]: string };
+  tags: ITags;
   urdfFiles: string[];
   telemetry?: {
     streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
@@ -244,8 +250,14 @@ export class Device extends EventEmitter implements IRealtimeDevice {
    * @returns {void}
    */
 
-  async startRealtimeConnection(sessionType?: number): Promise<void> {
+  async startRealtimeConnection(sessionType?: SessionType): Promise<void> {
     if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
+      if (this.rtcClient) {
+        console.error(
+          "overwriting existing rtcClient due to missing connectionMonitorInterval"
+        );
+      }
+
       let rtcClient;
 
       if (rtcClientVersion === "1") {
@@ -261,25 +273,14 @@ export class Device extends EventEmitter implements IRealtimeDevice {
           receive: this.handleMessage,
         });
       } else {
-        rtcClient = new RtcClient({
-          signalingClient: new SignalingPromiseClient(
-            FORMANT_API_URL,
-            null,
-            null
-          ),
-          getToken: async () => {
-            return defined(
-              Authentication.token,
-              "Realtime when user isn't authorized"
-            );
-          },
-          receive: this.handleMessage,
-          sessionType: sessionType,
-        });
+        const pool = sessionType
+          ? AppRtcClientPools[sessionType]
+          : defaultRtcClientPool;
+        rtcClient = pool.get(this.handleMessage);
       }
 
-      if ((rtcClient as any).isReady) {
-        while (!(rtcClient as RtcClient).isReady()) {
+      if ("isReady" in rtcClient) {
+        while (!rtcClient.isReady()) {
           await delay(100);
         }
       }
@@ -636,19 +637,34 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   }
 
   async stopRealtimeConnection() {
-    if (this.rtcClient && this.remoteDevicePeerId) {
+    let throwNotStartedError = false;
+
+    if (this.rtcClient) {
       this.stopConnectionMonitoring();
-      await this.rtcClient.disconnect(this.remoteDevicePeerId);
-      this.remoteDevicePeerId = null;
-    } else {
+
+      if (this.remoteDevicePeerId) {
+        await this.rtcClient.disconnect(this.remoteDevicePeerId);
+        this.remoteDevicePeerId = null;
+      } else {
+        throwNotStartedError = true;
+      }
+
+      try {
+        await this.rtcClient.shutdown();
+      } finally {
+        this.rtcClient = undefined;
+      }
+    }
+
+    if (throwNotStartedError) {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
   }
 
   async isInRealtimeSession(): Promise<boolean> {
-    let peers = await Fleet.getPeers();
-    let sessions = await Fleet.getRealtimeSessions();
-    let peer = peers.find((_) => _.deviceId === this.id);
+    const peers = await Fleet.getPeers();
+    const sessions = await Fleet.getRealtimeSessions();
+    const peer = peers.find((_) => _.deviceId === this.id);
     if (peer) {
       return sessions[peer.id].length > 0;
     }
