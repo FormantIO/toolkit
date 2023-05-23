@@ -251,71 +251,92 @@ export class Device extends EventEmitter implements IRealtimeDevice {
    */
 
   async startRealtimeConnection(sessionType?: SessionType): Promise<void> {
-    if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
-      if (this.rtcClient) {
-        console.error(
-          "overwriting existing rtcClient due to missing connectionMonitorInterval"
-        );
-      }
+    console.debug(`${new Date().toISOString()} :: Connection start requested`);
 
-      let rtcClient;
-
-      if (rtcClientVersion === "1") {
-        rtcClient = new RtcClientV1({
-          signalingClient: new RtcSignalingClient(
-            FORMANT_API_URL + "/v1/signaling"
-          ),
-          getToken: async () =>
-            defined(
-              Authentication.token,
-              "Realtime when user isn't authorized"
-            ),
-          receive: this.handleMessage,
-        });
-      } else {
-        const pool = sessionType
-          ? AppRtcClientPools[sessionType]
-          : defaultRtcClientPool;
-        rtcClient = pool.get(this.handleMessage);
-      }
-
-      if ("isReady" in rtcClient) {
-        while (!rtcClient.isReady()) {
-          await delay(100);
-        }
-      }
-
-      // WebRTC requires a signaling phase when forming a new connection.
-
-      this.remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
-
-      const sessionId = await this.createSession(rtcClient);
-
-      // Wait for the signaling process to complete...
-      if (!!sessionId) {
-        const retries = 100;
-        for (let i = 0; i < retries; i++) {
-          const connectionCompleted =
-            rtcClient.getConnectionStatus(this.remoteDevicePeerId) ===
-            "connected";
-          if (connectionCompleted) {
-            console.debug(
-              `${new Date().toISOString()} :: Connection completed after ${i} retries`
-            );
-            this.initConnectionMonitoring();
-            this.rtcClient = rtcClient;
-            this.emit("connect");
-            i = 100;
-          }
-          await delay(100);
-        }
-      } else {
-        throw new Error(`Unable to establish a connection at this time.`);
-      }
-    } else {
+    if (this.rtcClient && this.connectionMonitorInterval !== undefined) {
       throw new Error(
         `Already created realtime connection to device ${this.id}`
       );
+    }
+
+    if (this.rtcClient) {
+      console.warn(
+        "overwriting existing rtcClient due to missing connectionMonitorInterval"
+      );
+    }
+
+    let rtcClient;
+
+    if (rtcClientVersion === "1") {
+      rtcClient = new RtcClientV1({
+        signalingClient: new RtcSignalingClient(
+          FORMANT_API_URL + "/v1/signaling"
+        ),
+        getToken: async () =>
+          defined(Authentication.token, "Realtime when user isn't authorized"),
+        receive: this.handleMessage,
+      });
+    } else {
+      const pool = sessionType
+        ? AppRtcClientPools[sessionType]
+        : defaultRtcClientPool;
+      rtcClient = pool.get(this.handleMessage);
+    }
+
+    if ("isReady" in rtcClient) {
+      while (!rtcClient.isReady()) {
+        await delay(100);
+      }
+    }
+
+    // WebRTC requires a signaling phase when forming a new connection.
+
+    this.remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
+
+    const sessionId = await this.createSession(rtcClient);
+    if (!sessionId) {
+      try {
+        // cleanup
+        this.remoteDevicePeerId = null;
+        await rtcClient.shutdown();
+      } catch (err) {
+        console.error("rtcClient cannot shutdown", { err });
+      }
+
+      throw new Error(`Unable to establish a connection at this time.`);
+    }
+
+    // Wait for the signaling process to complete...
+    const retries = 100;
+    for (let i = 0; i < retries; i++) {
+      const connectionCompleted =
+        rtcClient.getConnectionStatus(this.remoteDevicePeerId) === "connected";
+
+      if (!connectionCompleted) {
+        await delay(100);
+        continue;
+      }
+
+      console.debug(
+        `${new Date().toISOString()} :: Connection completed after ${i} retries`
+      );
+      this.initConnectionMonitoring();
+      this.rtcClient = rtcClient;
+      this.emit("connect");
+      return;
+    }
+
+    console.error(
+      "Connection failed: A session was created, but the connection could not be established, " +
+        "possibly due to network issues or misconfigured settings."
+    );
+
+    try {
+      // cleanup
+      this.remoteDevicePeerId = null;
+      await rtcClient.shutdown();
+    } catch (err) {
+      console.error("rtcClient cannot shutdown", { err });
     }
   }
 
@@ -333,21 +354,21 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     return devicePeer.id;
   }
 
-  private async createSession(rtcClient: RtcClient | RtcClientV1) {
+  private async createSession(
+    rtcClient: RtcClient | RtcClientV1
+  ): Promise<string | null> {
     // We can connect our real-time communication client to device peers by their ID
     const tries = 3;
     if (this.remoteDevicePeerId) {
       for (let i = 0; i < tries; i++) {
-        const connectionId = await (rtcClient as RtcClient).connect(
-          this.remoteDevicePeerId
-        );
+        const connectionId = await rtcClient.connect(this.remoteDevicePeerId);
         if (!!connectionId) {
           return connectionId;
         }
         delay(100);
       }
     }
-    return;
+    return null;
   }
 
   private initConnectionMonitoring() {
