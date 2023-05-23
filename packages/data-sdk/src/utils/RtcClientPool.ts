@@ -72,8 +72,11 @@ export class RtcClientPool {
       return;
     }
 
-    await instance.shutdown();
-    this[singleton] = null;
+    try {
+      await instance.shutdown();
+    } finally {
+      this[singleton] = null;
+    }
   }
 
   private dispatch: ReceiveFn = (peerId, message) => {
