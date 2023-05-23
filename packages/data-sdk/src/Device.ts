@@ -11,7 +11,7 @@ import {
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { AppRtcClientPool } from "./AppRtcClientPool";
+import { AppRtcClientPools, defaultRtcClientPool } from "./AppRtcClientPools";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
@@ -273,7 +273,10 @@ export class Device extends EventEmitter implements IRealtimeDevice {
           receive: this.handleMessage,
         });
       } else {
-        rtcClient = AppRtcClientPool[sessionType ?? 1].get(this.handleMessage);
+        const pool = sessionType
+          ? AppRtcClientPools[sessionType]
+          : defaultRtcClientPool;
+        rtcClient = pool.get(this.handleMessage);
       }
 
       if ("isReady" in rtcClient) {

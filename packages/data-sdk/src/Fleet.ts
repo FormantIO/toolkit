@@ -3,7 +3,7 @@ import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { Device } from "./Device";
-import { AppRtcClientPool } from "./AppRtcClientPool";
+import { defaultRtcClientPool } from "./AppRtcClientPools";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IAnalyticsModule } from "./model/IAnalyticsModule";
@@ -168,7 +168,7 @@ export class Fleet {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const rtcClient = AppRtcClientPool.teleop.get();
+    const rtcClient = defaultRtcClientPool.get();
     try {
       return await rtcClient.getPeers();
     } finally {
@@ -180,7 +180,7 @@ export class Fleet {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const rtcClient = AppRtcClientPool.teleop.get();
+    const rtcClient = defaultRtcClientPool.get();
     try {
       return await rtcClient.getSessions();
     } finally {
