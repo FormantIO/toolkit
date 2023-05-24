@@ -5,13 +5,11 @@ import {
   IRtcStreamPayload,
   RtcClient,
   RtcClientV1,
-  RtcSignalingClient,
-  IRtcClientConfiguration,
 } from "@formant/realtime-sdk";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { AppRtcClientPools, defaultRtcClientPool } from "./AppRtcClientPools";
+import { getRtcClientPool } from "./AppRtcClientPools";
 import { Authentication } from "./Authentication";
 import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
@@ -35,13 +33,8 @@ import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
 import { ITags } from "./model/ITags";
-import { isRtcPeer } from "./utils";
-
-type SessionType = IRtcClientConfiguration["sessionType"];
-
-// get query param for "rtc_client"
-const urlParams = new URLSearchParams(window.location.search);
-const rtcClientVersion = urlParams.get("rtc_client");
+import { SessionType } from "./model/SessionType";
+import { isRtcPeer, getRtcClientVersion } from "./utils";
 
 export interface ConfigurationDocument {
   tags: ITags;
@@ -128,10 +121,15 @@ export type RealtimeDataStream = {
   name: string;
 };
 
-export const SessionType = {
-  Teleop: 1,
-  Observe: 3,
-};
+function assertNotCancelled(cancelled: boolean): void {
+  if (cancelled) throw new Error("Cancelled by deadline");
+}
+
+interface IStartRealtimeConnectionOptions {
+  sessionType?: SessionType;
+  deadlineMs?: number;
+  maxConnectRetries?: number;
+}
 
 export interface IRealtimeDevice {
   startRealtimeConnection(sessionType?: number): Promise<void>;
@@ -245,81 +243,122 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
   /**
    * Starts a real-time connection with the remote device using WebRTC.
-   * @param {number} [sessionType] - Optional session type to be used for the connection.
+   * @param {number} [options] - Optional session type to be used for the connection.
    * @throws `Error`  If the connection could not be established or if a connection already exists.
    * @returns {void}
    */
+  async startRealtimeConnection(
+    options: SessionType | IStartRealtimeConnectionOptions = {}
+  ): Promise<void> {
+    console.debug(`${new Date().toISOString()} :: Connection start requested`);
 
-  async startRealtimeConnection(sessionType?: SessionType): Promise<void> {
-    if (!this.rtcClient || this.connectionMonitorInterval === undefined) {
-      if (this.rtcClient) {
-        console.error(
-          "overwriting existing rtcClient due to missing connectionMonitorInterval"
+    if (this.rtcClient && this.connectionMonitorInterval !== undefined) {
+      throw new Error(
+        `Already created realtime connection to device ${this.id}`
+      );
+    }
+
+    if (this.rtcClient) {
+      console.warn(
+        "overwriting existing rtcClient due to missing connectionMonitorInterval"
+      );
+    }
+
+    const {
+      sessionType,
+      deadlineMs = 10_000,
+      maxConnectRetries = 3,
+    } = typeof options === "number"
+      ? ({ sessionType: options } as IStartRealtimeConnectionOptions)
+      : options;
+
+    const pool = getRtcClientPool({
+      sessionType,
+      version: getRtcClientVersion() ?? "2",
+    });
+    const rtcClient = pool.get(this.handleMessage);
+
+    let cancelled = false;
+    const deadlinePromise = new Promise<never>((_, reject) =>
+      setTimeout(() => {
+        cancelled = true;
+        reject(
+          new Error(
+            "Connection timed out: the connection could not be finalized in time, " +
+              "possibly due to network issues or misconfigured settings."
+          )
         );
-      }
+      }, deadlineMs)
+    );
 
-      let rtcClient;
-
-      if (rtcClientVersion === "1") {
-        rtcClient = new RtcClientV1({
-          signalingClient: new RtcSignalingClient(
-            FORMANT_API_URL + "/v1/signaling"
-          ),
-          getToken: async () =>
-            defined(
-              Authentication.token,
-              "Realtime when user isn't authorized"
-            ),
-          receive: this.handleMessage,
-        });
-      } else {
-        const pool = sessionType
-          ? AppRtcClientPools[sessionType]
-          : defaultRtcClientPool;
-        rtcClient = pool.get(this.handleMessage);
-      }
-
+    const establishConnection = async (): Promise<string> => {
       if ("isReady" in rtcClient) {
         while (!rtcClient.isReady()) {
+          assertNotCancelled(cancelled);
           await delay(100);
         }
       }
 
       // WebRTC requires a signaling phase when forming a new connection.
+      const remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
+      assertNotCancelled(cancelled);
 
-      this.remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
+      let sessionId: string | undefined = undefined;
 
-      const sessionId = await this.createSession(rtcClient);
+      // We can connect our real-time communication client to device peers by their ID
+      for (let i = 0; i < maxConnectRetries; i++) {
+        sessionId = await rtcClient.connect(remoteDevicePeerId);
+        if (!!sessionId) break;
+        delay(100);
+        assertNotCancelled(cancelled);
+      }
+
+      if (!sessionId)
+        throw new Error(
+          `Session could not be created: exhausted ${maxConnectRetries} retries`
+        );
 
       // Wait for the signaling process to complete...
-      if (!!sessionId) {
-        const retries = 100;
-        for (let i = 0; i < retries; i++) {
-          const connectionCompleted =
-            rtcClient.getConnectionStatus(this.remoteDevicePeerId) ===
-            "connected";
-          if (connectionCompleted) {
-            console.debug(
-              `${new Date().toISOString()} :: Connection completed after ${i} retries`
-            );
-            this.initConnectionMonitoring();
-            this.rtcClient = rtcClient;
-            this.emit("connect");
-            return;
-          }
-          await delay(100);
+      let retries = 0;
+      while (!cancelled) {
+        const connectionCompleted =
+          rtcClient.getConnectionStatus(remoteDevicePeerId) === "connected";
+        if (connectionCompleted) {
+          break;
         }
-        throw new Error(
-          "A session was created, but the connection could not be established, possibly due to network issues or misconfigured settings."
-        );
-      } else {
-        throw new Error(`Unable to establish a connection at this time.`);
+
+        await delay(100);
+        retries += 1;
       }
-    } else {
-      throw new Error(
-        `Already created realtime connection to device ${this.id}`
+      assertNotCancelled(cancelled);
+
+      console.debug(
+        `${new Date().toISOString()} :: Connection completed after ${retries} retries`
       );
-    }
+
+      return remoteDevicePeerId;
+    };
+
+    return Promise.race([establishConnection(), deadlinePromise])
+      .then((remoteDevicePeerId) => {
+        this.remoteDevicePeerId = remoteDevicePeerId;
+        this.initConnectionMonitoring();
+        this.rtcClient = rtcClient;
+        this.emit("connect");
+      })
+      .catch((err) => {
+        console.debug(
+          `${new Date().toISOString()} :: Connection failed: %o`,
+          err
+        );
+        // cleanup on failure
+        this.remoteDevicePeerId = null;
+        rtcClient.shutdown().catch((shutdownErr: unknown) => {
+          console.error("rtcClient cannot shutdown: %o", shutdownErr);
+        });
+        this.emit("connection_failed", err);
+        throw err;
+      });
   }
 
   private async getRemoteDevicePeerId(rtcClient: RtcClient | RtcClientV1) {
@@ -334,23 +373,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       throw new Error("Cannot find peer, is the robot offline?");
     }
     return devicePeer.id;
-  }
-
-  private async createSession(rtcClient: RtcClient | RtcClientV1) {
-    // We can connect our real-time communication client to device peers by their ID
-    const tries = 3;
-    if (this.remoteDevicePeerId) {
-      for (let i = 0; i < tries; i++) {
-        const connectionId = await (rtcClient as RtcClient).connect(
-          this.remoteDevicePeerId
-        );
-        if (!!connectionId) {
-          return connectionId;
-        }
-        delay(100);
-      }
-    }
-    return;
   }
 
   private initConnectionMonitoring() {
@@ -760,11 +782,12 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     channelName: string,
     rtcConfig?: RTCDataChannelInit
   ): Promise<DataChannel> {
-    if (rtcClientVersion === "1") {
+    if (getRtcClientVersion() === "1") {
       throw new Error(
         "createCustomDataChannel is not supported in rtcClientVersion 1"
       );
     }
+
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"

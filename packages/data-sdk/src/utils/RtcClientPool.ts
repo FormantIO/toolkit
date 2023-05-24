@@ -1,25 +1,31 @@
-import { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
+import {
+  RtcClient,
+  RtcClientV1,
+  IRtcClientConfiguration,
+} from "@formant/realtime-sdk";
 
 type ReceiveFn = IRtcClientConfiguration["receive"];
-type CreateClientFn = (receive: ReceiveFn) => RtcClient;
+type CreateClientFn<T extends RtcClient | RtcClientV1> = (
+  receive: ReceiveFn
+) => T;
 
-export interface IRtcClientPoolOptions {
-  createClient: CreateClientFn;
+export interface IRtcClientPoolOptions<T extends RtcClient | RtcClientV1> {
+  createClient: CreateClientFn<T>;
   ttlMs?: number;
 }
 
 const singleton = Symbol("RtcClientPool.instance");
 
-export class RtcClientPool {
-  [singleton]: RtcClient | null = null;
+export class RtcClientPool<T extends RtcClient | RtcClientV1> {
+  [singleton]: T | null = null;
 
-  private readonly createClient: CreateClientFn;
+  private readonly createClient: CreateClientFn<T>;
   private readonly ttlMs: number;
-  private readonly proxyHandler: ProxyHandler<RtcClient>;
-  private proxyReceivers: Map<RtcClient, ReceiveFn | null> = new Map();
+  private readonly proxyHandler: ProxyHandler<T>;
+  private proxyReceivers: Map<T, ReceiveFn | null> = new Map();
   private teardownTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(options: IRtcClientPoolOptions) {
+  constructor(options: IRtcClientPoolOptions<T>) {
     const { createClient, ttlMs = 0 } = options;
     this.createClient = createClient;
     this.ttlMs = Math.max(ttlMs, 0);
@@ -43,13 +49,13 @@ export class RtcClientPool {
     return this.proxyReceivers.size;
   }
 
-  get(onReceive?: ReceiveFn): RtcClient {
+  get(onReceive?: ReceiveFn): T {
     const proxy = new Proxy(this.allocate(), this.proxyHandler);
     this.proxyReceivers.set(proxy, onReceive ?? null);
     return proxy;
   }
 
-  private allocate(): RtcClient {
+  private allocate(): T {
     if (this[singleton]) {
       // cancel any outstanding teardown request/keep this singleton alive
       if (this.teardownTimeout) {
@@ -83,7 +89,7 @@ export class RtcClientPool {
     this.proxyReceivers.forEach((it) => it?.(peerId, message));
   };
 
-  private async releaseInstance(proxy: RtcClient): Promise<boolean> {
+  private async releaseInstance(proxy: T): Promise<boolean> {
     if (!this.proxyReceivers.delete(proxy)) {
       console.warn("this instance has already been released!");
       return false;
