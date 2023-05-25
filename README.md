@@ -173,7 +173,7 @@ Yes, you can do it in two ways, first as an ES6 module:
   import {
     Authentication,
     Fleet,
-  } from "https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.es6.js";
+  } from "https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.bundle.es.js";
   await Authentication.waitTilAuthenticated();
   const devices = await Fleet.getDevices();
   window.document.body.innerHTML = devices.map((_) => _.name).join("<br>");
@@ -183,7 +183,7 @@ Yes, you can do it in two ways, first as an ES6 module:
 or as a non-module:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@formant/data-sdk/dist/data-sdk.bundle.umd.js"></script>
 <script type="module">
   const { Authentication, Fleet } = window.FormantDataSDK;
   await Authentication.waitTilAuthenticated();

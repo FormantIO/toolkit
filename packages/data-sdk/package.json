@@ -29,7 +29,7 @@
     "preversion": "npm run verify",
     "postversion": "make",
     "dev": "vite --port 5173",
-    "build": "tsc -p ./configs/tsconfig.demo.json && vite build",
+    "build": "tsc -p ./configs/tsconfig.demo.json && vite build --emptyOutDir && vite build --mode=bundle --emptyOutDir=false",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest run",
