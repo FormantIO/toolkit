@@ -18,10 +18,10 @@ export default defineConfig({
       fileName: (format) => `data-sdk.${format}.js`,
       formats: ["es", "cjs"],
     },
+    sourcemap: true,
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-
       external: [/node_modules/],
       plugins: [rollupNodePolyFill(), nodeResolve()],
       output: {
