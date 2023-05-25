@@ -62,7 +62,7 @@
     "pako": "^2.1.0"
   },
   "peerDependencies": {
-    "@formant/realtime-sdk": "0.0.20 || ^1.0.0"
+    "@formant/realtime-sdk": "^0.0.20 || ^1.0.0"
   },
   "engines": {
     "node": "^18.12.0 || ^16.13.0"
