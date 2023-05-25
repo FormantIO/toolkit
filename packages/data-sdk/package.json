@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/formantio/toolkit",
-  "main": "./dist/data-sdk.umd.js",
+  "main": "./dist/data-sdk.cjs.js",
   "module": "./dist/data-sdk.es.js",
   "exports": {
     ".": {
@@ -20,7 +20,7 @@
       },
       "require": {
         "types": "./dist/types/data-sdk/src/main.d.ts",
-        "default": "./dist/data-sdk.umd.js"
+        "default": "./dist/data-sdk.cjs.js"
       }
     }
   },

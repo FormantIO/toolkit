@@ -50,6 +50,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "FormantDataSDK",
       fileName: (format) => `data-sdk.${format}.js`,
+      formats: ["es", "cjs"],
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
