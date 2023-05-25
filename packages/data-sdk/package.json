@@ -44,6 +44,7 @@
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@formant/realtime-sdk": "0.0.20",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@types/node": "^18.16.3",
     "@vitest/coverage-c8": "^0.30.1",
@@ -57,8 +58,10 @@
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
-    "@formant/realtime-sdk": "0.0.20",
     "date-fns": "^2.30.0"
+  },
+  "peerDependencies": {
+    "@formant/realtime-sdk": "0.0.20 || ^1.0.0"
   },
   "engines": {
     "node": "^18.12.0 || ^16.13.0"
