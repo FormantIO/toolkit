@@ -21,7 +21,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const cameras = useMemo(() => {
-    if (!config || config.cameras.length === 0) return <></>;
+    if (!config || config.cameras.length === 0 || !device) return <></>;
     return config.cameras.map((_, idx) => (
       <Cell key={idx}>
         <RealtimeVideoPlayer
@@ -36,7 +36,7 @@ function App() {
   const waitForConnection = useCallback(async () => {
     let connected = false;
     while (!connected) {
-      connected = await device.isInRealtimeSession();
+      connected = await device!.isInRealtimeSession();
       console.warn("Waiting for the main connection to establish.");
       await timeout(2000);
     }
@@ -50,7 +50,7 @@ function App() {
     waitForConnection();
   }, [device, context]);
 
-  return loading ? (
+  return loading || !device ? (
     <PageLoading>
       <LoadingIndicator />
     </PageLoading>
@@ -79,7 +79,7 @@ const Container = styled.div`
 const Cell = styled.div`
   background: black;
   max-width: 50%;
-  max-height: 50vh
+  max-height: 50vh;
 `;
 
 export default App;
