@@ -78,7 +78,8 @@ const Container = styled.div`
 
 const Cell = styled.div`
   background: black;
-  width: 50%;
+  max-width: 50%;
+  max-height: 50vh
 `;
 
 export default App;
