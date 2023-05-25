@@ -1,5 +1,3 @@
-import { Buffer } from "buffer";
-window.Buffer = Buffer;
 
 export { App } from "./App";
 export { Fleet } from "./Fleet";
