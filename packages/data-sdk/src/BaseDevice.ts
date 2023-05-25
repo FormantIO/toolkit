@@ -9,7 +9,7 @@ import { Uuid } from "./model/Uuid";
 import { SessionType } from "./model/SessionType";
 import { DataChannel } from "./DataChannel";
 import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 import { Manipulator } from "./Manipulator";
 import { BinaryRequestDataChannel, TextRequestDataChannel } from "./main";
 import { defined } from "../../common/defined";

@@ -61,6 +61,7 @@
   "dependencies": {
     "base64-js": "^1.5.1",
     "date-fns": "^2.30.0",
+    "eventemitter3": "^5.0.1",
     "pako": "^2.1.0"
   },
   "peerDependencies": {

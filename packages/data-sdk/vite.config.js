@@ -6,11 +6,6 @@ import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      events: "rollup-plugin-node-polyfills/polyfills/events",
-    },
-  },
   optimizeDeps: {
     esbuildOptions: {
       plugins: [NodeGlobalsPolyfillPlugin(), NodeModulesPolyfillPlugin()],
@@ -27,7 +22,7 @@ export default defineConfig({
       // make sure to externalize deps that shouldn't be bundled
       // into your library
 
-      external: ["date-fns", "pako", "base64-js", "@formant/realtime-sdk"],
+      external: [/node_modules/],
       plugins: [rollupNodePolyFill(), nodeResolve()],
       output: {
         // Provide global variables to use in the UMD build
