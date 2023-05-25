@@ -3,3 +3,4 @@ export * from "./numericAggregateUtils";
 export * from "./timeout";
 export * from "./serializeHash";
 export * from "./isRtcPeer";
+export { getRtcClientVersion } from "./rtcClientVersion";
