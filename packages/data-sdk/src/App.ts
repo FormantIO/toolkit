@@ -13,7 +13,7 @@ export interface IDevice {
 }
 
 export type AppMessage =
-  | { type: "request_date"; minTime?: Date; maxTime?: Date }
+  | { type: "request_date"; minTime?: Date; maxTime?: Date; time?: Date }
   | { type: "go_to_time"; time: number }
   | {
       type: "prompt";
@@ -370,19 +370,20 @@ export class App {
     });
   }
 
-  static async getDate(minTime?: Date, maxTime?: Date) {
+  static async getDate(time?: Date, minTime?: Date, maxTime?: Date) {
     return new Promise((resolve) => {
       this.sendAppMessage({
         type: "request_date",
         minTime,
         maxTime,
+        time,
       });
       const handler = (event: any) => {
         const msg = event.data as EmbeddedAppMessage;
         if (msg.type === "date_response") {
+          window.removeEventListener("message", handler);
           resolve(msg.data);
         }
-        window.removeEventListener("message", handler);
       };
       window.addEventListener("message", handler);
     });
