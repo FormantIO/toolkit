@@ -151,7 +151,7 @@ await fetch("https://api.formant.io/v1/admin/device-details/query", {
   body: JSON.stringify({{enabled:true, type:"default"}}),
   headers: {
     "Content-Type": "application/json",
-    "Authorization: "Bearer "+token
+    "Authorization": "Bearer "+token
   }
 });
 ```
