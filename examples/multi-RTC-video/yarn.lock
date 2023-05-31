@@ -378,10 +378,10 @@
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
     "@formant/ui-sdk-realtime-player-core-worker" "^0.0.4"
 
-"@formant/ui-sdk@^0.0.53":
-  "integrity" "sha512-CZUK7BAmFHdzz9Ooph2H5iVJWRYSd9VmAtxXNAfhuJfr91VkR+OFTkKLCVG5bv+NxrMyZrIlY/ek+ql6/ROHrg=="
-  "resolved" "https://registry.npmjs.org/@formant/ui-sdk/-/ui-sdk-0.0.53.tgz"
-  "version" "0.0.53"
+"@formant/ui-sdk@^0.0.54":
+  "integrity" "sha512-W7mkczV8kbRJHPt2npx1uzbkW8mvyOT3/Xz6/J2IJXli8dIviiJe7KG4N1ih/Bkazk74Esn/0mEl7nJbQ2Chgg=="
+  "resolved" "https://registry.npmjs.org/@formant/ui-sdk/-/ui-sdk-0.0.54.tgz"
+  "version" "0.0.54"
   dependencies:
     "@emotion/css" "^11.10.6"
     "@emotion/react" "^11.9.0"
