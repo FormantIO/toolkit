@@ -23,7 +23,7 @@
       }
     }
   },
-  "version": "0.0.53",
+  "version": "0.0.54",
   "scripts": {
     "dev": "vite --port 5173",
     "build": "vite build",
