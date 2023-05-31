@@ -74,11 +74,11 @@ export const useCurrentStreamsValues = (
     }
     const dataListener = setInterval(() => {
       handleFullScreenMode();
-    }, 2000);
+    }, 3000);
     return () => {
       clearInterval(dataListener);
     };
-  }, [streams, config]);
+  }, [config]);
 
   const handleFullScreenMode = async () => {
     await Authentication.waitTilAuthenticated();
