@@ -340,14 +340,6 @@
   "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.14.tgz"
   "version" "0.17.14"
 
-"@formant/data-sdk@^0.0.147":
-  "integrity" "sha512-fC+OoP4rz556c3wR3OER2ZPc/AdNwjFrgH1oCXwWK/5njxxMl8ZtXoXueP3HO1xt02/MBodw58qjLmGE+ijZpQ=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.147.tgz"
-  "version" "0.0.147"
-  dependencies:
-    "@formant/realtime-sdk" "0.0.20"
-    "date-fns" "^2.30.0"
-
 "@formant/data-sdk@^1.0.0-rc.3":
   "integrity" "sha512-nqVNVn4/EllxQ4lCZfgp2zAcpypMb93MS+Ov6CKJxMirdaqYyuYno6O6P+hKXyQmoJuiDTSQcTpNsGpmY9JuNw=="
   "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.0.0-rc.3.tgz"
@@ -386,15 +378,15 @@
     "@formant/ui-sdk-realtime-player-core" "^0.0.2"
     "@formant/ui-sdk-realtime-player-core-worker" "^0.0.4"
 
-"@formant/ui-sdk@^0.0.52":
-  "integrity" "sha512-j0oRrXhrBj4HldUqmXJ2NeNwtg6jfIC5tGG3YtIio/Gs7Bbaw332PwDKelXgjF3F7+b+yeTZE0jpkKhy5PZzcQ=="
-  "resolved" "https://registry.npmjs.org/@formant/ui-sdk/-/ui-sdk-0.0.52.tgz"
-  "version" "0.0.52"
+"@formant/ui-sdk@^0.0.53":
+  "integrity" "sha512-CZUK7BAmFHdzz9Ooph2H5iVJWRYSd9VmAtxXNAfhuJfr91VkR+OFTkKLCVG5bv+NxrMyZrIlY/ek+ql6/ROHrg=="
+  "resolved" "https://registry.npmjs.org/@formant/ui-sdk/-/ui-sdk-0.0.53.tgz"
+  "version" "0.0.53"
   dependencies:
     "@emotion/css" "^11.10.6"
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
-    "@formant/data-sdk" "^0.0.147"
+    "@formant/data-sdk" "^1.0.0-rc.3"
     "@formant/ui-sdk-realtime-player" "^0.0.9"
     "@mui/material" "^5.6.1"
     "@mui/utils" "^5.6.1"
