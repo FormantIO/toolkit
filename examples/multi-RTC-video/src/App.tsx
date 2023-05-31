@@ -22,10 +22,10 @@ function App() {
 
   const cameras = useMemo(() => {
     if (!config || config.cameras.length === 0 || !device) return <></>;
-    return config.cameras.map((_, idx) => (
-      <Cell key={idx}>
+    return config.cameras.map((_, i) => (
+      <Cell key={i}>
         <RealtimeVideoPlayer
-          id={`camera-${idx}`}
+          id={`camera-${i}`}
           cameraName={_.name}
           device={device}
         />
