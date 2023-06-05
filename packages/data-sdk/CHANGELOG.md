@@ -1,3 +1,11 @@
+## [1.0.0] - 2023-06-05
+
+### Added
+- Add time information to `request_date` message. (#93)
+
+### Fixed
+- Possible to removeListener too early when waiting for `request_date` to respond. (#93)
+
 ## [1.0.0-rc.3] - 2023-05-25 
 
 `Device.startRealtimeConnection()` now accepts an optional `options` argument, to more fine-grained control over
@@ -74,7 +82,7 @@ await device.startRealtimeConnection({
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
-
+[1.0.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.3...release/data-sdk/1.0.0~
 [1.0.0-rc.3]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.2...release/data-sdk/1.0.0-rc.3~
 [1.0.0-rc.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.1...release/data-sdk/1.0.0-rc.2~
 [1.0.0-rc.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.0...release/data-sdk/1.0.0-rc.1~
