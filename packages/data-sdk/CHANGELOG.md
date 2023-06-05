@@ -61,7 +61,7 @@ await device.startRealtimeConnection({
 ### Fixed
 - Prefer cached remoteDevicePeerId when set.  (#81)
 - Adding logging to RealtimeVideo and RealtimeDataStream methods (#82)
-- Try to reconect when rtc.connect returns undefined (#78)
+- Try to reconnect when rtc.connect returns undefined (#78)
 - Update function to use remotePeerId (#80)
 
 ## 1.0.0-rc.0 - 2023-05-12
