@@ -26,13 +26,13 @@ el("button").addEventListener("click", async () => {
     const device = await Fleet.getCurrentDevice();
     
     // report connections and disconnections
-    window.device.on('connect', () => {
-        console.log('Connected!');
-      });
+    device.on('connect', () => {
+      console.log('Connected!');
+    });
 
-      window.device.on('disconnect', () => {
-        console.log('Disconnected!');
-      });
+    device.on('disconnect', () => {
+      console.log('Disconnected!');
+    });
 
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.name + "</b>");
