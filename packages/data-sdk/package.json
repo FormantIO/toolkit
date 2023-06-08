@@ -24,9 +24,10 @@
       }
     }
   },
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0",
   "scripts": {
-    "preversion": "make",
+    "preversion": "npm run test && tsc --project ./configs/tsconfig.type-check.json",
+    "postversion": "make",
     "dev": "vite --port 5173",
     "build": "tsc -p ./configs/tsconfig.demo.json && vite build",
     "serve": "vite preview",
