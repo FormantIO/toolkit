@@ -9,6 +9,7 @@ import {
 import styled from "@emotion/styled";
 import { IConfiguration } from "./types";
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { SessionType, App as FormantApp } from "@formant/data-sdk";
 
 function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -22,15 +23,21 @@ function App() {
 
   const cameras = useMemo(() => {
     if (!config || config.cameras.length === 0 || !device) return <></>;
-    return config.cameras.map((_, i) => (
-      <Cell key={i}>
-        <RealtimeVideoPlayer
-          id={`camera-${i}`}
-          cameraName={_.name}
-          device={device}
-        />
-      </Cell>
-    ));
+    return config.cameras.map((_, i) => {
+      if (!_ || !_.name) {
+        FormantApp.showMessage("Configuratio not found");
+        return <></>;
+      }
+      return (
+        <Cell key={i}>
+          <RealtimeVideoPlayer
+            id={`camera-${i}`}
+            cameraName={_.name}
+            device={device}
+          />
+        </Cell>
+      );
+    });
   }, [config, device]);
 
   const waitForConnection = useCallback(async () => {
@@ -41,7 +48,7 @@ function App() {
       await timeout(2000);
     }
     console.warn("Main connection completed");
-
+    await device?.startRealtimeConnection(SessionType.OBSERVE);
     setLoading(false);
   }, [device]);
 
@@ -50,14 +57,12 @@ function App() {
     waitForConnection();
   }, [device, context]);
 
-  return loading || !device ? (
+  return loading || !device || config.cameras.length === 0 ? (
     <PageLoading>
       <LoadingIndicator />
     </PageLoading>
   ) : (
-    <RealtimeConnection device={device}>
-      <Container>{cameras}</Container>
-    </RealtimeConnection>
+    <Container>{cameras}</Container>
   );
 }
 
@@ -74,12 +79,17 @@ const Container = styled.div`
   flex-wrap: wrap;
   min-height: 100vh;
   width: 100%;
+  background-color: black;
 `;
 
 const Cell = styled.div`
   background: black;
   max-width: 50%;
   max-height: 50vh;
+  height: 50vh;
+  width: 50vw;
+  display: grid;
+  place-items: center;
 `;
 
 export default App;
