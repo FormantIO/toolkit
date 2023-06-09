@@ -45,10 +45,14 @@ function App() {
     while (!connected) {
       connected = await device!.isInRealtimeSession();
       console.warn("Waiting for the main connection to establish.");
-      await timeout(2000);
+      await timeout(100);
     }
     console.warn("Main connection completed");
-    await device?.startRealtimeConnection(SessionType.OBSERVE);
+    await device?.startRealtimeConnection({
+      sessionType: SessionType.OBSERVE,
+      deadlineMs: 20_000,
+      maxConnectRetries: 20,
+    });
     setLoading(false);
   }, [device]);
 
