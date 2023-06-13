@@ -1,24 +1,33 @@
 const DEFAULT_FORMANT_API_URL = "https://api.formant.io";
 
 interface IHasString {
+  get(key: string): string | null;
   has(key: string): boolean;
 }
 
-export function whichFormantApiUrl(
-  global: any,
-  urlParams: IHasString | undefined
-) {
-  if (urlParams) {
-    if (urlParams.has("formant_stage")) {
-      return "https://api-stage.formant.io";
-    }
+export function whichFormantApiUrl(global: any, urlParams: IHasString) {
+  if (urlParams.has("formant_stage")) {
+    return "https://api-stage.formant.io";
+  }
 
-    if (urlParams.has("formant_dev")) {
-      return "https://api-dev.formant.io";
-    }
+  if (urlParams.has("formant_dev")) {
+    return "https://api-dev.formant.io";
+  }
 
-    if (urlParams.has("formant_local")) {
-      return "https://api.formant.local";
+  if (urlParams.has("formant_local")) {
+    return "https://api.formant.local";
+  }
+
+  if (urlParams.has("formant_url")) {
+    const customUrl = urlParams.get("formant_url");
+    if (customUrl !== null) {
+      try {
+        return new URL(customUrl).origin;
+      } catch {
+        console.warn(
+          `Ignoring malformed \`formant_url\` url parameter: ${customUrl}`
+        );
+      }
     }
   }
 
