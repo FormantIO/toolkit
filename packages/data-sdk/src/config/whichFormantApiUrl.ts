@@ -6,19 +6,19 @@ interface IHasString {
 }
 
 export function whichFormantApiUrl(global: any, urlParams: IHasString) {
-  if (urlParams.has("formant_stage")) {
+  if (urlParams.get("formant_stage")) {
     return "https://api-stage.formant.io";
   }
 
-  if (urlParams.has("formant_dev")) {
+  if (urlParams.get("formant_dev")) {
     return "https://api-dev.formant.io";
   }
 
-  if (urlParams.has("formant_local")) {
+  if (urlParams.get("formant_local")) {
     return "https://api.formant.local";
   }
 
-  if (urlParams.has("formant_url")) {
+  if (urlParams.get("formant_url")) {
     const customUrl = urlParams.get("formant_url");
     if (customUrl !== null) {
       try {

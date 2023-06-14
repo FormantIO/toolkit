@@ -13,7 +13,7 @@ describe("whichFormantApiUrl()", () => {
       ["formant_stage", "https://api-stage.formant.io"],
       ["formant_local", "https://api.formant.local"],
     ])("should", (urlKey, expected) => {
-      const params = new URLSearchParams(`${urlKey}`);
+      const params = new URLSearchParams(`${urlKey}=true`);
       const url = whichFormantApiUrl({}, params);
       expect(url).toBe(expected);
     });
@@ -48,7 +48,7 @@ describe("whichFormantApiUrl()", () => {
   describe("precedence", () => {
     it(`should use pre-defined environments over custom and global`, () => {
       const params = new URLSearchParams(
-        `foo&formant_stage&formant_url=wat&baz`
+        `foo&formant_stage=true&formant_url=wat&baz`
       );
       const global = { FORMANT_API_URL: "https://custom.formant.local" };
       const url = whichFormantApiUrl(global, params);
