@@ -9,7 +9,9 @@ export default defineConfig(({ mode }) => {
         entry: path.resolve(__dirname, "src/main.ts"),
         name: "FormantDataSDK",
         fileName: (format) =>
-          `data-sdk${isBundle ? ".bundle" : ""}.${format}.js`,
+          `data-sdk${
+            isBundle && format !== "umd" ? ".bundle" : ""
+          }.${format}.js`,
         formats: ["es", isBundle ? "umd" : "cjs"],
       },
       sourcemap: !isBundle,
