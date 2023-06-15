@@ -1,3 +1,9 @@
+## [1.1.0-rc.0] - 2023-06-15
+
+### Added
+
+- Add support for custom API paths with `formant_url` query parameter. (#97) (MC-90)
+
 ## [1.0.0] - 2023-06-05
 
 ### Added
@@ -82,6 +88,7 @@ await device.startRealtimeConnection({
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.1.0-rc.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0...release/data-sdk/1.1.0-rc.0~
 [1.0.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.3...release/data-sdk/1.0.0~
 [1.0.0-rc.3]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.2...release/data-sdk/1.0.0-rc.3~
 [1.0.0-rc.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0-rc.1...release/data-sdk/1.0.0-rc.2~
