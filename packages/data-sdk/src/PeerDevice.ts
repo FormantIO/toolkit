@@ -210,7 +210,7 @@ export class PeerDevice implements IRealtimeDevice {
     const document = (await this.getConfiguration()) as any;
     const manipulators = [];
 
-    for (const _ of document.teleop.ros_streams ?? []) {
+    for (const _ of document.teleop.rosStreams ?? []) {
       if (_.topicType == "sensor_msgs/JointState") {
         manipulators.push(
           new Manipulator(this, {
