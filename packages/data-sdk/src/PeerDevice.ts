@@ -26,6 +26,7 @@ export class PeerDevice implements IRealtimeDevice {
   constructor(public peerUrl: string) {}
 
   async getLatestTelemetry(): Promise<IStreamCurrentValue[]> {
+    throw new Error("Not implemented");
     const data = await fetch(`${this.peerUrl}/telemetry`);
     const telemetry = (await data.json()) as {
       [key in string]: { timestamp: string };
@@ -45,15 +46,15 @@ export class PeerDevice implements IRealtimeDevice {
   }
 
   async getDeviceId(): Promise<string> {
-    let result = await fetch(`${this.peerUrl}/configuration`);
+    let result = await fetch(`${this.peerUrl}/v1/config`);
     const cfg = await result.json();
-    return cfg.agent_config.id;
+    return cfg.configuration.id;
   }
 
   async getConfiguration(): Promise<ConfigurationDocument> {
-    let result = await fetch(`${this.peerUrl}/configuration`);
+    let result = await fetch(`${this.peerUrl}/v1/config`);
     const cfg = await result.json();
-    return cfg.agent_config.document;
+    return cfg.configuration.document;
   }
 
   private handleMessage = (peerId: string, message: any) => {
