@@ -206,10 +206,10 @@
     "@babel/plugin-syntax-jsx" "^7.18.6"
     "@babel/types" "^7.19.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-  "integrity" "sha512-Q+8MqP7TiHMWzSfwiJwXCjyf4GYA4Dgw3emg/7xmwsdLJOZUp+nMqcOwOzzYheuM1rhDu8FSj2l0aoMygEuXuA=="
-  "resolved" "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.6.tgz"
-  "version" "7.20.6"
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.1", "@babel/runtime@^7.21.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
+  "integrity" "sha512-ecjvYlnAaZ/KVneE/OdKYBYfgXV3Ptu6zQWmgEF7vwKhQnvVS6bjMD2XYgj+SNvQ1GfK/pjgokfPkC/2CO8CuA=="
+  "resolved" "https://registry.npmjs.org/@babel/runtime/-/runtime-7.22.5.tgz"
+  "version" "7.22.5"
   dependencies:
     "regenerator-runtime" "^0.13.11"
 
@@ -355,13 +355,13 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz"
   "version" "0.3.0"
 
-"@formant/data-sdk@^0.0.130":
-  "integrity" "sha512-3rsw7UZg3mKwusufeCNLU7JiCRObw8B4/EMaHnoxNFkR6AAEUBY59fGgj6+rvr/LRijXkUg6lRQCgKCGDF7leg=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-0.0.130.tgz"
-  "version" "0.0.130"
+"@formant/data-sdk@^1.1.0-rc.0":
+  "integrity" "sha512-9xzSd6GXtj09KQAw/1C/FVwgyksaudwTMAOJx1zzSHVTFCXb+kE3swX4U0vj/jTxlhrsbtmEBi0/yyPFndM63g=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.1.0-rc.0.tgz"
+  "version" "1.1.0-rc.0"
   dependencies:
-    "@formant/realtime-sdk" "^0.0.19"
-    "date-fns" "^2.29.3"
+    "@formant/realtime-sdk" "0.0.20"
+    "date-fns" "^2.30.0"
 
 "@formant/data-sdk@0.0.129":
   "integrity" "sha512-+yj6BP1g7tGhIvXud4VD0rMAnSR/dyWT/hD/SZqyud0BuW6MWbzFSk4uoACWcL+vIVMJebb0D7sa9DkhWnGzFg=="
@@ -375,6 +375,15 @@
   "integrity" "sha512-P8EITCk8Pyg10UvB3f9Y7kbEMfOZ+gk1/tQRbjKnhuR+cN5Wcz6gyjo8i21JToogdgbe8iq3bb6Ghltz/hTmRA=="
   "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.19.tgz"
   "version" "0.0.19"
+  dependencies:
+    "@types/google-protobuf" "~3.7.0"
+    "env-var" "^7.3.0"
+    "grpc-web" "^1.2.1"
+
+"@formant/realtime-sdk@0.0.20":
+  "integrity" "sha512-XulXffp4h4guPhe00j4kCtoBe/GvgftJHYK8yR3lybv7mqLn/4zSXkC3io5qXACBQIqvq8U5l0Q/nLv0xcecyA=="
+  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.20.tgz"
+  "version" "0.0.20"
   dependencies:
     "@types/google-protobuf" "~3.7.0"
     "env-var" "^7.3.0"
@@ -758,10 +767,12 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.1.tgz"
   "version" "3.1.1"
 
-"date-fns@^2.29.3":
-  "integrity" "sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA=="
-  "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.29.3.tgz"
-  "version" "2.29.3"
+"date-fns@^2.29.3", "date-fns@^2.30.0":
+  "integrity" "sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw=="
+  "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.30.0.tgz"
+  "version" "2.30.0"
+  dependencies:
+    "@babel/runtime" "^7.21.0"
 
 "debug@^4.1.0":
   "integrity" "sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ=="
