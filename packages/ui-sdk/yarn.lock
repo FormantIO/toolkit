@@ -1327,10 +1327,10 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz"
   "version" "0.3.0"
 
-"@formant/data-sdk@^1.0.0-rc.3":
-  "integrity" "sha512-nqVNVn4/EllxQ4lCZfgp2zAcpypMb93MS+Ov6CKJxMirdaqYyuYno6O6P+hKXyQmoJuiDTSQcTpNsGpmY9JuNw=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.0.0-rc.3.tgz"
-  "version" "1.0.0-rc.3"
+"@formant/data-sdk@^1.0.0":
+  "integrity" "sha512-VNTrkPkFvkr5n3fuv80iyOrzx8sxd7PkV4eBsR3Loh9y6rAwLOdTeI31lK0Yf+IPvKysHeTjOqTQg6F/jxKymQ=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.0.0.tgz"
+  "version" "1.0.0"
   dependencies:
     "@formant/realtime-sdk" "0.0.20"
     "date-fns" "^2.30.0"
