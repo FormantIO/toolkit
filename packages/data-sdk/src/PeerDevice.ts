@@ -173,31 +173,31 @@ export class PeerDevice implements IRealtimeDevice {
     const document = (await this.getConfiguration()) as any;
     const streams = [];
 
-    for (const _ of document.teleop.hardware_streams ?? []) {
-      if (_.rtc_stream_type === "h264-video-frame") {
+    for (const _ of document.teleop.hardwareStreams ?? []) {
+      if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name,
         });
       }
     }
-    for (const _ of document.teleop.ros_streams ?? []) {
-      if (_.topic_type == "formant/H264VideoFrame") {
+    for (const _ of document.teleop.rosStreams ?? []) {
+      if (_.topicType == "formant/H264VideoFrame") {
         streams.push({
-          name: _.topic_name,
+          name: _.topicName,
         });
       }
       if (
-        (_.topic_type === "sensor_msgs/Image" ||
-          _.topic_type === "sensor_msgs/CompressedImage") &&
-        _.encode_video
+        (_.topicType === "sensor_msgs/Image" ||
+          _.topicType === "sensor_msgs/CompressedImage") &&
+        _.encodeVideo
       ) {
         streams.push({
-          name: _.topic_name,
+          name: _.topicName,
         });
       }
     }
-    for (const _ of document.teleop.custom_streams ?? []) {
-      if (_.rtc_stream_type === "h264-video-frame") {
+    for (const _ of document.teleop.customStreams ?? []) {
+      if (_.rtcStreamType === "h264-video-frame") {
         streams.push({
           name: _.name,
         });
