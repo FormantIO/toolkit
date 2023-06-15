@@ -81,8 +81,8 @@ export const getOptions = (
           if (tooltipModel.body) {
             const data = tooltipModel.dataPoints[0].raw;
             const label = data.label;
-            const x = data.x
-            const y = data.y
+            const x = data.x;
+            const y = data.y;
             tooltipLabel.innerHTML = label ?? "";
             tooltipValue.innerHTML = `x: ${x}  y: ${y}`;
           }

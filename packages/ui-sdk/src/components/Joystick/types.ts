@@ -8,9 +8,9 @@ export const twistDimensions = [
   "angular-z",
 ] as const;
 
-export type TeleopJoystickPosition = typeof teleopJoystickPositions[number];
+export type TeleopJoystickPosition = (typeof teleopJoystickPositions)[number];
 
-export type TwistDimension = typeof twistDimensions[number];
+export type TwistDimension = (typeof twistDimensions)[number];
 
 export interface ITeleopJoystickAxisConfiguration {
   dimension?: TwistDimension;

@@ -1,4 +1,4 @@
-import React,  { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { TextField } from "../../main";
 import { IInputProps, JsonArraySchema } from "./types";
 import { get, isInteger } from "lodash";
