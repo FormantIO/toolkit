@@ -46,7 +46,7 @@ export class PeerDevice implements IRealtimeDevice {
           start(controller) {
             function processResult(result: any) {
               if (result.done) {
-                this.telemetryStreamActive = false;
+                device.telemetryStreamActive = false;
                 controller.close();
                 return;
               }
