@@ -175,7 +175,6 @@ export class PeerDevice implements IRealtimeDevice {
 
     for (const _ of document.teleop.hardware_streams ?? []) {
       if (_.rtc_stream_type === "h264-video-frame") {
-        console.log("video frame 0");
         streams.push({
           name: _.name,
         });
@@ -183,7 +182,6 @@ export class PeerDevice implements IRealtimeDevice {
     }
     for (const _ of document.teleop.ros_streams ?? []) {
       if (_.topic_type == "formant/H264VideoFrame") {
-        console.log("video frame 1");
         streams.push({
           name: _.topic_name,
         });
@@ -193,7 +191,6 @@ export class PeerDevice implements IRealtimeDevice {
           _.topic_type === "sensor_msgs/CompressedImage") &&
         _.encode_video
       ) {
-        console.log("image");
         streams.push({
           name: _.topic_name,
         });
@@ -201,7 +198,6 @@ export class PeerDevice implements IRealtimeDevice {
     }
     for (const _ of document.teleop.custom_streams ?? []) {
       if (_.rtc_stream_type === "h264-video-frame") {
-        console.log("video frame 2");
         streams.push({
           name: _.name,
         });
