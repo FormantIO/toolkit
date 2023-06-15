@@ -173,31 +173,35 @@ export class PeerDevice implements IRealtimeDevice {
     const document = (await this.getConfiguration()) as any;
     const streams = [];
 
-    for (const _ of document.teleop.hardwareStreams ?? []) {
-      if (_.rtcStreamType === "h264-video-frame") {
+    for (const _ of document.teleop.hardware_streams ?? []) {
+      if (_.rtc_stream_type === "h264-video-frame") {
+        console.log("video frame 0");
         streams.push({
           name: _.name,
         });
       }
     }
-    for (const _ of document.teleop.rosStreams ?? []) {
-      if (_.topicType == "formant/H264VideoFrame") {
+    for (const _ of document.teleop.ros_streams ?? []) {
+      if (_.topic_type == "formant/H264VideoFrame") {
+        console.log("video frame 1");
         streams.push({
-          name: _.topicName,
+          name: _.topic_name,
         });
       }
       if (
-        (_.topicType === "sensor_msgs/Image" ||
-          _.topicType === "sensor_msgs/CompressedImage") &&
-        _.encodeVideo
+        (_.topic_type === "sensor_msgs/Image" ||
+          _.topic_type === "sensor_msgs/CompressedImage") &&
+        _.encode_video
       ) {
+        console.log("image");
         streams.push({
-          name: _.topicName,
+          name: _.topic_name,
         });
       }
     }
-    for (const _ of document.teleop.customStreams ?? []) {
-      if (_.rtcStreamType === "h264-video-frame") {
+    for (const _ of document.teleop.custom_streams ?? []) {
+      if (_.rtc_stream_type === "h264-video-frame") {
+        console.log("video frame 2");
         streams.push({
           name: _.name,
         });
@@ -210,7 +214,7 @@ export class PeerDevice implements IRealtimeDevice {
     const document = (await this.getConfiguration()) as any;
     const manipulators = [];
 
-    for (const _ of document.teleop.rosStreams ?? []) {
+    for (const _ of document.teleop.ros_streams ?? []) {
       if (_.topicType == "sensor_msgs/JointState") {
         manipulators.push(
           new Manipulator(this, {
