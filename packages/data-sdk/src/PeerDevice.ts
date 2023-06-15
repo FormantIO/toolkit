@@ -23,12 +23,69 @@ export class PeerDevice implements IRealtimeDevice {
 
   realtimeListeners: RealtimeListener[] = [];
   id!: string;
+
+  private telemetryStreamActive = false;
+  private streamTelemetry: { [key: string]: any } = {};
+
   constructor(public peerUrl: string) {}
 
+  private subscribeToTelemetry() {
+    this.telemetryStreamActive = true;
+    const device = this;
+
+    fetch(`${this.peerUrl}/v1/telemetry`, { method: "POST" })
+      .then((response) => {
+        if (response === null || response.body === null) {
+          this.telemetryStreamActive = false;
+          return;
+        }
+
+        const reader = response.body.getReader();
+
+        return new ReadableStream({
+          start(controller) {
+            function processResult(result: any) {
+              if (result.done) {
+                this.telemetryStreamActive = false;
+                controller.close();
+                return;
+              }
+
+              const chunk = result.value;
+              const decoder = new TextDecoder("utf-8");
+              const jsonObjects = decoder.decode(chunk).split("\n");
+
+              jsonObjects.forEach((jsonObject) => {
+                if (jsonObject.length > 0) {
+                  const parsedObject = JSON.parse(jsonObject);
+                  if (parsedObject.result?.datapoint) {
+                    const datapoint = parsedObject.result.datapoint;
+                    const stream = datapoint.stream;
+                    delete datapoint["stream"];
+                    device.streamTelemetry[stream] = datapoint;
+                  }
+                }
+              });
+
+              reader.read().then(processResult);
+            }
+
+            reader.read().then(processResult);
+          },
+        });
+      })
+      .catch((error) => {
+        this.telemetryStreamActive = false;
+        console.error("Error:", error);
+      });
+  }
+
   async getLatestTelemetry(): Promise<IStreamCurrentValue[]> {
-    throw new Error("Not implemented");
-    const data = await fetch(`${this.peerUrl}/telemetry`);
-    const telemetry = (await data.json()) as {
+    if (!this.telemetryStreamActive) {
+      this.subscribeToTelemetry();
+    }
+
+    const telemetry = this.streamTelemetry as {
       [key in string]: { timestamp: string };
     };
     const entries = Object.entries(telemetry);
