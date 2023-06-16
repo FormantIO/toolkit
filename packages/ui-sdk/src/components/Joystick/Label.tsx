@@ -6,7 +6,7 @@ import { css } from "@emotion/css";
 import { primary, spacing } from "../../style/common";
 
 const positions = ["top", "left", "bottom", "right"] as const;
-type Position = typeof positions[number];
+type Position = (typeof positions)[number];
 
 export interface ILabelProps {
   position: Position;
