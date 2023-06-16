@@ -1,12 +1,8 @@
-import { EventEmitter } from "events";
 import {
   IRtcSendConfiguration,
   IRtcStreamMessage,
-  IRtcStreamPayload,
   RtcClient,
-  RtcClientV1,
 } from "@formant/realtime-sdk";
-import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 import { getRtcClientPool } from "./AppRtcClientPools";
@@ -32,119 +28,22 @@ import { IEventQuery } from "./model/IEventQuery";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
 import { IShare } from "./model/IShare";
-import { ITags } from "./model/ITags";
 import { SessionType } from "./model/SessionType";
-import { isRtcPeer, getRtcClientVersion } from "./utils";
+import { isRtcPeer } from "./utils";
+import {
+  BaseDevice,
+  Command,
+  ConfigurationDocument,
+  IStartRealtimeConnectionOptions,
+  RealtimeAudioStream,
+  RealtimeDataStream,
+  RealtimeListener,
+  RealtimeVideoStream,
+  TelemetryStream,
+} from "./BaseDevice";
 
-export interface ConfigurationDocument {
-  tags: ITags;
-  urdfFiles: string[];
-  telemetry?: {
-    streams?: { name: string; disabled?: boolean; onDemand?: boolean }[];
-  };
-  teleop?: {
-    customStreams?: {
-      name: string;
-      rtcStreamType: RtcStreamType;
-    }[];
-    hardwareStreams?: {
-      name: string;
-      rtcStreamType: RtcStreamType;
-    }[];
-    rosStreams?: {
-      rtcStreamType: RtcStreamType;
-      topicName: string;
-      topicType: string;
-    }[];
-  };
-  adapters?: IAdapterConfiguration[];
-}
-
-export interface Command {
-  id: string;
-  name: string;
-  command: string;
-  description: string;
-  parameterEnabled: true;
-  parameterValue: string | null;
-  parameterMeta?: {
-    topic?: string;
-  };
-}
-
-export interface IJointState {
-  name: string[];
-  position: number[];
-  velocity?: number[];
-  effort?: number[];
-}
-
-export interface TelemetryStream {
-  name: string;
-  onDemand: boolean;
-}
-
-export interface IAdapterConfiguration {
-  id: Uuid;
-  name: string;
-  fileId: Uuid;
-  execCommand: string;
-  configuration?: string;
-}
-
-export type RealtimeMessage = {
-  header: {
-    created: number;
-    stream: {
-      entityId: string;
-      streamName: string;
-      streamType: RtcStreamType;
-    };
-  };
-  payload: IRtcStreamPayload;
-};
-
-export type RealtimeListener = (
-  peerId: string,
-  message: RealtimeMessage
-) => void;
-
-export type RealtimeAudioStream = {
-  name: string;
-};
-
-export type RealtimeVideoStream = {
-  name: string;
-};
-
-export type RealtimeDataStream = {
-  name: string;
-};
-
-function assertNotCancelled(cancelled: boolean): void {
-  if (cancelled) throw new Error("Cancelled by deadline");
-}
-
-interface IStartRealtimeConnectionOptions {
-  sessionType?: SessionType;
-  deadlineMs?: number;
-  maxConnectRetries?: number;
-}
-
-export interface IRealtimeDevice {
-  startRealtimeConnection(sessionType?: number): Promise<void>;
-  startListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
-  stopListeningToRealtimeDataStream(stream: RealtimeDataStream): Promise<void>;
-  addRealtimeListener(listener: RealtimeListener): void;
-  removeRealtimeListener(listener: RealtimeListener): void;
-  createCustomDataChannel(
-    channelName: string,
-    rtcConfig?: RTCDataChannelInit
-  ): Promise<DataChannel>;
-}
-
-export class Device extends EventEmitter implements IRealtimeDevice {
-  rtcClient: RtcClient | RtcClientV1 | undefined;
+export class Device extends BaseDevice {
+  rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | null = null;
 
   realtimeListeners: RealtimeListener[] = [];
@@ -274,7 +173,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
     const pool = getRtcClientPool({
       sessionType,
-      version: getRtcClientVersion() ?? "2",
     });
     const rtcClient = pool.get(this.handleMessage);
 
@@ -294,14 +192,14 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     const establishConnection = async (): Promise<string> => {
       if ("isReady" in rtcClient) {
         while (!rtcClient.isReady()) {
-          assertNotCancelled(cancelled);
+          this.assertNotCancelled(cancelled);
           await delay(100);
         }
       }
 
       // WebRTC requires a signaling phase when forming a new connection.
       const remoteDevicePeerId = await this.getRemoteDevicePeerId(rtcClient);
-      assertNotCancelled(cancelled);
+      this.assertNotCancelled(cancelled);
 
       let sessionId: string | undefined = undefined;
 
@@ -310,7 +208,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         sessionId = await rtcClient.connect(remoteDevicePeerId);
         if (!!sessionId) break;
         delay(100);
-        assertNotCancelled(cancelled);
+        this.assertNotCancelled(cancelled);
       }
 
       if (!sessionId)
@@ -330,7 +228,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         await delay(100);
         retries += 1;
       }
-      assertNotCancelled(cancelled);
+      this.assertNotCancelled(cancelled);
 
       console.debug(
         `${new Date().toISOString()} :: Connection completed after ${retries} retries`
@@ -361,7 +259,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       });
   }
 
-  private async getRemoteDevicePeerId(rtcClient: RtcClient | RtcClientV1) {
+  private async getRemoteDevicePeerId(rtcClient: RtcClient) {
     // Each online device and user has a peer in the system
     const peers = await rtcClient.getPeers();
 
@@ -377,22 +275,21 @@ export class Device extends EventEmitter implements IRealtimeDevice {
 
   private initConnectionMonitoring() {
     this.connectionMonitorInterval = setInterval(async () => {
-      if (!this.isV2Signaling(this.rtcClient)) {
-        return;
-      }
-
-      const rtcConnections = this.rtcClient.getConnections();
-      const connection = rtcConnections.find(
-        (_) => _.getRemotePeerId() === this.remoteDevicePeerId && _.isActive()
-      );
       let dataChannelClosed = false;
-      if (connection === undefined || !connection.isReady()) {
-        console.debug(`${new Date().toISOString()} :: data channel closed`);
-        dataChannelClosed = true;
-      } else {
-        console.debug(
-          `${new Date().toISOString()} :: data channel appears active`
+
+      if (this.rtcClient) {
+        const rtcConnections = this.rtcClient.getConnections();
+        const connection = rtcConnections.find(
+          (_) => _.getRemotePeerId() === this.remoteDevicePeerId && _.isActive()
         );
+        if (connection === undefined || !connection.isReady()) {
+          console.debug(`${new Date().toISOString()} :: data channel closed`);
+          dataChannelClosed = true;
+        } else {
+          console.debug(
+            `${new Date().toISOString()} :: data channel appears active`
+          );
+        }
       }
 
       if (
@@ -409,12 +306,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
         });
       }
     }, 1000);
-  }
-
-  private isV2Signaling(
-    rtcClient: RtcClient | RtcClientV1 | undefined
-  ): rtcClient is RtcClient {
-    return (rtcClient as RtcClient).getConnectionStatsInfo !== undefined;
   }
 
   private stopConnectionMonitoring() {
@@ -782,12 +673,6 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     channelName: string,
     rtcConfig?: RTCDataChannelInit
   ): Promise<DataChannel> {
-    if (getRtcClientVersion() === "1") {
-      throw new Error(
-        "createCustomDataChannel is not supported in rtcClientVersion 1"
-      );
-    }
-
     const client = defined(
       this.rtcClient,
       "Realtime connection has not been started"

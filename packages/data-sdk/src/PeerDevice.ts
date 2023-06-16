@@ -7,19 +7,19 @@ import {
   TextRequestDataChannel,
   BinaryRequestDataChannel,
 } from "./RequestDataChannel";
+import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
+import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import {
+  BaseDevice,
   ConfigurationDocument,
-  IRealtimeDevice,
   RealtimeDataStream,
   RealtimeListener,
   RealtimeVideoStream,
-} from "./Device";
-import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+} from "./BaseDevice";
 
-export class PeerDevice implements IRealtimeDevice {
+export class PeerDevice extends BaseDevice {
   rtcClient: RtcClient | undefined;
-  remoteDevicePeerId: string | undefined;
+  remoteDevicePeerId: string | null = null;
 
   realtimeListeners: RealtimeListener[] = [];
   id!: string;
@@ -27,7 +27,9 @@ export class PeerDevice implements IRealtimeDevice {
   private telemetryStreamActive = false;
   private streamTelemetry: { [key: string]: any } = {};
 
-  constructor(public peerUrl: string) {}
+  constructor(public peerUrl: string) {
+    super();
+  }
 
   private subscribeToTelemetry() {
     this.telemetryStreamActive = true;

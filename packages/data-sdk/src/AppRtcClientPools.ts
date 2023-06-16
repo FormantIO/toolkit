@@ -1,9 +1,4 @@
-import {
-  RtcClient,
-  RtcClientV1,
-  RtcSignalingClient,
-  SignalingPromiseClient,
-} from "@formant/realtime-sdk";
+import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 
 import { SessionType, SessionTypes } from "./model/SessionType";
 import { RtcClientPool } from "./utils/RtcClientPool";
@@ -67,27 +62,8 @@ export const AppRtcClientPools = {
 
 export const defaultRtcClientPool = EnumRtcClientPools[SessionTypes.TELEOP];
 
-export const v1RtcClientPool = new RtcClientPool({
-  ttlMs: 2_500,
-  createClient: (receiveFn) =>
-    new RtcClientV1({
-      signalingClient: new RtcSignalingClient(
-        FORMANT_API_URL + "/v1/signaling"
-      ),
-      getToken,
-      receive: receiveFn,
-    }),
-});
-
-export const getRtcClientPool = (options: {
-  version: string;
-  sessionType?: SessionType;
-}) => {
-  const { version, sessionType } = options;
-
-  if (version === "1") {
-    return v1RtcClientPool;
-  }
+export const getRtcClientPool = (options: { sessionType?: SessionType }) => {
+  const { sessionType } = options;
 
   return sessionType ? AppRtcClientPools[sessionType] : defaultRtcClientPool;
 };

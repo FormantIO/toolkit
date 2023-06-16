@@ -2,8 +2,8 @@ import {
   RealtimeDataStream,
   IJointState,
   RealtimeMessage,
-  IRealtimeDevice,
-} from "./Device";
+  BaseDevice,
+} from "./BaseDevice";
 
 export type RealtimeManipulatorConfig = {
   currentJointStateStream: RealtimeDataStream;
@@ -18,7 +18,7 @@ export type RealtimeManipulatorConfig = {
 export class Manipulator {
   currentListeners: ((js: IJointState) => void)[] = [];
   constructor(
-    private device: IRealtimeDevice,
+    private device: BaseDevice,
     private config: RealtimeManipulatorConfig
   ) {}
 
