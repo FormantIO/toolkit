@@ -22,6 +22,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const waitForConnection = useCallback(async () => {
+    if (!device) return;
     let connected = false;
     while (!connected) {
       connected = await device.isInRealtimeSession();
@@ -51,10 +52,10 @@ function App() {
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <RealtimeConnection device={device}>
+        <RealtimeConnection device={device!}>
           <RealtimeVideoPlayer
             cameraName={camera}
-            device={device}
+            device={device!}
             id="rtc-video"
           />
         </RealtimeConnection>
