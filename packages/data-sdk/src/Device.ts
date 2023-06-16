@@ -7,14 +7,8 @@ import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 import { getRtcClientPool } from "./AppRtcClientPools";
 import { Authentication } from "./Authentication";
-import { DataChannel } from "./DataChannel";
 import { CaptureStream } from "./CaptureStream";
-import { Manipulator } from "./Manipulator";
 import { Fleet } from "./Fleet";
-import {
-  TextRequestDataChannel,
-  BinaryRequestDataChannel,
-} from "./RequestDataChannel";
 import { FORMANT_API_URL } from "./config";
 
 import { delay } from "../../common/delay";
@@ -36,20 +30,10 @@ import {
   ConfigurationDocument,
   IStartRealtimeConnectionOptions,
   RealtimeAudioStream,
-  RealtimeDataStream,
-  RealtimeListener,
-  RealtimeVideoStream,
   TelemetryStream,
 } from "./BaseDevice";
 
 export class Device extends BaseDevice {
-  rtcClient: RtcClient | undefined;
-  remoteDevicePeerId: string | null = null;
-
-  private realtimeListeners: RealtimeListener[] = [];
-
-  private connectionMonitorInterval: NodeJS.Timeout | undefined;
-
   constructor(
     public id: string,
     public name: string,
@@ -118,26 +102,6 @@ export class Device extends BaseDevice {
     });
     const files = await result.json();
     return files.fileUrls;
-  }
-
-  private handleMessage = (peerId: string, message: any) => {
-    this.realtimeListeners.forEach((_) => _(peerId, message));
-  };
-
-  getRealtimeStatus(): "disconnected" | "connecting" | "connected" {
-    if (this.rtcClient && this.remoteDevicePeerId) {
-      return this.rtcClient.getConnectionStatus(this.remoteDevicePeerId);
-    } else {
-      throw new Error(`Realtime connection hasn't been started for ${this.id}`);
-    }
-  }
-
-  getRealtimePing(): number | undefined {
-    if (this.rtcClient && this.remoteDevicePeerId) {
-      return this.rtcClient.getPing(this.remoteDevicePeerId);
-    } else {
-      throw new Error(`Realtime connection hasn't been started for ${this.id}`);
-    }
   }
 
   /**
@@ -308,11 +272,6 @@ export class Device extends BaseDevice {
     }, 1000);
   }
 
-  private stopConnectionMonitoring() {
-    clearInterval(this.connectionMonitorInterval);
-    this.connectionMonitorInterval = undefined;
-  }
-
   async sendRealtimeMessage(
     message: IRtcStreamMessage,
     config: IRtcSendConfiguration = {
@@ -326,18 +285,6 @@ export class Device extends BaseDevice {
 
     const devicePeerId = await this.getRemotePeerId();
     client.send(devicePeerId, message, config);
-  }
-
-  addRealtimeListener(listener: RealtimeListener) {
-    this.realtimeListeners.push(listener);
-  }
-
-  removeRealtimeListener(listener: RealtimeListener) {
-    const i = this.realtimeListeners.indexOf(listener);
-    if (i === -1) {
-      throw new Error("Could not find realtime listener to remove");
-    }
-    this.realtimeListeners.splice(i, 1);
   }
 
   async getRealtimeAudioStreams(): Promise<RealtimeAudioStream[]> {
@@ -366,172 +313,6 @@ export class Device extends BaseDevice {
       }
     }
     return streams;
-  }
-
-  async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
-    const document = (await this.getConfiguration()) as any;
-    const streams: { name: string }[] = [];
-
-    for (const _ of document.teleop?.hardwareStreams ?? []) {
-      if (_.rtcStreamType === "h264-video-frame") {
-        streams.push({
-          name: _.name,
-        });
-      }
-    }
-    for (const _ of document.teleop?.rosStreams ?? []) {
-      if (_.topicType == "formant/H264VideoFrame") {
-        streams.push({
-          name: _.topicName,
-        });
-      }
-      if (
-        (_.topicType === "sensor_msgs/Image" ||
-          _.topicType === "sensor_msgs/CompressedImage") &&
-        _.encodeVideo
-      ) {
-        streams.push({
-          name: _.topicName,
-        });
-      }
-    }
-    for (const _ of document.teleop?.customStreams ?? []) {
-      if (_.rtcStreamType === "h264-video-frame") {
-        streams.push({
-          name: _.name,
-        });
-      }
-    }
-    return streams;
-  }
-
-  async getRealtimeManipulators(): Promise<Manipulator[]> {
-    const document = (await this.getConfiguration()) as any;
-    const manipulators = [];
-
-    for (const _ of document.teleop.rosStreams ?? []) {
-      if (_.topicType == "sensor_msgs/JointState") {
-        manipulators.push(
-          new Manipulator(this, {
-            currentJointStateStream: { name: _.topicName },
-            plannedJointStateStream: _.plannedTopic
-              ? { name: _.plannedTopic }
-              : undefined,
-            planValidStream: _.planValidTopic
-              ? { name: _.planValidTopic }
-              : undefined,
-            endEffectorStream: _.endEffectorTopic
-              ? { name: _.endEffectorTopic }
-              : undefined,
-            endEffectorLinkName: _.endEffectorLinkName,
-            baseReferenceFrame: _.baseReferenceFrame,
-            localFrame: _.localFrame,
-          })
-        );
-      }
-    }
-    return manipulators;
-  }
-
-  async startListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    console.debug(`RealtimeVideo(${this.id}).start(${stream.name})`);
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: stream.name,
-      enable: true,
-      pipeline: "rtc",
-    });
-  }
-
-  async stopListeningToRealtimeVideo(stream: RealtimeVideoStream) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: stream.name,
-      enable: false,
-      pipeline: "rtc",
-    });
-    console.debug(`RealtimeVideo(${this.id}).stop(${stream.name})`);
-  }
-
-  async startListeningToRealtimeDataStream(stream: RealtimeDataStream) {
-    console.debug(`RealtimeDataStream(${this.id}).start(${stream.name})`);
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: stream.name,
-      enable: true,
-      pipeline: "rtc",
-    });
-  }
-
-  async stopListeningToRealtimeDataStream(stream: RealtimeDataStream) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: stream.name,
-      enable: false,
-      pipeline: "rtc",
-    });
-    console.debug(`RealtimeDataStream(${this.id}).stop(${stream.name})`);
-  }
-
-  async enableRealtimeTelemetryPriorityIngestion(streamName: string) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: streamName,
-      enablePriorityUpload: true,
-      pipeline: "telemetry",
-    });
-  }
-
-  async changeStreamAudioType(streamName: string, newFormat: "wav" | "opus") {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName,
-      setAudioFormat: newFormat,
-    });
-  }
-
-  async disableRealtimeTelemetryPriorityIngestion(streamName: string) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.controlRemoteStream(devicePeerId, {
-      streamName: streamName,
-      enablePriorityUpload: false,
-      pipeline: "telemetry",
-    });
   }
 
   async getRemotePeer(): Promise<IRtcPeer> {
@@ -667,49 +448,6 @@ export class Device extends BaseDevice {
       },
     });
     return res;
-  }
-
-  async createCustomDataChannel(
-    channelName: string,
-    rtcConfig?: RTCDataChannelInit
-  ): Promise<DataChannel> {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    const p = await new Promise<DataChannel>((resolve) => {
-      (client as RtcClient).createCustomDataChannel(
-        devicePeerId,
-        channelName,
-        {
-          ordered: true,
-          ...rtcConfig,
-        },
-        false,
-        (_peerId, channel) => {
-          const dataChannel = new DataChannel(channel);
-          resolve(dataChannel);
-        }
-      );
-    });
-    await p.waitTilReady();
-    return p;
-  }
-
-  createCustomRequestDataChannel(
-    channelName: string,
-    timeout: number = 3000 // 3 seconds default timeout
-  ): TextRequestDataChannel {
-    return new TextRequestDataChannel(this, channelName, timeout);
-  }
-
-  createCustomBinaryRequestDataChannel(
-    channelName: string,
-    timeout: number = 3000 // 3 seconds default timeout
-  ): BinaryRequestDataChannel {
-    return new BinaryRequestDataChannel(this, channelName, timeout);
   }
 
   async createCaptureStream(streamName: string) {
