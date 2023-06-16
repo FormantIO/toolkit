@@ -1,7 +1,7 @@
 build:
 	npm run build
 
-deploy:
+deploy: build
 	cd dist &&  sed -i'' -e 's/"\/assets/"\.\/assets/g' index.html 
 	cp schema.json dist/assets
 	git add .
