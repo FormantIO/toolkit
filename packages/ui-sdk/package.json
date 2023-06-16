@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "0.0.57",
+  "version": "0.0.58",
   "scripts": {
     "preversion": "npm run test && prettier --check src/",
     "postversion": "make",
