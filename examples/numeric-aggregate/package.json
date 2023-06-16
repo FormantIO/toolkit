@@ -11,8 +11,8 @@
     "deploy": "make deploy"
   },
   "dependencies": {
-    "@formant/data-sdk": "^0.0.130",
-    "@formant/ui-sdk": "^0.0.40",
+    "@formant/data-sdk": "^1.1.0",
+    "@formant/ui-sdk": "^0.0.60",
     "@mui/material": "^5.10.16",
     "date-fns": "^2.29.3",
     "react": "^18.2.0",

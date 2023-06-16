@@ -257,7 +257,7 @@ export const useDataPoints = (): IHeatMapDataPoint[] => {
   }, [config]);
 
   useEffect(() => {
-    if (!startTime || !endTime || !config) return;
+    if (!startTime || !endTime || !config || !device) return;
     const { locationStream, numericStream } = config;
     getDataPoints(
       locationStream,
