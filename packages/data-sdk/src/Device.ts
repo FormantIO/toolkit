@@ -58,6 +58,7 @@ export interface ConfigurationDocument {
     }[];
   };
   adapters?: IAdapterConfiguration[];
+  application?: { configurationMap: { [key: string]: string } };
 }
 
 export interface Command {
