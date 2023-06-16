@@ -7,7 +7,7 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@formant/data-sdk": "^1.1.0-rc.0",
+    "@formant/data-sdk": "next",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   }
