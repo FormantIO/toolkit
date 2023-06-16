@@ -12,9 +12,7 @@ export default defineConfig(({ mode }) => {
         entry: path.resolve(__dirname, "src/main.ts"),
         name: "FormantDataSDK",
         fileName: (format) =>
-          `data-sdk${
-            isBundle && format !== "umd" ? ".bundle" : ""
-          }.${format}.js`,
+          `data-sdk.${isBundle && format === "es" ? "es6" : format}.js`,
         formats: ["es", isBundle ? "umd" : "cjs"],
       },
       sourcemap: !isBundle,
@@ -36,7 +34,11 @@ export default defineConfig(({ mode }) => {
               }
 
               const isNodeModule = !path.isAbsolute(source);
-              return isNodeModule;
+              if (isNodeModule) {
+                return true;
+              }
+
+              return false;
             },
         output: {
           // Provide global variables to use in the UMD build
