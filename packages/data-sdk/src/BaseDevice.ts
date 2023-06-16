@@ -1,4 +1,9 @@
-import { IRtcStreamPayload, RtcClient } from "@formant/realtime-sdk";
+import {
+  IRtcSendConfiguration,
+  IRtcStreamMessage,
+  IRtcStreamPayload,
+  RtcClient,
+} from "@formant/realtime-sdk";
 import { ITags } from "./model/ITags";
 import { Uuid } from "./model/Uuid";
 import { SessionType } from "./model/SessionType";
@@ -109,9 +114,22 @@ export abstract class BaseDevice extends EventEmitter {
 
   protected connectionMonitorInterval: NodeJS.Timeout | undefined;
 
+  abstract getConfiguration(): Promise<ConfigurationDocument>;
+  abstract startRealtimeConnection(sessionType?: number): Promise<void>;
+  abstract getRemotePeer(): Promise<IRtcPeer>;
+
   protected handleMessage = (peerId: string, message: any) => {
     this.realtimeListeners.forEach((_) => _(peerId, message));
   };
+
+  protected stopConnectionMonitoring() {
+    clearInterval(this.connectionMonitorInterval);
+    this.connectionMonitorInterval = undefined;
+  }
+
+  protected assertNotCancelled(cancelled: boolean): void {
+    if (cancelled) throw new Error("Cancelled by deadline");
+  }
 
   getRealtimeStatus(): "disconnected" | "connecting" | "connected" {
     if (this.rtcClient && this.remoteDevicePeerId) {
@@ -141,11 +159,6 @@ export abstract class BaseDevice extends EventEmitter {
     this.realtimeListeners.splice(i, 1);
   }
 
-  protected stopConnectionMonitoring() {
-    clearInterval(this.connectionMonitorInterval);
-    this.connectionMonitorInterval = undefined;
-  }
-
   async getRealtimeManipulators(): Promise<Manipulator[]> {
     const document = (await this.getConfiguration()) as any;
     const manipulators = [];
@@ -172,14 +185,6 @@ export abstract class BaseDevice extends EventEmitter {
       }
     }
     return manipulators;
-  }
-
-  abstract getConfiguration(): Promise<ConfigurationDocument>;
-  abstract startRealtimeConnection(sessionType?: number): Promise<void>;
-  abstract getRemotePeer(): Promise<IRtcPeer>;
-
-  protected assertNotCancelled(cancelled: boolean): void {
-    if (cancelled) throw new Error("Cancelled by deadline");
   }
 
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
@@ -355,5 +360,48 @@ export abstract class BaseDevice extends EventEmitter {
     });
     await p.waitTilReady();
     return p;
+  }
+
+  async sendRealtimeMessage(
+    message: IRtcStreamMessage,
+    config: IRtcSendConfiguration = {
+      channelLabel: "stream.reliable",
+    }
+  ) {
+    const client = defined(
+      this.rtcClient,
+      "Realtime connection has not been started"
+    );
+
+    const devicePeer = await this.getRemotePeer();
+    client.send(defined(devicePeer).id, message, config);
+  }
+
+  async getRealtimeAudioStreams(): Promise<RealtimeAudioStream[]> {
+    const document = await this.getConfiguration();
+    const streams: { name: string }[] = [];
+
+    for (const _ of document.teleop?.hardwareStreams ?? []) {
+      if (_.rtcStreamType === "audio-chunk") {
+        streams.push({
+          name: _.name,
+        });
+      }
+    }
+    for (const _ of document.teleop?.rosStreams ?? []) {
+      if (_.topicType == "audio_common_msgs/AudioData") {
+        streams.push({
+          name: _.topicName,
+        });
+      }
+    }
+    for (const _ of document.teleop?.customStreams ?? []) {
+      if (_.rtcStreamType === "audio-chunk") {
+        streams.push({
+          name: _.name,
+        });
+      }
+    }
+    return streams;
   }
 }

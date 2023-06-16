@@ -1,8 +1,4 @@
-import {
-  IRtcSendConfiguration,
-  IRtcStreamMessage,
-  RtcClient,
-} from "@formant/realtime-sdk";
+import { RtcClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
 import { getRtcClientPool } from "./AppRtcClientPools";
@@ -14,7 +10,6 @@ import { FORMANT_API_URL } from "./config";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 
-import { Uuid } from "./model/Uuid";
 import { InterventionType } from "./model/InterventionType";
 import { IInterventionTypeMap } from "./model/IInterventionTypeMap";
 import { IInterventionResponse } from "./model/IInterventionResponse";
@@ -29,7 +24,6 @@ import {
   Command,
   ConfigurationDocument,
   IStartRealtimeConnectionOptions,
-  RealtimeAudioStream,
   TelemetryStream,
 } from "./BaseDevice";
 
@@ -270,49 +264,6 @@ export class Device extends BaseDevice {
         });
       }
     }, 1000);
-  }
-
-  async sendRealtimeMessage(
-    message: IRtcStreamMessage,
-    config: IRtcSendConfiguration = {
-      channelLabel: "stream.reliable",
-    }
-  ) {
-    const client = defined(
-      this.rtcClient,
-      "Realtime connection has not been started"
-    );
-
-    const devicePeerId = await this.getRemotePeerId();
-    client.send(devicePeerId, message, config);
-  }
-
-  async getRealtimeAudioStreams(): Promise<RealtimeAudioStream[]> {
-    const document = await this.getConfiguration();
-    const streams: { name: string }[] = [];
-
-    for (const _ of document.teleop?.hardwareStreams ?? []) {
-      if (_.rtcStreamType === "audio-chunk") {
-        streams.push({
-          name: _.name,
-        });
-      }
-    }
-    for (const _ of document.teleop?.rosStreams ?? []) {
-      if (_.topicType == "audio_common_msgs/AudioData") {
-        streams.push({
-          name: _.topicName,
-        });
-      }
-    }
-    for (const _ of document.teleop?.customStreams ?? []) {
-      if (_.rtcStreamType === "audio-chunk") {
-        streams.push({
-          name: _.name,
-        });
-      }
-    }
-    return streams;
   }
 
   async getRemotePeer(): Promise<IRtcPeer> {
@@ -609,9 +560,5 @@ export class Device extends BaseDevice {
   async createShareLink(share: IShare, view: string) {
     share.scope.deviceIds = [this.id];
     return await Fleet.createShareLink(share, view);
-  }
-
-  private async getRemotePeerId(): Promise<Uuid> {
-    return this.remoteDevicePeerId ?? (await this.getRemotePeer()).id;
   }
 }
