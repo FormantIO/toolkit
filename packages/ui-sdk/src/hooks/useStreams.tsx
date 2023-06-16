@@ -15,4 +15,4 @@ const useStreams = (dependencies: any[] = []) => {
   return streams;
 };
 
-export default useStreams
+export default useStreams;

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { createRef, FC, useEffect, useRef, useState } from "react";
 import { Icon } from "../../Icon";
-import border from "@images/joystick.svg";
+import border from "../../images/joystick.svg";
 import { Labels } from "./Labels";
 import { css } from "@emotion/css";
 import classNames from "classnames";

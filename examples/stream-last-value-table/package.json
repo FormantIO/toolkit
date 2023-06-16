@@ -11,8 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formant/data-sdk": "^0.0.132",
-    "@formant/ui-sdk": "^0.0.44",
+    "@formant/data-sdk": "next",
+    "@formant/ui-sdk": "^0.0.60",
     "gh-pages": "^4.0.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

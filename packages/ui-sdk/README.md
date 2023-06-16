@@ -58,8 +58,28 @@ yarn storybook
 
 Weirdly, typescript requires npm layout package in order to generate its types
 
+
+## Deploying a new version
+
+```bash
+# use npm to bump the version number
+npm version X.Y.Z 
+
+# add all the changed files from the preversion/postversion tasks
+git add .
+
+# commit all the changes with a uniform commit message
+git commit -m ui-sdk@$(node -p "require('./package.json').version")
+
+# add a unified annotated tag for this version
+git tag -a release/ui-sdk/$(node -p "require('./package.json').version") -m ui-sdk@$(node -p "require('./package.json').version")
+
+# publish this version to npm; use "--tag=next" for future releases
+npm publish
+
+# push everything to remote vcs with the tags
+git push --follow-tags
 ```
-make
-```
+
 
 should run all that's necessary for creating a build

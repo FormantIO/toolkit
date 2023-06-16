@@ -17,12 +17,7 @@
     "noImplicitReturns": true,
     "experimentalDecorators": true,
     "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*", "./dist/*", ""],
-      "@style/*": ["src/style/*"],
-      "@images/*": ["src/images/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["src"],
   "exclude": ["node_modules"]

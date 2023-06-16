@@ -16,7 +16,7 @@ const charTypes = [
   "scatter",
 ] as const;
 
-type ChartType = typeof charTypes[number];
+type ChartType = (typeof charTypes)[number];
 
 interface IChart {
   type: ChartType;

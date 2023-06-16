@@ -72,7 +72,8 @@ export class Fleet {
     const context = new Device(
       Fleet.defaultDeviceId,
       name,
-      defined(Authentication.currentOrganization) as string
+      defined(Authentication.currentOrganization) as string,
+      device.tags
     );
     Fleet.knownContext.push(new WeakRef(context));
     return context;
@@ -100,7 +101,12 @@ export class Fleet {
     );
     const device = await data.json();
     const name = device.name as string;
-    const context = new Device(deviceId, name, device.organizationId);
+    const context = new Device(
+      deviceId,
+      name,
+      device.organizationId,
+      device.tags
+    );
     Fleet.knownContext.push(new WeakRef(context));
     return context;
   }
@@ -124,7 +130,12 @@ export class Fleet {
     devices.items;
     return devices.items.map(
       (_: any) =>
-        new Device(_.id as string, _.name as string, _.organizationId as string)
+        new Device(
+          _.id as string,
+          _.name as string,
+          _.organizationId as string,
+          _.tags
+        )
     );
   }
 
@@ -143,7 +154,7 @@ export class Fleet {
     const devices = await data.json();
 
     return devices.items.map(
-      (_: any) => new Device(_.id, _.name, _.organizationId)
+      (_: any) => new Device(_.id, _.name, _.organizationId, _.tags)
     );
   }
 

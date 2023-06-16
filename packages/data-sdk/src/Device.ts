@@ -26,12 +26,14 @@ import {
   IStartRealtimeConnectionOptions,
   TelemetryStream,
 } from "./BaseDevice";
+import { ITags } from "./model/ITags";
 
 export class Device extends BaseDevice {
   constructor(
     public id: string,
     public name: string,
-    private organizationId: string
+    private organizationId: string,
+    public tags?: ITags
   ) {
     super();
   }
@@ -337,6 +339,7 @@ export class Device extends BaseDevice {
       parameterValue: i.parameterValue,
       parameterMeta: i.parameterMeta,
       enabled: i.enabled,
+      tags: i.tags,
     }));
   }
 
