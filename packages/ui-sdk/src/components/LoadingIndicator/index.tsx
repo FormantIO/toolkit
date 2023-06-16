@@ -1,5 +1,5 @@
 import React from "react";
-import loading from "@images/loading.png";
+import loading from "../../images/loading.png";
 import styled from "@emotion/styled";
 
 export const LoadingIndicator = () => {

@@ -18,13 +18,6 @@ module.exports = defineConfig(({ mode }) => {
         },
       }),
     ],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src/"),
-        "@style": `${path.resolve(__dirname, "./src/style")}`,
-        "@images": `${path.resolve(__dirname, "./src/images")}`,
-      },
-    },
     build: {
       lib: {
         entry: path.resolve(__dirname, "src/main.ts"),
