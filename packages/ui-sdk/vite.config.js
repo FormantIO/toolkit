@@ -31,21 +31,19 @@ module.exports = defineConfig(({ mode }) => {
         external: isBundle
           ? ["@formant/ui-sdk"]
           : (source, importer) => {
-              if (!importer) return false;
+              if (!importer) {
+                return false;
+              }
 
               const isRelative =
                 source.startsWith("./") || source.startsWith("../");
 
               if (isRelative) {
-                const abs = path.resolve(importer, source);
-                return !abs.startsWith(path.resolve(__dirname, "./src/"));
+                return false;
               }
 
-              if (!path.isAbsolute(source)) {
-                return true;
-              }
-
-              return !source.startsWith(path.resolve(__dirname, "./src/"));
+              const isNodeModule = !path.isAbsolute(source);
+              return isNodeModule;
             },
         output: {
           globals: isBundle ? { "@formant/ui-sdk": "FormantDataSDK" } : {},
