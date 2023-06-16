@@ -34,7 +34,7 @@
     "build:package": "vite build --emptyOutDir",
     "build:bundle": "vite build --emptyOutDir=false --mode=bundle ",
     "serve": "vite preview",
-    "types": "tsc src/**/*.ts src/**/*.tsx --jsx react --lib ESNext,DOM --allowSyntheticDefaultImports --declaration --emitDeclarationOnly --experimentalDecorators --downlevelIteration --outDir dist/types",
+    "types": "tsc -p tsconfig.types.json",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/ui-sdk/",
     "format": "prettier --write src/"
   },
