@@ -46,7 +46,7 @@ export class Device extends BaseDevice {
   rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | null = null;
 
-  realtimeListeners: RealtimeListener[] = [];
+  private realtimeListeners: RealtimeListener[] = [];
 
   private connectionMonitorInterval: NodeJS.Timeout | undefined;
 

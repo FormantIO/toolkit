@@ -21,8 +21,10 @@ export class PeerDevice extends BaseDevice {
   rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | null = null;
 
-  realtimeListeners: RealtimeListener[] = [];
+  private realtimeListeners: RealtimeListener[] = [];
   id!: string;
+
+  private connectionMonitorInterval: NodeJS.Timeout | undefined;
 
   private telemetryStreamActive = false;
   private streamTelemetry: { [key: string]: any } = {};
@@ -137,26 +139,64 @@ export class PeerDevice extends BaseDevice {
   }
 
   async startRealtimeConnection(sessionType?: number) {
-    if (!this.rtcClient) {
-      const rtcClient = new RtcClient({
-        lanOnlyMode: true,
-        receive: this.handleMessage,
-        sessionType,
-      });
+    console.debug(`${new Date().toISOString()} :: Connection start requested`);
 
-      await rtcClient.connectLan(this.peerUrl);
-
-      // WebRTC requires a signaling phase when forming a new connection.
-      // Wait for the signaling process to complete...
-      while (rtcClient.getConnectionStatus(this.peerUrl) !== "connected") {
-        await delay(100);
-      }
-      this.rtcClient = rtcClient;
-    } else {
+    if (this.rtcClient && this.connectionMonitorInterval !== undefined) {
       throw new Error(
         `Already created realtime connection to device ${this.id}`
       );
     }
+
+    if (this.rtcClient) {
+      console.warn(
+        "overwriting existing rtcClient due to missing connectionMonitorInterval"
+      );
+    }
+
+    const rtcClient = new RtcClient({
+      lanOnlyMode: true,
+      receive: this.handleMessage,
+      sessionType,
+    });
+
+    await rtcClient.connectLan(this.peerUrl);
+
+    // WebRTC requires a signaling phase when forming a new connection.
+    // Wait for the signaling process to complete...
+    while (rtcClient.getConnectionStatus(this.peerUrl) !== "connected") {
+      await delay(100);
+    }
+    this.rtcClient = rtcClient;
+    this.initConnectionMonitoring();
+  }
+
+  private initConnectionMonitoring() {
+    this.connectionMonitorInterval = setInterval(async () => {
+      let dataChannelClosed = false;
+
+      if (this.rtcClient) {
+        if (this.rtcClient.getConnectionStatus(this.peerUrl) !== "connected") {
+          console.debug(`${new Date().toISOString()} :: data channel closed`);
+          dataChannelClosed = true;
+        } else {
+          console.debug(
+            `${new Date().toISOString()} :: data channel appears active`
+          );
+        }
+      }
+
+      if (!this.rtcClient || dataChannelClosed) {
+        this.emit("disconnect");
+        this.stopRealtimeConnection().catch((err) => {
+          console.error(err);
+        });
+      }
+    }, 1000);
+  }
+
+  private stopConnectionMonitoring() {
+    clearInterval(this.connectionMonitorInterval);
+    this.connectionMonitorInterval = undefined;
   }
 
   addRealtimeListener(listener: RealtimeListener) {
@@ -329,9 +369,26 @@ export class PeerDevice extends BaseDevice {
   }
 
   async stopRealtimeConnection() {
+    let throwNotStartedError = false;
+
     if (this.rtcClient) {
-      await this.rtcClient.disconnect(this.id);
-    } else {
+      this.stopConnectionMonitoring();
+
+      if (this.id) {
+        await this.rtcClient.disconnect(this.id);
+        this.remoteDevicePeerId = null;
+      } else {
+        throwNotStartedError = true;
+      }
+
+      try {
+        await this.rtcClient.shutdown();
+      } finally {
+        this.rtcClient = undefined;
+      }
+    }
+
+    if (throwNotStartedError) {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
   }
