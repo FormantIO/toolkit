@@ -35,7 +35,25 @@ module.exports = defineConfig(({ mode }) => {
       },
       sourcemap: !isBundle,
       rollupOptions: {
-        external: isBundle ? ["@formant/ui-sdk"] : [/node_modules/],
+        external: isBundle
+          ? ["@formant/ui-sdk"]
+          : (source, importer) => {
+              if (!importer) return false;
+
+              const isRelative =
+                source.startsWith("./") || source.startsWith("../");
+
+              if (isRelative) {
+                const abs = path.resolve(importer, source);
+                return !abs.startsWith(path.resolve(__dirname, "./src/"));
+              }
+
+              if (!path.isAbsolute(source)) {
+                return true;
+              }
+
+              return !source.startsWith(path.resolve(__dirname, "./src/"));
+            },
         output: {
           globals: isBundle ? { "@formant/ui-sdk": "FormantDataSDK" } : {},
         },
