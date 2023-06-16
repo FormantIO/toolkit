@@ -37,6 +37,7 @@ export interface ConfigurationDocument {
     }[];
   };
   adapters?: IAdapterConfiguration[];
+  application?: { configurationMap: { [key: string]: string } };
 }
 
 export interface Command {
@@ -46,6 +47,7 @@ export interface Command {
   description: string;
   parameterEnabled: true;
   parameterValue: string | null;
+  tags: ITags;
   parameterMeta?: {
     topic?: string;
   };
