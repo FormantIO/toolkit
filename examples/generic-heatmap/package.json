@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formant/data-sdk": "^1.1.0-rc.0",
-    "@formant/ui-sdk": "^0.0.40",
+    "@formant/data-sdk": "next",
+    "@formant/ui-sdk": "^0.0.60",
     "@types/geojson": "^7946.0.10",
     "geojson": "^0.5.0",
     "mapbox-gl": "^2.11.1",
