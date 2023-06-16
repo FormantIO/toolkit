@@ -156,7 +156,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
     public id: string,
     public name: string,
     private organizationId: string,
-    public tags: ITags
+    public tags?: ITags
   ) {
     super();
   }
