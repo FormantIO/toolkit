@@ -1,4 +1,4 @@
-import { Fleet } from "/Users/ebarch/Downloads/toolkit/packages/data-sdk/dist/data-sdk.es.js";
+import { Authentication, Fleet } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
@@ -14,7 +14,7 @@ el("button").addEventListener("click", async () => {
     el("#log").style.display = "block";
 
     // get current device from url context
-    const device = await Fleet.getPeerDevice("http://10.4.4.182:5502");
+    const device = await Fleet.getPeerDevice("https://localhost:8000");
 
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
@@ -40,10 +40,6 @@ el("button").addEventListener("click", async () => {
       const ce = e as CustomEvent;
       j.send(JSON.stringify(ce.detail));
     });
-
-    setInterval(async () => {
-      console.info(JSON.stringify(await device.getLatestTelemetry(), null, 2));
-    }, 2000);
   } catch (e) {
     log((e as Error).message);
   }
