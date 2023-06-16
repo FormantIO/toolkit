@@ -67,6 +67,7 @@ export interface Command {
   description: string;
   parameterEnabled: true;
   parameterValue: string | null;
+  tags: ITags;
   parameterMeta?: {
     topic?: string;
   };
@@ -154,7 +155,8 @@ export class Device extends EventEmitter implements IRealtimeDevice {
   constructor(
     public id: string,
     public name: string,
-    private organizationId: string
+    private organizationId: string,
+    public tags: ITags
   ) {
     super();
   }
@@ -714,6 +716,7 @@ export class Device extends EventEmitter implements IRealtimeDevice {
       parameterValue: i.parameterValue,
       parameterMeta: i.parameterMeta,
       enabled: i.enabled,
+      tags: i.tags,
     }));
   }
 
