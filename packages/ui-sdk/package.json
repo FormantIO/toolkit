@@ -26,7 +26,10 @@
   },
   "version": "0.0.55",
   "scripts": {
+    "preversion": "npm run test && prettier --check src/",
+    "postversion": "make",
     "dev": "vite --port 5173",
+    "test": "echo 'No tests'",
     "build": "npm run build:package && npm run build:bundle",
     "build:package": "vite build --emptyOutDir",
     "build:bundle": "vite build --emptyOutDir=false --mode=bundle ",
