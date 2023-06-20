@@ -13,8 +13,10 @@ el("button").addEventListener("click", async () => {
     el("section").style.display = "none";
     el("#log").style.display = "block";
 
-    // get current device from url context
-    const device = await Fleet.getPeerDevice("https://localhost:8000");
+    // connect directly to a device (agent) via its IP.
+    // NOTE: you must set the FORMANT_AGENT_IP ENV on the agent to an IP reachable by this UI.
+    // you can use "0.0.0.0" if you would like to listen on all interfaces
+    const device = await Fleet.getPeerDevice("http://10.4.4.182:5502");
 
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
