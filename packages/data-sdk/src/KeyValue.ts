@@ -1,9 +1,10 @@
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
+import { ITagSets } from "./main";
 
 export class KeyValue {
-  public static async set(key: string, value: string) {
+  public static async set(key: string, value: string, tags?: ITagSets) {
     try {
       const result = await fetch(FORMANT_API_URL + "/v1/admin/key-value", {
         method: "POST",
@@ -11,6 +12,7 @@ export class KeyValue {
           organizationId: defined(Authentication.currentUser).organizationId,
           key,
           value,
+          tags,
         }),
         headers: {
           "Content-Type": "application/json",

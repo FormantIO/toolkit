@@ -1,12 +1,3 @@
-export interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  organizationId: string;
-  roleId: string;
-  id: string;
-}
-
 export interface IAuthentication {
   accessToken: string;
   organizationId: string;

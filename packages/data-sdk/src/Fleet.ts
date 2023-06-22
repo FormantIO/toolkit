@@ -28,6 +28,7 @@ import {
   formatTimeFrameText,
   serializeHash,
 } from "./utils";
+import { IFleet } from "./model/IFleet";
 
 export interface TelemetryResult {
   deviceId: string;
@@ -844,5 +845,113 @@ export class Fleet {
     return `${origin}/shares/${code}#${serializeHash({
       viewId: selectedView[0].id,
     })}`;
+  }
+
+  static async listFleets(): Promise<IFleet[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/fleets`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const fleets = await data.json();
+    return fleets.items;
+  }
+
+  static async createFleet(fleet: IFleet): Promise<IFleet> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/fleets`, {
+      method: "POST",
+      body: JSON.stringify(fleet),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return await data.json();
+  }
+
+  static async getFleet(id: string): Promise<IFleet> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/fleets/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return await data.json();
+  }
+
+  static async patchFleet(id: string, role: Partial<IFleet>): Promise<IFleet> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/fleets/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(role),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return await data.json();
+  }
+
+  static async deleteFleet(id: string): Promise<void> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    await fetch(`${FORMANT_API_URL}/v1/admin/fleets/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+  }
+
+  static async addDeviceToFleet(deviceId: string, fleetId: string) {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/admin/devices/${deviceId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ fleetId }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    return await data.json();
+  }
+
+  static async getFleetDevices(id: string): Promise<void> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/admin/fleets/${id}/devices`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    const fleets = await data.json();
+    return fleets.items;
   }
 }

@@ -12,6 +12,9 @@ export * from "./App";
 export * from "./KeyValue";
 export * from "./utils";
 export * from "./AudioPlayer";
+export * from "./Account";
+export * from "./Role";
+export * from "./User";
 
 import { App } from "./App";
 import { Fleet } from "./Fleet";

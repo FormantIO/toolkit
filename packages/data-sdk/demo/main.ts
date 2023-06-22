@@ -1,4 +1,4 @@
-import { Authentication, Fleet, SessionType } from "../src/main";
+import { Authentication, Fleet } from "../src/main";
 import "./style.css";
 
 function timeout(ms: number) {
@@ -11,16 +11,11 @@ function timeout(ms: number) {
   if (el) {
     try {
       await Authentication.waitTilAuthenticated();
-      const d = await Fleet.getCurrentDevice();
-      let connected = false;
-      while (!connected) {
-        console.warn("waiting for main connection");
-        connected = await d.isInRealtimeSession();
-        await timeout(2000);
-      }
-      console.warn("start connection");
-      await d.startRealtimeConnection(SessionType.Observe);
-      console.error("complete");
+      const a = await Fleet.getFleetDevices(
+        "03c35af7-e82b-44f0-997e-f6d564180c18"
+      );
+
+      console.log(a);
     } catch (error) {
       console.log(error);
     }
