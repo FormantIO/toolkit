@@ -202,4 +202,30 @@ export class PeerDevice extends BaseDevice {
       throw new Error(`Realtime connection hasn't been started for ${this.id}`);
     }
   }
+
+  async sendCommand(
+    name: string,
+    data?: string,
+    time?: Date,
+    metadata?: {}
+  ): Promise<Response> {
+    const parameter = {
+      value: data,
+      scrubberTime: (time || new Date()).toISOString(),
+      meta: metadata,
+    };
+
+    const res = await fetch(`${this.peerUrl}/v1/enqueue-command`, {
+      method: "POST",
+      body: JSON.stringify({
+        command: name,
+        parameter: parameter
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    return res;
+  }
 }
