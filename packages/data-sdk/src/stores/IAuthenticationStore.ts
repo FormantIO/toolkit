@@ -1,3 +1,5 @@
+import { IUser } from "../model/IUser";
+
 export interface IAuthentication {
   accessToken: string;
   organizationId: string;
@@ -19,7 +21,7 @@ export interface IRespondToNewPasswordRequiredChallengeRequest {
 
 export interface IAuthenticationStore {
   readonly token: string | undefined;
-  readonly currentUser: User | undefined;
+  readonly currentUser: IUser | undefined;
   readonly currentOrganization: string | undefined;
   readonly defaultDeviceId: string | undefined;
 
@@ -39,7 +41,7 @@ export interface IAuthenticationStore {
 
   isAuthenticated(): boolean;
 
-  getCurrentUser(): User | undefined;
+  getCurrentUser(): IUser | undefined;
 
   waitTilAuthenticated(): Promise<boolean>;
 
