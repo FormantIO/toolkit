@@ -1,11 +1,10 @@
 import {
-  User,
   IAuthentication,
   IAuthenticationStore,
   IConfirmForgotPasswordRequest,
   IRespondToNewPasswordRequiredChallengeRequest,
 } from "./IAuthenticationStore";
-
+import { IUser } from "../model/IUser";
 interface IAuthenticationStoreOptions {
   apiUrl: string;
 
@@ -17,7 +16,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   private _refreshToken: string | undefined;
   private _isShareToken: boolean = false;
   private _currentOrganization: string | undefined;
-  private _currentUser: User | undefined;
+  private _currentUser: IUser | undefined;
   private _defaultDeviceId: string | undefined;
   private _token: string | undefined;
   private _waitingForAuth: Set<(result: boolean) => void> = new Set();
@@ -43,7 +42,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._token;
   }
 
-  get currentUser(): User | undefined {
+  get currentUser(): IUser | undefined {
     return this._currentUser;
   }
 
@@ -172,7 +171,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   /**
    * @deprecated use currentUser property instead.
    */
-  getCurrentUser(): User | undefined {
+  getCurrentUser(): IUser | undefined {
     return this._currentUser;
   }
 

@@ -27,6 +27,7 @@ import {
   TelemetryStream,
 } from "./BaseDevice";
 import { ITags } from "./model/ITags";
+import { IDevice } from "./model/IDevice";
 
 export class Device extends BaseDevice {
   constructor(
@@ -563,5 +564,35 @@ export class Device extends BaseDevice {
   async createShareLink(share: IShare, view: string) {
     share.scope.deviceIds = [this.id];
     return await Fleet.createShareLink(share, view);
+  }
+
+  async createDevice(device: IDevice): Promise<IDevice> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices`, {
+      method: "POST",
+      body: JSON.stringify(device),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return await data.json();
+  }
+
+  async patchDevice(id: string, device: Partial<IDevice>): Promise<IDevice> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(device),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    return await data.json();
   }
 }
