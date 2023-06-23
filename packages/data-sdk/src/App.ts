@@ -127,7 +127,7 @@ export class App {
   static getCurrentModuleContext(): string | null {
     let urlParams = new URLSearchParams("");
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && window.location) {
       urlParams = new URLSearchParams(window.location.search);
     }
 
@@ -139,7 +139,7 @@ export class App {
   static async getCurrentModuleConfiguration(): Promise<string | undefined> {
     let urlParams = new URLSearchParams("");
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && window.location) {
       urlParams = new URLSearchParams(window.location.search);
     }
 

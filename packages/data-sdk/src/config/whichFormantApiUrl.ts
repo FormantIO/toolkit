@@ -6,29 +6,34 @@ interface IHasString {
 }
 
 export function whichFormantApiUrl(global: any, urlParams: IHasString) {
-  if (urlParams.get("formant_stage")) {
-    return "https://api-stage.formant.io";
-  }
+  // url params may not be available when using react native
+  try {
+    if (urlParams.get("formant_stage")) {
+      return "https://api-stage.formant.io";
+    }
 
-  if (urlParams.get("formant_dev")) {
-    return "https://api-dev.formant.io";
-  }
+    if (urlParams.get("formant_dev")) {
+      return "https://api-dev.formant.io";
+    }
 
-  if (urlParams.get("formant_local")) {
-    return "https://api.formant.local";
-  }
+    if (urlParams.get("formant_local")) {
+      return "https://api.formant.local";
+    }
 
-  if (urlParams.get("formant_url")) {
-    const customUrl = urlParams.get("formant_url");
-    if (customUrl !== null) {
-      try {
-        return new URL(customUrl).origin;
-      } catch {
-        console.warn(
-          `Ignoring malformed \`formant_url\` url parameter: ${customUrl}`
-        );
+    if (urlParams.get("formant_url")) {
+      const customUrl = urlParams.get("formant_url");
+      if (customUrl !== null) {
+        try {
+          return new URL(customUrl).origin;
+        } catch {
+          console.warn(
+            `Ignoring malformed \`formant_url\` url parameter: ${customUrl}`
+          );
+        }
       }
     }
+  } catch (error) {
+    console.warn(error);
   }
 
   if (

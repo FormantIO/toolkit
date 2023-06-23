@@ -1,4 +1,4 @@
-import { Authentication, Fleet } from "@formant/data-sdk";
+import { Fleet } from "/Users/ebarch/Downloads/toolkit/packages/data-sdk/dist/data-sdk.es.js";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
@@ -42,6 +42,11 @@ el("button").addEventListener("click", async () => {
       const ce = e as CustomEvent;
       j.send(JSON.stringify(ce.detail));
     });
+
+    setTimeout(async () => {
+      const resp = await device.sendCommand('test-command');
+      console.log(resp);
+    }, 3000);
   } catch (e) {
     log((e as Error).message);
   }

@@ -384,7 +384,7 @@ export class Fleet {
     }
     let urlParams = new URLSearchParams("");
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && window.location) {
       urlParams = new URLSearchParams(window.location.search);
     }
 

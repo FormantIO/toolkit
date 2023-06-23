@@ -55,7 +55,7 @@ export default defineConfig({
       // make sure to externalize deps that shouldn't be bundled
       // into your library
 
-      external: ["date-fns"],
+      external: [],
       plugins: [rollupNodePolyFill(), nodeResolve()],
       output: {
         // Provide global variables to use in the UMD build
