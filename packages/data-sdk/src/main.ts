@@ -45,7 +45,7 @@ try {
     App.listenForConnectionEvents();
   }
 } catch (error) {
-  console.warn(error);
+  // console.warn(error);
 }
 
 export * from "./model/accessLevels";

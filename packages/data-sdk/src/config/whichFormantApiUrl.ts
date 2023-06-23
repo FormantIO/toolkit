@@ -33,7 +33,7 @@ export function whichFormantApiUrl(global: any, urlParams: IHasString) {
       }
     }
   } catch (error) {
-    console.warn(error);
+    // console.warn(error);
   }
 
   if (
