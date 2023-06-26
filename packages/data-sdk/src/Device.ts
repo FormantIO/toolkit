@@ -246,10 +246,6 @@ export class Device extends BaseDevice {
         if (connection === undefined || !connection.isReady()) {
           console.debug(`${new Date().toISOString()} :: data channel closed`);
           dataChannelClosed = true;
-        } else {
-          console.debug(
-            `${new Date().toISOString()} :: data channel appears active`
-          );
         }
       }
 
