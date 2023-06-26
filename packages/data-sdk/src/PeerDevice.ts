@@ -145,10 +145,6 @@ export class PeerDevice extends BaseDevice {
         if (this.rtcClient.getConnectionStatus(this.peerUrl) !== "connected") {
           console.debug(`${new Date().toISOString()} :: data channel closed`);
           dataChannelClosed = true;
-        } else {
-          console.debug(
-            `${new Date().toISOString()} :: data channel appears active`
-          );
         }
       }
 
