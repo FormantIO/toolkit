@@ -9,6 +9,10 @@ export type BrowserType =
 export function browser(): BrowserType {
   const { userAgent } = navigator;
 
+  if (!userAgent) {
+    return "Other";
+  }
+
   if (userAgent.includes("Firefox/")) {
     return "Firefox";
   } else if (userAgent.includes("Edg/")) {

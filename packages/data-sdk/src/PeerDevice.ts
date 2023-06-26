@@ -38,66 +38,59 @@ export class PeerDevice extends BaseDevice {
 
   private subscribeToTelemetry() {
     this.telemetryStreamActive = true;
-    const device = this;
 
-    fetch(`${this.peerUrl}/v1/telemetry`, { method: "POST" })
-      .then((response) => {
-        if (response === null || response.body === null) {
-          this.telemetryStreamActive = false;
-          return;
+    let previousBytesReceived = 0;
+
+    // we use XHR because chunked encoding is broken in the react native fetch API
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'text';
+
+    xhr.addEventListener("error", (_) => {
+      this.handleXHRError('error');
+    });
+    xhr.addEventListener("abort", (_) => {
+      this.handleXHRError('abort');
+    });
+    xhr.addEventListener("timeout", (_) => {
+      this.handleXHRError('timeout');
+    });
+    xhr.addEventListener("readystatechange", (_) => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        this.handleXHRError('closed');
+      }
+    });
+
+    // handle new data
+    xhr.addEventListener('progress', (event) => {
+      const currentBytesReceived = event.loaded;
+      const newBytesReceived = currentBytesReceived - previousBytesReceived;
+      previousBytesReceived = currentBytesReceived;
+
+      // Process the new data received
+      const newData = xhr.responseText.substr(-newBytesReceived);
+
+      const jsonObjects = newData.split("\n");
+      jsonObjects.forEach((jsonObject) => {
+        if (jsonObject.length > 0) {
+          const parsedObject = JSON.parse(jsonObject);
+          if (parsedObject.result?.datapoint) {
+            const datapoint = parsedObject.result.datapoint;
+            const stream = datapoint.stream;
+            delete datapoint["stream"];
+            this.streamTelemetry[stream] = datapoint;
+          }
         }
-
-        const reader = response.body.getReader();
-
-        return new ReadableStream({
-          start(controller) {
-            function processResult(result: any) {
-              if (result.done) {
-                device.telemetryStreamActive = false;
-                controller.close();
-                return;
-              }
-
-              const chunk = result.value;
-              const decoder = new TextDecoder("utf-8");
-              const jsonObjects = decoder.decode(chunk).split("\n");
-
-              jsonObjects.forEach((jsonObject) => {
-                if (jsonObject.length > 0) {
-                  const parsedObject = JSON.parse(jsonObject);
-                  if (parsedObject.result?.datapoint) {
-                    const datapoint = parsedObject.result.datapoint;
-                    const stream = datapoint.stream;
-                    delete datapoint["stream"];
-                    device.streamTelemetry[stream] = datapoint;
-                  }
-                }
-              });
-
-              device.readNextTelemetryRecord(reader, processResult);
-            }
-
-            device.readNextTelemetryRecord(reader, processResult);
-          },
-        });
-      })
-      .catch((error) => {
-        this.telemetryStreamActive = false;
-        console.error("Telemetry error:", error);
       });
+    });
+
+    xhr.open('POST', `${this.peerUrl}/v1/telemetry`);
+
+    xhr.send();
   }
 
-  private readNextTelemetryRecord(
-    reader: ReadableStreamDefaultReader<Uint8Array>,
-    processResult: (result: any) => void
-  ) {
-    reader
-      .read()
-      .then(processResult)
-      .catch((error) => {
-        this.telemetryStreamActive = false;
-        console.error("Telemetry error:", error);
-      });
+  private handleXHRError(reason: string) {
+    console.warn(`Telemetry stream ended: ${reason}`);
+    this.telemetryStreamActive = false;
   }
 
   async getDeviceId(): Promise<string> {
