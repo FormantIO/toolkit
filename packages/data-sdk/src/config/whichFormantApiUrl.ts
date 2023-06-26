@@ -32,9 +32,7 @@ export function whichFormantApiUrl(global: any, urlParams: IHasString) {
         }
       }
     }
-  } catch (error) {
-    // console.warn(error);
-  }
+  } catch (_) {}
 
   if (
     typeof global !== "undefined" &&

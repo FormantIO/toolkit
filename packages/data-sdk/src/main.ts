@@ -44,9 +44,7 @@ try {
   if (typeof window !== "undefined") {
     App.listenForConnectionEvents();
   }
-} catch (error) {
-  // console.warn(error);
-}
+} catch (_) {}
 
 export * from "./model/accessLevels";
 export * from "./model/AccessLevel";
