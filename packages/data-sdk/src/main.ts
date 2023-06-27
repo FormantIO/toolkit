@@ -33,11 +33,17 @@ export type {
 } from "./App";
 export type { TelemetryResult } from "./Fleet";
 export type {
+  Command,
+  ConfigurationDocument,
+  IAdapterConfiguration,
+  IJointState,
+  IStartRealtimeConnectionOptions,
   RealtimeAudioStream,
   RealtimeDataStream,
   RealtimeListener,
   RealtimeMessage,
   RealtimeVideoStream,
+  TelemetryStream,
 } from "./BaseDevice";
 export type {
   DataChannelBinaryListener,
