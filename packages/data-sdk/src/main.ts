@@ -1,30 +1,69 @@
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
-export * from "./Fleet";
-export * from "./Authentication";
-export * from "./Device";
-export * from "./PeerDevice";
-export * from "./DataChannel";
-export * from "./CaptureStream";
-export * from "./Manipulator";
-export * from "./RequestDataChannel";
-export * from "./App";
-export * from "./KeyValue";
-export * from "./utils";
-export * from "./AudioPlayer";
-export * from "./Account";
-export * from "./Role";
-export * from "./User";
 
+export { App } from "./App";
+export { Fleet } from "./Fleet";
+export { Authentication } from "./Authentication";
+export { Device } from "./Device";
+export { PeerDevice } from "./PeerDevice";
+export { DataChannel } from "./DataChannel";
+export { CaptureStream } from "./CaptureStream";
+export { Manipulator } from "./Manipulator";
+export {
+  BinaryRequestDataChannel,
+  TextRequestDataChannel,
+} from "./RequestDataChannel";
+export { KeyValue } from "./KeyValue";
+export { AudioPlayer } from "./AudioPlayer";
+export { Account } from "./Account";
+export { Role } from "./Role";
+export { User } from "./User";
+
+// Re-exporting core types
+export type {
+  AppMessage,
+  DataPoint,
+  EmbeddedAppMessage,
+  IDevice,
+  ModuleConfigurationMessage,
+  ModuleData,
+  QueryRange,
+  Stream,
+  StreamData,
+} from "./App";
+export type { TelemetryResult } from "./Fleet";
+export type {
+  Command,
+  ConfigurationDocument,
+  IAdapterConfiguration,
+  IJointState,
+  IStartRealtimeConnectionOptions,
+  RealtimeAudioStream,
+  RealtimeDataStream,
+  RealtimeListener,
+  RealtimeMessage,
+  RealtimeVideoStream,
+  TelemetryStream,
+} from "./BaseDevice";
+export type {
+  DataChannelBinaryListener,
+  DataChannelErrorListener,
+  DataChannelListener,
+  DataChannelStringListener,
+} from "./DataChannel";
+export type { CaptureSession } from "./CaptureStream";
+export type { RealtimeManipulatorConfig } from "./Manipulator";
+
+// Application Initialization
 import { App } from "./App";
 import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
 
 try {
   const urlParams =
-  (typeof window !== "undefined" && window.location)
-    ? new URLSearchParams(window.location.search)
-    : new URLSearchParams("");
+    typeof window !== "undefined" && window.location
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams("");
 
   const urlDevice = urlParams.get("device");
   if (urlDevice) {

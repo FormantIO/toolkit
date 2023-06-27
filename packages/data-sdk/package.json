@@ -26,7 +26,7 @@
   },
   "version": "1.3.0",
   "scripts": {
-    "preversion": "npm run test && tsc --project ./configs/tsconfig.type-check.json",
+    "preversion": "npm run verify",
     "postversion": "make",
     "dev": "vite --port 5173",
     "build": "tsc -p ./configs/tsconfig.demo.json && vite build",
@@ -37,6 +37,8 @@
     "prettier:check": "prettier --check src/",
     "prettier:write": "prettier --write src/",
     "types": "tsc --project ./configs/tsconfig.types.json",
+    "types:check": "tsc --project ./configs/tsconfig.type-check.json",
+    "verify": "concurrently --kill-others-on-fail npm:test:* npm:prettier:check npm:types:check",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
