@@ -1,3 +1,16 @@
+## [1.3.1] - 2023-06-15
+
+### Added
+
+- Ensure `Realtime*` types get exported at the top-level from `BaseDevice` (#110)
+
+## [1.3.0] - 2023-06-15
+
+### Added
+
+- Improving API support for `/users`, `/accounts`, and `/fleets` (#107)
+- Support for offline direct RTC (#99)
+
 ## [1.2.0] - 2023-06-15
 
 ### Added
@@ -98,6 +111,8 @@ await device.startRealtimeConnection({
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.3.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.3.1~
+[1.3.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.2.0...release/data-sdk/1.3.0~
 [1.2.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.1.0...release/data-sdk/1.2.0~
 [1.1.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.1.0-rc.0...release/data-sdk/1.1.0~
 [1.1.0-rc.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0...release/data-sdk/1.1.0-rc.0~

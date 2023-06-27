@@ -25,6 +25,9 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 ## Deploying a new version
 
 ```bash
+# update changelog
+vim CHANGELOG.md
+
 # use npm to bump the version number
 npm version X.Y.Z
 
