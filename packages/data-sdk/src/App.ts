@@ -3,6 +3,7 @@ import { FORMANT_API_URL } from "./config";
 import { QueryStore } from "./cache/queryStore";
 import { IStreamData, ITags, StreamType } from "./main";
 import { JsonSchema } from "./model/JsonSchema";
+import { IconName } from "./model/IconName";
 
 const queryStore = new QueryStore();
 
@@ -35,7 +36,7 @@ export type AppMessage =
   | {
       type: "setup_module_menus";
       module: string;
-      menus: { label: string }[];
+      menus: { label: string; icon?: IconName }[];
     }
   | {
       type: "send_channel_data";
@@ -235,7 +236,7 @@ export class App {
     });
   }
 
-  static setupModuleMenus(menus: { label: string }[]) {
+  static setupModuleMenus(menus: { label: string; icon?: IconName }[]) {
     const moduleName = this.getCurrentModuleContext();
     if (!moduleName) {
       throw new Error("No module context");
