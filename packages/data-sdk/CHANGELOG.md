@@ -1,8 +1,21 @@
+## [1.3.1] - 2023-06-15
+
+### Added
+
+- Ensure `Realtime*` types get exported at the top-level from `BaseDevice` (#110)
+
+## [1.3.0] - 2023-06-15
+
+### Added
+
+- Improving API support for `/users`, `/accounts`, and `/fleets` (#107)
+- Support for offline direct RTC (#99)
+
 ## [1.2.0] - 2023-06-15
 
 ### Added
 
-- Added `tags` support to `Device` and `Command` entity. (#104) 
+- Added `tags` support to `Device` and `Command` entity. (#104)
 
 ## [1.1.0] - 2023-06-15
 
@@ -22,7 +35,7 @@ _Released…_
 ### Fixed
 - Possible to removeListener too early when waiting for `request_date` to respond. (#93)
 
-## [1.0.0-rc.3] - 2023-05-25 
+## [1.0.0-rc.3] - 2023-05-25
 
 `Device.startRealtimeConnection()` now accepts an optional `options` argument, to more fine-grained control over
 the connection handshake behavior.
@@ -36,7 +49,7 @@ await device.startRealtimeConnection({
 });
 ```
 
-The default value for `deadlineMs` is `10000`, or 10 seconds. If `device.startRealtimeConnection()` is unsuccessful 
+The default value for `deadlineMs` is `10000`, or 10 seconds. If `device.startRealtimeConnection()` is unsuccessful
 in establishing a connection within the deadline, it will throw an error.
 
 ```ts
@@ -80,7 +93,7 @@ await device.startRealtimeConnection({
 - Adding WAN connectivity helpers (#83)
   - `App.isOnline` returns the last-known connectivity status to formant apis.
   - `App.checkConnection(ms?: number)` returns a promise for the _current_ connectivity status to formant apis.
-  - `App.waitForConnection(ms?: number)` returns a promise that will resolve when `App.isOnline` is `true`. 
+  - `App.waitForConnection(ms?: number)` returns a promise that will resolve when `App.isOnline` is `true`.
 
 ### Fixed
 - Prefer cached remoteDevicePeerId when set.  (#81)
@@ -93,11 +106,13 @@ await device.startRealtimeConnection({
 ### Added
 - Improve typescript definitions `ConfigurationDocument` (#77)
   - Added `adapters`
-  - Added `tags` 
+  - Added `tags`
 
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.3.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.3.1~
+[1.3.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.2.0...release/data-sdk/1.3.0~
 [1.2.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.1.0...release/data-sdk/1.2.0~
 [1.1.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.1.0-rc.0...release/data-sdk/1.1.0~
 [1.1.0-rc.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.0.0...release/data-sdk/1.1.0-rc.0~

@@ -25,6 +25,9 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 ## Deploying a new version
 
 ```bash
+# update the CHANGELOG with the changes since the previous version
+vim CHANGELOG.md
+
 # use npm to bump the version number
 npm version X.Y.Z
 
@@ -38,7 +41,7 @@ git commit -m data-sdk@$(node -p "require('./package.json').version")
 git tag -a release/data-sdk/$(node -p "require('./package.json').version") -m data-sdk@$(node -p "require('./package.json').version")
 
 # publish this version to npm; use "--tag=next" for future releases
-npm publish
+npm publish --tag=latest
 
 # push everything to remote vcs with the tags
 git push --follow-tags
