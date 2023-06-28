@@ -1,6 +1,15 @@
+## [1.5.0] - 2023-06-28
+
+### Changed
+
+- Rework data-sdk bundle/package (#92)
+  - packages `cjs`/`es` for package.json/bundlers _exclude_ all of their dependencies.
+  - pre-bundled assets `umd`/`es6` bundles all required dependencies for stand-alone use.
+
 ## [1.4.0] - 2023-06-28
 
 ### Added
+
 - Support for react native env (#108)
 - Implement `sendCommand` for `PeerDevice` (#106)
 
@@ -122,6 +131,8 @@ await device.startRealtimeConnection({
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.5.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.4.0...release/data-sdk/1.5.0~
+[1.4.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.4.0~
 [1.3.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.3.1~
 [1.3.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.2.0...release/data-sdk/1.3.0~
 [1.2.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.1.0...release/data-sdk/1.2.0~
