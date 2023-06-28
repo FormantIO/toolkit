@@ -1,12 +1,19 @@
-import { Buffer } from "buffer";
-import { deflateSync, inflateSync } from "zlib";
+import { inflate, deflate } from "pako";
+import { fromByteArray, toByteArray } from "base64-js";
+
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 export function serializeHash(value: any): string {
-  return deflateSync(Buffer.from(JSON.stringify(value), "utf8")).toString(
-    "base64"
-  );
+  const jsonValue = JSON.stringify(value);
+  const encodedValue = encoder.encode(jsonValue);
+  const compressedValue = deflate(encodedValue);
+  return fromByteArray(compressedValue);
 }
 
 export function deserializeHash(value: string): any {
-  return JSON.parse(inflateSync(Buffer.from(value, "base64")).toString("utf8"));
+  const a = toByteArray(value);
+  const b = inflate(a);
+  const c = decoder.decode(b);
+  return JSON.parse(c);
 }

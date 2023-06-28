@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/formantio/toolkit",
-  "main": "./dist/data-sdk.umd.js",
+  "main": "./dist/data-sdk.cjs.js",
   "module": "./dist/data-sdk.es.js",
   "exports": {
     ".": {
@@ -20,7 +20,7 @@
       },
       "require": {
         "types": "./dist/types/data-sdk/src/main.d.ts",
-        "default": "./dist/data-sdk.umd.js"
+        "default": "./dist/data-sdk.cjs.js"
       }
     }
   },
@@ -29,7 +29,10 @@
     "preversion": "npm run verify",
     "postversion": "make",
     "dev": "vite --port 5173",
-    "build": "tsc -p ./configs/tsconfig.demo.json && vite build",
+    "build": "npm run build:package && npm run build:bundle",
+    "build:package": "vite build --emptyOutDir",
+    "build:bundle": "vite build --mode=bundle --emptyOutDir=false",
+    "prebuild": "tsc -p ./configs/tsconfig.demo.json",
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest run",
@@ -42,10 +45,9 @@
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
-    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@formant/realtime-sdk": "0.0.20",
     "@types/node": "^18.16.3",
+    "@types/pako": "^2.0.0",
     "@vitest/coverage-c8": "^0.30.1",
     "concurrently": "^8.0.1",
     "grpc-web": "1.2.1",
@@ -57,8 +59,13 @@
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
-    "@formant/realtime-sdk": "0.0.20",
-    "date-fns": "^2.30.0"
+    "base64-js": "^1.5.1",
+    "date-fns": "^2.30.0",
+    "eventemitter3": "^5.0.1",
+    "pako": "^2.1.0"
+  },
+  "peerDependencies": {
+    "@formant/realtime-sdk": "^0.0.20 || ^1.0.0"
   },
   "engines": {
     "node": "^18.12.0 || ^16.13.0"
