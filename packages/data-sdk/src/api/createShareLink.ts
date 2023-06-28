@@ -13,7 +13,7 @@ import { getViews } from "./getViews";
  * Share link
  * @example
  * // Body
- * const link = await Fleet.createShareLink({
+ * const link = await createShareLink({
  *     delegateTeleop: false
  *     message: "See bot in action",
  *     scope: {

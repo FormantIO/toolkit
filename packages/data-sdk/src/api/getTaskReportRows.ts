@@ -8,7 +8,7 @@ import { FORMANT_API_URL } from "../config";
  * All task reports
  * @example
  * // Body
- * const tasks = await Fleet.getTaskReports({
+ * const tasks = await getTaskReports({
  *     taskColumns: [
  *       {
  *         columns: [

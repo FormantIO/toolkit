@@ -7,7 +7,7 @@ import { ISqlResult } from "../model/ISqlResult";
  *Retrieves all stream rows
  * @example
  * // Body
- * const analytics = await Fleet.queryAnalytics({
+ * const analytics = await queryAnalytics({
  *     aggregateLevel: "day",
  *     orderByColumn: "TIMESTAMP",
  *     streamColumns: [
