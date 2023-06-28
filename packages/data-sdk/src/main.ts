@@ -17,12 +17,14 @@ export { Role } from "./Role";
 export { User } from "./User";
 
 // Re-exporting core types
+export type { AppMessage } from "./message-bus/AppMessage";
 export type {
-  AppMessage,
-  DataPoint,
   EmbeddedAppMessage,
-  IDevice,
   ModuleConfigurationMessage,
+} from "./message-bus/EmbeddedAppMessage";
+export type {
+  DataPoint,
+  IDevice,
   ModuleData,
   QueryRange,
   Stream,
@@ -50,37 +52,6 @@ export type {
 } from "./DataChannel";
 export type { CaptureSession } from "./CaptureStream";
 export type { RealtimeManipulatorConfig } from "./Manipulator";
-
-// Application Initialization
-import { App } from "./App";
-import { Fleet } from "./Fleet";
-import { Authentication } from "./Authentication";
-
-try {
-  const urlParams =
-    typeof window !== "undefined" && window.location
-      ? new URLSearchParams(window.location.search)
-      : new URLSearchParams("");
-
-  const urlDevice = urlParams.get("device");
-  if (urlDevice) {
-    Fleet.setDefaultDevice(urlDevice);
-  }
-
-  const urlAuth = urlParams.get("auth");
-  if (urlAuth) {
-    Authentication.loginWithToken(urlAuth);
-  }
-
-  const moduleName = urlParams.get("module");
-  if (moduleName) {
-    Authentication.listenForRefresh();
-  }
-
-  if (typeof window !== "undefined") {
-    App.listenForConnectionEvents();
-  }
-} catch (_) {}
 
 export * from "./model/accessLevels";
 export * from "./model/AccessLevel";
@@ -207,3 +178,5 @@ export * from "./model/IAnalyticsModuleConfiguration";
 export * from "./model/IAggregateRow";
 export * from "./model/ISqlRow";
 export * from "./stores/IAuthenticationStore";
+
+import "./init.ts";

@@ -3,6 +3,11 @@ import { FORMANT_API_URL } from "./config";
 import { QueryStore } from "./cache/queryStore";
 import { IStreamData, ITags, StreamType } from "./main";
 import { JsonSchema } from "./model/JsonSchema";
+import {
+  sendAppMessage,
+  EmbeddedAppMessage,
+  ModuleConfigurationMessage,
+} from "./message-bus/MessageBus";
 
 const queryStore = new QueryStore();
 
@@ -12,102 +17,24 @@ export interface IDevice {
   tags: ITags;
 }
 
-export type AppMessage =
-  | { type: "request_date"; minTime?: Date; maxTime?: Date; time?: Date }
-  | { type: "go_to_time"; time: number }
-  | {
-      type: "prompt";
-      promptId: string;
-      schema: JsonSchema;
-      okText?: string;
-      cancelText?: string;
-    }
-  | { type: "go_to_device"; deviceId: string }
-  | { type: "request_module_data"; module: string }
-  | { type: "show_message"; message: string }
-  | { type: "refresh_auth_token"; module: string }
-  | {
-      type: "set_module_data_time_range";
-      module: string;
-      before: number;
-      after: number;
-    }
-  | {
-      type: "setup_module_menus";
-      module: string;
-      menus: { label: string }[];
-    }
-  | {
-      type: "send_channel_data";
-      channel: string;
-      source: string;
-      data: any;
-    }
-  | { type: "request_devices" }
-  | { type: "hide_analytics_date_picker" }
-  | { type: "formant_online" };
-
-export type ModuleConfigurationMessage = {
-  type: "module_configuration";
-  temporary: boolean;
-  configuration: string;
-};
-
-export type EmbeddedAppMessage =
-  | {
-      type: "date_response";
-      data: Date;
-    }
-  | {
-      type: "overview_devices";
-      data: IDevice[];
-    }
-  | {
-      type: "module_menu_item_clicked";
-      menu: string;
-    }
-  | {
-      type: "auth_token";
-      token: string;
-    }
-  | {
-      type: "module_data";
-      streams: { [x: string]: any };
-      time: number;
-      queryRange: { start: number; end: number };
-    }
-  | {
-      type: "channel_data";
-      channel: string;
-      source: string;
-      data: any;
-    }
-  | {
-      type: "prompt_response";
-      promptId: string;
-      data: any;
-    }
-  | {
-      type: "formant_online";
-      online: boolean;
-    }
-  | ModuleConfigurationMessage;
-
 export interface ModuleData {
   queryRange: QueryRange;
   time: number;
   streams: { [stream_name: string]: Stream };
 }
+
 export interface QueryRange {
   start: number;
   end: number;
 }
+
 export interface Stream {
   data: StreamData[];
   loading: boolean;
   tooMuchData: boolean;
   type: string;
 }
+
 export interface StreamData {
   points: DataPoint[];
   deviceId: string;
@@ -120,10 +47,6 @@ export interface StreamData {
 export type DataPoint = [number, any];
 
 export class App {
-  private static sendAppMessage(message: AppMessage) {
-    window.parent.postMessage(message, "*");
-  }
-
   static getCurrentModuleContext(): string | null {
     let urlParams = new URLSearchParams("");
 
@@ -167,21 +90,21 @@ export class App {
   }
 
   static goToTime(date: Date) {
-    this.sendAppMessage({
+    sendAppMessage({
       type: "go_to_time",
       time: date.getTime(),
     });
   }
 
   static goToDevice(deviceId: string) {
-    this.sendAppMessage({
+    sendAppMessage({
       type: "go_to_device",
       deviceId,
     });
   }
 
   static showMessage(message: string) {
-    this.sendAppMessage({ type: "show_message", message });
+    sendAppMessage({ type: "show_message", message });
   }
 
   static requestModuleData() {
@@ -189,7 +112,7 @@ export class App {
     if (!moduleName) {
       throw new Error("No module context");
     }
-    this.sendAppMessage({
+    sendAppMessage({
       type: "request_module_data",
       module: moduleName,
     });
@@ -203,7 +126,7 @@ export class App {
     if (!moduleName) {
       throw new Error("No module context");
     }
-    this.sendAppMessage({
+    sendAppMessage({
       type: "set_module_data_time_range",
       module: moduleName,
       before: beforeInMilliseconds,
@@ -216,7 +139,7 @@ export class App {
     if (!moduleName) {
       throw new Error("No module context");
     }
-    this.sendAppMessage({
+    sendAppMessage({
       type: "refresh_auth_token",
       module: moduleName,
     });
@@ -227,7 +150,7 @@ export class App {
     if (!moduleName) {
       throw new Error("No module context");
     }
-    this.sendAppMessage({
+    sendAppMessage({
       type: "send_channel_data",
       source: moduleName,
       channel,
@@ -240,7 +163,7 @@ export class App {
     if (!moduleName) {
       throw new Error("No module context");
     }
-    this.sendAppMessage({
+    sendAppMessage({
       type: "setup_module_menus",
       module: moduleName,
       menus,
@@ -268,7 +191,7 @@ export class App {
   static addModuleDataListener(handler: (data: ModuleData) => void) {
     const moduleName = this.getCurrentModuleContext();
     if (moduleName) {
-      this.sendAppMessage({ type: "request_module_data", module: moduleName });
+      sendAppMessage({ type: "request_module_data", module: moduleName });
     }
     window.addEventListener("message", (event) => {
       const msg = event.data as EmbeddedAppMessage;
@@ -283,7 +206,7 @@ export class App {
   }
 
   static addOverviewDeviceListener(handler: (devices: IDevice[]) => void) {
-    this.sendAppMessage({ type: "request_devices" });
+    sendAppMessage({ type: "request_devices" });
     const listener = (event: MessageEvent<any>) => {
       const msg = event.data as EmbeddedAppMessage;
       if (msg.type === "overview_devices") {
@@ -352,7 +275,7 @@ export class App {
   ): Promise<any> {
     return new Promise((resolve) => {
       const promptId = Math.random().toString();
-      this.sendAppMessage({
+      sendAppMessage({
         type: "prompt",
         promptId,
         schema,
@@ -372,7 +295,7 @@ export class App {
 
   static async getDate(time?: Date, minTime?: Date, maxTime?: Date) {
     return new Promise((resolve) => {
-      this.sendAppMessage({
+      sendAppMessage({
         type: "request_date",
         minTime,
         maxTime,
@@ -390,7 +313,7 @@ export class App {
   }
 
   static async disableAnalyticsBottomBar() {
-    this.sendAppMessage({
+    sendAppMessage({
       type: "hide_analytics_date_picker",
     });
   }
@@ -430,7 +353,7 @@ export class App {
       };
 
       window.addEventListener("message", handler);
-      this.sendAppMessage({ type: "formant_online" });
+      sendAppMessage({ type: "formant_online" });
     });
   }
 
