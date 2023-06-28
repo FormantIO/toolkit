@@ -2,7 +2,7 @@ import {
   DataChannel,
   DataChannelErrorListener,
   DataChannelListener,
-} from "./main";
+} from "./DataChannel";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
 import { BaseDevice } from "./BaseDevice";

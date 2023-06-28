@@ -1,7 +1,8 @@
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { QueryStore } from "./cache/queryStore";
-import { IStreamData, ITags, StreamType } from "./main";
+import { StreamType } from "./model/StreamType";
+import { IStreamData } from "./model/IStreamData";
 import { JsonSchema } from "./model/JsonSchema";
 import {
   sendAppMessage,
