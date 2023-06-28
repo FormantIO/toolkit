@@ -1,10 +1,21 @@
-## [1.3.1] - 2023-06-15
+## [1.4.0] - 2023-06-28
 
 ### Added
+- Support for react native env (#108)
+- Implement `sendCommand` for `PeerDevice` (#106)
+
+### Fixed
+
+- Ensure `Realtime*` types get exported at the top-level from `BaseDevice` (#110)
+- Remove debug logs (#109)
+
+## [1.3.1] - 2023-06-27
+
+### Fixed
 
 - Ensure `Realtime*` types get exported at the top-level from `BaseDevice` (#110)
 
-## [1.3.0] - 2023-06-15
+## [1.3.0] - 2023-06-22
 
 ### Added
 
