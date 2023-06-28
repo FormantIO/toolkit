@@ -43,25 +43,25 @@ export class PeerDevice extends BaseDevice {
 
     // we use XHR because chunked encoding is broken in the react native fetch API
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'text';
+    xhr.responseType = "text";
 
     xhr.addEventListener("error", (_) => {
-      this.handleXHRError('error');
+      this.handleXHRError("error");
     });
     xhr.addEventListener("abort", (_) => {
-      this.handleXHRError('abort');
+      this.handleXHRError("abort");
     });
     xhr.addEventListener("timeout", (_) => {
-      this.handleXHRError('timeout');
+      this.handleXHRError("timeout");
     });
     xhr.addEventListener("readystatechange", (_) => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        this.handleXHRError('closed');
+        this.handleXHRError("closed");
       }
     });
 
     // handle new data
-    xhr.addEventListener('progress', (event) => {
+    xhr.addEventListener("progress", (event) => {
       const currentBytesReceived = event.loaded;
       const newBytesReceived = currentBytesReceived - previousBytesReceived;
       previousBytesReceived = currentBytesReceived;
@@ -83,7 +83,7 @@ export class PeerDevice extends BaseDevice {
       });
     });
 
-    xhr.open('POST', `${this.peerUrl}/v1/telemetry`);
+    xhr.open("POST", `${this.peerUrl}/v1/telemetry`);
 
     xhr.send();
   }
@@ -208,10 +208,10 @@ export class PeerDevice extends BaseDevice {
       method: "POST",
       body: JSON.stringify({
         command: name,
-        parameter: parameter
+        parameter: parameter,
       }),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     });
 
