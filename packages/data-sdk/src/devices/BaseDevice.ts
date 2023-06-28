@@ -6,11 +6,14 @@ import {
 import { DataChannel } from "../DataChannel";
 import { EventEmitter } from "eventemitter3";
 import { Manipulator } from "../Manipulator";
-import { BinaryRequestDataChannel, TextRequestDataChannel } from "../main";
+import {
+  BinaryRequestDataChannel,
+  TextRequestDataChannel,
+} from "../RequestDataChannel";
 import { defined } from "../../../common/defined";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { IRealtimeSubscriber } from "./IRealtimeSubscriber";
-
+import { ICustomDataChannelCreator } from "./ICustomDataChannelCreator";
 import {
   ConfigurationDocument,
   RealtimeListener,
@@ -21,7 +24,7 @@ import {
 
 export abstract class BaseDevice
   extends EventEmitter
-  implements IRealtimeSubscriber
+  implements IRealtimeSubscriber, ICustomDataChannelCreator
 {
   rtcClient: RtcClient | undefined;
   remoteDevicePeerId: string | null = null;

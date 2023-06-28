@@ -1,17 +1,11 @@
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
 import { Device } from "./devices/Device";
-import { defaultRtcClientPool } from "./AppRtcClientPools";
-import { AggregateLevel } from "./model/AggregateLevel";
-import { EventType } from "./model/EventType";
 import { IAnalyticsModule } from "./model/IAnalyticsModule";
 import { IDeviceQuery } from "./model/IDeviceQuery";
 import { IEvent } from "./model/IEvent";
-import { IEventQuery } from "./model/IEventQuery";
 import { IQuery } from "./model/IQuery";
-import { IShare } from "./model/IShare";
 import { ISqlQuery } from "./model/ISqlQuery";
 import { ISqlResult } from "./model/ISqlResult";
 import { IStream } from "./model/IStream";
@@ -23,20 +17,16 @@ import { IStreamTypeMap } from "./model/IStreamTypeMap";
 import { ITaskReportColumn } from "./model/ITaskReportColumn";
 import { IView } from "./model/IView";
 import { PeerDevice } from "./devices/PeerDevice";
-import {
-  aggregateByDateFunctions,
-  formatTimeFrameText,
-  serializeHash,
-} from "./utils";
 import { IFleet } from "./model/IFleet";
-
-export interface TelemetryResult {
-  deviceId: string;
-  name: string;
-  points: [number, any][];
-  tags: { [key in string]: string | number };
-  type: string;
-}
+import { createShareLink } from "./api/createShareLink";
+import { eventsCounter } from "./api/eventsCounter";
+import { getAnnotationCount } from "./api/getAnnotationCount";
+import { getAnnotationCountByIntervals } from "./api/getAnnotationCountByIntervals";
+import { getTelemetry } from "./api/getTelemetry";
+import { getViews } from "./api/getViews";
+import { queryEvents } from "./api/queryEvents";
+import { getPeers } from "./api/getPeers";
+import { getRealtimeSessions } from "./api/getRealtimeSessions";
 
 export class Fleet {
   static defaultDeviceId: string | undefined;
@@ -176,29 +166,9 @@ export class Fleet {
     return allDevices.filter((_) => onlineIds.includes(_.id));
   }
 
-  static async getPeers(): Promise<IRtcPeer[]> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const rtcClient = defaultRtcClientPool.get();
-    try {
-      return await rtcClient.getPeers();
-    } finally {
-      await rtcClient.shutdown();
-    }
-  }
+  static getPeers = getPeers;
 
-  static async getRealtimeSessions(): Promise<{ [key in string]: string[] }> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const rtcClient = defaultRtcClientPool.get();
-    try {
-      return await rtcClient.getSessions();
-    } finally {
-      await rtcClient.shutdown();
-    }
-  }
+  static getRealtimeSessions = getRealtimeSessions;
 
   static async getRealtimeDevices(): Promise<Device[]> {
     if (!Authentication.token) {
@@ -245,38 +215,7 @@ export class Fleet {
     return telemetry.items;
   }
 
-  static async getTelemetry(
-    deviceIdOrDeviceIds: string | string[],
-    streamNameOrStreamNames: string | string[],
-    start: Date,
-    end: Date,
-    tags?: { [key in string]: string[] }
-  ): Promise<TelemetryResult[]> {
-    let deviceIds = deviceIdOrDeviceIds;
-    if (!Array.isArray(deviceIdOrDeviceIds)) {
-      deviceIds = [deviceIdOrDeviceIds];
-    }
-    let streamNames = streamNameOrStreamNames;
-    if (!Array.isArray(streamNameOrStreamNames)) {
-      streamNames = [streamNameOrStreamNames];
-    }
-    const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
-      method: "POST",
-      body: JSON.stringify({
-        deviceIds,
-        end: end.toISOString(),
-        names: streamNames,
-        start: start.toISOString(),
-        tags,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    const telemetry = await data.json();
-    return telemetry.items;
-  }
+  static getTelemetry = getTelemetry;
 
   static async getFileUrl(uuid: string) {
     const data = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
@@ -328,21 +267,7 @@ export class Fleet {
     return (await data.json()).aggregates as IStreamAggregateData[];
   }
 
-  static async queryEvents(query: IEventQuery): Promise<IEvent[]> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/events/query`, {
-      method: "POST",
-      body: JSON.stringify(query),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-
-    return (await data.json()).items as IEvent[];
-  }
+  static queryEvents = queryEvents;
 
   static async getEvent(uuid: string): Promise<IEvent> {
     if (!Authentication.token) {
@@ -414,64 +339,9 @@ export class Fleet {
     return devices;
   }
 
-  static async getAnnotationCount(query: IEventQuery, tagKey: string) {
-    const annotations = await this.queryEvents({
-      ...query,
-      eventTypes: ["annotation"],
-    });
+  static getAnnotationCount = getAnnotationCount;
 
-    const validAnnotations = annotations.filter(
-      (_) => !!_.tags && Object.keys(_.tags!).includes(tagKey)
-    );
-    const annotationCounter = validAnnotations.reduce<{
-      [key: string]: number;
-    }>((prev, current) => {
-      const value = current.tags![tagKey];
-      if (value in prev) {
-        prev[value] += 1;
-        return prev;
-      }
-      prev[value] = 1;
-      return prev;
-    }, {});
-
-    return annotationCounter;
-  }
-
-  static async getAnnotationCountByIntervals(
-    query: IEventQuery,
-    tagKey: string,
-    aggregate: AggregateLevel
-  ) {
-    const { end, start } = query;
-    const dateFunctions = aggregateByDateFunctions[aggregate];
-    const intervals: Date[] = dateFunctions.interval({
-      start: new Date(start!),
-      end: new Date(end!),
-    });
-
-    const annotationsQuery = intervals.map((_, idx) => {
-      const startDate = new Date(_).toISOString();
-      const endDate =
-        idx === intervals.length - 1
-          ? new Date(Date.now()).toISOString()
-          : new Date(intervals[idx + 1]);
-      return this.getAnnotationCount(
-        {
-          ...query,
-          start: startDate,
-          end: endDate as string,
-        },
-        tagKey
-      );
-    });
-    const responses = await Promise.all(annotationsQuery);
-
-    return intervals.map((_, idx) => ({
-      date: new Date(_).toISOString(),
-      annotations: responses[idx],
-    }));
-  }
+  static getAnnotationCountByIntervals = getAnnotationCountByIntervals;
 
   static async getStreams(): Promise<IStream[]> {
     if (!Authentication.token) {
@@ -508,20 +378,7 @@ export class Fleet {
     return (await response.json()) as IStream;
   }
 
-  static async getViews(): Promise<IView[]> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const response = await fetch(`${FORMANT_API_URL}/v1/admin/views`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    const views = await response.json();
-    return views.items;
-  }
+  static getViews = getViews;
 
   static async patchView(view: IView): Promise<IView> {
     if (!Authentication.token) {
@@ -541,43 +398,7 @@ export class Fleet {
     return (await response.json()) as IView;
   }
 
-  static async eventsCounter(
-    eventTypes: EventType[],
-    timeFrame: AggregateLevel,
-    range: number,
-    time: number,
-    query?: IEventQuery
-  ) {
-    const dateFunctions = aggregateByDateFunctions[timeFrame];
-
-    return await Promise.all(
-      Array(range)
-        .fill(0)
-        .map(async (_, dateOffset) => {
-          const activePointInTimeLine = new Date(time);
-
-          const startDate: Date = dateFunctions.sub(
-            dateFunctions.start(activePointInTimeLine),
-            range - dateOffset - 1
-          );
-          const endDate: Date = dateFunctions.sub(
-            dateFunctions.end(activePointInTimeLine),
-            range - dateOffset - 1
-          );
-          const date = formatTimeFrameText(
-            startDate.toLocaleDateString(),
-            endDate.toLocaleDateString()
-          );
-          const events = await Fleet.queryEvents({
-            ...query,
-            eventTypes,
-            start: new Date(startDate).toISOString(),
-            end: new Date(endDate).toISOString(),
-          });
-          return { date, events };
-        })
-    );
-  }
+  static eventsCounter = eventsCounter;
 
   static async getAnalyticsModules() {
     if (!Authentication.token) {
@@ -816,36 +637,7 @@ export class Fleet {
    *      userName: "User",
    *   });
    */
-
-  static async createShareLink(share: IShare, view: string) {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-
-    const views = await this.getViews();
-
-    const selectedView = views.filter((_) => _.name === view);
-
-    if (selectedView.length === 0) {
-      console.warn("View does not exist or it is misspell");
-      return null;
-    }
-
-    const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
-      method: "POST",
-      body: JSON.stringify(share),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    const origin = FORMANT_API_URL.replace("api", "app");
-    const { code } = await response.json();
-
-    return `${origin}/shares/${code}#${serializeHash({
-      viewId: selectedView[0].id,
-    })}`;
-  }
+  static createShareLink = createShareLink;
 
   static async listFleets(): Promise<IFleet[]> {
     if (!Authentication.token) {

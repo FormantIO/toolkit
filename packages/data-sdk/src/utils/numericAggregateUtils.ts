@@ -1,9 +1,7 @@
-import {
-  INumericAggregate,
-  INumericSetAggregateMap,
-  IStreamAggregateData,
-  IStreamTypeMap,
-} from "../main";
+import { INumericAggregate } from "../model/INumericAggregate";
+import { INumericSetAggregateMap } from "../model/INumericSetAggregateMap";
+import { IStreamAggregateData } from "../model/IStreamAggregateData";
+import { IStreamTypeMap } from "../model/IStreamTypeMap";
 
 export type WireINumericSetAggregateMap = {
   [id: string]: {

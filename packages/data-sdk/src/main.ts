@@ -30,7 +30,6 @@ export type {
   Stream,
   StreamData,
 } from "./App";
-export type { TelemetryResult } from "./Fleet";
 export type {
   Command,
   ConfigurationDocument,
@@ -178,5 +177,6 @@ export * from "./model/IAnalyticsModuleConfiguration";
 export * from "./model/IAggregateRow";
 export * from "./model/ISqlRow";
 export * from "./stores/IAuthenticationStore";
+export type { TelemetryResult } from "./model/TelemetryResult";
 
 import "./init.ts";

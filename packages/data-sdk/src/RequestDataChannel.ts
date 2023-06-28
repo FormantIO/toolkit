@@ -5,7 +5,7 @@ import {
 } from "./DataChannel";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
-import { BaseDevice } from "./devices/BaseDevice";
+import { ICustomDataChannelCreator } from "./devices/ICustomDataChannelCreator";
 
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.
@@ -14,7 +14,7 @@ abstract class RequestDataChannel {
   protected channel: undefined | DataChannel;
   protected requestIdToResponseMap = new Map<string, any>();
   constructor(
-    protected device: BaseDevice,
+    protected device: ICustomDataChannelCreator,
     protected channel_name: string,
     protected timeout: number
   ) {}
