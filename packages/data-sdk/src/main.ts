@@ -20,11 +20,11 @@ export { User } from "./User";
 export type { AppMessage } from "./message-bus/AppMessage";
 export type {
   EmbeddedAppMessage,
+  IDevice,
   ModuleConfigurationMessage,
 } from "./message-bus/EmbeddedAppMessage";
 export type {
   DataPoint,
-  IDevice,
   ModuleData,
   QueryRange,
   Stream,

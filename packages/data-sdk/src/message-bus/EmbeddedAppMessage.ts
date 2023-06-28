@@ -1,9 +1,15 @@
-import { IDevice } from "../App";
+import { ITags } from "../model/ITags";
 
 export type DateResponseMessage = {
   type: "date_response";
   data: Date;
 };
+
+export interface IDevice {
+  name: string;
+  id: string;
+  tags: ITags;
+}
 
 export type OverviewDevicesMessage = {
   type: "overview_devices";

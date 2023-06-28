@@ -4,19 +4,15 @@ import { QueryStore } from "./cache/queryStore";
 import { StreamType } from "./model/StreamType";
 import { IStreamData } from "./model/IStreamData";
 import { JsonSchema } from "./model/JsonSchema";
+import { sendAppMessage } from "./message-bus/sendAppMessage";
 import {
-  sendAppMessage,
   EmbeddedAppMessage,
+  IDevice,
   ModuleConfigurationMessage,
-} from "./message-bus/MessageBus";
+} from "./message-bus/EmbeddedAppMessage";
+import { getCurrentModuleContext } from "./utils/getCurrentModuleContext";
 
 const queryStore = new QueryStore();
-
-export interface IDevice {
-  name: string;
-  id: string;
-  tags: ITags;
-}
 
 export interface ModuleData {
   queryRange: QueryRange;
@@ -49,15 +45,7 @@ export type DataPoint = [number, any];
 
 export class App {
   static getCurrentModuleContext(): string | null {
-    let urlParams = new URLSearchParams("");
-
-    if (typeof window !== "undefined" && window.location) {
-      urlParams = new URLSearchParams(window.location.search);
-    }
-
-    const moduleName = urlParams.get("module");
-
-    return moduleName;
+    return getCurrentModuleContext();
   }
 
   static async getCurrentModuleConfiguration(): Promise<string | undefined> {
@@ -87,7 +75,7 @@ export class App {
   }
 
   static isModule(): boolean {
-    return this.getCurrentModuleContext() !== null;
+    return getCurrentModuleContext() !== null;
   }
 
   static goToTime(date: Date) {
@@ -109,7 +97,7 @@ export class App {
   }
 
   static requestModuleData() {
-    const moduleName = this.getCurrentModuleContext();
+    const moduleName = getCurrentModuleContext();
     if (!moduleName) {
       throw new Error("No module context");
     }
@@ -123,7 +111,7 @@ export class App {
     beforeInMilliseconds: number,
     afterInMilliseconds?: number
   ) {
-    const moduleName = this.getCurrentModuleContext();
+    const moduleName = getCurrentModuleContext();
     if (!moduleName) {
       throw new Error("No module context");
     }
@@ -136,18 +124,11 @@ export class App {
   }
 
   static refreshAuthToken() {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    sendAppMessage({
-      type: "refresh_auth_token",
-      module: moduleName,
-    });
+    Authentication.refreshAuthToken();
   }
 
   static sendChannelData(channel: string, data: any) {
-    const moduleName = this.getCurrentModuleContext();
+    const moduleName = getCurrentModuleContext();
     if (!moduleName) {
       throw new Error("No module context");
     }
@@ -160,7 +141,7 @@ export class App {
   }
 
   static setupModuleMenus(menus: { label: string }[]) {
-    const moduleName = this.getCurrentModuleContext();
+    const moduleName = getCurrentModuleContext();
     if (!moduleName) {
       throw new Error("No module context");
     }
@@ -181,16 +162,11 @@ export class App {
   }
 
   static addAccessTokenRefreshListener(handler: (token: string) => void) {
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "auth_token") {
-        handler(msg.token);
-      }
-    });
+    return Authentication.addAccessTokenRefreshListener(handler);
   }
 
   static addModuleDataListener(handler: (data: ModuleData) => void) {
-    const moduleName = this.getCurrentModuleContext();
+    const moduleName = getCurrentModuleContext();
     if (moduleName) {
       sendAppMessage({ type: "request_module_data", module: moduleName });
     }

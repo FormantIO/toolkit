@@ -9,10 +9,17 @@ interface IAuthenticationStoreOptions {
   apiUrl: string;
 
   refreshAuthToken: () => void;
-  addAccessTokenRefreshListener: (callback: (token: string) => void) => void;
+  addAccessTokenRefreshListener: (
+    callback: (token: string) => void
+  ) => () => void;
 }
 
 export class AuthenticationStore implements IAuthenticationStore {
+  public readonly refreshAuthToken: () => void;
+  public readonly addAccessTokenRefreshListener: (
+    callback: (token: string) => void
+  ) => () => void;
+
   private _refreshToken: string | undefined;
   private _isShareToken: boolean = false;
   private _currentOrganization: string | undefined;
@@ -23,10 +30,6 @@ export class AuthenticationStore implements IAuthenticationStore {
   private _refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
   private readonly _apiUrl: string;
-  private readonly _refreshAuthToken: () => void;
-  private readonly _addAccessTokenRefreshListener: (
-    callback: (token: string) => void
-  ) => void;
 
   constructor({
     apiUrl,
@@ -34,8 +37,8 @@ export class AuthenticationStore implements IAuthenticationStore {
     addAccessTokenRefreshListener,
   }: IAuthenticationStoreOptions) {
     this._apiUrl = apiUrl;
-    this._refreshAuthToken = refreshAuthToken;
-    this._addAccessTokenRefreshListener = addAccessTokenRefreshListener;
+    this.refreshAuthToken = refreshAuthToken;
+    this.addAccessTokenRefreshListener = addAccessTokenRefreshListener;
   }
 
   get token(): string | undefined {
@@ -190,10 +193,10 @@ export class AuthenticationStore implements IAuthenticationStore {
     const hour = 1000 * 60 * 60;
     const askForFreshToken = () => {
       this._refreshTimer = undefined;
-      this._refreshAuthToken();
+      this.refreshAuthToken();
     };
 
-    this._addAccessTokenRefreshListener((token: string) => {
+    this.addAccessTokenRefreshListener((token: string) => {
       if (this._refreshTimer) {
         // unless I get a fresh token sooner
         clearTimeout(this._refreshTimer);
