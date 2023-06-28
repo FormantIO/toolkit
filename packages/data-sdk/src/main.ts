@@ -1,8 +1,8 @@
 export { App } from "./App";
 export { Fleet } from "./Fleet";
 export { Authentication } from "./Authentication";
-export { Device } from "./Device";
-export { PeerDevice } from "./PeerDevice";
+export { Device } from "./devices/Device";
+export { PeerDevice } from "./devices/PeerDevice";
 export { DataChannel } from "./DataChannel";
 export { CaptureStream } from "./CaptureStream";
 export { Manipulator } from "./Manipulator";
@@ -43,7 +43,7 @@ export type {
   RealtimeMessage,
   RealtimeVideoStream,
   TelemetryStream,
-} from "./BaseDevice";
+} from "./devices/device.types";
 export type {
   DataChannelBinaryListener,
   DataChannelErrorListener,

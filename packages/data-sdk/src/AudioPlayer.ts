@@ -1,9 +1,9 @@
 import { IRtcStreamMessage } from "@formant/realtime-sdk";
-import { Device } from "./Device";
+import { Device } from "./devices/Device";
 import { stringToArrayBuffer } from "../../common/stringToArrayBuffer";
 import { fork } from "../../common/fork";
 import { browser } from "../../common/browser";
-import { RealtimeDataStream, RealtimeMessage } from "./BaseDevice";
+import { RealtimeDataStream, RealtimeMessage } from "./devices/device.types";
 
 const rtcAudioChunkStreamType = "audio-chunk";
 

@@ -2,7 +2,7 @@ import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
 import { FORMANT_API_URL } from "./config";
-import { Device } from "./Device";
+import { Device } from "./devices/Device";
 import { defaultRtcClientPool } from "./AppRtcClientPools";
 import { AggregateLevel } from "./model/AggregateLevel";
 import { EventType } from "./model/EventType";
@@ -22,7 +22,7 @@ import { IStreamData } from "./model/IStreamData";
 import { IStreamTypeMap } from "./model/IStreamTypeMap";
 import { ITaskReportColumn } from "./model/ITaskReportColumn";
 import { IView } from "./model/IView";
-import { PeerDevice } from "./PeerDevice";
+import { PeerDevice } from "./devices/PeerDevice";
 import {
   aggregateByDateFunctions,
   formatTimeFrameText,

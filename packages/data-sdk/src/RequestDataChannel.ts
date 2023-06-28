@@ -5,7 +5,7 @@ import {
 } from "./DataChannel";
 import { delay } from "../../common/delay";
 import { defined } from "../../common/defined";
-import { BaseDevice } from "./BaseDevice";
+import { BaseDevice } from "./devices/BaseDevice";
 
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.

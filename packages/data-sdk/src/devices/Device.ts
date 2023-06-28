@@ -1,33 +1,33 @@
 import { RtcClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { getRtcClientPool } from "./AppRtcClientPools";
-import { Authentication } from "./Authentication";
-import { CaptureStream } from "./CaptureStream";
-import { Fleet } from "./Fleet";
-import { FORMANT_API_URL } from "./config";
+import { getRtcClientPool } from "../AppRtcClientPools";
+import { Authentication } from "../Authentication";
+import { CaptureStream } from "../CaptureStream";
+import { Fleet } from "../Fleet";
+import { FORMANT_API_URL } from "../config";
 
-import { delay } from "../../common/delay";
-import { defined } from "../../common/defined";
+import { delay } from "../../../common/delay";
+import { defined } from "../../../common/defined";
 
-import { InterventionType } from "./model/InterventionType";
-import { IInterventionTypeMap } from "./model/IInterventionTypeMap";
-import { IInterventionResponse } from "./model/IInterventionResponse";
-import { IEventQuery } from "./model/IEventQuery";
-import { AggregateLevel } from "./model/AggregateLevel";
-import { EventType } from "./model/EventType";
-import { IShare } from "./model/IShare";
-import { SessionType } from "./model/SessionType";
-import { isRtcPeer } from "./utils";
+import { InterventionType } from "../model/InterventionType";
+import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
+import { IInterventionResponse } from "../model/IInterventionResponse";
+import { IEventQuery } from "../model/IEventQuery";
+import { AggregateLevel } from "../model/AggregateLevel";
+import { EventType } from "../model/EventType";
+import { IShare } from "../model/IShare";
+import { SessionType } from "../model/SessionType";
+import { isRtcPeer } from "../utils";
 import {
-  BaseDevice,
   Command,
   ConfigurationDocument,
   IStartRealtimeConnectionOptions,
   TelemetryStream,
-} from "./BaseDevice";
-import { ITags } from "./model/ITags";
-import { IDevice } from "./model/IDevice";
+} from "./device.types";
+import { BaseDevice } from "./BaseDevice";
+import { ITags } from "../model/ITags";
+import { IDevice } from "../model/IDevice";
 
 export class Device extends BaseDevice {
   constructor(
