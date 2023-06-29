@@ -31,7 +31,9 @@ export abstract class BaseDevice
 
   protected realtimeListeners: RealtimeListener[] = [];
 
-  protected connectionMonitorInterval: NodeJS.Timeout | undefined;
+  protected connectionMonitorInterval:
+    | ReturnType<typeof setInterval>
+    | undefined;
 
   abstract getConfiguration(): Promise<ConfigurationDocument>;
   abstract startRealtimeConnection(sessionType?: number): Promise<void>;

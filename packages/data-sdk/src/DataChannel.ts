@@ -68,9 +68,9 @@ export class DataChannel {
       return true;
     }
     const p = new Promise<boolean>((resolve, reject) => {
-      let a = window.setInterval(() => {
+      let a = setInterval(() => {
         if (this.ready) {
-          window.clearInterval(a);
+          clearInterval(a);
           resolve(true);
         }
         if (this.error) {
