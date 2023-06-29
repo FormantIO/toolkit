@@ -9,7 +9,9 @@ interface IAuthenticationStoreOptions {
   apiUrl: string;
 
   refreshAuthToken: () => void;
-  addAccessTokenRefreshListener: (callback: (token: string) => void) => void;
+  addAccessTokenRefreshListener: (
+    callback: (token: string) => void
+  ) => () => void;
 }
 
 export class AuthenticationStore implements IAuthenticationStore {
@@ -26,7 +28,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   private readonly _refreshAuthToken: () => void;
   private readonly _addAccessTokenRefreshListener: (
     callback: (token: string) => void
-  ) => void;
+  ) => () => void;
 
   constructor({
     apiUrl,

@@ -1,8 +1,8 @@
 export { App } from "./App";
 export { Fleet } from "./Fleet";
 export { Authentication } from "./Authentication";
-export { Device } from "./Device";
-export { PeerDevice } from "./PeerDevice";
+export { Device } from "./devices/Device";
+export { PeerDevice } from "./devices/PeerDevice";
 export { DataChannel } from "./DataChannel";
 export { CaptureStream } from "./CaptureStream";
 export { Manipulator } from "./Manipulator";
@@ -17,18 +17,19 @@ export { Role } from "./Role";
 export { User } from "./User";
 
 // Re-exporting core types
+export type { AppMessage } from "./message-bus/senders/AppMessage";
 export type {
-  AppMessage,
-  DataPoint,
   EmbeddedAppMessage,
   IDevice,
   ModuleConfigurationMessage,
+} from "./message-bus/listeners/EmbeddedAppMessage";
+export type {
+  DataPoint,
   ModuleData,
   QueryRange,
   Stream,
   StreamData,
-} from "./App";
-export type { TelemetryResult } from "./Fleet";
+} from "./message-bus/listeners/addModuleDataListener";
 export type {
   Command,
   ConfigurationDocument,
@@ -41,7 +42,7 @@ export type {
   RealtimeMessage,
   RealtimeVideoStream,
   TelemetryStream,
-} from "./BaseDevice";
+} from "./devices/device.types";
 export type {
   DataChannelBinaryListener,
   DataChannelErrorListener,
@@ -50,37 +51,6 @@ export type {
 } from "./DataChannel";
 export type { CaptureSession } from "./CaptureStream";
 export type { RealtimeManipulatorConfig } from "./Manipulator";
-
-// Application Initialization
-import { App } from "./App";
-import { Fleet } from "./Fleet";
-import { Authentication } from "./Authentication";
-
-try {
-  const urlParams =
-    typeof window !== "undefined" && window.location
-      ? new URLSearchParams(window.location.search)
-      : new URLSearchParams("");
-
-  const urlDevice = urlParams.get("device");
-  if (urlDevice) {
-    Fleet.setDefaultDevice(urlDevice);
-  }
-
-  const urlAuth = urlParams.get("auth");
-  if (urlAuth) {
-    Authentication.loginWithToken(urlAuth);
-  }
-
-  const moduleName = urlParams.get("module");
-  if (moduleName) {
-    Authentication.listenForRefresh();
-  }
-
-  if (typeof window !== "undefined") {
-    App.listenForConnectionEvents();
-  }
-} catch (_) {}
 
 export * from "./model/accessLevels";
 export * from "./model/AccessLevel";
@@ -207,3 +177,6 @@ export * from "./model/IAnalyticsModuleConfiguration";
 export * from "./model/IAggregateRow";
 export * from "./model/ISqlRow";
 export * from "./stores/IAuthenticationStore";
+export type { TelemetryResult } from "./model/TelemetryResult";
+
+import "./init.ts";

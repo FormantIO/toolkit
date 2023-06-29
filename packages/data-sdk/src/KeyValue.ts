@@ -1,7 +1,7 @@
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
-import { ITagSets } from "./main";
+import { ITagSets } from "./model/ITagSets";
 
 export class KeyValue {
   public static async set(key: string, value: string, tags?: ITagSets) {

@@ -1,33 +1,39 @@
 import { RtcClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 
-import { getRtcClientPool } from "./AppRtcClientPools";
-import { Authentication } from "./Authentication";
-import { CaptureStream } from "./CaptureStream";
-import { Fleet } from "./Fleet";
-import { FORMANT_API_URL } from "./config";
+import { getRtcClientPool } from "../AppRtcClientPools";
+import { Authentication } from "../Authentication";
+import { CaptureStream } from "../CaptureStream";
+import { FORMANT_API_URL } from "../config";
 
-import { delay } from "../../common/delay";
-import { defined } from "../../common/defined";
+import { delay } from "../../../common/delay";
+import { defined } from "../../../common/defined";
 
-import { InterventionType } from "./model/InterventionType";
-import { IInterventionTypeMap } from "./model/IInterventionTypeMap";
-import { IInterventionResponse } from "./model/IInterventionResponse";
-import { IEventQuery } from "./model/IEventQuery";
-import { AggregateLevel } from "./model/AggregateLevel";
-import { EventType } from "./model/EventType";
-import { IShare } from "./model/IShare";
-import { SessionType } from "./model/SessionType";
-import { isRtcPeer } from "./utils";
+import { InterventionType } from "../model/InterventionType";
+import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
+import { IInterventionResponse } from "../model/IInterventionResponse";
+import { IEventQuery } from "../model/IEventQuery";
+import { AggregateLevel } from "../model/AggregateLevel";
+import { EventType } from "../model/EventType";
+import { IShare } from "../model/IShare";
+import { SessionType } from "../model/SessionType";
+import { isRtcPeer } from "../utils/isRtcPeer";
 import {
-  BaseDevice,
   Command,
   ConfigurationDocument,
   IStartRealtimeConnectionOptions,
   TelemetryStream,
-} from "./BaseDevice";
-import { ITags } from "./model/ITags";
-import { IDevice } from "./model/IDevice";
+} from "./device.types";
+import { BaseDevice } from "./BaseDevice";
+import { ITags } from "../model/ITags";
+import { IDevice } from "../model/IDevice";
+import { createShareLink } from "../api/createShareLink";
+import { eventsCounter } from "../api/eventsCounter";
+import { getAnnotationCount } from "../api/getAnnotationCount";
+import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByIntervals";
+import { getTelemetry } from "../api/getTelemetry";
+import { getRealtimeSessions } from "../api/getRealtimeSessions";
+import { getPeers } from "../api/getPeers";
 
 export class Device extends BaseDevice {
   constructor(
@@ -306,8 +312,8 @@ export class Device extends BaseDevice {
   }
 
   async isInRealtimeSession(): Promise<boolean> {
-    const peers = await Fleet.getPeers();
-    const sessions = await Fleet.getRealtimeSessions();
+    const peers = await getPeers();
+    const sessions = await getRealtimeSessions();
     const peer = peers.find((_) => _.deviceId === this.id);
     if (peer) {
       return sessions[peer.id].length > 0;
@@ -424,7 +430,7 @@ export class Device extends BaseDevice {
     end: Date,
     tags?: { [key in string]: string[] }
   ) {
-    return await Fleet.getTelemetry(
+    return await getTelemetry(
       this.id,
       streamNameOrStreamNames,
       start,
@@ -526,10 +532,7 @@ export class Device extends BaseDevice {
   }
 
   async getAnnotationCount(query: IEventQuery, tagKey: string) {
-    return await Fleet.getAnnotationCount(
-      { ...query, deviceIds: [this.id] },
-      tagKey
-    );
+    return await getAnnotationCount({ ...query, deviceIds: [this.id] }, tagKey);
   }
 
   async getAnnotationCountByIntervals(
@@ -537,7 +540,7 @@ export class Device extends BaseDevice {
     tagKey: string,
     aggregate: AggregateLevel
   ) {
-    return await Fleet.getAnnotationCountByIntervals(
+    return await getAnnotationCountByIntervals(
       { ...query, deviceIds: [this.id] },
       tagKey,
       aggregate
@@ -551,7 +554,7 @@ export class Device extends BaseDevice {
     time: number,
     query?: IEventQuery
   ) {
-    return await Fleet.eventsCounter(eventTypes, timeFrame, range, time, {
+    return await eventsCounter(eventTypes, timeFrame, range, time, {
       ...query,
       deviceIds: [this.id],
     });
@@ -559,7 +562,7 @@ export class Device extends BaseDevice {
 
   async createShareLink(share: IShare, view: string) {
     share.scope.deviceIds = [this.id];
-    return await Fleet.createShareLink(share, view);
+    return await createShareLink(share, view);
   }
 
   async createDevice(device: IDevice): Promise<IDevice> {

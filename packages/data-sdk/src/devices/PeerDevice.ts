@@ -1,8 +1,9 @@
 import { RtcClient } from "@formant/realtime-sdk";
-import { delay } from "../../common/delay";
-import { IStreamCurrentValue } from "./model/IStreamCurrentValue";
+import { delay } from "../../../common/delay";
+import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
-import { BaseDevice, ConfigurationDocument } from "./BaseDevice";
+import { ConfigurationDocument } from "./device.types";
+import { BaseDevice } from "./BaseDevice";
 
 export class PeerDevice extends BaseDevice {
   id!: string;

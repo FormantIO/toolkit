@@ -1,139 +1,31 @@
-import { Authentication } from "./Authentication";
-import { FORMANT_API_URL } from "./config";
-import { QueryStore } from "./cache/queryStore";
-import { IStreamData, ITags, StreamType } from "./main";
-import { JsonSchema } from "./model/JsonSchema";
-
-const queryStore = new QueryStore();
-
-export interface IDevice {
-  name: string;
-  id: string;
-  tags: ITags;
-}
-
-export type AppMessage =
-  | { type: "request_date"; minTime?: Date; maxTime?: Date; time?: Date }
-  | { type: "go_to_time"; time: number }
-  | {
-      type: "prompt";
-      promptId: string;
-      schema: JsonSchema;
-      okText?: string;
-      cancelText?: string;
-    }
-  | { type: "go_to_device"; deviceId: string }
-  | { type: "request_module_data"; module: string }
-  | { type: "show_message"; message: string }
-  | { type: "refresh_auth_token"; module: string }
-  | {
-      type: "set_module_data_time_range";
-      module: string;
-      before: number;
-      after: number;
-    }
-  | {
-      type: "setup_module_menus";
-      module: string;
-      menus: { label: string }[];
-    }
-  | {
-      type: "send_channel_data";
-      channel: string;
-      source: string;
-      data: any;
-    }
-  | { type: "request_devices" }
-  | { type: "hide_analytics_date_picker" }
-  | { type: "formant_online" };
-
-export type ModuleConfigurationMessage = {
-  type: "module_configuration";
-  temporary: boolean;
-  configuration: string;
-};
-
-export type EmbeddedAppMessage =
-  | {
-      type: "date_response";
-      data: Date;
-    }
-  | {
-      type: "overview_devices";
-      data: IDevice[];
-    }
-  | {
-      type: "module_menu_item_clicked";
-      menu: string;
-    }
-  | {
-      type: "auth_token";
-      token: string;
-    }
-  | {
-      type: "module_data";
-      streams: { [x: string]: any };
-      time: number;
-      queryRange: { start: number; end: number };
-    }
-  | {
-      type: "channel_data";
-      channel: string;
-      source: string;
-      data: any;
-    }
-  | {
-      type: "prompt_response";
-      promptId: string;
-      data: any;
-    }
-  | {
-      type: "formant_online";
-      online: boolean;
-    }
-  | ModuleConfigurationMessage;
-
-export interface ModuleData {
-  queryRange: QueryRange;
-  time: number;
-  streams: { [stream_name: string]: Stream };
-}
-export interface QueryRange {
-  start: number;
-  end: number;
-}
-export interface Stream {
-  data: StreamData[];
-  loading: boolean;
-  tooMuchData: boolean;
-  type: string;
-}
-export interface StreamData {
-  points: DataPoint[];
-  deviceId: string;
-  agentId: string;
-  name: string;
-  tags: { [key: string]: string };
-  type: string;
-}
-
-export type DataPoint = [number, any];
+import { getModuleConfiguration } from "./api/getModuleConfiguration";
+import { getCurrentModuleContext } from "./utils/getCurrentModuleContext";
+import { disableAnalyticsBottomBar } from "./message-bus/senders/disableAnalyticsBottomBar";
+import { goToDevice } from "./message-bus/senders/goToDevice";
+import { goToTime } from "./message-bus/senders/goToTime";
+import { refreshAuthToken } from "./message-bus/senders/refreshAuthToken";
+import { requestModuleData } from "./message-bus/senders/requestModuleData";
+import { sendAppMessage } from "./message-bus/senders/sendAppMessage";
+import { sendChannelData } from "./message-bus/senders/sendChannelData";
+import { setModuleDateTimeRange } from "./message-bus/senders/setModuleDateTimeRange";
+import { setupModuleMenus } from "./message-bus/senders/setupModuleMenus";
+import { showMessage } from "./message-bus/senders/showMessage";
+import { EmbeddedAppMessage } from "./message-bus/listeners/EmbeddedAppMessage";
+import { addAccessTokenRefreshListener } from "./message-bus/listeners/addAccessTokenRefreshListener";
+import { addChannelDataListener } from "./message-bus/listeners/addChannelDataListener";
+import { addMenuListener } from "./message-bus/listeners/addMenuListener";
+import { addModuleConfigurationListener } from "./message-bus/listeners/addModuleConfigurationListener";
+import { addModuleDataListener } from "./message-bus/listeners/addModuleDataListener";
+import { addOverviewDeviceListener } from "./message-bus/listeners/addOverviewDeviceListener";
+import { addStreamListener } from "./message-bus/listeners/addStreamLIstener";
+import { getDate } from "./message-bus/bidirectional/getDate";
+import { prompt } from "./message-bus/bidirectional/prompt";
 
 export class App {
-  private static sendAppMessage(message: AppMessage) {
-    window.parent.postMessage(message, "*");
-  }
+  static getCurrentModuleContext = getCurrentModuleContext;
 
-  static getCurrentModuleContext(): string | null {
-    let urlParams = new URLSearchParams("");
-
-    if (typeof window !== "undefined" && window.location) {
-      urlParams = new URLSearchParams(window.location.search);
-    }
-
-    const moduleName = urlParams.get("module");
-
-    return moduleName;
+  static isModule(): boolean {
+    return getCurrentModuleContext() !== null;
   }
 
   static async getCurrentModuleConfiguration(): Promise<string | undefined> {
@@ -149,266 +41,49 @@ export class App {
       return undefined;
     }
 
-    const response = await fetch(
-      `${FORMANT_API_URL}/v1/admin/module-configurations/` + configurationId,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
-    const moduleConfiguration = await response.json();
-    return moduleConfiguration.configuration;
+    return getModuleConfiguration(configurationId.trim());
   }
 
-  static isModule(): boolean {
-    return this.getCurrentModuleContext() !== null;
-  }
+  // senders
+  static disableAnalyticsBottomBar = disableAnalyticsBottomBar;
+  static goToDevice = goToDevice;
+  static goToTime = goToTime;
+  static refreshAuthToken = refreshAuthToken;
+  static requestModuleData = requestModuleData;
+  static sendChannelData = sendChannelData;
+  static setModuleDateTimeRange = setModuleDateTimeRange;
+  static setupModuleMenus = setupModuleMenus;
+  static showMessage = showMessage;
 
-  static goToTime(date: Date) {
-    this.sendAppMessage({
-      type: "go_to_time",
-      time: date.getTime(),
-    });
-  }
+  // listeners
+  static addAccessTokenRefreshListener = addAccessTokenRefreshListener;
+  static addChannelDataListener = addChannelDataListener;
+  static addMenuListener = addMenuListener;
+  static addModuleConfigurationListener = addModuleConfigurationListener;
+  static addModuleDataListener = addModuleDataListener;
+  static addOverviewDeviceListener = addOverviewDeviceListener;
+  static addStreamListener = addStreamListener;
 
-  static goToDevice(deviceId: string) {
-    this.sendAppMessage({
-      type: "go_to_device",
-      deviceId,
-    });
-  }
+  // bidirectional
+  static getDate = getDate;
+  static prompt = prompt;
 
-  static showMessage(message: string) {
-    this.sendAppMessage({ type: "show_message", message });
-  }
-
-  static requestModuleData() {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    this.sendAppMessage({
-      type: "request_module_data",
-      module: moduleName,
-    });
-  }
-
-  static setModuleDateTimeRange(
-    beforeInMilliseconds: number,
-    afterInMilliseconds?: number
-  ) {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    this.sendAppMessage({
-      type: "set_module_data_time_range",
-      module: moduleName,
-      before: beforeInMilliseconds,
-      after: afterInMilliseconds || 0,
-    });
-  }
-
-  static refreshAuthToken() {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    this.sendAppMessage({
-      type: "refresh_auth_token",
-      module: moduleName,
-    });
-  }
-
-  static sendChannelData(channel: string, data: any) {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    this.sendAppMessage({
-      type: "send_channel_data",
-      source: moduleName,
-      channel,
-      data,
-    });
-  }
-
-  static setupModuleMenus(menus: { label: string }[]) {
-    const moduleName = this.getCurrentModuleContext();
-    if (!moduleName) {
-      throw new Error("No module context");
-    }
-    this.sendAppMessage({
-      type: "setup_module_menus",
-      module: moduleName,
-      menus,
-    });
-  }
-
-  static addMenuListener(handler: (label: string) => void) {
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "module_menu_item_clicked") {
-        handler(msg.menu);
-      }
-    });
-  }
-
-  static addAccessTokenRefreshListener(handler: (token: string) => void) {
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "auth_token") {
-        handler(msg.token);
-      }
-    });
-  }
-
-  static addModuleDataListener(handler: (data: ModuleData) => void) {
-    const moduleName = this.getCurrentModuleContext();
-    if (moduleName) {
-      this.sendAppMessage({ type: "request_module_data", module: moduleName });
-    }
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "module_data") {
-        handler({
-          streams: msg.streams,
-          time: msg.time,
-          queryRange: msg.queryRange,
-        });
-      }
-    });
-  }
-
-  static addOverviewDeviceListener(handler: (devices: IDevice[]) => void) {
-    this.sendAppMessage({ type: "request_devices" });
-    const listener = (event: MessageEvent<any>) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "overview_devices") {
-        handler(msg.data);
-      }
-    };
-    window.addEventListener("message", listener);
-
-    return () => window.removeEventListener("message", listener);
-  }
-
-  static addStreamListener(
-    streamNames: string[],
-    streamTypes: StreamType[],
-    handler: (response: IStreamData[] | "too much data" | undefined) => void
-  ): () => void {
-    const listener = (event: any) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "module_data") {
-        const { start, end } = msg.queryRange;
-        handler(
-          queryStore.moduleQuery(
-            {},
-            streamNames,
-            streamTypes,
-            new Date(start),
-            new Date(end),
-            false
-          )
-        );
-      }
-    };
-    window.addEventListener("message", listener);
-    return () => window.removeEventListener("message", listener);
-  }
-
-  static addModuleConfigurationListener(
-    handler: (event: ModuleConfigurationMessage) => void
-  ) {
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "module_configuration") {
-        handler(msg as ModuleConfigurationMessage);
-      }
-    });
-  }
-
-  static addChannelDataListener(
-    channel: string,
-    handler: (e: { source: string; data: any }) => void
-  ) {
-    window.addEventListener("message", (event) => {
-      const msg = event.data as EmbeddedAppMessage;
-      if (msg.type === "channel_data" && msg.channel === channel) {
-        handler({
-          source: msg.source,
-          data: msg.data,
-        });
-      }
-    });
-  }
-
-  static async prompt(
-    schema: JsonSchema,
-    options?: { okText?: string; cancelText?: string }
-  ): Promise<any> {
-    return new Promise((resolve) => {
-      const promptId = Math.random().toString();
-      this.sendAppMessage({
-        type: "prompt",
-        promptId,
-        schema,
-        okText: options?.okText,
-        cancelText: options?.cancelText,
-      });
-      const handler = (event: any) => {
-        const msg = event.data as EmbeddedAppMessage;
-        if (msg.type === "prompt_response" && msg.promptId === promptId) {
-          resolve(msg.data);
-        }
-        window.removeEventListener("message", handler);
-      };
-      window.addEventListener("message", handler);
-    });
-  }
-
-  static async getDate(time?: Date, minTime?: Date, maxTime?: Date) {
-    return new Promise((resolve) => {
-      this.sendAppMessage({
-        type: "request_date",
-        minTime,
-        maxTime,
-        time,
-      });
-      const handler = (event: any) => {
-        const msg = event.data as EmbeddedAppMessage;
-        if (msg.type === "date_response") {
-          window.removeEventListener("message", handler);
-          resolve(msg.data);
-        }
-      };
-      window.addEventListener("message", handler);
-    });
-  }
-
-  static async disableAnalyticsBottomBar() {
-    this.sendAppMessage({
-      type: "hide_analytics_date_picker",
-    });
-  }
   private static _isOnline: boolean | null = null;
-
-  private static _handleOnlineEvent = (e: MessageEvent<EmbeddedAppMessage>) => {
-    const { data } = e;
-    if (data.type === "formant_online") {
-      this._isOnline = data.online;
-    }
-  };
 
   static get isOnline(): boolean | null {
     return App._isOnline;
   }
 
-  static listenForConnectionEvents() {
-    window.addEventListener("message", this._handleOnlineEvent);
+  static listenForConnectionEvents(): () => void {
+    const listener = (e: MessageEvent<EmbeddedAppMessage>) => {
+      const { data } = e;
+      if (data.type === "formant_online") {
+        this._isOnline = data.online;
+      }
+    };
+
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
   }
 
   static checkConnection(deadlineMs: number = 1_000): Promise<boolean> {
@@ -430,7 +105,7 @@ export class App {
       };
 
       window.addEventListener("message", handler);
-      this.sendAppMessage({ type: "formant_online" });
+      sendAppMessage({ type: "formant_online" });
     });
   }
 

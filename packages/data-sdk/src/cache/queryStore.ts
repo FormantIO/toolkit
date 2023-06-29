@@ -2,7 +2,6 @@ import { IQuery } from "../model/IQuery";
 import { IStreamData } from "../model/IStreamData";
 import { StreamType } from "../model/StreamType";
 import { IFilter } from "../model/IFilter";
-import { Fleet } from "../Fleet";
 import {
   addMinutes,
   addSeconds,
@@ -13,6 +12,7 @@ import { duration } from "../../../common/duration";
 import { filterDataByType } from "./filterDataByType";
 import { filterDataByTime } from "./filterDataByTime";
 import { StoreCache } from "./StoreCache";
+import { queryTelemetry } from "../api/queryTelemetry";
 
 export class QueryStore {
   private queryStoreCache = new StoreCache<
@@ -91,7 +91,7 @@ export class QueryStore {
   ): IStreamData[] | "too much data" | undefined {
     return this.queryStoreCache.get(query, async () => {
       try {
-        return await Fleet.queryTelemetry(query);
+        return await queryTelemetry(query);
       } catch (error) {
         throw error;
       }
@@ -103,7 +103,7 @@ export class QueryStore {
   ): IStreamData[] | "too much data" | undefined {
     return this.liveQueryStoreCache.get(query, async () => {
       try {
-        return await Fleet.queryTelemetry(query);
+        return await queryTelemetry(query);
       } catch (error) {
         throw error;
       }
