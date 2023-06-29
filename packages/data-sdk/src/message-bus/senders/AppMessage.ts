@@ -1,4 +1,4 @@
-import { JsonSchema } from "../model/JsonSchema";
+import { JsonSchema } from "../../model/JsonSchema";
 
 export interface RequestDateMessage {
   type: "request_date";

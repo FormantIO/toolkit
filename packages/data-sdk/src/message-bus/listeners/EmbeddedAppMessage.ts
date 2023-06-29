@@ -1,4 +1,4 @@
-import { ITags } from "../model/ITags";
+import { ITags } from "../../model/ITags";
 
 export type DateResponseMessage = {
   type: "date_response";

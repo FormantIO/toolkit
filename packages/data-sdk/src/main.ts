@@ -17,19 +17,19 @@ export { Role } from "./Role";
 export { User } from "./User";
 
 // Re-exporting core types
-export type { AppMessage } from "./message-bus/AppMessage";
+export type { AppMessage } from "./message-bus/senders/AppMessage";
 export type {
   EmbeddedAppMessage,
   IDevice,
   ModuleConfigurationMessage,
-} from "./message-bus/EmbeddedAppMessage";
+} from "./message-bus/listeners/EmbeddedAppMessage";
 export type {
   DataPoint,
   ModuleData,
   QueryRange,
   Stream,
   StreamData,
-} from "./App";
+} from "./message-bus/listeners/addModuleDataListener";
 export type {
   Command,
   ConfigurationDocument,
