@@ -70,19 +70,20 @@ export class App {
 
   private static _isOnline: boolean | null = null;
 
-  private static _handleOnlineEvent = (e: MessageEvent<EmbeddedAppMessage>) => {
-    const { data } = e;
-    if (data.type === "formant_online") {
-      this._isOnline = data.online;
-    }
-  };
-
   static get isOnline(): boolean | null {
     return App._isOnline;
   }
 
-  static listenForConnectionEvents() {
-    window.addEventListener("message", this._handleOnlineEvent);
+  static listenForConnectionEvents(): () => void {
+    const listener = (e: MessageEvent<EmbeddedAppMessage>) => {
+      const { data } = e;
+      if (data.type === "formant_online") {
+        this._isOnline = data.online;
+      }
+    };
+
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
   }
 
   static checkConnection(deadlineMs: number = 1_000): Promise<boolean> {
