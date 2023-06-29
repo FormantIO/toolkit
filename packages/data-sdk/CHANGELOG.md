@@ -1,3 +1,9 @@
+## [1.5.2] - 2023-06-29
+
+### Fixed
+
+- Resolve leaky reference to `NodeJS.Timeout`.
+
 ## [1.5.1] - 2023-06-29
 
 ### Fixed
