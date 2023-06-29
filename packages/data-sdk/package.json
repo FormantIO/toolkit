@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "1.5.0",
+  "version": "1.5.1",
   "scripts": {
     "preversion": "npm run verify",
     "postversion": "make",
@@ -36,7 +36,7 @@
     "serve": "vite preview",
     "test": "concurrently --kill-others-on-fail npm:test:*",
     "test:unit": "vitest run",
-    "test:reject-cycles":  "dpdm --no-warning --no-tree --no-progress --exit-code=circular:1 --skip-dynamic-imports=circular \"src/main.ts\"",
+    "test:reject-cycles": "dpdm --no-warning --no-tree --no-progress --exit-code=circular:1 --skip-dynamic-imports=circular \"src/main.ts\"",
     "coverage": "vitest run --coverage",
     "prettier:check": "prettier --check src/",
     "prettier:write": "prettier --write src/",

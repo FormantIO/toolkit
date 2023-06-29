@@ -1,3 +1,9 @@
+## [1.5.1] - 2023-06-29
+
+### Fixed
+
+- Resolve dependency cycles. (#111)
+
 ## [1.5.0] - 2023-06-28
 
 ### Changed
@@ -131,6 +137,7 @@ await device.startRealtimeConnection({
 ### Fixed
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.5.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.0...release/data-sdk/1.5.1~
 [1.5.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.4.0...release/data-sdk/1.5.0~
 [1.4.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.4.0~
 [1.3.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.3.0...release/data-sdk/1.3.1~
