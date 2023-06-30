@@ -15,8 +15,7 @@ export class DataChannel {
   constructor(private dataChannel: RTCDataChannel) {
     this.dataChannel.binaryType = "arraybuffer";
     this.dataChannel.onopen = () => {
-      this.ready = true;
-      this.openListeners.forEach((listener) => listener());
+      this.setReady();
     };
     this.dataChannel.onclose = () => {
       this.ready = false;
@@ -37,6 +36,11 @@ export class DataChannel {
         _(new Uint8Array(m.data));
       });
     };
+  }
+
+  private setReady() {
+    this.ready = true;
+    this.openListeners.forEach((listener) => listener());
   }
 
   addOpenListener(listener: DataChannelListener) {
@@ -69,6 +73,9 @@ export class DataChannel {
     }
     const p = new Promise<boolean>((resolve, reject) => {
       let a = setInterval(() => {
+        if (this.dataChannel.readyState === 'open') {
+          this.setReady();
+        }
         if (this.ready) {
           clearInterval(a);
           resolve(true);
