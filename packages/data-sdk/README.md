@@ -9,11 +9,11 @@ Check out the [project website](https://github.com/FormantIO/toolkit) for more i
 Install using `npm` or `yarn`:
 
 ```sh
-$ npm install --save @formant/data-sdk@latest
+$ npm install --save @formant/data-sdk@latest @formant/realtime-sdk@latest
 
 # or with
 
-$ yarn add @formant/data-sdk@latest
+$ yarn add @formant/data-sdk@latest @formant/realtime-sdk@latest
 ```
 
 ## License

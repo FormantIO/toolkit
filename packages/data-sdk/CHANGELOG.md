@@ -1,3 +1,9 @@
+## [1.5.3] - 2023-06-30
+
+### Fixed
+
+- DataChannel check ready fix (#112)
+
 ## [1.5.2] - 2023-06-29
 
 ### Fixed
@@ -17,6 +23,20 @@
 - Rework data-sdk bundle/package (#92)
   - packages `cjs`/`es` for package.json/bundlers _exclude_ all of their dependencies.
   - pre-bundled assets `umd`/`es6` bundles all required dependencies for stand-alone use.
+
+### Update Notes
+
+The dependency tree has changed slightly to support better performance/security updates moving forward. As such the 
+`@formant/realtime-sdk` dependency has been changed from a `"dependency"` to a `"peerDependency"`. You will need to add
+this dependency as well:
+
+```sh
+$ npm install --save @formant/realtime-sdk@latest
+
+# or with
+
+$ yarn add @formant/realtime-sdk@latest
+```
 
 ## [1.4.0] - 2023-06-28
 
