@@ -73,7 +73,7 @@ export class DataChannel {
     }
     const p = new Promise<boolean>((resolve, reject) => {
       let a = setInterval(() => {
-        if (this.dataChannel.readyState === 'open') {
+        if (this.dataChannel.readyState === "open") {
           this.setReady();
         }
         if (this.ready) {
