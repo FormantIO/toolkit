@@ -39,8 +39,6 @@ import { queryAnalytics } from "./api/queryAnalytics";
 import { queryDevices } from "./api/queryDevices";
 import { queryEvents } from "./api/queryEvents";
 import { queryTelemetry } from "./api/queryTelemetry";
-import { createDevice } from "./api/createDevice";
-import { patchDevice } from "./api/patchDevice";
 import { getDevicesData } from "./api/getDevicesData";
 import { queryDevicesData } from "./api/queryDevicesData";
 export class Fleet {
@@ -133,8 +131,6 @@ export class Fleet {
   static queryDevices = queryDevices;
   static queryEvents = queryEvents;
   static queryTelemetry = queryTelemetry;
-  static createDevice = createDevice;
-  static patchDevice = patchDevice;
   static getDevicesData = getDevicesData;
   static queryDevicesData = queryDevicesData;
 }
