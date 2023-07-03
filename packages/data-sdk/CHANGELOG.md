@@ -1,3 +1,9 @@
+## [1.5.4] - 2023-07-03
+
+### Added
+
+- createDevice, patchDevice, getDeviceData, and queryDevicesData (#113)
+
 ## [1.5.3] - 2023-06-30
 
 ### Fixed

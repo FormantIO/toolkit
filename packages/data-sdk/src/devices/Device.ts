@@ -1,14 +1,11 @@
 import { RtcClient } from "@formant/realtime-sdk";
 import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
-
 import { getRtcClientPool } from "../AppRtcClientPools";
 import { Authentication } from "../Authentication";
 import { CaptureStream } from "../CaptureStream";
 import { FORMANT_API_URL } from "../config";
-
 import { delay } from "../../../common/delay";
 import { defined } from "../../../common/defined";
-
 import { InterventionType } from "../model/InterventionType";
 import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
 import { IInterventionResponse } from "../model/IInterventionResponse";

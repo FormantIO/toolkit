@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "1.5.3",
+  "version": "1.5.4",
   "scripts": {
     "preversion": "npm run verify",
     "postversion": "make",

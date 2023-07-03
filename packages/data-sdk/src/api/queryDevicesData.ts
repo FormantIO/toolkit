@@ -1,7 +1,7 @@
 import { IDeviceQuery } from "../model/IDeviceQuery";
 import { Authentication } from "../Authentication";
 import { FORMANT_API_URL } from "../config";
-import { IDevice } from "../main";
+import { IDevice } from "../model/IDevice";
 
 export async function queryDevicesData(
   query: IDeviceQuery
