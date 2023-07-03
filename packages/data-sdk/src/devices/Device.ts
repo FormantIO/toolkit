@@ -34,6 +34,10 @@ import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByInterv
 import { getTelemetry } from "../api/getTelemetry";
 import { getRealtimeSessions } from "../api/getRealtimeSessions";
 import { getPeers } from "../api/getPeers";
+import { createDevice } from "../api/createDevice";
+import { patchDevice } from "../api/patchDevice";
+import { getDevicesData } from "../api/getDevicesData";
+import { queryDevicesData } from "../api/queryDevicesData";
 
 export class Device extends BaseDevice {
   constructor(
@@ -44,6 +48,11 @@ export class Device extends BaseDevice {
   ) {
     super();
   }
+
+  static createDevice = createDevice;
+  static patchDevice = patchDevice;
+  static getDevicesData = getDevicesData;
+  static queryDevicesData = queryDevicesData;
 
   async getLatestTelemetry() {
     const data = await fetch(

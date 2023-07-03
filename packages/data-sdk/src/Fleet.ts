@@ -133,8 +133,4 @@ export class Fleet {
   static queryDevices = queryDevices;
   static queryEvents = queryEvents;
   static queryTelemetry = queryTelemetry;
-  static createDevice = createDevice;
-  static patchDevice = patchDevice;
-  static getDevicesData = getDevicesData;
-  static queryDevicesData = queryDevicesData;
 }
