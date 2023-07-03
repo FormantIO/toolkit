@@ -1,6 +1,6 @@
+import { IDevice } from "../model/IDevice";
 import { Authentication } from "../Authentication";
 import { FORMANT_API_URL } from "../config";
-import { IDevice } from "../model/IDevice";
 
 export async function patchDevice(
   id: string,

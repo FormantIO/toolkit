@@ -26,7 +26,6 @@ import {
 } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
 import { ITags } from "../model/ITags";
-import { IDevice } from "../model/IDevice";
 import { createShareLink } from "../api/createShareLink";
 import { eventsCounter } from "../api/eventsCounter";
 import { getAnnotationCount } from "../api/getAnnotationCount";
