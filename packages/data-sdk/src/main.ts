@@ -177,6 +177,15 @@ export * from "./model/IAnalyticsModuleConfiguration";
 export * from "./model/IAggregateRow";
 export * from "./model/ISqlRow";
 export * from "./stores/IAuthenticationStore";
+export * from "./model/IAccount"
+export * from "./model/IAccountTree"
+export * from "./model/IDevice"
+export * from "./model/IFleet"
+export * from "./model/IRole"
+export * from "./model/IUser"
+
+
 export type { TelemetryResult } from "./model/TelemetryResult";
 
 import "./init.ts";
+

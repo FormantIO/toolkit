@@ -26,7 +26,6 @@ import {
 } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
 import { ITags } from "../model/ITags";
-import { IDevice } from "../model/IDevice";
 import { createShareLink } from "../api/createShareLink";
 import { eventsCounter } from "../api/eventsCounter";
 import { getAnnotationCount } from "../api/getAnnotationCount";
@@ -34,6 +33,10 @@ import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByInterv
 import { getTelemetry } from "../api/getTelemetry";
 import { getRealtimeSessions } from "../api/getRealtimeSessions";
 import { getPeers } from "../api/getPeers";
+import { createDevice } from "../api/createDevice";
+import { patchDevice } from "../api/patchDevice";
+import { getDevicesData } from "../api/getDevicesData";
+import { queryDevicesData } from "../api/queryDevicesData";
 
 export class Device extends BaseDevice {
   constructor(
@@ -44,6 +47,11 @@ export class Device extends BaseDevice {
   ) {
     super();
   }
+
+  static createDevice = createDevice;
+  static patchDevice = patchDevice;
+  static getDevicesData = getDevicesData;
+  static queryDevicesData = queryDevicesData;
 
   async getLatestTelemetry() {
     const data = await fetch(
@@ -563,35 +571,5 @@ export class Device extends BaseDevice {
   async createShareLink(share: IShare, view: string) {
     share.scope.deviceIds = [this.id];
     return await createShareLink(share, view);
-  }
-
-  async createDevice(device: IDevice): Promise<IDevice> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices`, {
-      method: "POST",
-      body: JSON.stringify(device),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    return await data.json();
-  }
-
-  async patchDevice(id: string, device: Partial<IDevice>): Promise<IDevice> {
-    if (!Authentication.token) {
-      throw new Error("Not authenticated");
-    }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(device),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    return await data.json();
   }
 }
