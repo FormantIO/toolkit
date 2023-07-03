@@ -106,7 +106,7 @@ export class PeerDevice extends BaseDevice {
     return cfg.configuration.document;
   }
 
-  async startRealtimeConnection(sessionType?: number) {
+  async startRealtimeConnection(sessionType?: number): Promise<void> {
     console.debug(`${new Date().toISOString()} :: Connection start requested`);
 
     if (this.rtcClient && this.connectionMonitorInterval !== undefined) {
