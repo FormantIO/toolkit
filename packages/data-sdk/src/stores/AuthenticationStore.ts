@@ -1,3 +1,5 @@
+import { decode } from 'base-64'
+
 import {
   IAuthentication,
   IAuthenticationStore,
@@ -102,7 +104,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async loginWithToken(token: string, refreshToken?: string) {
-    const tokenData = JSON.parse(atob(token.split(".")[1]));
+    const tokenData = JSON.parse(decode(token.split(".")[1]));
     try {
       let userId: string | undefined;
       this._isShareToken =

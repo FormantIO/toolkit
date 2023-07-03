@@ -61,6 +61,7 @@
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
+    "base-64": "^1.0.0",
     "base64-js": "^1.5.1",
     "date-fns": "^2.30.0",
     "eventemitter3": "^5.0.1",

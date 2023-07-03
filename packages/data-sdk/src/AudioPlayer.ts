@@ -1,6 +1,6 @@
 import { IRtcStreamMessage } from "@formant/realtime-sdk";
 import { Device } from "./devices/Device";
-import { stringToArrayBuffer } from "../../common/stringToArrayBuffer";
+import { stringToArrayBuffer } from "./utils/stringToArrayBuffer";
 import { fork } from "../../common/fork";
 import { browser } from "../../common/browser";
 import { RealtimeDataStream, RealtimeMessage } from "./devices/device.types";
