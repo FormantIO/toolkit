@@ -1,4 +1,4 @@
-import { decode } from 'base-64'
+import { decode } from "base-64";
 
 import {
   IAuthentication,
