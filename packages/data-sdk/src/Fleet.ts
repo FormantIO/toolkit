@@ -39,11 +39,13 @@ import { queryAnalytics } from "./api/queryAnalytics";
 import { queryDevices } from "./api/queryDevices";
 import { queryEvents } from "./api/queryEvents";
 import { queryTelemetry } from "./api/queryTelemetry";
+import { createFleet } from "./api/createFleet";
 
 export class Fleet {
   static defaultDeviceId: string | undefined;
   static knownContext: WeakRef<Device>[] = [];
 
+  static createFleet = createFleet;
   static listFleets = listFleets;
   static getFleet = getFleet;
   static patchFleet = patchFleet;
