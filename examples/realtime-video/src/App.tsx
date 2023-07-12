@@ -7,6 +7,7 @@ import {
 } from "@formant/ui-sdk";
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
+import { SessionType } from "@formant/data-sdk";
 
 function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -23,6 +24,11 @@ function App() {
 
   const waitForConnection = useCallback(async () => {
     if (!device) return;
+    await device.startRealtimeConnection({
+      sessionType: SessionType.OBSERVE,
+      maxConnectRetries: 10,
+      deadlineMs: 10000,
+    });
     let connected = false;
     while (!connected) {
       connected = await device.isInRealtimeSession();
@@ -37,7 +43,13 @@ function App() {
   useEffect(() => {
     if (!device || !camera) return;
     if (!isTeleopModule) {
-      setLoading(false);
+      device
+        .startRealtimeConnection({
+          sessionType: SessionType.OBSERVE,
+          maxConnectRetries: 50,
+          deadlineMs: 15000,
+        })
+        .then(() => setLoading(false));
       return;
     }
     waitForConnection();
@@ -49,16 +61,14 @@ function App() {
 
   return (
     <div className="App">
-      {loading ? (
+      {loading || !device ? (
         <LoadingIndicator />
       ) : (
-        <RealtimeConnection device={device!}>
-          <RealtimeVideoPlayer
-            cameraName={camera}
-            device={device!}
-            id="rtc-video"
-          />
-        </RealtimeConnection>
+        <RealtimeVideoPlayer
+          cameraName={camera}
+          device={device!}
+          id="rtc-video"
+        />
       )}
     </div>
   );
