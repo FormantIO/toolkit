@@ -1,3 +1,9 @@
+## [1.7.0] - 2023-07-14
+
+### Added
+
+- disableDevice, and timeout (#115)
+
 ## [1.6.0] - 2023-07-09
 
 ### Added
