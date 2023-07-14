@@ -34,7 +34,7 @@ import { createDevice } from "../api/createDevice";
 import { patchDevice } from "../api/patchDevice";
 import { getDevicesData } from "../api/getDevicesData";
 import { queryDevicesData } from "../api/queryDevicesData";
-
+import { disableDevice } from "../api/disableDevice";
 export class Device extends BaseDevice {
   constructor(
     public id: string,
@@ -49,6 +49,7 @@ export class Device extends BaseDevice {
   static patchDevice = patchDevice;
   static getDevicesData = getDevicesData;
   static queryDevicesData = queryDevicesData;
+  static disableDevice = disableDevice;
 
   async getLatestTelemetry() {
     const data = await fetch(
