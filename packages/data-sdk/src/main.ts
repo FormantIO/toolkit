@@ -183,7 +183,9 @@ export * from "./model/IDevice";
 export * from "./model/IFleet";
 export * from "./model/IRole";
 export * from "./model/IUser";
+export * from "./utils/timeout"
 
 export type { TelemetryResult } from "./model/TelemetryResult";
 
 import "./init.ts";
+
