@@ -1,10 +1,10 @@
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
-import { ITagSets } from "./model/ITagSets";
+import { ITags } from "./model/ITags";
 
 export class KeyValue {
-  public static async set(key: string, value: string, tags?: ITagSets) {
+  public static async set(key: string, value: string, tags?: ITags) {
     try {
       const result = await fetch(FORMANT_API_URL + "/v1/admin/key-value", {
         method: "POST",
@@ -85,6 +85,29 @@ export class KeyValue {
         throw new Error("Unable to handle request");
       }
       return;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  public static async query(keys: string[]) {
+    try {
+      const result = await fetch(
+        FORMANT_API_URL + `/v1/admin/key-value/query`,
+        {
+          method: "POST",
+          body: JSON.stringify({ keys }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + Authentication.token,
+          },
+        }
+      );
+      if (!result.ok) {
+        throw new Error("Unable to handle request");
+      }
+      const jsonResponse = await result.json();
+      return jsonResponse.items;
     } catch (e: any) {
       throw e;
     }
