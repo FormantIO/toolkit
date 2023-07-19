@@ -53,7 +53,6 @@ export const CommandRow: FC<ICommandRowProps> = ({
   }, [description]);
 
   useEffect(() => {
-    console.log(meta, parameterValue,)
     if (!description) return;
     handleResponsiveDescription();
     window.addEventListener("resize", handleResponsiveDescription);
@@ -69,7 +68,12 @@ export const CommandRow: FC<ICommandRowProps> = ({
       setDisabled(true);
       if (!device) return;
 
-      device.sendCommand(name,  parameterValue ?? param, undefined, meta);
+      device.sendCommand(
+        name,
+        param.length > 0 ? param : parameterValue,
+        undefined,
+        meta
+      );
       setTimeout(() => {
         setDisabled(false);
       }, 3000);

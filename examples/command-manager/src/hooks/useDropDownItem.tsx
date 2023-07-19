@@ -8,7 +8,7 @@ const getLatestItems = async (device: Device, streamName: string) => {
   )[0];
   //TODO: handle error when stream does not exist
   //Or has invalid value
-  const csv = stream.currentValue.split(",");
+  const csv = stream.currentValue.split(", ");
 
   return csv.map((_: string) => ({ value: _, label: _ }));
 };
@@ -21,7 +21,9 @@ export const useDropDownItems = (
 
   useEffect(() => {
     if (!device || !streamName) return;
-    getLatestItems(device, streamName).then((_) => setItems(_));
+    getLatestItems(device, streamName).then((_) => {
+      setItems(_);
+    });
   }, [device, streamName]);
   return items;
 };
