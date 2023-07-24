@@ -16,7 +16,7 @@
 
 - createFleet
 
-## [1.5.4]:(https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~) - 2023-07-03
+## [1.5.4](https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~) - 2023-07-03
 
 ### Added
 
