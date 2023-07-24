@@ -203,11 +203,11 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
-[1.9.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~)
-[1.8.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~)
-[1.7.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.6.0...release/data-sdk/1.7.0~)
-[1.6.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.4...release/data-sdk/1.6.0~)
-[1.5.4]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~)
+[1.9.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~
+[1.8.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~
+[1.7.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.6.0...release/data-sdk/1.7.0~
+[1.6.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.4...release/data-sdk/1.6.0~
+[1.5.4]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~
 [1.5.3]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.2...release/data-sdk/1.5.3~
 [1.5.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.1...release/data-sdk/1.5.2~
 [1.5.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.0...release/data-sdk/1.5.1~

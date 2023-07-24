@@ -339,10 +339,10 @@
   "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.15.tgz"
   "version" "0.17.15"
 
-"@formant/data-sdk@^1.0.0", "@formant/data-sdk@^1.6.0":
-  "integrity" "sha512-Q5zLjRKK46SJP/uMtHMa1b/RIeaaTDh9rrwPPOC51et4cF2RfUCMfsf1ryYk7qxspzRriMD+nhMhjR1flxCdIw=="
-  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.6.0.tgz"
-  "version" "1.6.0"
+"@formant/data-sdk@^1.0.0", "@formant/data-sdk@^1.9.0":
+  "integrity" "sha512-kkE0W60zmxmscGlDWhLM388UWpK8aPyKT54DdFfMiMbBjuHRt5IPqfTEzDAZ67sFG8LuV7pRnw4Z3wZ7KRpSmw=="
+  "resolved" "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.9.0.tgz"
+  "version" "1.9.0"
   dependencies:
     "base-64" "^1.0.0"
     "base64-js" "^1.5.1"
