@@ -1,3 +1,9 @@
+## [1.9.0] - 2023-07-17
+
+### Upgrade
+
+- Upgrade data-sdk realtime-sdk to 1.0.0 (#117)
+
 ## [1.8.0] - 2023-07-17
 
 ### Added
@@ -16,7 +22,7 @@
 
 - createFleet
 
-## [1.5.4](https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~) - 2023-07-03
+## [1.5.4] - 2023-07-03
 
 ### Added
 
@@ -50,7 +56,7 @@
 
 ### Update Notes
 
-The dependency tree has changed slightly to support better performance/security updates moving forward. As such the 
+The dependency tree has changed slightly to support better performance/security updates moving forward. As such the
 `@formant/realtime-sdk` dependency has been changed from a `"dependency"` to a `"peerDependency"`. You will need to add
 this dependency as well:
 
@@ -106,9 +112,11 @@ _Released…_
 ## [1.0.0] - 2023-06-05
 
 ### Added
+
 - Add time information to `request_date` message. (#93)
 
 ### Fixed
+
 - Possible to removeListener too early when waiting for `request_date` to respond. (#93)
 
 ## [1.0.0-rc.3] - 2023-05-25
@@ -149,30 +157,36 @@ await device.startRealtimeConnection({
 ```
 
 ### Added
+
 - Improvements to `Device.startRealtimeConnection()` implementation (#91)
 
 ### Changed
+
 - Pool `RtcClients` by `sessionType` to reduce network overhead for multiple conections (#89)
 
 ## [1.0.0-rc.2] - 2023-05-18
 
 ### Added
+
 - Added App.disableAnalyticsBottomBar() to hide date picker in analytics view (#84)
 
 ### Fixed
+
 - Increase number of tries to create a connection (#88)
 - Re-enforce type constraints on aggregateByDateFunctions (#85)
 
 ## [1.0.0-rc.1] - 2023-05-17
 
 ### Added
+
 - Adding WAN connectivity helpers (#83)
   - `App.isOnline` returns the last-known connectivity status to formant apis.
   - `App.checkConnection(ms?: number)` returns a promise for the _current_ connectivity status to formant apis.
   - `App.waitForConnection(ms?: number)` returns a promise that will resolve when `App.isOnline` is `true`.
 
 ### Fixed
-- Prefer cached remoteDevicePeerId when set.  (#81)
+
+- Prefer cached remoteDevicePeerId when set. (#81)
 - Adding logging to RealtimeVideo and RealtimeDataStream methods (#82)
 - Try to reconnect when rtc.connect returns undefined (#78)
 - Update function to use remotePeerId (#80)
@@ -180,13 +194,20 @@ await device.startRealtimeConnection({
 ## 1.0.0-rc.0 - 2023-05-12
 
 ### Added
+
 - Improve typescript definitions `ConfigurationDocument` (#77)
   - Added `adapters`
   - Added `tags`
 
 ### Fixed
+
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.9.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~)
+[1.8.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~)
+[1.7.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.6.0...release/data-sdk/1.7.0~)
+[1.6.0]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.4...release/data-sdk/1.6.0~)
+[1.5.4]: (https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.3...release/data-sdk/1.5.4~)
 [1.5.3]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.2...release/data-sdk/1.5.3~
 [1.5.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.1...release/data-sdk/1.5.2~
 [1.5.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.5.0...release/data-sdk/1.5.1~
