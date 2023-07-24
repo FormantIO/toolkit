@@ -75,6 +75,7 @@ const useModuleDataListener = () => {
   const handleData = useCallback(async () => {
     await Authentication.waitTilAuthenticated();
     const device = await Fleet.getCurrentDevice();
+
     App.addStreamListener([config.stream], ["json"], (s) => {
       if (!s) return;
       const curentDeviceStream = (
@@ -87,7 +88,7 @@ const useModuleDataListener = () => {
         setStreams({ ...streams });
       }
     });
-  }, []);
+  }, [config]);
 
   return streams;
 };
