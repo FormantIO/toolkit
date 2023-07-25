@@ -47,7 +47,7 @@ function App() {
         .startRealtimeConnection({
           sessionType: SessionType.OBSERVE,
           maxConnectRetries: 50,
-          deadlineMs: 15000,
+          deadlineMs: 20000,
         })
         .then(() => setLoading(false));
       return;

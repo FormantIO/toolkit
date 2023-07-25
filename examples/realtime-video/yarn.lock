@@ -350,13 +350,13 @@
     "eventemitter3" "^5.0.1"
     "pako" "^2.1.0"
 
-"@formant/realtime-sdk@^0.0.20 || ^1.0.0":
-  "integrity" "sha512-XulXffp4h4guPhe00j4kCtoBe/GvgftJHYK8yR3lybv7mqLn/4zSXkC3io5qXACBQIqvq8U5l0Q/nLv0xcecyA=="
-  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-0.0.20.tgz"
-  "version" "0.0.20"
+"@formant/realtime-sdk@^0.0.20 || ^1.0.0", "@formant/realtime-sdk@^1.0.0":
+  "integrity" "sha512-dYEWKwVdDIfMYGZPmQ1kg/PtSJCZR41c1IOWPrGEKdWk4KV16Wn2lGWHIRXdqd2MRU9e0HEFP+D9bOZjBxa4KA=="
+  "resolved" "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-1.0.0.tgz"
+  "version" "1.0.0"
   dependencies:
     "@types/google-protobuf" "~3.7.0"
-    "env-var" "^7.3.0"
+    "env-var" "^7.3.1"
     "grpc-web" "^1.2.1"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
@@ -773,7 +773,7 @@
   "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.284.tgz"
   "version" "1.4.284"
 
-"env-var@^7.3.0":
+"env-var@^7.3.1":
   "integrity" "sha512-Sq9qMnbBApv7SeUOKhw5GZ0VxAwltjFTzXTOvRV9NZEKmMCBZuFCumAvkXwBC5Fo396D7BnOpb5dXud7Vzhliw=="
   "resolved" "https://registry.npmjs.org/env-var/-/env-var-7.3.1.tgz"
   "version" "7.3.1"
