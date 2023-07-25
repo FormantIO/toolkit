@@ -1,4 +1,10 @@
-## [1.9.0] - 2023-07-17
+## [1.10.0] - 2023-07-25
+
+### Upgrade
+
+- Upgrade grpc-web to 1.4.2
+
+## [1.9.0] - 2023-07-24
 
 ### Upgrade
 
@@ -203,6 +209,7 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.10.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.9.0...release/data-sdk/1.10.0~
 [1.9.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~
 [1.8.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~
 [1.7.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.6.0...release/data-sdk/1.7.0~
