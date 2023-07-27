@@ -18,7 +18,7 @@ export const DiagnosticsTable: FC<IDiagnosticsTableProps> = ({
     table?.classList.add("slide-out-right");
   };
 
-  return !!diagnosticsDetails ? (
+  return !!diagnosticsDetails && diagnosticsDetails.length > 0 ? (
     <div id="diagnostics-table" className={styles["diagnostic-table"]}>
       <div className={styles["diagnostic-table-header"]}>
         <IconButton onClick={handleBack} />
