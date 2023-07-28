@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import { StatusHeader } from "../StatusHeader";
-import { useCallback, useState, useMemo, FC } from "react";
+import { useCallback, useState, useMemo, FC, useEffect } from "react";
 import {
   StatusFilter,
   KeyValue,
@@ -12,12 +12,12 @@ import { DiagnosticsTable } from "../DiagnosticsTable";
 import { MessageTable } from "../MessageTable";
 import { LoadingIndicator } from "../LoadingIndicator";
 import { Typography } from "@formant/ui-sdk";
+import styled from "@emotion/styled";
 
 interface ITableProps {
-  messages: DiagnosticStatusMessage[] | null;
-  config: IConfiguration;
+  messages: DiagnosticStatusMessage | null;
 }
-export const Table: FC<ITableProps> = ({ messages, config }) => {
+export const Table: FC<ITableProps> = ({ messages }) => {
   const [active, setActive] = useState<string | null>(null);
   const [filters, setFilters] = useState<StatusFilter>({
     ok: false,
@@ -38,16 +38,16 @@ export const Table: FC<ITableProps> = ({ messages, config }) => {
       }
     });
 
-    if (activeFilters.length === 0) return messages;
-    return messages.filter((_) => activeFilters.includes(_.status[0].level));
+    if (activeFilters.length === 0) return messages.status;
+    return messages.status.filter((_) => activeFilters.includes(_.level));
   }, [messages, filters]);
 
   const activeValues: KeyValue[] | null = useMemo(() => {
     if (!!!messages) return null;
-    if (active === null || currentDiagnostics.length === 0) return [];
-    const _activeMessage = messages.filter((_) => _.status[0].name === active);
-    if (_activeMessage.length === 0) return [];
-    return _activeMessage[0].status[0].values;
+    if (active === null || currentDiagnostics.length === 0) return null;
+    const activeMsg = messages.status.find((_) => _.name === active);
+    if (!activeMsg) return null;
+    return activeMsg.values;
   }, [active, currentDiagnostics]);
 
   const handleFilter = (filter: SeverityLevel) => {
@@ -58,12 +58,25 @@ export const Table: FC<ITableProps> = ({ messages, config }) => {
 
   const handleSetActive = useCallback((_: string) => {
     const table = document.getElementById("diagnostics-table")!;
+    table.style.visibility = "visible";
     table.classList.remove("slide-out-right");
     table.classList.add("slide-out-left");
     setActive(_);
   }, []);
 
-  if (messages === null || messages.length === 0) {
+  const filteredMessages = useMemo(() => {
+    if (!messages) return [];
+
+    const filter: number[] = [];
+    Object.values(filters).forEach((_, idx) => {
+      if (_) filter.push(idx);
+    });
+
+    if (filter.length === 0 || filter.length === 4) return messages.status;
+    return messages.status.filter((_) => filter.includes(_.level));
+  }, [messages, filters]);
+
+  if (messages === null || messages === undefined) {
     return (
       <div className={styles.offline}>
         <Typography>No current data</Typography>
@@ -77,12 +90,16 @@ export const Table: FC<ITableProps> = ({ messages, config }) => {
       <div className={styles.table}>
         <MessageTable
           handleSetActive={handleSetActive}
-          messages={messages}
+          messages={filteredMessages}
           active={active}
         />
         <DiagnosticsTable active={active} diagnosticsDetails={activeValues} />
-        {messages.length === 0 && <LoadingIndicator />}
+        {messages.status.length === 0 && <LoadingIndicator />}
       </div>
     </>
   );
 };
+
+const NamesTable = styled.div`
+  display: flex;
+`;

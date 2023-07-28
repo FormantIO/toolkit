@@ -2,6 +2,7 @@ import { Icon, Typography } from "@formant/ui-sdk";
 import { FC } from "react";
 import styles from "./index.module.scss";
 import { SeverityLevel } from "../../types/types";
+import styled from "@emotion/styled";
 interface IMesageRowProps {
   message: string;
   active: string | null;

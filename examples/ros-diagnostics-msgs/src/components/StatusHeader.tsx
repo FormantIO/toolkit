@@ -94,9 +94,7 @@ export const StatusHeader: FC<IStatusHeaderProps> = ({
         }}
       >
         <Icon name="critical" />
-        <Typography sx={{ color: "white", marginLeft: 0.5 }}>
-          Critical
-        </Typography>
+        <Typography sx={{ color: "white", marginLeft: 0.5 }}>Error</Typography>
       </Box>
       <Box
         onClick={() => handleFilter("stale")}

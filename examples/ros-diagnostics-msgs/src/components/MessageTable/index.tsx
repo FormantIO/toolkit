@@ -1,10 +1,11 @@
 import { MessageRow } from "../MessageRow";
-import { DiagnosticStatusMessage } from "../../types/types";
+import { DiagnosticStatusMessage, IStatus } from "../../types/types";
 import { FC } from "react";
 import styles from "./index.module.scss";
+import styled from "@emotion/styled";
 
 interface IMessageTable {
-  messages: DiagnosticStatusMessage[];
+  messages: IStatus[];
   active: string | null;
   handleSetActive: (_: string) => void;
 }
@@ -22,16 +23,23 @@ export const MessageTable: FC<IMessageTable> = ({
       }}
     >
       {messages.map((_) => (
+        // <Row>
+        //   {_.name}
+        // </Row>
         <MessageRow
-          key={_.status[0].name}
-          level={_.status[0].level}
+          key={_.name}
+          level={_.level}
           active={active}
           setActive={() => {
-            handleSetActive(_.status[0].name);
+            handleSetActive(_.name);
           }}
-          message={_.status[0].name}
+          message={_.name}
         />
       ))}
     </div>
   );
 };
+
+const Row = styled.div`
+  height: 40px;
+`;
