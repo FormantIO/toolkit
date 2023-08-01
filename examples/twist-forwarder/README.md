@@ -12,5 +12,12 @@ Please install:
 
 ```
 sudo apt-get install ros-DISTRO-rosbridge-suite
-sudo apt-get install ros-DISTRO-web-video-server
+```
+Then run, in separate terminals
+```
+#terminal 1:
+roslaunch rosbridge_server rosbridge_websocket.launch
+#terminal 2:
+yarn
+yarn dev
 ```
