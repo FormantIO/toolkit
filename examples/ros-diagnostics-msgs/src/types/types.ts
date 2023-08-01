@@ -4,15 +4,15 @@ export interface DiagnosticStatusMessage {
     seq: number;
     stamp: { secs: number; nsecs: number };
   };
-  status: [
-    {
-      hardware_id: string;
-      level: number;
-      message: string;
-      name: string;
-      values: KeyValue[];
-    }
-  ];
+  status: IStatus[];
+}
+
+export interface IStatus {
+  hardware_id: string;
+  level: number;
+  message: string;
+  name: string;
+  values: KeyValue[];
 }
 
 export interface KeyValue {

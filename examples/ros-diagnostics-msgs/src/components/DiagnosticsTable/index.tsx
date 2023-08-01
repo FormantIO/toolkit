@@ -13,18 +13,19 @@ export const DiagnosticsTable: FC<IDiagnosticsTableProps> = ({
   active,
 }) => {
   const handleBack = () => {
-    const table = document.getElementById("diagnostics-table");
-    table?.classList.remove("slide-out-left");
-    table?.classList.add("slide-out-right");
+    const table = document.getElementById("diagnostics-table")!;
+    table.classList.remove("slide-out-left");
+    table.classList.add("slide-out-right");
+    table.style.visibility = "hidden";
   };
 
-  return !!diagnosticsDetails && diagnosticsDetails.length > 0 ? (
+  return (
     <div id="diagnostics-table" className={styles["diagnostic-table"]}>
       <div className={styles["diagnostic-table-header"]}>
         <IconButton onClick={handleBack} />
         <Typography sx={{ color: "white" }}>{active}</Typography>
       </div>
-      {diagnosticsDetails.map((_) => {
+      {diagnosticsDetails?.map((_) => {
         return (
           <div key={_.key} className={styles["diagnostic-table-row"]}>
             <Typography
@@ -43,5 +44,5 @@ export const DiagnosticsTable: FC<IDiagnosticsTableProps> = ({
         );
       })}
     </div>
-  ) : null;
+  );
 };

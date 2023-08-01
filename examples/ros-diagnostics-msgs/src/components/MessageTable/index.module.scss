@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   background-color: $messages-bg;
-  height: calc(100vh - 60px);
+  // height: calc(100vh - 60px);
+  height: auto;
   min-width: 500px;
   @include sm {
     width: 100vw;

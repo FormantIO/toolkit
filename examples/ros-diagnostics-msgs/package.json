@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formant/data-sdk": "^0.0.133",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@formant/data-sdk": "^1.10.0",
     "@formant/ui-sdk": "^0.0.44",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",
@@ -23,6 +25,6 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
     "typescript": "^4.6.4",
-    "vite": "^3.0.7"
+    "vite":"^4.3.9"
   }
 }

@@ -6,6 +6,7 @@ import { LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { dummyData } from "./util";
 import { IConfiguration } from "./types/types";
 import { useEffect, useMemo } from "react";
+import { data } from "./data";
 
 function App() {
   const context = useFormant();
@@ -13,12 +14,11 @@ function App() {
   const diagnostics = useModuleDataListener();
   const messages = useFetchDiagnostics(diagnostics);
 
-  const handleConfiguration =
-    config.stream?.length > 1 ? messages : [dummyData];
+  const handleConfiguration = config.stream?.length > 1 ? messages : dummyData;
 
   return (
     <div className="App">
-      <Table messages={handleConfiguration} config={config} />
+      <Table messages={handleConfiguration} />
     </div>
   );
 }
