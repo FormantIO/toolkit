@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://formant.io/toolkit/examples/twist-forwarder/schema.json",
+  "title": "Twist Forwarder",
+  "description": "Connect to a local ROS twist and forward it over the Formant realtime channel.",
+  "type": "object",
+  "properties": {
+    "localTwistTopic": {
+      "type": "string",
+      "description": "The topic of the local Twist"
+    },
+    "formantTwistStream": {
+      "type": "string",
+      "description": "The stream name of the Formant Twist"
+    }
+  }
+}
