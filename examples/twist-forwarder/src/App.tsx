@@ -61,6 +61,12 @@ function App() {
             JSON.stringify(message)
         );
         setData(message);
+        // created should be in miliseconds
+        const created = Math.round(
+          (message.header.stamp.secs * 1000000000 +
+            message.header.stamp.nsecs) /
+            1000000
+        );
         device.sendRealtimeMessage({
           header: {
             stream: {
@@ -68,8 +74,7 @@ function App() {
               streamName: formantTwistStream,
               streamType: "twist",
             },
-            created:
-              message.header.stamp.secs * 1000 + message.header.stamp.nsecs,
+            created,
           },
           payload: {
             twist: message.twist,
