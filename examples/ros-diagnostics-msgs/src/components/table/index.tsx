@@ -86,8 +86,12 @@ export const Table: FC<ITableProps> = ({ messages }) => {
 
   return (
     <>
-      <StatusHeader filters={filters} handleFilter={handleFilter} />
-      <div className={styles.table}>
+      <StatusHeader
+        messages={messages}
+        filters={filters}
+        handleFilter={handleFilter}
+      />
+      <Container>
         <MessageTable
           handleSetActive={handleSetActive}
           messages={filteredMessages}
@@ -95,11 +99,15 @@ export const Table: FC<ITableProps> = ({ messages }) => {
         />
         <DiagnosticsTable active={active} diagnosticsDetails={activeValues} />
         {messages.status.length === 0 && <LoadingIndicator />}
-      </div>
+      </Container>
     </>
   );
 };
 
 const NamesTable = styled.div`
+  display: flex;
+`;
+
+const Container = styled.div`
   display: flex;
 `;
