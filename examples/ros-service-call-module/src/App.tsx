@@ -25,6 +25,12 @@ const getServices = async (latestTelemetry: any): Promise<Services> => {
   if (!newTelp[0]) return {};
   if (!newTelp[0].currentValue) return {};
 
+  // check if currentValue is a url or json
+  if (newTelp[0].currentValue.startsWith("http")) {
+    const response = await fetch(newTelp[0].currentValue);
+    return response.json();
+  }
+
   return JSON.parse(newTelp[0].currentValue);
 };
 
