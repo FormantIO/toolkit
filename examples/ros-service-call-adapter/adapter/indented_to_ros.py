@@ -37,6 +37,8 @@ class IndentedJsonToRosJson:
             # Signifies the end of the request part of a ROS message
             if "---" in param["name"]:
                 break
+            if "=" in param["name"]:
+                continue
             self._ros_format.append(self._convert_type(param))
 
     def _convert_type(self, type_obj, parent_name=""):
