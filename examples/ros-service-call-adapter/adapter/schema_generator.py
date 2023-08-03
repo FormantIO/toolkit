@@ -1,7 +1,7 @@
 def ROS_to_json_schema_type_conversion(intype: str):
     """Convert a ROS type to it's corresponding python type."""
     mapping = {
-        "bool": "bool",
+        "bool": "boolean",
         "int8": "integer",
         "uint8": "integer",
         "int16": "integer",

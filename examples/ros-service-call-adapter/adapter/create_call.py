@@ -67,6 +67,18 @@ class CallCreator:
         if obj["type"] == "string":
             return input(f"Please enter a value for parameter '{obj['title']}': ")
 
+        if obj["type"] == "integer":
+            return int(input(f"Please enter an integer for parameter '{obj['title']}': "))
+        
+        if obj["type"] == "boolean":
+            i = input(f"Please enter a boolean ('true' or 'false') for parameter '{obj['title']}': ")
+            if i.lower() == "true":
+                return True
+            elif i.lower() == "false":
+                return False
+            else:
+                return False
+
     def _parse_array(self, obj):
         if obj["items"]["type"] == "string":
             t = "values"
@@ -83,7 +95,7 @@ class CallCreator:
 
     @staticmethod
     def is_primitive(desc):
-        if desc["type"] in {"string", "number", "integer"}:
+        if desc["type"] in {"string", "number", "integer", "boolean"}:
             return True
         return False
     
