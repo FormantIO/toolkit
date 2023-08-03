@@ -15,5 +15,4 @@ class Adapter:
     def start(self):
         while(not rospy.is_shutdown()):
             time.sleep(1)
-        self.shutdown()
 
