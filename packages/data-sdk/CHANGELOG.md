@@ -1,3 +1,9 @@
+## [1.11.0] = 2023-08-07
+
+### Added
+
+- Add getAllEventTriggerGroup, getEventTriggerGroup, and patchEventTriggerGroup
+
 ## [1.10.0] - 2023-07-25
 
 ### Upgrade
@@ -209,6 +215,7 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.11.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.10.0...release/data-sdk/1.11.0~
 [1.10.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.9.0...release/data-sdk/1.10.0~
 [1.9.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~
 [1.8.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~
