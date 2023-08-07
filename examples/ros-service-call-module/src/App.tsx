@@ -20,9 +20,18 @@ const getServices = async (latestTelemetry: any): Promise<Services> => {
   const newTelp = latestTelemetry.filter(
     (stream: any) => stream.streamName === "ros.services.json"
   );
-  const newServices = await fetch(newTelp[0].currentValue);
-  const jsonResponse = await fetch(newServices.url);
-  return await jsonResponse.json();
+
+  if (!newTelp) return {};
+  if (!newTelp[0]) return {};
+  if (!newTelp[0].currentValue) return {};
+
+  // check if currentValue is a url or json
+  if (newTelp[0].currentValue.startsWith("http")) {
+    const response = await fetch(newTelp[0].currentValue);
+    return response.json();
+  }
+
+  return JSON.parse(newTelp[0].currentValue);
 };
 
 const App: FC = () => {
