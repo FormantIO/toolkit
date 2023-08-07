@@ -110,4 +110,5 @@ const NamesTable = styled.div`
 
 const Container = styled.div`
   display: flex;
+  max-height: calc(100vh - 60px)
 `;

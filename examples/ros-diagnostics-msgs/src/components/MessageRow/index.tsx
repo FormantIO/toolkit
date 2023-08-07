@@ -17,7 +17,7 @@ export const MessageRow: FC<IMesageRowProps> = ({
   level,
 }) => {
   return (
-    <div className={styles["message-row"]} onClick={setActive}>
+    <Row onClick={setActive}>
       <div
         className={`${styles["inner-message"]} ${
           active === message ? styles["inner-message-active"] : ""
@@ -48,6 +48,24 @@ export const MessageRow: FC<IMesageRowProps> = ({
           <Icon name="chevron-right" />
         </div>
       </div>
-    </div>
+    </Row>
   );
 };
+
+const Row = styled.button`
+  all: unset;
+  box-sizing: border-box;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0;
+  width: auto;
+  min-width: 400px;
+  justify-content: space-between;
+  &:hover {
+    cursor: pointer;
+  }
+  p {
+    margin-left: 8px;
+  }
+`;

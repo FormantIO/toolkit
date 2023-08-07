@@ -1,8 +1,8 @@
 import { MessageRow } from "../MessageRow";
-import { DiagnosticStatusMessage, IStatus } from "../../types/types";
+import { IStatus } from "../../types/types";
 import { FC } from "react";
-import styles from "./index.module.scss";
 import styled from "@emotion/styled";
+import { mediaQueries } from "../../styles/breakpoints";
 
 interface IMessageTable {
   messages: IStatus[];
@@ -16,16 +16,12 @@ export const MessageTable: FC<IMessageTable> = ({
   handleSetActive,
 }) => {
   return (
-    <div
-      className={styles["message-table"]}
+    <Container
       style={{
         minWidth: active === null ? "100%" : 500,
       }}
     >
       {messages.map((_) => (
-        // <Row>
-        //   {_.name}
-        // </Row>
         <MessageRow
           key={_.name}
           level={_.level}
@@ -36,10 +32,16 @@ export const MessageTable: FC<IMessageTable> = ({
           message={_.name}
         />
       ))}
-    </div>
+    </Container>
   );
 };
 
-const Row = styled.div`
-  height: 40px;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #282f45;
+  min-width: 500px;
+  ${mediaQueries.small} {
+    width: 100vw;
+  }
 `;
