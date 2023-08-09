@@ -21,17 +21,19 @@ export const MessageTable: FC<IMessageTable> = ({
         minWidth: active === null ? "100%" : 500,
       }}
     >
-      {messages.map((_) => (
-        <MessageRow
-          key={_.name}
-          level={_.level}
-          active={active}
-          setActive={() => {
-            handleSetActive(_.name);
-          }}
-          message={_.name}
-        />
-      ))}
+      {messages
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((_) => (
+          <MessageRow
+            key={_.name}
+            level={_.level}
+            active={active}
+            setActive={() => {
+              handleSetActive(_.name);
+            }}
+            message={_.name}
+          />
+        ))}
     </Container>
   );
 };
@@ -41,6 +43,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #282f45;
   min-width: 500px;
+  overflow: auto;
   ${mediaQueries.small} {
     width: 100vw;
   }

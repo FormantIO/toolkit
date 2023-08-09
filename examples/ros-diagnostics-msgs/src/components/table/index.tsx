@@ -85,7 +85,7 @@ export const Table: FC<ITableProps> = ({ messages }) => {
   }
 
   return (
-    <>
+    <Main>
       <StatusHeader
         messages={messages}
         filters={filters}
@@ -100,15 +100,15 @@ export const Table: FC<ITableProps> = ({ messages }) => {
         <DiagnosticsTable active={active} diagnosticsDetails={activeValues} />
         {messages.status.length === 0 && <LoadingIndicator />}
       </Container>
-    </>
+    </Main>
   );
 };
 
-const NamesTable = styled.div`
-  display: flex;
+const Main = styled.div`
+  height: 100vh;
 `;
 
 const Container = styled.div`
   display: flex;
-  max-height: calc(100vh - 60px)
+  max-height: calc(100vh - 60px);
 `;

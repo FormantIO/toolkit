@@ -1,8 +1,10 @@
-import { Typography } from "@formant/ui-sdk";
+import { Typography, Tooltip } from "@formant/ui-sdk";
 import { FC } from "react";
-import styles from "./index.module.scss";
 import { IconButton } from "../IconButton";
 import "../../index.css";
+
+import styled from "@emotion/styled";
+import { mediaQueries } from "../../styles/breakpoints";
 interface IDiagnosticsTableProps {
   diagnosticsDetails: any[] | null;
   active: string | null;
@@ -20,29 +22,94 @@ export const DiagnosticsTable: FC<IDiagnosticsTableProps> = ({
   };
 
   return (
-    <div id="diagnostics-table" className={styles["diagnostic-table"]}>
-      <div className={styles["diagnostic-table-header"]}>
+    <Container id="diagnostics-table">
+      <Header>
         <IconButton onClick={handleBack} />
         <Typography sx={{ color: "white" }}>{active}</Typography>
-      </div>
-      {diagnosticsDetails?.map((_) => {
-        return (
-          <div key={_.key} className={styles["diagnostic-table-row"]}>
-            <Typography
-              sx={{
-                minWidth: "400px",
-                padding: 1,
-                color: "white",
-              }}
-            >
-              {_.key}
-            </Typography>
-            <Typography sx={{ padding: 1, color: "white" }}>
-              {_.value}
-            </Typography>
-          </div>
-        );
-      })}
-    </div>
+      </Header>
+      {diagnosticsDetails
+        ?.sort((a, b) => a.key.localeCompare(b.key))
+        .map((_) => {
+          return (
+            <Row key={_.key}>
+              <Tooltip title={_.key}>
+                <Key>{_.key}</Key>
+              </Tooltip>
+              <Tooltip title={_.value}>
+                <Value>{_.value}</Value>
+              </Tooltip>
+            </Row>
+          );
+        })}
+    </Container>
   );
 };
+
+const Key = styled.p`
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 1.688rem;
+  letter-spacing: 0.063rem;
+  font-feature-settings: "zero" on;
+  color: white;
+  padding: 8px;
+  white-space: nowrap;
+  min-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 290px;
+  white-space: nowrap;
+  max-width: 141px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const Value = styled.p`
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 1.688rem;
+  letter-spacing: 0.063rem;
+  font-feature-settings: "zero" on;
+  color: white;
+  padding: 8px;
+  white-space: nowrap;
+  max-width: 141px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const Row = styled.div`
+  display: flex;
+  border-bottom: 1px solid black;
+  align-items: center;
+  height: 56px;
+`;
+
+const Header = styled.header`
+  background-color: #2d3855;
+  height: 56px;
+  border-bottom: 1px solid black;
+  align-items: center;
+  padding-left: 10px;
+  display: none;
+  ${mediaQueries.small} {
+    display: flex;
+  }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  border-top: 1px solid black;
+  visibility: hidden;
+  overflow: auto;
+  ${mediaQueries.small} {
+    position: fixed;
+    top: 0;
+    background-color: #282f45;
+    height: 100%;
+  }
+`;
