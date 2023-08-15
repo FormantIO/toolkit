@@ -26,9 +26,9 @@ export const DoughnutChart: FC<IChartProps> = ({
   tooltipUnits,
 }) => {
   const chartRef = useRef<ChartJS>(null);
-  const [_containerId] = useState(crypto.randomUUID());
-  const [_labelId] = useState(crypto.randomUUID());
-  const [_valueId] = useState(crypto.randomUUID());
+  const [_containerId] = useState(Math.random().toString(36));
+  const [_labelId] = useState(Math.random().toString(36));
+  const [_valueId] = useState(Math.random().toString(36));
   const [chartData, setChartData] = useState<ChartData<"doughnut">>({
     datasets: [],
   });
