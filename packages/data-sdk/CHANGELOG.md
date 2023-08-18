@@ -1,3 +1,10 @@
+## [1.12.0] - 2023-08-07
+
+### Upgrade
+
+- Added support for `HEADLESS` session types in RtcClientPool. 
+- Upgrade `@formant/realtime-sdk` to 1.2.0. 
+
 ## [1.11.1] - 2023-08-07
 
 ### Added
@@ -222,6 +229,7 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.11.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.1...release/data-sdk/1.12.0~
 [1.11.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.0...release/data-sdk/1.11.1~
 [1.11.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.10.0...release/data-sdk/1.11.0~
 [1.10.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.9.0...release/data-sdk/1.10.0~
