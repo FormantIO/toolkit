@@ -2,6 +2,7 @@ import {
   IRtcSendConfiguration,
   IRtcStreamMessage,
   RtcClient,
+  IRtcPeer,
 } from "@formant/realtime-sdk";
 import { DataChannel } from "../DataChannel";
 import { EventEmitter } from "eventemitter3";
@@ -11,7 +12,6 @@ import {
   TextRequestDataChannel,
 } from "../RequestDataChannel";
 import { defined } from "../../../common/defined";
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { IRealtimeSubscriber } from "./IRealtimeSubscriber";
 import { ICustomDataChannelCreator } from "./ICustomDataChannelCreator";
 import {

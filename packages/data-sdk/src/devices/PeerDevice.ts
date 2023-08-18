@@ -1,7 +1,6 @@
-import { RtcClient } from "@formant/realtime-sdk";
+import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
 import { delay } from "../../../common/delay";
 import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
 import { ConfigurationDocument } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
 

@@ -1,5 +1,4 @@
-import { RtcClient } from "@formant/realtime-sdk";
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
 import { getRtcClientPool } from "../AppRtcClientPools";
 import { Authentication } from "../Authentication";
 import { CaptureStream } from "../CaptureStream";
