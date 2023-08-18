@@ -1,4 +1,4 @@
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+import { IRtcPeer } from "@formant/realtime-sdk";
 
 import { Authentication } from "../Authentication";
 import { defaultRtcClientPool } from "../AppRtcClientPools";

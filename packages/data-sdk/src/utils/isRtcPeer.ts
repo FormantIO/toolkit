@@ -1,4 +1,4 @@
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+import { IRtcPeer } from "@formant/realtime-sdk";
 
 export const isRtcPeer = (peer: IRtcPeer | undefined): peer is IRtcPeer =>
   peer !== undefined &&

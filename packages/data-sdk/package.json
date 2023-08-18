@@ -46,7 +46,7 @@
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {
-    "@formant/realtime-sdk": "1.0.0",
+    "@formant/realtime-sdk": "1.2.0",
     "@types/base-64": "^1.0.0",
     "@types/node": "^18.16.3",
     "@types/pako": "^2.0.0",
@@ -69,7 +69,7 @@
     "pako": "^2.1.0"
   },
   "peerDependencies": {
-    "@formant/realtime-sdk": "^0.0.20 || ^1.0.0"
+    "@formant/realtime-sdk": "^1.2.0"
   },
   "engines": {
     "node": "^18.12.0 || ^16.13.0"
