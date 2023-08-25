@@ -1,3 +1,9 @@
+## [1.13.1] - 2023-08-25
+
+### Fixed
+
+- Only resolve `Authentication.respondToNewPasswordRequiredChallenge` on `response.ok`.
+
 ## [1.13.0] - 2023-08-25
 
 ### Added
