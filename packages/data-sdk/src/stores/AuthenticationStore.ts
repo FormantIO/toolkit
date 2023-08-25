@@ -307,7 +307,12 @@ export class AuthenticationStore implements IAuthenticationStore {
         },
       }
     );
-    return await response.json();
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    throw new Error("respond-to-new-password-required-challenge failed");
   }
 
   async loginWithGoogle(token: string) {
