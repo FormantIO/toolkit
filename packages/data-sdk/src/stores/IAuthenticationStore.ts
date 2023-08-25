@@ -35,7 +35,7 @@ export interface IAuthenticationStore {
    */
   readonly isShareToken: boolean;
 
-  login(email: string, password: string): Promise<IAuthentication | Error>;
+  login(email: string, password: string): Promise<IAuthentication>;
 
   loginWithToken(token: string, refreshToken?: string): Promise<void>;
 
