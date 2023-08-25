@@ -1,3 +1,9 @@
+## [1.13.0] - 2023-08-25
+
+### Added
+
+- Enhance Authentication.login() method for _advanced_ login flows. 
+
 ## [1.12.0] - 2023-08-07
 
 ### Upgrade
@@ -229,6 +235,7 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.13.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.12.0...release/data-sdk/1.13.0~
 [1.12.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.1...release/data-sdk/1.12.0~
 [1.11.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.0...release/data-sdk/1.11.1~
 [1.11.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.10.0...release/data-sdk/1.11.0~
