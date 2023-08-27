@@ -1,11 +1,6 @@
 import { decode } from "base-64";
 
-import {
-  IAuthentication,
-  IAuthenticationStore,
-  IConfirmForgotPasswordRequest,
-  IRespondToNewPasswordRequiredChallengeRequest,
-} from "./IAuthenticationStore";
+import { IAuthenticationStore } from "./IAuthenticationStore";
 import { AuthenticationResult } from "./AuthenticationResult";
 import {
   LoginFailureError,
@@ -13,6 +8,9 @@ import {
 } from "./AuthenticationErrors";
 
 import { IUser } from "../model/IUser";
+import { IAuthentication } from "./IAuthentication";
+import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
+import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
 
 interface IAuthenticationStoreOptions {
   apiUrl: string;

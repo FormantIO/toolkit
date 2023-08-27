@@ -1,5 +1,5 @@
-import { IAuthentication } from "./IAuthenticationStore";
 import { IChallenge } from "../model/IChallenge";
+import { IAuthentication } from "./IAuthentication";
 
 export interface AuthSuccessResult {
   result: "success";
