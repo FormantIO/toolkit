@@ -1,3 +1,9 @@
+## [1.13.2] - 2023-08-27
+
+### Fixed
+
+- Fix IAuthenticationStore types for login() method.
+
 ## [1.13.1] - 2023-08-25
 
 ### Fixed
@@ -241,6 +247,8 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.13.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.13.2~
+[1.13.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.0...release/data-sdk/1.13.1~
 [1.13.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.12.0...release/data-sdk/1.13.0~
 [1.12.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.1...release/data-sdk/1.12.0~
 [1.11.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.0...release/data-sdk/1.11.1~
