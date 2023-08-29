@@ -76,7 +76,7 @@ export class Account {
         Authorization: "Bearer " + Authentication.token,
       },
     });
-    if (result.ok) {
+    if (!result.ok) {
       throw new Error("Unable to delete account");
     }
   }
