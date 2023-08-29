@@ -69,13 +69,16 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    await fetch(`${FORMANT_API_URL}/v1/admin/accounts/${id}`, {
+    const result = await fetch(`${FORMANT_API_URL}/v1/admin/accounts/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + Authentication.token,
       },
     });
+    if (result.ok) {
+      throw new Error("Unable to delete account");
+    }
   }
 
   static async getAccountTree(id: string): Promise<IAccountTree> {
