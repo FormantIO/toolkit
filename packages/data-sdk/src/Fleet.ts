@@ -40,6 +40,9 @@ import { queryDevices } from "./api/queryDevices";
 import { queryEvents } from "./api/queryEvents";
 import { queryTelemetry } from "./api/queryTelemetry";
 import { createFleet } from "./api/createFleet";
+import { getAllEventTriggerGroup } from "./api/getAllEventTriggerGroup";
+import { getEventTriggerGroup } from "./api/getEventTriggerGroup";
+import { patchEventTriggerGroup } from "./api/patchEventTriggerGroup";
 
 export class Fleet {
   static defaultDeviceId: string | undefined;
@@ -132,4 +135,7 @@ export class Fleet {
   static queryDevices = queryDevices;
   static queryEvents = queryEvents;
   static queryTelemetry = queryTelemetry;
+  static getAllEventTriggerGroup = getAllEventTriggerGroup;
+  static getEventTriggerGroup = getEventTriggerGroup;
+  static patchEventTriggergroup = patchEventTriggerGroup;
 }

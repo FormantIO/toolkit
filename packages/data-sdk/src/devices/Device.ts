@@ -1,5 +1,4 @@
-import { RtcClient } from "@formant/realtime-sdk";
-import { IRtcPeer } from "@formant/realtime-sdk/dist/model/IRtcPeer";
+import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
 import { getRtcClientPool } from "../AppRtcClientPools";
 import { Authentication } from "../Authentication";
 import { CaptureStream } from "../CaptureStream";
@@ -69,7 +68,17 @@ export class Device extends BaseDevice {
     return telemetry.items;
   }
 
-  async getConfiguration(): Promise<ConfigurationDocument> {
+  /**
+   * Asynchronously retrieves the configuration document for a device.
+   *
+   * @param {boolean} getDesiredConfigurationVersion - Whether to retrieve the desired configuration version
+   * @returns {Promise<ConfigurationDocument>} A promise that resolves to the configuration document
+   * @throws {Error} Throws an error if the device has no configuration or has never been turned on
+   */
+
+  async getConfiguration(
+    getDesiredConfigurationVersion: boolean = false
+  ): Promise<ConfigurationDocument> {
     let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
       method: "GET",
       headers: {
@@ -83,7 +92,10 @@ export class Device extends BaseDevice {
         "Device has no configuration, has it ever been turned on?"
       );
     }
-    const version = device.state.reportedConfiguration.version;
+
+    const version = getDesiredConfigurationVersion
+      ? device.desiredConfigurationVersion
+      : device.state.reportedConfiguration.version;
     result = await fetch(
       `${FORMANT_API_URL}/v1/admin/devices/${this.id}/configurations/${version}`,
       {

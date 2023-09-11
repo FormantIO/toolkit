@@ -1,12 +1,17 @@
 import { decode } from "base-64";
 
+import { IAuthenticationStore } from "./IAuthenticationStore";
+import { AuthenticationResult } from "./AuthenticationResult";
 import {
-  IAuthentication,
-  IAuthenticationStore,
-  IConfirmForgotPasswordRequest,
-  IRespondToNewPasswordRequiredChallengeRequest,
-} from "./IAuthenticationStore";
+  LoginFailureError,
+  LoginChallengedError,
+} from "./AuthenticationErrors";
+
 import { IUser } from "../model/IUser";
+import { IAuthentication } from "./IAuthentication";
+import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
+import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
+
 interface IAuthenticationStoreOptions {
   apiUrl: string;
 
@@ -72,10 +77,19 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._isShareToken;
   }
 
+  login(email: string, password: string): Promise<IAuthentication>;
+  login(
+    email: string,
+    password: string,
+    options: { advanced: true }
+  ): Promise<AuthenticationResult>;
   async login(
     email: string,
-    password: string
-  ): Promise<IAuthentication | Error> {
+    password: string,
+    options: { advanced?: boolean } = {}
+  ): Promise<IAuthentication | AuthenticationResult> {
+    const { advanced = false } = options;
+
     try {
       const result = await fetch(`${this._apiUrl}/v1/admin/auth/login`, {
         method: "POST",
@@ -84,22 +98,56 @@ export class AuthenticationStore implements IAuthenticationStore {
           "Content-Type": "application/json",
         },
       });
+
       const auth = await result.json();
       if (result.status !== 200) {
-        throw new Error(auth.message);
+        throw new LoginFailureError(auth.message);
       }
+
+      if ("challenge" in auth) {
+        throw new LoginChallengedError(auth.challenge);
+      }
+
+      const { authentication } = auth;
       await this.loginWithToken(
-        auth.authentication.accessToken as string,
-        auth.authentication.refreshToken as string
+        authentication.accessToken as string,
+        authentication.refreshToken as string
       );
 
-      return auth.authentication;
+      return !advanced
+        ? authentication
+        : {
+            result: "success",
+            authentication,
+          };
     } catch (err: unknown) {
-      console.error("login() failed", { err });
+      if (!advanced) {
+        console.error("login() failed", { err });
+      }
+
       this._waitingForAuth.forEach((_) => _(false));
       this._waitingForAuth.clear();
 
-      return Promise.reject(err);
+      if (!advanced) {
+        throw err;
+      }
+
+      if (err instanceof LoginChallengedError) {
+        return {
+          result: "challenged",
+          challenge: err.challenge,
+        };
+      }
+
+      return {
+        result: "failure",
+        reason:
+          err instanceof LoginFailureError
+            ? err.reason
+            : err instanceof Error
+            ? err.message
+            : String(err),
+      };
     }
   }
 
@@ -257,7 +305,12 @@ export class AuthenticationStore implements IAuthenticationStore {
         },
       }
     );
-    return await response.json();
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    throw new Error("respond-to-new-password-required-challenge failed");
   }
 
   async loginWithGoogle(token: string) {

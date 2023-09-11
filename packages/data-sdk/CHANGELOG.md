@@ -1,3 +1,47 @@
+## [1.14.0] - 2023-09-06
+
+### Added 
+
+- Add parameter to query desire configuration vs reported configuration (#132)
+
+## [1.13.2] - 2023-08-27
+
+### Fixed
+
+- Fix IAuthenticationStore types for login() method.
+
+## [1.13.1] - 2023-08-25
+
+### Fixed
+
+- Only resolve `Authentication.respondToNewPasswordRequiredChallenge` on `response.ok`.
+
+## [1.13.0] - 2023-08-25
+
+### Added
+
+- Enhance Authentication.login() method for _advanced_ login flows. 
+
+## [1.12.0] - 2023-08-07
+
+### Upgrade
+
+- Added support for `HEADLESS` session types in RtcClientPool. 
+- Upgrade `@formant/realtime-sdk` to 1.2.0. 
+
+## [1.11.1] - 2023-08-07
+
+### Added
+
+- Added right files
+
+
+## [1.11.0] - 2023-08-07
+
+### Added
+
+- Add getAllEventTriggerGroup, getEventTriggerGroup, and patchEventTriggerGroup
+
 ## [1.10.0] - 2023-07-25
 
 ### Upgrade
@@ -209,6 +253,13 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.14.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.14.0~
+[1.13.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.13.2~
+[1.13.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.0...release/data-sdk/1.13.1~
+[1.13.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.12.0...release/data-sdk/1.13.0~
+[1.12.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.1...release/data-sdk/1.12.0~
+[1.11.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.11.0...release/data-sdk/1.11.1~
+[1.11.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.10.0...release/data-sdk/1.11.0~
 [1.10.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.9.0...release/data-sdk/1.10.0~
 [1.9.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.8.0...release/data-sdk/1.9.0~
 [1.8.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.7.0...release/data-sdk/1.8.0~

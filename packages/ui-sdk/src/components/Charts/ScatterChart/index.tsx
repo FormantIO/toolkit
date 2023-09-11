@@ -30,9 +30,9 @@ export const ScatterChart: React.FC<IScatterChartProps> = ({
   yMin,
   customTooltip,
 }) => {
-  const [_containerId] = useState(crypto.randomUUID());
-  const [_labelId] = useState(crypto.randomUUID());
-  const [_valueId] = useState(crypto.randomUUID());
+  const [_containerId] = useState(Math.random().toString(36));
+  const [_labelId] = useState(Math.random().toString(36));
+  const [_valueId] = useState(Math.random().toString(36));
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<"scatter">>({
     datasets: [],

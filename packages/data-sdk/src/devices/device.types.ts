@@ -1,8 +1,7 @@
-import { IRtcStreamPayload } from "@formant/realtime-sdk";
+import { IRtcStreamPayload, RtcStreamType } from "@formant/realtime-sdk";
 import { ITags } from "../model/ITags";
 import { Uuid } from "../model/Uuid";
 import { SessionType } from "../model/SessionType";
-import { RtcStreamType } from "@formant/realtime-sdk/dist/model/RtcStreamType";
 
 export interface ConfigurationDocument {
   tags: ITags;

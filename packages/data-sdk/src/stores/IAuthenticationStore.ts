@@ -1,23 +1,8 @@
 import { IUser } from "../model/IUser";
-
-export interface IAuthentication {
-  accessToken: string;
-  organizationId: string;
-  refreshToken: string;
-  userId: string;
-}
-
-export interface IConfirmForgotPasswordRequest {
-  email: string;
-  confirmationCode: string;
-  newPassword: string;
-}
-
-export interface IRespondToNewPasswordRequiredChallengeRequest {
-  userId: string;
-  session: string;
-  newPassword: string;
-}
+import { AuthenticationResult } from "./AuthenticationResult";
+import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
+import { IAuthentication } from "./IAuthentication";
+import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
 
 export interface IAuthenticationStore {
   readonly token: string | undefined;
@@ -35,7 +20,12 @@ export interface IAuthenticationStore {
    */
   readonly isShareToken: boolean;
 
-  login(email: string, password: string): Promise<IAuthentication | Error>;
+  login(email: string, password: string): Promise<IAuthentication>;
+  login(
+    email: string,
+    password: string,
+    options: { advanced: true }
+  ): Promise<AuthenticationResult>;
 
   loginWithToken(token: string, refreshToken?: string): Promise<void>;
 

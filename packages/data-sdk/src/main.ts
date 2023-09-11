@@ -186,5 +186,8 @@ export * from "./model/IUser";
 export * from "./utils/timeout";
 
 export type { TelemetryResult } from "./model/TelemetryResult";
+export type { IAuthentication } from "./stores/IAuthentication";
+export type { IConfirmForgotPasswordRequest } from "./stores/IConfirmForgotPasswordRequest";
+export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRespondToNewPasswordRequiredChallengeRequest";
 
 import "./init.ts";

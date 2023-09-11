@@ -1,124 +1,108 @@
 import { Icon, Box, Typography } from "@formant/ui-sdk";
-import { FC } from "react";
-import styles from "./StatusHeader.module.scss";
+import { FC, useMemo } from "react";
 import { StatusFilter, SeverityLevel } from "../types/types";
+import styled from "@emotion/styled";
+import { DiagnosticStatusMessage } from "../types/types";
 
 interface IStatusHeaderProps {
   filters: StatusFilter;
   handleFilter: (_: SeverityLevel) => void;
+  messages: DiagnosticStatusMessage | null;
 }
-
 export const StatusHeader: FC<IStatusHeaderProps> = ({
   filters,
   handleFilter,
+  messages,
 }) => {
+  const messagesCount = useMemo(() => {
+    if (messages === null)
+      return {
+        ok: 0,
+        warning: 0,
+        stale: 0,
+        critical: 0,
+      };
+
+    return {
+      ok: messages.status.filter((_) => _.level === 0).length,
+      warning: messages.status.filter((_) => _.level === 1).length,
+      stale: messages.status.filter((_) => _.level === 3).length,
+      critical: messages.status.filter((_) => _.level === 2).length,
+    };
+  }, [messages]);
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        width: "100%",
-        height: 60,
-        alignItems: "center",
-        paddingLeft: 2,
-        paddingRight: 2,
-      }}
-    >
-      <Box
+    <Container>
+      <FilterButton
+        active={filters.ok}
         onClick={() => {
           handleFilter("ok");
         }}
-        className={styles.ok}
-        sx={{
-          width: 120,
-          marginRight: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingRight: 1,
-          paddingLeft: 1,
-          paddingTop: 0.5,
-          paddingBottom: 0.5,
-          borderRadius: 25,
-          backgroundColor: filters["ok"] ? "#677194" : "transparent",
-          display: "flex",
-          ": hover": {
-            cursor: "pointer",
-          },
-        }}
       >
         <Icon name="check" />
-        <Typography sx={{ color: "white" }}>OK</Typography>
-      </Box>
-      <Box
+        <Typography
+          sx={{ color: "white" }}
+        >{`OK ${messagesCount.ok}`}</Typography>
+      </FilterButton>
+      <FilterButton
+        active={filters.warning}
         onClick={() => handleFilter("warning")}
-        className={styles.warning}
-        sx={{
-          width: 120,
-          marginRight: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingRight: 1,
-          paddingLeft: 1,
-          paddingTop: 0.5,
-          paddingBottom: 0.5,
-          borderRadius: 25,
-          backgroundColor: filters["warning"] ? "#677194" : "transparent",
-          display: "flex",
-          ": hover": {
-            cursor: "pointer",
-          },
-        }}
       >
         <Icon name="warning" />
         <Typography sx={{ color: "white", marginLeft: 0.5 }}>
-          Warning
+          {`Warning ${messagesCount.warning}`}
         </Typography>
-      </Box>
-      <Box
+      </FilterButton>
+      <FilterButton
         onClick={() => handleFilter("critical")}
-        className={styles.error}
-        sx={{
-          width: 120,
-          marginRight: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingRight: 1,
-          paddingLeft: 1,
-          paddingTop: 0.5,
-          paddingBottom: 0.5,
-          borderRadius: 25,
-          backgroundColor: filters["critical"] ? "#677194" : "transparent",
-          display: "flex",
-          ": hover": {
-            cursor: "pointer",
-          },
-        }}
+        active={filters.critical}
       >
         <Icon name="critical" />
-        <Typography sx={{ color: "white", marginLeft: 0.5 }}>Error</Typography>
-      </Box>
-      <Box
+        <Typography
+          sx={{ color: "white", marginLeft: 0.5 }}
+        >{`Error ${messagesCount.critical}`}</Typography>
+      </FilterButton>
+      <FilterButton
         onClick={() => handleFilter("stale")}
-        className={styles.stale}
-        sx={{
-          width: 120,
-          marginRight: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingRight: 1,
-          paddingLeft: 1,
-          paddingTop: 0.5,
-          paddingBottom: 0.5,
-          borderRadius: 25,
-          backgroundColor: filters["stale"] ? "#677194" : "transparent",
-          display: "flex",
-          ": hover": {
-            cursor: "pointer",
-          },
-        }}
+        active={filters.stale}
       >
         {/* <Icon name="check" /> */}
-        <Typography sx={{ color: "white" }}>Stale</Typography>
-      </Box>
-    </Box>
+        <Typography
+          sx={{ color: "white" }}
+        >{`Stale ${messagesCount.stale}`}</Typography>
+      </FilterButton>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 60px;
+  align-items: center;
+  padding: 0 20px 0;
+  gap: 20px;
+`;
+
+interface IFilterButtonProps {
+  active: boolean;
+}
+
+const FilterButton = styled.button<IFilterButtonProps>`
+  all: unset;
+  min-width: 142px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 25px;
+  background-color: ${(props) => (props.active ? "#677194" : "transparent")};
+  display: flex;
+  border: 1px solid #677194;
+  &:hover {
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+    svg {
+      fill: white;
+    }
+  }
+`;

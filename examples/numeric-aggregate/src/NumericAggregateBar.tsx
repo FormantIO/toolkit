@@ -3,7 +3,7 @@ import {
   BarChart,
   useFormant,
   LoadingIndicator,
-  useScrubberTime,
+  useScrubberTime
 } from "@formant/ui-sdk";
 import * as dateFns from "date-fns";
 import { FC, useEffect, useMemo, useState } from "react";

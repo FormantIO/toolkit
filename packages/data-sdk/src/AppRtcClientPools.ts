@@ -50,6 +50,16 @@ const EnumRtcClientPools = {
         receive: receiveFn,
       }),
   }),
+  [SessionTypes.HEADLESS]: new RtcClientPool({
+    ttlMs: 2_500,
+    createClient: (receiveFn) =>
+      new RtcClient({
+        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        getToken,
+        sessionType: SessionTypes.HEADLESS,
+        receive: receiveFn,
+      }),
+  }),
 } as const;
 
 export const AppRtcClientPools = {
@@ -58,6 +68,7 @@ export const AppRtcClientPools = {
   teleop: EnumRtcClientPools[SessionTypes.TELEOP],
   portForward: EnumRtcClientPools[SessionTypes.PORT_FORWARD],
   observe: EnumRtcClientPools[SessionTypes.OBSERVE],
+  headless: EnumRtcClientPools[SessionTypes.HEADLESS],
 } as const;
 
 export const defaultRtcClientPool = EnumRtcClientPools[SessionTypes.TELEOP];
