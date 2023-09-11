@@ -1,0 +1,51 @@
+{
+    "title": "Ros Service Call Adapter Configuration",
+    "description": "Configuration for button toggle adapter.",
+    "type": "object",
+    "properties": {
+        "ros-button-mapping": {
+            "type": "array",
+            "title": "ROS Buttons",
+            "description": "Buttons that are configured to call a ros service",
+            "items": {
+                "title": "ROS Button",
+                "description": "ROS Button that is configured to call a ros service",
+                "type": "object",
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "title": "Button Topic",
+                        "description": "Topic to listening for button presses on"
+                    },
+                    "button-config": {
+                        "type": "string",
+                        "title": "ROS Service Configuration",
+                        "description": "Configuration for the ROS service to call"
+                    }
+                }
+            }
+        },
+        "api-button-mapping": {
+            "type": "array",
+            "title": "API Buttons",
+            "description": "API Buttons configured to call a ros service",
+            "items": {
+                "title": "API Button",
+                "description": "API Buttons configured to call a ros service",
+                "type": "object",
+                "properties": {
+                    "api_button_name": {
+                        "type": "string",
+                        "title": "API Button Name",
+                        "description": "Name of button"
+                    },
+                    "button-config": {
+                        "type": "string",
+                        "title": "ROS Service Configuration",
+                        "description": "Configuration for the ROS service to call"
+                    }
+                }
+            }
+        }
+    }
+}
