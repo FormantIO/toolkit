@@ -61,12 +61,17 @@ class Adapter:
 
         logger.info(f"ROS button press received from {topic}")        
 
+        if topic not in self._ros_button_map:
+            logger.info(f"ROS topic {topic} has no service mapping")
+            return
+
         service_json = json.dumps(self._ros_button_map.get(topic, {}))
 
         try:
             datum = parse(service_json) 
         except:
             logger.warn(f"Failed parsing json for service call mapped to ROS topic {topic}")
+            return
 
         service_name = datum[0]
         service_args = datum[1]
@@ -84,13 +89,14 @@ class Adapter:
 
         if button_name not in self._api_button_map:
             logger.info(f"Button {button_name} has not service mapping")
+            return
 
         service_json = json.dumps(self._api_button_map[button_name]) 
-        
         try:
             datum = parse(service_json) 
         except:
             logger.warn(f"Failed parsing json for service call mapped to API button {button_name}")
+            return
 
         service_name = datum[0]
         service_args = datum[1]
@@ -99,7 +105,6 @@ class Adapter:
 
     def _handle_command(self, data):
         """Handles an incoming formant command as specified in service-commands in config.json"""
-
         logger.info(
             f"New command received. Parsing and executing: {data.text}")
 
