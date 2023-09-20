@@ -69,7 +69,7 @@
     "react-device-detect": "^2.2.2"
   },
   "peerDependencies": {
-    "@formant/data-sdk": "^1.0.0",
+    "@formant/data-sdk": "^1.14.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   }

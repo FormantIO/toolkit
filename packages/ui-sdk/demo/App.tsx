@@ -38,6 +38,7 @@ import {
   Chart,
   RealtimeConnection,
   AuthPage,
+  StreamLoader,
 } from "../src/main";
 
 import { Card } from "../src/components/Charts/LineChart/Card";
@@ -47,82 +48,61 @@ import { ServiceParameters } from "../src/components/JsonSchemaForm/ServiceParam
 import { Authentication, Fleet, SessionType } from "@formant/data-sdk";
 import { randomUUID } from "crypto";
 import styled from "@emotion/styled";
+import { Sample } from "./Sample";
 
 function App() {
-  const device = useDevice();
-  const [params, setParams] = React.useState<ServiceParameters>({});
+  // const device = useDevice();
+  // const [params, setParams] = React.useState<ServiceParameters>({});
   const [auth, setAuth] = React.useState(false);
 
-  const sample = ["device one", "device two"];
+  // const sample = ["device one", "device two"];
 
-  const [en, setEn] = React.useState<string[]>([]);
-  const [loading, setIsLoading] = React.useState(true);
+  // const [en, setEn] = React.useState<string[]>([]);
+  // const [loading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    Authentication.login("alen+prod+demos@formant.io", "Winter13!").then((_) =>
+      setAuth(true)
+    );
+  }, []);
 
   // React.useEffect(() => {
-  //   Authentication.login("alen+sanity@formant.io", "Winter13!").then((_) =>
-  //     setAuth(true)
-  //   );
-  // }, []);
+  //   if (!device) return;
+  //   device.on("disconnect", () => {
+  //     console.warn("DISCONNECTED");
+  //   });
+  // }, [device]);
 
-  React.useEffect(() => {
-    if (!device) return;
-    device.on("disconnect", () => {
-      console.warn("DISCONNECTED");
-    });
-  }, [device]);
+  // const waitForConnection = React.useCallback(async () => {
+  //   let connected = false;
+  //   while (!connected) {
+  //     connected = await device.isInRealtimeSession();
+  //     console.warn("Waiting for the main connection to establish.");
+  //   }
+  //   console.warn("Main connection completed");
 
-  const waitForConnection = React.useCallback(async () => {
-    let connected = false;
-    while (!connected) {
-      connected = await device.isInRealtimeSession();
-      console.warn("Waiting for the main connection to establish.");
-    }
-    console.warn("Main connection completed");
+  //   setIsLoading(false);
+  // }, [device]);
 
-    setIsLoading(false);
-  }, [device]);
-
-  React.useEffect(() => {
-    if (!device) return;
-    waitForConnection();
-  }, [device]);
+  // React.useEffect(() => {
+  //   if (!device) return;
+  //   waitForConnection();
+  // }, [device]);
 
   return (
     <div>
-      {!device || loading ? (
+      {!auth ? (
         <></>
       ) : (
         <Container>
-          <RealtimeConnection device={device}>
-            <Cell>
-              <RealtimeVideoPlayer
-                device={device}
-                id="aa"
-                cameraName=""
-              />
-            </Cell>
-            {/* <Cell>
-              <RealtimeVideoPlayer
-                device={device}
-                id="dos"
-                cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera1"
-              />
-            </Cell>
-            <Cell>
-              <RealtimeVideoPlayer
-                device={device}
-                id="tres"
-                cameraName="rtsp.192.168.131.10.axis-mediamedia.ampcamera2"
-              />
-            </Cell>
-            <Cell>
-              <RealtimeVideoPlayer
-                device={device}
-                id="cuatro"
-                cameraName="rtsp.192.168.131.11.554"
-              />
-            </Cell> */}
-          </RealtimeConnection>
+          <StreamLoader
+            streams={["$.host.cpu"]}
+            types={["numeric set"]}
+            deviceIds={["8b1b3e3e-1c41-4820-99ca-97657374e2c7", "58d7f6e1-899d-4a8a-8c02-4c805cc8227f"]}
+            useCurrentDevice={false}
+          >
+           <Sample />
+          </StreamLoader>
         </Container>
       )}
     </div>
