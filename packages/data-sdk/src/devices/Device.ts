@@ -110,6 +110,26 @@ export class Device extends BaseDevice {
     return config.document;
   }
 
+  /**
+   * Asynchronously retrieves the device's agent version string
+   *
+   * @returns {Promise<string | undefined | null>} A promise that resolves to the agent version
+   * @throws {Error} Throws an error if the device info cannot be fetched
+   */
+
+  async getAgentVersion(): Promise<string | undefined | null> {
+    let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const device = await result.json();
+
+    return device?.state?.agentVersion;
+  }
+
   async getFileUrl(fileId: string): Promise<string[]> {
     const result = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
       method: "POST",
