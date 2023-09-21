@@ -113,7 +113,7 @@ export class Device extends BaseDevice {
   /**
    * Asynchronously retrieves the device's agent version string
    *
-   * @returns {Promise<string | null>} A promise that resolves to the agent version
+   * @returns {Promise<string | undefined | null>} A promise that resolves to the agent version
    * @throws {Error} Throws an error if the device info cannot be fetched
    */
 
