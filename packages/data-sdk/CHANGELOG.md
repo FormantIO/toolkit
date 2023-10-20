@@ -1,3 +1,9 @@
+## [1.16.0] - 2023-09-21
+
+### Fixed
+
+- Device entity should have correct organization property set. (#138)
+
 ## [1.15.0] - 2023-09-21
 
 ### Added
