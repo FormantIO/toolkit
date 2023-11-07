@@ -361,10 +361,14 @@ export class AuthenticationStore implements IAuthenticationStore {
         "Content-Type": "application/json",
       },
     });
-    const ssoTokens = (await result.json()) as AuthenticationResult;
-    if (ssoTokens.result !== "success") {
-      throw new Error("loginWithSso failed");
+    const ssoTokens = (await result.json()) as {
+      authentication?: IAuthentication;
+    };
+
+    if (!ssoTokens.authentication) {
+      throw new Error("Failed to login with SSO");
     }
+
     return await this.loginWithToken(
       ssoTokens.authentication.accessToken,
       ssoTokens.authentication.refreshToken
