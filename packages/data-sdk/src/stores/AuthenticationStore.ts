@@ -11,6 +11,7 @@ import { IUser } from "../model/IUser";
 import { IAuthentication } from "./IAuthentication";
 import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
+import { ICheckSsoResult } from "./ICheckSsoResult";
 
 interface IAuthenticationStoreOptions {
   apiUrl: string;
@@ -336,5 +337,37 @@ export class AuthenticationStore implements IAuthenticationStore {
     });
     const refreshData = await result.json();
     await this.loginWithToken(refreshData.authentication.accessToken, token);
+  }
+
+  async checkSso(
+    email: string,
+    allowUserAutoCreation?: boolean
+  ): Promise<ICheckSsoResult> {
+    const result = await fetch(`${this._apiUrl}/v1/admin/auth/check-sso`, {
+      method: "POST",
+      body: JSON.stringify({ email, allowUserAutoCreation }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await result.json();
+  }
+
+  async loginWithSso(ssoToken: string, ssoRefreshToken?: string) {
+    const result = await fetch(`${this._apiUrl}/v1/admin/auth/login-sso`, {
+      method: "POST",
+      body: JSON.stringify({ token: ssoToken, refreshToken: ssoRefreshToken }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const ssoTokens = (await result.json()) as AuthenticationResult;
+    if (ssoTokens.result !== "success") {
+      throw new Error("loginWithSso failed");
+    }
+    return await this.loginWithToken(
+      ssoTokens.authentication.accessToken,
+      ssoTokens.authentication.refreshToken
+    );
   }
 }

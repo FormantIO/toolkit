@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "1.16.0",
+  "version": "1.17.0",
   "scripts": {
     "preversion": "npm run verify",
     "postversion": "make",
@@ -55,7 +55,7 @@
     "dpdm": "^3.13.1",
     "grpc-web": "1.4.2",
     "prettier": "2.8.8",
-    "typedoc": "^0.24.6",
+    "typedoc": "^0.25.3",
     "typescript": "^5.0.4",
     "vite": "^4.3.9",
     "vitest": "^0.30.1"
