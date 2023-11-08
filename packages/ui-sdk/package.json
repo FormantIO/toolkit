@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "0.0.63",
+  "version": "0.0.64",
   "scripts": {
     "preversion": "npm run test && prettier --check src/",
     "postversion": "make",
@@ -63,13 +63,13 @@
     "@types/lodash": "^4.14.182",
     "chart.js": "^4.2.0",
     "classnames": "^2.3.1",
-    "grpc-web": "1.2.1",
+    "grpc-web": "1.4.2",
     "lodash": "^4.17.21",
     "react-chartjs-2": "^5.2.0",
     "react-device-detect": "^2.2.2"
   },
   "peerDependencies": {
-    "@formant/data-sdk": "^1.0.0",
+    "@formant/data-sdk": "^1.14.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   }

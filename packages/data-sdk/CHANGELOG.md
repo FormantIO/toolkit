@@ -1,8 +1,27 @@
-## [1.14.0] - 2023-09-06
+## [1.16.0] - 2023-09-21
 
-### Added 
+### Fixed
+
+- Device entity should have correct organization property set. (#138)
+
+## [1.15.0] - 2023-09-21
+
+### Added
+
+- Add support for agent version querying (#136)
+
+
+## [1.14.1] - 2023-09-06
+
+### Added
 
 - Add parameter to query desire configuration vs reported configuration (#132)
+
+## [1.14.0] - 2023-09-06
+
+### Fixed
+
+- Fixed delete account error handling (#131)
 
 ## [1.13.2] - 2023-08-27
 
@@ -253,7 +272,10 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
-[1.14.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.14.0~
+[1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
+[1.15.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.1...release/data-sdk/1.15.0~
+[1.14.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.0...release/data-sdk/1.14.1~
+[1.14.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.2...release/data-sdk/1.14.0~
 [1.13.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.13.2~
 [1.13.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.0...release/data-sdk/1.13.1~
 [1.13.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.12.0...release/data-sdk/1.13.0~

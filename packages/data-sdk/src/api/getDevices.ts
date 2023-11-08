@@ -1,6 +1,7 @@
 import { Device } from "../devices/Device";
 import { Authentication } from "../Authentication";
 import { FORMANT_API_URL } from "../config";
+import { defined } from "../../../common/defined";
 
 export async function getDevices(): Promise<Device[]> {
   if (!Authentication.token) {
@@ -21,7 +22,7 @@ export async function getDevices(): Promise<Device[]> {
       new Device(
         _.id as string,
         _.name as string,
-        _.organizationId as string,
+        defined(Authentication.currentOrganization) as string,
         _.tags
       )
   );
