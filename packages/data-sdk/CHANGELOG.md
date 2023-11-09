@@ -1,3 +1,9 @@
+## [1.17.0] - 2023-10-09
+
+### Added
+
+- New functions for looking up SSO login information and logging in with SSO tokens
+
 ## [1.16.0] - 2023-09-21
 
 ### Fixed
