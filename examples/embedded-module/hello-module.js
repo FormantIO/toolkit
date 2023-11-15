@@ -15,7 +15,11 @@ class HelloModule extends HTMLElement {
         const config = await contextEl.context.client.getConfiguration(
           configId
         );
-        this.innerHTML = `<h1>My configuration ${config}!</h1>`;
+        this.innerHTML = `<h1>My configuration ${JSON.stringify(
+          config,
+          null,
+          2
+        )}!</h1>`;
       })();
     }
   }
