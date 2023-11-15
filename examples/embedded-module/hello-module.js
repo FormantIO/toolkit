@@ -8,10 +8,16 @@ class HelloModule extends HTMLElement {
   connectedCallback() {
     this.innerHTML = "<h1>I am a module!</h1>";
 
-    window.setInterval(() => {
-      const c = document.querySelector("formant-context");
-      this.innerHTML = JSON.stringify(c.context);
-    }, 1000);
+    const configId = this.getAttribute("configurationid");
+    if (configId) {
+      const contextEl = document.querySelector(`formant-context`);
+      (async () => {
+        const config = await contextEl.context.client.getConfiguration(
+          configId
+        );
+        this.innerHTML = `<h1>My configuration ${config}!</h1>`;
+      })();
+    }
   }
 }
 
