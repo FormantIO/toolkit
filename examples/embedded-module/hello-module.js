@@ -6,33 +6,19 @@ class HelloModule extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = "<h1>Retrieving health ...</h1>";
+    this.innerHTML = "<h1>Retrieving configuration ...</h1>";
 
+    const configurationAttribute = this.getAttribute("configuration");
     const contextEl = document.querySelector(`formant-context`);
     const client = contextEl.context.client;
-    setInterval(async () => {
-      // last minute
-      const start = new Date(Date.now() - 60 * 1000);
-      const end = new Date();
-      const results = await client.query(
-        {},
-        ["$.agent.health"],
-        "health",
-        start,
-        end
-      );
-      if (results) {
-        const health = await Promise.all(
-          results.map((r) =>
-            (async () => {
-              const name = await client.getDeviceName(r.deviceId);
-              return { name, latest: r.points[r.points.length - 1] };
-            })()
-          )
-        );
-        this.innerHTML = `<h1>health</h1>` + JSON.stringify(health, null, 2);
-      }
-    }, 1000);
+    if (configurationAttribute === null) {
+      client.experimental.customModuleStore
+        .getConfiguration(configurationAttribute)
+        .then((config) => {
+          this.innerHTML =
+            `<h1>Configuration</h1><br>` + JSON.stringify(config);
+        });
+    }
   }
 }
 

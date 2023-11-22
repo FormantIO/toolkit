@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hello World",
+  "type": "object",
+  "properties": {
+    "moduleNodes": {
+      "title": "Modle Nodes",
+      "type": "json",
+      "$formant.nodes": "module"
+    }
+  }
+}
