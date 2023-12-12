@@ -16,6 +16,7 @@ function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
   const device = useDevice();
+  device?.startRealtimeConnection();
   const streams: IStream[] = useStreams(device);
   const commands = useCommands();
 
