@@ -23,3 +23,30 @@ export const useCommands = () => {
 
   return commands;
 };
+
+export const sendButtonState = async (streamLabel: string, value: boolean) => {
+  const device = useDevice();
+  if (!device) {
+    return;
+  }
+
+  if (await Authentication.waitTilAuthenticated()) {
+    return device.sendRealtimeMessage({
+      header: {
+        stream: {
+          entityId: device.id,
+          label: streamLabel,
+          streamName: "Buttons",
+          streamType: "bitset",
+        },
+        created: Date.now(),
+        frameId: "",
+      },
+      payload: {
+        bitset: {
+          bits: [{ key: streamLabel, value }],
+        },
+      },
+    });
+  }
+};
