@@ -24,14 +24,13 @@ export const useCommands = () => {
   return commands;
 };
 
-export const sendButtonState = async (streamLabel: string, value: boolean) => {
-  const device = useDevice();
+export const sendButtonState = (device: Device | undefined, streamLabel: string, value: boolean) => {
   if (!device) {
     return;
   }
 
-  if (await Authentication.waitTilAuthenticated()) {
-    return device.sendRealtimeMessage({
+  Authentication.waitTilAuthenticated().then(() => {
+    device.sendRealtimeMessage({
       header: {
         stream: {
           entityId: device.id,
@@ -40,7 +39,6 @@ export const sendButtonState = async (streamLabel: string, value: boolean) => {
           streamType: "bitset",
         },
         created: Date.now(),
-        frameId: "",
       },
       payload: {
         bitset: {
@@ -48,5 +46,5 @@ export const sendButtonState = async (streamLabel: string, value: boolean) => {
         },
       },
     });
-  }
+  });
 };

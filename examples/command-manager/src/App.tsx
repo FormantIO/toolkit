@@ -3,7 +3,7 @@ import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { IConfiguration } from "./types";
 import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
-import { useCommands } from "./hooks/useCommands";
+import { useCommands, sendButtonState } from "./hooks/useCommands";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 
@@ -21,7 +21,9 @@ function App() {
 
   return (
     <div className="App">
-      {!config ? (
+      <br /><br />
+      <button onClick={() => { sendButtonState(device, "test_btn", true) }}>Send Button State</button>
+      {/* {!config ? (
         <Conatiner>
           <LoadingIndicator />
         </Conatiner>
@@ -52,7 +54,7 @@ function App() {
             );
           })}
         </Table>
-      )}
+      )} */}
     </div>
   );
 }
