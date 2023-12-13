@@ -68,12 +68,14 @@ function emitButtonState(device: Device, streamLabel: string, value: boolean) {
       stream: {
         entityId: device.id,
         label: streamLabel,
-        streamName: "Buttons",
-        streamType: "bitset",
+        streamName: streamLabel.startsWith("/") ? streamLabel : "Buttons",
+        streamType: streamLabel.startsWith("/") ? "boolean" : "bitset",
       },
       created: Date.now(),
     },
-    payload: {
+    payload: streamLabel.startsWith("/") ? {
+      boolean: value,
+    } : {
       bitset: {
         bits: [{ key: streamLabel, value }],
       },
