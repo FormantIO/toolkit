@@ -3,7 +3,8 @@ import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { IConfiguration } from "./types";
 import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
-import { useCommands, sendButtonState, initRealtimeDevice } from "./hooks/useCommands";
+import { useCommands } from "./hooks/useCommands";
+import { sendButtonState, initRealtimeDevice } from "./hooks/useButtons";
 import styled from "@emotion/styled";
 import { ButtonRow } from "./ButtonRow";
 
@@ -22,8 +23,6 @@ function App() {
 
   return (
     <div className="App">
-      <br /><br />
-      <button onClick={() => { sendButtonState("test_btn", true) }}>Send Button State</button>
       {!config || (!config.commands && !config.buttons) ? (
         <Conatiner>
           <LoadingIndicator />
@@ -59,6 +58,7 @@ function App() {
               <ButtonRow
                 key={_.streamName}
                 streamName={_.streamName}
+                sendBtnPressFn={sendButtonState}
               />
             );
           })}
