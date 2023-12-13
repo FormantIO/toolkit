@@ -5,7 +5,7 @@ import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
 import { useCommands, sendButtonState, initRealtimeDevice } from "./hooks/useCommands";
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { ButtonRow } from "./ButtonRow";
 
 export interface IStream {
   streamName: string;
@@ -24,13 +24,13 @@ function App() {
     <div className="App">
       <br /><br />
       <button onClick={() => { sendButtonState("test_btn", true) }}>Send Button State</button>
-      {/* {!config ? (
+      {!config || (!config.commands && !config.buttons) ? (
         <Conatiner>
           <LoadingIndicator />
         </Conatiner>
       ) : (
         <Table>
-          {config.commands.map((_) => {
+          {config.commands && config.commands.map((_) => {
             return (
               <CommandRow
                 device={device as any}
@@ -54,8 +54,16 @@ function App() {
               />
             );
           })}
+          {config.buttons && config.buttons.map((_) => {
+            return (
+              <ButtonRow
+                key={_.streamName}
+                streamName={_.streamName}
+              />
+            );
+          })}
         </Table>
-      )} */}
+      )}
     </div>
   );
 }
