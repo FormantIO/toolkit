@@ -3,7 +3,7 @@ import { useDevice, LoadingIndicator, useFormant } from "@formant/ui-sdk";
 import { IConfiguration } from "./types";
 import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
-import { useCommands, sendButtonState } from "./hooks/useCommands";
+import { useCommands, sendButtonState, initRealtimeDevice } from "./hooks/useCommands";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 
@@ -16,14 +16,14 @@ function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
   const device = useDevice();
-  device?.startRealtimeConnection();
+  initRealtimeDevice(device);
   const streams: IStream[] = useStreams(device);
   const commands = useCommands();
 
   return (
     <div className="App">
       <br /><br />
-      <button onClick={() => { sendButtonState(device, "test_btn", true) }}>Send Button State</button>
+      <button onClick={() => { sendButtonState("test_btn", true) }}>Send Button State</button>
       {/* {!config ? (
         <Conatiner>
           <LoadingIndicator />
