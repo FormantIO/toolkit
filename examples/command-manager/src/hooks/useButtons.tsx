@@ -2,6 +2,17 @@ import { Authentication, Device } from "@formant/data-sdk";
 
 let rtcDevice: Device;
 let connected = false;
+let setConnectedFn: React.Dispatch<React.SetStateAction<boolean>>;
+let reconnectTimeout: number | null = null;
+
+export const updateConnectedSetFn = (setConnected: React.Dispatch<React.SetStateAction<boolean>>) => {
+  setConnectedFn = setConnected;
+}
+
+function setConnected(connectState: boolean) {
+  connected = connectState;
+  setConnectedFn(connected);
+}
 
 export const initRealtimeDevice = (device: Device | undefined) => {
   if (!device || rtcDevice) {
@@ -13,14 +24,23 @@ export const initRealtimeDevice = (device: Device | undefined) => {
   Authentication.waitTilAuthenticated().then(() => {
     if (!connected) {
       rtcDevice.on('connect', () => {
-        connected = true;
+        setConnected(true);
         console.log('Device connected');
       });
 
       rtcDevice.on('disconnect', () => {
-        connected = false;
+        setConnected(false);
         console.log('Device disconnected');
-        // scheduleReconnect();
+
+        if (reconnectTimeout) {
+          clearTimeout(reconnectTimeout);
+          reconnectTimeout = setTimeout(() => {
+            rtcDevice.startRealtimeConnection().catch((error) => {
+              console.error('Device connection failed', error);;
+            });
+            reconnectTimeout = null;
+          }, 3000);
+        }
       });
 
       rtcDevice.startRealtimeConnection().catch((error) => {

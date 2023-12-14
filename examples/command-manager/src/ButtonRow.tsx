@@ -5,12 +5,16 @@ import "./App.css";
 
 interface IButtonRowProps {
   streamName: string;
+  buttonLabel?: string;
+  isConnected: boolean;
   sendBtnPressFn: (streamName: string, state: boolean) => void;
 }
 
 export const ButtonRow: FC<IButtonRowProps> = ({
   sendBtnPressFn,
   streamName,
+  buttonLabel,
+  isConnected,
 }) => {
   const issueBtnPress = useCallback(async () => {
     try {
@@ -23,11 +27,12 @@ export const ButtonRow: FC<IButtonRowProps> = ({
   return (
     <Row>
       <Description>
-        <Name>{streamName}</Name>
+        <Name>{buttonLabel || streamName}</Name>
       </Description>
       <ButtonContainer>
         <Button
           onClick={issueBtnPress}
+          disabled={!isConnected}
           color="primary"
           variant="contained"
           sx={{ minWidth: 155 }}

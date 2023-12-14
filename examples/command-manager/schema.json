@@ -37,6 +37,9 @@
         "properties": {
           "streamName": {
             "type": "string"
+          },
+          "buttonLabel": {
+            "type": "string"
           }
         }
       }

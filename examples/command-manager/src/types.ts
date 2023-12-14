@@ -22,6 +22,7 @@ export interface ICommandConfiguration {
 
 export interface IButtonConfiguration {
   streamName: string;
+  buttonLabel?: string;
 }
 
 export interface IConfiguration {

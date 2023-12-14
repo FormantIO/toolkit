@@ -4,9 +4,10 @@ import { IConfiguration } from "./types";
 import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
 import { useCommands } from "./hooks/useCommands";
-import { sendButtonState, initRealtimeDevice } from "./hooks/useButtons";
+import { sendButtonState, initRealtimeDevice, updateConnectedSetFn } from "./hooks/useButtons";
 import styled from "@emotion/styled";
 import { ButtonRow } from "./ButtonRow";
+import { useState } from "react";
 
 export interface IStream {
   streamName: string;
@@ -20,6 +21,8 @@ function App() {
   initRealtimeDevice(device);
   const streams: IStream[] = useStreams(device);
   const commands = useCommands();
+  const [connected, setConnected] = useState(false);
+  updateConnectedSetFn(setConnected);
 
   return (
     <div className="App">
@@ -58,6 +61,8 @@ function App() {
               <ButtonRow
                 key={_.streamName}
                 streamName={_.streamName}
+                buttonLabel={_.buttonLabel}
+                isConnected={connected}
                 sendBtnPressFn={sendButtonState}
               />
             );
