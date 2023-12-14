@@ -29,6 +29,7 @@ export const ButtonRow: FC<IButtonRowProps> = ({
       <Description>
         <Name>{buttonLabel || streamName}</Name>
       </Description>
+      <SpacerContainer />
       <ButtonContainer>
         <Button
           onClick={issueBtnPress}
@@ -58,6 +59,13 @@ const Description = styled.td`
 const ButtonContainer = styled.td`
   width: auto;
   padding: 15px;
+`;
+
+const SpacerContainer = styled.td`
+  width: auto;
+  padding: 5px;
+  display: flex;
+  align-items: center;
 `;
 
 const Name = styled.span`
