@@ -5,21 +5,26 @@ class HelloModule extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
-    this.innerHTML = "<h1>Retrieving configuration ...</h1>";
-
+  async getConfiguration() {
     const configurationAttribute = this.getAttribute("configuration");
     const contextEl = document.querySelector(`formant-context`);
     const client = contextEl.context.client;
-
     if (configurationAttribute !== null) {
-      client.experimental.customModuleStore
-        .getConfiguration(configurationAttribute)
-        .then((config) => {
-          this.innerHTML =
-            `<h1>Configuration</h1><br>` + JSON.stringify(config);
-        });
+      return await client.experimental.customModuleStore.getConfiguration(
+        configurationAttribute
+      );
     }
+    return undefined;
+  }
+
+  connectedCallback() {
+    this.innerHTML = "<h1>Retrieving configuration ...</h1>";
+
+    this.getConfiguration().then((config) => {
+      if (config) {
+        this.innerHTML = `<h1>Configuration</h1><br>` + JSON.stringify(config);
+      }
+    });
   }
 }
 
