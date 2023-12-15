@@ -11,7 +11,8 @@ class HelloModule extends HTMLElement {
     const configurationAttribute = this.getAttribute("configuration");
     const contextEl = document.querySelector(`formant-context`);
     const client = contextEl.context.client;
-    if (configurationAttribute === null) {
+
+    if (configurationAttribute !== null) {
       client.experimental.customModuleStore
         .getConfiguration(configurationAttribute)
         .then((config) => {

@@ -2,66 +2,9 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "nodes": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "attributes": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string"
-                                },
-                                "value": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["name","value"]
-                        }
-                    }
-                },
-                "required": ["name"]
-            }
-        },
-        "edges": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "from": {
-                        "type": "object",
-                        "properties": {
-                            "node": {
-                                "type": "integer"
-                            },
-                            "output": {
-                                "type": "string"
-                            }
-                        },
-                        "required": ["node", "output"]
-                    },
-                    "to": {
-                        "type": "object",
-                        "properties": {
-                            "node": {
-                                "type": "integer"
-                            },
-                            "input": {
-                                "type": "string"
-                            }
-                        },
-                        "required": ["node", "input"]
-                    }
-                },
-                "required": ["from", "to"]
-            }
+        "message": {
+            "type": "string"
         }
     },
-    "required": ["nodes", "edges"]
+    "required": ["message"]
 }
