@@ -1,4 +1,4 @@
-import { Authentication, Device } from "@formant/data-sdk";
+import { Authentication, Device, SessionType } from "@formant/data-sdk";
 
 let rtcDevice: Device;
 let connected = false;
@@ -35,7 +35,7 @@ export const initRealtimeDevice = (device: Device | undefined) => {
         if (reconnectTimeout) {
           clearTimeout(reconnectTimeout);
           reconnectTimeout = setTimeout(() => {
-            rtcDevice.startRealtimeConnection().catch((error) => {
+            rtcDevice.startRealtimeConnection(SessionType.HEADLESS).catch((error) => {
               console.error('Device connection failed', error);;
             });
             reconnectTimeout = null;
