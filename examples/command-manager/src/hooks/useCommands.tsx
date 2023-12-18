@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Authentication, App, Device, Command } from "@formant/data-sdk";
+import { Authentication, Device, Command } from "@formant/data-sdk";
 import { useDevice } from "@formant/ui-sdk";
 
 const getCommands = async (device: Device) => {

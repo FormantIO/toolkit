@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/command-manager/schema.json",
   "title": "Command Manager",
-  "description": "Aggregate chart configuration.",
+  "description": "Command manager configuration.",
   "type": "object",
   "properties": {
     "commands": {
@@ -25,6 +25,21 @@
             "$formant.visible.when": ["useStreamValue", "=", true],
             "type": "string",
             "$formant.streams.byType": "text"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "type": "array",
+      "title": "Real-time Buttons",
+      "items": {
+        "type": "object",
+        "properties": {
+          "streamName": {
+            "type": "string"
+          },
+          "buttonLabel": {
+            "type": "string"
           }
         }
       }
