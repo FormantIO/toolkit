@@ -43,7 +43,7 @@ export const initRealtimeDevice = (device: Device | undefined) => {
         }
       });
 
-      rtcDevice.startRealtimeConnection().catch((error) => {
+      rtcDevice.startRealtimeConnection(SessionType.HEADLESS).catch((error) => {
         console.error('Device connection failed', error);;
       });
     }
