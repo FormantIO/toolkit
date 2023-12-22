@@ -11,6 +11,9 @@ interface IRowProps {
   idx?: number;
 }
 
+const WINDOW_TELEOP_MIN_WIDTH = 301;
+const TIMEOUT_DEBOUNCER = 100;
+
 export const Row: FC<IRowProps> = (props: any) => {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
@@ -18,16 +21,32 @@ export const Row: FC<IRowProps> = (props: any) => {
   const [teleopMode, setTeleopMode] = useState(false);
 
   useEffect(() => {
-    if (window.innerWidth < 301) setTeleopMode(true);
-  }, []);
+    const handleResize = () => {
+      let timeoutId: any = undefined;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (window.innerWidth < WINDOW_TELEOP_MIN_WIDTH) {
+          setTeleopMode(true);
+        } else {
+          setTeleopMode(false);
+        }
+      }, TIMEOUT_DEBOUNCER);
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth < 301) {
+      return () => clearTimeout(timeoutId);
+    };
+
+    if (window.innerWidth < WINDOW_TELEOP_MIN_WIDTH) {
       setTeleopMode(true);
-      return;
+    } else {
+      setTeleopMode(false);
     }
-    setTeleopMode(false);
-  });
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
