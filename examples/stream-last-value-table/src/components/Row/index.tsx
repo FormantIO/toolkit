@@ -46,7 +46,7 @@ export const Row: FC<IRowProps> = (props: any) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [setTeleopMode]);
 
   return (
     <div
