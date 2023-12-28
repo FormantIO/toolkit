@@ -22,7 +22,8 @@ export const Table: FC<IMainProps> = ({
   const context = useFormant();
   const config = context.configuration as IConfiguration;
 
-  const configuration = useMemo(() => {
+  const configuration = (() => {
+
     //handles unset bitsets
     const undefinedBitsets = Object.keys(currentConfiguration).filter((_) =>
       _.includes("undefined")
@@ -49,15 +50,13 @@ export const Table: FC<IMainProps> = ({
     }
 
     return currentConfiguration;
-  }, [currentValues]);
+  })();
 
-  const numericSetsFilter = useMemo(() => {
-    return Object.keys(currentValues).filter((_) =>
-      Array.isArray(currentValues[_])
-    );
-  }, [currentValues]);
+  const numericSetsFilter = Object.keys(currentValues).filter((_) =>
+    Array.isArray(currentValues[_])
+  );
 
-  const subsets = useMemo(() => {
+  const subsets = (() => {
     const numericSets = Object.entries(currentValues).filter((_) =>
       Array.isArray(_[1])
     );
@@ -67,7 +66,7 @@ export const Table: FC<IMainProps> = ({
       return p;
     }, {});
     return numericSets;
-  }, [currentValues]);
+  })();
 
   const widths = useMemo(() => {
     const fullWidthStreams: string[] = [];
