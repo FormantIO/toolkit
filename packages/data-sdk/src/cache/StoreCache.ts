@@ -40,15 +40,12 @@ export class StoreCache<Key, Value> {
     const isDuplicate = JSON.stringify(previousValue) === JSON.stringify(value);
     if (!isDuplicate) {
       this.entries.set(cacheKey, value);
-      console.log(this.entries);
       this.enforceMaxSize();
     }
   }
 
   public clear() {
-    console.log("clearing cache");
     this.entries.clear();
-    console.log(this.entries);
     [...this.metadata.values()].forEach((value) => (value.generating = false));
   }
 
@@ -62,8 +59,6 @@ export class StoreCache<Key, Value> {
   }
 
   private enforceMaxSize(): void {
-    console.log(this.metadata.size);
-    console.log(this.entries.size);
     while (this.metadata.size > this.capacity && this.metadata.size > 0) {
       const [key] = [...this.metadata.entries()].reduce(
         ([oldestKey, oldestEntry], [thisKey, entry]) =>
