@@ -1,3 +1,9 @@
+## [1.18.0] - 2023-12-29
+
+### Added
+
+- improvements to storeCache
+
 ## [1.17.0] - 2023-10-09
 
 ### Added
@@ -278,6 +284,8 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
+[1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
 [1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
 [1.15.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.1...release/data-sdk/1.15.0~
 [1.14.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.0...release/data-sdk/1.14.1~
