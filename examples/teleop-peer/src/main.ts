@@ -50,9 +50,8 @@ el("button").addEventListener("click", async () => {
 
     log("Video streams: ");
     videoStreams.forEach((s, i) => {
-      log(`<a onClick="setVideo(${i})" >${i} ${s.name}</a>`);
+      log(`<a onClick="setVideo(${i})" href="#">${i} ${s.name}</a>`);
     });
-
 
     el("formant-realtime-player").style.display = "block";
 
