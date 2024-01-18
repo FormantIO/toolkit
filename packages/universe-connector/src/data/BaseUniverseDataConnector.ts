@@ -7,11 +7,10 @@ import {
   IStreamData,
   ITransform,
   ITransformNode,
-} from "@formant/data-sdk";
-import {
-  createRtcStreamMessage,
   IRtcStreamMessage,
-} from "@formant/realtime-sdk";
+  SessionType,
+  createRtcStreamMessage,
+} from "@formant/data-sdk";
 import {
   CloseSubscription,
   DataSourceState,
@@ -34,7 +33,6 @@ import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
-import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
 
 export type DeviceId = string;
 export type DataSourceId = string;
@@ -157,7 +155,7 @@ export class BasicUniverseDataConnector {
 
   protected async createRealtimeConnection(
     deviceId: string,
-    sessionType: SessionType = SessionType.TELEOP
+    sessionType: number = SessionType.TELEOP
   ) {
     const existingDevice = this.mapRealtimeConnections.get(deviceId);
     if (existingDevice === undefined) {

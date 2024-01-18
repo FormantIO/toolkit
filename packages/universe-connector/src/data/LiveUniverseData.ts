@@ -13,6 +13,7 @@ import {
   ILocation,
   IJointState,
   IBitset,
+  SessionType,
 } from "@formant/data-sdk";
 import {
   CloseSubscription,
@@ -31,7 +32,6 @@ import {
   BasicUniverseDataConnector,
   DataResult,
 } from "./BaseUniverseDataConnector";
-import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
@@ -78,7 +78,7 @@ export class LiveUniverseData
             keys: [],
             values: [],
           };
-          bitsetData.bits.forEach((bit) => {
+          bitsetData.bits.forEach((bit: { key: string; value: boolean }) => {
             bitset.keys.push(bit.key);
             bitset.values.push(bit.value);
           });
