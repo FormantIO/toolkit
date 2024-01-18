@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import { Authentication, Fleet } from "@formant/data-sdk";
-import { defined } from "../src/main";
+import { LiveUniverseData } from "../src/main";
 
 export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -22,6 +22,19 @@ export function App() {
     (async () => {
       if (currentDevice) {
         const d = await Fleet.getDevice(currentDevice.id);
+        const universeData = new LiveUniverseData();
+        universeData.subscribeToBitset(
+          d.id,
+          {
+            id: "123",
+            sourceType: "realtime",
+            rosTopicName: "Status",
+            rosTopicType: "bitset",
+          },
+          (data) => {
+            console.log("bitset!", data);
+          }
+        ); /*
         const conf = await defined(d).getConfiguration();
         const teleopConf = conf.teleop;
         const customStreams = defined(teleopConf).customStreams;
@@ -32,9 +45,14 @@ export function App() {
         d.startListeningToRealtimeDataStream({
           name: "Status",
         });
-        d.addRealtimeListener((data) => {
-          console.log(data);
-        });
+        d.addRealtimeListener((data, d) => {
+          if (
+            d.header.stream.streamName === "Status" &&
+            d.header.stream.streamType === "bitset"
+          ) {
+            console.log(d.payload);
+          }
+        });*/
       }
     })();
   }, [currentDevice]);

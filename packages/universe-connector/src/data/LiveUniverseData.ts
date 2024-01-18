@@ -12,6 +12,7 @@ import {
   ITransformNode,
   ILocation,
   IJointState,
+  IBitset,
 } from "@formant/data-sdk";
 import {
   CloseSubscription,
@@ -62,6 +63,39 @@ export class LiveUniverseData
     _callback: (frame: HTMLVideoElement) => void
   ): CloseSubscription {
     throw new Error("Method not implemented.");
+  }
+
+  subscribeToBitset(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IBitset | Symbol) => void
+  ): CloseSubscription {
+    if (source.sourceType === "realtime") {
+      const listener = (_peerId: string, msg: RealtimeMessage) => {
+        if (msg.payload.bitset) {
+          const bitsetData = msg.payload.bitset;
+          const bitset: IBitset = {
+            keys: [],
+            values: [],
+          };
+          bitsetData.bits.forEach((bit) => {
+            bitset.keys.push(bit.key);
+            bitset.values.push(bit.value);
+          });
+          callback(bitset);
+        }
+      };
+      this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
+      return () => {
+        this.unsubscribeToRealtimeMessages(
+          deviceId,
+          source.rosTopicName,
+          listener
+        );
+      };
+    }
+
+    throw new Error("Telemetry bitset not implemented");
   }
 
   subscribeToOdometry(

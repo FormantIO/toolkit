@@ -21,6 +21,7 @@ import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
 import { QueryStore } from "./queryStore";
 import { StoreCache } from "./StoreCache";
+import { IBitset } from "../../../data-sdk/src/model/IBitset";
 
 const queryStore = new QueryStore();
 export class TelemetryUniverseData
@@ -33,6 +34,15 @@ export class TelemetryUniverseData
     this.timeChangeListeners.push(this.onTimeChange.bind(this));
     this.onTimeChange("live");
   }
+
+  subscribeToBitset(
+    _deviceId: string,
+    _source: UniverseDataSource,
+    _callback: (data: IBitset | Symbol) => void
+  ): CloseSubscription {
+    throw new Error("Method not implemented for telemetry universe connector.");
+  }
+
   subscribeToPath(
     deviceId: string,
     source: UniverseDataSource,
