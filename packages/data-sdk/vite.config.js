@@ -19,27 +19,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
         // into your library
-        external: isBundle
-          ? []
-          : (source, importer) => {
-              if (!importer) {
-                return false;
-              }
-
-              const isRelative =
-                source.startsWith("./") || source.startsWith("../");
-
-              if (isRelative) {
-                return false;
-              }
-
-              const isNodeModule = !path.isAbsolute(source);
-              if (isNodeModule) {
-                return true;
-              }
-
-              return false;
-            },
+        external: [],
         output: {
           // Provide global variables to use in the UMD build
           // for externalized deps

@@ -24,7 +24,7 @@
       }
     }
   },
-  "version": "0.0.64",
+  "version": "0.0.65",
   "scripts": {
     "preversion": "npm run test && prettier --check src/",
     "postversion": "make",
@@ -39,6 +39,7 @@
     "format": "prettier --write src/"
   },
   "devDependencies": {
+    "@formant/realtime-sdk": "1.2.0",
     "@babel/core": "^7.17.9",
     "@emotion/babel-plugin": "^11.10.6",
     "@types/react": "^18",
@@ -69,7 +70,7 @@
     "react-device-detect": "^2.2.2"
   },
   "peerDependencies": {
-    "@formant/data-sdk": "^1.14.1",
+    "@formant/data-sdk": "^1.22.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   }

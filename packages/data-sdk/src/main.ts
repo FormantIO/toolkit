@@ -110,6 +110,8 @@ export * from "./model/ILocation";
 export * from "./model/IMap";
 export * from "./model/interventionTypes";
 export * from "./model/InterventionType";
+export * from "./model/IMarker3D";
+export * from "./model/IMarker3DArray";
 export * from "./model/INumericSetEntry";
 export * from "./model/INumericSetAggregateMap";
 export * from "./model/INumericAggregate";
@@ -191,3 +193,5 @@ export type { IConfirmForgotPasswordRequest } from "./stores/IConfirmForgotPassw
 export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRespondToNewPasswordRequiredChallengeRequest";
 
 import "./init.ts";
+
+export { createRtcStreamMessage } from "@formant/realtime-sdk";
