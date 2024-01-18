@@ -1,3 +1,9 @@
+## [1.21.0] - 2024-01-17
+
+### Added
+
+- exposing realtime message creator
+
 ## [1.20.0] - 2024-01-17
 
 ### Added

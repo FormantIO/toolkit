@@ -193,3 +193,5 @@ export type { IConfirmForgotPasswordRequest } from "./stores/IConfirmForgotPassw
 export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRespondToNewPasswordRequiredChallengeRequest";
 
 import "./init.ts";
+
+export { createRtcStreamMessage } from "@formant/realtime-sdk";
