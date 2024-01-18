@@ -1,0 +1,59 @@
+{
+  "name": "@formant/universe-connector",
+  "version": "0.0.35",
+  "description": "A library for getting data from Formant to universe",
+  "homepage": "https://github.com/formantio/universe-data-connector",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formantio/universe-data-connector.git"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/formant-universe-connector.es.js",
+      "require": "./dist/formant-universe-connector.cjs.js"
+    }
+  },
+  "main": "./dist/formant-universe-connector.cjs.js",
+  "module": "./dist/formant-universe-connector.es.js",
+  "types": "./dist/types/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "tsc --noEmit",
+    "build": "yarn build:package && yarn build:bundle",
+    "build:bundle": "vite build --emptyOutDir=false --mode=bundle",
+    "build:package": "vite build --emptyOutDir",
+    "postversion": "make",
+    "dev": "vite --port 9146",
+    "prettier:check": "prettier --check src/",
+    "prettier:write": "prettier --write src/",
+    "serve": "vite preview",
+    "types": "tsc -p tsconfig.types.json"
+  },
+  "dependencies": {
+    "@formant/ui-sdk-realtime-player-core": "^0.0.2",
+    "@formant/ui-sdk-realtime-player-core-worker": "^0.0.4",
+    "@formant/universe-core": "0.0.17",
+    "date-fns": "^2.30.0",
+    "lzfjs": "^1.0.1",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "@formant/data-sdk": "^1.16.0",
+    "@formant/realtime-sdk": "^1.2.0",
+    "@types/react-dom": "18.0.6",
+    "@types/validator": "^13.11.6",
+    "prettier": "2.8.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "terser": "^5.18.2",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9"
+  },
+  "peerDependencies": {
+    "@formant/data-sdk": "^1.5.2",
+    "@formant/realtime-sdk": "^0.0.20"
+  }
+}

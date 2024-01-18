@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "downlevelIteration": true,
+    "outDir": "./dist/types"
+  },
+  "include": ["src/main.ts"]
+}
