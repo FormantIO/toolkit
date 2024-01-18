@@ -1,3 +1,9 @@
+## [1.22.0] - 2024-01-17
+
+### Added
+
+- bundling deps to prevent typing issues
+
 ## [1.21.0] - 2024-01-17
 
 ### Added
