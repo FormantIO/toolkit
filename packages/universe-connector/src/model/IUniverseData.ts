@@ -171,6 +171,12 @@ export interface IUniverseData {
 
   getHardwareStreams(deviceId: string): Promise<IRealtimeStream[]>;
 
+  subscribeToBitset(
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IBitset | DataStatus) => void
+  ): CloseSubscription;
+
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,

@@ -1,3 +1,27 @@
+## [1.22.0] - 2024-01-17
+
+### Added
+
+- bundling deps to prevent typing issues
+
+## [1.21.0] - 2024-01-17
+
+### Added
+
+- exposing realtime message creator
+
+## [1.20.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3DArray
+
+## [1.19.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3D
+
 ## [1.18.0] - 2023-12-29
 
 ### Added
@@ -21,7 +45,6 @@
 ### Added
 
 - Add support for agent version querying (#136)
-
 
 ## [1.14.1] - 2023-09-06
 
@@ -51,21 +74,20 @@
 
 ### Added
 
-- Enhance Authentication.login() method for _advanced_ login flows. 
+- Enhance Authentication.login() method for _advanced_ login flows.
 
 ## [1.12.0] - 2023-08-07
 
 ### Upgrade
 
-- Added support for `HEADLESS` session types in RtcClientPool. 
-- Upgrade `@formant/realtime-sdk` to 1.2.0. 
+- Added support for `HEADLESS` session types in RtcClientPool.
+- Upgrade `@formant/realtime-sdk` to 1.2.0.
 
 ## [1.11.1] - 2023-08-07
 
 ### Added
 
 - Added right files
-
 
 ## [1.11.0] - 2023-08-07
 
