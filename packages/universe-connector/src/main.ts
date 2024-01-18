@@ -14,3 +14,8 @@ export type IUniverseGridMap =
 export type IUniverseOdometry =
   import("./model/IUniverseOdometry").IUniverseOdometry;
 export type IPcd = import("./model/IPcd").IPcd;
+export type IPose = import("./model/IPose").IPose;
+export type IUniversePointCloud =
+  import("./model/IUniversePointCloud").IUniversePointCloud;
+export type IUniversePath = import("./model/IUniversePath").IUniversePath;
+export type IUniverseData = import("./model/IUniverseData").IUniverseData;
