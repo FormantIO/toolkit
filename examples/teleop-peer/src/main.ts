@@ -20,8 +20,7 @@ el("button").addEventListener("click", async () => {
     el("section").style.display = "none";
     el("#log").style.display = "block";
     // Just connect to whereever this is hosted on port 5502
-    const host = window.location.origin.replace(/:[0-9]+$/, '');
-    const device = await Fleet.getPeerDevice(`${host}:5502`);
+    const device = await Fleet.getPeerDevice("http://10.4.4.182:5502");
 
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
