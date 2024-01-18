@@ -1,4 +1,13 @@
-import { Device, Fleet, IQuery, IStreamData } from "@formant/data-sdk";
+import {
+  Device,
+  Fleet,
+  IBitset,
+  ILocation,
+  IQuery,
+  IStreamData,
+  ITransform,
+  ITransformNode,
+} from "@formant/data-sdk";
 import {
   createRtcStreamMessage,
   IRtcStreamMessage,
@@ -6,18 +15,14 @@ import {
 import {
   CloseSubscription,
   DataSourceState,
-  IBitset,
-  ILocation,
   Interaction,
   IRealtimeStream,
   ITelemetryRosStream,
   ITelemetryStream,
-  ITransform,
-  ITransformNode,
   IUniverseStatistics,
   RealtimeButtonConfiguration,
   UniverseDataSource,
-} from "@formant/universe-core";
+} from "../main";
 import { subDays } from "date-fns";
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -150,7 +155,10 @@ export class BasicUniverseDataConnector {
     }
   }
 
-  protected async createRealtimeConnection(deviceId: string, sessionType: SessionType = SessionType.TELEOP) {
+  protected async createRealtimeConnection(
+    deviceId: string,
+    sessionType: SessionType = SessionType.TELEOP
+  ) {
     const existingDevice = this.mapRealtimeConnections.get(deviceId);
     if (existingDevice === undefined) {
       this.mapRealtimeConnections.set(deviceId, "loading");

@@ -119,24 +119,24 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
-"@formant/data-sdk@^1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.5.2.tgz#333e965a4fdfb4b7511ffefa0bc36bbc8a273855"
-  integrity sha512-SFXRbF1w2ILpPkMDwv81Z3wHZQOt5mF/7kTzPn+GH+Xmbd9A+iwAxVopM5HyWK3lLxlZBlLh3IE73fGPfkdO8w==
+"@formant/data-sdk@^1.20.0":
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.20.0.tgz#3caee6cc4d59a835e815581dc4e89211f2f20434"
+  integrity sha512-+Csw8tlZ4WsL/hrFzHyBxL1COLH4AY43cG02nMiKESakRbYIv+v8kLYbNjWAUf80xzBttHJEEj380eGXdt6pkQ==
   dependencies:
+    base-64 "^1.0.0"
     base64-js "^1.5.1"
     date-fns "^2.30.0"
     eventemitter3 "^5.0.1"
     pako "^2.1.0"
 
-"@formant/realtime-sdk@^0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.20.tgz#b4a2eedce32b17bdc3e3013fdff077baefba1f3e"
-  integrity sha512-XulXffp4h4guPhe00j4kCtoBe/GvgftJHYK8yR3lybv7mqLn/4zSXkC3io5qXACBQIqvq8U5l0Q/nLv0xcecyA==
+"@formant/realtime-sdk@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-1.2.0.tgz#6010bebe8a8d45b2105bde72c7aaa8cb5577937b"
+  integrity sha512-BOzD40kjGHyHLYhwna/FPTMItnrkIaLvALWh/iM6M7/22ZpDJWLqdtrC7GK80B04KvllQHrkCQGUgQmu2aDXfg==
   dependencies:
     "@types/google-protobuf" "~3.7.0"
-    env-var "^7.3.0"
-    grpc-web "^1.2.1"
+    env-var "^7.3.1"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
   version "0.0.4"
@@ -150,11 +150,6 @@
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
   integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
-
-"@formant/universe-core@0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@formant/universe-core/-/universe-core-0.0.17.tgz#9ec5aae8b34faca7aff9b13522e5f4bfc60072f6"
-  integrity sha512-7f+WeyvCnTRYbCPFKnpniA42bFIfyWV9XY8D5mPz3B1qNrmvx6ChrDbLA8R4Bn0Xyzq3rpfgpnyEvqySfQAD6A==
 
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.2"
@@ -242,6 +237,11 @@ acorn@^8.8.2:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.9.0.tgz#78a16e3b2bcc198c10822786fa6679e245db5b59"
   integrity sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==
 
+base-64@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-1.0.0.tgz#09d0f2084e32a3fd08c2475b973788eee6ae8f4a"
+  integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
+
 base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
@@ -269,10 +269,10 @@ date-fns@^2.30.0:
   dependencies:
     "@babel/runtime" "^7.21.0"
 
-env-var@^7.3.0:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/env-var/-/env-var-7.3.1.tgz#a1522aa0d962033487a9f336952d02abfba9564b"
-  integrity sha512-Sq9qMnbBApv7SeUOKhw5GZ0VxAwltjFTzXTOvRV9NZEKmMCBZuFCumAvkXwBC5Fo396D7BnOpb5dXud7Vzhliw==
+env-var@^7.3.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/env-var/-/env-var-7.4.1.tgz#88af75fe16cc11031000f88d4777802c6958a01c"
+  integrity sha512-H8Ga2SbXTQwt6MKEawWSvmxoH1+J6bnAXkuyE7eDvbGmrhIL2i+XGjzGM3DFHcJu8GY1zY9/AnBJY8uGQYPHiw==
 
 esbuild@^0.17.5:
   version "0.17.19"
@@ -311,11 +311,6 @@ fsevents@~2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
-
-grpc-web@^1.2.1:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.4.2.tgz#86995f76471ce6b2119106ec26f909b7b69e7d43"
-  integrity sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw==
 
 h264decoder@^1.0.0:
   version "1.0.0"

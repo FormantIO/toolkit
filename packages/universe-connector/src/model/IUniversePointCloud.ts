@@ -1,4 +1,4 @@
-import { ITransform } from "../main";
+import { ITransform } from "@formant/data-sdk";
 import { IPcd } from "./IPcd";
 
 export interface IUniversePointCloud {

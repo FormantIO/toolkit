@@ -1,22 +1,21 @@
-import { IDataPoint, StreamType } from "@formant/data-sdk";
+import { IDataPoint, IPointCloud, StreamType } from "@formant/data-sdk";
 import {
   CloseSubscription,
-  IPointCloud,
   IPose,
   IUniverseData,
   IUniverseGridMap,
   IUniverseOdometry,
   NoData,
   UniverseDataSource,
-} from "@formant/universe-core";
-import { IJointState } from "@formant/universe-core/dist/types/data-sdk/src/model/IJointState";
-import { ILocation } from "@formant/universe-core/dist/types/data-sdk/src/model/ILocation";
-import { IMarker3DArray } from "@formant/universe-core/dist/types/data-sdk/src/model/IMarker3DArray";
-import { INumericSetEntry } from "@formant/universe-core/dist/types/data-sdk/src/model/INumericSetEntry";
-import { ITransformNode } from "@formant/universe-core/dist/types/data-sdk/src/model/ITransformNode";
-import { IPcd } from "@formant/universe-core/dist/types/universe-core/src/model/IPcd";
-import { IUniversePath } from "@formant/universe-core/dist/types/universe-core/src/model/IUniversePath";
-import { IUniversePointCloud } from "@formant/universe-core/dist/types/universe-core/src/model/IUniversePointCloud";
+} from "../main";
+import { IJointState } from "@formant/data-sdk";
+import { ILocation } from "@formant/data-sdk";
+import { IMarker3DArray } from "@formant/data-sdk";
+import { INumericSetEntry } from "@formant/data-sdk";
+import { ITransformNode } from "@formant/data-sdk";
+import { IPcd } from "../model/IPcd";
+import { IUniversePath } from "../model/IUniversePath";
+import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { addSeconds, addYears } from "date-fns";
 import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";

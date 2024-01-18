@@ -2,29 +2,29 @@ import {
   Device,
   Fleet,
   ILocalization,
+  INumericSetEntry,
   IPointCloud,
   IStreamData,
   RealtimeListener,
   RealtimeMessage,
   TelemetryResult,
+  IMarker3DArray,
+  ITransformNode,
+  ILocation,
+  IJointState,
 } from "@formant/data-sdk";
 import {
   CloseSubscription,
-  IJointState,
-  ILocation,
-  IMarker3DArray,
   IPcd,
-  ITransformNode,
   IUniverseData,
   UniverseDataSource,
-  INumericSetEntry,
   IPose,
   defined,
   IUniverseOdometry,
   IUniverseGridMap,
-} from "@formant/universe-core";
-import { IUniversePath } from "@formant/universe-core/dist/types/universe-core/src/model/IUniversePath";
-import { IUniversePointCloud } from "@formant/universe-core/dist/types/universe-core/src/model/IUniversePointCloud";
+} from "../main";
+import { IUniversePath } from "../model/IUniversePath";
+import { IUniversePointCloud } from "../model/IUniversePointCloud";
 
 import {
   BasicUniverseDataConnector,

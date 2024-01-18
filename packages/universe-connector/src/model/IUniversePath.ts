@@ -1,3 +1,3 @@
-import { IPath } from "../main";
+import { IPath } from "@formant/data-sdk";
 
 export interface IUniversePath extends IPath {}
