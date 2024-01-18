@@ -40,8 +40,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@formant/data-sdk": "1.21.0",
-    "@formant/realtime-sdk": "^1.2.0",
+    "@formant/data-sdk": "1.22.0",
     "@types/react-dom": "18.0.6",
     "@types/validator": "^13.11.6",
     "prettier": "2.8.8",
@@ -52,7 +51,6 @@
     "vite": "^4.3.9"
   },
   "peerDependencies": {
-    "@formant/data-sdk": "^1.5.2",
-    "@formant/realtime-sdk": "^1.20.0"
+    "@formant/data-sdk": "1.22.0"
   }
 }

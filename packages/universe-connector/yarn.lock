@@ -119,24 +119,16 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
-"@formant/data-sdk@1.21.0":
-  version "1.21.0"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.21.0.tgz#17ac5bc6efd566044e1b048d2f50b0f67f51c44f"
-  integrity sha512-vRMt83XCm1tMmoNZPUqvF0UgsCCd2Qm3al6G6jVTZkiQ2XQu8MU/zr5u0aYZ3Wstjx0L7waK6jdg3kr5714Hdg==
+"@formant/data-sdk@1.22.0":
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.22.0.tgz#7407a8e128da0a5b51a3b76a4d3513aca7b30196"
+  integrity sha512-k8U9wtdFJj5TBeV4lO8QRabq+MhZC3zBNqFIUCTaJStiGHLU+jXDwc5KcPV0JX16FT65AdEN14fHZAHbyE7UXg==
   dependencies:
     base-64 "^1.0.0"
     base64-js "^1.5.1"
     date-fns "^2.30.0"
     eventemitter3 "^5.0.1"
     pako "^2.1.0"
-
-"@formant/realtime-sdk@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-1.2.0.tgz#6010bebe8a8d45b2105bde72c7aaa8cb5577937b"
-  integrity sha512-BOzD40kjGHyHLYhwna/FPTMItnrkIaLvALWh/iM6M7/22ZpDJWLqdtrC7GK80B04KvllQHrkCQGUgQmu2aDXfg==
-  dependencies:
-    "@types/google-protobuf" "~3.7.0"
-    env-var "^7.3.1"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
   version "0.0.4"
@@ -190,11 +182,6 @@
   dependencies:
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
-
-"@types/google-protobuf@~3.7.0":
-  version "3.7.4"
-  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.7.4.tgz#1621c50ceaf5aefa699851da8e0ea606a2943a39"
-  integrity sha512-6PjMFKl13cgB4kRdYtvyjKl8VVa0PXS2IdVxHhQ8GEKbxBkyJtSbaIeK1eZGjDKN7dvUh4vkOvU9FMwYNv4GQQ==
 
 "@types/offscreencanvas@^2019.6.4":
   version "2019.7.0"
@@ -268,11 +255,6 @@ date-fns@^2.30.0:
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
   dependencies:
     "@babel/runtime" "^7.21.0"
-
-env-var@^7.3.1:
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/env-var/-/env-var-7.4.1.tgz#88af75fe16cc11031000f88d4777802c6958a01c"
-  integrity sha512-H8Ga2SbXTQwt6MKEawWSvmxoH1+J6bnAXkuyE7eDvbGmrhIL2i+XGjzGM3DFHcJu8GY1zY9/AnBJY8uGQYPHiw==
 
 esbuild@^0.17.5:
   version "0.17.19"
