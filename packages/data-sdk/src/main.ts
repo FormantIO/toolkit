@@ -111,6 +111,7 @@ export * from "./model/IMap";
 export * from "./model/interventionTypes";
 export * from "./model/InterventionType";
 export * from "./model/IMarker3D";
+export * from "./model/IMarker3DArray";
 export * from "./model/INumericSetEntry";
 export * from "./model/INumericSetAggregateMap";
 export * from "./model/INumericAggregate";

@@ -1,3 +1,9 @@
+## [1.20.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3DArray
+
 ## [1.19.0] - 2024-01-17
 
 ### Added
