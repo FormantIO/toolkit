@@ -130,6 +130,14 @@
     eventemitter3 "^5.0.1"
     pako "^2.1.0"
 
+"@formant/realtime-sdk@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-1.2.0.tgz#6010bebe8a8d45b2105bde72c7aaa8cb5577937b"
+  integrity sha512-BOzD40kjGHyHLYhwna/FPTMItnrkIaLvALWh/iM6M7/22ZpDJWLqdtrC7GK80B04KvllQHrkCQGUgQmu2aDXfg==
+  dependencies:
+    "@types/google-protobuf" "~3.7.0"
+    env-var "^7.3.1"
+
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core-worker/-/ui-sdk-realtime-player-core-worker-0.0.4.tgz#d197fcaad113bd51b6cca53e5f6bb1e441ae6582"
@@ -182,6 +190,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
+
+"@types/google-protobuf@~3.7.0":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.7.4.tgz#1621c50ceaf5aefa699851da8e0ea606a2943a39"
+  integrity sha512-6PjMFKl13cgB4kRdYtvyjKl8VVa0PXS2IdVxHhQ8GEKbxBkyJtSbaIeK1eZGjDKN7dvUh4vkOvU9FMwYNv4GQQ==
 
 "@types/offscreencanvas@^2019.6.4":
   version "2019.7.0"
@@ -255,6 +268,11 @@ date-fns@^2.30.0:
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
   dependencies:
     "@babel/runtime" "^7.21.0"
+
+env-var@^7.3.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/env-var/-/env-var-7.4.1.tgz#88af75fe16cc11031000f88d4777802c6958a01c"
+  integrity sha512-H8Ga2SbXTQwt6MKEawWSvmxoH1+J6bnAXkuyE7eDvbGmrhIL2i+XGjzGM3DFHcJu8GY1zY9/AnBJY8uGQYPHiw==
 
 esbuild@^0.17.5:
   version "0.17.19"
