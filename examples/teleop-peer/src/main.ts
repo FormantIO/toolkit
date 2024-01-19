@@ -1,4 +1,4 @@
-import { Fleet } from "@formant/data-sdk";
+import { Fleet, RealtimeMessage } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
@@ -25,7 +25,7 @@ el("button").addEventListener("click", async () => {
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
     log("Getting a realtime connection ... ");
-    const listener = (_peerId: any, message: any) => {
+    const listener = (_peerId: string, message: RealtimeMessage) => {
       (el("formant-realtime-player") as RealtimePlayer).drawVideoFrame(
         message.payload.h264VideoFrame
       );
