@@ -1,3 +1,9 @@
+## [1.23.0] - 2024-01-22
+
+### Added
+
+- Authentication method for peer
+
 ## [1.22.0] - 2024-01-17
 
 ### Added
