@@ -221,6 +221,20 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._token !== undefined;
   }
 
+  async loginToPeer(peerUrl: string, password: string): Promise<void> {
+    const result = await fetch(`${peerUrl}/login`, {
+      method: "POST",
+      body: JSON.stringify({ password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (result.status !== 200) {
+      throw new LoginFailureError("Invalid authentication");
+    }
+  }
+
   /**
    * @deprecated use currentUser property instead.
    */
