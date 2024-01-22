@@ -208,11 +208,26 @@ export class LiveUniverseData
   }
 
   subscribeToNumeric(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (num: [number, number][]) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (num: [number, number][]) => void
   ): CloseSubscription {
-    throw new Error("Method not implemented.");
+    if (source.sourceType === "realtime") {
+      const listener = async (_peerId: string, msg: RealtimeMessage) => {
+        if (msg.payload.numeric) {
+          callback([[Date.now(), msg.payload.numeric.value]]);
+        }
+      };
+      this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
+      return () => {
+        this.unsubscribeToRealtimeMessages(
+          deviceId,
+          source.rosTopicName,
+          listener
+        );
+      };
+    }
+    return () => {};
   }
 
   subscribeToNumericSet(
@@ -328,6 +343,20 @@ export class LiveUniverseData
         },
         callback
       );
+    } else if (source.sourceType === "realtime") {
+      const listener = async (_peerId: string, msg: RealtimeMessage) => {
+        if (msg.payload.jsonString) {
+          callback(JSON.parse(msg.payload.jsonString.value));
+        }
+      };
+      this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
+      return () => {
+        this.unsubscribeToRealtimeMessages(
+          deviceId,
+          source.rosTopicName,
+          listener
+        );
+      };
     }
     return () => {};
   }
