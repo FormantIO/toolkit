@@ -119,10 +119,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
-"@formant/data-sdk@1.23.0":
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.23.0.tgz#a727717cd430e42f01e246f7cdd24f71368e0094"
-  integrity sha512-RjZynKHYIboM37YFKH99oonwDEo3ujqa7IqzANy+RKyBtRgW+MX7Ah6Zp7i/UzIALajB75LMq2gildZTOOT3BA==
+"@formant/data-sdk@1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-1.25.0.tgz#f35c24ee6c1bac9b49b0494504299240cfbb9057"
+  integrity sha512-25VuN9JfQouK9+cH+Ev+eVq0fAZwJrNILlOYXeMPF/B6wa60HkdBI3lkppgQkrFrAAW5sLZEWvYOHGAAT3hdSg==
   dependencies:
     base-64 "^1.0.0"
     base64-js "^1.5.1"
