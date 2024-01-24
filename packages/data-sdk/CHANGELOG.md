@@ -1,3 +1,9 @@
+## [1.24.0] - 2024-01-24
+
+### Added
+
+- Exposing function on interface
+
 ## [1.23.0] - 2024-01-22
 
 ### Added
