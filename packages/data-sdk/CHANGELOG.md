@@ -1,3 +1,9 @@
+## [1.25.0] - 2024-01-24
+
+### Added
+
+- PeerDevice function to get commands
+
 ## [1.24.0] - 2024-01-24
 
 ### Added
