@@ -192,6 +192,10 @@ export class PeerDevice extends BaseDevice {
     }
   }
 
+  async getCommandMetadata(): Promise<{ commands: any[] }> {
+    return (await fetch(`${this.peerUrl}/v1/commands`)).json();
+  }
+
   async sendCommand(
     name: string,
     data?: string,
