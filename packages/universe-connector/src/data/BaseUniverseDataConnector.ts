@@ -10,6 +10,7 @@ import {
   IRtcStreamMessage,
   SessionType,
   createRtcStreamMessage,
+  PeerDevice,
 } from "@formant/data-sdk";
 import {
   CloseSubscription,
@@ -61,7 +62,8 @@ export class BasicUniverseDataConnector {
     Map<DataSourceId, ((data: any) => void)[]>
   > = new Map();
 
-  mapRealtimeConnections: Map<string, Device | "loading"> = new Map();
+  mapRealtimeConnections: Map<string, Device | PeerDevice | "loading"> =
+    new Map();
 
   lastQueriedHistoricTime: Date | undefined;
   time: Date | "live";
@@ -160,7 +162,18 @@ export class BasicUniverseDataConnector {
     const existingDevice = this.mapRealtimeConnections.get(deviceId);
     if (existingDevice === undefined) {
       this.mapRealtimeConnections.set(deviceId, "loading");
-      const device = await Fleet.getDevice(deviceId);
+
+      // is url
+      const isUrl = deviceId.startsWith("http");
+      console.log("Creating {} realtime connection", isUrl ? "peer" : "cloud");
+
+      let device;
+      if (isUrl) {
+        device = new PeerDevice(deviceId);
+      } else {
+        device = await Fleet.getDevice(deviceId);
+      }
+
       await device.startRealtimeConnection(sessionType);
       if (debug) {
         device.addRealtimeListener((peerId, msg) => {
