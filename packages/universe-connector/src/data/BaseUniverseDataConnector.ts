@@ -148,8 +148,8 @@ export class BasicUniverseDataConnector {
   protected async sendRtcMessage(deviceId: string, msg: IRtcStreamMessage) {
     await this.createRealtimeConnection(deviceId);
     const device = this.mapRealtimeConnections.get(deviceId);
-    if (device && device !== "loading" && device.remoteDevicePeerId) {
-      device.rtcClient?.send(device.remoteDevicePeerId, msg, {
+    if (device && device !== "loading" && device) {
+      device.sendRealtimeMessage(msg, {
         channelLabel: "stream.reliable",
       });
     }
