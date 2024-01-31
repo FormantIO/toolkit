@@ -1,6 +1,6 @@
 {
   "name": "@formant/universe-connector",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "A library for getting data from Formant to universe",
   "homepage": "https://github.com/formantio/universe-data-connector",
   "repository": {

@@ -24,11 +24,14 @@ import {
   defined,
   IUniverseOdometry,
   IUniverseGridMap,
-  IUniversePath,
-  IUniversePointCloud,
-  DataResult,
-  BasicUniverseDataConnector,
 } from "../main";
+import { IUniversePath } from "../model/IUniversePath";
+import { IUniversePointCloud } from "../model/IUniversePointCloud";
+
+import {
+  BasicUniverseDataConnector,
+  DataResult,
+} from "./BaseUniverseDataConnector";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
