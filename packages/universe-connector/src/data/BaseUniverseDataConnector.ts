@@ -265,7 +265,10 @@ export class BasicUniverseDataConnector {
     name: string,
     data?: string | undefined
   ): Promise<void> {
-    const d = await Fleet.getDevice(deviceId);
+    const d = this.mapRealtimeConnections.get(deviceId);
+    if (d === "loading" || d === undefined) {
+      throw new Error("Device is not ready or doesnt exist");
+    }
     await d.sendCommand(name, data);
   }
 
