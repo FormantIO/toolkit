@@ -24,14 +24,11 @@ import {
   defined,
   IUniverseOdometry,
   IUniverseGridMap,
-} from "../main";
-import { IUniversePath } from "../model/IUniversePath";
-import { IUniversePointCloud } from "../model/IUniversePointCloud";
-
-import {
-  BasicUniverseDataConnector,
+  IUniversePath,
+  IUniversePointCloud,
   DataResult,
-} from "./BaseUniverseDataConnector";
+  BasicUniverseDataConnector,
+} from "../main";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
@@ -267,16 +264,9 @@ export class LiveUniverseData
   ) {
     await this.createRealtimeConnection(deviceId, SessionType.OBSERVE);
     const device = this.mapRealtimeConnections.get(deviceId);
-    if (
-      device &&
-      device !== "loading" &&
-      device.rtcClient &&
-      device.remoteDevicePeerId
-    ) {
-      device.rtcClient.controlRemoteStream(device.remoteDevicePeerId, {
-        pipeline: "rtc",
-        enable: true,
-        streamName,
+    if (device && device !== "loading") {
+      device.startListeningToRealtimeDataStream({
+        name: streamName,
       });
       device.addRealtimeListener((peerId, msg) => {
         if (msg.header.stream.streamName === streamName) {
@@ -292,16 +282,9 @@ export class LiveUniverseData
     callback: RealtimeListener
   ) {
     const device = this.mapRealtimeConnections.get(deviceId);
-    if (
-      device &&
-      device !== "loading" &&
-      device.rtcClient &&
-      device.remoteDevicePeerId
-    ) {
-      device.rtcClient.controlRemoteStream(device.remoteDevicePeerId, {
-        pipeline: "rtc",
-        enable: false,
-        streamName,
+    if (device && device !== "loading") {
+      device.stopListeningToRealtimeDataStream({
+        name: streamName,
       });
       device.removeRealtimeListener(callback);
     }
