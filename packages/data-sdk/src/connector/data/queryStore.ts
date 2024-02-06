@@ -9,7 +9,10 @@ import { filterDataByType } from "../common/filterDataByType";
 import { filterDataByTime } from "../common/filterDataByTime";
 import { StoreCache } from "./StoreCache";
 import { Fleet } from "../../Fleet";
-import { IQuery, IStreamData, StreamType, IFilter } from "../../main";
+import { IQuery } from "../../model/IQuery";
+import { IStreamData } from "../../model/IStreamData";
+import { IFilter } from "../../model/IFilter";
+import { StreamType } from "../../model/StreamType";
 
 function roundToNearestSecond(date: Date) {
   return new Date(Math.round(date.getTime() / 1000) * 1000);

@@ -9,7 +9,7 @@ import { IPose } from "./IPose";
 import { IUniverseGridMap } from "./IUniverseGridMap";
 import { IUniversePointCloud } from "./IUniversePointCloud";
 import { IUniversePath } from "./IUniversePath";
-import { StreamType } from "../../main";
+import { StreamType } from "../../model/StreamType";
 
 export type DataSourceState =
   | "missing_data"

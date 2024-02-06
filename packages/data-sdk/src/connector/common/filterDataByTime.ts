@@ -1,4 +1,4 @@
-import { IStreamData } from "../../main";
+import { IStreamData } from "../../model/IStreamData";
 
 export function filterDataByTime(
   datas: IStreamData[],

@@ -1,26 +1,3 @@
-import {
-  Device,
-  Fleet,
-  IBitset,
-  ILocation,
-  IQuery,
-  IStreamData,
-  ITransform,
-  ITransformNode,
-  IRtcStreamMessage,
-  SessionType,
-  createRtcStreamMessage,
-  PeerDevice,
-  CloseSubscription,
-  DataSourceState,
-  Interaction,
-  IRealtimeStream,
-  ITelemetryRosStream,
-  ITelemetryStream,
-  IUniverseStatistics,
-  RealtimeButtonConfiguration,
-  UniverseDataSource,
-} from "../../main";
 import { subDays } from "date-fns";
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -32,6 +9,31 @@ import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
+import {
+  CloseSubscription,
+  DataSourceState,
+  IRealtimeStream,
+  ITelemetryRosStream,
+  ITelemetryStream,
+  IUniverseStatistics,
+  Interaction,
+  RealtimeButtonConfiguration,
+  UniverseDataSource,
+} from "../model/IUniverseData";
+import { Device } from "../../devices/Device";
+import { PeerDevice } from "../../devices/PeerDevice";
+import { Fleet } from "../../Fleet";
+import { IQuery } from "../../model/IQuery";
+import {
+  IRtcStreamMessage,
+  createRtcStreamMessage,
+} from "@formant/realtime-sdk";
+import { IStreamData } from "../../model/IStreamData";
+import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
+import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
+import { IBitset } from "../../model/IBitset";
+import { ITransformNode } from "../../model/ITransformNode";
+import { ILocation } from "../../model/ILocation";
 
 export type DeviceId = string;
 export type DataSourceId = string;

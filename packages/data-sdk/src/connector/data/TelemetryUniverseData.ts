@@ -1,27 +1,29 @@
-import { IDataPoint, IPointCloud, StreamType } from "../../main";
-import {
-  CloseSubscription,
-  IPose,
-  IUniverseData,
-  IUniverseGridMap,
-  IUniverseOdometry,
-  NoData,
-  UniverseDataSource,
-  IJointState,
-  ILocation,
-  IMarker3DArray,
-  INumericSetEntry,
-  ITransformNode,
-  IPcd,
-  IUniversePath,
-  IUniversePointCloud,
-  IBitset,
-} from "../../main";
 import { addSeconds, addYears } from "date-fns";
 import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
 import { QueryStore } from "./queryStore";
 import { StoreCache } from "./StoreCache";
+import {
+  CloseSubscription,
+  IUniverseData,
+  NoData,
+  UniverseDataSource,
+} from "../model/IUniverseData";
+import { IUniversePath } from "../model/IUniversePath";
+import { IUniversePointCloud } from "../model/IUniversePointCloud";
+import { IPcd } from "./pcd";
+import { IUniverseOdometry } from "../model/IUniverseOdometry";
+import { IPose } from "../model/IPose";
+import { IBitset } from "../../model/IBitset";
+import { ITransformNode } from "../../model/ITransformNode";
+import { ILocation } from "../../model/ILocation";
+import { IUniverseGridMap } from "../model/IUniverseGridMap";
+import { IJointState } from "../../model/IJointState";
+import { IMarker3DArray } from "../../model/IMarker3DArray";
+import { INumericSetEntry } from "../../model/INumericSetEntry";
+import { StreamType } from "../../model/StreamType";
+import { IDataPoint } from "../../model/IDataPoint";
+import { IPointCloud } from "../../model/IPointCloud";
 
 const queryStore = new QueryStore();
 export class TelemetryUniverseData

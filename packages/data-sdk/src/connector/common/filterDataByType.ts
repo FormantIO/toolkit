@@ -1,4 +1,5 @@
-import { IStreamData, StreamType } from "../../main";
+import { IStreamData } from "../../model/IStreamData";
+import { StreamType } from "../../model/StreamType";
 
 export function filterDataByType<T extends StreamType>(
   datas: IStreamData[],
