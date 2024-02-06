@@ -62,11 +62,16 @@
   },
   "types": "./dist/types/data-sdk/src/main.d.ts",
   "dependencies": {
+    "@formant/ui-sdk-realtime-player-core": "^0.0.2",
+    "@formant/ui-sdk-realtime-player-core-worker": "^0.0.4",
+    "@types/validator": "^13.11.8",
     "base-64": "^1.0.0",
     "base64-js": "^1.5.1",
     "date-fns": "^2.30.0",
     "eventemitter3": "^5.0.1",
-    "pako": "^2.1.0"
+    "lzfjs": "^1.0.1",
+    "pako": "^2.1.0",
+    "validator": "^13.11.0"
   },
   "engines": {
     "node": "^18.12.0 || ^16.13.0"
