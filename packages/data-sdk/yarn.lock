@@ -132,6 +132,19 @@
     "@types/google-protobuf" "~3.7.0"
     env-var "^7.3.1"
 
+"@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core-worker/-/ui-sdk-realtime-player-core-worker-0.0.4.tgz#d197fcaad113bd51b6cca53e5f6bb1e441ae6582"
+  integrity sha512-yQ0VJNdrFkTHRA9mBkmfBzrgSrdOTTukETtC1Jit2A5yj2B765IngA20Lf8ny6BePTsozHFk89KM5cU6MNuMmg==
+  dependencies:
+    "@types/offscreencanvas" "^2019.6.4"
+    h264decoder "^1.0.0"
+
+"@formant/ui-sdk-realtime-player-core@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk-realtime-player-core/-/ui-sdk-realtime-player-core-0.0.2.tgz#c4a48e2de2619b3a3633c4808e201234decf0b41"
+  integrity sha512-RC8z90dMvtXDAnxnSLYH2d4m27SgPI7fJasMu4X98QEwo4eOg4yRXT5TNbnpdjI7bqARbaSlosWtc7ba8d42Ng==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@isaacs/cliui/-/cliui-8.0.2.tgz#b37667b7bc181c168782259bab42474fbf52b550"
@@ -213,10 +226,20 @@
   dependencies:
     undici-types "~5.26.4"
 
+"@types/offscreencanvas@^2019.6.4":
+  version "2019.7.3"
+  resolved "https://registry.yarnpkg.com/@types/offscreencanvas/-/offscreencanvas-2019.7.3.tgz#90267db13f64d6e9ccb5ae3eac92786a7c77a516"
+  integrity sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==
+
 "@types/pako@^2.0.0":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/pako/-/pako-2.0.2.tgz#155edb098859d98dd598b805b27ec2bf96cc5354"
   integrity sha512-AtTbzIwhvLMTEUPudP3hxUwNK50DoX3amfVJmmL7WQH5iF3Kfqs8pG1tStsewHqmh75ULmjjldKn/B70D6DNcQ==
+
+"@types/validator@^13.11.8":
+  version "13.11.8"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.11.8.tgz#bb1162ec0fe6f87c95ca812f15b996fcc5e1e2dc"
+  integrity sha512-c/hzNDBh7eRF+KbCf+OoZxKbnkpaK/cKp9iLQWqB7muXtM+MtL9SUUH8vCFcLn6dH1Qm05jiexK0ofWY7TfOhQ==
 
 "@vitest/coverage-c8@^0.30.1":
   version "0.30.1"
@@ -718,6 +741,11 @@ grpc-web@1.4.2:
   resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.4.2.tgz#86995f76471ce6b2119106ec26f909b7b69e7d43"
   integrity sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw==
 
+h264decoder@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/h264decoder/-/h264decoder-1.0.0.tgz#5c3c5bc1f755df10f3689d58e00910264be8a8ff"
+  integrity sha512-uFoa7RPOjKia91ziteLynrDkoIIx17zfIhJbTy2SXAg/Eu89H8sFVDw9lpWv3i4evIO1QlCdjrub0f4kRIgtcQ==
+
 has-flag@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-4.0.0.tgz#944771fd9c81c81265c4d6941860da06bb59479b"
@@ -864,6 +892,11 @@ lunr@^2.3.9:
   version "2.3.9"
   resolved "https://registry.yarnpkg.com/lunr/-/lunr-2.3.9.tgz#18b123142832337dd6e964df1a5a7707b25d35e1"
   integrity sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==
+
+lzfjs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/lzfjs/-/lzfjs-1.0.1.tgz#f26074f55bdca831a6354449f59a1632fe8f6ea1"
+  integrity sha512-P1x9feLT9xHg9OpfgWcDlWtndf7wYTJk5LgIeVE9tGo6CptVnDi34/mcT8REskWNdQCSiPGhSLQ80L7zTQXUVg==
 
 magic-string@^0.30.0:
   version "0.30.5"
@@ -1339,6 +1372,11 @@ v8-to-istanbul@^9.0.0:
     "@jridgewell/trace-mapping" "^0.3.12"
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^2.0.0"
+
+validator@^13.11.0:
+  version "13.11.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-13.11.0.tgz#23ab3fd59290c61248364eabf4067f04955fbb1b"
+  integrity sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==
 
 vite-node@0.30.1:
   version "0.30.1"
