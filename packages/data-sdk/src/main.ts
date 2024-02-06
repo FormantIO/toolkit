@@ -195,3 +195,28 @@ export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRe
 import "./init.ts";
 
 export { createRtcStreamMessage } from "@formant/realtime-sdk";
+
+// Connector Exports
+export * from "./connector/data/LiveUniverseData";
+export * from "./connector/data/queryStore";
+export * from "./connector/data/TelemetryUniverseData";
+export * from "./connector/data/BaseUniverseDataConnector";
+
+export * from "./connector/model/IPose";
+export * from "./connector/model/IUniverseOdometry";
+export * from "./connector/model/IUniverseData";
+
+export { defined, definedAndNotNull } from "../../common/defined";
+
+export type IUniverseGridMap =
+  import("./connector/model/IUniverseGridMap").IUniverseGridMap;
+export type IUniverseOdometry =
+  import("./connector/model/IUniverseOdometry").IUniverseOdometry;
+export type IPcd = import("./connector/model/IPcd").IPcd;
+export type IPose = import("./connector/model/IPose").IPose;
+export type IUniversePointCloud =
+  import("./connector/model/IUniversePointCloud").IUniversePointCloud;
+export type IUniversePath =
+  import("./connector/model/IUniversePath").IUniversePath;
+export type IUniverseData =
+  import("./connector/model/IUniverseData").IUniverseData;
