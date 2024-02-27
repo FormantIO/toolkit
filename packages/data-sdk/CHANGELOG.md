@@ -1,3 +1,7 @@
+## [1.30.0] - 2024-02-27
+
+- adding more events
+
 ## [1.29.0] - 2024-02-27
 
 - fixing interface of IAnnotation
