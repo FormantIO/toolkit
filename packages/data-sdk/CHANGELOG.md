@@ -1,3 +1,7 @@
+## [1.28.0] - 2024-02-27
+
+- fixing interface of ITriggeredEvent
+
 ## [1.26.0] - 2024-01-24
 
 - targeting es2019
