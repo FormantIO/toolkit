@@ -7,7 +7,7 @@ import { Uuid } from "./Uuid";
 export interface IAnnotation extends IBaseEvent<"annotation"> {
   editedAt?: IsoDate;
   userId: Uuid;
-  annotationTemplateId: Uuid;
+  annotationTemplateId?: Uuid | null;
   taggedUsers?: ITaggedUsers | null;
   publishedTo?: ISpreadsheetIdRange;
   note?: string | null;

@@ -1,3 +1,7 @@
+## [1.29.0] - 2024-02-27
+
+- fixing interface of IAnnotation
+
 ## [1.28.0] - 2024-02-27
 
 - fixing interface of ITriggeredEvent
