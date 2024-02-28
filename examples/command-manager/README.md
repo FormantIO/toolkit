@@ -1,6 +1,6 @@
 # Command Buttons
 
-This module enables you to issue commands with a simple click of a button. You have the option to send a parameter with the command by providing a text input, or select a stream which will generate a drop-down list based on the stream's values.
+This module enables you to issue commands with a simple click of a button. You have the option to send a parameter with the command by providing a text input, or select a stream which will generate a drop-down list based on the stream's values. NOTE: This stream should enable "persist last known value" in the stream's settings. 
 
 ## Configuration
 
