@@ -28,6 +28,7 @@ export interface IAuthenticationStore {
   ): Promise<AuthenticationResult>;
 
   loginWithToken(token: string, refreshToken?: string): Promise<void>;
+  loginToPeer(peerUrl: string, password: string): Promise<void>;
 
   isAuthenticated(): boolean;
 

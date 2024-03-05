@@ -1,10 +1,8 @@
-import { fork } from "../../../common/fork";
 import { duration } from "../../../common/duration";
 
 interface ICacheEntryMetadata<Value> {
-  generating: boolean;
-  expiration: Date;
-  lastValue?: Value;
+  generating: Promise<Value> | false;
+  staleAt: number;
 }
 
 type CacheKey = string;
@@ -13,48 +11,36 @@ export class StoreCache<Key, Value> {
   private entries = new Map<CacheKey, Value>();
   private metadata = new Map<CacheKey, ICacheEntryMetadata<Value>>();
   private capacity!: number;
-  private timeout!: number;
+  private staleIntervalMs!: number;
 
   constructor({
     capacity,
     timeout,
   }: { capacity?: number; timeout?: number } = {}) {
     this.capacity = capacity || 10000;
-    this.timeout = timeout || duration.minute;
+    this.staleIntervalMs = timeout || duration.minute;
   }
 
   public get(key: Key, generator?: () => Promise<Value>): Value | undefined {
     const cacheKey = this.keyToCacheKey(key);
-    const entry = this.entries.get(cacheKey);
-    const metadata = this.metadata.get(cacheKey);
 
-    if (
-      (entry === undefined ||
-        (metadata && metadata?.expiration.getTime() < Date.now())) &&
-      !metadata?.generating &&
-      generator
-    ) {
-      this.generate(key, generator());
+    if (this.isStale(cacheKey) && !this.isGenerating(cacheKey) && generator) {
+      void this.generate(key, generator);
     }
-
-    if (entry === undefined && metadata && metadata.lastValue !== undefined) {
-      return metadata.lastValue;
-    }
-
-    return entry;
+    return this.entries.get(cacheKey);
   }
 
   public set(key: Key, value: Value) {
     const cacheKey = this.keyToCacheKey(key);
     this.metadata.set(cacheKey, {
       generating: false,
-      expiration: new Date(Date.now() + this.timeout),
-      lastValue: value,
+      staleAt: performance.now() + this.staleIntervalMs,
     });
-    this.entries.set(cacheKey, value);
-
-    if (this.metadata.size > this.capacity) {
-      this.deleteOldestEntry();
+    const previousValue = this.entries.get(cacheKey);
+    const isDuplicate = JSON.stringify(previousValue) === JSON.stringify(value);
+    if (!isDuplicate) {
+      this.entries.set(cacheKey, value);
+      this.enforceMaxSize();
     }
   }
 
@@ -72,37 +58,50 @@ export class StoreCache<Key, Value> {
     return JSON.stringify(key);
   }
 
-  private deleteOldestEntry() {
-    if (this.metadata.size < 1) {
-      return;
+  private enforceMaxSize(): void {
+    while (this.metadata.size > this.capacity && this.metadata.size > 0) {
+      const [key] = [...this.metadata.entries()].reduce(
+        ([oldestKey, oldestEntry], [thisKey, entry]) =>
+          entry.staleAt < oldestEntry.staleAt
+            ? [thisKey, entry]
+            : [oldestKey, oldestEntry]
+      );
+      this.clearKey(key);
     }
-    const [key] = [...this.metadata.entries()].reduce(
-      ([oldestKey, oldestEntry], [thisKey, entry]) =>
-        entry.expiration.getTime() < oldestEntry.expiration.getTime()
-          ? [thisKey, entry]
-          : [oldestKey, oldestEntry]
-    );
-    this.clearKey(key);
   }
 
-  private generate(key: Key, promise: Promise<Value>) {
+  private isStale(cacheKey: CacheKey): boolean {
+    const metadata = this.metadata.get(cacheKey);
+    return metadata ? metadata?.staleAt < performance.now() : true;
+  }
+
+  private isGenerating(cacheKey: CacheKey): Promise<Value> | false {
+    const metadata = this.metadata.get(cacheKey);
+    return metadata ? metadata.generating : false;
+  }
+
+  private generate(key: Key, generator: () => Promise<Value>) {
     const cacheKey = this.keyToCacheKey(key);
     const existingMetadata = this.metadata.get(cacheKey) || {};
+
+    const generating = generator()
+      .then((value) => {
+        const metadata = this.metadata.get(cacheKey);
+        const canceled = metadata?.generating !== generating;
+        if (!canceled) {
+          this.set(key, value);
+        }
+        return value;
+      })
+      .catch((err) => {
+        this.metadata.delete(cacheKey);
+        throw err;
+      });
+
     this.metadata.set(cacheKey, {
       ...existingMetadata,
-      generating: true,
-      expiration: new Date(Date.now() + this.timeout),
+      generating,
+      staleAt: performance.now() + this.staleIntervalMs,
     });
-    setTimeout(() => {
-      fork(
-        promise.then((value) => {
-          const metadata = this.metadata.get(cacheKey);
-          const canceled = !metadata?.generating;
-          if (!canceled) {
-            this.set(key, value);
-          }
-        })
-      );
-    }, 0);
   }
 }

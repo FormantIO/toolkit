@@ -4,8 +4,10 @@ import { IConfiguration } from "./types";
 import { CommandRow } from "./CommandRow";
 import { useStreams } from "./hooks/useStreams";
 import { useCommands } from "./hooks/useCommands";
+import { sendButtonState, initRealtimeDevice, updateConnectedSetFn } from "./hooks/useButtons";
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { ButtonRow } from "./ButtonRow";
+import { useState } from "react";
 
 export interface IStream {
   streamName: string;
@@ -16,18 +18,23 @@ function App() {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
   const device = useDevice();
+  if (config.buttons) {
+    initRealtimeDevice(device);
+  }
   const streams: IStream[] = useStreams(device);
   const commands = useCommands();
+  const [connected, setConnected] = useState(false);
+  updateConnectedSetFn(setConnected);
 
   return (
     <div className="App">
-      {!config ? (
+      {!config || (!config.commands && !config.buttons) ? (
         <Conatiner>
           <LoadingIndicator />
         </Conatiner>
       ) : (
         <Table>
-          {config.commands.map((_) => {
+          {config.commands && config.commands.map((_) => {
             return (
               <CommandRow
                 device={device as any}
@@ -48,6 +55,17 @@ function App() {
                   commands?.filter((command) => _.name === command.name)[0]
                     ?.parameterMeta ?? {}
                 }
+              />
+            );
+          })}
+          {config.buttons && config.buttons.map((_) => {
+            return (
+              <ButtonRow
+                key={_.streamName}
+                streamName={_.streamName}
+                buttonLabel={_.buttonLabel}
+                isConnected={connected}
+                sendBtnPressFn={sendButtonState}
               />
             );
           })}

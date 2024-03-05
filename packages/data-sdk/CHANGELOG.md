@@ -1,3 +1,81 @@
+## [1.31.0] - 2024-02-27
+
+- adding physical events
+
+## [1.30.0] - 2024-02-27
+
+- adding more events
+
+## [1.29.0] - 2024-02-27
+
+- fixing interface of IAnnotation
+
+## [1.28.0] - 2024-02-27
+
+- fixing interface of ITriggeredEvent
+
+## [1.26.0] - 2024-01-24
+
+- targeting es2019
+
+## [1.26.0] - 2024-01-24
+
+- Merging in data connector
+
+## [1.25.0] - 2024-01-24
+
+### Added
+
+- PeerDevice function to get commands
+
+## [1.24.0] - 2024-01-24
+
+### Added
+
+- Exposing function on interface
+
+## [1.23.0] - 2024-01-22
+
+### Added
+
+- Authentication method for peer
+
+## [1.22.0] - 2024-01-17
+
+### Added
+
+- bundling deps to prevent typing issues
+
+## [1.21.0] - 2024-01-17
+
+### Added
+
+- exposing realtime message creator
+
+## [1.20.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3DArray
+
+## [1.19.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3D
+
+## [1.18.0] - 2023-12-29
+
+### Added
+
+- improvements to storeCache
+
+## [1.17.0] - 2023-10-09
+
+### Added
+
+- New functions for looking up SSO login information and logging in with SSO tokens
+
 ## [1.16.0] - 2023-09-21
 
 ### Fixed
@@ -9,7 +87,6 @@
 ### Added
 
 - Add support for agent version querying (#136)
-
 
 ## [1.14.1] - 2023-09-06
 
@@ -39,21 +116,20 @@
 
 ### Added
 
-- Enhance Authentication.login() method for _advanced_ login flows. 
+- Enhance Authentication.login() method for _advanced_ login flows.
 
 ## [1.12.0] - 2023-08-07
 
 ### Upgrade
 
-- Added support for `HEADLESS` session types in RtcClientPool. 
-- Upgrade `@formant/realtime-sdk` to 1.2.0. 
+- Added support for `HEADLESS` session types in RtcClientPool.
+- Upgrade `@formant/realtime-sdk` to 1.2.0.
 
 ## [1.11.1] - 2023-08-07
 
 ### Added
 
 - Added right files
-
 
 ## [1.11.0] - 2023-08-07
 
@@ -272,6 +348,8 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.18.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
+[1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
 [1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
 [1.15.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.1...release/data-sdk/1.15.0~
 [1.14.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.0...release/data-sdk/1.14.1~

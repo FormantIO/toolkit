@@ -20,6 +20,12 @@ export interface ICommandConfiguration {
   streamName: string;
 }
 
+export interface IButtonConfiguration {
+  streamName: string;
+  buttonLabel?: string;
+}
+
 export interface IConfiguration {
   commands: ICommandConfiguration[];
+  buttons: IButtonConfiguration[];
 }
