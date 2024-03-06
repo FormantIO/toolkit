@@ -207,7 +207,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-
+    const pcdWorker = this.getAvailableWorker();
     const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
       deviceId,
       source,
@@ -227,8 +227,8 @@ export class TelemetryUniverseData
           callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
         } else {
           const { url } = latestPointCloud;
-          this.pcdWorker.postMessage({ url });
-          this.pcdWorker.onmessage = (
+          pcdWorker.postMessage({ url });
+          pcdWorker.onmessage = (
             ev: MessageEvent<{ url: string; pcd: IPcd }>
           ) => {
             if (ev.data.url === url) {
@@ -257,8 +257,8 @@ export class TelemetryUniverseData
         }
         if (latestLocalization.pointClouds) {
           const { url, worldToLocal } = latestLocalization.pointClouds[0];
-          this.pcdWorker.postMessage({ url });
-          this.pcdWorker.onmessage = (
+          pcdWorker.postMessage({ url });
+          pcdWorker.onmessage = (
             ev: MessageEvent<{ url: string; pcd: IPcd }>
           ) => {
             if (ev.data.url === url) {

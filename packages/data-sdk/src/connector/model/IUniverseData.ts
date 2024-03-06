@@ -136,6 +136,8 @@ export interface IUniverseData {
     }[]
   >;
 
+  clearWorkerPool(): void;
+
   getLatestLocations(
     deviceId: string
   ): Promise<{ streamName: string; location: ILocation }[]>;

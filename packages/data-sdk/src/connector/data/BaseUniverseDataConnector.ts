@@ -46,9 +46,11 @@ export type DataResult<T> = {
 // get query paramters "debug"
 const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
+const PCD_WORKER_POOL_SIZE = 5;
 
 export class BasicUniverseDataConnector {
-  pcdWorker = new PcdWorker();
+  pcdWorkerPool: PcdWorker[] = [];
+  pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
 
@@ -79,6 +81,11 @@ export class BasicUniverseDataConnector {
 
   constructor() {
     this.time = "live";
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
+      const pcdWorker = new PcdWorker();
+      this.pcdWorkerPool.push(pcdWorker);
+    }
+
     const dataLoop = async () => {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
         // Load all data for this time
@@ -121,6 +128,26 @@ export class BasicUniverseDataConnector {
       setTimeout(() => dataLoop(), 0);
     };
     setTimeout(() => dataLoop(), 0);
+  }
+
+  protected getAvailableWorker(): PcdWorker {
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
+      if (!this.pcdWorkerPoolOccupancy[i]) {
+        this.pcdWorkerPoolOccupancy[i] = true;
+        return this.pcdWorkerPool[i];
+      }
+    }
+  }
+
+  protected releaseWorker(worker: PcdWorker) {
+    const index = this.pcdWorkerPool.indexOf(worker);
+    this.pcdWorkerPoolOccupancy[index] = false;
+  }
+
+  clearWorkerPool() {
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
+      this.pcdWorkerPoolOccupancy[i] = false;
+    }
   }
 
   private generateTelemetryFilter(): IQuery {
