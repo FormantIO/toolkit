@@ -49,7 +49,9 @@ const debug =
 const PCD_WORKER_POOL_SIZE = 5;
 
 export class BasicUniverseDataConnector {
+
   pcdWorkerPool: Worker[] = [];
+
   pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
