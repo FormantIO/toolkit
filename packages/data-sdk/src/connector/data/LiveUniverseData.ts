@@ -387,6 +387,7 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
+    const pcdWorker = this.getAvailableWorker();
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"
@@ -417,8 +418,8 @@ export class LiveUniverseData
           if (found) {
             const { url } = found;
             pcd = await new Promise((resolve) => {
-              this.pcdWorker.postMessage({ url });
-              this.pcdWorker.onmessage = (
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
                 ev: MessageEvent<{ url: string; pcd: IPcd }>
               ) => {
                 if (ev.data.url === url) {
@@ -469,8 +470,8 @@ export class LiveUniverseData
           if (found && found.pointClouds) {
             const { url } = found.pointClouds[0];
             pcd = await new Promise((resolve) => {
-              this.pcdWorker.postMessage({ url });
-              this.pcdWorker.onmessage = (
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
                 ev: MessageEvent<{ url: string; pcd: IPcd }>
               ) => {
                 if (ev.data.url === url) {
@@ -499,11 +500,11 @@ export class LiveUniverseData
         if (msg.payload.pointCloud) {
           const id = Math.random();
           const pcd = await new Promise<IPcd>((resolve) => {
-            this.pcdWorker.postMessage({
+            pcdWorker.postMessage({
               id,
               pointCloud: defined(msg.payload.pointCloud).data,
             });
-            this.pcdWorker.onmessage = (
+            pcdWorker.onmessage = (
               ev: MessageEvent<{ id: number; pcd: IPcd }>
             ) => {
               if (ev.data.id === id) {

@@ -48,7 +48,8 @@ const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
 
 export class BasicUniverseDataConnector {
-  pcdWorker = new PcdWorker();
+  pcdWorkerPool: PcdWorker[] = [];
+  pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
 
@@ -79,6 +80,12 @@ export class BasicUniverseDataConnector {
 
   constructor() {
     this.time = "live";
+    const poolSize = 5;
+    for (let i = 0; i < poolSize; i++) {
+      const pcdWorker = new PcdWorker();
+      this.pcdWorkerPool.push(pcdWorker);
+    }
+
     const dataLoop = async () => {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
         // Load all data for this time
@@ -121,6 +128,26 @@ export class BasicUniverseDataConnector {
       setTimeout(() => dataLoop(), 0);
     };
     setTimeout(() => dataLoop(), 0);
+  }
+
+  protected getAvailableWorker(): PcdWorker {
+    for (let i = 0; i < 5; i++) {
+      if (!this.pcdWorkerPoolOccupancy[i]) {
+        this.pcdWorkerPoolOccupancy[i] = true;
+        return this.pcdWorkerPool[i];
+      }
+    }
+  }
+
+  protected releaseWorker(worker: PcdWorker) {
+    const index = this.pcdWorkerPool.indexOf(worker);
+    this.pcdWorkerPoolOccupancy[index] = false;
+  }
+
+  clearWorkerPool() {
+    for (let i = 0; i < 5; i++) {
+      this.pcdWorkerPoolOccupancy[i] = false;
+    }
   }
 
   private generateTelemetryFilter(): IQuery {
