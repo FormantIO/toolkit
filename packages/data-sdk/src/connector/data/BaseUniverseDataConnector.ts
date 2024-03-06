@@ -49,7 +49,7 @@ const debug =
 const PCD_WORKER_POOL_SIZE = 5;
 
 export class BasicUniverseDataConnector {
-  pcdWorkerPool: PcdWorker[] = [];
+  pcdWorkerPool: Worker[] = [];
   pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
@@ -130,16 +130,17 @@ export class BasicUniverseDataConnector {
     setTimeout(() => dataLoop(), 0);
   }
 
-  protected getAvailableWorker(): PcdWorker {
+  protected getAvailableWorker(): Worker | undefined {
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       if (!this.pcdWorkerPoolOccupancy[i]) {
         this.pcdWorkerPoolOccupancy[i] = true;
         return this.pcdWorkerPool[i];
       }
     }
+    return undefined;
   }
 
-  protected releaseWorker(worker: PcdWorker) {
+  protected releaseWorker(worker: Worker) {
     const index = this.pcdWorkerPool.indexOf(worker);
     this.pcdWorkerPoolOccupancy[index] = false;
   }
