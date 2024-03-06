@@ -46,6 +46,7 @@ export type DataResult<T> = {
 // get query paramters "debug"
 const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
+const PCD_WORKER_POOL_SIZE = 5;
 
 export class BasicUniverseDataConnector {
   pcdWorkerPool: PcdWorker[] = [];
@@ -80,8 +81,7 @@ export class BasicUniverseDataConnector {
 
   constructor() {
     this.time = "live";
-    const poolSize = 5;
-    for (let i = 0; i < poolSize; i++) {
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       const pcdWorker = new PcdWorker();
       this.pcdWorkerPool.push(pcdWorker);
     }
@@ -131,7 +131,7 @@ export class BasicUniverseDataConnector {
   }
 
   protected getAvailableWorker(): PcdWorker {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       if (!this.pcdWorkerPoolOccupancy[i]) {
         this.pcdWorkerPoolOccupancy[i] = true;
         return this.pcdWorkerPool[i];
@@ -145,7 +145,7 @@ export class BasicUniverseDataConnector {
   }
 
   clearWorkerPool() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       this.pcdWorkerPoolOccupancy[i] = false;
     }
   }
