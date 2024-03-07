@@ -388,6 +388,9 @@ export class LiveUniverseData
     callback: (data: IUniversePointCloud) => void
   ): () => void {
     const pcdWorker = this.getAvailableWorker();
+    if (!pcdWorker) {
+      throw new Error("No available pointcloud worker");
+    }
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"

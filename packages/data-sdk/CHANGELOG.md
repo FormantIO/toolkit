@@ -1,3 +1,7 @@
+## [1.32.0] - 2024-03-06
+
+- Adding support for multiple pointclouds subscriptions
+
 ## [1.31.0] - 2024-02-27
 
 - adding physical events

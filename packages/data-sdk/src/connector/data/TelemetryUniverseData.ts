@@ -208,6 +208,9 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const pcdWorker = this.getAvailableWorker();
+    if (!pcdWorker) {
+      throw new Error("No available pointcloud worker");
+    }
     const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
       deviceId,
       source,
