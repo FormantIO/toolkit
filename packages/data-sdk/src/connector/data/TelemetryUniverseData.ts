@@ -1,7 +1,6 @@
 import { addSeconds, addYears } from "date-fns";
 import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
-import { QueryStore } from "./queryStore";
 import { StoreCache } from "./StoreCache";
 import {
   CloseSubscription,
@@ -25,7 +24,6 @@ import { StreamType } from "../../model/StreamType";
 import { IDataPoint } from "../../model/IDataPoint";
 import { IPointCloud } from "../../model/IPointCloud";
 
-const queryStore = new QueryStore();
 export class TelemetryUniverseData
   extends BasicUniverseDataConnector
   implements IUniverseData
@@ -122,7 +120,7 @@ export class TelemetryUniverseData
       } else {
         end = addSeconds(time, 5);
       }
-      let data = queryStore.moduleQuery(
+      let data = this.queryStore.moduleQuery(
         {
           deviceIds: [deviceId],
         },
@@ -211,69 +209,133 @@ export class TelemetryUniverseData
     if (!pcdWorker) {
       throw new Error("No available pointcloud worker");
     }
-    const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
-      deviceId,
-      source,
-      callback
-    );
-    const pointCloudUnsubscribe = this.subscribeTelemetry(
-      deviceId,
-      source,
-      "point cloud",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
-          callback(NoData);
-          return;
-        }
-        const latestPointCloud = d[d.length - 1][1] as "string" | IPointCloud;
-        if (typeof latestPointCloud === "string") {
-          callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
-        } else {
-          const { url } = latestPointCloud;
-          pcdWorker.postMessage({ url });
-          pcdWorker.onmessage = (
-            ev: MessageEvent<{ url: string; pcd: IPcd }>
-          ) => {
-            if (ev.data.url === url) {
-              callback({
-                worldToLocal: latestPointCloud.worldToLocal,
-                pcd: ev.data.pcd,
-              });
+    const probeStreamType = async (): Promise<string> => {
+      return new Promise((resolve) => {
+        // Define a callback to resolve the promise with the detected data type
+        const _callback = (dataType: string) => {
+          jsonUnsubscribe();
+          pointCloudUnsubscribe();
+          localizationUnsubscribe();
+          // Resolve the promise with the detected data type
+          resolve(dataType);
+        };
+
+        const _source = {
+          ...source,
+          latestDataPoint: true,
+        };
+
+        // Subscribe to json, pointcloud, and localization to detect the data type
+        const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
+          deviceId,
+          _source,
+          (d) => {
+            if (d !== undefined && typeof d !== "symbol") {
+              _callback("json");
             }
-          };
-        }
-      }
-    );
-    const localizationUnsubscribe = this.subscribeTelemetry(
-      deviceId,
-      source,
-      "localization",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
-          callback(NoData);
-          return;
-        }
-        let latestLocalization = d[d.length - 1][1];
-        if (latestLocalization.url) {
-          const response = await fetch(latestLocalization.url);
-          latestLocalization = await response.json();
-        }
-        if (latestLocalization.pointClouds) {
-          const { url, worldToLocal } = latestLocalization.pointClouds[0];
-          pcdWorker.postMessage({ url });
-          pcdWorker.onmessage = (
-            ev: MessageEvent<{ url: string; pcd: IPcd }>
-          ) => {
-            if (ev.data.url === url) {
-              callback({
-                worldToLocal,
-                pcd: ev.data.pcd,
-              });
+          }
+        );
+
+        const pointCloudUnsubscribe = this.subscribeTelemetry(
+          deviceId,
+          _source,
+          "point cloud",
+          async (d) => {
+            if (d !== undefined && typeof d !== "symbol") {
+              _callback("pointcloud");
             }
-          };
-        }
+          }
+        );
+
+        const localizationUnsubscribe = this.subscribeTelemetry(
+          deviceId,
+          _source,
+          "localization",
+          async (d) => {
+            if (d !== undefined && typeof d !== "symbol") {
+              _callback("localization");
+            }
+          }
+        );
+      });
+    };
+
+    // Call the function and handle the resolved data type
+    let jsonUnsubscribe = () => {};
+    let pointCloudUnsubscribe = () => {};
+    let localizationUnsubscribe = () => {};
+    probeStreamType().then((dataType) => {
+      if (dataType === "json") {
+        jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
+          deviceId,
+          source,
+          callback
+        );
+      } else if (dataType === "pointcloud") {
+        pointCloudUnsubscribe = this.subscribeTelemetry(
+          deviceId,
+          source,
+          "point cloud",
+          async (d) => {
+            if (d === "too much data" || d === undefined) {
+              callback(NoData);
+              return;
+            }
+            const latestPointCloud = d[d.length - 1][1] as
+              | "string"
+              | IPointCloud;
+            if (typeof latestPointCloud === "string") {
+              callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
+            } else {
+              const { url } = latestPointCloud;
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
+                ev: MessageEvent<{ url: string; pcd: IPcd }>
+              ) => {
+                if (ev.data.url === url) {
+                  callback({
+                    worldToLocal: latestPointCloud.worldToLocal,
+                    pcd: ev.data.pcd,
+                  });
+                }
+              };
+            }
+          }
+        );
+      } else if (dataType === "localization") {
+        localizationUnsubscribe = this.subscribeTelemetry(
+          deviceId,
+          source,
+          "localization",
+          async (d) => {
+            if (d === "too much data" || d === undefined) {
+              callback(NoData);
+              return;
+            }
+            let latestLocalization = d[d.length - 1][1];
+            if (latestLocalization.url) {
+              const response = await fetch(latestLocalization.url);
+              latestLocalization = await response.json();
+            }
+            if (latestLocalization.pointClouds) {
+              const { url, worldToLocal } = latestLocalization.pointClouds[0];
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
+                ev: MessageEvent<{ url: string; pcd: IPcd }>
+              ) => {
+                if (ev.data.url === url) {
+                  callback({
+                    worldToLocal,
+                    pcd: ev.data.pcd,
+                  });
+                }
+              };
+            }
+          }
+        );
       }
-    );
+    });
+
     return () => {
       jsonUnsubscribe();
       pointCloudUnsubscribe();
