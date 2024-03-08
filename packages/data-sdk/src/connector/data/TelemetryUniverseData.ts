@@ -205,7 +205,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const pcdWorker = this.getAvailableWorker();
+    const pcdWorker = this.getAvailablePCDWorker();
     if (!pcdWorker) {
       throw new Error("No available pointcloud worker");
     }
@@ -337,6 +337,7 @@ export class TelemetryUniverseData
     });
 
     return () => {
+      this.releasePCDWorker(pcdWorker);
       jsonUnsubscribe();
       pointCloudUnsubscribe();
       localizationUnsubscribe();
@@ -349,6 +350,10 @@ export class TelemetryUniverseData
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
+    }
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
     }
     return this.subscribeTelemetry(
       deviceId,
@@ -363,28 +368,32 @@ export class TelemetryUniverseData
 
         let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          dataFetchWorker.postMessage({ url: dp.url });
+          dataFetchWorker.onmessage = (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            latestLocalization = ev.data.response;
 
-        if (latestLocalization.odometry) {
-          callback({
-            worldToLocal: latestLocalization.odometry.worldToLocal,
-            pose: {
-              translation: {
-                x: latestLocalization.odometry.pose.translation.x,
-                y: latestLocalization.odometry.pose.translation.y,
-                z: latestLocalization.odometry.pose.translation.z,
-              },
-              rotation: {
-                x: latestLocalization.odometry.pose.rotation.x,
-                y: latestLocalization.odometry.pose.rotation.y,
-                z: latestLocalization.odometry.pose.rotation.z,
-                w: latestLocalization.odometry.pose.rotation.w,
-              },
-            },
-            covariance: [],
-          });
+            if (latestLocalization.odometry) {
+              callback({
+                worldToLocal: latestLocalization.odometry.worldToLocal,
+                pose: {
+                  translation: {
+                    x: latestLocalization.odometry.pose.translation.x,
+                    y: latestLocalization.odometry.pose.translation.y,
+                    z: latestLocalization.odometry.pose.translation.z,
+                  },
+                  rotation: {
+                    x: latestLocalization.odometry.pose.rotation.x,
+                    y: latestLocalization.odometry.pose.rotation.y,
+                    z: latestLocalization.odometry.pose.rotation.z,
+                    w: latestLocalization.odometry.pose.rotation.w,
+                  },
+                },
+                covariance: [],
+              });
+            }
+          };
         }
       }
     );
@@ -404,6 +413,10 @@ export class TelemetryUniverseData
     callback: (data: Symbol | IMarker3DArray) => void
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
+      const dataFetchWorker = this.getAvailableDataFetchWorker();
+      if (!dataFetchWorker) {
+        throw new Error("No available data fetch worker");
+      }
       return this.subscribeTelemetry(deviceId, source, "json", async (d) => {
         if (d === "too much data" || d === undefined) {
           callback(NoData);
@@ -411,10 +424,14 @@ export class TelemetryUniverseData
         }
         let jsonString = d[d.length - 1][1];
         if (jsonString.startsWith("http")) {
-          const asset = await fetch(jsonString);
-          jsonString = await asset.text();
+          dataFetchWorker.postMessage({ url: jsonString });
+          dataFetchWorker.onmessage = (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            jsonString = JSON.stringify(ev.data.response);
+            callback(JSON.parse(jsonString) as IMarker3DArray);
+          };
         }
-        callback(JSON.parse(jsonString) as IMarker3DArray);
       });
     } else {
       throw new Error("Realtime geometry note supported");
@@ -437,6 +454,10 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
     return this.subscribeTelemetry(
       deviceId,
       source,
@@ -448,40 +469,49 @@ export class TelemetryUniverseData
         }
 
         const dp = d[d.length - 1][1];
-
         let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          dataFetchWorker.postMessage({ url: dp.url });
 
-        if (latestLocalization.map) {
-          const canvas = document.createElement("canvas");
-          const image = await this.fetchImage(latestLocalization.map.url);
-          canvas.width = image.width;
-          canvas.height = image.height;
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            ctx.drawImage(image, 0, 0);
-          }
-          const pixelData = ctx?.getImageData(0, 0, image.width, image.height);
-          const mapData: number[] = [];
-          if (pixelData) {
-            for (let i = 0; i < pixelData.data.length; i += 4) {
-              const r = pixelData.data[i];
-              mapData.push(r);
+          dataFetchWorker.onmessage = async (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            latestLocalization = ev.data.response;
+
+            if (latestLocalization.map) {
+              const canvas = document.createElement("canvas");
+              const image = await this.fetchImage(latestLocalization.map.url);
+              canvas.width = image.width;
+              canvas.height = image.height;
+              const ctx = canvas.getContext("2d");
+              if (ctx) {
+                ctx.drawImage(image, 0, 0);
+              }
+              const pixelData = ctx?.getImageData(
+                0,
+                0,
+                image.width,
+                image.height
+              );
+              const mapData: number[] = [];
+              if (pixelData) {
+                for (let i = 0; i < pixelData.data.length; i += 4) {
+                  const r = pixelData.data[i];
+                  mapData.push(r);
+                }
+              }
+              const gridValue = {
+                width: latestLocalization.map.width,
+                height: latestLocalization.map.height,
+                worldToLocal: latestLocalization.map.worldToLocal,
+                resolution: latestLocalization.map.resolution,
+                origin: latestLocalization.map.origin,
+                canvas,
+                data: mapData,
+              };
+              callback(gridValue);
             }
-          }
-          const gridValue = {
-            width: latestLocalization.map.width,
-            height: latestLocalization.map.height,
-            worldToLocal: latestLocalization.map.worldToLocal,
-            resolution: latestLocalization.map.resolution,
-            origin: latestLocalization.map.origin,
-            canvas,
-            data: mapData,
           };
-          callback(gridValue);
         }
       }
     );

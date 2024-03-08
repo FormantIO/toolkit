@@ -387,7 +387,7 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
-    const pcdWorker = this.getAvailableWorker();
+    const pcdWorker = this.getAvailablePCDWorker();
     if (!pcdWorker) {
       throw new Error("No available pointcloud worker");
     }
