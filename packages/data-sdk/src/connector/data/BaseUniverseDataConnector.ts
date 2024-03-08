@@ -34,6 +34,7 @@ import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
 import { IBitset } from "../../model/IBitset";
 import { ITransformNode } from "../../model/ITransformNode";
 import { ILocation } from "../../model/ILocation";
+import { QueryStore } from "./queryStore";
 
 export type DeviceId = string;
 export type DataSourceId = string;
@@ -49,7 +50,6 @@ const debug =
 const PCD_WORKER_POOL_SIZE = 5;
 
 export class BasicUniverseDataConnector {
-
   pcdWorkerPool: Worker[] = [];
 
   pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
@@ -74,6 +74,8 @@ export class BasicUniverseDataConnector {
 
   timeChangeListeners: ((time: Date | "live") => void)[] = [];
 
+  queryStore: QueryStore = new QueryStore();
+
   setTime(time: Date | "live"): void {
     if (time !== "live") {
       this.time = time;
@@ -92,7 +94,11 @@ export class BasicUniverseDataConnector {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
         // Load all data for this time
         const deviceIds: string[] = [];
-        const data = await Fleet.queryTelemetry(this.generateTelemetryFilter());
+        const query = this.generateTelemetryFilter();
+        const data = this.queryStore.query(query);
+        if (!data || data === "too much data") {
+          return;
+        }
         data.forEach((_) => {
           deviceIds.push(_.deviceId);
         });
