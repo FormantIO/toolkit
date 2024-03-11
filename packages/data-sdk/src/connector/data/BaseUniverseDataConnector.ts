@@ -5,6 +5,7 @@ import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-pl
 // eslint-disable-next-line import/no-unresolved
 // @ts-ignore-next-line
 import PcdWorker from "./PcdLoaderWorker?worker&inline";
+// @ts-ignore-next-line
 import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
 // @ts-ignore

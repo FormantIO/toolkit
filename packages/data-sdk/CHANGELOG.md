@@ -1,3 +1,8 @@
+## [1.33.0] - 2024-03-11
+
+- Caching universe-connector network calls
+- Using workers to fetch external assets
+
 ## [1.32.0] - 2024-03-06
 
 - Adding support for multiple pointclouds subscriptions
