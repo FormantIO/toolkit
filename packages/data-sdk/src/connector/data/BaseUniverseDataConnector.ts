@@ -5,6 +5,7 @@ import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-pl
 // eslint-disable-next-line import/no-unresolved
 // @ts-ignore-next-line
 import PcdWorker from "./PcdLoaderWorker?worker&inline";
+import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -34,6 +35,7 @@ import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
 import { IBitset } from "../../model/IBitset";
 import { ITransformNode } from "../../model/ITransformNode";
 import { ILocation } from "../../model/ILocation";
+import { QueryStore } from "./queryStore";
 
 export type DeviceId = string;
 export type DataSourceId = string;
@@ -47,12 +49,25 @@ export type DataResult<T> = {
 const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
 const PCD_WORKER_POOL_SIZE = 5;
+const DATA_FETCH_WORKER_POOL_SIZE = 10;
 
 export class BasicUniverseDataConnector {
-
   pcdWorkerPool: Worker[] = [];
+  dataFetchWorkerPool: Worker[] = [];
 
   pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
+  dataFetchWorkerPoolOccupancy: Boolean[] = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
 
@@ -74,6 +89,8 @@ export class BasicUniverseDataConnector {
 
   timeChangeListeners: ((time: Date | "live") => void)[] = [];
 
+  queryStore: QueryStore = new QueryStore();
+
   setTime(time: Date | "live"): void {
     if (time !== "live") {
       this.time = time;
@@ -87,12 +104,20 @@ export class BasicUniverseDataConnector {
       const pcdWorker = new PcdWorker();
       this.pcdWorkerPool.push(pcdWorker);
     }
+    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
+      const dataFetchWorker = new DataFetchWorker();
+      this.dataFetchWorkerPool.push(dataFetchWorker);
+    }
 
     const dataLoop = async () => {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
         // Load all data for this time
         const deviceIds: string[] = [];
-        const data = await Fleet.queryTelemetry(this.generateTelemetryFilter());
+        const query = this.generateTelemetryFilter();
+        const data = this.queryStore.query(query);
+        if (!data || data === "too much data") {
+          return;
+        }
         data.forEach((_) => {
           deviceIds.push(_.deviceId);
         });
@@ -132,7 +157,7 @@ export class BasicUniverseDataConnector {
     setTimeout(() => dataLoop(), 0);
   }
 
-  protected getAvailableWorker(): Worker | undefined {
+  protected getAvailablePCDWorker(): Worker | undefined {
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       if (!this.pcdWorkerPoolOccupancy[i]) {
         this.pcdWorkerPoolOccupancy[i] = true;
@@ -142,14 +167,32 @@ export class BasicUniverseDataConnector {
     return undefined;
   }
 
-  protected releaseWorker(worker: Worker) {
+  protected getAvailableDataFetchWorker(): Worker | undefined {
+    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
+      if (!this.dataFetchWorkerPoolOccupancy[i]) {
+        this.dataFetchWorkerPoolOccupancy[i] = true;
+        return this.dataFetchWorkerPool[i];
+      }
+    }
+    return undefined;
+  }
+
+  protected releasePCDWorker(worker: Worker) {
     const index = this.pcdWorkerPool.indexOf(worker);
     this.pcdWorkerPoolOccupancy[index] = false;
+  }
+
+  protected releaseDataFetchWorker(worker: Worker) {
+    const index = this.dataFetchWorkerPool.indexOf(worker);
+    this.dataFetchWorkerPoolOccupancy[index] = false;
   }
 
   clearWorkerPool() {
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
       this.pcdWorkerPoolOccupancy[i] = false;
+    }
+    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
+      this.dataFetchWorkerPoolOccupancy[i] = false;
     }
   }
 
