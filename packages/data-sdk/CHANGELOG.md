@@ -1,3 +1,7 @@
+## [1.33.1] - 2024-03-19
+
+- Remove JSON subscription as an option for pointclouds in universe-connector
+
 ## [1.33.0] - 2024-03-11
 
 - Caching universe-connector network calls

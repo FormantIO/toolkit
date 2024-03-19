@@ -213,7 +213,6 @@ export class TelemetryUniverseData
       return new Promise((resolve) => {
         // Define a callback to resolve the promise with the detected data type
         const _callback = (dataType: string) => {
-          jsonUnsubscribe();
           pointCloudUnsubscribe();
           localizationUnsubscribe();
           // Resolve the promise with the detected data type
@@ -224,17 +223,6 @@ export class TelemetryUniverseData
           ...source,
           latestDataPoint: true,
         };
-
-        // Subscribe to json, pointcloud, and localization to detect the data type
-        const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
-          deviceId,
-          _source,
-          (d) => {
-            if (d !== undefined && typeof d !== "symbol") {
-              _callback("json");
-            }
-          }
-        );
 
         const pointCloudUnsubscribe = this.subscribeTelemetry(
           deviceId,
@@ -261,17 +249,10 @@ export class TelemetryUniverseData
     };
 
     // Call the function and handle the resolved data type
-    let jsonUnsubscribe = () => {};
     let pointCloudUnsubscribe = () => {};
     let localizationUnsubscribe = () => {};
     probeStreamType().then((dataType) => {
-      if (dataType === "json") {
-        jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
-          deviceId,
-          source,
-          callback
-        );
-      } else if (dataType === "pointcloud") {
+      if (dataType === "pointcloud") {
         pointCloudUnsubscribe = this.subscribeTelemetry(
           deviceId,
           source,
@@ -338,7 +319,6 @@ export class TelemetryUniverseData
 
     return () => {
       this.releasePCDWorker(pcdWorker);
-      jsonUnsubscribe();
       pointCloudUnsubscribe();
       localizationUnsubscribe();
     };
