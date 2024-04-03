@@ -1,3 +1,7 @@
+## [1.34.0] - 2024-04-03
+
+- New auth mechanism
+
 ## [1.33.1] - 2024-03-19
 
 - Remove JSON subscription as an option for pointclouds in universe-connector
