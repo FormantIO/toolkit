@@ -6,22 +6,27 @@
   "type": "object",
   "properties": {
     "commands": {
+      "description": "Issue commands to your robot at the click of a button.",
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "name": {
+            "description": "Enter the name of the command to be controlled by this button. The name must match exactly.",
             "type": "string"
           },
           "enabledParameters": {
+            "description": "If your command accepts parameters, set this to ON.",
             "type": "boolean"
           },
           "useStreamValue": {
             "$formant.visible.when": ["enabledParameters", "=", true],
+            "description": "If ON, the parameter sent with this command will be selectable from a dropdown.",
             "title": "CSV from a text stream",
             "type": "boolean"
           },
           "streamName": {
+            "description": "First, create a text stream and ingest a comma-separated string containing the options for parameter values you want the user to be able to select from the dropdown. Make sure that stream has 'Persist last known value' set to TRUE. Then, enter the name of that stream here.",
             "$formant.visible.when": ["useStreamValue", "=", true],
             "type": "string",
             "$formant.streams.byType": "text"
@@ -30,16 +35,19 @@
       }
     },
     "buttons": {
+      "description": "Realtime buttons issue commands over a WebRTC connection with minimal latency.",
       "type": "array",
       "title": "Real-time Buttons",
       "items": {
         "type": "object",
         "properties": {
           "streamName": {
-            "type": "string"
+            "type": "string",
+            "description": "First, create a teleoperation button. Then, enter the name of the stream related to that button here."
           },
           "buttonLabel": {
-            "type": "string"
+            "type": "string",
+            "description": "Text appearing on the button."
           }
         }
       }
