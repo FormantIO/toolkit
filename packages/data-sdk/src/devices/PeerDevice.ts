@@ -36,6 +36,28 @@ export class PeerDevice extends BaseDevice {
     });
   }
 
+  async queryTelemetry(
+    streamName: string,
+    start: Date,
+    end: Date,
+    limit?: number,
+    offset?: number
+  ): Promise<object[]> {
+    let queryUrl = `${
+      this.peerUrl
+    }/v1/querydatapoints?stream_name=${streamName}&start=${start.toISOString()}&end=${end.toISOString()}`;
+    if (limit != null && limit > 0) {
+      queryUrl += `&limit=${limit}`;
+    }
+    if (offset != null && offset >= 0) {
+      queryUrl += `&offset=${offset}`;
+    }
+
+    const result = await fetch(queryUrl);
+    const queryResp = await result.json();
+    return queryResp.results;
+  }
+
   private subscribeToTelemetry() {
     this.telemetryStreamActive = true;
 
