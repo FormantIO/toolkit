@@ -53,7 +53,9 @@ export class PeerDevice extends BaseDevice {
       queryUrl += `&offset=${offset}`;
     }
 
-    const result = await fetch(queryUrl);
+    const result = await fetch(queryUrl, {
+      credentials: "include",
+    });
     const queryResp = await result.json();
     return queryResp.results;
   }
@@ -116,13 +118,17 @@ export class PeerDevice extends BaseDevice {
   }
 
   async getDeviceId(): Promise<string> {
-    let result = await fetch(`${this.peerUrl}/v1/config`);
+    let result = await fetch(`${this.peerUrl}/v1/config`, {
+      credentials: "include",
+    });
     const cfg = await result.json();
     return cfg.configuration.id;
   }
 
   async getConfiguration(): Promise<ConfigurationDocument> {
-    let result = await fetch(`${this.peerUrl}/v1/config`);
+    let result = await fetch(`${this.peerUrl}/v1/config`, {
+      credentials: "include",
+    });
     const cfg = await result.json();
     return cfg.configuration.document;
   }
@@ -215,7 +221,11 @@ export class PeerDevice extends BaseDevice {
   }
 
   async getCommandMetadata(): Promise<{ commands: any[] }> {
-    return (await fetch(`${this.peerUrl}/v1/commands`)).json();
+    return (
+      await fetch(`${this.peerUrl}/v1/commands`, {
+        credentials: "include",
+      })
+    ).json();
   }
 
   async sendCommand(
@@ -231,6 +241,7 @@ export class PeerDevice extends BaseDevice {
     };
 
     const res = await fetch(`${this.peerUrl}/v1/enqueue-command`, {
+      credentials: "include",
       method: "POST",
       body: JSON.stringify({
         command: name,
