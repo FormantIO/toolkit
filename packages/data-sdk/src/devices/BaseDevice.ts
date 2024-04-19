@@ -45,7 +45,8 @@ export abstract class BaseDevice
     end: Date,
     tags?: { [key in string]: string[] },
     limit?: number,
-    offset?: number
+    offset?: number,
+    latestOnly?: boolean
   ): Promise<TelemetryResult[]>;
 
   protected handleMessage = (peerId: string, message: any) => {
