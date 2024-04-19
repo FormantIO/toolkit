@@ -1,3 +1,7 @@
+## [1.35.0] - 2024-04-19
+
+- adding agent getTelemetry
+
 ## [1.34.0] - 2024-04-03
 
 - New auth mechanism
