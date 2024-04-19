@@ -21,6 +21,7 @@ import {
   RealtimeVideoStream,
   RealtimeDataStream,
 } from "./device.types";
+import { TelemetryResult } from "../model/TelemetryResult";
 
 export abstract class BaseDevice
   extends EventEmitter
@@ -38,6 +39,14 @@ export abstract class BaseDevice
   abstract getConfiguration(): Promise<ConfigurationDocument>;
   abstract startRealtimeConnection(sessionType?: number): Promise<void>;
   abstract getRemotePeer(): Promise<IRtcPeer>;
+  abstract getTelemetry(
+    streamNameOrStreamNames: string | string[],
+    start: Date,
+    end: Date,
+    tags?: { [key in string]: string[] },
+    limit?: number,
+    offset?: number
+  ): Promise<TelemetryResult[]>;
 
   protected handleMessage = (peerId: string, message: any) => {
     this.realtimeListeners.forEach((_) => _(peerId, message));

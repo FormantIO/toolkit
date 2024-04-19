@@ -34,6 +34,7 @@ import { patchDevice } from "../api/patchDevice";
 import { getDevicesData } from "../api/getDevicesData";
 import { queryDevicesData } from "../api/queryDevicesData";
 import { disableDevice } from "../api/disableDevice";
+import { TelemetryResult } from "../model/TelemetryResult";
 export class Device extends BaseDevice {
   constructor(
     public id: string,
@@ -466,8 +467,14 @@ export class Device extends BaseDevice {
     streamNameOrStreamNames: string | string[],
     start: Date,
     end: Date,
-    tags?: { [key in string]: string[] }
-  ) {
+    tags?: { [key in string]: string[] },
+    limit?: number,
+    offset?: number
+  ): Promise<TelemetryResult[]> {
+    if (limit !== undefined || offset !== undefined) {
+      throw new Error("Limit and offset are not supported in this method");
+    }
+
     return await getTelemetry(
       this.id,
       streamNameOrStreamNames,
