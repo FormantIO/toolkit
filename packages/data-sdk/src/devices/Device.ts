@@ -469,7 +469,8 @@ export class Device extends BaseDevice {
     end: Date,
     tags?: { [key in string]: string[] },
     limit?: number,
-    offset?: number
+    offset?: number,
+    latestOnly?: boolean
   ): Promise<TelemetryResult[]> {
     if (limit !== undefined || offset !== undefined) {
       throw new Error("Limit and offset are not supported in this method");
@@ -480,7 +481,8 @@ export class Device extends BaseDevice {
       streamNameOrStreamNames,
       start,
       end,
-      tags
+      tags,
+      latestOnly
     );
   }
 

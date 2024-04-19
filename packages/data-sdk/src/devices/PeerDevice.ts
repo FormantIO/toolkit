@@ -43,7 +43,8 @@ export class PeerDevice extends BaseDevice {
     end: Date,
     tags?: { [key in string]: string[] },
     limit?: number,
-    offset?: number
+    offset?: number,
+    latestOnly?: boolean
   ): Promise<TelemetryResult[]> {
     if (Array.isArray(streamNameOrStreamNames)) {
       throw new Error("Multiple stream names not supported");
@@ -51,6 +52,13 @@ export class PeerDevice extends BaseDevice {
     if (tags) {
       throw new Error("Tags not supported");
     }
+
+    if (latestOnly && limit === undefined) {
+      limit = 1;
+    } else if (latestOnly && limit !== undefined) {
+      throw new Error("latestOnly and limit cannot be used together");
+    }
+
     let queryUrl = `${
       this.peerUrl
     }/v1/querydatapoints?stream_name=${streamNameOrStreamNames}&start=${start.toISOString()}&end=${end.toISOString()}`;
