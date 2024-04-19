@@ -3,6 +3,7 @@ import { delay } from "../../../common/delay";
 import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
 import { ConfigurationDocument } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
+import { TelemetryResult } from "../model/TelemetryResult";
 
 export class PeerDevice extends BaseDevice {
   id!: string;
@@ -34,6 +35,35 @@ export class PeerDevice extends BaseDevice {
       };
       return v;
     });
+  }
+
+  async getTelemetry(
+    streamNameOrStreamNames: string | string[],
+    start: Date,
+    end: Date,
+    tags?: { [key in string]: string[] },
+    limit?: number,
+    offset?: number
+  ): Promise<TelemetryResult[]> {
+    if (Array.isArray(streamNameOrStreamNames)) {
+      throw new Error("Multiple stream names not supported");
+    }
+    if (tags) {
+      throw new Error("Tags not supported");
+    }
+    let queryUrl = `${
+      this.peerUrl
+    }/v1/querydatapoints?stream_name=${streamNameOrStreamNames}&start=${start.toISOString()}&end=${end.toISOString()}`;
+    if (limit != null && limit > 0) {
+      queryUrl += `&limit=${limit}`;
+    }
+    if (offset != null && offset >= 0) {
+      queryUrl += `&offset=${offset}`;
+    }
+
+    const result = await fetch(queryUrl);
+    const queryResp = await result.json();
+    return queryResp.results as TelemetryResult[];
   }
 
   private subscribeToTelemetry() {
