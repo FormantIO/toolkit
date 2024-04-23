@@ -93,11 +93,11 @@ export class PeerDevice extends BaseDevice {
   private getPointPayload(type: string, datapoint: any): any {
     switch (type) {
       case "numeric":
-        throw new Error("Not implemented");
+        return datapoint.numeric.value;
       case "numeric_set":
         return datapoint.numericSet.numerics;
       case "text":
-        throw new Error("Not implemented");
+        return datapoint.text.value;
       case "bitset":
         throw new Error("Not implemented");
       case "location":
