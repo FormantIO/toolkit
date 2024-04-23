@@ -1,3 +1,52 @@
+## [1.37.0] - 2024-04-19
+
+- adding latestOnly support for getTelemetry
+
+## [1.36.0] - 2024-04-19
+
+- adding agent getTelemetry
+
+## [1.34.0] - 2024-04-03
+
+- New auth mechanism
+
+## [1.33.1] - 2024-03-19
+
+- Remove JSON subscription as an option for pointclouds in universe-connector
+
+## [1.33.0] - 2024-03-11
+
+- Caching universe-connector network calls
+- Using workers to fetch external assets
+
+## [1.32.0] - 2024-03-06
+
+- Adding support for multiple pointclouds subscriptions
+
+## [1.31.0] - 2024-02-27
+
+- adding physical events
+
+## [1.30.0] - 2024-02-27
+
+- adding more events
+
+## [1.29.0] - 2024-02-27
+
+- fixing interface of IAnnotation
+
+## [1.28.0] - 2024-02-27
+
+- fixing interface of ITriggeredEvent
+
+## [1.26.0] - 2024-01-24
+
+- targeting es2019
+
+## [1.26.0] - 2024-01-24
+
+- Merging in data connector
+
 ## [1.25.0] - 2024-01-24
 
 ### Added

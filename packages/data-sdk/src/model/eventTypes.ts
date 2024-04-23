@@ -1,5 +1,8 @@
 export const eventTypes = [
   "triggered-event",
+  "datapoint-event",
+  "device-online",
+  "device-offline",
   "intervention-request",
   "teleop-session-record",
   "port-forwarding-session-record",
@@ -10,4 +13,6 @@ export const eventTypes = [
   "comment",
   "system",
   "annotation",
+  "task-summary",
+  "stateful",
 ] as const;

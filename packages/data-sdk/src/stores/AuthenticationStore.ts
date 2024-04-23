@@ -221,7 +221,11 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._token !== undefined;
   }
 
-  async loginToPeer(peerUrl: string, username: string, password: string): Promise<void> {
+  async loginToPeer(
+    peerUrl: string,
+    username: string,
+    password: string
+  ): Promise<void> {
     const result = await fetch(`${peerUrl}/login`, {
       method: "POST",
       body: JSON.stringify({ username, password }),

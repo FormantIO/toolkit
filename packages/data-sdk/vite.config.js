@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
       "process.env.NODE_ENV": JSON.stringify("production"),
     },
     build: {
+      target: "es2019",
       lib: {
         entry: path.resolve(__dirname, "src/main.ts"),
         name: "FormantDataSDK",
