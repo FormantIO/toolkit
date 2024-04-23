@@ -99,13 +99,22 @@ export class PeerDevice extends BaseDevice {
       case "text":
         return datapoint.text.value;
       case "bitset":
-        throw new Error("Not implemented");
+        const keys = [];
+        const values = [];
+        for (const bit of datapoint.bitset.bits) {
+          keys.push(bit.key);
+          values.push(bit.value);
+        }
+        return {
+          keys,
+          values,
+        };
       case "location":
-        throw new Error("Not implemented");
+        return datapoint.location;
       case "health":
-        throw new Error("Not implemented");
+        return datapoint.health;
       case "battery":
-        throw new Error("Not implemented");
+        return datapoint.battery;
       default:
         return {};
     }
