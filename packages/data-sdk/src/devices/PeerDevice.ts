@@ -71,7 +71,44 @@ export class PeerDevice extends BaseDevice {
 
     const result = await fetch(queryUrl);
     const queryResp = await result.json();
-    return queryResp.results as TelemetryResult[];
+
+    const telemetryDatapoints: TelemetryResult[] = [];
+    for (const dp of queryResp.results) {
+      const dpTime = parseInt(dp.timestamp);
+      const dpType = dp.tags.data_type;
+      delete dp.tags.data_type;
+
+      telemetryDatapoints.push({
+        deviceId: this.id,
+        name: dp.stream,
+        points: [[dpTime, this.getPointPayload(dpType, dp)]],
+        tags: dp.tags,
+        type: dpType.replace("_", " "), // needed for numeric_set -> numeric set
+      });
+    }
+
+    return telemetryDatapoints;
+  }
+
+  private getPointPayload(type: string, datapoint: any): any {
+    switch (type) {
+      case "numeric":
+        throw new Error("Not implemented");
+      case "numeric_set":
+        return datapoint.numericSet.numerics;
+      case "text":
+        throw new Error("Not implemented");
+      case "bitset":
+        throw new Error("Not implemented");
+      case "location":
+        throw new Error("Not implemented");
+      case "health":
+        throw new Error("Not implemented");
+      case "battery":
+        throw new Error("Not implemented");
+      default:
+        return {};
+    }
   }
 
   private subscribeToTelemetry() {
