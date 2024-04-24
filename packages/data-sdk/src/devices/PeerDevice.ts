@@ -83,7 +83,7 @@ export class PeerDevice extends BaseDevice {
         name: dp.stream,
         points: [[dpTime, this.getPointPayload(dpType, dp)]],
         tags: dp.tags,
-        type: dpType.replace("_", " "), // needed for numeric_set -> numeric set
+        type: dpType,
       });
     }
 
