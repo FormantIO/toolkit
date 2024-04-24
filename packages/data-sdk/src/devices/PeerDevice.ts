@@ -94,7 +94,7 @@ export class PeerDevice extends BaseDevice {
     switch (type) {
       case "numeric":
         return datapoint.numeric.value;
-      case "numeric_set":
+      case "numeric set":
         return datapoint.numericSet.numerics;
       case "text":
         return datapoint.text.value;
