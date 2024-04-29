@@ -1,16 +1,5 @@
 import { subDays } from "date-fns";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
-// eslint-disable-next-line import/no-unresolved
-// @ts-ignore-next-line
-import PcdWorker from "./PcdLoaderWorker?worker&inline";
-// @ts-ignore-next-line
-import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 import {
   CloseSubscription,
   DataSourceState,
@@ -102,11 +91,11 @@ export class BasicUniverseDataConnector {
   constructor() {
     this.time = "live";
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
-      const pcdWorker = new PcdWorker();
+      const pcdWorker = new Worker(new URL('./PcdLoaderWorker', import.meta.url));
       this.pcdWorkerPool.push(pcdWorker);
     }
     for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
-      const dataFetchWorker = new DataFetchWorker();
+      const dataFetchWorker = new Worker(new URL('./DataFetchWorker', import.meta.url));
       this.dataFetchWorkerPool.push(dataFetchWorker);
     }
 
@@ -327,7 +316,7 @@ export class BasicUniverseDataConnector {
 
   protected createH264Drawer(): H264BytestreamCanvasDrawer {
     const drawer = new H264BytestreamCanvasDrawer(
-      () => new RealtimePlayerWorker(),
+      () => new Worker("@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"),
       () => {},
       () => {}
     );
