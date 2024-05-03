@@ -35,6 +35,8 @@ import { getDevicesData } from "../api/getDevicesData";
 import { queryDevicesData } from "../api/queryDevicesData";
 import { disableDevice } from "../api/disableDevice";
 import { TelemetryResult } from "../model/TelemetryResult";
+import { IEvent } from "../model/IEvent";
+import { queryEvents } from "../api/queryEvents";
 export class Device extends BaseDevice {
   constructor(
     public id: string,
@@ -484,6 +486,16 @@ export class Device extends BaseDevice {
       tags,
       latestOnly
     );
+  }
+
+  async queryEvents(query: IEventQuery): Promise<IEvent[]> {
+    if (query.deviceIds) {
+      throw new Error("Cannot filter multiple devices via Device class");
+    }
+
+    query.deviceIds = [this.id];
+
+    return queryEvents(query);
   }
 
   async getTelemetryStreams(): Promise<TelemetryStream[]> {

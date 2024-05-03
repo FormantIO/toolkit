@@ -22,6 +22,8 @@ import {
   RealtimeDataStream,
 } from "./device.types";
 import { TelemetryResult } from "../model/TelemetryResult";
+import { IEventQuery } from "../model/IEventQuery";
+import { IEvent } from "../model/IEvent";
 
 export abstract class BaseDevice
   extends EventEmitter
@@ -48,6 +50,7 @@ export abstract class BaseDevice
     offset?: number,
     latestOnly?: boolean
   ): Promise<TelemetryResult[]>;
+  abstract queryEvents(query: IEventQuery): Promise<IEvent[]>;
 
   protected handleMessage = (peerId: string, message: any) => {
     this.realtimeListeners.forEach((_) => _(peerId, message));
