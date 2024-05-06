@@ -89,7 +89,8 @@ export class PeerDevice extends BaseDevice {
       });
     }
 
-    return telemetryDatapoints;
+    // adhere to default cloud ordering
+    return telemetryDatapoints.reverse();
   }
 
   async queryEvents(query: IEventQuery): Promise<IEvent[]> {
@@ -166,7 +167,8 @@ export class PeerDevice extends BaseDevice {
       events.push(event);
     }
 
-    return events;
+    // adhere to default cloud ordering
+    return events.reverse();
   }
 
   private checkKeysAndThrow(obj: any, keysToCheck: string[]): void {
@@ -187,6 +189,8 @@ export class PeerDevice extends BaseDevice {
         return datapoint.numericSet.numerics;
       case "text":
         return datapoint.text.value;
+      case "json":
+        return datapoint.json.value;
       case "bitset":
         const keys = [];
         const values = [];
