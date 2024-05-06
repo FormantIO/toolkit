@@ -1,3 +1,7 @@
+## [1.38.0] - 2024-04-19
+
+- adding more agent apis
+
 ## [1.37.0] - 2024-04-19
 
 - adding latestOnly support for getTelemetry
