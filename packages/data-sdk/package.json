@@ -69,6 +69,7 @@
     "base64-js": "^1.5.1",
     "date-fns": "^2.30.0",
     "eventemitter3": "^5.0.1",
+    "google-protobuf": "^3.21.2",
     "lzfjs": "^1.0.1",
     "pako": "^2.1.0",
     "validator": "^13.11.0"
