@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/ros-diagnostics-msgs/schema.json",
   "title": "ROS diagnostic message viewer",
-  "description": "Wuickly and easily view JSON-format ROS diagnostic information in a user-friendly display.",
+  "description": "Quickly and easily view JSON-format ROS diagnostic information in a user-friendly display.",
   "type": "object",
   "properties": {
     "stream": {
