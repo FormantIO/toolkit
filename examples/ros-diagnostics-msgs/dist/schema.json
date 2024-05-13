@@ -1,16 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/ros-diagnostics-msgs/schema.json",
-  "title": "Numeric aggregate",
-  "description": "ROS Diagnostics Messages.",
+  "title": "ROS diagnostic message viewer",
+  "description": "Quickly and easily view JSON-format ROS diagnostic information in a user-friendly display.",
   "type": "object",
   "properties": {
     "stream": {
       "title": "JSON stream",
+      "description": "Enter the name of a JSON stream which contains ROS diagnostic message data.",
       "type": "string",
       "$formant.streams.byType": "json"
     },
     "fullScreenMode": {
+      "title": "Realtime mode",
+      "description": "If set to ON, this module will disconnect from the current position on the timeline and always show current data from the ROS diagnostic message stream. Set this to ON when using in teleoperation.",
       "type": "boolean"
     }
   }

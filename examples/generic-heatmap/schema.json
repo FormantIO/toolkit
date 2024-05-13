@@ -5,20 +5,26 @@
   "description": "Display location data over time as a heat map.",
   "type": "object",
   "properties": {
+    "locationStream": {
+      "type": "string",
+      "title": "Location data stream",
+      "$formant.streams.byType": "location",
+      "description": "Enter the name of the location stream you want to visualize."
+    },
     "queryType": {
-      "description": "Specifies what timeframe of data is shown in the heatmap",
+      "description": "Choose an event, annotation, or timeline point to specify the time range for the heatmap.",
       "title": "Query data by",
       "type": "string",
       "enum": ["Events", "Annotation", "Active Timeline point"]
     },
     "scrubber": {
-      "description": "Use the scrubber's position in the timeline to specify the time range of data to show in the heatmap",
+      "description": "Choose either start event or a length of time before the current position on your timeline. The time range for the heatmap will be calculated starting from the point you specify, and ending at the current position on the timeline.",
       "type": "object",
-      "title": "Active Timeline point",
+      "title": "Active timeline point",
       "$formant.visible.when": ["queryType", "=", "Active Timeline point"],
       "properties": {
         "startFrom": {
-          "description": "Query can start from some time before the active timeline point or the last event.End point will be active timeline point.",
+          "description": "Choose either start event or a length of time before the current position on your timeline. The time range for the heatmap will be calculated starting from the point you specify, and ending at the current position on the timeline.",
           "type": "string",
           "enum": ["Time Delta", "Event"]
         },
@@ -31,26 +37,26 @@
           "$formant.visible.when": ["startFrom", "=", "Time Delta"]
         },
         "eventName": {
+          "description": "Name of the event at the start of your time range. The time range will end at the current position on the timeline.",
           "type": "string",
           "$formant.visible.when": ["startFrom", "=", "Event"]
         }
       }
     },
-
     "annotation": {
       "title": "Annotation Name",
-      "description": "It will use annotation start, and end time to query data.",
+      "description": "The time range defined by this annotation will be used to generate the heatmap.",
       "type": "string",
       "$formant.visible.when": ["queryType", "=", "Annotation"]
     },
     "eventsQuery": {
-      "description": "Use events to specify the timerange of data shown in the heatmap",
+      "description": "Choose either a start event and end event, or an end event and a length of time before that event.",
       "title": "Time Range",
       "type": "object",
       "$formant.visible.when": ["queryType", "=", "Events"],
       "properties": {
         "startFrom": {
-          "description": "Choose either a time delta before the end event or another event to specify the start time of the data shown",
+          "description": "Choose either a length of time before the end event, or a start and end event to set your time range.",
           "type": "string",
           "enum": ["Time Delta", "Event"]
         },
@@ -69,22 +75,17 @@
         },
         "endEvent": {
           "title": "End Event Name",
+          "description": "Name of the event at the end of your time range.",
           "type": "string"
         }
       }
     },
-    "locationStream": {
-      "type": "string",
-      "title": "Location data stream",
-      "$formant.streams.byType": "location",
-      "description": "Name of location stream in Formant to view as heatmap"
-    },
     "advanceSettings": {
-      "title": "Enable advance settings",
+      "title": "Advanced settings",
       "type": "boolean"
     },
     "mapboxKey": {
-      "description": "To use the heatmap, you'll need a Mapbox access token.",
+      "description": "The heatmap is built on a Mapbox map. To use this module, first generate an access token from Mapbox, and then provide that token here.",
       "title": "Mapbox key",
       "type": "string",
       "$formant.visible.when": ["advanceSettings", "=", true]
@@ -93,51 +94,52 @@
       "title": "Weight",
       "type": "string",
       "$formant.streams.byType": "numeric",
-      "description": "The size of the heatmap marker will scale to the value of the integer stream specified.",
+      "description": "Provide the name of a numeric stream. The size of the heatmap marker will scale to the value of the numeric stream specified.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "weightSearchWindow": {
       "title": "Weight Search Window (s)",
       "type": "integer",
-      "description": "Max window around location timestamp to search for a corresponding weight value in the numeric stream",
+      "description": "Max time window around location timestamp to search for a corresponding weight value in the numeric stream.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
-
     "longitude": {
-      "description": "Optional center position of the map",
+      "description": "Optional center position of the map.",
       "type": "number",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "latitude": {
-      "description": "Optional center position of the map",
+      "description": "Optional center position of the map.",
       "type": "number",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "defaultZoomLevel": {
       "range": "from 1 (farthest) to 20 (closest)",
       "type": "integer",
-      "description": "Default zoom level. 1 is closest, 24 furthest away.",
+      "description": "Default zoom level. 1 is closest, 24 farthest away.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "distinctPointZoomLevel": {
       "title": "Distinct zoom level",
       "type": "integer",
-      "description": "At what zoom level to fade the heatmap and show individual locations.",
+      "description": "Zoom level at which the heatmap will fade away and show individual position datapoints.",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "heatmapIntensity": {
       "title": "Heatmap intensity",
-      "description": "Integer between 1 - 20, it will make the map more dense based on the zoom lebel.",
+      "description": "Integer between 1 - 20, it will make the map more dense based on the zoom level.",
       "type": "integer",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "circleRadius": {
       "title": "Circle heat radius (px)",
+      "description": "Size of position datapoints on map.",
       "type": "integer",
       "$formant.visible.when": ["advanceSettings", "=", true]
     },
     "tooltipLabel": {
       "title": "Hover Tooltip Label",
+      "description": "Labels to mark position datapoints on the map.",
       "type": "string",
       "$formant.visible.when": ["advanceSettings", "=", true]
     }

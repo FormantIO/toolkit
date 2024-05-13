@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/command-manager/schema.json",
-  "title": "Command Manager",
-  "description": "Command manager configuration.",
+  "title": "Command Buttons",
+  "description": "issue commands to your robot from the observability view with a click of a button.",
   "type": "object",
   "properties": {
     "commands": {
@@ -22,7 +22,7 @@
           "useStreamValue": {
             "$formant.visible.when": ["enabledParameters", "=", true],
             "description": "If ON, the parameter sent with this command will be selectable from a dropdown.",
-            "title": "CSV from a text stream",
+            "title": "Select parameter from dropdown",
             "type": "boolean"
           },
           "streamName": {
