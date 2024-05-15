@@ -1,5 +1,5 @@
-import { FORMANT_API_URL } from "../config";
 import { Authentication } from "../Authentication";
+import { FORMANT_API_URL } from "../config";
 
 import { TelemetryResult } from "../model/TelemetryResult";
 
@@ -19,6 +19,8 @@ export async function getTelemetry(
   if (!Array.isArray(streamNameOrStreamNames)) {
     streamNames = [streamNameOrStreamNames];
   }
+
+  debugger;
   const data = await fetch(`${FORMANT_API_URL}/v1/queries/queries`, {
     method: "POST",
     body: JSON.stringify({

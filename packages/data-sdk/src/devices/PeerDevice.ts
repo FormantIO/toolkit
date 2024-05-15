@@ -1,11 +1,13 @@
-import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
+// eslint-disable-next-line import/no-relative-packages
+import { IRtcPeer, RtcClient } from "../../../../../realtime-sdk/src/";
+// eslint-disable-next-line import/no-relative-packages
 import { delay } from "../../../common/delay";
-import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
-import { ConfigurationDocument } from "./device.types";
-import { BaseDevice } from "./BaseDevice";
-import { TelemetryResult } from "../model/TelemetryResult";
-import { IEventQuery } from "../model/IEventQuery";
 import { IEvent } from "../model/IEvent";
+import { IEventQuery } from "../model/IEventQuery";
+import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
+import { TelemetryResult } from "../model/TelemetryResult";
+import { BaseDevice } from "./BaseDevice";
+import { ConfigurationDocument } from "./device.types";
 
 export class PeerDevice extends BaseDevice {
   id!: string;

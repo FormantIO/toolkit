@@ -1,10 +1,11 @@
-import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
-
+// eslint-disable-next-line import/no-relative-packages
+import { RtcClient } from "../../../../realtime-sdk/src/";
+// eslint-disable-next-line import/no-relative-packages
+import { defined } from "../../common/defined";
+import { Authentication } from "./Authentication";
+import { FORMANT_API_URL } from "./config";
 import { SessionType, SessionTypes } from "./model/SessionType";
 import { RtcClientPool } from "./utils/RtcClientPool";
-import { FORMANT_API_URL } from "./config";
-import { Authentication } from "./Authentication";
-import { defined } from "../../common/defined";
 
 const getToken = async () =>
   defined(Authentication.token, "Realtime when user isn't authorized");

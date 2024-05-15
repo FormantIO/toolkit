@@ -1,42 +1,42 @@
-import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
+import { IRtcPeer, RtcClient } from "@formant/realtime-sdk";
+import { defined } from "../../../common/defined";
+import { delay } from "../../../common/delay";
+import { createDevice } from "../api/createDevice";
+import { createShareLink } from "../api/createShareLink";
+import { disableDevice } from "../api/disableDevice";
+import { eventsCounter } from "../api/eventsCounter";
+import { getAnnotationCount } from "../api/getAnnotationCount";
+import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByIntervals";
+import { getDevicesData } from "../api/getDevicesData";
+import { getPeers } from "../api/getPeers";
+import { getRealtimeSessions } from "../api/getRealtimeSessions";
+import { getTelemetry } from "../api/getTelemetry";
+import { patchDevice } from "../api/patchDevice";
+import { queryDevicesData } from "../api/queryDevicesData";
+import { queryEvents } from "../api/queryEvents";
 import { getRtcClientPool } from "../AppRtcClientPools";
 import { Authentication } from "../Authentication";
 import { CaptureStream } from "../CaptureStream";
 import { FORMANT_API_URL } from "../config";
-import { delay } from "../../../common/delay";
-import { defined } from "../../../common/defined";
-import { InterventionType } from "../model/InterventionType";
-import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
-import { IInterventionResponse } from "../model/IInterventionResponse";
-import { IEventQuery } from "../model/IEventQuery";
 import { AggregateLevel } from "../model/AggregateLevel";
 import { EventType } from "../model/EventType";
+import { IEvent } from "../model/IEvent";
+import { IEventQuery } from "../model/IEventQuery";
+import { IInterventionResponse } from "../model/IInterventionResponse";
+import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
+import { InterventionType } from "../model/InterventionType";
 import { IShare } from "../model/IShare";
+import { ITags } from "../model/ITags";
 import { SessionType } from "../model/SessionType";
+import { TelemetryResult } from "../model/TelemetryResult";
 import { isRtcPeer } from "../utils/isRtcPeer";
+import { BaseDevice } from "./BaseDevice";
 import {
   Command,
   ConfigurationDocument,
   IStartRealtimeConnectionOptions,
   TelemetryStream,
 } from "./device.types";
-import { BaseDevice } from "./BaseDevice";
-import { ITags } from "../model/ITags";
-import { createShareLink } from "../api/createShareLink";
-import { eventsCounter } from "../api/eventsCounter";
-import { getAnnotationCount } from "../api/getAnnotationCount";
-import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByIntervals";
-import { getTelemetry } from "../api/getTelemetry";
-import { getRealtimeSessions } from "../api/getRealtimeSessions";
-import { getPeers } from "../api/getPeers";
-import { createDevice } from "../api/createDevice";
-import { patchDevice } from "../api/patchDevice";
-import { getDevicesData } from "../api/getDevicesData";
-import { queryDevicesData } from "../api/queryDevicesData";
-import { disableDevice } from "../api/disableDevice";
-import { TelemetryResult } from "../model/TelemetryResult";
-import { IEvent } from "../model/IEvent";
-import { queryEvents } from "../api/queryEvents";
 export class Device extends BaseDevice {
   constructor(
     public id: string,
@@ -477,6 +477,8 @@ export class Device extends BaseDevice {
     if (limit !== undefined || offset !== undefined) {
       throw new Error("Limit and offset are not supported in this method");
     }
+
+    debugger;
 
     return await getTelemetry(
       this.id,
