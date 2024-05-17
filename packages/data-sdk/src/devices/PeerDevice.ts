@@ -134,6 +134,8 @@ export class PeerDevice extends BaseDevice {
         time: new Date(epochTime).toISOString(),
         message: ev.message,
         notificationEnabled: ev.notificationEnabled,
+        type: ev.type,
+        tags: ev.tags,
       };
 
       if (ev.id !== "") {

@@ -91,11 +91,15 @@ export class BasicUniverseDataConnector {
   constructor() {
     this.time = "live";
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
-      const pcdWorker = new Worker(new URL('./PcdLoaderWorker', import.meta.url));
+      const pcdWorker = new Worker(
+        new URL("./PcdLoaderWorker", import.meta.url)
+      );
       this.pcdWorkerPool.push(pcdWorker);
     }
     for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
-      const dataFetchWorker = new Worker(new URL('./DataFetchWorker', import.meta.url));
+      const dataFetchWorker = new Worker(
+        new URL("./DataFetchWorker", import.meta.url)
+      );
       this.dataFetchWorkerPool.push(dataFetchWorker);
     }
 
@@ -316,7 +320,10 @@ export class BasicUniverseDataConnector {
 
   protected createH264Drawer(): H264BytestreamCanvasDrawer {
     const drawer = new H264BytestreamCanvasDrawer(
-      () => new Worker("@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"),
+      () =>
+        new Worker(
+          "@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"
+        ),
       () => {},
       () => {}
     );

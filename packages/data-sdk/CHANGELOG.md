@@ -1,3 +1,7 @@
+## [1.39.0] - 2024-05-16
+
+- new intervention request type
+
 ## [1.38.0] - 2024-04-19
 
 - adding more agent apis
