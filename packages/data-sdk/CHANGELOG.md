@@ -1,3 +1,7 @@
+## [1.40.0] - 2024-05-16
+
+- missing intervention request data field
+
 ## [1.39.0] - 2024-05-16
 
 - new intervention request type
