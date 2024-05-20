@@ -226,7 +226,6 @@ export class TelemetryUniverseData
     if (!dataFetchWorker) {
       throw new Error("No available data fetch worker");
     }
-    console.log(source);
     // Call the function and handle the resolved data type
     let pointCloudUnsubscribe = () => {};
     let localizationUnsubscribe = () => {};
