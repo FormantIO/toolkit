@@ -1,3 +1,7 @@
+## [1.41.0] - 2024-05-20
+
+- Improvements to UniverseData connect
+
 ## [1.40.0] - 2024-05-16
 
 - missing intervention request data field
