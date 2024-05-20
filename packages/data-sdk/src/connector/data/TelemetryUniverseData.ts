@@ -51,6 +51,10 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
     return this.subscribeTelemetry(
       deviceId,
       source,
@@ -64,15 +68,19 @@ export class TelemetryUniverseData
 
         let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          dataFetchWorker.postMessage({ url: dp.url });
+          dataFetchWorker.onmessage = (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            latestLocalization = ev.data;
 
-        if (latestLocalization.path) {
-          callback({
-            worldToLocal: latestLocalization.path.worldToLocal,
-            poses: latestLocalization.path.poses,
-          });
+            if (latestLocalization.path) {
+              callback({
+                worldToLocal: latestLocalization.path.worldToLocal,
+                poses: latestLocalization.path.poses,
+              });
+            }
+          };
         }
       }
     );
@@ -352,7 +360,7 @@ export class TelemetryUniverseData
           dataFetchWorker.onmessage = (
             ev: MessageEvent<{ url: string; response: any }>
           ) => {
-            latestLocalization = ev.data.response;
+            latestLocalization = ev.data;
 
             if (latestLocalization.odometry) {
               callback({
@@ -408,7 +416,7 @@ export class TelemetryUniverseData
           dataFetchWorker.onmessage = (
             ev: MessageEvent<{ url: string; response: any }>
           ) => {
-            jsonString = JSON.stringify(ev.data.response);
+            jsonString = JSON.stringify(ev.data);
             callback(JSON.parse(jsonString) as IMarker3DArray);
           };
         }
@@ -431,6 +439,8 @@ export class TelemetryUniverseData
     source: UniverseDataSource,
     callback: (data: Symbol | IUniverseGridMap) => void
   ): CloseSubscription {
+    const mapDataCache: { [url: string]: any } = {};
+
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
@@ -449,21 +459,26 @@ export class TelemetryUniverseData
         }
 
         const dp = d[d.length - 1][1];
-        let latestLocalization = dp;
         if (dp.url) {
+          if (mapDataCache[dp.url]) {
+            callback(mapDataCache[dp.url]);
+            return;
+          }
+
           dataFetchWorker.postMessage({ url: dp.url });
 
-          dataFetchWorker.onmessage = async (
-            ev: MessageEvent<{ url: string; response: any }>
-          ) => {
-            latestLocalization = ev.data.response;
+          dataFetchWorker.onmessage = async (ev: MessageEvent) => {
+            const latestLocalization = ev.data.response.map;
 
-            if (latestLocalization.map) {
+            if (latestLocalization) {
               const canvas = document.createElement("canvas");
-              const image = await this.fetchImage(latestLocalization.map.url);
+              const image = await this.fetchImage(latestLocalization.url);
               canvas.width = image.width;
               canvas.height = image.height;
-              const ctx = canvas.getContext("2d");
+
+              const ctx = canvas.getContext("2d", {
+                willReadFrequently: true,
+              });
               if (ctx) {
                 ctx.drawImage(image, 0, 0);
               }
@@ -474,21 +489,25 @@ export class TelemetryUniverseData
                 image.height
               );
               const mapData: number[] = [];
+              const alphaData: number[] = [];
               if (pixelData) {
                 for (let i = 0; i < pixelData.data.length; i += 4) {
                   const r = pixelData.data[i];
+                  const a = pixelData.data[i + 3];
                   mapData.push(r);
+                  alphaData.push(a);
                 }
               }
               const gridValue = {
-                width: latestLocalization.map.width,
-                height: latestLocalization.map.height,
-                worldToLocal: latestLocalization.map.worldToLocal,
-                resolution: latestLocalization.map.resolution,
-                origin: latestLocalization.map.origin,
-                canvas,
+                width: latestLocalization.width,
+                height: latestLocalization.height,
+                worldToLocal: latestLocalization.worldToLocal,
+                resolution: latestLocalization.resolution,
+                origin: latestLocalization.origin,
+                alpha: alphaData,
                 data: mapData,
               };
+              mapDataCache[dp.url!] = JSON.parse(JSON.stringify(gridValue));
               callback(gridValue);
             }
           };
