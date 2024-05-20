@@ -72,7 +72,7 @@ export class TelemetryUniverseData
           dataFetchWorker.onmessage = (
             ev: MessageEvent<{ url: string; response: any }>
           ) => {
-            latestLocalization = ev.data;
+            latestLocalization = ev.data.response;
 
             if (latestLocalization.path) {
               callback({
@@ -360,7 +360,7 @@ export class TelemetryUniverseData
           dataFetchWorker.onmessage = (
             ev: MessageEvent<{ url: string; response: any }>
           ) => {
-            latestLocalization = ev.data;
+            latestLocalization = ev.data.response;
 
             if (latestLocalization.odometry) {
               callback({
