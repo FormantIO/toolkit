@@ -88,7 +88,7 @@ export class QueryStore {
       return data;
     }
 
-    return filterDataByTime(data, new Date(q.start), new Date(q.end));
+    return filterDataByTime(data, new Date(start), new Date(end));
   }
 
   private queryCache(
