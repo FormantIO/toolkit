@@ -9,6 +9,7 @@ export const eventTypes = [
   "command-request",
   "command-response",
   "command-delivery",
+  "intervention-response",
   "custom",
   "comment",
   "system",
