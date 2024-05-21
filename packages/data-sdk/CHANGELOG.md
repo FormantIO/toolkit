@@ -1,3 +1,7 @@
+## [1.43.0] - 2024-05-21
+
+- Fixes to UniverseData connect
+
 ## [1.41.0] - 2024-05-20
 
 - Improvements to UniverseData connect
