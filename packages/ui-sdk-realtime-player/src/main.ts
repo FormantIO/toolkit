@@ -1,11 +1,13 @@
 import * as UiCore from "@formant/ui-sdk-realtime-player-core";
+// @ts-ignore
+import RealtimePlayerWorker from "../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 export class RealtimePlayer extends HTMLElement {
   drawer: UiCore.H264BytestreamCanvasDrawer;
 
   constructor() {
     super();
     this.drawer = new UiCore.H264BytestreamCanvasDrawer(
-      () => new Worker("@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"),
+      () => new RealtimePlayerWorker(),
       () => {},
       () => {}
     );

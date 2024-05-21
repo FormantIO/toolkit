@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { Device, RealtimeVideoStream } from "@formant/data-sdk";
 import { defined } from "../../common/defined";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
+// @ts-ignore
+import RealtimePlayerWorker from "../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
 export class DeviceVideo extends THREE.Object3D {
   videoStream: RealtimeVideoStream | undefined;
@@ -11,7 +13,7 @@ export class DeviceVideo extends THREE.Object3D {
   constructor(private device: Device, videoStreamName?: string) {
     super();
     this.drawer = new H264BytestreamCanvasDrawer(
-      () => new Worker("@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"),
+      () => new RealtimePlayerWorker(),
       () => {},
       () => {}
     );
