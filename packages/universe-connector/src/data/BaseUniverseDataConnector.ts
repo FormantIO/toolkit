@@ -24,8 +24,16 @@ import {
   UniverseDataSource,
 } from "../main";
 import { subDays } from "date-fns";
-
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
+// eslint-disable-next-line import/no-unresolved
+// @ts-ignore-next-line
+import PcdWorker from "./PcdLoaderWorker?worker&inline";
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 
 export type DeviceId = string;
 export type DataSourceId = string;
@@ -40,7 +48,7 @@ const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
 
 export class BasicUniverseDataConnector {
-  pcdWorker = new Worker(new URL('./PcdLoaderWorker', import.meta.url));
+  pcdWorker = new PcdWorker();
 
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
 
@@ -245,7 +253,7 @@ export class BasicUniverseDataConnector {
 
   protected createH264Drawer(): H264BytestreamCanvasDrawer {
     const drawer = new H264BytestreamCanvasDrawer(
-      () => new Worker("@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker"),
+      () => new RealtimePlayerWorker(),
       () => {},
       () => {}
     );
