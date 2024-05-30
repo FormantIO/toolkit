@@ -1,7 +1,6 @@
 import { addSeconds, addYears } from "date-fns";
 import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
-import { QueryStore } from "./queryStore";
 import { StoreCache } from "./StoreCache";
 import {
   CloseSubscription,
@@ -25,7 +24,6 @@ import { StreamType } from "../../model/StreamType";
 import { IDataPoint } from "../../model/IDataPoint";
 import { IPointCloud } from "../../model/IPointCloud";
 
-const queryStore = new QueryStore();
 export class TelemetryUniverseData
   extends BasicUniverseDataConnector
   implements IUniverseData
@@ -53,7 +51,11 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    return this.subscribeTelemetry(
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
+    const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
       "localization",
@@ -66,18 +68,27 @@ export class TelemetryUniverseData
 
         let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          dataFetchWorker.postMessage({ url: dp.url });
+          dataFetchWorker.onmessage = (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            latestLocalization = ev.data.response;
 
-        if (latestLocalization.path) {
-          callback({
-            worldToLocal: latestLocalization.path.worldToLocal,
-            poses: latestLocalization.path.poses,
-          });
+            if (latestLocalization.path) {
+              callback({
+                worldToLocal: latestLocalization.path.worldToLocal,
+                poses: latestLocalization.path.poses,
+              });
+            }
+          };
         }
       }
     );
+
+    return () => {
+      this.releaseDataFetchWorker(dataFetchWorker);
+      unsubscribe();
+    };
   }
 
   onTimeChange(time: Date | "live") {
@@ -122,7 +133,7 @@ export class TelemetryUniverseData
       } else {
         end = addSeconds(time, 5);
       }
-      let data = queryStore.moduleQuery(
+      let data = this.queryStore.moduleQuery(
         {
           deviceIds: [deviceId],
         },
@@ -207,72 +218,87 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
+    const pcdWorker = this.getAvailablePCDWorker();
+    if (!pcdWorker) {
+      throw new Error("No available pointcloud worker");
+    }
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
+    // Call the function and handle the resolved data type
+    let pointCloudUnsubscribe = () => {};
+    let localizationUnsubscribe = () => {};
+    if (source.streamType === "point cloud") {
+      pointCloudUnsubscribe = this.subscribeTelemetry(
+        deviceId,
+        source,
+        "point cloud",
+        async (d) => {
+          if (d === "too much data" || d === undefined) {
+            callback(NoData);
+            return;
+          }
+          const latestPointCloud = d[d.length - 1][1] as "string" | IPointCloud;
+          if (typeof latestPointCloud === "string") {
+            callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
+          } else {
+            const { url } = latestPointCloud;
+            pcdWorker.postMessage({ url });
+            pcdWorker.onmessage = (
+              ev: MessageEvent<{ url: string; pcd: IPcd }>
+            ) => {
+              if (ev.data.url === url) {
+                callback({
+                  worldToLocal: latestPointCloud.worldToLocal,
+                  pcd: ev.data.pcd,
+                });
+              }
+            };
+          }
+        }
+      );
+    } else if (source.streamType === "localization") {
+      localizationUnsubscribe = this.subscribeTelemetry(
+        deviceId,
+        source,
+        "localization",
+        async (d) => {
+          if (d === "too much data" || d === undefined) {
+            callback(NoData);
+            return;
+          }
+          let latestLocalization = d[d.length - 1][1];
+          if (latestLocalization.url) {
+            dataFetchWorker.postMessage({ url: latestLocalization.url });
+            dataFetchWorker.onmessage = (
+              ev: MessageEvent<{ url: string; response: any }>
+            ) => {
+              latestLocalization = ev.data.response;
 
-    const jsonUnsubscribe = this.subscribeToJson<IUniversePointCloud>(
-      deviceId,
-      source,
-      callback
-    );
-    const pointCloudUnsubscribe = this.subscribeTelemetry(
-      deviceId,
-      source,
-      "point cloud",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
-          callback(NoData);
-          return;
+              if (latestLocalization.pointClouds) {
+                const { url, worldToLocal } = latestLocalization.pointClouds[0];
+                pcdWorker.postMessage({ url });
+                pcdWorker.onmessage = (
+                  ev: MessageEvent<{ url: string; pcd: IPcd }>
+                ) => {
+                  if (ev.data.url === url) {
+                    callback({
+                      worldToLocal,
+                      pcd: ev.data.pcd,
+                    });
+                  }
+                };
+              }
+            };
+          }
         }
-        const latestPointCloud = d[d.length - 1][1] as "string" | IPointCloud;
-        if (typeof latestPointCloud === "string") {
-          callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
-        } else {
-          const { url } = latestPointCloud;
-          this.pcdWorker.postMessage({ url });
-          this.pcdWorker.onmessage = (
-            ev: MessageEvent<{ url: string; pcd: IPcd }>
-          ) => {
-            if (ev.data.url === url) {
-              callback({
-                worldToLocal: latestPointCloud.worldToLocal,
-                pcd: ev.data.pcd,
-              });
-            }
-          };
-        }
-      }
-    );
-    const localizationUnsubscribe = this.subscribeTelemetry(
-      deviceId,
-      source,
-      "localization",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
-          callback(NoData);
-          return;
-        }
-        let latestLocalization = d[d.length - 1][1];
-        if (latestLocalization.url) {
-          const response = await fetch(latestLocalization.url);
-          latestLocalization = await response.json();
-        }
-        if (latestLocalization.pointClouds) {
-          const { url, worldToLocal } = latestLocalization.pointClouds[0];
-          this.pcdWorker.postMessage({ url });
-          this.pcdWorker.onmessage = (
-            ev: MessageEvent<{ url: string; pcd: IPcd }>
-          ) => {
-            if (ev.data.url === url) {
-              callback({
-                worldToLocal,
-                pcd: ev.data.pcd,
-              });
-            }
-          };
-        }
-      }
-    );
+      );
+    }
+
     return () => {
-      jsonUnsubscribe();
+      this.releasePCDWorker(pcdWorker);
+      this.releaseDataFetchWorker(dataFetchWorker);
       pointCloudUnsubscribe();
       localizationUnsubscribe();
     };
@@ -285,7 +311,11 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    return this.subscribeTelemetry(
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
+    const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
       "localization",
@@ -298,31 +328,40 @@ export class TelemetryUniverseData
 
         let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          dataFetchWorker.postMessage({ url: dp.url });
+          dataFetchWorker.onmessage = (
+            ev: MessageEvent<{ url: string; response: any }>
+          ) => {
+            latestLocalization = ev.data.response;
 
-        if (latestLocalization.odometry) {
-          callback({
-            worldToLocal: latestLocalization.odometry.worldToLocal,
-            pose: {
-              translation: {
-                x: latestLocalization.odometry.pose.translation.x,
-                y: latestLocalization.odometry.pose.translation.y,
-                z: latestLocalization.odometry.pose.translation.z,
-              },
-              rotation: {
-                x: latestLocalization.odometry.pose.rotation.x,
-                y: latestLocalization.odometry.pose.rotation.y,
-                z: latestLocalization.odometry.pose.rotation.z,
-                w: latestLocalization.odometry.pose.rotation.w,
-              },
-            },
-            covariance: [],
-          });
+            if (latestLocalization.odometry) {
+              callback({
+                worldToLocal: latestLocalization.odometry.worldToLocal,
+                pose: {
+                  translation: {
+                    x: latestLocalization.odometry.pose.translation.x,
+                    y: latestLocalization.odometry.pose.translation.y,
+                    z: latestLocalization.odometry.pose.translation.z,
+                  },
+                  rotation: {
+                    x: latestLocalization.odometry.pose.rotation.x,
+                    y: latestLocalization.odometry.pose.rotation.y,
+                    z: latestLocalization.odometry.pose.rotation.z,
+                    w: latestLocalization.odometry.pose.rotation.w,
+                  },
+                },
+                covariance: [],
+              });
+            }
+          };
         }
       }
     );
+
+    return () => {
+      this.releaseDataFetchWorker(dataFetchWorker);
+      unsubscribe();
+    };
   }
 
   subscribeToPose(
@@ -339,18 +378,36 @@ export class TelemetryUniverseData
     callback: (data: Symbol | IMarker3DArray) => void
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
-      return this.subscribeTelemetry(deviceId, source, "json", async (d) => {
-        if (d === "too much data" || d === undefined) {
-          callback(NoData);
-          return;
+      const dataFetchWorker = this.getAvailableDataFetchWorker();
+      if (!dataFetchWorker) {
+        throw new Error("No available data fetch worker");
+      }
+      const unsubscribe = this.subscribeTelemetry(
+        deviceId,
+        source,
+        "json",
+        async (d) => {
+          if (d === "too much data" || d === undefined) {
+            callback(NoData);
+            return;
+          }
+          let jsonString = d[d.length - 1][1];
+          if (jsonString.startsWith("http")) {
+            dataFetchWorker.postMessage({ url: jsonString });
+            dataFetchWorker.onmessage = (
+              ev: MessageEvent<{ url: string; response: any }>
+            ) => {
+              jsonString = JSON.stringify(ev.data);
+              callback(JSON.parse(jsonString) as IMarker3DArray);
+            };
+          }
         }
-        let jsonString = d[d.length - 1][1];
-        if (jsonString.startsWith("http")) {
-          const asset = await fetch(jsonString);
-          jsonString = await asset.text();
-        }
-        callback(JSON.parse(jsonString) as IMarker3DArray);
-      });
+      );
+
+      return () => {
+        this.releaseDataFetchWorker(dataFetchWorker);
+        unsubscribe();
+      };
     } else {
       throw new Error("Realtime geometry note supported");
     }
@@ -369,10 +426,16 @@ export class TelemetryUniverseData
     source: UniverseDataSource,
     callback: (data: Symbol | IUniverseGridMap) => void
   ): CloseSubscription {
+    const mapDataCache: { [url: string]: any } = {};
+
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    return this.subscribeTelemetry(
+    const dataFetchWorker = this.getAvailableDataFetchWorker();
+    if (!dataFetchWorker) {
+      throw new Error("No available data fetch worker");
+    }
+    const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
       "localization",
@@ -383,43 +446,66 @@ export class TelemetryUniverseData
         }
 
         const dp = d[d.length - 1][1];
-
-        let latestLocalization = dp;
         if (dp.url) {
-          const asset = await fetch(dp.url);
-          latestLocalization = await asset.json();
-        }
+          if (mapDataCache[dp.url]) {
+            callback(mapDataCache[dp.url]);
+            return;
+          }
 
-        if (latestLocalization.map) {
-          const canvas = document.createElement("canvas");
-          const image = await this.fetchImage(latestLocalization.map.url);
-          canvas.width = image.width;
-          canvas.height = image.height;
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            ctx.drawImage(image, 0, 0);
-          }
-          const pixelData = ctx?.getImageData(0, 0, image.width, image.height);
-          const mapData: number[] = [];
-          if (pixelData) {
-            for (let i = 0; i < pixelData.data.length; i += 4) {
-              const r = pixelData.data[i];
-              mapData.push(r);
+          dataFetchWorker.postMessage({ url: dp.url });
+
+          dataFetchWorker.onmessage = async (ev: MessageEvent) => {
+            const latestLocalization = ev.data.response.map;
+
+            if (latestLocalization) {
+              const canvas = document.createElement("canvas");
+              const image = await this.fetchImage(latestLocalization.url);
+              canvas.width = image.width;
+              canvas.height = image.height;
+
+              const ctx = canvas.getContext("2d", {
+                willReadFrequently: true,
+              });
+              if (ctx) {
+                ctx.drawImage(image, 0, 0);
+              }
+              const pixelData = ctx?.getImageData(
+                0,
+                0,
+                image.width,
+                image.height
+              );
+              const mapData: number[] = [];
+              const alphaData: number[] = [];
+              if (pixelData) {
+                for (let i = 0; i < pixelData.data.length; i += 4) {
+                  const r = pixelData.data[i];
+                  const a = pixelData.data[i + 3];
+                  mapData.push(r);
+                  alphaData.push(a);
+                }
+              }
+              const gridValue = {
+                width: latestLocalization.width,
+                height: latestLocalization.height,
+                worldToLocal: latestLocalization.worldToLocal,
+                resolution: latestLocalization.resolution,
+                origin: latestLocalization.origin,
+                alpha: alphaData,
+                data: mapData,
+              };
+              mapDataCache[dp.url!] = JSON.parse(JSON.stringify(gridValue));
+              callback(gridValue);
             }
-          }
-          const gridValue = {
-            width: latestLocalization.map.width,
-            height: latestLocalization.map.height,
-            worldToLocal: latestLocalization.map.worldToLocal,
-            resolution: latestLocalization.map.resolution,
-            origin: latestLocalization.map.origin,
-            canvas,
-            data: mapData,
           };
-          callback(gridValue);
         }
       }
     );
+
+    return () => {
+      this.releaseDataFetchWorker(dataFetchWorker);
+      unsubscribe();
+    };
   }
 
   videoCache = new StoreCache<string, HTMLVideoElement>({

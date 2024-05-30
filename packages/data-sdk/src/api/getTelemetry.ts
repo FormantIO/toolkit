@@ -8,7 +8,8 @@ export async function getTelemetry(
   streamNameOrStreamNames: string | string[],
   start: Date,
   end: Date,
-  tags?: { [key in string]: string[] }
+  tags?: { [key in string]: string[] },
+  latestOnly?: boolean
 ): Promise<TelemetryResult[]> {
   let deviceIds = deviceIdOrDeviceIds;
   if (!Array.isArray(deviceIdOrDeviceIds)) {
@@ -26,6 +27,7 @@ export async function getTelemetry(
       names: streamNames,
       start: start.toISOString(),
       tags,
+      latestOnly,
     }),
     headers: {
       "Content-Type": "application/json",

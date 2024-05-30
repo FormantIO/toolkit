@@ -387,6 +387,10 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
+    const pcdWorker = this.getAvailablePCDWorker();
+    if (!pcdWorker) {
+      throw new Error("No available pointcloud worker");
+    }
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"
@@ -417,8 +421,8 @@ export class LiveUniverseData
           if (found) {
             const { url } = found;
             pcd = await new Promise((resolve) => {
-              this.pcdWorker.postMessage({ url });
-              this.pcdWorker.onmessage = (
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
                 ev: MessageEvent<{ url: string; pcd: IPcd }>
               ) => {
                 if (ev.data.url === url) {
@@ -469,8 +473,8 @@ export class LiveUniverseData
           if (found && found.pointClouds) {
             const { url } = found.pointClouds[0];
             pcd = await new Promise((resolve) => {
-              this.pcdWorker.postMessage({ url });
-              this.pcdWorker.onmessage = (
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
                 ev: MessageEvent<{ url: string; pcd: IPcd }>
               ) => {
                 if (ev.data.url === url) {
@@ -499,11 +503,11 @@ export class LiveUniverseData
         if (msg.payload.pointCloud) {
           const id = Math.random();
           const pcd = await new Promise<IPcd>((resolve) => {
-            this.pcdWorker.postMessage({
+            pcdWorker.postMessage({
               id,
               pointCloud: defined(msg.payload.pointCloud).data,
             });
-            this.pcdWorker.onmessage = (
+            pcdWorker.onmessage = (
               ev: MessageEvent<{ id: number; pcd: IPcd }>
             ) => {
               if (ev.data.id === id) {
@@ -598,7 +602,7 @@ export class LiveUniverseData
               rotation: parsedMsg.info.origin.orientation,
             },
             data: parsedMsg.data,
-            canvas: undefined as any,
+            alpha: parsedMsg.data.map(() => 255),
           });
         }
       };
@@ -636,7 +640,9 @@ export class LiveUniverseData
             const image = await this.fetchImage(foundLocalization.map.url);
             canvas.width = image.width;
             canvas.height = image.height;
-            const ctx = canvas.getContext("2d");
+            const ctx = canvas.getContext("2d", {
+              willReadFrequently: true,
+            });
             if (ctx) {
               ctx.drawImage(image, 0, 0);
             }
@@ -647,10 +653,13 @@ export class LiveUniverseData
               image.height
             );
             const mapData: number[] = [];
+            const alphaData: number[] = [];
             if (pixelData) {
               for (let i = 0; i < pixelData.data.length; i += 4) {
                 const r = pixelData.data[i];
+                const a = pixelData.data[i + 3];
                 mapData.push(r);
+                alphaData.push(a);
               }
             }
             gridValue = {
@@ -659,7 +668,7 @@ export class LiveUniverseData
               worldToLocal: foundLocalization.map.worldToLocal,
               resolution: foundLocalization.map.resolution,
               origin: foundLocalization.map.origin,
-              canvas,
+              alpha: alphaData,
               data: mapData,
             };
           }

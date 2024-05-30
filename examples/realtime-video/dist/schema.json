@@ -1,16 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://formant.io/toolkit/examples/realtime-video/schema.json",
-  "title": "RTC Video",
-  "description": "Real time video connection.",
+  "title": "Realtime video",
+  "description": "Monitor a realtime video stream from your device.",
   "type": "object",
   "properties": {
     "camera": {
       "type": "string",
-      "description": "Camera name i.e. Integrated Camera Integrated C - dev.video0"
+      "title": "Camera name",
+      "description": "Name of the video source."
     },
     "isTeleopModule": {
-      "name": "Enable teleop mode",
+      "title": "Using in teleoperation mode?",
+      "description": "If using this module in teleoperation mode, set this to ON.",
       "type": "boolean",
       "default": false
     }

@@ -8,6 +8,7 @@ import { IDatapointEvent } from "./IDatapointEvent";
 import { IDeviceOfflineEvent } from "./IDeviceOfflineEvent";
 import { IDeviceOnlineEvent } from "./IDeviceOnlineEvent";
 import { IInterventionRequest } from "./IInterventionRequest";
+import { IInterventionResponse } from "./IInterventionResponse";
 import { IPortForwardingSessionRecord } from "./IPortForwardingSessionRecord";
 import { IStatefulEvent } from "./IStatefulEvent";
 import { ISystemEvent } from "./ISystemEvent";
@@ -21,6 +22,7 @@ export type IEvent =
   | IDeviceOnlineEvent
   | IDeviceOfflineEvent
   | IInterventionRequest
+  | IInterventionResponse
   | ITeleopSessionRecord
   | IPortForwardingSessionRecord
   | ICommandRequestEvent
