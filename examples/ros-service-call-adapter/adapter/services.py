@@ -114,6 +114,7 @@ class RosService:
             if service_name not in set(rosservice.get_service_list()):
                 self._is_valid = False
                 return
+            self.request_args()
         except Exception:
             self._is_valid = False
 
