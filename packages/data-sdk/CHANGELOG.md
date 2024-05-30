@@ -1,3 +1,48 @@
+## [1.43.0] - 2024-05-21
+
+- Fixes to UniverseData connect
+
+## [1.41.0] - 2024-05-20
+
+- Improvements to UniverseData connect
+
+## [1.40.0] - 2024-05-16
+
+- missing intervention request data field
+
+## [1.39.0] - 2024-05-16
+
+- new intervention request type
+
+## [1.38.0] - 2024-04-19
+
+- adding more agent apis
+
+## [1.37.0] - 2024-04-19
+
+- adding latestOnly support for getTelemetry
+
+## [1.36.0] - 2024-04-19
+
+- adding agent getTelemetry
+
+## [1.34.0] - 2024-04-03
+
+- New auth mechanism
+
+## [1.33.1] - 2024-03-19
+
+- Remove JSON subscription as an option for pointclouds in universe-connector
+
+## [1.33.0] - 2024-03-11
+
+- Caching universe-connector network calls
+- Using workers to fetch external assets
+
+## [1.32.0] - 2024-03-06
+
+- Adding support for multiple pointclouds subscriptions
+
 ## [1.31.0] - 2024-02-27
 
 - adding physical events

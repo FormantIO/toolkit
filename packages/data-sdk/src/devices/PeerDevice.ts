@@ -3,6 +3,9 @@ import { delay } from "../../../common/delay";
 import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
 import { ConfigurationDocument } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
+import { TelemetryResult } from "../model/TelemetryResult";
+import { IEventQuery } from "../model/IEventQuery";
+import { IEvent } from "../model/IEvent";
 
 export class PeerDevice extends BaseDevice {
   id!: string;
@@ -34,6 +37,182 @@ export class PeerDevice extends BaseDevice {
       };
       return v;
     });
+  }
+
+  async getTelemetry(
+    streamNameOrStreamNames: string | string[],
+    start: Date,
+    end: Date,
+    tags?: { [key in string]: string[] },
+    limit?: number,
+    offset?: number,
+    latestOnly?: boolean
+  ): Promise<TelemetryResult[]> {
+    if (Array.isArray(streamNameOrStreamNames)) {
+      throw new Error("Multiple stream names not supported");
+    }
+    if (tags) {
+      throw new Error("Tags not supported");
+    }
+
+    if (latestOnly && limit === undefined) {
+      limit = 1;
+    } else if (latestOnly && limit !== undefined) {
+      throw new Error("latestOnly and limit cannot be used together");
+    }
+
+    let queryUrl = `${
+      this.peerUrl
+    }/v1/querydatapoints?stream_name=${streamNameOrStreamNames}&start=${start.toISOString()}&end=${end.toISOString()}`;
+    if (limit != null && limit > 0) {
+      queryUrl += `&limit=${limit}`;
+    }
+    if (offset != null && offset >= 0) {
+      queryUrl += `&offset=${offset}`;
+    }
+
+    const result = await fetch(queryUrl);
+    const queryResp = await result.json();
+
+    const telemetryDatapoints: TelemetryResult[] = [];
+    for (const dp of queryResp.results) {
+      const dpTime = parseInt(dp.timestamp);
+      const dpType = dp.tags.data_type;
+      delete dp.tags.data_type;
+
+      telemetryDatapoints.push({
+        deviceId: this.id,
+        name: dp.stream,
+        points: [[dpTime, this.getPointPayload(dpType, dp)]],
+        tags: dp.tags,
+        type: dpType,
+      });
+    }
+
+    // adhere to default cloud ordering
+    return telemetryDatapoints.reverse();
+  }
+
+  async queryEvents(query: IEventQuery): Promise<IEvent[]> {
+    const unsupportedFilters = [
+      "id",
+      "viewed",
+      "keyword",
+      "message",
+      "sort",
+      "eventTypes",
+      "notificationEnabled",
+      "userIds",
+      "annotationTemplateIds",
+      "disableNullMatches",
+      "severities",
+      "deviceIds",
+      "names",
+      "types",
+      "tags",
+      "notNames",
+    ];
+    this.checkKeysAndThrow(query, unsupportedFilters);
+
+    let queryUrl = `${this.peerUrl}/v1/queryevents?start=${query.start}&end=${query.end}`;
+    if (query.count != null && query.count > 0) {
+      queryUrl += `&limit=${query.count}`;
+    }
+    if (query.offset != null && query.offset >= 0) {
+      queryUrl += `&offset=${query.offset}`;
+    }
+
+    const result = await fetch(queryUrl);
+    const queryResp = await result.json();
+
+    const events: IEvent[] = [];
+    for (const ev of queryResp.results) {
+      const epochTime = parseInt(ev.timestamp);
+
+      const event: IEvent = {
+        deviceId: this.id,
+        time: new Date(epochTime).toISOString(),
+        message: ev.message,
+        notificationEnabled: ev.notificationEnabled,
+        type: ev.type,
+        tags: ev.tags,
+      };
+
+      if (ev.id !== "") {
+        event.id = ev.id;
+      }
+
+      if (ev.type !== "") {
+        event.type = ev.type;
+      }
+
+      if (ev.streamName !== "") {
+        event.streamName = ev.streamName;
+      }
+
+      if (ev.streamType !== "") {
+        event.streamType = ev.streamType;
+      }
+
+      if (ev.severity !== "") {
+        (event as any).severity = ev.severity.toLowerCase();
+      }
+
+      if (ev.tags) {
+        event.tags = ev.tags;
+      }
+
+      if (ev.endTimestamp !== "0") {
+        event.endTime = new Date(parseInt(ev.endTimestamp)).toISOString();
+      }
+
+      events.push(event);
+    }
+
+    // adhere to default cloud ordering
+    return events.reverse();
+  }
+
+  private checkKeysAndThrow(obj: any, keysToCheck: string[]): void {
+    const unsupportedKeysFound = keysToCheck.filter((key) => key in obj);
+
+    if (unsupportedKeysFound.length > 0) {
+      throw new Error(
+        `Filters not currently supported: ${unsupportedKeysFound.join(", ")}.`
+      );
+    }
+  }
+
+  private getPointPayload(type: string, datapoint: any): any {
+    switch (type) {
+      case "numeric":
+        return datapoint.numeric.value;
+      case "numeric set":
+        return datapoint.numericSet.numerics;
+      case "text":
+        return datapoint.text.value;
+      case "json":
+        return datapoint.json.value;
+      case "bitset":
+        const keys = [];
+        const values = [];
+        for (const bit of datapoint.bitset.bits) {
+          keys.push(bit.key);
+          values.push(bit.value);
+        }
+        return {
+          keys,
+          values,
+        };
+      case "location":
+        return datapoint.location;
+      case "health":
+        return datapoint.health;
+      case "battery":
+        return datapoint.battery;
+      default:
+        return {};
+    }
   }
 
   private subscribeToTelemetry() {

@@ -6,4 +6,5 @@ export interface ILabelingRequestData {
   imageUrl: string;
   labels: ILabel[];
   hint?: ILabeledPolygon[];
+  title?: string;
 }

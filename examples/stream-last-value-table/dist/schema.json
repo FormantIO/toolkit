@@ -1,33 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Last known value table",
-  "description": "Available streams to display on the table.",
+  "title": "Stream last value table",
+  "description": "Monitor the last recorded value on a set of streams at a glance.",
   "type": "object",
   "properties": {
     "fullScreenMode": {
+      "title": "Realtime mode",
+      "description": "If set to ON, this module will disconnect from the current position on the timeline and always show current data from the stream last value table. Set this to ON when using in teleoperation.",
       "type": "boolean"
     },
     "fontSize": {
+      "title": "Font size (px)",
       "type": "integer"
     },
     "rowHeight": {
+      "title": "Row height (px)",
       "type": "integer"
     },
     "textStreams": {
-      "description": "Text streams",
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "name": {
-            "description": "Formant stream name",
+            "description": "Name of the text stream you want to monitor. Persist Last Known Value must be set to ON for this stream.",
             "$formant.streams.byType": "text",
             "type": "string"
           },
           "expectedValue": {
+            "description": "Expected value of the text stream. If the stream value does not match the expected value, the row will be highlighted.",
             "type": "string"
           },
           "fullwidth": {
+            "title": "Fit rows to window",
+            "description": "If ON, window will display one stream per row. If OFF, multiple streams may be displayed in table window in a single row.",
             "type": "boolean",
             "default": true
           }
@@ -40,21 +46,25 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Formant stream name",
+            "description": "Name of the numeric set stream you want to monitor. Persist Last Known Value must be set to ON for this stream.",
             "$formant.streams.byType": "numeric set",
             "type": "string"
           },
           "expectedValue": {
+            "description": "Expected value of the numeric set stream. If the stream value does not match the expected value, the row will be highlighted.",
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
+                  "description": "Optional name of this expected value.",
                   "type": "string"
                 },
                 "greaterThan": { "type": "integer" },
                 "lesserThan": { "type": "integer" },
                 "fullwidth": {
+                  "title": "Fit rows to window",
+                  "description": "If ON, window will display one stream per row. If OFF, multiple streams may be displayed in table window in a single row.",
                   "type": "boolean",
                   "default": true
                 }
@@ -70,13 +80,21 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Formant stream name",
+            "description": "Name of the numeric stream you want to monitor. Persist Last Known Value must be set to ON for this stream.",
             "$formant.streams.byType": "numeric",
             "type": "string"
           },
-          "greaterThan": { "type": "integer" },
-          "lesserThan": { "type": "integer" },
+          "greaterThan": { 
+            "type": "integer",
+            "description:": "If the stream value falls outside of the expected values, the row will be highlighted."
+          },
+          "lesserThan": { 
+            "type": "integer",
+            "description": "If the stream value falls outside of the expected values, the row will be highlighted."
+          },
           "fullwidth": {
+            "title": "Fit rows to window",
+            "description": "If ON, window will display one stream per row. If OFF, multiple streams may be displayed in table window in a single row.",
             "type": "boolean",
             "default": true
           }
@@ -89,7 +107,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Formant stream name",
+            "description": "Name of the bitset stream you want to monitor. Persist Last Known Value must be set to ON for this stream.",
             "$formant.streams.byType": "bitset",
             "type": "string"
           },
@@ -99,13 +117,17 @@
               "type": "object",
               "properties": {
                 "key": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Key of the bitset stream you want to monitor."
                 },
                 "value": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Expected value of the bitset stream. If the stream value does not match the expected value, the row will be highlighted."
                 },
                 "fullwidth": {
                   "type": "boolean",
+                  "title": "Fit rows to window",
+                  "description": "If ON, window will display one stream per row. If OFF, multiple streams may be displayed in table window in a single row.",
                   "default": true
                 }
               }

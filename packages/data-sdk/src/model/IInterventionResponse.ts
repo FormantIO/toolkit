@@ -1,11 +1,11 @@
-import { IBaseEntity } from "./IBaseEntity";
+import { IBaseEvent } from "./IBaseEvent";
 import { IInterventionTypeMap } from "./IInterventionTypeMap";
 import { InterventionType } from "./InterventionType";
 import { Uuid } from "./Uuid";
 
 export interface IInterventionResponse<
   T extends InterventionType = InterventionType
-> extends IBaseEntity {
+> extends IBaseEvent<"intervention-response"> {
   userId?: Uuid;
   interventionId: Uuid;
   interventionType: T;
