@@ -6,6 +6,7 @@ export interface IUniverseGridMap {
   height: number;
   resolution: number;
   origin: ITransform;
-  data: number[];
-  alpha: number[];
+  url?: string;
+  data?: number[];
+  alpha?: number[];
 }

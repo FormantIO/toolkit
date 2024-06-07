@@ -458,41 +458,15 @@ export class TelemetryUniverseData
             const latestLocalization = ev.data.response.map;
 
             if (latestLocalization) {
-              const canvas = document.createElement("canvas");
-              const image = await this.fetchImage(latestLocalization.url);
-              canvas.width = image.width;
-              canvas.height = image.height;
-
-              const ctx = canvas.getContext("2d", {
-                willReadFrequently: true,
-              });
-              if (ctx) {
-                ctx.drawImage(image, 0, 0);
-              }
-              const pixelData = ctx?.getImageData(
-                0,
-                0,
-                image.width,
-                image.height
-              );
-              const mapData: number[] = [];
-              const alphaData: number[] = [];
-              if (pixelData) {
-                for (let i = 0; i < pixelData.data.length; i += 4) {
-                  const r = pixelData.data[i];
-                  const a = pixelData.data[i + 3];
-                  mapData.push(r);
-                  alphaData.push(a);
-                }
-              }
               const gridValue = {
                 width: latestLocalization.width,
                 height: latestLocalization.height,
                 worldToLocal: latestLocalization.worldToLocal,
                 resolution: latestLocalization.resolution,
                 origin: latestLocalization.origin,
-                alpha: alphaData,
-                data: mapData,
+                url: latestLocalization.url,
+                //alpha: alphaData,
+                //data: mapData,
               };
               mapDataCache[dp.url!] = JSON.parse(JSON.stringify(gridValue));
               callback(gridValue);
