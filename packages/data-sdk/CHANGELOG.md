@@ -1,3 +1,6 @@
+## [1.44.1] - 2024-06-10
+- fix version
+
 ## [1.44.0] - 2024-06-10
 
 - Passing url for gridMaps in UniverseData connect
