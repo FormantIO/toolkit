@@ -6,6 +6,7 @@ import { BaseDevice } from "./BaseDevice";
 import { TelemetryResult } from "../model/TelemetryResult";
 import { IEventQuery } from "../model/IEventQuery";
 import { IEvent } from "../model/IEvent";
+import { IView } from "./IView";
 
 export class PeerDevice extends BaseDevice {
   id!: string;
@@ -282,6 +283,12 @@ export class PeerDevice extends BaseDevice {
     let result = await fetch(`${this.peerUrl}/v1/config`);
     const cfg = await result.json();
     return cfg.configuration.document;
+  }
+
+  async getViews(): Promise<IView[]> {
+    let result = await fetch(`${this.peerUrl}/v1/views`);
+    const viewDoc = await result.json();
+    return viewDoc.views;
   }
 
   async startRealtimeConnection(sessionType?: number): Promise<void> {
