@@ -397,7 +397,7 @@ export class TelemetryUniverseData
             dataFetchWorker.onmessage = (
               ev: MessageEvent<{ url: string; response: any }>
             ) => {
-              jsonString = JSON.stringify(ev.data);
+              jsonString = JSON.stringify(ev.data.response);
               callback(JSON.parse(jsonString) as IMarker3DArray);
             };
           } else {
