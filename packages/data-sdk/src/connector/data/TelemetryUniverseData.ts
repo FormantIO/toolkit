@@ -400,6 +400,8 @@ export class TelemetryUniverseData
               jsonString = JSON.stringify(ev.data);
               callback(JSON.parse(jsonString) as IMarker3DArray);
             };
+          } else {
+            callback(JSON.parse(jsonString) as IMarker3DArray);
           }
         }
       );
