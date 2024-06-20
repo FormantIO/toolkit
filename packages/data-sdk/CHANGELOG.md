@@ -1,3 +1,7 @@
+## [1.46.0] - 2024-6-20
+
+- return geometry json when it doesn't come as url asse
+
 ## [1.45.0] - 2024-06-20
 
 - improvements for local
