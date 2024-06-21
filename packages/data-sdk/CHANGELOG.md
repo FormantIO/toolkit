@@ -1,6 +1,10 @@
+## [1.47.0] - 2024-6-21
+
+- fix latest data point
+
 ## [1.46.0] - 2024-6-20
 
-- return geometry json when it doesn't come as url asse
+- return geometry json when it doesn't come as url
 
 ## [1.45.0] - 2024-06-20
 
