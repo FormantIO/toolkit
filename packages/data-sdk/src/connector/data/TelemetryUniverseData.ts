@@ -153,7 +153,7 @@ export class TelemetryUniverseData
           const points = streamData.points;
           if (points.length > 0) {
             const lastPoint = points[points.length - 1];
-            if (latestOnly) {
+            if (!latestOnly) {
               let nearestPointTime = lastPoint[0];
               let nearestPoint = lastPoint[1];
               points.forEach((p: any) => {
