@@ -114,6 +114,7 @@ class RosService:
             if service_name not in set(rosservice.get_service_list()):
                 self._is_valid = False
                 return
+            self.request_args()
         except Exception:
             self._is_valid = False
 
@@ -137,7 +138,12 @@ class RosService:
             self._is_valid = False
             return {}
 
-        parsed_from_indented_text = parse_indented_string(srv_text)
+        try:
+            parsed_from_indented_text = parse_indented_string(srv_text)
 
-        ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
-        return ROS_format_to_JSON_schema(self._service_name, ros_formatted)
+            ros_formatted = parse_indented_as_ros(parsed_from_indented_text)
+            return ROS_format_to_JSON_schema(self._service_name, ros_formatted)
+        except Exception as e:
+            logger.warn(f"Failure parsing srv text for {self._service_name}: {e}")
+            self._is_valid = False
+            return {}
