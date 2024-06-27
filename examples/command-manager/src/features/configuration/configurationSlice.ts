@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IConfiguration } from "../../types";
 
-const initialState: IConfiguration = {
+const initialState: any = {
   commands: [],
 };
 
@@ -19,7 +19,7 @@ export const configurationSlice = createSlice({
           state.commands.push(id);
           return;
         case false:
-          state.commands = state.commands.filter((_) => _ !== id);
+          state.commands = state.commands.filter((_: {id: string}) => _ !== id);
           return;
         default:
           return state;

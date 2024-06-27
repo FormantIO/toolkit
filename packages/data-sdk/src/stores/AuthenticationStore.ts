@@ -11,6 +11,7 @@ import { IUser } from "../model/IUser";
 import { IAuthentication } from "./IAuthentication";
 import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
+import { ICheckSsoResult } from "./ICheckSsoResult";
 
 interface IAuthenticationStoreOptions {
   apiUrl: string;
@@ -220,6 +221,24 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._token !== undefined;
   }
 
+  async loginToPeer(
+    peerUrl: string,
+    username: string,
+    password: string
+  ): Promise<void> {
+    const result = await fetch(`${peerUrl}/login`, {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (result.status !== 200) {
+      throw new LoginFailureError("Invalid authentication");
+    }
+  }
+
   /**
    * @deprecated use currentUser property instead.
    */
@@ -336,5 +355,41 @@ export class AuthenticationStore implements IAuthenticationStore {
     });
     const refreshData = await result.json();
     await this.loginWithToken(refreshData.authentication.accessToken, token);
+  }
+
+  async checkSso(
+    email: string,
+    allowUserAutoCreation?: boolean
+  ): Promise<ICheckSsoResult> {
+    const result = await fetch(`${this._apiUrl}/v1/admin/auth/check-sso`, {
+      method: "POST",
+      body: JSON.stringify({ email, allowUserAutoCreation }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await result.json();
+  }
+
+  async loginWithSso(ssoToken: string, ssoRefreshToken?: string) {
+    const result = await fetch(`${this._apiUrl}/v1/admin/auth/login-sso`, {
+      method: "POST",
+      body: JSON.stringify({ token: ssoToken, refreshToken: ssoRefreshToken }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const ssoTokens = (await result.json()) as {
+      authentication?: IAuthentication;
+    };
+
+    if (!ssoTokens.authentication) {
+      throw new Error("Failed to login with SSO");
+    }
+
+    return await this.loginWithToken(
+      ssoTokens.authentication.accessToken,
+      ssoTokens.authentication.refreshToken
+    );
   }
 }

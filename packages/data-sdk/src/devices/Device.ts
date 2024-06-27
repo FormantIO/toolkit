@@ -34,6 +34,9 @@ import { patchDevice } from "../api/patchDevice";
 import { getDevicesData } from "../api/getDevicesData";
 import { queryDevicesData } from "../api/queryDevicesData";
 import { disableDevice } from "../api/disableDevice";
+import { TelemetryResult } from "../model/TelemetryResult";
+import { IEvent } from "../model/IEvent";
+import { queryEvents } from "../api/queryEvents";
 export class Device extends BaseDevice {
   constructor(
     public id: string,
@@ -108,6 +111,26 @@ export class Device extends BaseDevice {
     );
     const config = await result.json();
     return config.document;
+  }
+
+  /**
+   * Asynchronously retrieves the device's agent version string
+   *
+   * @returns {Promise<string | undefined | null>} A promise that resolves to the agent version
+   * @throws {Error} Throws an error if the device info cannot be fetched
+   */
+
+  async getAgentVersion(): Promise<string | undefined | null> {
+    let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const device = await result.json();
+
+    return device?.state?.agentVersion;
   }
 
   async getFileUrl(fileId: string): Promise<string[]> {
@@ -446,15 +469,33 @@ export class Device extends BaseDevice {
     streamNameOrStreamNames: string | string[],
     start: Date,
     end: Date,
-    tags?: { [key in string]: string[] }
-  ) {
+    tags?: { [key in string]: string[] },
+    limit?: number,
+    offset?: number,
+    latestOnly?: boolean
+  ): Promise<TelemetryResult[]> {
+    if (limit !== undefined || offset !== undefined) {
+      throw new Error("Limit and offset are not supported in this method");
+    }
+
     return await getTelemetry(
       this.id,
       streamNameOrStreamNames,
       start,
       end,
-      tags
+      tags,
+      latestOnly
     );
+  }
+
+  async queryEvents(query: IEventQuery): Promise<IEvent[]> {
+    if (query.deviceIds) {
+      throw new Error("Cannot filter multiple devices via Device class");
+    }
+
+    query.deviceIds = [this.id];
+
+    return queryEvents(query);
   }
 
   async getTelemetryStreams(): Promise<TelemetryStream[]> {

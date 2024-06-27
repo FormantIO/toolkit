@@ -1,8 +1,169 @@
-## [1.14.0] - 2023-09-06
+## [1.47.0] - 2024-6-21
 
-### Added 
+- fix latest data point
+
+## [1.46.0] - 2024-6-20
+
+- return geometry json when it doesn't come as url
+
+## [1.45.0] - 2024-06-20
+
+- improvements for local
+
+## [1.44.1] - 2024-06-10
+
+- fix version
+
+## [1.44.0] - 2024-06-10
+
+- Passing url for gridMaps in UniverseData connect
+
+## [1.43.0] - 2024-05-21
+
+- Fixes to UniverseData connect
+
+## [1.41.0] - 2024-05-20
+
+- Improvements to UniverseData connect
+
+## [1.40.0] - 2024-05-16
+
+- missing intervention request data field
+
+## [1.39.0] - 2024-05-16
+
+- new intervention request type
+
+## [1.38.0] - 2024-04-19
+
+- adding more agent apis
+
+## [1.37.0] - 2024-04-19
+
+- adding latestOnly support for getTelemetry
+
+## [1.36.0] - 2024-04-19
+
+- adding agent getTelemetry
+
+## [1.34.0] - 2024-04-03
+
+- New auth mechanism
+
+## [1.33.1] - 2024-03-19
+
+- Remove JSON subscription as an option for pointclouds in universe-connector
+
+## [1.33.0] - 2024-03-11
+
+- Caching universe-connector network calls
+- Using workers to fetch external assets
+
+## [1.32.0] - 2024-03-06
+
+- Adding support for multiple pointclouds subscriptions
+
+## [1.31.0] - 2024-02-27
+
+- adding physical events
+
+## [1.30.0] - 2024-02-27
+
+- adding more events
+
+## [1.29.0] - 2024-02-27
+
+- fixing interface of IAnnotation
+
+## [1.28.0] - 2024-02-27
+
+- fixing interface of ITriggeredEvent
+
+## [1.26.0] - 2024-01-24
+
+- targeting es2019
+
+## [1.26.0] - 2024-01-24
+
+- Merging in data connector
+
+## [1.25.0] - 2024-01-24
+
+### Added
+
+- PeerDevice function to get commands
+
+## [1.24.0] - 2024-01-24
+
+### Added
+
+- Exposing function on interface
+
+## [1.23.0] - 2024-01-22
+
+### Added
+
+- Authentication method for peer
+
+## [1.22.0] - 2024-01-17
+
+### Added
+
+- bundling deps to prevent typing issues
+
+## [1.21.0] - 2024-01-17
+
+### Added
+
+- exposing realtime message creator
+
+## [1.20.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3DArray
+
+## [1.19.0] - 2024-01-17
+
+### Added
+
+- exposed new interface IMarker3D
+
+## [1.18.0] - 2023-12-29
+
+### Added
+
+- improvements to storeCache
+
+## [1.17.0] - 2023-10-09
+
+### Added
+
+- New functions for looking up SSO login information and logging in with SSO tokens
+
+## [1.16.0] - 2023-09-21
+
+### Fixed
+
+- Device entity should have correct organization property set. (#138)
+
+## [1.15.0] - 2023-09-21
+
+### Added
+
+- Add support for agent version querying (#136)
+
+## [1.14.1] - 2023-09-06
+
+### Added
 
 - Add parameter to query desire configuration vs reported configuration (#132)
+
+## [1.14.0] - 2023-09-06
+
+### Fixed
+
+- Fixed delete account error handling (#131)
 
 ## [1.13.2] - 2023-08-27
 
@@ -20,21 +181,20 @@
 
 ### Added
 
-- Enhance Authentication.login() method for _advanced_ login flows. 
+- Enhance Authentication.login() method for _advanced_ login flows.
 
 ## [1.12.0] - 2023-08-07
 
 ### Upgrade
 
-- Added support for `HEADLESS` session types in RtcClientPool. 
-- Upgrade `@formant/realtime-sdk` to 1.2.0. 
+- Added support for `HEADLESS` session types in RtcClientPool.
+- Upgrade `@formant/realtime-sdk` to 1.2.0.
 
 ## [1.11.1] - 2023-08-07
 
 ### Added
 
 - Added right files
-
 
 ## [1.11.0] - 2023-08-07
 
@@ -253,7 +413,12 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
-[1.14.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.14.0~
+[1.18.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
+[1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
+[1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
+[1.15.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.1...release/data-sdk/1.15.0~
+[1.14.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.14.0...release/data-sdk/1.14.1~
+[1.14.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.2...release/data-sdk/1.14.0~
 [1.13.2]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.1...release/data-sdk/1.13.2~
 [1.13.1]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.13.0...release/data-sdk/1.13.1~
 [1.13.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.12.0...release/data-sdk/1.13.0~

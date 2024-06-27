@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import { IConfiguration, Status } from "types";
 import { useFormant } from "@formant/ui-sdk";
@@ -11,23 +11,31 @@ interface IRowProps {
   idx?: number;
 }
 
+const WINDOW_TELEOP_MIN_WIDTH = 301;
+const TIMEOUT_DEBOUNCER = 100;
+
 export const Row: FC<IRowProps> = (props: any) => {
   const context = useFormant();
   const config = context.configuration as IConfiguration;
+  const timeoutId = useRef<any>(null);
   const { leftValue, rightValue, state, height, fullWidth } = props;
-  const [teleopMode, setTeleopMode] = useState(false);
+  const [teleopMode, setTeleopMode] = useState(() => window.innerWidth < WINDOW_TELEOP_MIN_WIDTH);
 
   useEffect(() => {
-    if (window.innerWidth < 301) setTeleopMode(true);
-  }, []);
+    const handleResize = () => {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = setTimeout(() => {
+        setTeleopMode(window.innerWidth < WINDOW_TELEOP_MIN_WIDTH);
+      }, TIMEOUT_DEBOUNCER);
+    };
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth < 301) {
-      setTeleopMode(true);
-      return;
-    }
-    setTeleopMode(false);
-  });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timeoutId.current);
+    };
+  }, []);
 
   return (
     <div
