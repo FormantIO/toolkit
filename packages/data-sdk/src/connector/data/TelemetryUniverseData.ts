@@ -153,7 +153,7 @@ export class TelemetryUniverseData
           const points = streamData.points;
           if (points.length > 0) {
             const lastPoint = points[points.length - 1];
-            if (latestOnly) {
+            if (!latestOnly) {
               let nearestPointTime = lastPoint[0];
               let nearestPoint = lastPoint[1];
               points.forEach((p: any) => {
@@ -397,9 +397,11 @@ export class TelemetryUniverseData
             dataFetchWorker.onmessage = (
               ev: MessageEvent<{ url: string; response: any }>
             ) => {
-              jsonString = JSON.stringify(ev.data);
+              jsonString = JSON.stringify(ev.data.response);
               callback(JSON.parse(jsonString) as IMarker3DArray);
             };
+          } else {
+            callback(JSON.parse(jsonString) as IMarker3DArray);
           }
         }
       );
@@ -458,41 +460,15 @@ export class TelemetryUniverseData
             const latestLocalization = ev.data.response.map;
 
             if (latestLocalization) {
-              const canvas = document.createElement("canvas");
-              const image = await this.fetchImage(latestLocalization.url);
-              canvas.width = image.width;
-              canvas.height = image.height;
-
-              const ctx = canvas.getContext("2d", {
-                willReadFrequently: true,
-              });
-              if (ctx) {
-                ctx.drawImage(image, 0, 0);
-              }
-              const pixelData = ctx?.getImageData(
-                0,
-                0,
-                image.width,
-                image.height
-              );
-              const mapData: number[] = [];
-              const alphaData: number[] = [];
-              if (pixelData) {
-                for (let i = 0; i < pixelData.data.length; i += 4) {
-                  const r = pixelData.data[i];
-                  const a = pixelData.data[i + 3];
-                  mapData.push(r);
-                  alphaData.push(a);
-                }
-              }
               const gridValue = {
                 width: latestLocalization.width,
                 height: latestLocalization.height,
                 worldToLocal: latestLocalization.worldToLocal,
                 resolution: latestLocalization.resolution,
                 origin: latestLocalization.origin,
-                alpha: alphaData,
-                data: mapData,
+                url: latestLocalization.url,
+                //alpha: alphaData,
+                //data: mapData,
               };
               mapDataCache[dp.url!] = JSON.parse(JSON.stringify(gridValue));
               callback(gridValue);

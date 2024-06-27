@@ -1,3 +1,23 @@
+## [1.47.0] - 2024-6-21
+
+- fix latest data point
+
+## [1.46.0] - 2024-6-20
+
+- return geometry json when it doesn't come as url
+
+## [1.45.0] - 2024-06-20
+
+- improvements for local
+
+## [1.44.1] - 2024-06-10
+
+- fix version
+
+## [1.44.0] - 2024-06-10
+
+- Passing url for gridMaps in UniverseData connect
+
 ## [1.43.0] - 2024-05-21
 
 - Fixes to UniverseData connect
