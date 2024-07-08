@@ -99,6 +99,14 @@ export class BasicUniverseDataConnector {
     this.timeChangeListeners.forEach((listener) => listener(time));
   }
 
+  getTime(): Date | "live" {
+    return this.time;
+  }
+
+  getTimeMs(): number {
+    return this.time === "live" ? new Date().getTime() : this.time.getTime();
+  }
+
   constructor() {
     this.time = "live";
     for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {

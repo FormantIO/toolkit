@@ -129,6 +129,10 @@ export interface IUniverseData {
 
   setTime(time: Date | "live"): void;
 
+  getTime(): Date | "live";
+
+  getTimeMs(): number;
+
   getLatestTransformTrees(deviceId: string): Promise<
     {
       streamName: string;
@@ -174,7 +178,8 @@ export interface IUniverseData {
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IUniverseOdometry | DataStatus) => void
+    callback: (data: IUniverseOdometry | DataStatus) => void,
+    trail?: number
   ): CloseSubscription;
 
   subscribeToPath(
