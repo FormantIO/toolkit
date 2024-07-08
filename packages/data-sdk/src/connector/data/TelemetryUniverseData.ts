@@ -146,8 +146,11 @@ export class TelemetryUniverseData
         return;
       }
 
-      const streamData = data[0];
-      const points = streamData.points;
+      // streamData can have multiple items for a different set of tags
+      // accumulate all the points into a single array
+      const points = data.reduce((acc: IDataPoint<T>[], d) => {
+        return acc.concat(d.points);
+      }, []);
 
       if (!points || points.length === 0) {
         fork(callback(undefined));
@@ -161,7 +164,6 @@ export class TelemetryUniverseData
         const filteredPoints = points.filter(
           (p) => p[0] > addSeconds(lastTime, -15).getTime()
         );
-
         fork(callback(filteredPoints));
         return;
       }
