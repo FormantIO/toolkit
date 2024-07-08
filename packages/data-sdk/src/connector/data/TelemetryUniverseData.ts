@@ -1,4 +1,4 @@
-import { addSeconds, addYears } from "date-fns";
+import { addMilliseconds, addSeconds, addYears } from "date-fns";
 import { fork } from "../common/fork";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
 import { StoreCache } from "./StoreCache";
@@ -23,6 +23,7 @@ import { INumericSetEntry } from "../../model/INumericSetEntry";
 import { StreamType } from "../../model/StreamType";
 import { IDataPoint } from "../../model/IDataPoint";
 import { IPointCloud } from "../../model/IPointCloud";
+import { IImage, ILocalization, ITransform, IVideo } from "../../main";
 
 export class TelemetryUniverseData
   extends BasicUniverseDataConnector
@@ -59,28 +60,24 @@ export class TelemetryUniverseData
       deviceId,
       source,
       "localization",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
+      async (data) => {
+        if (data === "too much data" || data === undefined) {
           callback(NoData);
           return;
         }
-        const dp = d[d.length - 1][1];
 
-        let latestLocalization = dp;
-        if (dp.url) {
-          dataFetchWorker.postMessage({ url: dp.url });
-          dataFetchWorker.onmessage = (
-            ev: MessageEvent<{ url: string; response: any }>
-          ) => {
-            latestLocalization = ev.data.response;
-
-            if (latestLocalization.path) {
-              callback({
-                worldToLocal: latestLocalization.path.worldToLocal,
-                poses: latestLocalization.path.poses,
-              });
-            }
-          };
+        const datapoint = this.getNearestPoint(data)[1] as ILocalization;
+        if (datapoint.url) {
+          const response = (await fetch(datapoint.url).then((res) =>
+            res.json()
+          )) as ILocalization;
+          if (response.path) {
+            callback(response.path);
+          }
+          return;
+        } else if (datapoint.path) {
+          callback(datapoint.path);
+          return;
         }
       }
     );
@@ -113,74 +110,90 @@ export class TelemetryUniverseData
   timeFinders: ((time: Date) => void)[] = [];
 
   addFinder<T extends StreamType>(
-    t: (f: "too much data" | IDataPoint<T>[] | undefined) => Promise<void>,
+    callback: (
+      f: "too much data" | IDataPoint<T>[] | undefined
+    ) => Promise<void>,
     deviceId: string,
     name: string,
     dataType: T,
     latestOnly: boolean
   ): (time: Date) => void {
     const fn = (time: Date) => {
-      let start;
-      if (latestOnly) {
-        // lets look back a year if we are only looking for the latest data point
-        start = addYears(time, -1);
-      } else {
-        start = addSeconds(time, -15);
-      }
-      let end;
-      if (latestOnly) {
-        end = time;
-      } else {
-        end = addSeconds(time, 5);
-      }
-      let data = this.queryStore.moduleQuery(
-        {
-          deviceIds: [deviceId],
-        },
+      // for latestonly we look back a year until now
+      // otherwise look 60 seconds back and 5 seconds forward
+      const start = latestOnly ? addYears(time, -1) : addSeconds(time, -60);
+      const end = latestOnly ? addMilliseconds(time, 1) : addSeconds(time, 5);
+
+      const data = this.queryStore.moduleQuery(
+        { deviceIds: [deviceId] },
         name,
         dataType,
         start,
         end,
         latestOnly
       );
+
       if (data === undefined) {
-        fork(t(undefined));
-      } else if (data === "too much data") {
-        fork(t("too much data"));
-      } else {
-        if (data.length > 0) {
-          const streamData = data[0];
-          const points = streamData.points;
-          if (points.length > 0) {
-            const lastPoint = points[points.length - 1];
-            if (!latestOnly) {
-              let nearestPointTime = lastPoint[0];
-              let nearestPoint = lastPoint[1];
-              points.forEach((p: any) => {
-                const pointTime = p[0];
-                const point = p[1];
-                if (
-                  Math.abs(pointTime - time.getTime()) <
-                  Math.abs(nearestPointTime - time.getTime())
-                ) {
-                  nearestPointTime = pointTime;
-                  nearestPoint = point;
-                }
-              });
-              fork(t([[nearestPointTime, nearestPoint]]));
-            } else {
-              fork(t(points));
-            }
-          } else {
-            fork(t(undefined));
-          }
-        } else {
-          fork(t(undefined));
-        }
+        fork(callback(undefined));
+        return;
       }
+      if (data === "too much data") {
+        fork(callback("too much data"));
+        return;
+      }
+      if (data.length === 0) {
+        fork(callback(undefined));
+        return;
+      }
+
+      // streamData can have multiple items for a different set of tags
+      // accumulate all the points into a single array
+      const points = data.reduce((acc: IDataPoint<T>[], d) => {
+        return acc.concat(d.points);
+      }, []);
+
+      if (!points || points.length === 0) {
+        fork(callback(undefined));
+        return;
+      }
+
+      // the query will contain a year of data, we need to filter it down to the relevant time
+      if (latestOnly) {
+        const lastPoint = points[points.length - 1];
+        const lastTime = lastPoint[0];
+        const filteredPoints = points.filter(
+          (p) => p[0] > addSeconds(lastTime, -15).getTime()
+        );
+        fork(callback(filteredPoints));
+        return;
+      }
+
+      fork(callback(points));
     };
     this.timeFinders.push(fn);
     return fn;
+  }
+
+  private getNearestPoint(
+    points: IDataPoint<StreamType>[],
+    time: Date | "live" = this.time
+  ) {
+    const _time =
+      time === "live" ? addMilliseconds(new Date(), 1) : (this.time as Date);
+    let nearestPointTime = points[0][0];
+    let nearestPoint = points[0][1];
+    points.forEach((p) => {
+      const pointTime = p[0];
+      const point = p[1];
+      if (
+        Math.abs(pointTime - _time.getTime()) <
+        Math.abs(nearestPointTime - _time.getTime())
+      ) {
+        nearestPointTime = pointTime;
+        nearestPoint = point;
+      }
+    });
+    return [nearestPointTime, nearestPoint] as IDataPoint<StreamType>;
   }
 
   removeFinder(fn: (time: Date) => void) {
@@ -239,7 +252,7 @@ export class TelemetryUniverseData
             callback(NoData);
             return;
           }
-          const latestPointCloud = d[d.length - 1][1] as "string" | IPointCloud;
+          const latestPointCloud = this.getNearestPoint(d)[1] as IPointCloud;
           if (typeof latestPointCloud === "string") {
             callback(JSON.parse(latestPointCloud) as IUniversePointCloud);
           } else {
@@ -268,7 +281,7 @@ export class TelemetryUniverseData
             callback(NoData);
             return;
           }
-          let latestLocalization = d[d.length - 1][1];
+          let latestLocalization = this.getNearestPoint(d)[1] as ILocalization;
           if (latestLocalization.url) {
             dataFetchWorker.postMessage({ url: latestLocalization.url });
             dataFetchWorker.onmessage = (
@@ -303,10 +316,12 @@ export class TelemetryUniverseData
       localizationUnsubscribe();
     };
   }
+
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IUniverseOdometry) => void
+    callback: (data: Symbol | IUniverseOdometry) => void,
+    trail: number = 0 // how many seconds of previous odometry points to include in the trail
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -319,42 +334,77 @@ export class TelemetryUniverseData
       deviceId,
       source,
       "localization",
-      async (d) => {
-        if (d === "too much data" || d === undefined) {
+      async (data) => {
+        if (data === "too much data" || data === undefined) {
           callback(NoData);
           return;
         }
-        const dp = d[d.length - 1][1];
+        const currentDatapoint = this.getNearestPoint(
+          data
+        ) as IDataPoint<"localization">;
 
-        let latestLocalization = dp;
-        if (dp.url) {
-          dataFetchWorker.postMessage({ url: dp.url });
-          dataFetchWorker.onmessage = (
-            ev: MessageEvent<{ url: string; response: any }>
-          ) => {
-            latestLocalization = ev.data.response;
-
-            if (latestLocalization.odometry) {
-              callback({
-                worldToLocal: latestLocalization.odometry.worldToLocal,
-                pose: {
-                  translation: {
-                    x: latestLocalization.odometry.pose.translation.x,
-                    y: latestLocalization.odometry.pose.translation.y,
-                    z: latestLocalization.odometry.pose.translation.z,
-                  },
-                  rotation: {
-                    x: latestLocalization.odometry.pose.rotation.x,
-                    y: latestLocalization.odometry.pose.rotation.y,
-                    z: latestLocalization.odometry.pose.rotation.z,
-                    w: latestLocalization.odometry.pose.rotation.w,
-                  },
-                },
-                covariance: [],
-              });
-            }
-          };
+        let odometry: ILocalization["odometry"];
+        if (currentDatapoint[1].url) {
+          try {
+            const response = await fetch(currentDatapoint[1].url);
+            const jsonResponse = (await response.json()) as ILocalization;
+            odometry = jsonResponse.odometry;
+          } catch (error) {
+            console.error("Failed to fetch odometry data:", error);
+            throw error;
+          }
+        } else {
+          odometry = currentDatapoint[1].odometry;
         }
+
+        if (trail) {
+          const trailDatapoints = data.filter(
+            (datapoint) =>
+              datapoint[0] <= currentDatapoint[0] &&
+              datapoint[0] >= currentDatapoint[0] - trail * 1000
+          );
+
+          const trailPromises = trailDatapoints.map(async (datapoint) => {
+            if (datapoint[1].url) {
+              try {
+                const response = await fetch(datapoint[1].url);
+                const jsonResponse = (await response.json()) as ILocalization;
+                return [datapoint[0], jsonResponse.odometry?.pose] as [
+                  number,
+                  ITransform
+                ];
+              } catch (error) {
+                console.error("Failed to fetch trail odometry data:", error);
+                throw error;
+              }
+            }
+            return [datapoint[0], datapoint[1].odometry?.pose] as [
+              number,
+              ITransform
+            ];
+          });
+
+          try {
+            const trailResults = await Promise.all(trailPromises);
+            callback({
+              worldToLocal: odometry!.worldToLocal,
+              pose: odometry!.pose,
+              trail: trailResults,
+              covariance: [],
+            });
+            return;
+          } catch (error) {
+            console.error("Failed to process trail data:", error);
+            throw error;
+          }
+        }
+
+        callback({
+          worldToLocal: odometry!.worldToLocal,
+          pose: odometry!.pose,
+          covariance: [],
+        });
+        return;
       }
     );
 
@@ -391,7 +441,7 @@ export class TelemetryUniverseData
             callback(NoData);
             return;
           }
-          let jsonString = d[d.length - 1][1];
+          let jsonString = this.getNearestPoint(d)[1] as string;
           if (jsonString.startsWith("http")) {
             dataFetchWorker.postMessage({ url: jsonString });
             dataFetchWorker.onmessage = (
@@ -447,7 +497,7 @@ export class TelemetryUniverseData
           return;
         }
 
-        const dp = d[d.length - 1][1];
+        const dp = this.getNearestPoint(d)[1] as ILocalization;
         if (dp.url) {
           if (mapDataCache[dp.url]) {
             callback(mapDataCache[dp.url]);
@@ -502,7 +552,7 @@ export class TelemetryUniverseData
         return;
       }
 
-      const currentVideo = d[d.length - 1][1];
+      const currentVideo = this.getNearestPoint(d)[1] as IVideo;
       const { url } = currentVideo;
 
       const video = this.videoCache.get(url, async () => {
@@ -543,7 +593,7 @@ export class TelemetryUniverseData
           callback(NoData);
           return;
         }
-        callback(d[d.length - 1][1]);
+        callback(this.getNearestPoint(d)[1] as ITransformNode);
       }
     );
   }
@@ -570,7 +620,7 @@ export class TelemetryUniverseData
           callback(NoData);
           return;
         }
-        const latestPosition = d[d.length - 1][1];
+        const latestPosition = this.getNearestPoint(d)[1] as ILocation;
         callback(latestPosition);
       }
     );
@@ -594,7 +644,7 @@ export class TelemetryUniverseData
         callback(NoData);
         return;
       }
-      let jsonString = d[d.length - 1][1];
+      let jsonString = this.getNearestPoint(d)[1] as string;
       if (jsonString.startsWith("http")) {
         const asset = await fetch(jsonString);
         jsonString = await asset.text();
@@ -616,7 +666,7 @@ export class TelemetryUniverseData
         callback(NoData);
         return;
       }
-      callback(d[d.length - 1][1]);
+      callback(this.getNearestPoint(d)[1] as string);
     });
   }
 
@@ -672,7 +722,7 @@ export class TelemetryUniverseData
         callback(NoData);
         return;
       }
-      const currentImageUrl = d[d.length - 1][1].url;
+      const currentImageUrl = (this.getNearestPoint(d)[1] as IImage).url;
       const currentImage = new Image();
       currentImage.src = currentImageUrl;
       currentImage.onload = () => {
