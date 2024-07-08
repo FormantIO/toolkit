@@ -1,3 +1,7 @@
+## [1.48.0] - 2024-6-21
+
+- 3d scene path improvements
+
 ## [1.47.0] - 2024-6-21
 
 - fix latest data point

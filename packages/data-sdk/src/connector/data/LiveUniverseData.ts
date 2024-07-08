@@ -99,7 +99,7 @@ export class LiveUniverseData
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IUniverseOdometry) => void,
-    trail?: number
+    _trail?: number
   ): CloseSubscription {
     if (source.sourceType === "realtime") {
       const listener = (_peerId: string, msg: RealtimeMessage) => {

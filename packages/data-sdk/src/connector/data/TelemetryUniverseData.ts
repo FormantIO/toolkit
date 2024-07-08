@@ -23,7 +23,10 @@ import { INumericSetEntry } from "../../model/INumericSetEntry";
 import { StreamType } from "../../model/StreamType";
 import { IDataPoint } from "../../model/IDataPoint";
 import { IPointCloud } from "../../model/IPointCloud";
-import { IImage, ILocalization, ITransform, IVideo } from "../../main";
+import { ILocalization } from "../../model/ILocalization";
+import { ITransform } from "../../model/ITransform";
+import { IVideo } from "../../model/IVideo";
+import { IImage } from "../../model/IImage";
 
 export class TelemetryUniverseData
   extends BasicUniverseDataConnector
