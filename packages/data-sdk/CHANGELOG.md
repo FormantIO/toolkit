@@ -1,3 +1,7 @@
+## [1.49.0] - 2024-8-19
+
+- local improvements
+
 ## [1.48.0] - 2024-6-21
 
 - 3d scene path improvements
