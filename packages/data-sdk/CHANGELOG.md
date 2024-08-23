@@ -1,4 +1,4 @@
-## [1.35.0] - 2024-08-23
+## [1.50.0] - 2024-08-23
 
 ### Upgrade
 
@@ -373,7 +373,7 @@ await device.startRealtimeConnection({
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
 
-[1.35.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.34.0...release/data-sdk/1.35.0~
+[1.50.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.49.0...release/data-sdk/1.50.0~
 [1.18.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
 [1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
 [1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
