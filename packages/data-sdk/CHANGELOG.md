@@ -1,3 +1,10 @@
+## [1.35.0] - 2024-08-23
+
+### Upgrade
+
+- Upgrade `@formant/realtime-sdk` to 1.3.0.
+
+
 ## [1.34.0] - 2024-04-03
 
 - New auth mechanism
@@ -365,6 +372,8 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+
+[1.35.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.34.0...release/data-sdk/1.35.0~
 [1.18.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
 [1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
 [1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~
