@@ -1,3 +1,7 @@
+## [1.51.0] - 2024-8-26
+
+- Exposing more realtime SDK
+
 ## [1.51.0] - 2024-8-23
 
 ### Upgrade

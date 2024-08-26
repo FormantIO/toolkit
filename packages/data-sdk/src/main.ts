@@ -163,6 +163,10 @@ export type {
   IRtcSendConfiguration,
   IRtcStreamMessage,
   IRtcStreamPayload,
+  RtcClient,
+  RtcClientV1,
+  RtcStreamType,
+  RtcSignalingClient,
 } from "@formant/realtime-sdk";
 export * from "./model/JsonSchema";
 export * from "./utils/aggregateFunctionUtils";
