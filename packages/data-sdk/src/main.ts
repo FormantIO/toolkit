@@ -163,10 +163,7 @@ export type {
   IRtcSendConfiguration,
   IRtcStreamMessage,
   IRtcStreamPayload,
-  RtcClient,
-  RtcClientV1,
   RtcStreamType,
-  RtcSignalingClient,
 } from "@formant/realtime-sdk";
 export * from "./model/JsonSchema";
 export * from "./utils/aggregateFunctionUtils";
@@ -198,7 +195,12 @@ export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRe
 
 import "./init.ts";
 
-export { createRtcStreamMessage } from "@formant/realtime-sdk";
+export {
+  createRtcStreamMessage,
+  RtcClient,
+  RtcClientV1,
+  RtcSignalingClient,
+} from "@formant/realtime-sdk";
 
 // Connector Exports
 export * from "./connector/data/LiveUniverseData";

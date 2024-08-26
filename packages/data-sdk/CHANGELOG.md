@@ -1,4 +1,8 @@
-## [1.51.0] - 2024-8-26
+## [1.53.0] - 2024-8-26
+
+- Exposing more realtime SDK
+
+## [1.52.0] - 2024-8-26
 
 - Exposing more realtime SDK
 
