@@ -1,3 +1,7 @@
+## [1.54.0] - 2024-8-26
+
+- bumping realtime sdk
+
 ## [1.53.0] - 2024-8-26
 
 - Exposing more realtime SDK
