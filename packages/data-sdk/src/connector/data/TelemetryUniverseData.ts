@@ -47,6 +47,7 @@ export class TelemetryUniverseData
     throw new Error("Method not implemented for telemetry universe connector.");
   }
 
+
   subscribeToPath(
     deviceId: string,
     source: UniverseDataSource,
@@ -59,6 +60,8 @@ export class TelemetryUniverseData
     if (!dataFetchWorker) {
       throw new Error("No available data fetch worker");
     }
+    let latestTimestamp = 0;
+
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -68,17 +71,24 @@ export class TelemetryUniverseData
           callback(NoData);
           return;
         }
+        const nearestPoint = this.getNearestPoint(data);
+        const datapoint = nearestPoint[1] as ILocalization;
+        const timestamp = nearestPoint[0];
 
-        const datapoint = this.getNearestPoint(data)[1] as ILocalization;
+        if(timestamp === latestTimestamp) {
+          return;
+        }
+        latestTimestamp = timestamp;
+
         if (datapoint.url) {
           const response = (await fetch(datapoint.url).then((res) =>
             res.json()
           )) as ILocalization;
-          if (response.path) {
+          if (response.path && timestamp >= latestTimestamp) {
             callback(response.path);
           }
           return;
-        } else if (datapoint.path) {
+        } else if (datapoint.path && timestamp >= latestTimestamp) {
           callback(datapoint.path);
           return;
         }
