@@ -1,3 +1,7 @@
+## [1.57.0] - 2024-9-18
+
+- preventing flickering
+
 ## [1.56.0] - 2024-8-26
 
 - bumping realtime sdk
