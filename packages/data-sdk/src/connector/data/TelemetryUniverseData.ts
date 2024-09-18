@@ -47,7 +47,6 @@ export class TelemetryUniverseData
     throw new Error("Method not implemented for telemetry universe connector.");
   }
 
-
   subscribeToPath(
     deviceId: string,
     source: UniverseDataSource,
@@ -75,7 +74,7 @@ export class TelemetryUniverseData
         const datapoint = nearestPoint[1] as ILocalization;
         const timestamp = nearestPoint[0];
 
-        if(timestamp === latestTimestamp) {
+        if (timestamp === latestTimestamp) {
           return;
         }
         latestTimestamp = timestamp;
