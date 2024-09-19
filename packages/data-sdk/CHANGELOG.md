@@ -1,3 +1,7 @@
+## [1.58.0] - 2024-9-18
+
+- url fix
+
 ## [1.57.0] - 2024-9-18
 
 - preventing flickering
