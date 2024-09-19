@@ -18,7 +18,7 @@ export function whichFormantApiUrl(
       } else if (host.includes("app-stage.formant.io")) {
         return "https://api-stage.formant.io";
       } else if (host.includes("app.formant.io")) {
-        return "https://api.formant.local";
+        return "https://api.formant.io";
       }
     }
 
