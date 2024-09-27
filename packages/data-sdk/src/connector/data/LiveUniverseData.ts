@@ -13,22 +13,22 @@ import { TelemetryResult } from "../../model/TelemetryResult";
 import { defined } from "../common/defined";
 import { IPose } from "../model/IPose";
 import {
+  CloseSubscription,
   IUniverseData,
   UniverseDataSource,
-  CloseSubscription,
 } from "../model/IUniverseData";
 import { IUniverseGridMap } from "../model/IUniverseGridMap";
 import { IUniverseOdometry } from "../model/IUniverseOdometry";
 import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 
+import { ILocation } from "../../model/ILocation";
+import { IMarker3DArray } from "../../model/IMarker3DArray";
 import {
   BasicUniverseDataConnector,
   DataResult,
 } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-import { IMarker3DArray } from "../../model/IMarker3DArray";
-import { ILocation } from "../../model/ILocation";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
