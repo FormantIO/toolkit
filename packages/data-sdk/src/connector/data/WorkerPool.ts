@@ -2,6 +2,7 @@
 // @ts-ignore
 import PcdWorker from "./PcdLoaderWorker?worker&inline";
 // @ts-ignore
+
 import DataFetchWorker from "./DataFetchWorker?worker&inline";
 
 export const PCD_WORKER_POOL_SIZE = 5;
