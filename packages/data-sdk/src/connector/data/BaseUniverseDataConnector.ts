@@ -1,12 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
+
 import { subDays } from "date-fns";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
+
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
+
 import {
   IRtcStreamMessage,
   createRtcStreamMessage,
@@ -21,6 +18,9 @@ import { ILocation } from "../../model/ILocation";
 import { IQuery } from "../../model/IQuery";
 import { IStreamData } from "../../model/IStreamData";
 import { ITransformNode } from "../../model/ITransformNode";
+// @ts-ignore
+import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
+
 import {
   CloseSubscription,
   DataSourceState,
@@ -52,8 +52,8 @@ const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
 
 export class BasicUniverseDataConnector {
-  pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
-  dataFetchWorkerPoolOccupancy: Boolean[] = [
+  pcdWorkerPoolOccupancy: boolean[] = [false, false, false, false, false];
+  dataFetchWorkerPoolOccupancy: boolean[] = [
     false,
     false,
     false,
