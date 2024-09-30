@@ -1,3 +1,7 @@
+## [1.59.0] - 2024-9-30
+
+- web worker static list fix
+
 ## [1.58.0] - 2024-9-18
 
 - url fix

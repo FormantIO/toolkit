@@ -1,6 +1,7 @@
-// @ts-ignore-next-line
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
 import PcdWorker from "./PcdLoaderWorker?worker&inline";
-// @ts-ignore-next-line
+// @ts-ignore
 import DataFetchWorker from "./DataFetchWorker?worker&inline";
 
 export const PCD_WORKER_POOL_SIZE = 5;
