@@ -17,7 +17,7 @@ import { IQuery } from "../../model/IQuery";
 import { IStreamData } from "../../model/IStreamData";
 import { ITransformNode } from "../../model/ITransformNode";
 // @ts-ignore
-import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
+import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
 import {
   CloseSubscription,
   DataSourceState,
