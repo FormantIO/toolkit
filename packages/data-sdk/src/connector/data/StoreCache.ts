@@ -1,5 +1,5 @@
-import { fork } from "../common/fork";
 import { duration } from "../common/duration";
+import { fork } from "../common/fork";
 
 interface ICacheEntryMetadata<Value> {
   generating: boolean;
