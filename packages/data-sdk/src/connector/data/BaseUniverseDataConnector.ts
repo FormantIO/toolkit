@@ -106,8 +106,6 @@ export class BasicUniverseDataConnector {
   constructor() {
     this.time = "live";
 
-    console.log("HELP ME 2123!");
-
     WorkerPoolService.getPcdWorkerPool();
     WorkerPoolService.getDataFetchWorkerPool();
 
