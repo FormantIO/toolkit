@@ -25,8 +25,10 @@ import { IUniverseOdometry } from "../model/IUniverseOdometry";
 import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
+// @ts-ignore
 import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { IPcd } from "./pcd";
+// @ts-ignore
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 import { StoreCache } from "./StoreCache";
 
