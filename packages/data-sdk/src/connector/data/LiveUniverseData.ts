@@ -388,10 +388,12 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
-    const pcdWorker = this.getAvailablePCDWorker();
-    if (!pcdWorker) {
-      throw new Error("No available pointcloud worker");
-    }
+    const pcdWorker = new Worker(
+      new URL("./PcdLoaderWorker.ts", import.meta.url),
+      {
+        name: "liveuniverseDataPCD",
+      }
+    ) as Worker;
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"
@@ -524,6 +526,7 @@ export class LiveUniverseData
       };
       this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
       return () => {
+        pcdWorker.terminate();
         this.unsubscribeToRealtimeMessages(
           deviceId,
           source.rosTopicName,

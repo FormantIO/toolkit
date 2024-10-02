@@ -25,7 +25,9 @@ import { IUniverseOdometry } from "../model/IUniverseOdometry";
 import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
+import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { IPcd } from "./pcd";
+import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 import { StoreCache } from "./StoreCache";
 
 export class TelemetryUniverseData
@@ -55,10 +57,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = this.getAvailableDataFetchWorker();
-    if (!dataFetchWorker) {
-      throw new Error("No available data fetch worker");
-    }
+    const dataFetchWorker = new DataFetchWorker();
     let latestTimestamp = 0;
 
     const unsubscribe = this.subscribeTelemetry(
@@ -95,7 +94,7 @@ export class TelemetryUniverseData
     );
 
     return () => {
-      this.releaseDataFetchWorker(dataFetchWorker);
+      dataFetchWorker.terminate();
       unsubscribe();
     };
   }
@@ -243,14 +242,9 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const pcdWorker = this.getAvailablePCDWorker();
-    if (!pcdWorker) {
-      throw new Error("No available pointcloud worker");
-    }
-    const dataFetchWorker = this.getAvailableDataFetchWorker();
-    if (!dataFetchWorker) {
-      throw new Error("No available data fetch worker");
-    }
+    const pcdWorker = new PCDLoaderWorker();
+    const dataFetchWorker = new DataFetchWorker();
+
     // Call the function and handle the resolved data type
     let pointCloudUnsubscribe = () => {};
     let localizationUnsubscribe = () => {};
@@ -322,8 +316,8 @@ export class TelemetryUniverseData
     }
 
     return () => {
-      this.releasePCDWorker(pcdWorker);
-      this.releaseDataFetchWorker(dataFetchWorker);
+      pcdWorker.terminate();
+      dataFetchWorker.terminate();
       pointCloudUnsubscribe();
       localizationUnsubscribe();
     };
@@ -338,10 +332,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = this.getAvailableDataFetchWorker();
-    if (!dataFetchWorker) {
-      throw new Error("No available data fetch worker");
-    }
+    const dataFetchWorker = new DataFetchWorker();
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -421,7 +412,7 @@ export class TelemetryUniverseData
     );
 
     return () => {
-      this.releaseDataFetchWorker(dataFetchWorker);
+      dataFetchWorker.terminate();
       unsubscribe();
     };
   }
@@ -440,10 +431,7 @@ export class TelemetryUniverseData
     callback: (data: Symbol | IMarker3DArray) => void
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
-      const dataFetchWorker = this.getAvailableDataFetchWorker();
-      if (!dataFetchWorker) {
-        throw new Error("No available data fetch worker");
-      }
+      const dataFetchWorker = new DataFetchWorker();
       const unsubscribe = this.subscribeTelemetry(
         deviceId,
         source,
@@ -469,7 +457,7 @@ export class TelemetryUniverseData
       );
 
       return () => {
-        this.releaseDataFetchWorker(dataFetchWorker);
+        dataFetchWorker.terminate();
         unsubscribe();
       };
     } else {
@@ -495,10 +483,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = this.getAvailableDataFetchWorker();
-    if (!dataFetchWorker) {
-      throw new Error("No available data fetch worker");
-    }
+    const dataFetchWorker = new DataFetchWorker();
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -541,7 +526,7 @@ export class TelemetryUniverseData
     );
 
     return () => {
-      this.releaseDataFetchWorker(dataFetchWorker);
+      dataFetchWorker.terminate();
       unsubscribe();
     };
   }

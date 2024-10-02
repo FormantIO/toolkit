@@ -1,15 +1,15 @@
+import { IBitset } from "../../model/IBitset";
 import { IJointState } from "../../model/IJointState";
 import { ILocation } from "../../model/ILocation";
 import { IMarker3DArray } from "../../model/IMarker3DArray";
-import { ITransformNode } from "../../model/ITransformNode";
 import { INumericSetEntry } from "../../model/INumericSetEntry";
-import { IBitset } from "../../model/IBitset";
-import { IUniverseOdometry } from "./IUniverseOdometry";
+import { ITransformNode } from "../../model/ITransformNode";
+import { StreamType } from "../../model/StreamType";
 import { IPose } from "./IPose";
 import { IUniverseGridMap } from "./IUniverseGridMap";
-import { IUniversePointCloud } from "./IUniversePointCloud";
+import { IUniverseOdometry } from "./IUniverseOdometry";
 import { IUniversePath } from "./IUniversePath";
-import { StreamType } from "../../model/StreamType";
+import { IUniversePointCloud } from "./IUniversePointCloud";
 
 export type DataSourceState =
   | "missing_data"
@@ -139,8 +139,6 @@ export interface IUniverseData {
       transformTree: ITransformNode;
     }[]
   >;
-
-  clearWorkerPool(): void;
 
   getLatestLocations(
     deviceId: string
