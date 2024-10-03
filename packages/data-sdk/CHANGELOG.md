@@ -1,3 +1,8 @@
+## [1.60.0] - 2024-10-3
+
+- Made the workers dynamic; they now spawn and terminate on demand.
+- Fixed subscription to odometry using data fetch worker.
+
 ## [1.59.0] - 2024-9-30
 
 - web worker static list fix
