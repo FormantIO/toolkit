@@ -1,3 +1,7 @@
+## [1.61.0] - 2024-10-3
+
+- prioritize url params to determine which api to use
+
 ## [1.60.0] - 2024-10-3
 
 - Made the workers dynamic; they now spawn and terminate on demand.
