@@ -13,7 +13,7 @@ export function whichFormantApiUrl(
   // url params may not be available when using react native
   try {
     if (host) {
-      if (host.includes("app-dev.formant.io") || host.includes("localhost")) {
+      if (host.includes("app-dev.formant.io")) {
         return "https://api-dev.formant.io";
       } else if (host.includes("app-stage.formant.io")) {
         return "https://api-stage.formant.io";
