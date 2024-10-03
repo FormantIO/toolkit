@@ -334,10 +334,7 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-
     const dataFetchWorker = new DataFetchWorker();
-    let latestTimestamp = 0;
-
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -347,141 +344,72 @@ export class TelemetryUniverseData
           callback(NoData);
           return;
         }
-
         const currentDatapoint = this.getNearestPoint(
           data
         ) as IDataPoint<"localization">;
 
-        const timestamp = currentDatapoint[0]; // Current timestamp
-        if (timestamp <= latestTimestamp) {
-          return; // Avoid processing out-of-order data
-        }
-        latestTimestamp = timestamp;
-
         let odometry: ILocalization["odometry"];
-
         if (currentDatapoint[1].url) {
-          // Use dataFetchWorker to handle fetching
-          dataFetchWorker.postMessage({ url: currentDatapoint[1].url });
-          dataFetchWorker.onmessage = async (
-            ev: MessageEvent<{ url: string; response: ILocalization }>
-          ) => {
-            if (
-              ev.data.url === currentDatapoint[1].url &&
-              timestamp >= latestTimestamp
-            ) {
-              odometry = ev.data.response.odometry;
-
-              // Handle trail data if needed
-              if (trail) {
-                const trailDatapoints = data.filter(
-                  (datapoint) =>
-                    datapoint[0] <= currentDatapoint[0] &&
-                    datapoint[0] >= currentDatapoint[0] - trail * 1000
-                );
-
-                const trailPromises = trailDatapoints.map(
-                  (datapoint) =>
-                    new Promise<[number, ITransform | undefined]>((resolve) => {
-                      if (datapoint[1].url) {
-                        // Use dataFetchWorker for trail fetching as well
-                        dataFetchWorker.postMessage({ url: datapoint[1].url });
-                        dataFetchWorker.onmessage = (
-                          trailEvent: MessageEvent<{
-                            url: string;
-                            response: ILocalization;
-                          }>
-                        ) => {
-                          if (
-                            trailEvent.data.url === datapoint[1].url &&
-                            timestamp >= latestTimestamp
-                          ) {
-                            resolve([
-                              datapoint[0],
-                              trailEvent.data.response.odometry?.pose,
-                            ]);
-                          }
-                        };
-                      } else {
-                        resolve([datapoint[0], datapoint[1].odometry?.pose]);
-                      }
-                    })
-                );
-
-                try {
-                  const trailResults = await Promise.all(trailPromises);
-                  if (timestamp >= latestTimestamp) {
-                    callback({
-                      worldToLocal: odometry!.worldToLocal,
-                      pose: odometry!.pose,
-                      trail: trailResults.filter(
-                        (result): result is [number, ITransform] =>
-                          result[1] !== undefined
-                      ),
-                      covariance: [],
-                    });
-                  }
-                  return;
-                } catch (error) {
-                  console.error("Failed to process trail data:", error);
-                  throw error;
-                }
-              }
-
-              // If no trail, return the current odometry data
-              if (timestamp >= latestTimestamp) {
-                callback({
-                  worldToLocal: odometry!.worldToLocal,
-                  pose: odometry!.pose,
-                  covariance: [],
-                });
-              }
-            }
-          };
-        } else {
-          // If no URL, just use the current data point's odometry
-          odometry = currentDatapoint[1].odometry;
-
-          if (trail) {
-            const trailDatapoints = data.filter(
-              (datapoint) =>
-                datapoint[0] <= currentDatapoint[0] &&
-                datapoint[0] >= currentDatapoint[0] - trail * 1000
-            );
-
-            const trailPromises = trailDatapoints.map(async (datapoint) => {
-              return [datapoint[0], datapoint[1].odometry?.pose] as [
-                number,
-                ITransform
-              ];
-            });
-
-            try {
-              const trailResults = await Promise.all(trailPromises);
-              if (timestamp >= latestTimestamp) {
-                callback({
-                  worldToLocal: odometry!.worldToLocal,
-                  pose: odometry!.pose,
-                  trail: trailResults,
-                  covariance: [],
-                });
-              }
-              return;
-            } catch (error) {
-              console.error("Failed to process trail data:", error);
-              throw error;
-            }
+          try {
+            const response = await fetch(currentDatapoint[1].url);
+            const jsonResponse = (await response.json()) as ILocalization;
+            odometry = jsonResponse.odometry;
+          } catch (error) {
+            console.error("Failed to fetch odometry data:", error);
+            throw error;
           }
+        } else {
+          odometry = currentDatapoint[1].odometry;
+        }
 
-          // If no trail, return the current odometry data
-          if (timestamp >= latestTimestamp) {
+        if (trail) {
+          const trailDatapoints = data.filter(
+            (datapoint) =>
+              datapoint[0] <= currentDatapoint[0] &&
+              datapoint[0] >= currentDatapoint[0] - trail * 1000
+          );
+
+          const trailPromises = trailDatapoints.map(async (datapoint) => {
+            if (datapoint[1].url) {
+              try {
+                const response = await fetch(datapoint[1].url);
+                const jsonResponse = (await response.json()) as ILocalization;
+                return [datapoint[0], jsonResponse.odometry?.pose] as [
+                  number,
+                  ITransform
+                ];
+              } catch (error) {
+                console.error("Failed to fetch trail odometry data:", error);
+                throw error;
+              }
+            }
+            return [datapoint[0], datapoint[1].odometry?.pose] as [
+              number,
+              ITransform
+            ];
+          });
+
+          try {
+            const trailResults = await Promise.all(trailPromises);
             callback({
               worldToLocal: odometry!.worldToLocal,
               pose: odometry!.pose,
+              trail: trailResults,
               covariance: [],
             });
+            return;
+          } catch (error) {
+            console.error("Failed to process trail data:", error);
+            throw error;
           }
         }
+
+        callback({
+          worldToLocal: odometry!.worldToLocal,
+          pose: odometry!.pose,
+          covariance: [],
+        });
+        return;
       }
     );
 
