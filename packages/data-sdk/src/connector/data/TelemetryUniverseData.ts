@@ -335,6 +335,7 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const dataFetchWorker = new DataFetchWorker();
+    let latestTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -347,6 +348,9 @@ export class TelemetryUniverseData
         const currentDatapoint = this.getNearestPoint(
           data
         ) as IDataPoint<"localization">;
+        if (currentDatapoint[0] > latestTimestamp) {
+          latestTimestamp = currentDatapoint[0];
+        }
 
         let odometry: ILocalization["odometry"];
         if (currentDatapoint[1].url) {
@@ -391,24 +395,27 @@ export class TelemetryUniverseData
 
           try {
             const trailResults = await Promise.all(trailPromises);
-            callback({
-              worldToLocal: odometry!.worldToLocal,
-              pose: odometry!.pose,
-              trail: trailResults,
-              covariance: [],
-            });
+            if (latestTimestamp === currentDatapoint[0]) {
+              callback({
+                worldToLocal: odometry!.worldToLocal,
+                pose: odometry!.pose,
+                trail: trailResults,
+                covariance: [],
+              });
+            }
             return;
           } catch (error) {
             console.error("Failed to process trail data:", error);
             throw error;
           }
         }
-
-        callback({
-          worldToLocal: odometry!.worldToLocal,
-          pose: odometry!.pose,
-          covariance: [],
-        });
+        if (latestTimestamp === currentDatapoint[0]) {
+          callback({
+            worldToLocal: odometry!.worldToLocal,
+            pose: odometry!.pose,
+            covariance: [],
+          });
+        }
         return;
       }
     );
