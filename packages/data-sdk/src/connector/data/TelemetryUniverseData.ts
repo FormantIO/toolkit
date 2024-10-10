@@ -348,8 +348,9 @@ export class TelemetryUniverseData
         const currentDatapoint = this.getNearestPoint(
           data
         ) as IDataPoint<"localization">;
-        if (currentDatapoint[0] > latestTimestamp) {
-          latestTimestamp = currentDatapoint[0];
+        const timestamp = currentDatapoint[0];
+        if (timestamp <= latestTimestamp) {
+          return;
         }
 
         let odometry: ILocalization["odometry"];
@@ -395,27 +396,26 @@ export class TelemetryUniverseData
 
           try {
             const trailResults = await Promise.all(trailPromises);
-            if (latestTimestamp === currentDatapoint[0]) {
-              callback({
-                worldToLocal: odometry!.worldToLocal,
-                pose: odometry!.pose,
-                trail: trailResults,
-                covariance: [],
-              });
-            }
+            latestTimestamp = timestamp;
+            callback({
+              worldToLocal: odometry!.worldToLocal,
+              pose: odometry!.pose,
+              trail: trailResults,
+              covariance: [],
+            });
             return;
           } catch (error) {
             console.error("Failed to process trail data:", error);
             throw error;
           }
         }
-        if (latestTimestamp === currentDatapoint[0]) {
-          callback({
-            worldToLocal: odometry!.worldToLocal,
-            pose: odometry!.pose,
-            covariance: [],
-          });
-        }
+        latestTimestamp = timestamp;
+        callback({
+          worldToLocal: odometry!.worldToLocal,
+          pose: odometry!.pose,
+          covariance: [],
+        });
+
         return;
       }
     );
