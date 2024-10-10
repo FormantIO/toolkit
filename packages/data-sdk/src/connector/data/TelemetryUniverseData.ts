@@ -335,6 +335,7 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const dataFetchWorker = new DataFetchWorker();
+    let latestTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -347,6 +348,10 @@ export class TelemetryUniverseData
         const currentDatapoint = this.getNearestPoint(
           data
         ) as IDataPoint<"localization">;
+        const timestamp = currentDatapoint[0];
+        if (timestamp <= latestTimestamp) {
+          return;
+        }
 
         let odometry: ILocalization["odometry"];
         if (currentDatapoint[1].url) {
@@ -391,6 +396,7 @@ export class TelemetryUniverseData
 
           try {
             const trailResults = await Promise.all(trailPromises);
+            latestTimestamp = timestamp;
             callback({
               worldToLocal: odometry!.worldToLocal,
               pose: odometry!.pose,
@@ -403,12 +409,13 @@ export class TelemetryUniverseData
             throw error;
           }
         }
-
+        latestTimestamp = timestamp;
         callback({
           worldToLocal: odometry!.worldToLocal,
           pose: odometry!.pose,
           covariance: [],
         });
+
         return;
       }
     );
