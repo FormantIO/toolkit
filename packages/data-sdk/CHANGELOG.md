@@ -1,3 +1,7 @@
+## [1.62.0] - 2024-10-10
+
+- prevent flickering when subscribing to odometry
+
 ## [1.61.0] - 2024-10-3
 
 - prioritize url params to determine which api to use
