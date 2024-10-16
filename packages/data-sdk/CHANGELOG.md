@@ -1,3 +1,7 @@
+## [1.63.0] - 2024-10-16
+
+- Prevent repeated and out of order requests in subscribeToOdometry and subscribeToPath
+
 ## [1.62.0] - 2024-10-10
 
 - prevent flickering when subscribing to odometry

@@ -60,8 +60,8 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const dataFetchWorker = new DataFetchWorker();
-    let latestTimestamp = 0;
-
+    let fetchingTimestamp = 0;
+    let currentTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -71,25 +71,51 @@ export class TelemetryUniverseData
           callback(NoData);
           return;
         }
-        const nearestPoint = this.getNearestPoint(data);
+        const nearestPoint = this.getNearestPoint(data); // gets the nearest data point to the current time
         const datapoint = nearestPoint[1] as ILocalization;
         const timestamp = nearestPoint[0];
 
-        if (timestamp === latestTimestamp) {
+        const isLiveMode = this.time === "live";
+        const timelineTime = isLiveMode
+          ? new Date().getTime()
+          : (this.time as Date).getTime();
+        const hasGoneBackInTime =
+          !isLiveMode && currentTimestamp - timelineTime > 2000;
+
+        // avoid processing the same data point multiple times
+        // also avoid processing data points that are older than the current time
+        // except when user has gone back in time
+        if (
+          (timestamp <= currentTimestamp || timestamp <= fetchingTimestamp) &&
+          !hasGoneBackInTime
+        ) {
           return;
         }
-        latestTimestamp = timestamp;
+
+        fetchingTimestamp = timestamp;
 
         if (datapoint.url) {
-          const response = (await fetch(datapoint.url).then((res) =>
-            res.json()
-          )) as ILocalization;
-          if (response.path && timestamp >= latestTimestamp) {
-            callback(response.path);
+          try {
+            const response = (await fetch(datapoint.url).then((res) =>
+              res.json()
+            )) as ILocalization;
+            if (
+              response.path &&
+              (hasGoneBackInTime || timestamp > currentTimestamp)
+            ) {
+              callback(response.path);
+              currentTimestamp = timestamp;
+            }
+          } catch (error) {
+            console.error("Failed to fetch path data:", error);
           }
           return;
-        } else if (datapoint.path && timestamp >= latestTimestamp) {
+        } else if (
+          datapoint.path &&
+          (hasGoneBackInTime || timestamp > currentTimestamp)
+        ) {
           callback(datapoint.path);
+          currentTimestamp = timestamp;
           return;
         }
       }
@@ -335,7 +361,8 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const dataFetchWorker = new DataFetchWorker();
-    let latestTimestamp = 0;
+    let currentTimestamp = 0;
+    let fetchingTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -349,9 +376,25 @@ export class TelemetryUniverseData
           data
         ) as IDataPoint<"localization">;
         const timestamp = currentDatapoint[0];
-        if (timestamp <= latestTimestamp) {
+
+        const isLiveMode = this.time === "live";
+        const timelineTime = isLiveMode
+          ? new Date().getTime()
+          : (this.time as Date).getTime();
+        const hasGoneBackInTime =
+          !isLiveMode && currentTimestamp - timelineTime > 2000;
+
+        // avoid processing the same data point multiple times
+        // also avoid processing data points that are older than the current time
+        // except when user has gone back in time
+        if (
+          (timestamp <= currentTimestamp || timestamp <= fetchingTimestamp) &&
+          !hasGoneBackInTime
+        ) {
           return;
         }
+
+        fetchingTimestamp = timestamp;
 
         let odometry: ILocalization["odometry"];
         if (currentDatapoint[1].url) {
@@ -361,7 +404,6 @@ export class TelemetryUniverseData
             odometry = jsonResponse.odometry;
           } catch (error) {
             console.error("Failed to fetch odometry data:", error);
-            throw error;
           }
         } else {
           odometry = currentDatapoint[1].odometry;
@@ -385,7 +427,6 @@ export class TelemetryUniverseData
                 ];
               } catch (error) {
                 console.error("Failed to fetch trail odometry data:", error);
-                throw error;
               }
             }
             return [datapoint[0], datapoint[1].odometry?.pose] as [
@@ -396,25 +437,29 @@ export class TelemetryUniverseData
 
           try {
             const trailResults = await Promise.all(trailPromises);
-            latestTimestamp = timestamp;
-            callback({
-              worldToLocal: odometry!.worldToLocal,
-              pose: odometry!.pose,
-              trail: trailResults,
-              covariance: [],
-            });
+
+            if (hasGoneBackInTime || timestamp > currentTimestamp) {
+              callback({
+                worldToLocal: odometry!.worldToLocal,
+                pose: odometry!.pose,
+                trail: trailResults,
+                covariance: [],
+              });
+              currentTimestamp = timestamp;
+            }
             return;
           } catch (error) {
             console.error("Failed to process trail data:", error);
-            throw error;
           }
         }
-        latestTimestamp = timestamp;
-        callback({
-          worldToLocal: odometry!.worldToLocal,
-          pose: odometry!.pose,
-          covariance: [],
-        });
+        if (hasGoneBackInTime || timestamp > currentTimestamp) {
+          callback({
+            worldToLocal: odometry!.worldToLocal,
+            pose: odometry!.pose,
+            covariance: [],
+          });
+          currentTimestamp = timestamp;
+        }
 
         return;
       }
