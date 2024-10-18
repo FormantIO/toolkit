@@ -1,3 +1,7 @@
+## [1.67.0] - 2024-10-18
+
+- Add apiURL getter/setter interface updates.
+
 ## [1.66.0] - 2024-10-18
 
 - Export apiURL helper functions for View Embed usage.
