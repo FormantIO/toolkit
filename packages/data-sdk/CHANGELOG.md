@@ -1,6 +1,10 @@
-## [1.65.0] - 2024-10-16
+## [1.66.0] - 2024-10-18
 
-- Adding apiURL scope adjustment for View Embed usage. 
+- Export apiURL helper functions for View Embed usage.
+
+## [1.65.0] - 2024-10-18
+
+- Adding apiURL scope adjustment for View Embed usage.
 
 ## [1.63.0] - 2024-10-16
 
