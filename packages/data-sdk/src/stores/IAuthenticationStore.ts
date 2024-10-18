@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IUser } from "../model/IUser";
 import { AuthenticationResult } from "./AuthenticationResult";
-import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IAuthentication } from "./IAuthentication";
+import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
 
 export interface IAuthenticationStore {
@@ -19,6 +20,9 @@ export interface IAuthenticationStore {
    * @deprecated Do not use directly. This will be removed in future versions of the API
    */
   readonly isShareToken: boolean;
+
+  set apiUrl(url: string);
+  get apiUrl(): string;
 
   login(email: string, password: string): Promise<IAuthentication>;
   login(

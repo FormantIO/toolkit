@@ -1,3 +1,15 @@
+## [1.67.0] - 2024-10-18
+
+- Add apiURL getter/setter interface updates.
+
+## [1.66.0] - 2024-10-18
+
+- Export apiURL helper functions for View Embed usage.
+
+## [1.65.0] - 2024-10-18
+
+- Adding apiURL scope adjustment for View Embed usage.
+
 ## [1.63.0] - 2024-10-16
 
 - Prevent repeated and out of order requests in subscribeToOdometry and subscribeToPath
