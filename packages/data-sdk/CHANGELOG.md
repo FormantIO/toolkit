@@ -1,3 +1,7 @@
+## [1.68.0] - 2024-11-22
+
+- Add in boolean stream type
+
 ## [1.67.0] - 2024-10-18
 
 - Add apiURL getter/setter interface updates.
