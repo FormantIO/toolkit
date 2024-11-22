@@ -1,3 +1,7 @@
+## [1.69.0] - 2024-11-22
+
+- Bump realtime-sdk in deployment
+
 ## [1.68.0] - 2024-11-22
 
 - Add in boolean stream type
