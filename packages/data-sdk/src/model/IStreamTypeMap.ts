@@ -13,6 +13,7 @@ import { IVideo } from "./IVideo";
 // NOTE: Also add an entry in streamTypes
 
 export interface IStreamTypeMap {
+  boolean: boolean;
   bitset: IBitset;
   localization: ILocalization;
   "point cloud": IPointCloud;
