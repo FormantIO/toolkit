@@ -1,16 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
+
 import { subDays } from "date-fns";
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import RealtimePlayerWorker from "../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
-// eslint-disable-next-line import/no-unresolved
-// @ts-ignore-next-line
-import PcdWorker from "./PcdLoaderWorker?worker&inline";
-// @ts-ignore-next-line
-import DataFetchWorker from "./DataFetchWorker?worker&inline";
+
 import { H264BytestreamCanvasDrawer } from "@formant/ui-sdk-realtime-player-core";
+
+import {
+  IRtcStreamMessage,
+  createRtcStreamMessage,
+} from "@formant/realtime-sdk";
+import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
+import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
+import { Device } from "../../devices/Device";
+import { PeerDevice } from "../../devices/PeerDevice";
+import { Fleet } from "../../Fleet";
+import { IBitset } from "../../model/IBitset";
+import { ILocation } from "../../model/ILocation";
+import { IQuery } from "../../model/IQuery";
+import { IStreamData } from "../../model/IStreamData";
+import { ITransformNode } from "../../model/ITransformNode";
 // @ts-ignore
-// eslint-disable-next-line import/no-unresolved
 import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
+
 import {
   CloseSubscription,
   DataSourceState,
@@ -22,20 +32,6 @@ import {
   RealtimeButtonConfiguration,
   UniverseDataSource,
 } from "../model/IUniverseData";
-import { Device } from "../../devices/Device";
-import { PeerDevice } from "../../devices/PeerDevice";
-import { Fleet } from "../../Fleet";
-import { IQuery } from "../../model/IQuery";
-import {
-  IRtcStreamMessage,
-  createRtcStreamMessage,
-} from "@formant/realtime-sdk";
-import { IStreamData } from "../../model/IStreamData";
-import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
-import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
-import { IBitset } from "../../model/IBitset";
-import { ITransformNode } from "../../model/ITransformNode";
-import { ILocation } from "../../model/ILocation";
 import { QueryStore } from "./queryStore";
 
 export type DeviceId = string;
@@ -49,27 +45,8 @@ export type DataResult<T> = {
 // get query paramters "debug"
 const debug =
   new URLSearchParams(window.location.search).get("debug") === "true";
-const PCD_WORKER_POOL_SIZE = 5;
-const DATA_FETCH_WORKER_POOL_SIZE = 10;
 
 export class BasicUniverseDataConnector {
-  pcdWorkerPool: Worker[] = [];
-  dataFetchWorkerPool: Worker[] = [];
-
-  pcdWorkerPoolOccupancy: Boolean[] = [false, false, false, false, false];
-  dataFetchWorkerPoolOccupancy: Boolean[] = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
-
   subscriberSources: Map<string, Map<string, UniverseDataSource>> = new Map();
 
   subscriberLoaders: Map<
@@ -99,16 +76,16 @@ export class BasicUniverseDataConnector {
     this.timeChangeListeners.forEach((listener) => listener(time));
   }
 
+  getTime(): Date | "live" {
+    return this.time;
+  }
+
+  getTimeMs(): number {
+    return this.time === "live" ? new Date().getTime() : this.time.getTime();
+  }
+
   constructor() {
     this.time = "live";
-    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
-      const pcdWorker = new PcdWorker();
-      this.pcdWorkerPool.push(pcdWorker);
-    }
-    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
-      const dataFetchWorker = new DataFetchWorker();
-      this.dataFetchWorkerPool.push(dataFetchWorker);
-    }
 
     const dataLoop = async () => {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
@@ -156,45 +133,6 @@ export class BasicUniverseDataConnector {
       setTimeout(() => dataLoop(), 0);
     };
     setTimeout(() => dataLoop(), 0);
-  }
-
-  protected getAvailablePCDWorker(): Worker | undefined {
-    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
-      if (!this.pcdWorkerPoolOccupancy[i]) {
-        this.pcdWorkerPoolOccupancy[i] = true;
-        return this.pcdWorkerPool[i];
-      }
-    }
-    return undefined;
-  }
-
-  protected getAvailableDataFetchWorker(): Worker | undefined {
-    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
-      if (!this.dataFetchWorkerPoolOccupancy[i]) {
-        this.dataFetchWorkerPoolOccupancy[i] = true;
-        return this.dataFetchWorkerPool[i];
-      }
-    }
-    return undefined;
-  }
-
-  protected releasePCDWorker(worker: Worker) {
-    const index = this.pcdWorkerPool.indexOf(worker);
-    this.pcdWorkerPoolOccupancy[index] = false;
-  }
-
-  protected releaseDataFetchWorker(worker: Worker) {
-    const index = this.dataFetchWorkerPool.indexOf(worker);
-    this.dataFetchWorkerPoolOccupancy[index] = false;
-  }
-
-  clearWorkerPool() {
-    for (let i = 0; i < PCD_WORKER_POOL_SIZE; i++) {
-      this.pcdWorkerPoolOccupancy[i] = false;
-    }
-    for (let i = 0; i < DATA_FETCH_WORKER_POOL_SIZE; i++) {
-      this.dataFetchWorkerPoolOccupancy[i] = false;
-    }
   }
 
   private generateTelemetryFilter(): IQuery {

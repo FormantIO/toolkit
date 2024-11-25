@@ -1,7 +1,7 @@
 // Application Initialization
 import { App } from "./App";
-import { Fleet } from "./Fleet";
 import { Authentication } from "./Authentication";
+import { Fleet } from "./Fleet";
 
 try {
   const urlParams =

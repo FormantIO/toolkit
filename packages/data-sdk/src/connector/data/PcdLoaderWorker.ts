@@ -1,6 +1,6 @@
 import { duration } from "../common/duration";
 import { StoreCache } from "./StoreCache";
-import { parse, loadFromBase64, IPcd } from "./pcd";
+import { IPcd, loadFromBase64, parse } from "./pcd";
 
 const cache = new StoreCache<string, IPcd>({
   capacity: 1000,

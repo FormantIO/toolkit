@@ -3,4 +3,5 @@ import { ITransform } from "../../model/ITransform";
 
 export interface IUniverseOdometry extends IPoseWithCovariance {
   worldToLocal?: ITransform;
+  trail?: [number, ITransform][];
 }

@@ -13,22 +13,22 @@ import { TelemetryResult } from "../../model/TelemetryResult";
 import { defined } from "../common/defined";
 import { IPose } from "../model/IPose";
 import {
+  CloseSubscription,
   IUniverseData,
   UniverseDataSource,
-  CloseSubscription,
 } from "../model/IUniverseData";
 import { IUniverseGridMap } from "../model/IUniverseGridMap";
 import { IUniverseOdometry } from "../model/IUniverseOdometry";
 import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 
+import { ILocation } from "../../model/ILocation";
+import { IMarker3DArray } from "../../model/IMarker3DArray";
 import {
   BasicUniverseDataConnector,
   DataResult,
 } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-import { IMarker3DArray } from "../../model/IMarker3DArray";
-import { ILocation } from "../../model/ILocation";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
@@ -98,7 +98,8 @@ export class LiveUniverseData
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IUniverseOdometry) => void
+    callback: (data: IUniverseOdometry) => void,
+    _trail?: number
   ): CloseSubscription {
     if (source.sourceType === "realtime") {
       const listener = (_peerId: string, msg: RealtimeMessage) => {
@@ -387,10 +388,12 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
-    const pcdWorker = this.getAvailablePCDWorker();
-    if (!pcdWorker) {
-      throw new Error("No available pointcloud worker");
-    }
+    const pcdWorker = new Worker(
+      new URL("./PcdLoaderWorker.ts", import.meta.url),
+      {
+        name: "liveuniverseDataPCD",
+      }
+    ) as Worker;
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"
@@ -523,6 +526,7 @@ export class LiveUniverseData
       };
       this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
       return () => {
+        pcdWorker.terminate();
         this.unsubscribeToRealtimeMessages(
           deviceId,
           source.rosTopicName,

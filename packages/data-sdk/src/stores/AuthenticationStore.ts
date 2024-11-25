@@ -1,17 +1,17 @@
 import { decode } from "base-64";
 
-import { IAuthenticationStore } from "./IAuthenticationStore";
-import { AuthenticationResult } from "./AuthenticationResult";
 import {
-  LoginFailureError,
   LoginChallengedError,
+  LoginFailureError,
 } from "./AuthenticationErrors";
+import { AuthenticationResult } from "./AuthenticationResult";
+import { IAuthenticationStore } from "./IAuthenticationStore";
 
 import { IUser } from "../model/IUser";
 import { IAuthentication } from "./IAuthentication";
+import { ICheckSsoResult } from "./ICheckSsoResult";
 import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
-import { ICheckSsoResult } from "./ICheckSsoResult";
 
 interface IAuthenticationStoreOptions {
   apiUrl: string;
@@ -32,7 +32,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   private _waitingForAuth: Set<(result: boolean) => void> = new Set();
   private _refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
-  private readonly _apiUrl: string;
+  private _apiUrl: string;
   private readonly _refreshAuthToken: () => void;
   private readonly _addAccessTokenRefreshListener: (
     callback: (token: string) => void
@@ -46,6 +46,14 @@ export class AuthenticationStore implements IAuthenticationStore {
     this._apiUrl = apiUrl;
     this._refreshAuthToken = refreshAuthToken;
     this._addAccessTokenRefreshListener = addAccessTokenRefreshListener;
+  }
+
+  set apiUrl(url: string) {
+    this._apiUrl = url;
+  }
+
+  get apiUrl(): string {
+    return this._apiUrl;
   }
 
   get token(): string | undefined {

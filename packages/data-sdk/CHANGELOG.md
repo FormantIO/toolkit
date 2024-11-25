@@ -1,3 +1,77 @@
+## [1.67.0] - 2024-10-18
+
+- Add apiURL getter/setter interface updates.
+
+## [1.66.0] - 2024-10-18
+
+- Export apiURL helper functions for View Embed usage.
+
+## [1.65.0] - 2024-10-18
+
+- Adding apiURL scope adjustment for View Embed usage.
+
+## [1.63.0] - 2024-10-16
+
+- Prevent repeated and out of order requests in subscribeToOdometry and subscribeToPath
+
+## [1.62.0] - 2024-10-10
+
+- prevent flickering when subscribing to odometry
+
+## [1.61.0] - 2024-10-3
+
+- prioritize url params to determine which api to use
+
+## [1.60.0] - 2024-10-3
+
+- Made the workers dynamic; they now spawn and terminate on demand.
+
+## [1.59.0] - 2024-9-30
+
+- web worker static list fix
+
+## [1.58.0] - 2024-9-18
+
+- url fix
+
+## [1.57.0] - 2024-9-18
+
+- preventing flickering
+
+## [1.56.0] - 2024-8-26
+
+- bumping realtime sdk
+
+## [1.55.0] - 2024-8-26
+
+- bumping realtime sdk
+
+## [1.54.0] - 2024-8-26
+
+- bumping realtime sdk
+
+## [1.53.0] - 2024-8-26
+
+- Exposing more realtime SDK
+
+## [1.52.0] - 2024-8-26
+
+- Exposing more realtime SDK
+
+## [1.51.0] - 2024-8-23
+
+### Upgrade
+
+- Upgrade `@formant/realtime-sdk` to 1.4.0.
+
+## [1.49.0] - 2024-8-19
+
+- local improvements
+
+## [1.48.0] - 2024-6-21
+
+- 3d scene path improvements
+
 ## [1.47.0] - 2024-6-21
 
 - fix latest data point
@@ -413,6 +487,7 @@ await device.startRealtimeConnection({
 
 - correct support for `getLatestTelemetry(oneUuid)` (#76)
 
+[1.51.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.50.0...release/data-sdk/1.51.0~
 [1.18.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.17.0...release/data-sdk/1.18.0~
 [1.17.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.16.0...release/data-sdk/1.17.0~
 [1.16.0]: https://github.com/FormantIO/toolkit/compare/release/data-sdk/1.15.0...release/data-sdk/1.16.0~

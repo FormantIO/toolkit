@@ -339,24 +339,32 @@
   resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.15.tgz"
   integrity sha512-JsdS0EgEViwuKsw5tiJQo9UdQdUJYuB+Mf6HxtJSPN35vez1hlrNb1KajvKWF5Sa35j17+rW1ECEO9iNrIXbNg==
 
-"@formant/data-sdk@^1.0.0", "@formant/data-sdk@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.10.0.tgz"
-  integrity sha512-o6aXAEKEERya6YLyaPPBFWmtuX7ESCZ8em+kFow8+VwxXDzm6UAxYvCm+dbxrHh2A33WSIdQNNNs7Z9a/jPLKw==
+"@formant/data-sdk@^1.0.0", "@formant/data-sdk@^1.51.0":
+  version "1.51.0"
+  resolved "https://registry.npmjs.org/@formant/data-sdk/-/data-sdk-1.51.0.tgz"
+  integrity sha512-8/7IQb6VaiLVx+31e8y3iRNNC4f9LLjhJwAK5NNJNceagz6oezPkfvsKa362scyf2oXLkgsOMC2A/20UMD6gPw==
   dependencies:
+    "@formant/ui-sdk-realtime-player-core" "^0.0.2"
+    "@formant/ui-sdk-realtime-player-core-worker" "^0.0.4"
+    "@types/validator" "^13.11.8"
     base-64 "^1.0.0"
     base64-js "^1.5.1"
     date-fns "^2.30.0"
     eventemitter3 "^5.0.1"
+    google-protobuf "^3.21.2"
+    lzfjs "^1.0.1"
     pako "^2.1.0"
+    validator "^13.11.0"
 
-"@formant/realtime-sdk@^0.0.20 || ^1.0.0", "@formant/realtime-sdk@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-1.2.0.tgz"
-  integrity sha512-BOzD40kjGHyHLYhwna/FPTMItnrkIaLvALWh/iM6M7/22ZpDJWLqdtrC7GK80B04KvllQHrkCQGUgQmu2aDXfg==
+"@formant/realtime-sdk@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/@formant/realtime-sdk/-/realtime-sdk-1.4.0.tgz"
+  integrity sha512-nxUxm8PlYDsjI6X0KAO/JvYIGE/UlL1O0k+vYlOwQjAMvX9xGXAz6QhO2GJKDO3Z8HurhTaZnmExxUU0q0Q9kg==
   dependencies:
+    "@types/generic-pool" "^3.8.1"
     "@types/google-protobuf" "~3.7.0"
-    env-var "^7.3.1"
+    env-var "^7.4.0"
+    generic-pool "^3.9.0"
 
 "@formant/ui-sdk-realtime-player-core-worker@^0.0.4":
   version "0.0.4"
@@ -534,6 +542,13 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
+"@types/generic-pool@^3.8.1":
+  version "3.8.1"
+  resolved "https://registry.npmjs.org/@types/generic-pool/-/generic-pool-3.8.1.tgz"
+  integrity sha512-eaMAbZS0EfKvaP5PUZ/Cdf5uJBO2t6T3RdvQTKuMqUwGhNpCnPAsKWEMyV+mCeCQG3UiHrtgdzni8X6DmhxRaQ==
+  dependencies:
+    generic-pool "*"
+
 "@types/google-protobuf@~3.7.0":
   version "3.7.4"
   resolved "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.7.4.tgz"
@@ -593,6 +608,11 @@
   version "0.16.2"
   resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
+
+"@types/validator@^13.11.8":
+  version "13.12.0"
+  resolved "https://registry.npmjs.org/@types/validator/-/validator-13.12.0.tgz"
+  integrity sha512-nH45Lk7oPIJ1RVOF6JgFI6Dy0QpHEzq4QecZhvguxYPDwT8c93prCMqAtiIttm39voZ+DDR+qkNnMpJmMBRqag==
 
 "@vitejs/plugin-react@^3.0.0":
   version "3.1.0"
@@ -772,10 +792,10 @@ electron-to-chromium@^1.4.284:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.284.tgz"
   integrity sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==
 
-env-var@^7.3.1:
-  version "7.3.1"
-  resolved "https://registry.npmjs.org/env-var/-/env-var-7.3.1.tgz"
-  integrity sha512-Sq9qMnbBApv7SeUOKhw5GZ0VxAwltjFTzXTOvRV9NZEKmMCBZuFCumAvkXwBC5Fo396D7BnOpb5dXud7Vzhliw==
+env-var@^7.4.0:
+  version "7.5.0"
+  resolved "https://registry.npmjs.org/env-var/-/env-var-7.5.0.tgz"
+  integrity sha512-mKZOzLRN0ETzau2W2QXefbFjo5EF4yWq28OyKb9ICdeNhHJlOE/pHHnz4hdYJ9cNZXcJHo5xN4OT4pzuSHSNvA==
 
 error-ex@^1.3.1:
   version "1.3.2"
@@ -849,6 +869,11 @@ function-bind@^1.1.1:
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
+generic-pool@*, generic-pool@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.npmjs.org/generic-pool/-/generic-pool-3.9.0.tgz"
+  integrity sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g==
+
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
@@ -865,6 +890,11 @@ globals@^11.1.0:
   version "11.12.0"
   resolved "https://registry.npmjs.org/globals/-/globals-11.12.0.tgz"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
+
+google-protobuf@^3.21.2:
+  version "3.21.4"
+  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.21.4.tgz"
+  integrity sha512-MnG7N936zcKTco4Jd2PX2U96Kf9PxygAPKBug+74LHzmHXmceN16MmRcdgZv+DGef/S9YvQAfRsNCn4cjf9yyQ==
 
 grpc-web@1.2.1:
   version "1.2.1"
@@ -987,6 +1017,11 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
+
+lzfjs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/lzfjs/-/lzfjs-1.0.1.tgz"
+  integrity sha512-P1x9feLT9xHg9OpfgWcDlWtndf7wYTJk5LgIeVE9tGo6CptVnDi34/mcT8REskWNdQCSiPGhSLQ80L7zTQXUVg==
 
 magic-string@^0.27.0:
   version "0.27.0"
@@ -1247,6 +1282,11 @@ update-browserslist-db@^1.0.10:
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
+
+validator@^13.11.0:
+  version "13.12.0"
+  resolved "https://registry.npmjs.org/validator/-/validator-13.12.0.tgz"
+  integrity sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==
 
 vite@^4.0.0, vite@^4.1.0-beta.0:
   version "4.2.1"
