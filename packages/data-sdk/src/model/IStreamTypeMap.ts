@@ -8,11 +8,13 @@ import { ILocation } from "./ILocation";
 import { INumericSetEntry } from "./INumericSetEntry";
 import { IPointCloud } from "./IPointCloud";
 import { ITransformNode } from "./ITransformNode";
+import { ITwist } from "./ITwist";
 import { IVideo } from "./IVideo";
 
 // NOTE: Also add an entry in streamTypes
 
 export interface IStreamTypeMap {
+  twist: ITwist;
   boolean: boolean;
   bitset: IBitset;
   localization: ILocalization;
