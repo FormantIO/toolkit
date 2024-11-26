@@ -1,3 +1,8 @@
+## [1.70.0] - 2024-11-26
+
+- Add in twist stream type
+- Fix API resolution in the data sdk to support localhost on prod
+
 ## [1.69.0] - 2024-11-22
 
 - Bump realtime-sdk in deployment
