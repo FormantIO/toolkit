@@ -1,3 +1,7 @@
+## [1.71.0] - 2024-12-09
+
+- fix pointcloud realtime subscription
+
 ## [1.70.0] - 2024-11-26
 
 - Add in twist stream type

@@ -29,6 +29,8 @@ import {
   DataResult,
 } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
+// @ts-ignore
+import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 
 export class LiveUniverseData
   extends BasicUniverseDataConnector
@@ -388,17 +390,14 @@ export class LiveUniverseData
     source: UniverseDataSource,
     callback: (data: IUniversePointCloud) => void
   ): () => void {
-    const pcdWorker = new Worker(
-      new URL("./PcdLoaderWorker.ts", import.meta.url),
-      {
-        name: "liveuniverseDataPCD",
-      }
-    ) as Worker;
+    let pointcloudUnsubscribe: CloseSubscription | undefined;
+    const pcdWorker = new PCDLoaderWorker();
+
     if (
       source.sourceType === "telemetry" &&
       source.streamType !== "localization"
     ) {
-      return this.addRemovableTelemetrySubscription(
+      pointcloudUnsubscribe = this.addRemovableTelemetrySubscription(
         deviceId,
         source,
         async (
@@ -450,7 +449,7 @@ export class LiveUniverseData
       source.sourceType === "telemetry" &&
       source.streamType === "localization"
     ) {
-      return this.addRemovableTelemetrySubscription(
+      pointcloudUnsubscribe = this.addRemovableTelemetrySubscription(
         deviceId,
         source,
         async (
@@ -534,7 +533,10 @@ export class LiveUniverseData
         );
       };
     }
-    return () => {};
+    return () => {
+      pcdWorker.terminate();
+      pointcloudUnsubscribe?.();
+    };
   }
 
   subscribeToGeometry(
