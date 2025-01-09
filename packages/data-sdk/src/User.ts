@@ -1,6 +1,7 @@
 import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
 import { IUser } from "./model/IUser";
+import { IQuery } from "./main";
 
 export class User {
   static async listUsers(): Promise<IUser[]> {
@@ -74,5 +75,21 @@ export class User {
         Authorization: "Bearer " + Authentication.token,
       },
     });
+  }
+
+  static async queryUsers(query: IQuery): Promise<IUser[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(`${FORMANT_API_URL}/v1/admin/users/query`, {
+      method: "POST",
+      body: JSON.stringify(query),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const users = await data.json();
+    return users.items;
   }
 }

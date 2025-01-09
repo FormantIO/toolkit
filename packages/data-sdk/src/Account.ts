@@ -97,4 +97,26 @@ export class Account {
     );
     return await data.json();
   }
+  static async getAccountChildren(
+    id: string,
+    onlyIds: boolean
+  ): Promise<IAccount[]> {
+    if (!Authentication.token) {
+      throw new Error("Not authenticated");
+    }
+    const data = await fetch(
+      `${FORMANT_API_URL}/v1/admin/accounts/${id}/children${
+        onlyIds ? "?onlyIds=true" : ""
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
+    const accounts = await data.json();
+    return accounts.items;
+  }
 }
