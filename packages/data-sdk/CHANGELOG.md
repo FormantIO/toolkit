@@ -1,3 +1,7 @@
+## [1.72.0] - 2025-01-22
+
+- Add geometry subscription in live universe data
+
 ## [1.71.0] - 2024-12-09
 
 - fix pointcloud realtime subscription

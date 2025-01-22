@@ -540,15 +540,14 @@ export class LiveUniverseData
   }
 
   subscribeToGeometry(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: IMarker3DArray) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IMarker3DArray) => void
   ): () => void {
-    throw new Error("type error in realtime sdk");
-    /*if (source.sourceType === "realtime") {
+    if (source.sourceType === "realtime") {
       const listener = (_peerId: string, msg: RealtimeMessage) => {
         if (msg.payload.markerArray) {
-          callback(msg.payload.markerArray);
+          callback(msg.payload.markerArray as unknown as IMarker3DArray);
         }
       };
       this.subscribeToRealtimeMessages(deviceId, source.rosTopicName, listener);
@@ -560,7 +559,7 @@ export class LiveUniverseData
         );
       };
     }
-    return () => {};*/
+    return () => {};
   }
 
   subscribeToJointState(

@@ -15,7 +15,7 @@ export function whichFormantApiUrl(
     if (urlParams.get("formant_prod")) {
       return "https://api.formant.io";
     }
-    
+
     if (urlParams.get("formant_stage")) {
       return "https://api-stage.formant.io";
     }
@@ -50,7 +50,7 @@ export function whichFormantApiUrl(
         return "https://api.formant.io";
       }
     }
-  } catch (_) { }
+  } catch (_) {}
 
   if (host) {
     if (host.includes("app-dev.formant.io")) {
