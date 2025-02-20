@@ -8,5 +8,6 @@ export interface ITaskSummary extends IBaseEvent<"task-summary"> {
   taskId: string;
   deviceId: Uuid;
   generatedAt: IsoDate;
+  endTime: IsoDate;
   deletedAt?: IsoDate | null;
 }
