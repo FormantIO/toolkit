@@ -1,3 +1,7 @@
+## [1.73.0] - 2025-02-20
+
+- Updating task summary
+
 ## [1.72.0] - 2025-01-22
 
 - Add geometry subscription in live universe data
