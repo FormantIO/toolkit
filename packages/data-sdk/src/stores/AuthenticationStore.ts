@@ -86,6 +86,18 @@ export class AuthenticationStore implements IAuthenticationStore {
     return this._isShareToken;
   }
 
+  setEnvironment(env: "prod" | "stage" | "dev" | "local") {
+    if (env === "prod") {
+      this.apiUrl = "https://api.formant.io";
+    } else if (env === "stage") {
+      this.apiUrl = "https://api-stage.formant.io";
+    } else if (env === "dev") {
+      this.apiUrl = "https://api-dev.formant.io";
+    } else if (env === "local") {
+      this.apiUrl = "https://api.formant.local";
+    }
+  }
+
   login(email: string, password: string): Promise<IAuthentication>;
   login(
     email: string,
