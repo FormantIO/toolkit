@@ -1,3 +1,7 @@
+## [1.75.0] - 2025-02-22
+
+- Setting api env changes global
+
 ## [1.74.0] - 2025-02-22
 
 - Allow programattic env set
