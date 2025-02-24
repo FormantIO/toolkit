@@ -17,6 +17,7 @@ export {
 } from "./RequestDataChannel";
 export { Role } from "./Role";
 export { User } from "./User";
+export { Views } from "./Views";
 
 // Re-exporting core types
 export type { CaptureSession } from "./CaptureStream";
@@ -198,10 +199,10 @@ export type { IRespondToNewPasswordRequiredChallengeRequest } from "./stores/IRe
 import "./init.ts";
 
 export {
+  createRtcStreamMessage,
   RtcClient,
   RtcClientV1,
   RtcSignalingClient,
-  createRtcStreamMessage,
 } from "@formant/realtime-sdk";
 
 // Connector Exports
@@ -228,3 +229,5 @@ export type IUniversePath =
   import("./connector/model/IUniversePath").IUniversePath;
 export type IUniverseData =
   import("./connector/model/IUniverseData").IUniverseData;
+
+console.log("main.ts loaded");
