@@ -229,5 +229,3 @@ export type IUniversePath =
   import("./connector/model/IUniversePath").IUniversePath;
 export type IUniverseData =
   import("./connector/model/IUniverseData").IUniverseData;
-
-console.log("main.ts loaded");
