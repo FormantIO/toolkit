@@ -7,12 +7,12 @@ import {
 import { AuthenticationResult } from "./AuthenticationResult";
 import { IAuthenticationStore } from "./IAuthenticationStore";
 
+import { setFormantApiUrl } from "../config";
 import { IUser } from "../model/IUser";
 import { IAuthentication } from "./IAuthentication";
 import { ICheckSsoResult } from "./ICheckSsoResult";
 import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
-import { setFormantApiUrl } from "../config";
 
 interface IAuthenticationStoreOptions {
   apiUrl: string;
@@ -100,7 +100,6 @@ export class AuthenticationStore implements IAuthenticationStore {
     options: { advanced?: boolean } = {}
   ): Promise<IAuthentication | AuthenticationResult> {
     const { advanced = false } = options;
-
     try {
       const result = await fetch(`${this._apiUrl}/v1/admin/auth/login`, {
         method: "POST",
