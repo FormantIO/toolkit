@@ -1,19 +1,18 @@
 {
-    "API-buttons": {
-        "/api_button": {
-            "output_topic": "api_button_state"
-        }
-    },
-    "ROS-buttons": {
-        "/ros_button": {
-            "output_topic": "ros_button_state"
-        },
-        "/hos_button": {
-            "output_topic": "ros_button_state"
-        }
-    },
-    "global-configuration": {
-        "initial-state": false,
-        "publish-on-sub": true
+    "button-toggle-adapter": {
+        "ros-buttons": [
+            {
+                "input_topic": "/joy",
+                "output_topic": "/toggle"
+            }
+        ],
+        "api-buttons": [
+            {
+                "api_button_name": "joy",
+                "output_topic": "/toggle"
+            }
+        ],
+        "default-button-state": false,
+        "publish-on-subscription": true
     }
 }
