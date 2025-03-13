@@ -1,3 +1,7 @@
+## [1.77.0] - 2025-03-13
+
+- Fix occupancy gridmap data fetching
+
 ## [1.76.1] - 2025-02-25
 
 - Republish
