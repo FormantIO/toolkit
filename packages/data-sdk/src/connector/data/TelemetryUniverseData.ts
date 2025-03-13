@@ -549,17 +549,27 @@ export class TelemetryUniverseData
         }
 
         const dp = this.getNearestPoint(d)[1] as ILocalization;
-        if (dp.url) {
+        if (dp.map) {
+          // this means the localization object is not assetized
+          const gridValue = {
+            width: dp.map.width,
+            height: dp.map.height,
+            worldToLocal: dp.map.worldToLocal,
+            resolution: dp.map.resolution,
+            origin: dp.map.origin,
+            url: dp.map.url,
+          };
+          mapDataCache[dp.map.url!] = JSON.parse(JSON.stringify(gridValue));
+          callback(gridValue);
+        } else if (dp.url) {
           if (mapDataCache[dp.url]) {
             callback(mapDataCache[dp.url]);
             return;
           }
-
           dataFetchWorker.postMessage({ url: dp.url });
 
           dataFetchWorker.onmessage = async (ev: MessageEvent) => {
             const latestLocalization = ev.data.response.map;
-
             if (latestLocalization) {
               const gridValue = {
                 width: latestLocalization.width,
