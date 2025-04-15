@@ -1,3 +1,7 @@
+## [1.78.0] - 2025-04-14
+
+- Add in IJoy type
+
 ## [1.77.0] - 2025-03-13
 
 - Fix occupancy gridmap data fetching
