@@ -119,6 +119,7 @@ export * from "./model/IImageAnnotation";
 export * from "./model/IInterventionRequest";
 export * from "./model/IInterventionResponse";
 export * from "./model/IInterventionTypeMap";
+export * from "./model/IJoy";
 export * from "./model/ILabel";
 export * from "./model/ILabeledPolygon";
 export * from "./model/ILabelingRequestData";

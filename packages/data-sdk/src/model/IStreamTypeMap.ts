@@ -3,6 +3,7 @@ import { IBitset } from "./IBitset";
 import { IFile } from "./IFile";
 import { IHealth } from "./IHealth";
 import { IImage } from "./IImage";
+import { IJoy } from "./IJoy";
 import { ILocalization } from "./ILocalization";
 import { ILocation } from "./ILocation";
 import { INumericSetEntry } from "./INumericSetEntry";
@@ -15,6 +16,7 @@ import { IVideo } from "./IVideo";
 
 export interface IStreamTypeMap {
   twist: ITwist;
+  joy: IJoy;
   boolean: boolean;
   bitset: IBitset;
   localization: ILocalization;
