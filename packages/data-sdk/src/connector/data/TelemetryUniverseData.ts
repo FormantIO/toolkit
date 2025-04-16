@@ -486,6 +486,9 @@ export class TelemetryUniverseData
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
       const dataFetchWorker = new DataFetchWorker();
+      let currentTimestamp = 0;
+      let fetchingTimestamp = 0;
+
       const unsubscribe = this.subscribeTelemetry(
         deviceId,
         source,
@@ -495,17 +498,43 @@ export class TelemetryUniverseData
             callback(NoData);
             return;
           }
-          let jsonString = this.getNearestPoint(d)[1] as string;
+
+          const nearestPoint = this.getNearestPoint(d);
+          const timestamp = nearestPoint[0];
+          let jsonString = nearestPoint[1] as string;
+
+          const isLiveMode = this.time === "live";
+          const timelineTime = isLiveMode
+            ? new Date().getTime()
+            : (this.time as Date).getTime();
+          const hasGoneBackInTime =
+            !isLiveMode && currentTimestamp - timelineTime > 2000;
+
+          // Skip outdated data points
+          if (
+            (timestamp <= currentTimestamp || timestamp <= fetchingTimestamp) &&
+            !hasGoneBackInTime
+          ) {
+            return;
+          }
+
+          fetchingTimestamp = timestamp;
+
           if (jsonString.startsWith("http")) {
             dataFetchWorker.postMessage({ url: jsonString });
             dataFetchWorker.onmessage = (
               ev: MessageEvent<{ url: string; response: any }>
             ) => {
+              if (timestamp < currentTimestamp) {
+                return;
+              }
               jsonString = JSON.stringify(ev.data.response);
               callback(JSON.parse(jsonString) as IMarker3DArray);
+              currentTimestamp = timestamp;
             };
           } else {
             callback(JSON.parse(jsonString) as IMarker3DArray);
+            currentTimestamp = timestamp;
           }
         }
       );
@@ -515,7 +544,7 @@ export class TelemetryUniverseData
         unsubscribe();
       };
     } else {
-      throw new Error("Realtime geometry note supported");
+      throw new Error("Realtime geometry not supported");
     }
   }
 
