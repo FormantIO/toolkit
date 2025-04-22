@@ -1,3 +1,7 @@
+## [1.78.1] - 2025-04-14
+
+- Increment version for Vercel deploys
+
 ## [1.78.0] - 2025-04-14
 
 - Add in IJoy type
