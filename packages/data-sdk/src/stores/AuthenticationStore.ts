@@ -161,7 +161,11 @@ export class AuthenticationStore implements IAuthenticationStore {
     }
   }
 
-  async loginWithToken(token: string, refreshToken?: string) {
+  async loginWithToken(
+    token: string,
+    refreshToken?: string,
+    skipUserFetch = false
+  ) {
     const tokenData = JSON.parse(decode(token.split(".")[1]));
     try {
       let userId: string | undefined;
@@ -183,7 +187,7 @@ export class AuthenticationStore implements IAuthenticationStore {
         userId = tokenData["formant:claims"].userId;
       }
 
-      if (userId && this._currentUser?.id !== userId) {
+      if (userId && this._currentUser?.id !== userId && !skipUserFetch) {
         const result = await fetch(`${this._apiUrl}/v1/admin/users/${userId}`, {
           method: "GET",
           headers: {
