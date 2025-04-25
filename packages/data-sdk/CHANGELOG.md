@@ -1,3 +1,7 @@
+## [1.78.2] - 2025-04-25
+
+- Skip user fectch option to loginWithToken #208
+
 ## [1.78.1] - 2025-04-14
 
 - Increment version for Vercel deploys
