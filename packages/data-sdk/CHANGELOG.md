@@ -1,3 +1,7 @@
+## [1.78.3] - 2025-05-02
+
+- Fixed: Improved user fetch error handling in AuthenticationStore. Now gracefully handles 404 responses when fetching user details with a token, avoiding unnecessary errors in cases where the user is not accessible (e.g., embed scenarios).
+
 ## [1.78.2] - 2025-04-25
 
 - Skip user fectch option to loginWithToken #208
