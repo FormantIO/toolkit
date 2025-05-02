@@ -161,11 +161,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     }
   }
 
-  async loginWithToken(
-    token: string,
-    refreshToken?: string,
-    skipUserFetch = false
-  ) {
+  async loginWithToken(token: string, refreshToken?: string) {
     const tokenData = JSON.parse(decode(token.split(".")[1]));
     try {
       let userId: string | undefined;
@@ -187,7 +183,7 @@ export class AuthenticationStore implements IAuthenticationStore {
         userId = tokenData["formant:claims"].userId;
       }
 
-      if (userId && this._currentUser?.id !== userId && !skipUserFetch) {
+      if (userId && this._currentUser?.id !== userId) {
         const result = await fetch(`${this._apiUrl}/v1/admin/users/${userId}`, {
           method: "GET",
           headers: {
@@ -196,10 +192,15 @@ export class AuthenticationStore implements IAuthenticationStore {
           },
         });
         const data = await result.json();
-        if (result.status !== 200) {
+        if (result.status === 404) {
+          // this can happen if the token doesn't have access to its own user, like in the embed case
+          // ignore this error
+          this._currentUser = undefined;
+        } else if (result.status !== 200) {
           throw new Error(data.message);
+        } else {
+          this._currentUser = data;
         }
-        this._currentUser = data;
       }
       this._token = token;
       this._waitingForAuth.forEach((_) => _(true));
