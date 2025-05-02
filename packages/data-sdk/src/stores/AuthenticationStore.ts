@@ -192,12 +192,12 @@ export class AuthenticationStore implements IAuthenticationStore {
           },
         });
         const data = await result.json();
-        if (result.status !== 200 && result.status !== 404) {
-          throw new Error(data.message);
-        }
-
         if (result.status === 404) {
+          // this can happen if the token doesn't have access to its own user, like in the embed case
+          // ignore this error
           this._currentUser = undefined;
+        } else if (result.status !== 200) {
+          throw new Error(data.message);
         } else {
           this._currentUser = data;
         }
