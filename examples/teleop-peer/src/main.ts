@@ -1,8 +1,15 @@
-import { Authentication, Fleet } from "@formant/data-sdk";
+import { Fleet, RealtimeMessage } from "@formant/data-sdk";
 import "@formant/ui-sdk-joystick";
 import "@formant/ui-sdk-realtime-player";
 import { RealtimePlayer } from "@formant/ui-sdk-realtime-player";
 import "./style.css";
+
+
+declare global {
+  interface Window {
+    setVideo: (num: number) => void;
+  }
+}
 
 (el("formant-realtime-player") as RealtimePlayer).drawer.start();
 
@@ -12,27 +19,39 @@ el("button").addEventListener("click", async () => {
     // hide intro
     el("section").style.display = "none";
     el("#log").style.display = "block";
-
-    // connect directly to a device (agent) via its IP.
-    // NOTE: you must set the FORMANT_AGENT_IP ENV on the agent to an IP reachable by this UI.
-    // you can use "0.0.0.0" if you would like to listen on all interfaces
+    // Just connect to whereever this is hosted on port 5502
     const device = await Fleet.getPeerDevice("http://10.4.4.182:5502");
 
     // start connecting to realtime and get videos and start one
     log("Currently looking at <b>" + device.id + "</b>");
     log("Getting a realtime connection ... ");
-    await device.startRealtimeConnection();
-    device.addRealtimeListener((_peerId: any, message: any) => {
+    const listener = (_peerId: string, message: RealtimeMessage) => {
       (el("formant-realtime-player") as RealtimePlayer).drawVideoFrame(
         message.payload.h264VideoFrame
       );
-    });
-    let videoStreams = await device.getRealtimeVideoStreams();
-    log("Video streams: " + JSON.stringify(videoStreams));
-    log("Starting to listen to video stream " + videoStreams[0].name + " ... ");
-    device.startListeningToRealtimeVideo(videoStreams[0]);
+    };
+    await device.startRealtimeConnection();
 
-    // show the player
+    let videoStreams = await device.getRealtimeVideoStreams();
+    let last: number;
+
+    window.setVideo = async (num: number) => {
+      if (last) {
+        // await device.stopRealtimeConnection();
+        await device.stopListeningToRealtimeVideo(videoStreams[last]);
+        await device.removeRealtimeListener(listener);
+      }
+      log(`Starting to listen to video stream ${videoStreams[num].name}  ... `);
+      await device.startListeningToRealtimeVideo(videoStreams[num]);
+      await device.addRealtimeListener(listener);
+      last = num;
+    };
+
+    log("Video streams: ");
+    videoStreams.forEach((s, i) => {
+      log(`<a onClick="setVideo(${i})" href="#">${i} ${s.name}</a>`);
+    });
+
     el("formant-realtime-player").style.display = "block";
 
     // show joysticks and connect them up
@@ -46,6 +65,7 @@ el("button").addEventListener("click", async () => {
     log((e as Error).message);
   }
 });
+
 
 function log(msg: string) {
   el("#log").innerHTML = msg + "<br>" + el("#log").innerHTML;
