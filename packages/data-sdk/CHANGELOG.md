@@ -1,3 +1,7 @@
+## [1.79.0] - 2025-05-09
+
+- Command fixes
+
 ## [1.78.2] - 2025-04-25
 
 - Skip user fectch option to loginWithToken #208
