@@ -46,6 +46,7 @@ export class AudioPlayer {
     }
 
     const AudioContext =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       window.AudioContext || (window as any).webkitAudioContext;
 
     this.audioContext = new AudioContext();
@@ -76,7 +77,7 @@ export class AudioPlayer {
     const arrayBuffer = stringToArrayBuffer(data);
     try {
       await audioContext.decodeAudioData(
-        arrayBuffer.buffer,
+        toArrayBuffer(arrayBuffer.buffer),
         this.scheduleChunk
       );
     } catch (error) {
@@ -127,6 +128,7 @@ export class AudioPlayer {
     source.buffer = buffer;
     source.connect(audioContext.destination);
     source.loop = false;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     source.onended = (_: Event) => {
       this.chunks.splice(this.chunks.indexOf(source), 1);
       if (this.chunks.length === 0) {
@@ -145,4 +147,28 @@ export class AudioPlayer {
       })()
     );
   }
+}
+
+function toArrayBuffer(data: ArrayBufferLike): ArrayBuffer {
+  // (1) If it’s already an ArrayBuffer, just return it.
+  if (data instanceof ArrayBuffer) {
+    return data;
+  }
+
+  // (2) If it’s a TypedArray or DataView, pull out the exact bytes.
+  if (ArrayBuffer.isView(data)) {
+    const view = data as ArrayBufferView;
+    const buffer = view.buffer.slice(
+      view.byteOffset,
+      view.byteOffset + view.byteLength
+    );
+    if (buffer instanceof SharedArrayBuffer) {
+      return new Uint8Array(data as SharedArrayBuffer).slice().buffer;
+    }
+    return buffer;
+  }
+
+  // (3) Otherwise it must be a SharedArrayBuffer — copy it into a new ArrayBuffer.
+  //     We do this by wrapping in a Uint8Array and slicing.
+  return new Uint8Array(data as SharedArrayBuffer).slice().buffer;
 }
