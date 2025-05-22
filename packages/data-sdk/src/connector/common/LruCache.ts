@@ -10,7 +10,7 @@ export class LruCache<K, V> {
   private cache!: BaseLruCache<string, V>;
   private stringify: (_: K) => string;
 
-  constructor(private options: CacheOptions<V>) {
+  constructor(options: CacheOptions<V>) {
     this.cache = new BaseLruCache<string, V>({
       // if using the dispose callback,
       // by default automatically prune expired entries so

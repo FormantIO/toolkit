@@ -8,5 +8,5 @@ import stringify from "fast-json-stable-stringify";
  * Warning: output is not guaranteed to be a valid JSON string.
  */
 export function toStringSafe(input: unknown): string {
-    return stringify(input, { cycles: true });
+  return stringify(input, { cycles: true });
 }
