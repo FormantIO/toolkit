@@ -32,6 +32,7 @@ import {
   RealtimeButtonConfiguration,
   UniverseDataSource,
 } from "../model/IUniverseData";
+import { DataLoader } from "./loader/DataLoader";
 import { QueryStore } from "./queryStore";
 
 export type DeviceId = string;
@@ -68,6 +69,7 @@ export class BasicUniverseDataConnector {
   timeChangeListeners: ((time: Date | "live") => void)[] = [];
 
   queryStore: QueryStore = new QueryStore();
+  dataLoader: any;
 
   setTime(time: Date | "live"): void {
     if (time !== "live") {
@@ -86,6 +88,7 @@ export class BasicUniverseDataConnector {
 
   constructor() {
     this.time = "live";
+    this.dataLoader = DataLoader.get();
 
     const dataLoop = async () => {
       if (Array.from(this.subscriberLoaders.keys()).length > 0) {
