@@ -303,7 +303,7 @@ export class LiveUniverseData
         deviceId,
         source,
         async (data: IStreamData[]): Promise<DataResult<T>> => {
-          let foundUrl: string | undefined;
+          let found: string | undefined;
           let jsonValue: T | undefined;
           for (let i = 0; i < data.length; i += 1) {
             const _ = data[i];
@@ -313,13 +313,14 @@ export class LiveUniverseData
               _.type === "json"
             ) {
               const [_time, value] = _.points[_.points.length - 1];
-              foundUrl = value as string;
+              found = value as string;
             }
           }
-          if (foundUrl) {
-            jsonValue = await fetch(foundUrl).then(
-              (r) => r.json() as Promise<T>
-            );
+          if (found?.startsWith("http")) {
+            const loaded = await this.dataLoader.load(found);
+            jsonValue = loaded.json;
+          } else {
+            jsonValue = JSON.parse(found || "{}");
           }
           return {
             deviceId,

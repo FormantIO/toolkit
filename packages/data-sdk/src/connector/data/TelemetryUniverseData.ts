@@ -7,6 +7,7 @@ import { ILocalization } from "../../model/ILocalization";
 import { ILocation } from "../../model/ILocation";
 import { IMarker3DArray } from "../../model/IMarker3DArray";
 import { INumericSetEntry } from "../../model/INumericSetEntry";
+import { IPath } from "../../model/IPath";
 import { IPointCloud } from "../../model/IPointCloud";
 import { ITransform } from "../../model/ITransform";
 import { ITransformNode } from "../../model/ITransformNode";
@@ -25,8 +26,6 @@ import { IUniverseOdometry } from "../model/IUniverseOdometry";
 import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
-// @ts-ignore
-import DataFetchWorker from "./DataFetchWorker?worker&inline";
 import { IPcd } from "./pcd";
 // @ts-ignore
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
@@ -56,10 +55,10 @@ export class TelemetryUniverseData
     source: UniverseDataSource,
     callback: (data: Symbol | IUniversePath) => void
   ): CloseSubscription {
+    console.log("TelemetryUniverseData --- subscribeToPath");
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = new DataFetchWorker();
     let fetchingTimestamp = 0;
     let currentTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
@@ -96,14 +95,15 @@ export class TelemetryUniverseData
 
         if (datapoint.url) {
           try {
-            const response = (await fetch(datapoint.url).then((res) =>
-              res.json()
-            )) as ILocalization;
-            if (
-              response.path &&
-              (hasGoneBackInTime || timestamp > currentTimestamp)
-            ) {
-              callback(response.path);
+            const loaded = (await this.dataLoader.load(datapoint.url))
+              .json as ILocalization;
+            let path = loaded.path;
+            if (loaded.path?.url) {
+              const loadedPath = await this.dataLoader.load(loaded.path.url);
+              path = loadedPath.json as unknown as IPath;
+            }
+            if (path && (hasGoneBackInTime || timestamp > currentTimestamp)) {
+              callback(path);
               currentTimestamp = timestamp;
             }
           } catch (error) {
@@ -114,7 +114,12 @@ export class TelemetryUniverseData
           datapoint.path &&
           (hasGoneBackInTime || timestamp > currentTimestamp)
         ) {
-          callback(datapoint.path);
+          let path = datapoint.path;
+          if (path.url) {
+            const loaded = await this.dataLoader.load(path.url);
+            path = loaded.json as unknown as IPath;
+          }
+          callback(path);
           currentTimestamp = timestamp;
           return;
         }
@@ -122,7 +127,6 @@ export class TelemetryUniverseData
     );
 
     return () => {
-      dataFetchWorker.terminate();
       unsubscribe();
     };
   }
@@ -271,7 +275,6 @@ export class TelemetryUniverseData
       throw new Error("Telemetry sources only supported");
     }
     const pcdWorker = new PCDLoaderWorker();
-    const dataFetchWorker = new DataFetchWorker();
 
     // Call the function and handle the resolved data type
     let pointCloudUnsubscribe = () => {};
@@ -317,27 +320,22 @@ export class TelemetryUniverseData
           }
           let latestLocalization = this.getNearestPoint(d)[1] as ILocalization;
           if (latestLocalization.url) {
-            dataFetchWorker.postMessage({ url: latestLocalization.url });
-            dataFetchWorker.onmessage = (
-              ev: MessageEvent<{ url: string; response: any }>
-            ) => {
-              latestLocalization = ev.data.response;
-
-              if (latestLocalization.pointClouds) {
-                const { url, worldToLocal } = latestLocalization.pointClouds[0];
-                pcdWorker.postMessage({ url });
-                pcdWorker.onmessage = (
-                  ev: MessageEvent<{ url: string; pcd: IPcd }>
-                ) => {
-                  if (ev.data.url === url) {
-                    callback({
-                      worldToLocal,
-                      pcd: ev.data.pcd,
-                    });
-                  }
-                };
-              }
-            };
+            const loaded = await this.dataLoader.load(latestLocalization.url);
+            latestLocalization = loaded.json as ILocalization;
+            if (latestLocalization.pointClouds) {
+              const { url, worldToLocal } = latestLocalization.pointClouds[0];
+              pcdWorker.postMessage({ url });
+              pcdWorker.onmessage = (
+                ev: MessageEvent<{ url: string; pcd: IPcd }>
+              ) => {
+                if (ev.data.url === url) {
+                  callback({
+                    worldToLocal,
+                    pcd: ev.data.pcd,
+                  });
+                }
+              };
+            }
           }
         }
       );
@@ -345,7 +343,6 @@ export class TelemetryUniverseData
 
     return () => {
       pcdWorker.terminate();
-      dataFetchWorker.terminate();
       pointCloudUnsubscribe();
       localizationUnsubscribe();
     };
@@ -360,7 +357,6 @@ export class TelemetryUniverseData
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = new DataFetchWorker();
     let currentTimestamp = 0;
     let fetchingTimestamp = 0;
     const unsubscribe = this.subscribeTelemetry(
@@ -399,8 +395,8 @@ export class TelemetryUniverseData
         let odometry: ILocalization["odometry"];
         if (currentDatapoint[1].url) {
           try {
-            const response = await fetch(currentDatapoint[1].url);
-            const jsonResponse = (await response.json()) as ILocalization;
+            const loaded = await this.dataLoader.load(currentDatapoint[1].url);
+            const jsonResponse = loaded.json as ILocalization;
             odometry = jsonResponse.odometry;
           } catch (error) {
             console.error("Failed to fetch odometry data:", error);
@@ -419,8 +415,8 @@ export class TelemetryUniverseData
           const trailPromises = trailDatapoints.map(async (datapoint) => {
             if (datapoint[1].url) {
               try {
-                const response = await fetch(datapoint[1].url);
-                const jsonResponse = (await response.json()) as ILocalization;
+                const loaded = await this.dataLoader.load(datapoint[1].url);
+                const jsonResponse = loaded.json as ILocalization;
                 return [datapoint[0], jsonResponse.odometry?.pose] as [
                   number,
                   ITransform
@@ -466,7 +462,6 @@ export class TelemetryUniverseData
     );
 
     return () => {
-      dataFetchWorker.terminate();
       unsubscribe();
     };
   }
@@ -485,7 +480,6 @@ export class TelemetryUniverseData
     callback: (data: Symbol | IMarker3DArray) => void
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
-      const dataFetchWorker = new DataFetchWorker();
       const unsubscribe = this.subscribeTelemetry(
         deviceId,
         source,
@@ -497,21 +491,14 @@ export class TelemetryUniverseData
           }
           let jsonString = this.getNearestPoint(d)[1] as string;
           if (jsonString.startsWith("http")) {
-            dataFetchWorker.postMessage({ url: jsonString });
-            dataFetchWorker.onmessage = (
-              ev: MessageEvent<{ url: string; response: any }>
-            ) => {
-              jsonString = JSON.stringify(ev.data.response);
-              callback(JSON.parse(jsonString) as IMarker3DArray);
-            };
-          } else {
-            callback(JSON.parse(jsonString) as IMarker3DArray);
+            const loaded = await this.dataLoader.load(jsonString);
+            jsonString = JSON.stringify(loaded.json);
           }
+          callback(JSON.parse(jsonString) as IMarker3DArray);
         }
       );
 
       return () => {
-        dataFetchWorker.terminate();
         unsubscribe();
       };
     } else {
@@ -532,12 +519,9 @@ export class TelemetryUniverseData
     source: UniverseDataSource,
     callback: (data: Symbol | IUniverseGridMap) => void
   ): CloseSubscription {
-    const mapDataCache: { [url: string]: any } = {};
-
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
     }
-    const dataFetchWorker = new DataFetchWorker();
     const unsubscribe = this.subscribeTelemetry(
       deviceId,
       source,
@@ -559,38 +543,26 @@ export class TelemetryUniverseData
             origin: dp.map.origin,
             url: dp.map.url,
           };
-          mapDataCache[dp.map.url!] = JSON.parse(JSON.stringify(gridValue));
           callback(gridValue);
         } else if (dp.url) {
-          if (mapDataCache[dp.url]) {
-            callback(mapDataCache[dp.url]);
-            return;
+          const loaded = await this.dataLoader.load(dp.url);
+          const latestMap = (loaded.json as ILocalization).map;
+          if (latestMap) {
+            const gridValue = {
+              width: latestMap.width,
+              height: latestMap.height,
+              worldToLocal: latestMap.worldToLocal,
+              resolution: latestMap.resolution,
+              origin: latestMap.origin,
+              url: latestMap.url,
+            };
+            callback(gridValue);
           }
-          dataFetchWorker.postMessage({ url: dp.url });
-
-          dataFetchWorker.onmessage = async (ev: MessageEvent) => {
-            const latestLocalization = ev.data.response.map;
-            if (latestLocalization) {
-              const gridValue = {
-                width: latestLocalization.width,
-                height: latestLocalization.height,
-                worldToLocal: latestLocalization.worldToLocal,
-                resolution: latestLocalization.resolution,
-                origin: latestLocalization.origin,
-                url: latestLocalization.url,
-                //alpha: alphaData,
-                //data: mapData,
-              };
-              mapDataCache[dp.url!] = JSON.parse(JSON.stringify(gridValue));
-              callback(gridValue);
-            }
-          };
         }
       }
     );
 
     return () => {
-      dataFetchWorker.terminate();
       unsubscribe();
     };
   }
@@ -707,8 +679,8 @@ export class TelemetryUniverseData
       }
       let jsonString = this.getNearestPoint(d)[1] as string;
       if (jsonString.startsWith("http")) {
-        const asset = await fetch(jsonString);
-        jsonString = await asset.text();
+        const loaded = await this.dataLoader.load(jsonString);
+        jsonString = JSON.stringify(loaded.json);
       }
       callback(JSON.parse(jsonString));
     });
