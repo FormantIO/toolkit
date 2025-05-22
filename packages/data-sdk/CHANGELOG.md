@@ -1,3 +1,7 @@
+## [1.80.1] - 2025-05-22
+
+- Fix Asset loading
+
 ## [1.80.0] - 2025-05-22
 
 - Fix Asset loading
