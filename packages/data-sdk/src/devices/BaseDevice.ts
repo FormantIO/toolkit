@@ -4,6 +4,7 @@ import {
   RtcClient,
   IRtcPeer,
 } from "@formant/realtime-sdk";
+import { IPingInfo } from "@formant/realtime-sdk/dist/rtc-client/models/IPingInfo";
 import { DataChannel } from "../DataChannel";
 import { EventEmitter } from "eventemitter3";
 import { Manipulator } from "../Manipulator";
@@ -68,6 +69,14 @@ export abstract class BaseDevice
   getRealtimeStatus(): "disconnected" | "connecting" | "connected" {
     if (this.rtcClient && this.remoteDevicePeerId) {
       return this.rtcClient.getConnectionStatus(this.remoteDevicePeerId);
+    } else {
+      throw new Error(`Realtime connection hasn't been started`);
+    }
+  }
+
+  getRealtimePingInfo(): IPingInfo | undefined {
+    if (this.rtcClient && this.remoteDevicePeerId) {
+      return this.rtcClient.getPingInfo(this.remoteDevicePeerId);
     } else {
       throw new Error(`Realtime connection hasn't been started`);
     }
