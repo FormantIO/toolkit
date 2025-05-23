@@ -1,3 +1,7 @@
+## [1.80.2] - 2025-05-23
+
+- Add realtimePingInfo to Device
+
 ## [1.80.0] - 2025-05-22
 
 - Fix Asset loading
