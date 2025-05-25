@@ -31,6 +31,7 @@ export type {
   Command,
   ConfigurationDocument,
   IAdapterConfiguration,
+  ICommandTemplate,
   IJointState,
   IStartRealtimeConnectionOptions,
   RealtimeAudioStream,

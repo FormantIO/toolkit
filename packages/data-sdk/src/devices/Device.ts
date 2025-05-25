@@ -32,8 +32,8 @@ import { TelemetryResult } from "../model/TelemetryResult";
 import { isRtcPeer } from "../utils/isRtcPeer";
 import { BaseDevice } from "./BaseDevice";
 import {
-  Command,
   ConfigurationDocument,
+  ICommandTemplate,
   IStartRealtimeConnectionOptions,
   TelemetryStream,
 } from "./device.types";
@@ -362,7 +362,9 @@ export class Device extends BaseDevice {
     return false;
   }
 
-  async getAvailableCommands(includeDisabled = true): Promise<Command[]> {
+  async getAvailableCommands(
+    includeDisabled = true
+  ): Promise<ICommandTemplate[]> {
     const result = await fetch(
       `${FORMANT_API_URL}/v1/admin/command-templates/`,
       {
@@ -374,24 +376,12 @@ export class Device extends BaseDevice {
       }
     );
     const commands = await result.json();
-    return commands.items
-      .map((i: any) => ({
-        name: i.name,
-        id: i.id,
-        command: i.command,
-        description: i.description,
-        parameterEnabled: i.parameterEnabled,
-        parameterValue: i.parameterValue,
-        parameterMeta: i.parameterMeta,
-        enabled: i.enabled,
-        tags: i.tags,
-      }))
-      .filter((i: any) => {
-        if (includeDisabled) {
-          return true;
-        }
-        return i.enabled;
-      });
+    return commands.items.filter((i: ICommandTemplate) => {
+      if (includeDisabled) {
+        return true;
+      }
+      return i.enabled;
+    });
   }
 
   async sendCommand(

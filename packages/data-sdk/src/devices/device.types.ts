@@ -1,7 +1,11 @@
 import { IRtcStreamPayload, RtcStreamType } from "@formant/realtime-sdk";
+import { IDictionary } from "../model/IDictionary";
+import { IFilter } from "../model/IFilter";
+import { IScopeFilter } from "../model/IScopeFilter";
+import { ITaggedEntity } from "../model/ITaggedEntity";
 import { ITags } from "../model/ITags";
-import { Uuid } from "../model/Uuid";
 import { SessionType } from "../model/SessionType";
+import { Uuid } from "../model/Uuid";
 
 export interface ConfigurationDocument {
   tags: ITags;
@@ -26,6 +30,36 @@ export interface ConfigurationDocument {
   };
   adapters?: IAdapterConfiguration[];
   application?: { configurationMap: { [key: string]: string } };
+}
+export interface ICommandDeliverySettings {
+  // command is dropped after it expires (defaults to defaultCommandTtlMs)
+  ttlMs?: number;
+  // `false` (default) for fire-and-forget (at most once delivery)
+  // `true` for at least once delivery
+  retryable?: boolean;
+
+  // TODO?
+  // maxRetries?: number;
+  // retryDelayMs?: number;
+  // parallelExecution?: boolean;
+  // maxPendingCommands?: number;
+}
+
+export interface ICommandTemplate extends ITaggedEntity {
+  organizationId?: Uuid;
+  name: string;
+  command: string;
+  description?: string;
+  parameterEnabled: boolean;
+  allowParameterOverride?: boolean;
+  parameterValue?: string | null;
+  parameterMeta?: IDictionary;
+  deviceScope?: IScopeFilter;
+  enabled?: boolean;
+  deviceFilter: IFilter | null;
+  lambdaUri?: string | null;
+  deliverySettings?: ICommandDeliverySettings;
+  schema?: string | null;
 }
 
 export interface Command {
