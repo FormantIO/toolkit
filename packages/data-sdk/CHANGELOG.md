@@ -1,3 +1,7 @@
+## [1.80.3] - 2025-05-31
+
+- Fix stream types
+
 ## [1.80.2] - 2025-05-23
 
 - Add realtimePingInfo to Device
