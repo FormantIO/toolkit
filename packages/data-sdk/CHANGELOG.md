@@ -1,3 +1,6 @@
+## [1.80.5] - 2025-06-03
+- Fix packaging
+
 ## [1.80.4] - 2025-05-31
 
 - Fix stream types
