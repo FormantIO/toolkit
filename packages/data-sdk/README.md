@@ -25,6 +25,9 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 ## Deploying a new version
 
 ```bash
+# build the project
+npm install && npm run build && npm run types
+
 # update the CHANGELOG with the changes since the previous version
 vim CHANGELOG.md
 
