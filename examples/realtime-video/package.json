@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formant/data-sdk": "^1.51.0",
-    "@formant/realtime-sdk": "^1.4.2",
+    "@formant/data-sdk": "^1.80.8",
+    "@formant/realtime-sdk": "^1.4.5",
     "@formant/ui-sdk": "^0.0.60",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
