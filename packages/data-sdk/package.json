@@ -1,6 +1,6 @@
 {
   "name": "@formant/data-sdk",
-  "version": "1.80.7",
+  "version": "1.80.8",
   "description": "A library for getting data from Formant",
   "repository": {
     "type": "git",
@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
-    "@formant/realtime-sdk": "1.4.3",
+    "@formant/realtime-sdk": "^1.4.5",
     "@types/base-64": "^1.0.0",
     "@types/fast-json-stable-stringify": "=2.0.0",
     "@types/node": "^18.16.3",
