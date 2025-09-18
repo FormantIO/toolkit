@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@formant/data-sdk": "^1.80.8",
-    "@formant/realtime-sdk": "^1.4.8",
     "@formant/ui-sdk": "^0.0.60",
     "process": "^0.11.10",
     "react": "^18.2.0",
