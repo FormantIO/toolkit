@@ -1,3 +1,6 @@
+## [1.80.9] - 2025-09-19
+- Update realtime-sdk dependency to 1.4.9 to include rtc-client v1.1.1 fixes 
+
 ## [1.80.8] - 2025-09-15
 - Update realtime-sdk dependency to 1.4.5 to include rtc-client v1.1.0 improvements
 
