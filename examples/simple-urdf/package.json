@@ -13,7 +13,7 @@
     "vite": "^2.5.4"
   },
   "dependencies": {
-    "@formant/data-sdk": "latest",
+    "@formant/data-sdk": "0.0.130",
     "@types/three": "^0.131.0"
   }
 }
