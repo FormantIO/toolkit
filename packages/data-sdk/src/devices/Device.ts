@@ -47,6 +47,19 @@ export class Device extends BaseDevice {
     super();
   }
 
+  /**
+   * Connection monitor state.
+   *
+   * The original implementation would disconnect on the very first 1s tick if:
+   * - the connection wasn't "ready" yet, OR
+   * - RTC stats weren't available yet.
+   *
+   * On Firefox and iOS Safari, those conditions can be transient immediately after ICE reports "connected".
+   * That creates the "connect then disconnect after ~1s" pattern.
+   */
+  private connectionMonitorStartedAtMs: number = 0;
+  private connectionMonitorConsecutiveFailures: number = 0;
+
   static createDevice = createDevice;
   static patchDevice = patchDevice;
   static getDevicesData = getDevicesData;
@@ -121,13 +134,16 @@ export class Device extends BaseDevice {
    */
 
   async getAgentVersion(): Promise<string | undefined | null> {
-    let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
+    const result = await fetch(
+      `${FORMANT_API_URL}/v1/admin/devices/${this.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      }
+    );
     const device = await result.json();
 
     return device?.state?.agentVersion;
@@ -214,7 +230,7 @@ export class Device extends BaseDevice {
       // We can connect our real-time communication client to device peers by their ID
       for (let i = 0; i < maxConnectRetries; i++) {
         sessionId = await rtcClient.connect(remoteDevicePeerId);
-        if (!!sessionId) break;
+        if (sessionId) break;
         delay(100);
         this.assertNotCancelled(cancelled);
       }
@@ -248,8 +264,10 @@ export class Device extends BaseDevice {
     return Promise.race([establishConnection(), deadlinePromise])
       .then((remoteDevicePeerId) => {
         this.remoteDevicePeerId = remoteDevicePeerId;
-        this.initConnectionMonitoring();
         this.rtcClient = rtcClient;
+        this.connectionMonitorStartedAtMs = Date.now();
+        this.connectionMonitorConsecutiveFailures = 0;
+        this.initConnectionMonitoring();
         this.emit("connect");
       })
       .catch((err) => {
@@ -283,7 +301,12 @@ export class Device extends BaseDevice {
 
   private initConnectionMonitoring() {
     this.connectionMonitorInterval = setInterval(async () => {
+      const GRACE_MS = 6000;
+      const MAX_CONSECUTIVE_FAILURES = 3;
+
       let dataChannelClosed = false;
+      let connectionNotReady = false;
+      let statsUnavailable = false;
 
       if (this.rtcClient) {
         const rtcConnections = this.rtcClient.getConnections();
@@ -293,22 +316,84 @@ export class Device extends BaseDevice {
         if (connection === undefined || !connection.isReady()) {
           console.debug(`${new Date().toISOString()} :: data channel closed`);
           dataChannelClosed = true;
+          connectionNotReady = true;
         }
       }
 
-      if (
-        !this.rtcClient ||
-        !this.remoteDevicePeerId ||
-        (await this.rtcClient.getConnectionStatsInfo(
-          this.remoteDevicePeerId
-        )) === undefined ||
-        dataChannelClosed
-      ) {
+      if (!this.rtcClient || !this.remoteDevicePeerId) {
         this.emit("disconnect");
-        this.stopRealtimeConnection().catch((err) => {
-          console.error(err);
-        });
+        this.stopRealtimeConnection().catch((err) => console.error(err));
+        return;
       }
+
+      try {
+        const stats = await this.rtcClient.getConnectionStatsInfo(
+          this.remoteDevicePeerId
+        );
+        statsUnavailable = stats === undefined;
+      } catch (_err) {
+        statsUnavailable = true;
+      }
+
+      const elapsed = Date.now() - (this.connectionMonitorStartedAtMs || 0);
+      // IMPORTANT:
+      // On Firefox and iOS Safari, getConnectionStatsInfo(...) can return undefined for many seconds
+      // even while the data channel is healthy and realtime traffic is flowing.
+      // Treat statsUnavailable as a diagnostic signal only, NOT as a disconnect condition.
+      const unhealthy = dataChannelClosed || connectionNotReady;
+
+      if (unhealthy) {
+        // Tolerate transient issues right after connect on Firefox/iOS Safari.
+        // IMPORTANT: don't accumulate failures during grace, otherwise one later blip can cause an instant disconnect.
+        if (elapsed < GRACE_MS) {
+          console.debug(
+            `${new Date().toISOString()} :: connection monitor unhealthy (grace)`,
+            {
+              elapsed,
+              connectionNotReady,
+              statsUnavailable,
+              dataChannelClosed,
+              consecutiveFailures: this.connectionMonitorConsecutiveFailures,
+            }
+          );
+          return;
+        }
+
+        this.connectionMonitorConsecutiveFailures += 1;
+
+        // After grace, require a few consecutive failures before disconnecting.
+        if (
+          this.connectionMonitorConsecutiveFailures < MAX_CONSECUTIVE_FAILURES
+        ) {
+          console.debug(
+            `${new Date().toISOString()} :: connection monitor unhealthy (retrying)`,
+            {
+              elapsed,
+              connectionNotReady,
+              statsUnavailable,
+              dataChannelClosed,
+              consecutiveFailures: this.connectionMonitorConsecutiveFailures,
+            }
+          );
+          return;
+        }
+
+        console.debug(
+          `${new Date().toISOString()} :: connection monitor disconnecting`,
+          {
+            elapsed,
+            connectionNotReady,
+            statsUnavailable,
+            dataChannelClosed,
+            consecutiveFailures: this.connectionMonitorConsecutiveFailures,
+          }
+        );
+        this.emit("disconnect");
+        this.stopRealtimeConnection().catch((err) => console.error(err));
+        return;
+      }
+
+      this.connectionMonitorConsecutiveFailures = 0;
     }, 1000);
   }
 
@@ -412,7 +497,7 @@ export class Device extends BaseDevice {
       d = data;
     }
 
-    let parameter = {
+    const parameter = {
       value: d,
       scrubberTime: (time || new Date()).toISOString(),
       meta: {
@@ -532,7 +617,7 @@ export class Device extends BaseDevice {
 
     const data = await result.json();
 
-    let streamNames = (data.items as string[])
+    const streamNames = (data.items as string[])
       .filter((_) => !disabledList.includes(_))
       .map((_) => ({ name: _, onDemand: onDemandList.includes(_) }));
 
