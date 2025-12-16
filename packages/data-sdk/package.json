@@ -1,6 +1,6 @@
 {
   "name": "@formant/data-sdk",
-  "version": "1.81.7",
+  "version": "1.81.8",
   "description": "A library for getting data from Formant",
   "repository": {
     "type": "git",
@@ -84,6 +84,6 @@
     "validator": "^13.11.0"
   },
   "engines": {
-    "node": "^18.12.0 || ^16.13.0 || 20.x"
+    "node": "^18.12.0 || ^16.13.0 || 20.x || ^22.0.0 || ^24.0.0"
   }
 }
