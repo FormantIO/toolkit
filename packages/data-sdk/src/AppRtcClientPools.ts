@@ -76,7 +76,9 @@ export const defaultRtcClientPool = EnumRtcClientPools[SessionTypes.TELEOP];
 export const getRtcClientPool = (options: { sessionType?: SessionType }) => {
   const { sessionType } = options;
 
-  return sessionType ? AppRtcClientPools[sessionType as keyof typeof AppRtcClientPools] : defaultRtcClientPool;
+  return sessionType
+    ? AppRtcClientPools[sessionType as keyof typeof AppRtcClientPools]
+    : defaultRtcClientPool;
 };
 
 export function debug() {
