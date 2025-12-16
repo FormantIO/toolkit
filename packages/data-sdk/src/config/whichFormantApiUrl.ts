@@ -42,15 +42,22 @@ export function whichFormantApiUrl(
     }
 
     if (host) {
-      if (host.includes("app-dev.formant.io") || host.includes("v2-coherence-dev.vercel.app") || host.includes("localhost")) {
+      if (
+        host.includes("app-dev.formant.io") ||
+        host.includes("v2-coherence-dev.vercel.app") ||
+        host.includes("localhost")
+      ) {
         return "https://api-dev.formant.io";
       } else if (host.includes("app-stage.formant.io")) {
         return "https://api-stage.formant.io";
-      } else if (host.includes("app.formant.io") || host.includes("v2-coherence.vercel.app")) {
+      } else if (
+        host.includes("app.formant.io") ||
+        host.includes("v2-coherence.vercel.app")
+      ) {
         return "https://api.formant.io";
       }
     }
-  } catch (_) { }
+  } catch (_) {}
 
   if (host) {
     if (host.includes("app-dev.formant.io")) {
