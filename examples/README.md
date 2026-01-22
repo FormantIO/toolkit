@@ -2,6 +2,12 @@
 
 A series of examples about how to extend Formants capabilities; including views, adapters and functionalities.
 
+## Quick Testing
+
+**Want to test group module functionality?** See:
+- `examples/group-module-host/README.md` for host setup
+- `examples/module-tester/README.md` for module example
+
 # Index
 
 - #### [Views/Modules](https://github.com/FormantIO/toolkit/tree/master/examples#viewsmoules)
@@ -35,9 +41,10 @@ A series of examples about how to extend Formants capabilities; including views,
   - [ROS Services](https://github.com/FormantIO/toolkit/tree/master/examples#adapter) (Python)
 
 
-### Views/Moules
+### Views/Modules
 
 - Examples of what can be built that can be embeded on Formant or individually hosted.
+- Modules can work in both **single-device** and **multi-device (group)** contexts.
 
 ### [Represent altitude and orientation on a map](https://github.com/FormantIO/toolkit/tree/master/examples/altitude-on-map) (React)
 
@@ -119,6 +126,25 @@ This exaple shows how to use tranformation tree stream to create visual represen
 This example how you can display different streams in the same graph.
 
 ![App Screenshot](https://github.com/FormantIO/toolkit/blob/master/examples/scatter-plot/images/Screen%20Shot%202022-04-20%20at%202.06.20%20PM.png)
+
+### [Module Tester](https://github.com/FormantIO/toolkit/tree/master/examples/module-tester) (TypeScript)
+
+A comprehensive example demonstrating custom module development, including:
+- Single-device and **multi-device (group)** module patterns
+- Message bus communication
+- Stream data processing for multiple devices
+- Group device detection and access
+
+**Key Feature:** Shows how modules work in coherence group views with multiple devices.
+
+### [Group Module Host](https://github.com/FormantIO/toolkit/tree/master/examples/group-module-host) (JavaScript)
+
+Example host container implementation for coherence group views. Demonstrates:
+- How to send multiple devices to modules
+- Multi-device stream data aggregation
+- Group-aware module hosting
+
+**Use this as a template** for implementing group support in your host containers.
 
 ## Teleop
 

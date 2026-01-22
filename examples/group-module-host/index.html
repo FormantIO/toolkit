@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Module Host (Toolkit Example)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
+    />
+    <style>
+      body {
+        padding: 16px;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      .panel {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.12);
+      }
+      label {
+        display: block;
+        margin: 10px 0 6px;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.25);
+        color: inherit;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+      }
+      textarea {
+        min-height: 210px;
+        resize: vertical;
+      }
+      button {
+        width: 100%;
+        margin-top: 12px;
+      }
+      #iframeWrap {
+        height: calc(100vh - 32px);
+      }
+      #moduleFrame {
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        background: #0b1220;
+      }
+      .hint {
+        font-size: 12px;
+        opacity: 0.85;
+        margin-top: 6px;
+      }
+      .logs {
+        margin-top: 12px;
+        font-size: 12px;
+        white-space: pre-wrap;
+        opacity: 0.85;
+        max-height: 220px;
+        overflow: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="panel">
+        <h2 style="margin: 0 0 10px">Group-aware Module Host</h2>
+        <div class="hint">
+          This simulates the Formant product container. It replies to
+          <code>request_devices</code> and <code>request_module_data</code> with
+          multi-device (group) payloads.
+        </div>
+
+        <label for="moduleUrl">Module URL</label>
+        <input
+          id="moduleUrl"
+          spellcheck="false"
+          value="http://localhost:4000/?module=module-tester&auth=TEST_TOKEN"
+        />
+        <div class="hint">
+          Tip: run <code>examples/module-tester</code> and paste its URL here.
+        </div>
+
+        <label for="groupId">group (optional)</label>
+        <input id="groupId" spellcheck="false" value="" />
+        <div class="hint">
+          In real coherence views, this would be the coherence group id (or
+          whatever your host uses to define membership).
+        </div>
+
+        <label for="devicesJson">Group devices (overview_devices)</label>
+        <textarea id="devicesJson" spellcheck="false"></textarea>
+
+        <label for="authToken">Auth token (for auth_token refresh replies)</label>
+        <input id="authToken" spellcheck="false" value="TEST_TOKEN" />
+        <div class="hint">
+          If the module calls <code>App.refreshAuthToken()</code>, this host will reply with
+          <code>auth_token</code> containing this value.
+        </div>
+
+        <button id="load">Load iframe</button>
+        <button id="sendDemoData">Push demo module_data</button>
+
+        <div class="logs" id="logs"></div>
+      </div>
+
+      <div class="panel" id="iframeWrap">
+        <iframe id="moduleFrame" title="Embedded module"></iframe>
+      </div>
+    </div>
+
+    <script type="module" src="./host.js"></script>
+  </body>
+</html>

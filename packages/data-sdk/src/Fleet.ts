@@ -43,10 +43,12 @@ import { createFleet } from "./api/createFleet";
 import { getAllEventTriggerGroup } from "./api/getAllEventTriggerGroup";
 import { getEventTriggerGroup } from "./api/getEventTriggerGroup";
 import { patchEventTriggerGroup } from "./api/patchEventTriggerGroup";
+import { IDevice } from "./message-bus/listeners/EmbeddedAppMessage";
 
 export class Fleet {
   static defaultDeviceId: string | undefined;
   static knownContext: WeakRef<Device>[] = [];
+  static groupDevices: IDevice[] | undefined;
 
   static createFleet = createFleet;
   static listFleets = listFleets;
@@ -104,6 +106,42 @@ export class Fleet {
     const context = await getDevice(deviceId);
     Fleet.knownContext.push(new WeakRef(context));
     return context;
+  }
+
+  /**
+   * Sets the group devices for multi-device (coherence group) contexts.
+   * This is typically called automatically when overview_devices message is received.
+   * @param devices Array of device information from the host container
+   */
+  static setGroupDevices(devices: IDevice[]): void {
+    Fleet.groupDevices = devices;
+    // For backward compatibility, set first device as default if no default is set
+    if (devices.length > 0 && !Fleet.defaultDeviceId) {
+      Fleet.setDefaultDevice(devices[0].id);
+    }
+  }
+
+  /**
+   * Gets the group devices for multi-device contexts.
+   * Returns undefined if not in a group context (single device view).
+   * @returns Array of device information or undefined
+   */
+  static getGroupDevices(): IDevice[] | undefined {
+    return Fleet.groupDevices;
+  }
+
+  /**
+   * Gets all group devices as Device instances.
+   * Useful for modules that need full Device objects rather than just IDevice info.
+   * @returns Promise resolving to array of Device instances
+   */
+  static async getGroupDevicesAsDeviceInstances(): Promise<Device[]> {
+    if (!Fleet.groupDevices || Fleet.groupDevices.length === 0) {
+      return [];
+    }
+    return Promise.all(
+      Fleet.groupDevices.map((d) => Fleet.getDevice(d.id))
+    );
   }
 
   static aggregateTelemetry = aggregateTelemetry;
