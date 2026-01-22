@@ -9,17 +9,169 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
     />
+    <style>
+      body {
+        padding: 12px;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+      }
+      #app {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .header {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .subtitle {
+        margin: 0;
+        opacity: 0.85;
+        font-size: 12px;
+      }
+      .panel {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.12);
+      }
+      .panel h3 {
+        margin: 0 0 10px;
+        font-size: 14px;
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .action {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.14);
+      }
+      .action button {
+        width: 100%;
+      }
+      .desc {
+        margin-top: 6px;
+        font-size: 12px;
+        opacity: 0.85;
+        line-height: 1.35;
+      }
+      #config {
+        margin-top: 8px;
+        white-space: pre-wrap;
+        font-size: 12px;
+        opacity: 0.9;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <button id="sendmessage">Send Message</button>
-      <button id="refreshtoken">Refresh Token</button>
-      <button id="requestmoduledata">Request module data</button>
-      <button id="goback">Go back 1 minute</button>
-      <button id="gotodevice">Go to device</button>
-      <button id="fetchcurrent">Fetch current</button>
-      <button id="sendchannel">Send Data On Channel</button>
-      <button id="testgroupdevices">Test Group Devices</button>
+      <div class="header">
+        <h2 class="title">Module Tester (runs inside the iframe)</h2>
+        <p class="subtitle">
+          These buttons call SDK APIs that postMessage the host (and sometimes
+          call Formant APIs). Watch the browser console and host logs.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h3>Group context</h3>
+        <div class="actions">
+          <div class="action">
+            <button id="testgroupdevices">Test group devices (overview_devices)</button>
+            <div class="desc">
+              Reads <code>overview_devices</code> sent by the host via postMessage.
+              No auth required. Also tries to “upgrade” to full <code>Device[]</code>
+              if auth is available.
+            </div>
+          </div>
+          <div class="action">
+            <button id="fetchcurrentgroup">Fetch group via API (?group=)</button>
+            <div class="desc">
+              Calls <code>Fleet.getCurrentGroup()</code> (reads <code>?group=</code>
+              from the iframe URL and queries Formant). Requires real auth.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Host / module protocol (postMessage)</h3>
+        <div class="actions">
+          <div class="action">
+            <button id="requestmoduledata">Request module data</button>
+            <div class="desc">
+              Sends <code>request_module_data</code>; host replies with
+              <code>module_data</code> (streams for all devices).
+            </div>
+          </div>
+          <div class="action">
+            <button id="sendmessage">Show message (toast)</button>
+            <div class="desc">
+              Sends <code>show_message</code> to the host (visible in the host logs /
+              product UI).
+            </div>
+          </div>
+          <div class="action">
+            <button id="refreshtoken">Refresh auth token</button>
+            <div class="desc">
+              Sends <code>refresh_auth_token</code>; host replies with
+              <code>auth_token</code>.
+            </div>
+          </div>
+          <div class="action">
+            <button id="sendchannel">Send channel data</button>
+            <div class="desc">
+              Sends <code>send_channel_data</code> and listens for echoed
+              <code>channel_data</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Navigation (host-handled)</h3>
+        <div class="actions">
+          <div class="action">
+            <button id="goback">Go to time: now - 1 minute</button>
+            <div class="desc">
+              Sends <code>go_to_time</code> to the host (timeline navigation).
+            </div>
+          </div>
+          <div class="action">
+            <button id="gotodevice">Go to device (hardcoded demo id)</button>
+            <div class="desc">
+              Sends <code>go_to_device</code> with a demo device id.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>API calls (require auth)</h3>
+        <div class="actions">
+          <div class="action">
+            <button id="fetchcurrent">Fetch online devices</button>
+            <div class="desc">
+              Calls <code>Fleet.getOnlineDevices()</code>. Requires real auth.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="config"></div>
     <script type="module" src="/src/main.ts"></script>

@@ -9,22 +9,40 @@
       href="https://cdn.jsdelivr.net/gh/formantio/toolkit/css/formant.css"
     />
     <style>
-      body {
-        padding: 16px;
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
         font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
           sans-serif;
+      }
+      body {
+        padding: 16px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
       }
       .grid {
         display: grid;
         grid-template-columns: 420px 1fr;
         gap: 16px;
-        align-items: start;
+        align-items: stretch;
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        box-sizing: border-box;
       }
       .panel {
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 10px;
         padding: 12px;
         background: rgba(0, 0, 0, 0.12);
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
       }
       label {
         display: block;
@@ -34,6 +52,7 @@
       input,
       textarea {
         width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
         padding: 8px 10px;
         border-radius: 8px;
@@ -52,7 +71,10 @@
         margin-top: 12px;
       }
       #iframeWrap {
-        height: calc(100vh - 32px);
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
       }
       #moduleFrame {
         width: 100%;
@@ -60,6 +82,8 @@
         border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 10px;
         background: #0b1220;
+        flex: 1;
+        min-height: 0;
       }
       .hint {
         font-size: 12px;
@@ -73,14 +97,16 @@
         opacity: 0.85;
         max-height: 220px;
         overflow: auto;
+        overflow-x: hidden;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
         padding-top: 10px;
+        flex-shrink: 0;
       }
     </style>
   </head>
   <body>
     <div class="grid">
-      <div class="panel">
+      <div class="panel" style="overflow-y: auto;">
         <h2 style="margin: 0 0 10px">Group-aware Module Host</h2>
         <div class="hint">
           This simulates the Formant product container. It replies to

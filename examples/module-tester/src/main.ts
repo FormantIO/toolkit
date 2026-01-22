@@ -1,6 +1,26 @@
 // Import polyfills first
 import "./polyfills";
-import { App, ModuleData, Fleet, Authentication } from "@formant/data-sdk";
+import { App, Fleet, Authentication } from "@formant/data-sdk";
+
+type IDevice = {
+  id: string;
+  name: string;
+  tags?: Record<string, string>;
+};
+
+type DeviceStreamData = {
+  deviceId: string;
+  name: string;
+  points: any[];
+};
+
+type Stream = {
+  data: DeviceStreamData[];
+};
+
+type ModuleData = {
+  streams: Record<string, Stream>;
+};
 
 if (App.isModule()) {
   App.showMessage("This running as a module");
@@ -89,10 +109,10 @@ if (App.isModule()) {
         return;
       }
 
-      const groupDevices = Fleet.getGroupDevices();
+      const groupDevices = Fleet.getGroupDevices() as IDevice[] | undefined;
       if (groupDevices) {
         const deviceList = groupDevices
-          .map((d) => `- ${d.name} (${d.id})`)
+          .map((d: IDevice) => `- ${d.name} (${d.id})`)
           .join("\n");
         
         App.showMessage(
@@ -139,13 +159,53 @@ if (App.isModule()) {
   }
 );
 
-App.addChannelDataListener("test_channel", (e) => {
+// API-based group lookup (reads ?group= from URL). Requires real auth.
+(document.querySelector("#fetchcurrentgroup") as HTMLElement).addEventListener(
+  "click",
+  async () => {
+    try {
+      if (typeof Fleet.getCurrentGroup !== "function") {
+        App.showMessage(
+          "Error: Fleet.getCurrentGroup() is not available in this SDK version."
+        );
+        return;
+      }
+
+      const devices = await Fleet.getCurrentGroup();
+      if (!devices) {
+        App.showMessage("No ?group= in URL (host group field is empty)");
+        return;
+      }
+
+      App.showMessage(`✅ getCurrentGroup(): ${devices.length} devices`);
+      console.log("getCurrentGroup() devices:", devices);
+    } catch (error: any) {
+      console.error("Error calling getCurrentGroup():", error);
+      const errorMsg = error?.message || String(error);
+      if (errorMsg.includes("Not authenticated") || errorMsg.includes("authenticated")) {
+        App.showMessage(
+          "Note: Fleet.getCurrentGroup() requires real API authentication.\n" +
+            "In production, the host provides a valid auth token.\n" +
+            "Error: " +
+            errorMsg
+        );
+      } else {
+        App.showMessage("Error: " + errorMsg);
+      }
+    }
+  }
+);
+
+App.addChannelDataListener(
+  "test_channel",
+  (e: { source: string; data: any }) => {
   if (e.source === App.getCurrentModuleContext()) {
     App.showMessage("channel data i sent: " + JSON.stringify(e));
   } else {
     App.showMessage("channel data: " + JSON.stringify(e));
   }
-});
+  }
+);
 
 App.setupModuleMenus([
   {
@@ -166,7 +226,7 @@ App.addModuleDataListener((data: ModuleData) => {
   // Example: Process multi-device stream data
   Object.entries(data.streams).forEach(([streamName, stream]) => {
     console.log(`Stream: ${streamName}, Devices: ${stream.data.length}`);
-    stream.data.forEach((deviceData) => {
+    stream.data.forEach((deviceData: DeviceStreamData) => {
       console.log(
         `  Device ${deviceData.deviceId} (${deviceData.name}): ${deviceData.points.length} points`
       );
@@ -177,10 +237,10 @@ App.addModuleDataListener((data: ModuleData) => {
 // Group device awareness example
 try {
   if (typeof App.addOverviewDeviceListener === "function") {
-    App.addOverviewDeviceListener((devices) => {
+    App.addOverviewDeviceListener((devices: IDevice[]) => {
       console.log("Overview devices received:", devices);
       if (typeof Fleet.getGroupDevices === "function") {
-        const groupDevices = Fleet.getGroupDevices();
+        const groupDevices = Fleet.getGroupDevices() as IDevice[] | undefined;
         if (groupDevices && groupDevices.length > 1) {
           App.showMessage(
             `Group context: ${groupDevices.length} devices available`
@@ -203,9 +263,20 @@ try {
   await Authentication.waitTilAuthenticated();
   const config = await App.getCurrentModuleConfiguration();
   const el = document.querySelector("#config") as HTMLElement;
-  el.innerText = config ? config : "no configuration found";
-  App.addModuleConfigurationListener((event) => {
+  if (config) {
+    el.innerText = config;
+    el.style.display = "block";
+  } else {
+    // No configuration is normal - modules can work without it
+    el.style.display = "none";
+  }
+  App.addModuleConfigurationListener((event: { configuration: string }) => {
     const el = document.querySelector("#config") as HTMLElement;
-    el.innerText = event.configuration;
+    if (event.configuration) {
+      el.innerText = event.configuration;
+      el.style.display = "block";
+    } else {
+      el.style.display = "none";
+    }
   });
 })();
