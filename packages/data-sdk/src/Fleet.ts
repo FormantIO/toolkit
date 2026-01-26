@@ -139,9 +139,7 @@ export class Fleet {
     if (!Fleet.groupDevices || Fleet.groupDevices.length === 0) {
       return [];
     }
-    return Promise.all(
-      Fleet.groupDevices.map((d) => Fleet.getDevice(d.id))
-    );
+    return Promise.all(Fleet.groupDevices.map((d) => Fleet.getDevice(d.id)));
   }
 
   static aggregateTelemetry = aggregateTelemetry;

@@ -25,7 +25,7 @@ try {
 
     // Auto-initialize group devices from overview_devices message
     // This enables modules to work in coherence group views
-    // 
+    //
     // Priority order (when devices are available):
     // 1. overview_devices message (from host) - highest priority, overrides URL device
     //    - Arrives asynchronously via postMessage
