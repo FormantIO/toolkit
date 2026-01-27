@@ -1,3 +1,7 @@
+## [1.82.0]
+
+- Implemented custom modules for group views
+
 ## [1.81.8]
 
 - Node 24 support

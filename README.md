@@ -82,6 +82,50 @@ const device = await Fleet.getCurrentDevice();
 const data = await device.getLatestTelemetry();
 ```
 
+### I'm making a module for coherence group views (multiple devices)
+
+Modules can now work with multiple devices in coherence group views:
+
+```javascript
+import { Fleet, App } from "@formant/data-sdk";
+
+// Check if in group context
+const groupDevices = Fleet.getGroupDevices();
+if (groupDevices && groupDevices.length > 1) {
+  // Process all devices in the group
+  groupDevices.forEach(device => {
+    console.log(`${device.name} (${device.id})`);
+  });
+}
+
+// Process multi-device stream data
+App.addModuleDataListener((data) => {
+  Object.entries(data.streams).forEach(([name, stream]) => {
+    // stream.data contains data for ALL devices
+    stream.data.forEach((deviceData) => {
+      console.log(`${deviceData.name}: ${deviceData.points.length} points`);
+    });
+  });
+});
+```
+
+**React Hook:**
+```tsx
+import { useGroupDevices } from "@formant/ui-sdk";
+
+function MyModule() {
+  const devices = useGroupDevices(); // Device[] | undefined
+  
+  if (!devices) {
+    return <div>Single device context</div>;
+  }
+  
+  return <GroupDashboard devices={devices} />;
+}
+```
+
+See [examples/module-tester](examples/module-tester) for a complete example.
+
 ## How do I run an example
 
 1. install [NodeJS](https://nodejs.org/en/)
@@ -93,6 +137,14 @@ const data = await device.getLatestTelemetry();
 7. Select the custom view from the views dropdown
 
 For more detailed instruction on custom views, see our [custom view readme](https://formant.readme.io/reference/creating-a-custom-view).
+
+### Testing Group Module Examples
+
+To test the new group module (multi-device) functionality:
+
+**To test:**
+- See `examples/group-module-host/README.md` for quick start instructions
+- See `examples/module-tester/README.md` for module example
 
 ## What do you have for ThreeJS?
 
