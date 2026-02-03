@@ -87,9 +87,11 @@ export class Device extends BaseDevice {
   /**
    * Asynchronously retrieves the configuration document for a device.
    *
-   * @param {boolean} getDesiredConfigurationVersion - Whether to retrieve the desired configuration version
+   * @param {boolean} getDesiredConfigurationVersion - Whether to retrieve the desired configuration version.
+   *   If false, uses reportedConfiguration.version, falling back to desiredConfigurationVersion
+   *   if the device has no reportedConfiguration (e.g., agent never connected).
    * @returns {Promise<ConfigurationDocument>} A promise that resolves to the configuration document
-   * @throws {Error} Throws an error if the device has no configuration or has never been turned on
+   * @throws {Error} Throws an error if the device has no configuration version
    */
 
   async getConfiguration(
@@ -103,15 +105,16 @@ export class Device extends BaseDevice {
       },
     });
     const device = await result.json();
-    if (!device.state.reportedConfiguration) {
-      throw new Error(
-        "Device has no configuration, has it ever been turned on?"
-      );
-    }
 
     const version = getDesiredConfigurationVersion
       ? device.desiredConfigurationVersion
-      : device.state.reportedConfiguration.version;
+      : device.state?.reportedConfiguration?.version ??
+        device.desiredConfigurationVersion;
+
+    if (!version) {
+      throw new Error("Device has no configuration version");
+    }
+
     result = await fetch(
       `${FORMANT_API_URL}/v1/admin/devices/${this.id}/configurations/${version}`,
       {
