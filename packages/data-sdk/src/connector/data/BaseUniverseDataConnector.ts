@@ -8,7 +8,6 @@ import {
   IRtcStreamMessage,
   createRtcStreamMessage,
 } from "@formant/realtime-sdk";
-import { ITransform } from "@formant/realtime-sdk/dist/model/ITransform";
 import { SessionType } from "@formant/realtime-sdk/dist/protos/api/signaling/v1/signaling_pb";
 import { Device } from "../../devices/Device";
 import { PeerDevice } from "../../devices/PeerDevice";
@@ -17,6 +16,7 @@ import { IBitset } from "../../model/IBitset";
 import { ILocation } from "../../model/ILocation";
 import { IQuery } from "../../model/IQuery";
 import { IStreamData } from "../../model/IStreamData";
+import { ITransform } from "../../model/ITransform";
 import { ITransformNode } from "../../model/ITransformNode";
 // @ts-ignore
 import RealtimePlayerWorker from "../../../node_modules/@formant/ui-sdk-realtime-player-core-worker/dist/ui-sdk-realtime-player-core-worker.umd?worker&inline";
