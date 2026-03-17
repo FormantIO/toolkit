@@ -194,6 +194,7 @@ export class Device extends BaseDevice {
       sessionType,
       deadlineMs = 10_000,
       maxConnectRetries = 3,
+      lockDevice,
     } = typeof options === "number"
       ? ({ sessionType: options } as IStartRealtimeConnectionOptions)
       : options;
@@ -230,9 +231,15 @@ export class Device extends BaseDevice {
 
       let sessionId: string | undefined = undefined;
 
-      // We can connect our real-time communication client to device peers by their ID
+      // We can connect our real-time communication client to device peers by their ID.
+      const connectOptions =
+        lockDevice === true ? { lockDevice: true } : undefined;
       for (let i = 0; i < maxConnectRetries; i++) {
-        sessionId = await rtcClient.connect(remoteDevicePeerId);
+        sessionId = await rtcClient.connect(
+          remoteDevicePeerId,
+          undefined,
+          connectOptions,
+        );
         if (sessionId) break;
         delay(100);
         this.assertNotCancelled(cancelled);
