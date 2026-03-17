@@ -128,4 +128,6 @@ export interface IStartRealtimeConnectionOptions {
   sessionType?: SessionType;
   deadlineMs?: number;
   maxConnectRetries?: number;
+  /** When true, request a device lock via signaling (claim device). Only applies when organization has deviceLocksEnabled. */
+  lockDevice?: boolean;
 }
