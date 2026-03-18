@@ -1,0 +1,27 @@
+name: CI Checks
+
+on: [pull_request]
+
+jobs:
+    data-sdk:
+        name: data-sdk
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  cache: "npm"
+                  cache-dependency-path: packages/data-sdk/package-lock.json
+
+            - name: Install dependencies
+              working-directory: packages/data-sdk
+              run: npm ci
+
+            - name: Verify (test, prettier-check, types)
+              working-directory: packages/data-sdk
+              run: npm run verify
