@@ -99,7 +99,7 @@ export class DataChannel {
     if (!this.ready) {
       throw new Error("Connection has been closed");
     }
-    this.dataChannel.send(data);
+    this.dataChannel.send(new Uint8Array(data));
   }
 
   addListener(listener: DataChannelStringListener) {
