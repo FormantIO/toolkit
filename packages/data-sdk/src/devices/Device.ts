@@ -238,7 +238,7 @@ export class Device extends BaseDevice {
         sessionId = await rtcClient.connect(
           remoteDevicePeerId,
           undefined,
-          connectOptions,
+          connectOptions
         );
         if (sessionId) break;
         delay(100);
