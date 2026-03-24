@@ -47,8 +47,8 @@ export async function createShareLink(share: IShare, view: string) {
       Authorization: "Bearer " + Authentication.token,
     },
   });
-  // TODO: support other environments
-  const origin = "https://app.formant.io";
+  // TODO: support local
+  const origin = DataSdk.adminApi.replace("api", "app").replace("/v1/admin", "");
   const { code } = await response.json();
 
   return `${origin}/shares/${code}#${serializeHash({

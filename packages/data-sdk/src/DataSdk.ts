@@ -7,6 +7,10 @@ export type DataSdkInitOptions = {
   signalingApi: string;
 };
 
+function stripTrailingSlash(url: string): string {
+  return url.replace(/\/+$/, "");
+}
+
 export class DataSdk {
   private constructor() {}
 
@@ -16,9 +20,9 @@ export class DataSdk {
   static signalingApi = formantApiUrl;
 
   static init(options: DataSdkInitOptions): void {
-    DataSdk.adminApi = options.adminApi;
-    DataSdk.queryApi = options.queryApi;
-    DataSdk.ingestionApi = options.ingestionApi;
-    DataSdk.signalingApi = options.signalingApi;
+    DataSdk.adminApi = stripTrailingSlash(options.adminApi);
+    DataSdk.queryApi = stripTrailingSlash(options.queryApi);
+    DataSdk.ingestionApi = stripTrailingSlash(options.ingestionApi);
+    DataSdk.signalingApi = stripTrailingSlash(options.signalingApi);
   }
 }
