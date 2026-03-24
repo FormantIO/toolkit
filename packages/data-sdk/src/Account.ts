@@ -86,11 +86,11 @@ export class Account {
       throw new Error("Not authenticated");
     }
     const data = await fetch(`${DataSdk.adminApi}/accounts/${id}/tree`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
     });
     return await data.json();
   }

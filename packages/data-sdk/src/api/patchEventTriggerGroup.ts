@@ -10,12 +10,12 @@ export async function patchEventTriggerGroup(
     throw new Error("Not authenticated");
   }
   const data = await fetch(`${DataSdk.adminApi}/event-trigger-groups/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(eventTrigger),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
+    method: "PATCH",
+    body: JSON.stringify(eventTrigger),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
   });
 
   return (await data.json()) as IEventTriggerGroup;

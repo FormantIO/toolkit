@@ -19,10 +19,10 @@ export async function getCurrentGroup(): Promise<Device[] | undefined> {
     return undefined;
   }
   const response = await fetch(`${DataSdk.adminApi}/groups/${groupId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
   });
 
   const { tagKey, tagValue } = await response.json();

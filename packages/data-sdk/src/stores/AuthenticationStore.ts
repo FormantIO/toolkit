@@ -319,9 +319,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     request: IRespondToNewPasswordRequiredChallengeRequest
   ) {
     const response = await fetch(
-      this.adminFetchUrl(
-        "auth/respond-to-new-password-required-challenge"
-      ),
+      this.adminFetchUrl("auth/respond-to-new-password-required-challenge"),
       {
         method: "POST",
         body: JSON.stringify(request),

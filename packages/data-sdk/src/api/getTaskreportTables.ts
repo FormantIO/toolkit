@@ -28,15 +28,12 @@ export async function getTaskReportTables() {
     throw new Error("Not authenticated");
   }
 
-  const response = await fetch(
-    `${DataSdk.queryApi}/analytics/task-reports`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const response = await fetch(`${DataSdk.queryApi}/analytics/task-reports`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
   return (await response.json()).items as ITaskReportColumn[];
 }

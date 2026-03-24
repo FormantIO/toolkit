@@ -7,11 +7,11 @@ export async function disableDevice(id: string): Promise<IDevice[]> {
     throw new Error("Not authenticated");
   }
   const data = await fetch(`${DataSdk.adminApi}/devices/${id}/disable`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
   });
   const response = await data.json();
 

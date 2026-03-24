@@ -8,11 +8,11 @@ export async function getAnalyticsModules() {
   }
 
   const response = await fetch(`${DataSdk.adminApi}/analytics-modules`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
   });
   return (await response.json()).items as IAnalyticsModule;
 }

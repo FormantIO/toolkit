@@ -12,19 +12,16 @@ export async function getLatestTelemetry(
     return [];
   }
 
-  const data = await fetch(
-    `${DataSdk.queryApi}/stream-current-value`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        deviceIds,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const data = await fetch(`${DataSdk.queryApi}/stream-current-value`, {
+    method: "POST",
+    body: JSON.stringify({
+      deviceIds,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
   const telemetry = await data.json();
   return telemetry.items;
 }

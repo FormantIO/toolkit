@@ -70,11 +70,11 @@ export class Fleet {
     }
 
     const data = await fetch(`${DataSdk.adminApi}/device-details/query`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
     });
 
     const devices = await data.json();

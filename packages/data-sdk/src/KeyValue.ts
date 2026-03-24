@@ -30,16 +30,13 @@ export class KeyValue {
 
   public static async get(key: string): Promise<string> {
     try {
-      const result = await fetch(
-        `${DataSdk.adminApi}/key-value/${key}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + Authentication.token,
-          },
-        }
-      );
+      const result = await fetch(`${DataSdk.adminApi}/key-value/${key}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      });
       const keyValue = await result.json();
       if (result.status !== 200) {
         throw new Error(keyValue.message);
@@ -71,16 +68,13 @@ export class KeyValue {
 
   public static async delete(key: string) {
     try {
-      const result = await fetch(
-        `${DataSdk.adminApi}/key-value/${key}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + Authentication.token,
-          },
-        }
-      );
+      const result = await fetch(`${DataSdk.adminApi}/key-value/${key}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      });
       if (!result.ok) {
         throw new Error("Unable to handle request");
       }
@@ -92,17 +86,14 @@ export class KeyValue {
 
   public static async query(keys: string[]) {
     try {
-      const result = await fetch(
-        `${DataSdk.adminApi}/key-value/query`,
-        {
-          method: "POST",
-          body: JSON.stringify({ keys }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + Authentication.token,
-          },
-        }
-      );
+      const result = await fetch(`${DataSdk.adminApi}/key-value/query`, {
+        method: "POST",
+        body: JSON.stringify({ keys }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Authentication.token,
+        },
+      });
       if (!result.ok) {
         throw new Error("Unable to handle request");
       }

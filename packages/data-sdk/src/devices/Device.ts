@@ -67,19 +67,16 @@ export class Device extends BaseDevice {
   static disableDevice = disableDevice;
 
   async getLatestTelemetry() {
-    const data = await fetch(
-      `${DataSdk.queryApi}/stream-current-value`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          deviceIds: [this.id],
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const data = await fetch(`${DataSdk.queryApi}/stream-current-value`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceIds: [this.id],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const telemetry = await data.json();
     return telemetry.items;
   }
@@ -137,16 +134,13 @@ export class Device extends BaseDevice {
    */
 
   async getAgentVersion(): Promise<string | undefined | null> {
-    const result = await fetch(
-      `${DataSdk.adminApi}/devices/${this.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.adminApi}/devices/${this.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const device = await result.json();
 
     return device?.state?.agentVersion;
@@ -286,7 +280,9 @@ export class Device extends BaseDevice {
           err
         );
         const error =
-          err instanceof Error ? err : new Error(String(err ?? "Unknown error"));
+          err instanceof Error
+            ? err
+            : new Error(String(err ?? "Unknown error"));
         // cleanup on failure
         this.remoteDevicePeerId = null;
         rtcClient.shutdown().catch((shutdownErr: unknown) => {
@@ -462,16 +458,13 @@ export class Device extends BaseDevice {
   async getAvailableCommands(
     includeDisabled = true
   ): Promise<ICommandTemplate[]> {
-    const result = await fetch(
-      `${DataSdk.adminApi}/command-templates/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.adminApi}/command-templates/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const commands = await result.json();
     return commands.items.filter((i: ICommandTemplate) => {
       if (includeDisabled) {
@@ -601,19 +594,16 @@ export class Device extends BaseDevice {
   async getTelemetryStreams(): Promise<TelemetryStream[]> {
     const config = await this.getConfiguration();
 
-    const result = await fetch(
-      `${DataSdk.queryApi}/metadata/stream-names`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          deviceIds: [this.id],
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.queryApi}/metadata/stream-names`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceIds: [this.id],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
 
     const disabledList: string[] = [];
     const onDemandList: string[] = [];
@@ -671,21 +661,18 @@ export class Device extends BaseDevice {
     interventionType: InterventionType,
     data: IInterventionTypeMap[T]["response"]
   ): Promise<IInterventionResponse> {
-    const response = await fetch(
-      `${DataSdk.adminApi}/intervention-responses`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          interventionId,
-          interventionType,
-          data,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const response = await fetch(`${DataSdk.adminApi}/intervention-responses`, {
+      method: "POST",
+      body: JSON.stringify({
+        interventionId,
+        interventionType,
+        data,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const interventionResponse = await response.json();
     return interventionResponse;
   }

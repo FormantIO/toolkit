@@ -23,15 +23,12 @@ export async function getAnalyticStreams() {
     throw new Error("Not authenticated");
   }
 
-  const response = await fetch(
-    `${DataSdk.queryApi}/analytics/streams`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const response = await fetch(`${DataSdk.queryApi}/analytics/streams`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
   return (await response.json()).items as IStreamColumn[];
 }

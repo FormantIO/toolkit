@@ -48,7 +48,9 @@ export async function createShareLink(share: IShare, view: string) {
     },
   });
   // TODO: support local
-  const origin = DataSdk.adminApi.replace("api", "app").replace("/v1/admin", "");
+  const origin = DataSdk.adminApi
+    .replace("api", "app")
+    .replace("/v1/admin", "");
   const { code } = await response.json();
 
   return `${origin}/shares/${code}#${serializeHash({
