@@ -1,12 +1,12 @@
 import { Device } from "../devices/Device";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function getDevice(deviceId: string): Promise<Device> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${deviceId}`, {
+  const data = await fetch(`${DataSdk.adminApi}/devices/${deviceId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

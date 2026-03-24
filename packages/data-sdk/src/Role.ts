@@ -1,5 +1,5 @@
-import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
+import { DataSdk } from "./DataSdk";
 import { IRole } from "./model/IRole";
 
 export class Role {
@@ -7,7 +7,7 @@ export class Role {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/roles`, {
+    const data = await fetch(`${DataSdk.adminApi}/roles`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export class Role {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/roles`, {
+    const data = await fetch(`${DataSdk.adminApi}/roles`, {
       method: "POST",
       body: JSON.stringify(role),
       headers: {
@@ -37,7 +37,7 @@ export class Role {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/roles/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/roles/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export class Role {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/roles/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/roles/${id}`, {
       method: "PATCH",
       body: JSON.stringify(role),
       headers: {
@@ -66,7 +66,7 @@ export class Role {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    await fetch(`${FORMANT_API_URL}/v1/admin/roles/${id}`, {
+    await fetch(`${DataSdk.adminApi}/roles/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

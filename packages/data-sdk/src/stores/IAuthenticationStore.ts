@@ -21,9 +21,6 @@ export interface IAuthenticationStore {
    */
   readonly isShareToken: boolean;
 
-  set apiUrl(url: string);
-  get apiUrl(): string;
-
   login(email: string, password: string): Promise<IAuthentication>;
   login(
     email: string,

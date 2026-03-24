@@ -1,12 +1,12 @@
-import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
+import { DataSdk } from "./DataSdk";
 import { defined } from "../../common/defined";
 import { ITags } from "./model/ITags";
 
 export class KeyValue {
   public static async set(key: string, value: string, tags?: ITags) {
     try {
-      const result = await fetch(FORMANT_API_URL + "/v1/admin/key-value", {
+      const result = await fetch(`${DataSdk.adminApi}/key-value`, {
         method: "POST",
         body: JSON.stringify({
           organizationId: defined(Authentication.currentUser).organizationId,
@@ -31,7 +31,7 @@ export class KeyValue {
   public static async get(key: string): Promise<string> {
     try {
       const result = await fetch(
-        FORMANT_API_URL + `/v1/admin/key-value/${key}`,
+        `${DataSdk.adminApi}/key-value/${key}`,
         {
           method: "GET",
           headers: {
@@ -52,7 +52,7 @@ export class KeyValue {
 
   public static async list(): Promise<string[]> {
     try {
-      const result = await fetch(FORMANT_API_URL + "/v1/admin/key-value", {
+      const result = await fetch(`${DataSdk.adminApi}/key-value`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export class KeyValue {
   public static async delete(key: string) {
     try {
       const result = await fetch(
-        FORMANT_API_URL + `/v1/admin/key-value/${key}`,
+        `${DataSdk.adminApi}/key-value/${key}`,
         {
           method: "DELETE",
           headers: {
@@ -93,7 +93,7 @@ export class KeyValue {
   public static async query(keys: string[]) {
     try {
       const result = await fetch(
-        FORMANT_API_URL + `/v1/admin/key-value/query`,
+        `${DataSdk.adminApi}/key-value/query`,
         {
           method: "POST",
           body: JSON.stringify({ keys }),

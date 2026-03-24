@@ -1,8 +1,8 @@
-import { FORMANT_API_URL } from "../config";
 import { Authentication } from "../Authentication";
+import { DataSdk } from "../DataSdk";
 
 export async function getFileUrl(uuid: string) {
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
+  const data = await fetch(`${DataSdk.adminApi}/files/query`, {
     method: "POST",
     body: JSON.stringify({
       fileIds: [uuid],

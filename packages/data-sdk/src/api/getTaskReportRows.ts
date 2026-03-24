@@ -1,6 +1,6 @@
 import { ISqlQuery } from "../model/ISqlQuery";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 /**
  * @param taskColumns is required
@@ -32,7 +32,7 @@ export async function getTaskReportRows(query: ISqlQuery) {
     throw new Error("Not authenticated");
   }
   const response = await fetch(
-    `${FORMANT_API_URL}/v1/queries/analytics/task-report-rows`,
+    `${DataSdk.queryApi}/analytics/task-report-rows`,
     {
       method: "POST",
       body: JSON.stringify(query),

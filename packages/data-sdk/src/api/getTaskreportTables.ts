@@ -1,5 +1,5 @@
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { ITaskReportColumn } from "../model/ITaskReportColumn";
 
 /**
@@ -29,7 +29,7 @@ export async function getTaskReportTables() {
   }
 
   const response = await fetch(
-    `${FORMANT_API_URL}/v1/queries/analytics/task-reports`,
+    `${DataSdk.queryApi}/analytics/task-reports`,
     {
       method: "GET",
       headers: {

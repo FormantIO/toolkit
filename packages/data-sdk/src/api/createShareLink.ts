@@ -1,6 +1,6 @@
 import { IShare } from "../model/IShare";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { serializeHash } from "../utils/serializeHash";
 
 import { getViews } from "./getViews";
@@ -39,7 +39,7 @@ export async function createShareLink(share: IShare, view: string) {
     return null;
   }
 
-  const response = await fetch(`${FORMANT_API_URL}/v1/admin/shares`, {
+  const response = await fetch(`${DataSdk.adminApi}/shares`, {
     method: "POST",
     body: JSON.stringify(share),
     headers: {
@@ -47,7 +47,8 @@ export async function createShareLink(share: IShare, view: string) {
       Authorization: "Bearer " + Authentication.token,
     },
   });
-  const origin = FORMANT_API_URL.replace("api", "app");
+  // TODO: support other environments
+  const origin = "https://app.formant.io";
   const { code } = await response.json();
 
   return `${origin}/shares/${code}#${serializeHash({

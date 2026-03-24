@@ -1,5 +1,5 @@
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { IStreamColumn } from "../model/IStreamColumn";
 
 /**
@@ -24,7 +24,7 @@ export async function getAnalyticStreams() {
   }
 
   const response = await fetch(
-    `${FORMANT_API_URL}/v1/queries/analytics/streams`,
+    `${DataSdk.queryApi}/analytics/streams`,
     {
       method: "GET",
       headers: {

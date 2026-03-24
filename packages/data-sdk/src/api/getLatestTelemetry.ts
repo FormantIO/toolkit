@@ -1,6 +1,6 @@
 import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
 import { IStreamTypeMap } from "../model/IStreamTypeMap";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { Authentication } from "../Authentication";
 
 export async function getLatestTelemetry(
@@ -13,7 +13,7 @@ export async function getLatestTelemetry(
   }
 
   const data = await fetch(
-    `${FORMANT_API_URL}/v1/queries/stream-current-value`,
+    `${DataSdk.queryApi}/stream-current-value`,
     {
       method: "POST",
       body: JSON.stringify({

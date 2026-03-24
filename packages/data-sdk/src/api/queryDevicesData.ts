@@ -1,6 +1,6 @@
 import { IDeviceQuery } from "../model/IDeviceQuery";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { IDevice } from "../model/IDevice";
 
 export async function queryDevicesData(
@@ -9,7 +9,7 @@ export async function queryDevicesData(
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/query`, {
+  const data = await fetch(`${DataSdk.adminApi}/devices/query`, {
     method: "POST",
     body: JSON.stringify(query),
     headers: {

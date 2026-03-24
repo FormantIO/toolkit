@@ -1,5 +1,5 @@
-import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
+import { DataSdk } from "./DataSdk";
 import { IUser } from "./model/IUser";
 
 export class User {
@@ -7,7 +7,7 @@ export class User {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/users`, {
+    const data = await fetch(`${DataSdk.adminApi}/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export class User {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/users`, {
+    const data = await fetch(`${DataSdk.adminApi}/users`, {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
@@ -37,7 +37,7 @@ export class User {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/users/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/users/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export class User {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/users/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/users/${id}`, {
       method: "PATCH",
       body: JSON.stringify(user),
       headers: {
@@ -66,7 +66,7 @@ export class User {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    await fetch(`${FORMANT_API_URL}/v1/admin/users/${id}`, {
+    await fetch(`${DataSdk.adminApi}/users/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ enabled: false, roleId: null, teamId: null }),
       headers: {

@@ -1,6 +1,6 @@
 import { IDevice } from "../model/IDevice";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function patchDevice(
   id: string,
@@ -9,7 +9,7 @@ export async function patchDevice(
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${id}`, {
+  const data = await fetch(`${DataSdk.adminApi}/devices/${id}`, {
     method: "PATCH",
     body: JSON.stringify(device),
     headers: {

@@ -1,6 +1,6 @@
 import { ISqlQuery } from "../model/ISqlQuery";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { ISqlResult } from "../model/ISqlResult";
 
 /**
@@ -47,7 +47,7 @@ export async function queryAnalytics(query: ISqlQuery) {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const response = await fetch(`${FORMANT_API_URL}/v1/queries/analytics`, {
+  const response = await fetch(`${DataSdk.queryApi}/analytics`, {
     method: "POST",
     body: JSON.stringify(query),
     headers: {
