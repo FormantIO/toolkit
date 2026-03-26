@@ -1,12 +1,12 @@
 import { IFleet } from "../model/IFleet";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function getFleet(id: string): Promise<IFleet> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/fleets/${id}`, {
+  const data = await fetch(`${DataSdk.adminApi}/fleets/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

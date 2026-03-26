@@ -1,6 +1,6 @@
 import { IEventTriggerGroup } from "../model/IEventTriggerGroup";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function patchEventTriggerGroup(
   id: string,
@@ -9,17 +9,14 @@ export async function patchEventTriggerGroup(
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(
-    `${FORMANT_API_URL}/v1/admin/event-trigger-groups/${id}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(eventTrigger),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const data = await fetch(`${DataSdk.adminApi}/event-trigger-groups/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(eventTrigger),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
 
   return (await data.json()) as IEventTriggerGroup;
 }

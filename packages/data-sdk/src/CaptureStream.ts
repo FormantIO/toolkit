@@ -1,4 +1,4 @@
-import { FORMANT_API_URL } from "./config";
+import { DataSdk } from "./DataSdk";
 
 export interface CaptureSession {
   deviceId: string;
@@ -20,7 +20,7 @@ export class CaptureStream {
   async ingestJSON(value: {}) {
     if (!this.token) {
       const result = await fetch(
-        `${FORMANT_API_URL}/v1/admin/capture-sessions/${this.captureSession.code}/authenticate`,
+        `${DataSdk.adminApi}/capture-sessions/${this.captureSession.code}/authenticate`,
         {
           method: "POST",
         }
@@ -29,7 +29,7 @@ export class CaptureStream {
       this.token = authInfo.token;
     }
 
-    await fetch(`${FORMANT_API_URL}/v1/ingest`, {
+    await fetch(DataSdk.ingestionApi, {
       method: "POST",
       body: JSON.stringify({
         deviceId: this.captureSession.deviceId,

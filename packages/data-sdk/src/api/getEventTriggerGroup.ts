@@ -1,6 +1,6 @@
 import { IEventTriggerGroup } from "../model/IEventTriggerGroup";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function getEventTriggerGroup(
   id: string
@@ -8,16 +8,13 @@ export async function getEventTriggerGroup(
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(
-    `${FORMANT_API_URL}/v1/admin/event-trigger-groups/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const data = await fetch(`${DataSdk.adminApi}/event-trigger-groups/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
 
   return (await data.json()) as IEventTriggerGroup;
 }

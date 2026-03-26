@@ -1,14 +1,14 @@
 import { IEventQuery } from "../model/IEventQuery";
 import { IEvent } from "../model/IEvent";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function queryEvents(query: IEventQuery): Promise<IEvent[]> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
 
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/events/query`, {
+  const data = await fetch(`${DataSdk.adminApi}/events/query`, {
     method: "POST",
     body: JSON.stringify(query),
     headers: {

@@ -1,6 +1,6 @@
 import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
-import { FORMANT_API_URL } from "./config";
+import { DataSdk } from "./DataSdk";
 import { Device } from "./devices/Device";
 import { PeerDevice } from "./devices/PeerDevice";
 import { addDeviceToFleet } from "./api/addDeviceToFleet";
@@ -24,7 +24,6 @@ import { getInterventions } from "./api/getInterventions";
 import { getLatestTelemetry } from "./api/getLatestTelemetry";
 import { getOnlineDevices } from "./api/getOnlineDevices";
 import { getPeers } from "./api/getPeers";
-import { getRealtimeDevices } from "./api/getRealtimeDevices";
 import { getRealtimeSessions } from "./api/getRealtimeSessions";
 import { getStreams } from "./api/getStreams";
 import { getTaskReportRows } from "./api/getTaskReportRows";
@@ -70,16 +69,13 @@ export class Fleet {
       throw new Error("No known default device");
     }
 
-    const data = await fetch(
-      `${FORMANT_API_URL}/v1/admin/device-details/query`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const data = await fetch(`${DataSdk.adminApi}/device-details/query`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
 
     const devices = await data.json();
     const device = devices.items.find(
@@ -158,7 +154,6 @@ export class Fleet {
   static getLatestTelemetry = getLatestTelemetry;
   static getOnlineDevices = getOnlineDevices;
   static getPeers = getPeers;
-  static getRealtimeDevices = getRealtimeDevices;
   static getRealtimeSessions = getRealtimeSessions;
   static getStreams = getStreams;
   static getTaskReportRows = getTaskReportRows;

@@ -1,11 +1,11 @@
-import { FORMANT_API_URL } from "../config";
 import { Authentication } from "../Authentication";
+import { DataSdk } from "../DataSdk";
 
 export async function getModuleConfiguration(
   id: string
 ): Promise<string | undefined> {
   const response = await fetch(
-    `${FORMANT_API_URL}/v1/admin/module-configurations/${id}`,
+    `${DataSdk.adminApi}/module-configurations/${id}`,
     {
       headers: {
         "Content-Type": "application/json",

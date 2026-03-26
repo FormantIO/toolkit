@@ -1,5 +1,5 @@
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { IAnalyticsModule } from "../model/IAnalyticsModule";
 
 export async function getAnalyticsModules() {
@@ -7,15 +7,12 @@ export async function getAnalyticsModules() {
     throw new Error("Not authenticated");
   }
 
-  const response = await fetch(
-    `${FORMANT_API_URL}/v1/admin/analytics-modules`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const response = await fetch(`${DataSdk.adminApi}/analytics-modules`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
   return (await response.json()).items as IAnalyticsModule;
 }

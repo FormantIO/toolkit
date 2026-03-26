@@ -1,11 +1,11 @@
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function addDeviceToFleet(deviceId: string, fleetId: string) {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${deviceId}`, {
+  const data = await fetch(`${DataSdk.adminApi}/devices/${deviceId}`, {
     method: "PATCH",
     body: JSON.stringify({ fleetId }),
     headers: {

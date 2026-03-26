@@ -1,13 +1,13 @@
 import { IEvent } from "../model/IEvent";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function getInterventions(): Promise<IEvent[]> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
   const interventions = await fetch(
-    `${FORMANT_API_URL}/v1/admin/intervention-requests`,
+    `${DataSdk.adminApi}/intervention-requests`,
     {
       method: "GET",
       headers: {

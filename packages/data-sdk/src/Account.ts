@@ -1,5 +1,5 @@
-import { FORMANT_API_URL } from "./config";
 import { Authentication } from "./Authentication";
+import { DataSdk } from "./DataSdk";
 import { IAccount } from "./model/IAccount";
 import { IAccountTree } from "./model/IAccountTree";
 
@@ -8,7 +8,7 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/accounts`, {
+    const data = await fetch(`${DataSdk.adminApi}/accounts`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/accounts`, {
+    const data = await fetch(`${DataSdk.adminApi}/accounts`, {
       method: "POST",
       body: JSON.stringify(account),
       headers: {
@@ -38,7 +38,7 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/accounts/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/accounts/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(`${FORMANT_API_URL}/v1/admin/accounts/${id}`, {
+    const data = await fetch(`${DataSdk.adminApi}/accounts/${id}`, {
       method: "PATCH",
       body: JSON.stringify(account),
       headers: {
@@ -69,7 +69,7 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const result = await fetch(`${FORMANT_API_URL}/v1/admin/accounts/${id}`, {
+    const result = await fetch(`${DataSdk.adminApi}/accounts/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -85,16 +85,13 @@ export class Account {
     if (!Authentication.token) {
       throw new Error("Not authenticated");
     }
-    const data = await fetch(
-      `${FORMANT_API_URL}/v1/admin/accounts/${id}/tree`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const data = await fetch(`${DataSdk.adminApi}/accounts/${id}/tree`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     return await data.json();
   }
 }

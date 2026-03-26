@@ -1,7 +1,7 @@
 // packages/data-sdk/src/api/queryViews.ts
 
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { RtcStreamType } from "../connector/model/IUniverseData";
 import { IsoDate } from "../model/IsoDate";
 import { ITags } from "../model/ITags";
@@ -69,7 +69,7 @@ export async function request<T>(
     throw new Error("Not authenticated");
   }
 
-  const data = await fetch(`${FORMANT_API_URL}/v1${endpoint}`, {
+  const data = await fetch(`${DataSdk.adminApi}${endpoint}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -90,18 +90,18 @@ export async function request<T>(
 }
 
 export async function fetchTeleopViews(): Promise<ITeleopView[]> {
-  const data = await request<ITeleopViewResponse>("/admin/teleop-views");
+  const data = await request<ITeleopViewResponse>("/teleop-views");
   return data.items;
 }
 
 export async function getTeleopView(id: string): Promise<ITeleopView> {
-  return await request<ITeleopView>(`/admin/teleop-views/${id}`);
+  return await request<ITeleopView>(`/teleop-views/${id}`);
 }
 
 export async function createTeleopView(
   view: Omit<ITeleopView, "id" | "organizationId" | "createdAt" | "updatedAt">
 ): Promise<ITeleopView> {
-  return await request<ITeleopView>("/admin/teleop-views", {
+  return await request<ITeleopView>("/teleop-views", {
     method: "POST",
     body: JSON.stringify(view),
   });
@@ -111,14 +111,14 @@ export async function updateTeleopView(
   id: string,
   view: Partial<ITeleopView>
 ): Promise<ITeleopView> {
-  return await request<ITeleopView>(`/admin/teleop-views/${id}`, {
+  return await request<ITeleopView>(`/teleop-views/${id}`, {
     method: "PATCH",
     body: JSON.stringify(view),
   });
 }
 
 export async function deleteTeleopView(id: string): Promise<void> {
-  await request(`/admin/teleop-views/${id}`, {
+  await request(`/teleop-views/${id}`, {
     method: "DELETE",
   });
 }

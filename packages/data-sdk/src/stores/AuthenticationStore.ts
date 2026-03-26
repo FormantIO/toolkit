@@ -7,7 +7,7 @@ import {
 import { AuthenticationResult } from "./AuthenticationResult";
 import { IAuthenticationStore } from "./IAuthenticationStore";
 
-import { setFormantApiUrl } from "../config";
+import { DataSdk } from "../DataSdk";
 import { IUser } from "../model/IUser";
 import { IAuthentication } from "./IAuthentication";
 import { ICheckSsoResult } from "./ICheckSsoResult";
@@ -15,8 +15,6 @@ import { IConfirmForgotPasswordRequest } from "./IConfirmForgotPasswordRequest";
 import { IRespondToNewPasswordRequiredChallengeRequest } from "./IRespondToNewPasswordRequiredChallengeRequest";
 
 interface IAuthenticationStoreOptions {
-  apiUrl: string;
-
   refreshAuthToken: () => void;
   addAccessTokenRefreshListener: (
     callback: (token: string) => void
@@ -33,29 +31,21 @@ export class AuthenticationStore implements IAuthenticationStore {
   private _waitingForAuth: Set<(result: boolean) => void> = new Set();
   private _refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
-  private _apiUrl: string;
   private readonly _refreshAuthToken: () => void;
   private readonly _addAccessTokenRefreshListener: (
     callback: (token: string) => void
   ) => () => void;
 
   constructor({
-    apiUrl,
     refreshAuthToken,
     addAccessTokenRefreshListener,
   }: IAuthenticationStoreOptions) {
-    this._apiUrl = apiUrl;
     this._refreshAuthToken = refreshAuthToken;
     this._addAccessTokenRefreshListener = addAccessTokenRefreshListener;
   }
 
-  set apiUrl(url: string) {
-    this._apiUrl = url;
-    setFormantApiUrl(url);
-  }
-
-  get apiUrl(): string {
-    return this._apiUrl;
+  private adminFetchUrl(path: string): string {
+    return `${DataSdk.adminApi}/${path}`;
   }
 
   get token(): string | undefined {
@@ -101,7 +91,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   ): Promise<IAuthentication | AuthenticationResult> {
     const { advanced = false } = options;
     try {
-      const result = await fetch(`${this._apiUrl}/v1/admin/auth/login`, {
+      const result = await fetch(this.adminFetchUrl("auth/login"), {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -184,7 +174,7 @@ export class AuthenticationStore implements IAuthenticationStore {
       }
 
       if (userId && this._currentUser?.id !== userId) {
-        const result = await fetch(`${this._apiUrl}/v1/admin/users/${userId}`, {
+        const result = await fetch(this.adminFetchUrl(`users/${userId}`), {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -215,7 +205,7 @@ export class AuthenticationStore implements IAuthenticationStore {
       this._refreshToken = refreshToken;
       setInterval(async () => {
         if (this._refreshToken) {
-          const result = await fetch(`${this._apiUrl}/v1/admin/auth/refresh`, {
+          const result = await fetch(this.adminFetchUrl("auth/refresh"), {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -292,7 +282,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async forgotPassword(email: string) {
-    await fetch(`${this._apiUrl}/v1/admin/auth/forgot-password`, {
+    await fetch(this.adminFetchUrl("auth/forgot-password"), {
       method: "POST",
       body: JSON.stringify({ email }),
       headers: {
@@ -312,7 +302,7 @@ export class AuthenticationStore implements IAuthenticationStore {
    */
   async confirmForgotPassword(request: IConfirmForgotPasswordRequest) {
     const response = await fetch(
-      `${this._apiUrl}/v1/admin/auth/confirm-forgot-password`,
+      this.adminFetchUrl("auth/confirm-forgot-password"),
       {
         method: "POST",
         body: JSON.stringify(request),
@@ -329,7 +319,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     request: IRespondToNewPasswordRequiredChallengeRequest
   ) {
     const response = await fetch(
-      `${this._apiUrl}/v1/admin/auth/respond-to-new-password-required-challenge`,
+      this.adminFetchUrl("auth/respond-to-new-password-required-challenge"),
       {
         method: "POST",
         body: JSON.stringify(request),
@@ -347,7 +337,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async loginWithGoogle(token: string) {
-    const response = await fetch(`${this._apiUrl}/v1/admin/auth/login-google`, {
+    const response = await fetch(this.adminFetchUrl("auth/login-google"), {
       method: "POST",
       body: JSON.stringify(token),
       headers: {
@@ -358,7 +348,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async refresh(token: string) {
-    const result = await fetch(`${this._apiUrl}/v1/admin/auth/refresh`, {
+    const result = await fetch(this.adminFetchUrl("auth/refresh"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -375,7 +365,7 @@ export class AuthenticationStore implements IAuthenticationStore {
     email: string,
     allowUserAutoCreation?: boolean
   ): Promise<ICheckSsoResult> {
-    const result = await fetch(`${this._apiUrl}/v1/admin/auth/check-sso`, {
+    const result = await fetch(this.adminFetchUrl("auth/check-sso"), {
       method: "POST",
       body: JSON.stringify({ email, allowUserAutoCreation }),
       headers: {
@@ -386,7 +376,7 @@ export class AuthenticationStore implements IAuthenticationStore {
   }
 
   async loginWithSso(ssoToken: string, ssoRefreshToken?: string) {
-    const result = await fetch(`${this._apiUrl}/v1/admin/auth/login-sso`, {
+    const result = await fetch(this.adminFetchUrl("auth/login-sso"), {
       method: "POST",
       body: JSON.stringify({ token: ssoToken, refreshToken: ssoRefreshToken }),
       headers: {

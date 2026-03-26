@@ -1,6 +1,6 @@
 import { Device } from "../devices/Device";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { queryDevices } from "./queryDevices";
 
 export async function getCurrentGroup(): Promise<Device[] | undefined> {
@@ -18,15 +18,12 @@ export async function getCurrentGroup(): Promise<Device[] | undefined> {
   if (groupId === null || groupId.trim() === "") {
     return undefined;
   }
-  const response = await fetch(
-    `${FORMANT_API_URL}/v1/admin/groups/` + groupId,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    }
-  );
+  const response = await fetch(`${DataSdk.adminApi}/groups/${groupId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + Authentication.token,
+    },
+  });
 
   const { tagKey, tagValue } = await response.json();
 

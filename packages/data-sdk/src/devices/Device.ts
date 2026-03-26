@@ -17,7 +17,7 @@ import { queryEvents } from "../api/queryEvents";
 import { getRtcClientPool } from "../AppRtcClientPools";
 import { Authentication } from "../Authentication";
 import { CaptureStream } from "../CaptureStream";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 import { AggregateLevel } from "../model/AggregateLevel";
 import { EventType } from "../model/EventType";
 import { IEvent } from "../model/IEvent";
@@ -67,19 +67,16 @@ export class Device extends BaseDevice {
   static disableDevice = disableDevice;
 
   async getLatestTelemetry() {
-    const data = await fetch(
-      `${FORMANT_API_URL}/v1/queries/stream-current-value`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          deviceIds: [this.id],
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const data = await fetch(`${DataSdk.queryApi}/stream-current-value`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceIds: [this.id],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const telemetry = await data.json();
     return telemetry.items;
   }
@@ -97,7 +94,7 @@ export class Device extends BaseDevice {
   async getConfiguration(
     getDesiredConfigurationVersion: boolean = false
   ): Promise<ConfigurationDocument> {
-    let result = await fetch(`${FORMANT_API_URL}/v1/admin/devices/${this.id}`, {
+    let result = await fetch(`${DataSdk.adminApi}/devices/${this.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -116,7 +113,7 @@ export class Device extends BaseDevice {
     }
 
     result = await fetch(
-      `${FORMANT_API_URL}/v1/admin/devices/${this.id}/configurations/${version}`,
+      `${DataSdk.adminApi}/devices/${this.id}/configurations/${version}`,
       {
         method: "GET",
         headers: {
@@ -137,23 +134,20 @@ export class Device extends BaseDevice {
    */
 
   async getAgentVersion(): Promise<string | undefined | null> {
-    const result = await fetch(
-      `${FORMANT_API_URL}/v1/admin/devices/${this.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.adminApi}/devices/${this.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const device = await result.json();
 
     return device?.state?.agentVersion;
   }
 
   async getFileUrl(fileId: string): Promise<string[]> {
-    const result = await fetch(`${FORMANT_API_URL}/v1/admin/files/query`, {
+    const result = await fetch(`${DataSdk.adminApi}/files/query`, {
       method: "POST",
       body: JSON.stringify({
         fileIds: [fileId],
@@ -241,7 +235,7 @@ export class Device extends BaseDevice {
           connectOptions
         );
         if (sessionId) break;
-        delay(100);
+        await delay(100);
         this.assertNotCancelled(cancelled);
       }
 
@@ -280,18 +274,22 @@ export class Device extends BaseDevice {
         this.initConnectionMonitoring();
         this.emit("connect");
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.debug(
           `${new Date().toISOString()} :: Connection failed: %o`,
           err
         );
+        const error =
+          err instanceof Error
+            ? err
+            : new Error(String(err ?? "Unknown error"));
         // cleanup on failure
         this.remoteDevicePeerId = null;
         rtcClient.shutdown().catch((shutdownErr: unknown) => {
           console.error("rtcClient cannot shutdown: %o", shutdownErr);
         });
-        this.emit("connection_failed", err);
-        throw err;
+        this.emit("connection_failed", error);
+        throw error;
       });
   }
 
@@ -460,16 +458,13 @@ export class Device extends BaseDevice {
   async getAvailableCommands(
     includeDisabled = true
   ): Promise<ICommandTemplate[]> {
-    const result = await fetch(
-      `${FORMANT_API_URL}/v1/admin/command-templates/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.adminApi}/command-templates/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const commands = await result.json();
     return commands.items.filter((i: ICommandTemplate) => {
       if (includeDisabled) {
@@ -516,7 +511,7 @@ export class Device extends BaseDevice {
       },
     };
 
-    const res = await fetch(`${FORMANT_API_URL}/v1/admin/commands`, {
+    const res = await fetch(`${DataSdk.adminApi}/commands`, {
       method: "POST",
       body: JSON.stringify({
         commandTemplateId: command.id,
@@ -536,7 +531,7 @@ export class Device extends BaseDevice {
   }
 
   async getCommand(id: string): Promise<Response> {
-    const res = await fetch(`${FORMANT_API_URL}/v1/admin/commands/${id}`, {
+    const res = await fetch(`${DataSdk.adminApi}/commands/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -547,7 +542,7 @@ export class Device extends BaseDevice {
   }
 
   async createCaptureStream(streamName: string) {
-    const result = await fetch(`${FORMANT_API_URL}/v1/admin/capture-sessions`, {
+    const result = await fetch(`${DataSdk.adminApi}/capture-sessions`, {
       method: "POST",
       body: JSON.stringify({
         deviceId: this.id,
@@ -599,19 +594,16 @@ export class Device extends BaseDevice {
   async getTelemetryStreams(): Promise<TelemetryStream[]> {
     const config = await this.getConfiguration();
 
-    const result = await fetch(
-      `${FORMANT_API_URL}/v1/queries/metadata/stream-names`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          deviceIds: [this.id],
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const result = await fetch(`${DataSdk.queryApi}/metadata/stream-names`, {
+      method: "POST",
+      body: JSON.stringify({
+        deviceIds: [this.id],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
 
     const disabledList: string[] = [];
     const onDemandList: string[] = [];
@@ -641,7 +633,7 @@ export class Device extends BaseDevice {
     tags?: { [key in string]: string[] }
   ): Promise<(id: string) => IInterventionTypeMap[T]["response"]> {
     const intervention = await fetch(
-      `${FORMANT_API_URL}/v1/admin/intervention-requests`,
+      `${DataSdk.adminApi}/intervention-requests`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -669,21 +661,18 @@ export class Device extends BaseDevice {
     interventionType: InterventionType,
     data: IInterventionTypeMap[T]["response"]
   ): Promise<IInterventionResponse> {
-    const response = await fetch(
-      `${FORMANT_API_URL}/v1/admin/intervention-responses`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          interventionId,
-          interventionType,
-          data,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + Authentication.token,
-        },
-      }
-    );
+    const response = await fetch(`${DataSdk.adminApi}/intervention-responses`, {
+      method: "POST",
+      body: JSON.stringify({
+        interventionId,
+        interventionType,
+        data,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
     const interventionResponse = await response.json();
     return interventionResponse;
   }

@@ -2,7 +2,7 @@ import { RtcClient, SignalingPromiseClient } from "@formant/realtime-sdk";
 
 import { SessionType, SessionTypes } from "./model/SessionType";
 import { RtcClientPool } from "./utils/RtcClientPool";
-import { FORMANT_API_URL } from "./config";
+import { DataSdk } from "./DataSdk";
 import { Authentication } from "./Authentication";
 import { defined } from "../../common/defined";
 
@@ -14,7 +14,7 @@ const EnumRtcClientPools = {
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
-        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        signalingClient: new SignalingPromiseClient(DataSdk.signalingApi),
         getToken,
         sessionType: SessionTypes.UNKNOWN,
         receive: receiveFn,
@@ -24,7 +24,7 @@ const EnumRtcClientPools = {
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
-        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        signalingClient: new SignalingPromiseClient(DataSdk.signalingApi),
         getToken,
         sessionType: SessionTypes.TELEOP,
         receive: receiveFn,
@@ -34,7 +34,7 @@ const EnumRtcClientPools = {
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
-        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        signalingClient: new SignalingPromiseClient(DataSdk.signalingApi),
         getToken,
         sessionType: SessionTypes.PORT_FORWARD,
         receive: receiveFn,
@@ -44,7 +44,7 @@ const EnumRtcClientPools = {
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
-        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        signalingClient: new SignalingPromiseClient(DataSdk.signalingApi),
         getToken,
         sessionType: SessionTypes.OBSERVE,
         receive: receiveFn,
@@ -54,7 +54,7 @@ const EnumRtcClientPools = {
     ttlMs: 2_500,
     createClient: (receiveFn) =>
       new RtcClient({
-        signalingClient: new SignalingPromiseClient(FORMANT_API_URL),
+        signalingClient: new SignalingPromiseClient(DataSdk.signalingApi),
         getToken,
         sessionType: SessionTypes.HEADLESS,
         receive: receiveFn,

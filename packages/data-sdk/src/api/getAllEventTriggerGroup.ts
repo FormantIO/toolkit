@@ -1,12 +1,12 @@
 import { IEventTriggerGroup } from "../model/IEventTriggerGroup";
 import { Authentication } from "../Authentication";
-import { FORMANT_API_URL } from "../config";
+import { DataSdk } from "../DataSdk";
 
 export async function getAllEventTriggerGroup(): Promise<IEventTriggerGroup[]> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${FORMANT_API_URL}/v1/admin/event-trigger-groups`, {
+  const data = await fetch(`${DataSdk.adminApi}/event-trigger-groups`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

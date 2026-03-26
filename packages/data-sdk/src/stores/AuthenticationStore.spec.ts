@@ -19,7 +19,6 @@ beforeEach(() => {
 describe("AuthenticationStore", () => {
   it("should login with a token", async () => {
     const authStore = new AuthenticationStore({
-      apiUrl: "https://vitest.invalid",
       addAccessTokenRefreshListener: vi.fn(),
       refreshAuthToken: vi.fn(),
     });
@@ -37,7 +36,6 @@ describe("AuthenticationStore", () => {
 
   it("should extract the organization from the token", async () => {
     const authStore = new AuthenticationStore({
-      apiUrl: "https://vitest.invalid",
       addAccessTokenRefreshListener: vi.fn(),
       refreshAuthToken: vi.fn(),
     });
@@ -56,7 +54,6 @@ describe("AuthenticationStore", () => {
   describe("share tokens", () => {
     it("should extract the organization from the token", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -79,7 +76,6 @@ describe("AuthenticationStore", () => {
   describe("waiting for auth", () => {
     it("should immediately resolve if already logged in", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -90,7 +86,6 @@ describe("AuthenticationStore", () => {
 
     it("should wait until the auth has been resolved", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -123,7 +118,6 @@ describe("AuthenticationStore", () => {
       const addAccessTokenRefreshListener = vi.fn();
       const refreshAuthToken = vi.fn();
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener,
         refreshAuthToken,
       });
@@ -144,7 +138,6 @@ describe("AuthenticationStore", () => {
     describe("basic login", () => {
       it("should handle successful login", async () => {
         const authStore = new AuthenticationStore({
-          apiUrl: "https://vitest.invalid",
           addAccessTokenRefreshListener: vi.fn(),
           refreshAuthToken: vi.fn(),
         });
@@ -198,7 +191,6 @@ describe("AuthenticationStore", () => {
 
     it("should handle a challege as a failure", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -233,7 +225,6 @@ describe("AuthenticationStore", () => {
 
     it("should handle a 403 as a failure", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -264,7 +255,6 @@ describe("AuthenticationStore", () => {
   describe("advanced", () => {
     it("should handle a successful login", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -321,7 +311,6 @@ describe("AuthenticationStore", () => {
 
     it("should handle a challenge", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
@@ -367,7 +356,6 @@ describe("AuthenticationStore", () => {
 
     it("should handle failed credentials", async () => {
       const authStore = new AuthenticationStore({
-        apiUrl: "https://vitest.invalid",
         addAccessTokenRefreshListener: vi.fn(),
         refreshAuthToken: vi.fn(),
       });
