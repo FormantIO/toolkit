@@ -1,0 +1,87 @@
+---
+name: Publish @formant/data-sdk
+
+on:
+  repository_dispatch:
+    types: [publish-data-sdk]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 1.345.5). Leave empty to use package.json version."
+        required: false
+        type: string
+      dry_run:
+        description: "Dry run (do not actually publish)"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+jobs:
+  publish-data-sdk:
+    name: Publish @formant/data-sdk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: packages/data-sdk/package-lock.json
+
+      - name: Install dependencies
+        working-directory: packages/data-sdk
+        run: npm ci
+
+      - name: Build
+        working-directory: packages/data-sdk
+        run: |
+          npm run build
+          npm run types
+
+      - name: Determine version
+        id: version
+        run: |
+          # Priority: workflow_dispatch input > repository_dispatch payload > package.json
+          VERSION="${{ inputs.version || '' }}"
+          if [ -z "$VERSION" ] && [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            VERSION="${{ github.event.client_payload.version || '' }}"
+          fi
+          if [ -z "$VERSION" ]; then
+            VERSION=$(node -p "require('./packages/data-sdk/package.json').version")
+            echo "Using package.json version: $VERSION"
+          else
+            echo "Using provided version: $VERSION"
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Set package version
+        working-directory: packages/data-sdk
+        run: npm version "${{ steps.version.outputs.VERSION }}" --no-git-tag-version --allow-same-version
+
+      - name: Verify package contents
+        working-directory: packages/data-sdk
+        run: npm pack --dry-run 2>&1
+
+      - name: Publish
+        if: ${{ github.event_name == 'repository_dispatch' || inputs.dry_run != true }}
+        working-directory: packages/data-sdk
+        run: |
+          npm config set //registry.npmjs.org/:_authToken "${NPM_PUBLISH_TOKEN}"
+          npm publish --access public
+
+      - name: Publish (dry run)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
+        working-directory: packages/data-sdk
+        run: |
+          npm publish --access public --dry-run
