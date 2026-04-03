@@ -29,7 +29,7 @@
     "preversion": "npm run verify",
     "postversion": "make",
     "dev": "vite --port 5173",
-    "build": "npm run build:package && npm run build:bundle",
+    "build": "npm run build:package && npm run build:bundle && npm run types",
     "build:package": "vite build --emptyOutDir",
     "build:bundle": "vite build --mode=bundle --emptyOutDir=false",
     "prebuild": "tsc -p ./configs/tsconfig.demo.json",
