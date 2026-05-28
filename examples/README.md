@@ -150,10 +150,6 @@ Example host container implementation for coherence group views. Demonstrates:
 
 - Examples of how to perform a teleoperation using the Data SDK.
 
-### [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop-cra) (React)
-
-This custom view is a demonstration of how the data sdk can be used with the ui sdk for realtime teleop views. In particular we use ui-sdk-joystick and ui-sdk-realtime-player. Checkout https://github.com/FormantIO/toolkit for more information!
-
 ### [Teleoperation using Data-SDK](https://github.com/FormantIO/toolkit/tree/master/examples/teleop) (TypeScript)
 
 This custom view is a demonstration of how the data sdk can be used with the ui sdk for realtime teleop views. In particular we use ui-sdk-joystick and ui-sdk-realtime-player. Checkout https://github.com/FormantIO/toolkit for more information!
