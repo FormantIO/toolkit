@@ -1,0 +1,33 @@
+name: Prune stale branches
+
+on:
+    schedule:
+        - cron: "0 9 1 * *"
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: "List only; do not delete"
+                type: boolean
+                default: true
+            max_age_days:
+                description: "Delete branches with HEAD older than this many days"
+                type: string
+                default: "60"
+
+permissions:
+    contents: write
+    pull-requests: read
+
+concurrency:
+    group: prune-stale-branches
+    cancel-in-progress: false
+
+jobs:
+    prune:
+        uses: FormantIO/ci-shared/.github/workflows/prune-stale-branches.yml@main
+        permissions:
+            contents: write
+            pull-requests: read
+        with:
+            dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+            max_age_days: ${{ github.event_name == 'workflow_dispatch' && inputs.max_age_days || '60' }}
