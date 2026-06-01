@@ -1,33 +1,120 @@
 name: Prune stale branches
 
 on:
-    schedule:
-        - cron: "0 9 1 * *"
-    workflow_dispatch:
-        inputs:
-            dry_run:
-                description: "List only; do not delete"
-                type: boolean
-                default: true
-            max_age_days:
-                description: "Delete branches with HEAD older than this many days"
-                type: string
-                default: "60"
+  schedule:
+    - cron: "0 9 1 * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "List only; do not delete"
+        type: boolean
+        default: true
+      max_age_days:
+        description: "Delete branches with HEAD older than this many days"
+        type: string
+        default: "60"
 
 permissions:
-    contents: write
-    pull-requests: read
+  contents: write
+  pull-requests: read
 
 concurrency:
-    group: prune-stale-branches
-    cancel-in-progress: false
+  group: prune-stale-branches
+  cancel-in-progress: false
 
 jobs:
-    prune:
-        uses: FormantIO/ci-shared/.github/workflows/prune-stale-branches.yml@main
-        permissions:
-            contents: write
-            pull-requests: read
-        with:
-            dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
-            max_age_days: ${{ github.event_name == 'workflow_dispatch' && inputs.max_age_days || '60' }}
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Identify and delete stale branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_AGE_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_age_days || '60' }}
+          DRY_RUN: ${{ github.event_name == 'schedule' && 'false' || inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          owner_name="${GITHUB_REPOSITORY}"
+          owner="${owner_name%/*}"
+          name="${owner_name#*/}"
+          cutoff_epoch=$(date -u -d "${MAX_AGE_DAYS} days ago" +%s)
+
+          default_branch=$(gh api "repos/${owner_name}" --jq .default_branch)
+
+          protected_branches_json=$(gh api "repos/${owner_name}/branches?protected=true&per_page=100" --paginate --jq '[.[].name]' | jq -sc 'add // []')
+
+          open_prs_json=$(gh api graphql --paginate \
+              -F owner="$owner" -F name="$name" -f query='
+          query($owner: String!, $name: String!, $endCursor: String) {
+            repository(owner: $owner, name: $name) {
+              pullRequests(states: OPEN, first: 100, after: $endCursor) {
+                pageInfo { hasNextPage endCursor }
+                nodes { headRefName }
+              }
+            }
+          }' --jq '[.data.repository.pullRequests.nodes[].headRefName]' | jq -sc 'add // []')
+
+          candidates_file=$(mktemp)
+          trap 'rm -f "$candidates_file"' EXIT
+
+          gh api graphql --paginate \
+              -F owner="$owner" -F name="$name" -f query='
+          query($owner: String!, $name: String!, $endCursor: String) {
+            repository(owner: $owner, name: $name) {
+              refs(refPrefix: "refs/heads/", first: 100, after: $endCursor) {
+                pageInfo { hasNextPage endCursor }
+                nodes {
+                  name
+                  target {
+                    ... on Commit { committedDate }
+                  }
+                }
+              }
+            }
+          }' --jq '.data.repository.refs.nodes' | \
+          jq -r --slurp \
+              --arg default "$default_branch" \
+              --argjson cutoff "$cutoff_epoch" \
+              --argjson open_prs "$open_prs_json" \
+              --argjson protected "$protected_branches_json" '
+              [.[]|.[]]
+              | map(select(.name != null))
+              | map(select(.name != $default))
+              | map(select((.name as $n | $protected | index($n)) | not))
+              | map(select(.name | test("^(dependabot/|renovate/|release-please--|release/|release[_-][0-9]|hotfix/|[0-9]+\\.[0-9]+)"; "i") | not))
+              | map(select((.name as $n | $open_prs | index($n)) | not))
+              | map(select(.target.committedDate != null and .target.committedDate != ""))
+              | map(select((.target.committedDate | fromdate) < $cutoff))
+              | .[]
+              | [.name, .target.committedDate]
+              | @tsv
+          ' > "$candidates_file"
+
+          count=$(wc -l <"$candidates_file" | tr -d ' ')
+          echo "::notice::Found ${count} stale branches (cutoff: ${MAX_AGE_DAYS} days)"
+
+          if [[ "$count" == "0" ]]; then
+              exit 0
+          fi
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+              echo "Would delete:"
+              cat "$candidates_file"
+              exit 0
+          fi
+
+          deleted=0
+          failed=0
+          while IFS=$'\t' read -r branch_name committed_date; do
+              [[ -z "$branch_name" ]] && continue
+              encoded=$(jq -rn --arg n "$branch_name" '$n|@uri')
+              if gh api -X DELETE "repos/${owner_name}/git/refs/heads/${encoded}" >/dev/null 2>&1; then
+                  echo "deleted: ${branch_name} (last commit ${committed_date})"
+                  deleted=$((deleted + 1))
+              else
+                  echo "::warning::failed to delete ${branch_name}"
+                  failed=$((failed + 1))
+              fi
+          done <"$candidates_file"
+
+          echo "::notice::Deleted ${deleted}, failed ${failed}"
