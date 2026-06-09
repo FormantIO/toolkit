@@ -65,16 +65,40 @@ jobs:
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Guard against backward or duplicate version
+        id: guard
+        # Only meaningful for real publishes; dry runs never touch the registry.
+        if: ${{ github.event_name == 'repository_dispatch' || inputs.dry_run != true }}
+        run: |
+          TARGET="${{ steps.version.outputs.VERSION }}"
+          LATEST=$(npm view @formant/data-sdk dist-tags.latest 2>/dev/null || echo "0.0.0")
+          echo "Target version: ${TARGET} | npm 'latest': ${LATEST}"
+          # Idempotent re-runs: if this exact version is already published, skip cleanly.
+          if npm view "@formant/data-sdk@${TARGET}" version >/dev/null 2>&1; then
+            echo "::notice::${TARGET} is already on npm — skipping publish."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Refuse to move the 'latest' tag backward (this is what was failing in CI).
+          HIGHEST=$(printf '%s\n%s\n' "${TARGET}" "${LATEST}" | sort -V | tail -1)
+          if [ "${TARGET}" != "${HIGHEST}" ]; then
+            echo "::error::Refusing to publish ${TARGET}: npm 'latest' is already ${LATEST}. Bump above ${LATEST}, or publish under a dist-tag with --tag."
+            exit 1
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
       - name: Set package version
+        if: ${{ steps.guard.outputs.skip != 'true' }}
         working-directory: packages/data-sdk
         run: npm version "${{ steps.version.outputs.VERSION }}" --no-git-tag-version --allow-same-version
 
       - name: Verify package contents
+        if: ${{ steps.guard.outputs.skip != 'true' }}
         working-directory: packages/data-sdk
         run: npm pack --dry-run 2>&1
 
       - name: Publish
-        if: ${{ github.event_name == 'repository_dispatch' || inputs.dry_run != true }}
+        if: ${{ (github.event_name == 'repository_dispatch' || inputs.dry_run != true) && steps.guard.outputs.skip != 'true' }}
         working-directory: packages/data-sdk
         run: |
           npm config set //registry.npmjs.org/:_authToken "${NPM_PUBLISH_TOKEN}"
