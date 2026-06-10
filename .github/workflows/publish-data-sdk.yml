@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to publish (e.g., 1.345.5). Leave empty to use package.json version."
+        description: "Version to publish (e.g., 1.345.5). Leave empty to auto-bump the patch above the current npm 'latest'."
         required: false
         type: string
       dry_run:
@@ -52,14 +52,16 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          # Priority: workflow_dispatch input > repository_dispatch payload > package.json
+          # Priority: workflow_dispatch input > repository_dispatch payload > next patch above npm 'latest'
           VERSION="${{ inputs.version || '' }}"
           if [ -z "$VERSION" ] && [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             VERSION="${{ github.event.client_payload.version || '' }}"
           fi
           if [ -z "$VERSION" ]; then
-            VERSION=$(node -p "require('./packages/data-sdk/package.json').version")
-            echo "Using package.json version: $VERSION"
+            LATEST=$(npm view @formant/data-sdk dist-tags.latest 2>/dev/null || echo "0.0.0")
+            IFS=. read -r MAJOR MINOR PATCH <<< "$LATEST"
+            VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+            echo "Auto-derived next patch above ${LATEST}: $VERSION"
           else
             echo "Using provided version: $VERSION"
           fi
@@ -72,7 +74,6 @@ jobs:
           TARGET="${{ steps.version.outputs.VERSION }}"
           LATEST=$(npm view @formant/data-sdk dist-tags.latest 2>/dev/null || echo "0.0.0")
           echo "Target version: ${TARGET} | npm 'latest': ${LATEST}"
-          # Idempotent re-runs: if this exact version is already published, skip cleanly.
           if npm view "@formant/data-sdk@${TARGET}" version >/dev/null 2>&1; then
             echo "::notice::${TARGET} is already on npm — skipping publish."
             echo "skip=true" >> "$GITHUB_OUTPUT"
