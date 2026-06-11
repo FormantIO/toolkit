@@ -1,61 +1,22 @@
-import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
-import { DataSdk } from "./DataSdk";
-import { Device } from "./devices/Device";
-import { PeerDevice } from "./devices/PeerDevice";
-import { addDeviceToFleet } from "./api/addDeviceToFleet";
-import { aggregateTelemetry } from "./api/aggregateTelemetry";
-import { createShareLink } from "./api/createShareLink";
-import { deleteFleet } from "./api/deleteFleet";
-import { eventsCounter } from "./api/eventsCounter";
-import { getAnalyticStreams } from "./api/getAnalyticsStreams";
-import { getAnalyticsModules } from "./api/getAnalyticsModules";
-import { getAnalyticsRows } from "./api/getAnalyticsRows";
-import { getAnnotationCount } from "./api/getAnnotationCount";
-import { getAnnotationCountByIntervals } from "./api/getAnnotationCountByIntervals";
-import { getCurrentGroup } from "./api/getCurrentGroup";
 import { getDevice } from "./api/getDevice";
 import { getDevices } from "./api/getDevices";
-import { getEvent } from "./api/getEvent";
-import { getFileUrl } from "./api/getFileUrl";
-import { getFleet } from "./api/getFleet";
-import { getFleetDevices } from "./api/getFleetDevices";
-import { getInterventions } from "./api/getInterventions";
 import { getLatestTelemetry } from "./api/getLatestTelemetry";
-import { getOnlineDevices } from "./api/getOnlineDevices";
-import { getPeers } from "./api/getPeers";
-import { getRealtimeSessions } from "./api/getRealtimeSessions";
 import { getStreams } from "./api/getStreams";
-import { getTaskReportRows } from "./api/getTaskReportRows";
-import { getTaskReportTables } from "./api/getTaskreportTables";
-import { getTelemetry } from "./api/getTelemetry";
-import { getViews } from "./api/getViews";
-import { listFleets } from "./api/listFleets";
-import { patchFleet } from "./api/patchFleet";
-import { patchStream } from "./api/patchStreams";
-import { patchView } from "./api/patchView";
-import { queryAnalytics } from "./api/queryAnalytics";
 import { queryDevices } from "./api/queryDevices";
-import { queryEvents } from "./api/queryEvents";
 import { queryTelemetry } from "./api/queryTelemetry";
-import { createFleet } from "./api/createFleet";
-import { getAllEventTriggerGroup } from "./api/getAllEventTriggerGroup";
-import { getEventTriggerGroup } from "./api/getEventTriggerGroup";
-import { patchEventTriggerGroup } from "./api/patchEventTriggerGroup";
 import { IDevice } from "./message-bus/listeners/EmbeddedAppMessage";
+import { Device } from "./devices/Device";
+import { PeerDevice } from "./devices/PeerDevice";
 
+/**
+ * Device context and query helpers for embedded custom modules.
+ * Not related to the admin-api /fleets resource (removed).
+ */
 export class Fleet {
   static defaultDeviceId: string | undefined;
   static knownContext: WeakRef<Device>[] = [];
   static groupDevices: IDevice[] | undefined;
-
-  static createFleet = createFleet;
-  static listFleets = listFleets;
-  static getFleet = getFleet;
-  static patchFleet = patchFleet;
-  static deleteFleet = deleteFleet;
-  static addDeviceToFleet = addDeviceToFleet;
-  static getFleetDevices = getFleetDevices;
 
   static async setDefaultDevice(deviceId: string) {
     Fleet.defaultDeviceId = deviceId;
@@ -69,27 +30,7 @@ export class Fleet {
       throw new Error("No known default device");
     }
 
-    const data = await fetch(`${DataSdk.adminApi}/device-details/query`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-
-    const devices = await data.json();
-    const device = devices.items.find(
-      (_: { id: string }) => _.id === Fleet.defaultDeviceId
-    );
-    const name = device.name as string;
-    const context = new Device(
-      Fleet.defaultDeviceId,
-      name,
-      defined(Authentication.currentOrganization) as string,
-      device.tags
-    );
-    Fleet.knownContext.push(new WeakRef(context));
-    return context;
+    return Fleet.getDevice(Fleet.defaultDeviceId);
   }
 
   static async getPeerDevice(url: string): Promise<PeerDevice> {
@@ -104,33 +45,17 @@ export class Fleet {
     return context;
   }
 
-  /**
-   * Sets the group devices for multi-device (coherence group) contexts.
-   * This is typically called automatically when overview_devices message is received.
-   * @param devices Array of device information from the host container
-   */
   static setGroupDevices(devices: IDevice[]): void {
     Fleet.groupDevices = devices;
-    // For backward compatibility, set first device as default if no default is set
     if (devices.length > 0 && !Fleet.defaultDeviceId) {
       Fleet.setDefaultDevice(devices[0].id);
     }
   }
 
-  /**
-   * Gets the group devices for multi-device contexts.
-   * Returns undefined if not in a group context (single device view).
-   * @returns Array of device information or undefined
-   */
   static getGroupDevices(): IDevice[] | undefined {
     return Fleet.groupDevices;
   }
 
-  /**
-   * Gets all group devices as Device instances.
-   * Useful for modules that need full Device objects rather than just IDevice info.
-   * @returns Promise resolving to array of Device instances
-   */
   static async getGroupDevicesAsDeviceInstances(): Promise<Device[]> {
     if (!Fleet.groupDevices || Fleet.groupDevices.length === 0) {
       return [];
@@ -138,35 +63,9 @@ export class Fleet {
     return Promise.all(Fleet.groupDevices.map((d) => Fleet.getDevice(d.id)));
   }
 
-  static aggregateTelemetry = aggregateTelemetry;
-  static createShareLink = createShareLink;
-  static eventsCounter = eventsCounter;
-  static getAnalyticStreams = getAnalyticStreams;
-  static getAnalyticsModules = getAnalyticsModules;
-  static getAnalyticsRows = getAnalyticsRows;
-  static getAnnotationCount = getAnnotationCount;
-  static getAnnotationCountByIntervals = getAnnotationCountByIntervals;
-  static getCurrentGroup = getCurrentGroup;
   static getDevices = getDevices;
-  static getEvent = getEvent;
-  static getFileUrl = getFileUrl;
-  static getInterventions = getInterventions;
-  static getLatestTelemetry = getLatestTelemetry;
-  static getOnlineDevices = getOnlineDevices;
-  static getPeers = getPeers;
-  static getRealtimeSessions = getRealtimeSessions;
-  static getStreams = getStreams;
-  static getTaskReportRows = getTaskReportRows;
-  static getTaskReportTables = getTaskReportTables;
-  static getTelemetry = getTelemetry;
-  static getViews = getViews;
-  static patchStream = patchStream;
-  static patchView = patchView;
-  static queryAnalytics = queryAnalytics;
   static queryDevices = queryDevices;
-  static queryEvents = queryEvents;
   static queryTelemetry = queryTelemetry;
-  static getAllEventTriggerGroup = getAllEventTriggerGroup;
-  static getEventTriggerGroup = getEventTriggerGroup;
-  static patchEventTriggergroup = patchEventTriggerGroup;
+  static getLatestTelemetry = getLatestTelemetry;
+  static getStreams = getStreams;
 }

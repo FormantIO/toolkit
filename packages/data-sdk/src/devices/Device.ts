@@ -2,12 +2,10 @@ import { IRtcPeer, RtcClient } from "@formant/realtime-sdk";
 import { defined } from "../../../common/defined";
 import { delay } from "../../../common/delay";
 import { createDevice } from "../api/createDevice";
-import { createShareLink } from "../api/createShareLink";
 import { disableDevice } from "../api/disableDevice";
 import { eventsCounter } from "../api/eventsCounter";
 import { getAnnotationCount } from "../api/getAnnotationCount";
 import { getAnnotationCountByIntervals } from "../api/getAnnotationCountByIntervals";
-import { getDevicesData } from "../api/getDevicesData";
 import { getPeers } from "../api/getPeers";
 import { getRealtimeSessions } from "../api/getRealtimeSessions";
 import { getTelemetry } from "../api/getTelemetry";
@@ -25,7 +23,6 @@ import { IEventQuery } from "../model/IEventQuery";
 import { IInterventionResponse } from "../model/IInterventionResponse";
 import { IInterventionTypeMap } from "../model/IInterventionTypeMap";
 import { InterventionType } from "../model/InterventionType";
-import { IShare } from "../model/IShare";
 import { ITags } from "../model/ITags";
 import { SessionType } from "../model/SessionType";
 import { TelemetryResult } from "../model/TelemetryResult";
@@ -62,7 +59,7 @@ export class Device extends BaseDevice {
 
   static createDevice = createDevice;
   static patchDevice = patchDevice;
-  static getDevicesData = getDevicesData;
+  static getDevicesData = queryDevicesData;
   static queryDevicesData = queryDevicesData;
   static disableDevice = disableDevice;
 
@@ -144,21 +141,6 @@ export class Device extends BaseDevice {
     const device = await result.json();
 
     return device?.state?.agentVersion;
-  }
-
-  async getFileUrl(fileId: string): Promise<string[]> {
-    const result = await fetch(`${DataSdk.adminApi}/files/query`, {
-      method: "POST",
-      body: JSON.stringify({
-        fileIds: [fileId],
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + Authentication.token,
-      },
-    });
-    const files = await result.json();
-    return files.fileUrls;
   }
 
   /**
@@ -706,8 +688,4 @@ export class Device extends BaseDevice {
     });
   }
 
-  async createShareLink(share: IShare, view: string) {
-    share.scope.deviceIds = [this.id];
-    return await createShareLink(share, view);
-  }
 }

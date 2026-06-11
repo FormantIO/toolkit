@@ -1,4 +1,3 @@
-export { Account } from "./Account";
 export { App } from "./App";
 export { AudioPlayer } from "./AudioPlayer";
 export { Authentication } from "./Authentication";

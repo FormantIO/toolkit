@@ -1,14 +1,8 @@
-// packages/data-sdk/src/api/queryViews.ts
-
 import { Authentication } from "../Authentication";
 import { DataSdk } from "../DataSdk";
 import { RtcStreamType } from "../connector/model/IUniverseData";
 import { IsoDate } from "../model/IsoDate";
 import { ITags } from "../model/ITags";
-
-export interface IDictionary<T = string> {
-  [key: string]: T;
-}
 
 export interface ITeleopViewModule {
   id: string;
@@ -40,7 +34,6 @@ export interface ITeleopViewResponse {
   items: ITeleopView[];
 }
 
-// Define the ModuleConfigItem as a union
 export type ModuleConfigItem =
   | {
       id: string;
@@ -53,28 +46,21 @@ export type ModuleConfigItem =
   | { id: string; name: string; type: "named-boolean"; defaultValue: boolean }
   | { id: string; name: string; type: "named-number"; defaultValue: number };
 
-// Define a type for the configuration values
-export type ConfigValue = string | number | boolean | any[];
+export type ConfigValue = string | number | boolean | unknown[];
 
-// Define the ModuleConfig type
 export type ModuleConfig = {
   [key: string]: ConfigValue;
 };
 
-export async function request<T>(
-  endpoint: string,
-  options?: RequestInit
-): Promise<T> {
+export async function fetchTeleopViews(): Promise<ITeleopView[]> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
 
-  const data = await fetch(`${DataSdk.adminApi}${endpoint}`, {
-    ...options,
+  const data = await fetch(`${DataSdk.adminApi}/teleop-views`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${Authentication.token}`,
-      ...options?.headers,
     },
   });
 
@@ -82,43 +68,6 @@ export async function request<T>(
     throw new Error(`Error: ${data.statusText}`);
   }
 
-  if (data.status === 204 || data.headers.get("content-length") === "0") {
-    return null as T;
-  }
-
-  return (await data.json()) as T;
-}
-
-export async function fetchTeleopViews(): Promise<ITeleopView[]> {
-  const data = await request<ITeleopViewResponse>("/teleop-views");
-  return data.items;
-}
-
-export async function getTeleopView(id: string): Promise<ITeleopView> {
-  return await request<ITeleopView>(`/teleop-views/${id}`);
-}
-
-export async function createTeleopView(
-  view: Omit<ITeleopView, "id" | "organizationId" | "createdAt" | "updatedAt">
-): Promise<ITeleopView> {
-  return await request<ITeleopView>("/teleop-views", {
-    method: "POST",
-    body: JSON.stringify(view),
-  });
-}
-
-export async function updateTeleopView(
-  id: string,
-  view: Partial<ITeleopView>
-): Promise<ITeleopView> {
-  return await request<ITeleopView>(`/teleop-views/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(view),
-  });
-}
-
-export async function deleteTeleopView(id: string): Promise<void> {
-  await request(`/teleop-views/${id}`, {
-    method: "DELETE",
-  });
+  const response = (await data.json()) as ITeleopViewResponse;
+  return response.items;
 }
