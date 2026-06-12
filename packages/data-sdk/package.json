@@ -26,6 +26,7 @@
     }
   },
   "scripts": {
+    "prepare": "lefthook install",
     "preversion": "npm run verify",
     "postversion": "make",
     "dev": "vite --port 5173",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@evilmartians/lefthook": "^1.13.6",
     "@formant/realtime-sdk": "^1.4.11",
     "@types/base-64": "^1.0.0",
     "@types/fast-json-stable-stringify": "=2.0.0",

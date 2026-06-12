@@ -687,5 +687,4 @@ export class Device extends BaseDevice {
       deviceIds: [this.id],
     });
   }
-
 }
