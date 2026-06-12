@@ -1,8 +1,13 @@
 import { Authentication } from "./Authentication";
+import { getAnalyticsRows } from "./api/getAnalyticsRows";
 import { getDevice } from "./api/getDevice";
 import { getDevices } from "./api/getDevices";
+import { getEvent } from "./api/getEvent";
 import { getLatestTelemetry } from "./api/getLatestTelemetry";
+import { getOnlineDevices } from "./api/getOnlineDevices";
 import { getStreams } from "./api/getStreams";
+import { getViews } from "./api/getViews";
+import { patchView } from "./api/patchView";
 import { queryDevices } from "./api/queryDevices";
 import { queryTelemetry } from "./api/queryTelemetry";
 import { IDevice } from "./message-bus/listeners/EmbeddedAppMessage";
@@ -63,7 +68,12 @@ export class Fleet {
     return Promise.all(Fleet.groupDevices.map((d) => Fleet.getDevice(d.id)));
   }
 
+  static getAnalyticsRows = getAnalyticsRows;
   static getDevices = getDevices;
+  static getEvent = getEvent;
+  static getOnlineDevices = getOnlineDevices;
+  static getViews = getViews;
+  static patchView = patchView;
   static queryDevices = queryDevices;
   static queryTelemetry = queryTelemetry;
   static getLatestTelemetry = getLatestTelemetry;
