@@ -1,0 +1,7 @@
+pre-commit:
+  commands:
+    prettier-data-sdk:
+      root: packages/data-sdk/
+      glob: "packages/data-sdk/src/**/*.{ts,tsx,js,jsx,json,md,yml,yaml}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true

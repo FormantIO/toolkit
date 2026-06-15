@@ -32,7 +32,7 @@ try {
     //    - Automatically calls Fleet.setGroupDevices() when received
     // 2. URL ?device= parameter - set synchronously at init
     //    - May be overridden by overview_devices if it arrives later
-    // 3. URL ?group= parameter - requires explicit call to Fleet.getCurrentGroup()
+    // 3. URL ?group= parameter - requires explicit call to Fleet.getGroupDevicesAsDeviceInstances()
     //    - NOT called automatically - modules must call it explicitly if needed
     //    - Requires authentication
     App.addOverviewDeviceListener((devices) => {

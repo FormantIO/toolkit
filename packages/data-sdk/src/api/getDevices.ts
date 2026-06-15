@@ -7,7 +7,7 @@ export async function getDevices(): Promise<Device[]> {
   if (!Authentication.token) {
     throw new Error("Not authenticated");
   }
-  const data = await fetch(`${DataSdk.adminApi}/device-details/query`, {
+  const data = await fetch(`${DataSdk.adminApi}/devices/query`, {
     method: "POST",
     body: JSON.stringify({ enabled: true, type: "default" }),
     headers: {
@@ -16,12 +16,11 @@ export async function getDevices(): Promise<Device[]> {
     },
   });
   const devices = await data.json();
-  devices.items;
   return devices.items.map(
-    (_: any) =>
+    (_: { id: string; name: string; tags?: Record<string, string> }) =>
       new Device(
-        _.id as string,
-        _.name as string,
+        _.id,
+        _.name,
         defined(Authentication.currentOrganization) as string,
         _.tags
       )
