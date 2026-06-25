@@ -338,7 +338,8 @@ export class BasicUniverseDataConnector {
     if (!config.urdfFiles || config.urdfFiles.length === 0) {
       return [];
     }
-    return [];
+    const zipFileUrl = await Fleet.getFileUrl(config.urdfFiles[0]);
+    return [zipFileUrl];
   }
 
   async getTelemetryStreams(_deviceId: string): Promise<ITelemetryStream[]> {

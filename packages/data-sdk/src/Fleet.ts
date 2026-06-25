@@ -1,14 +1,18 @@
+import { defined } from "../../common/defined";
 import { Authentication } from "./Authentication";
+import { DataSdk } from "./DataSdk";
 import { getAnalyticsRows } from "./api/getAnalyticsRows";
 import { getDevice } from "./api/getDevice";
 import { getDevices } from "./api/getDevices";
 import { getEvent } from "./api/getEvent";
+import { getFileUrl } from "./api/getFileUrl";
 import { getLatestTelemetry } from "./api/getLatestTelemetry";
 import { getOnlineDevices } from "./api/getOnlineDevices";
 import { getStreams } from "./api/getStreams";
 import { getViews } from "./api/getViews";
 import { patchView } from "./api/patchView";
 import { queryDevices } from "./api/queryDevices";
+import { queryEvents } from "./api/queryEvents";
 import { queryTelemetry } from "./api/queryTelemetry";
 import { IDevice } from "./message-bus/listeners/EmbeddedAppMessage";
 import { Device } from "./devices/Device";
@@ -35,7 +39,27 @@ export class Fleet {
       throw new Error("No known default device");
     }
 
-    return Fleet.getDevice(Fleet.defaultDeviceId);
+    const data = await fetch(`${DataSdk.adminApi}/device-details/query`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+
+    const devices = await data.json();
+    const device = devices.items.find(
+      (_: { id: string }) => _.id === Fleet.defaultDeviceId
+    );
+    const name = device.name as string;
+    const context = new Device(
+      Fleet.defaultDeviceId,
+      name,
+      defined(Authentication.currentOrganization) as string,
+      device.tags
+    );
+    Fleet.knownContext.push(new WeakRef(context));
+    return context;
   }
 
   static async getPeerDevice(url: string): Promise<PeerDevice> {
@@ -71,10 +95,12 @@ export class Fleet {
   static getAnalyticsRows = getAnalyticsRows;
   static getDevices = getDevices;
   static getEvent = getEvent;
+  static getFileUrl = getFileUrl;
   static getOnlineDevices = getOnlineDevices;
   static getViews = getViews;
   static patchView = patchView;
   static queryDevices = queryDevices;
+  static queryEvents = queryEvents;
   static queryTelemetry = queryTelemetry;
   static getLatestTelemetry = getLatestTelemetry;
   static getStreams = getStreams;

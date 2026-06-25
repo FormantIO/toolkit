@@ -143,6 +143,21 @@ export class Device extends BaseDevice {
     return device?.state?.agentVersion;
   }
 
+  async getFileUrl(fileId: string): Promise<string[]> {
+    const result = await fetch(`${DataSdk.adminApi}/files/query`, {
+      method: "POST",
+      body: JSON.stringify({
+        fileIds: [fileId],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + Authentication.token,
+      },
+    });
+    const files = await result.json();
+    return files.fileUrls;
+  }
+
   /**
    * Starts a real-time connection with the remote device using WebRTC.
    * @param {number} [options] - Optional session type to be used for the connection.
