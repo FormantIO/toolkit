@@ -29,7 +29,7 @@ export interface StreamData {
   type: string;
 }
 
-export type DataPoint = [number, any];
+export type DataPoint = [number, unknown];
 
 export function addModuleDataListener(handler: (data: ModuleData) => void) {
   const moduleName = getCurrentModuleContext();

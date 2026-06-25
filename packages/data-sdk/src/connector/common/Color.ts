@@ -12,7 +12,7 @@ export class Color {
         parseInt(match[3], 16)
       );
     }
-    return undefined;
+    return;
   }
 
   constructor(

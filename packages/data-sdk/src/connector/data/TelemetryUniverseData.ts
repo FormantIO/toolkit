@@ -27,7 +27,7 @@ import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-// @ts-ignore
+// @ts-expect-error Vite worker import has no TypeScript module declaration
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 import { StoreCache } from "./StoreCache";
 
@@ -43,17 +43,20 @@ export class TelemetryUniverseData
   }
 
   subscribeToBitset(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: IBitset | Symbol) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: IBitset | symbol) => void
   ): CloseSubscription {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Method not implemented for telemetry universe connector.");
   }
 
   subscribeToPath(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IUniversePath) => void
+    callback: (data: symbol | IUniversePath) => void
   ): CloseSubscription {
     console.log("TelemetryUniverseData --- subscribeToPath");
     if (source.sourceType !== "telemetry") {
@@ -269,7 +272,7 @@ export class TelemetryUniverseData
   subscribeToPointCloud(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IUniversePointCloud | Symbol) => void
+    callback: (data: IUniversePointCloud | symbol) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -351,7 +354,7 @@ export class TelemetryUniverseData
   subscribeToOdometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IUniverseOdometry) => void,
+    callback: (data: symbol | IUniverseOdometry) => void,
     trail: number = 0 // how many seconds of previous odometry points to include in the trail
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
@@ -435,9 +438,12 @@ export class TelemetryUniverseData
             const trailResults = await Promise.all(trailPromises);
 
             if (hasGoneBackInTime || timestamp > currentTimestamp) {
+              if (!odometry) {
+                return;
+              }
               callback({
-                worldToLocal: odometry!.worldToLocal,
-                pose: odometry!.pose,
+                worldToLocal: odometry.worldToLocal,
+                pose: odometry.pose,
                 trail: trailResults,
                 covariance: [],
               });
@@ -449,9 +455,12 @@ export class TelemetryUniverseData
           }
         }
         if (hasGoneBackInTime || timestamp > currentTimestamp) {
+          if (!odometry) {
+            return;
+          }
           callback({
-            worldToLocal: odometry!.worldToLocal,
-            pose: odometry!.pose,
+            worldToLocal: odometry.worldToLocal,
+            pose: odometry.pose,
             covariance: [],
           });
           currentTimestamp = timestamp;
@@ -467,17 +476,20 @@ export class TelemetryUniverseData
   }
 
   subscribeToPose(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: Symbol | IPose) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: symbol | IPose) => void
   ): CloseSubscription {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Method not implemented for telemetry universe connector.");
   }
 
   subscribeToGeometry(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IMarker3DArray) => void
+    callback: (data: symbol | IMarker3DArray) => void
   ): CloseSubscription {
     if (source.sourceType === "telemetry") {
       const unsubscribe = this.subscribeTelemetry(
@@ -509,7 +521,7 @@ export class TelemetryUniverseData
   subscribeToJointState(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IJointState) => void
+    callback: (data: symbol | IJointState) => void
   ): CloseSubscription {
     return this.subscribeToJson<IJointState>(deviceId, source, callback);
   }
@@ -517,7 +529,7 @@ export class TelemetryUniverseData
   subscribeToGridMap(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | IUniverseGridMap) => void
+    callback: (data: symbol | IUniverseGridMap) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -574,7 +586,7 @@ export class TelemetryUniverseData
   subscribeToVideo(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (frame: Symbol | HTMLCanvasElement) => void
+    callback: (frame: symbol | HTMLCanvasElement) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -593,7 +605,7 @@ export class TelemetryUniverseData
           const videoEl = document.createElement("video");
           videoEl.src = url;
           videoEl.onload = () => {
-            resolve;
+            resolve(videoEl);
           };
         });
       });
@@ -612,7 +624,7 @@ export class TelemetryUniverseData
   subscribeToTransformTree(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | ITransformNode) => void
+    callback: (data: symbol | ITransformNode) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -634,7 +646,7 @@ export class TelemetryUniverseData
   subscribeToLocation(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | ILocation) => void
+    callback: (data: symbol | ILocation) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -667,7 +679,7 @@ export class TelemetryUniverseData
   subscribeToJson<T>(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: Symbol | T) => void
+    callback: (data: symbol | T) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -689,7 +701,7 @@ export class TelemetryUniverseData
   subscribeToText(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (text: string | Symbol) => void
+    callback: (text: string | symbol) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -706,7 +718,7 @@ export class TelemetryUniverseData
   subscribeToNumeric(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (num: Symbol | [number, number][]) => void
+    callback: (num: symbol | [number, number][]) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -723,7 +735,7 @@ export class TelemetryUniverseData
   subscribeToNumericSet(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (entry: Symbol | [number, INumericSetEntry[]][]) => void
+    callback: (entry: symbol | [number, INumericSetEntry[]][]) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");
@@ -745,7 +757,7 @@ export class TelemetryUniverseData
   subscribeToImage(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (image: Symbol | HTMLCanvasElement) => void
+    callback: (image: symbol | HTMLCanvasElement) => void
   ): CloseSubscription {
     if (source.sourceType !== "telemetry") {
       throw new Error("Telemetry sources only supported");

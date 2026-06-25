@@ -57,7 +57,7 @@ export interface SendChannelDataMessage {
   type: "send_channel_data";
   channel: string;
   source: string;
-  data: any;
+  data: unknown;
 }
 
 export interface RequestDevicesMessage {

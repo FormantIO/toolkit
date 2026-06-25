@@ -52,7 +52,7 @@ export class QueryStore {
     };
     const data = this.query(q);
     if (data === undefined || data === "too much data") {
-      return data as any;
+      return data;
     }
     return filterDataByType(data, type);
   }
@@ -94,24 +94,16 @@ export class QueryStore {
   private queryCache(
     query: IQuery
   ): IStreamData[] | "too much data" | undefined {
-    return this.queryStoreCache.get(query, async () => {
-      try {
-        return await Fleet.queryTelemetry(query);
-      } catch (error) {
-        throw error;
-      }
-    });
+    return this.queryStoreCache.get(query, async () =>
+      Fleet.queryTelemetry(query)
+    );
   }
 
   private liveQueryCache(
     query: IQuery
   ): IStreamData[] | "too much data" | undefined {
-    return this.liveQueryStoreCache.get(query, async () => {
-      try {
-        return await Fleet.queryTelemetry(query);
-      } catch (error) {
-        throw error;
-      }
-    });
+    return this.liveQueryStoreCache.get(query, async () =>
+      Fleet.queryTelemetry(query)
+    );
   }
 }

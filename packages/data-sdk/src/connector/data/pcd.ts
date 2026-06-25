@@ -1,4 +1,4 @@
-// @ts-ignore-next-line
+// @ts-expect-error Vite worker import has no TypeScript module declaration
 import * as lzfjs from "lzfjs";
 import { range } from "./range";
 
@@ -111,7 +111,7 @@ function parseHeader(buffer: ArrayBuffer): {
   if (countMatch) {
     optionalCount = countMatch[1].split(" ").map((_) => parseInt(_, 10));
   }
-  const count = optionalCount || fields.map((_) => 1);
+  const count = optionalCount || fields.map(() => 1);
 
   const widthMatch = /WIDTH (.*)/i.exec(header);
   if (!widthMatch) {

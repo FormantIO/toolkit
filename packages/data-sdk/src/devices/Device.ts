@@ -321,7 +321,7 @@ export class Device extends BaseDevice {
           this.remoteDevicePeerId
         );
         statsUnavailable = stats === undefined;
-      } catch (_err) {
+      } catch {
         statsUnavailable = true;
       }
 
@@ -460,7 +460,7 @@ export class Device extends BaseDevice {
     name: string,
     data?: string,
     time?: Date,
-    metadata?: {},
+    metadata?: Record<string, unknown>,
     id?: string
   ): Promise<Response> {
     const commands = await this.getAvailableCommands(false);

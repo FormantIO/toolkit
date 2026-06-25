@@ -1,7 +1,7 @@
 import { RtcClient, IRtcPeer } from "@formant/realtime-sdk";
 import { delay } from "../../../common/delay";
 import { IStreamCurrentValue } from "../model/IStreamCurrentValue";
-import { ConfigurationDocument } from "./device.types";
+import { ConfigurationDocument, Command } from "./device.types";
 import { BaseDevice } from "./BaseDevice";
 import { TelemetryResult } from "../model/TelemetryResult";
 import { IEventQuery } from "../model/IEventQuery";
@@ -12,7 +12,7 @@ export class PeerDevice extends BaseDevice {
   id!: string;
 
   private telemetryStreamActive = false;
-  private streamTelemetry: { [key: string]: any } = {};
+  private streamTelemetry: { [key: string]: unknown } = {};
 
   constructor(public peerUrl: string) {
     super();
@@ -156,7 +156,9 @@ export class PeerDevice extends BaseDevice {
       }
 
       if (ev.severity !== "") {
-        (event as any).severity = ev.severity.toLowerCase();
+        Object.assign(event, {
+          severity: ev.severity.toLowerCase(),
+        });
       }
 
       if (ev.tags) {
@@ -174,7 +176,7 @@ export class PeerDevice extends BaseDevice {
     return events.reverse();
   }
 
-  private checkKeysAndThrow(obj: any, keysToCheck: string[]): void {
+  private checkKeysAndThrow(obj: object, keysToCheck: string[]): void {
     const unsupportedKeysFound = keysToCheck.filter((key) => key in obj);
 
     if (unsupportedKeysFound.length > 0) {
@@ -184,7 +186,10 @@ export class PeerDevice extends BaseDevice {
     }
   }
 
-  private getPointPayload(type: string, datapoint: any): any {
+  private getPointPayload(
+    type: string,
+    datapoint: Record<string, unknown>
+  ): unknown {
     switch (type) {
       case "numeric":
         return datapoint.numeric.value;
@@ -194,7 +199,7 @@ export class PeerDevice extends BaseDevice {
         return datapoint.text.value;
       case "json":
         return datapoint.json.value;
-      case "bitset":
+      case "bitset": {
         const keys = [];
         const values = [];
         for (const bit of datapoint.bitset.bits) {
@@ -205,6 +210,7 @@ export class PeerDevice extends BaseDevice {
           keys,
           values,
         };
+      }
       case "location":
         return datapoint.location;
       case "health":
@@ -225,16 +231,16 @@ export class PeerDevice extends BaseDevice {
     const xhr = new XMLHttpRequest();
     xhr.responseType = "text";
 
-    xhr.addEventListener("error", (_) => {
+    xhr.addEventListener("error", () => {
       this.handleXHRError("error");
     });
-    xhr.addEventListener("abort", (_) => {
+    xhr.addEventListener("abort", () => {
       this.handleXHRError("abort");
     });
-    xhr.addEventListener("timeout", (_) => {
+    xhr.addEventListener("timeout", () => {
       this.handleXHRError("timeout");
     });
-    xhr.addEventListener("readystatechange", (_) => {
+    xhr.addEventListener("readystatechange", () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         this.handleXHRError("closed");
       }
@@ -274,19 +280,19 @@ export class PeerDevice extends BaseDevice {
   }
 
   async getDeviceId(): Promise<string> {
-    let result = await fetch(`${this.peerUrl}/v1/config`);
+    const result = await fetch(`${this.peerUrl}/v1/config`);
     const cfg = await result.json();
     return cfg.configuration.id;
   }
 
   async getConfiguration(): Promise<ConfigurationDocument> {
-    let result = await fetch(`${this.peerUrl}/v1/config`);
+    const result = await fetch(`${this.peerUrl}/v1/config`);
     const cfg = await result.json();
     return cfg.configuration.document;
   }
 
   async getViews(): Promise<IView[]> {
-    let result = await fetch(`${this.peerUrl}/v1/views`);
+    const result = await fetch(`${this.peerUrl}/v1/views`);
     const viewDoc = await result.json();
     return viewDoc.views;
   }
@@ -378,7 +384,7 @@ export class PeerDevice extends BaseDevice {
     }
   }
 
-  async getCommandMetadata(): Promise<{ commands: any[] }> {
+  async getCommandMetadata(): Promise<{ commands: Command[] }> {
     return (await fetch(`${this.peerUrl}/v1/commands`)).json();
   }
 
@@ -386,7 +392,7 @@ export class PeerDevice extends BaseDevice {
     name: string,
     data?: string,
     time?: Date,
-    metadata?: {}
+    metadata?: Record<string, unknown>
   ): Promise<Response> {
     const parameter = {
       value: data,

@@ -1,3 +1,3 @@
-export function toJsonLines(objects: any[]): string {
-  return objects.reduce((acc, _) => `${acc}${JSON.stringify(_)}\n`, "");
+export function toJsonLines(objects: unknown[]): string {
+  return objects.reduce((acc, obj) => `${acc}${JSON.stringify(obj)}\n`, "");
 }

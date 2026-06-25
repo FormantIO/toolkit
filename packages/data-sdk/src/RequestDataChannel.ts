@@ -10,9 +10,18 @@ import { ICustomDataChannelCreator } from "./devices/ICustomDataChannelCreator";
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.
 
+type TextChannelResponse = {
+  id: string;
+  data?: string;
+  error?: string;
+};
+
 abstract class RequestDataChannel {
   protected channel: undefined | DataChannel;
-  protected requestIdToResponseMap = new Map<string, any>();
+  protected requestIdToResponseMap = new Map<
+    string,
+    true | Uint8Array | TextChannelResponse
+  >();
   constructor(
     protected device: ICustomDataChannelCreator,
     protected channel_name: string,

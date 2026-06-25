@@ -1,3 +1,3 @@
 import { ITriggeredEvent } from "./ITriggeredEvent";
 
-export interface IDeviceOnlineEvent extends ITriggeredEvent<"device-online"> {}
+export type IDeviceOnlineEvent = ITriggeredEvent<"device-online">;

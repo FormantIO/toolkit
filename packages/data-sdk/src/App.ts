@@ -38,7 +38,7 @@ export class App {
     const configurationId = urlParams.get("configuration");
 
     if (configurationId === null || configurationId.trim() === "") {
-      return undefined;
+      return;
     }
 
     return getModuleConfiguration(configurationId.trim());

@@ -1,7 +1,7 @@
 import { sendAppMessage } from "./sendAppMessage";
 import { getCurrentModuleContext } from "../../utils/getCurrentModuleContext";
 
-export function sendChannelData(channel: string, data: any) {
+export function sendChannelData(channel: string, data: unknown) {
   const moduleName = getCurrentModuleContext();
   if (!moduleName) {
     throw new Error("No module context");

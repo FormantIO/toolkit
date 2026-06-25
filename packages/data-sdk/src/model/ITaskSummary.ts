@@ -4,7 +4,7 @@ import { Uuid } from "./Uuid";
 
 export interface ITaskSummary extends IBaseEvent<"task-summary"> {
   taskSummaryFormatId: Uuid;
-  report: { [key: string]: any };
+  report: { [key: string]: unknown };
   taskId: string;
   deviceId: Uuid;
   generatedAt: IsoDate;

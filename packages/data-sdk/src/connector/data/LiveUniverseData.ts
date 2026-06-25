@@ -29,7 +29,7 @@ import {
   DataResult,
 } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-// @ts-ignore
+// @ts-expect-error Vite worker import has no TypeScript module declaration
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 
 export class LiveUniverseData
@@ -41,33 +41,42 @@ export class LiveUniverseData
   }
 
   subscribeToPath(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: Symbol | IUniversePath) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: symbol | IUniversePath) => void
   ): CloseSubscription {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Method not implemented.");
   }
 
   subscribeToImage(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (image: HTMLCanvasElement) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (image: HTMLCanvasElement) => void
   ): CloseSubscription {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Method not implemented.");
   }
 
   subcribeToVideo(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (frame: HTMLVideoElement) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (frame: HTMLVideoElement) => void
   ): CloseSubscription {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Method not implemented.");
   }
 
   subscribeToBitset(
     deviceId: string,
     source: UniverseDataSource,
-    callback: (data: IBitset | Symbol) => void
+    callback: (data: IBitset | symbol) => void
   ): CloseSubscription {
     if (source.sourceType === "realtime") {
       const listener = (_peerId: string, msg: RealtimeMessage) => {
@@ -101,8 +110,9 @@ export class LiveUniverseData
     deviceId: string,
     source: UniverseDataSource,
     callback: (data: IUniverseOdometry) => void,
-    _trail?: number
+    trail?: number
   ): CloseSubscription {
+    void trail;
     if (source.sourceType === "realtime") {
       const listener = (_peerId: string, msg: RealtimeMessage) => {
         if (msg.payload.odometry) {
@@ -149,7 +159,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "localization"
             ) {
-              const [__, value] = _.points[_.points.length - 1];
+              const [, value] = _.points[_.points.length - 1];
               foundLocalization = value as ILocalization;
             }
           }
@@ -312,7 +322,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "json"
             ) {
-              const [_time, value] = _.points[_.points.length - 1];
+              const [, value] = _.points[_.points.length - 1];
               found = value as string;
             }
           }
@@ -367,7 +377,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "text"
             ) {
-              const [_time, value] = _.points[_.points.length - 1];
+              const [, value] = _.points[_.points.length - 1];
               foundUrl = value as string;
             }
           }
@@ -413,7 +423,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "point cloud"
             ) {
-              const [_time, pointCloud] = _.points[_.points.length - 1] as [
+              const [, pointCloud] = _.points[_.points.length - 1] as [
                 number,
                 IPointCloud
               ];
@@ -465,7 +475,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "localization"
             ) {
-              const [_time, value] = _.points[_.points.length - 1] as [
+              const [, value] = _.points[_.points.length - 1] as [
                 number,
                 ILocalization
               ];
@@ -637,7 +647,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "localization"
             ) {
-              const [_time, value] = _.points[_.points.length - 1];
+              const [, value] = _.points[_.points.length - 1];
               foundLocalization = value as ILocalization;
             }
           }
@@ -802,7 +812,7 @@ export class LiveUniverseData
               _.name === source.streamName &&
               _.type === "transform tree"
             ) {
-              const [__, value] = _.points[_.points.length - 1];
+              const [, value] = _.points[_.points.length - 1];
               tfValue = value as ITransformNode;
             }
           }
@@ -821,10 +831,13 @@ export class LiveUniverseData
   }
 
   subscribeToLocation(
-    _deviceId: string,
-    _source: UniverseDataSource,
-    _callback: (data: ILocation) => void
+    deviceId: string,
+    source: UniverseDataSource,
+    callback: (data: ILocation) => void
   ): () => void {
+    void deviceId;
+    void source;
+    void callback;
     throw new Error("Not implemented");
   }
 }
