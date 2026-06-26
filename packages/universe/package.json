@@ -47,7 +47,7 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "react-dom": "^18.0.0",
     "typescript": "^4.6.3",
-    "vite": "^2.9.5"
+    "vite": "^6.4.3"
   },
   "types": "./dist/types/universe/src/main.d.ts",
   "dependencies": {
