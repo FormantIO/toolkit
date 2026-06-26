@@ -347,8 +347,14 @@ export class BasicUniverseDataConnector {
     await this.sendRtcMessage(deviceId, msg);
   }
 
-  async getUrdfs(_deviceId: string): Promise<string[]> {
-    return [];
+  async getUrdfs(deviceId: string): Promise<string[]> {
+    const device = await Fleet.getDevice(deviceId);
+    const config = await device.getConfiguration();
+    if (!config.urdfFiles || config.urdfFiles.length === 0) {
+      return [];
+    }
+    const zipFileUrl = await Fleet.getFileUrl(config.urdfFiles[0]);
+    return [zipFileUrl];
   }
 
   async getTelemetryStreams(_deviceId: string): Promise<ITelemetryStream[]> {
