@@ -28,12 +28,12 @@ export class PeerDevice extends BaseDevice {
     };
     const entries = Object.entries(telemetry);
     return entries.map(([stream, latestValue]) => {
-      const v: IStreamCurrentValue<"json"> = {
+      const v: IStreamCurrentValue = {
         deviceId: this.id,
         streamName: stream,
         streamType: "json",
-        currentValue: JSON.stringify(latestValue),
-        currentValueTime: latestValue.timestamp,
+        currentValue: latestValue as IStreamCurrentValue["currentValue"],
+        currentValueTime: (latestValue as { timestamp: string }).timestamp,
         tags: {},
       };
       return v;
