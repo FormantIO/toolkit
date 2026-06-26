@@ -28,11 +28,11 @@ export class PeerDevice extends BaseDevice {
     };
     const entries = Object.entries(telemetry);
     return entries.map(([stream, latestValue]) => {
-      const v: IStreamCurrentValue = {
+      const v: IStreamCurrentValue<"json"> = {
         deviceId: this.id,
         streamName: stream,
         streamType: "json",
-        currentValue: latestValue,
+        currentValue: JSON.stringify(latestValue),
         currentValueTime: latestValue.timestamp,
         tags: {},
       };
@@ -192,17 +192,19 @@ export class PeerDevice extends BaseDevice {
   ): unknown {
     switch (type) {
       case "numeric":
-        return datapoint.numeric.value;
+        return (datapoint.numeric as { value: number }).value;
       case "numeric set":
-        return datapoint.numericSet.numerics;
+        return (datapoint.numericSet as { numerics: unknown }).numerics;
       case "text":
-        return datapoint.text.value;
+        return (datapoint.text as { value: string }).value;
       case "json":
-        return datapoint.json.value;
+        return (datapoint.json as { value: unknown }).value;
       case "bitset": {
         const keys = [];
         const values = [];
-        for (const bit of datapoint.bitset.bits) {
+        for (const bit of (
+          datapoint.bitset as { bits: { key: string; value: boolean }[] }
+        ).bits) {
           keys.push(bit.key);
           values.push(bit.value);
         }

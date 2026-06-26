@@ -107,7 +107,7 @@ export abstract class BaseDevice
     const document = (await this.getConfiguration()) as ConfigurationDocument;
     const manipulators = [];
 
-    for (const _ of document.teleop.rosStreams ?? []) {
+    for (const _ of document.teleop?.rosStreams ?? []) {
       if (_.topicType == "sensor_msgs/JointState") {
         manipulators.push(
           new Manipulator(this, {

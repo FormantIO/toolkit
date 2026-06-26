@@ -40,7 +40,7 @@ export function addModuleDataListener(handler: (data: ModuleData) => void) {
     const msg = event.data;
     if (msg.type === "module_data") {
       handler({
-        streams: msg.streams,
+        streams: msg.streams as ModuleData["streams"],
         time: msg.time,
         queryRange: msg.queryRange,
       });
