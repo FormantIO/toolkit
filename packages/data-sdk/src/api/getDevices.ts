@@ -16,14 +16,13 @@ export async function getDevices(): Promise<Device[]> {
     },
   });
   const devices = await data.json();
-  devices.items;
   return devices.items.map(
-    (_: any) =>
+    (device: { id: string; name: string; tags?: Record<string, string> }) =>
       new Device(
-        _.id as string,
-        _.name as string,
+        device.id,
+        device.name,
         defined(Authentication.currentOrganization) as string,
-        _.tags
+        device.tags
       )
   );
 }
