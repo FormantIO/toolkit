@@ -2,6 +2,14 @@ import { IDeviceQuery } from "../model/IDeviceQuery";
 import { Device } from "../devices/Device";
 import { Authentication } from "../Authentication";
 import { DataSdk } from "../DataSdk";
+import { ITags } from "../model/ITags";
+
+interface IDeviceListItem {
+  id: string;
+  name: string;
+  organizationId: string;
+  tags: ITags;
+}
 
 export async function queryDevices(query: IDeviceQuery): Promise<Device[]> {
   if (!Authentication.token) {
@@ -17,7 +25,8 @@ export async function queryDevices(query: IDeviceQuery): Promise<Device[]> {
   });
   const devices = await data.json();
 
-  return devices.items.map(
-    (_: any) => new Device(_.id, _.name, _.organizationId, _.tags)
+  return (devices.items as IDeviceListItem[]).map(
+    (device) =>
+      new Device(device.id, device.name, device.organizationId, device.tags)
   );
 }

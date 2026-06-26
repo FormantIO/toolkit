@@ -5,7 +5,7 @@ import { EmbeddedAppMessage } from "../listeners/EmbeddedAppMessage";
 export async function prompt(
   schema: JsonSchema,
   options?: { okText?: string; cancelText?: string }
-): Promise<any> {
+): Promise<unknown> {
   return new Promise((resolve) => {
     const promptId = Math.random().toString();
     sendAppMessage({

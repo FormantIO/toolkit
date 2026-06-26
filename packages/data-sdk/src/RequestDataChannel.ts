@@ -10,9 +10,18 @@ import { ICustomDataChannelCreator } from "./devices/ICustomDataChannelCreator";
 // AdapterError -> An error occurred when handling the request on the adapter.
 // TimeoutError -> The request did not receive a response within the timeout period.
 
+type TextChannelResponse = {
+  id: string;
+  data?: string;
+  error?: string;
+};
+
 abstract class RequestDataChannel {
   protected channel: undefined | DataChannel;
-  protected requestIdToResponseMap = new Map<string, any>();
+  protected requestIdToResponseMap = new Map<
+    string,
+    true | Uint8Array | TextChannelResponse
+  >();
   constructor(
     protected device: ICustomDataChannelCreator,
     protected channel_name: string,
@@ -117,19 +126,23 @@ export class BinaryRequestDataChannel extends RequestDataChannel {
       await delay(50);
       if (requestIdToResponseMap.has(id)) {
         const response = requestIdToResponseMap.get(id);
-        if (response !== true) {
-          requestIdToResponseMap.delete(id);
-          const success = response[0] === this.RESPONSE_SUCCESS_BYTE;
-          const payload = response.slice(1);
-          if (success) {
-            return payload;
-          } else {
-            console.error({
-              name: "AdapterError",
-              message: this.decoder.decode(payload),
-            });
-            throw new Error("Binary request datachannel adapter error");
-          }
+        if (response === true) {
+          continue;
+        }
+        requestIdToResponseMap.delete(id);
+        if (!(response instanceof Uint8Array)) {
+          throw new Error("Invalid binary channel response shape");
+        }
+        const success = response[0] === this.RESPONSE_SUCCESS_BYTE;
+        const payload = response.slice(1);
+        if (success) {
+          return payload;
+        } else {
+          console.error({
+            name: "AdapterError",
+            message: this.decoder.decode(payload),
+          });
+          throw new Error("Binary request datachannel adapter error");
         }
       }
     }
@@ -196,20 +209,29 @@ export class TextRequestDataChannel extends RequestDataChannel {
       await delay(50);
       if (requestIdToResponseMap.has(id)) {
         const response = requestIdToResponseMap.get(id);
-        if (response !== true) {
-          requestIdToResponseMap.delete(id);
-          const { data, error } = response;
-          if (data) {
-            return data;
-          }
-          if (error) {
-            console.error({
-              name: "AdapterError",
-              message: error,
-            });
-            throw new Error("Text request datachannel adapter error");
-          }
+        if (response === true) {
+          continue;
         }
+        requestIdToResponseMap.delete(id);
+        if (response instanceof Uint8Array) {
+          throw new Error(
+            "Invalid text channel response: unexpected binary payload"
+          );
+        }
+        const { data, error } = response as TextChannelResponse;
+        if (data) {
+          return data;
+        }
+        if (error) {
+          console.error({
+            name: "AdapterError",
+            message: error,
+          });
+          throw new Error("Text request datachannel adapter error");
+        }
+        throw new Error(
+          "Invalid text channel response: missing data and error"
+        );
       }
     }
 

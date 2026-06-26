@@ -1,4 +1,3 @@
 import { IRtcSessionRecord } from "./IRtcSessionRecord";
 
-export interface ITeleopSessionRecord
-  extends IRtcSessionRecord<"teleop-session-record"> {}
+export type ITeleopSessionRecord = IRtcSessionRecord<"teleop-session-record">;

@@ -9,10 +9,13 @@ export async function getAnnotationCountByIntervals(
   aggregate: AggregateLevel
 ) {
   const { end, start } = query;
+  if (start === undefined || end === undefined) {
+    throw new Error("Query start and end are required");
+  }
   const dateFunctions = aggregateByDateFunctions[aggregate];
   const intervals: Date[] = dateFunctions.interval({
-    start: new Date(start!),
-    end: new Date(end!),
+    start: new Date(start),
+    end: new Date(end),
   });
 
   const annotationsQuery = intervals.map((_, idx) => {

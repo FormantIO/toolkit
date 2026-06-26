@@ -2,7 +2,7 @@ import { EmbeddedAppMessage } from "./EmbeddedAppMessage";
 
 export function addChannelDataListener(
   channel: string,
-  handler: (e: { source: string; data: any }) => void
+  handler: (e: { source: string; data: unknown }) => void
 ) {
   const listener = (event: MessageEvent<EmbeddedAppMessage>) => {
     const msg = event.data;

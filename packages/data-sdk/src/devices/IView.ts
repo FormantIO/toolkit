@@ -1,3 +1,5 @@
+import { IFilter } from "../model/IFilter";
+
 export interface IView {
   id: string;
   tags: { [key: string]: string };
@@ -16,13 +18,4 @@ export interface IView {
   groupFilter: IFilter | null;
   layoutType?: string | null;
   index: number;
-}
-
-export interface IFilter {
-  deviceIds?: string[];
-  names?: string[];
-  types?: any[];
-  tags?: any;
-  notTags?: any;
-  notNames?: string[];
 }

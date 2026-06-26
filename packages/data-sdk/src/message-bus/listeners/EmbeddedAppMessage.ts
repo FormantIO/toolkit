@@ -34,7 +34,7 @@ export type AuthTokenMessage = {
 
 export type ModuleDataMessage = {
   type: "module_data";
-  streams: { [x: string]: any };
+  streams: { [x: string]: unknown };
   time: number;
   queryRange: { start: number; end: number };
 };
@@ -43,13 +43,13 @@ export type ChannelDataMessage = {
   type: "channel_data";
   channel: string;
   source: string;
-  data: any;
+  data: unknown;
 };
 
 export type PromptResponseMessage = {
   type: "prompt_response";
   promptId: string;
-  data: any;
+  data: unknown;
 };
 
 export type FormantOnlineMessage = {

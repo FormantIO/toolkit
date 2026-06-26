@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, it, vi, expect } from "vitest";
 
 import { AuthenticationStore } from "./AuthenticationStore";
+import { AuthenticationResult } from "./AuthenticationResult";
 
-function fakeJwt(payload: Record<string, any>) {
+function fakeJwt(payload: Record<string, unknown>) {
   const header = { typ: "JWT", alg: "none" };
-  const encoded = (data: Record<string, any>) =>
+  const encoded = (data: Record<string, unknown>) =>
     Buffer.from(JSON.stringify(data)).toString("base64url");
   return `${encoded(header)}.${encoded(payload)}.`;
 }
@@ -294,7 +295,7 @@ describe("AuthenticationStore", () => {
         };
       });
 
-      const actual: any = await authStore.login(
+      const actual: AuthenticationResult = await authStore.login(
         "jim@starfleet.com",
         "jamestkirk",
         { advanced: true }
@@ -338,7 +339,7 @@ describe("AuthenticationStore", () => {
         };
       });
 
-      const actual: any = await authStore.login(
+      const actual: AuthenticationResult = await authStore.login(
         "jim@starfleet.com",
         "jamestkirk",
         { advanced: true }
@@ -377,7 +378,7 @@ describe("AuthenticationStore", () => {
         };
       });
 
-      const actual: any = await authStore.login(
+      const actual: AuthenticationResult = await authStore.login(
         "jim@starfleet.com",
         "jamestkirk",
         { advanced: true }

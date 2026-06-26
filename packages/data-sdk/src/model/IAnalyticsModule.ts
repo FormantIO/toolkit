@@ -9,8 +9,8 @@ export interface IAnalyticsModule extends IBaseEntity {
   name: string;
   query: ISqlQuery | null;
   configuration: IAnalyticsModuleConfiguration | null;
-  layout: any | null;
-  data: any[] | null;
+  layout: unknown | null;
+  data: unknown[] | null;
   streamIds: Uuid[];
   fullscreen?: boolean;
 }

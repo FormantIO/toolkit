@@ -1,5 +1,9 @@
 import { describe, it, vi, expect, beforeEach, afterEach } from "vitest";
-import type { RtcClient, IRtcClientConfiguration } from "@formant/realtime-sdk";
+import type {
+  RtcClient,
+  IRtcClientConfiguration,
+  IRtcStreamMessage,
+} from "@formant/realtime-sdk";
 
 import { RtcClientPool } from "./RtcClientPool";
 
@@ -77,7 +81,7 @@ describe("RtcClientPool", () => {
     const pool = new RtcClientPool({
       createClient(receive) {
         emit = receive;
-        return {} as any;
+        return {} as unknown as RtcClient;
       },
     });
 
@@ -88,7 +92,7 @@ describe("RtcClientPool", () => {
     pool.get(handle2);
 
     const zeroUuid = "00000000-0000-0000-0000-000000000000";
-    const fakeMessage = {} as unknown as any;
+    const fakeMessage = {} as unknown as IRtcStreamMessage;
 
     emit(zeroUuid, fakeMessage);
 
@@ -103,7 +107,7 @@ describe("RtcClientPool", () => {
         emit = receive;
         return {
           shutdown: vi.fn(),
-        } as any;
+        } as unknown as RtcClient;
       },
     });
 
@@ -114,7 +118,7 @@ describe("RtcClientPool", () => {
     const client2 = pool.get(handle2);
 
     const zeroUuid = "00000000-0000-0000-0000-000000000000";
-    const fakeMessage = {} as unknown as any;
+    const fakeMessage = {} as unknown as IRtcStreamMessage;
 
     emit(zeroUuid, fakeMessage);
 
@@ -147,7 +151,7 @@ describe("RtcClientPool", () => {
       createClient() {
         return {
           shutdown: vi.fn(),
-        } as any;
+        } as unknown as RtcClient;
       },
     });
 
@@ -170,7 +174,7 @@ describe("RtcClientPool", () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
         ttlMs: 1_000,
-        createClient: () => ({ shutdown } as any),
+        createClient: () => ({ shutdown } as unknown as RtcClient),
       });
 
       await expect(pool.get().shutdown()).resolves.toBe(true);
@@ -186,7 +190,7 @@ describe("RtcClientPool", () => {
       const shutdown = vi.fn();
       const pool = new RtcClientPool({
         ttlMs: 1_000,
-        createClient: () => ({ shutdown } as any),
+        createClient: () => ({ shutdown } as unknown as RtcClient),
       });
 
       await pool.get().shutdown();

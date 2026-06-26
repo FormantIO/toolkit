@@ -41,9 +41,13 @@
     "coverage": "vitest run --coverage",
     "prettier": "prettier --write src/",
     "prettier-check": "prettier --check src/",
+    "lint": "npm run lint:prettier && npm run lint:eslint",
+    "lint:prettier": "prettier --check src/",
+    "lint:eslint": "eslint --quiet src/",
+    "lint:fix": "prettier --write src/ && eslint src/ --fix",
     "types": "tsc --project ./configs/tsconfig.types.json",
     "types:check": "tsc --project ./configs/tsconfig.type-check.json",
-    "verify": "concurrently --kill-others-on-fail npm:test:* npm:prettier-check npm:types:check",
+    "verify": "concurrently --kill-others-on-fail npm:test:* npm:lint npm:types:check",
     "docs": "typedoc src/main.ts --theme default --out ../../docs/data-sdk/"
   },
   "devDependencies": {

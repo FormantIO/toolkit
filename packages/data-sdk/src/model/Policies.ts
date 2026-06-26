@@ -50,7 +50,7 @@ export function getAccessLevel(
   if (policies.includes(viewer)) {
     return viewer;
   }
-  return undefined;
+  return;
 }
 
 export function includesAccess<T extends Resource = Resource>(

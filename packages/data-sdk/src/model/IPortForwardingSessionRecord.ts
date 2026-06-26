@@ -1,4 +1,4 @@
 import { IRtcSessionRecord } from "./IRtcSessionRecord";
 
-export interface IPortForwardingSessionRecord
-  extends IRtcSessionRecord<"port-forwarding-session-record"> {}
+export type IPortForwardingSessionRecord =
+  IRtcSessionRecord<"port-forwarding-session-record">;

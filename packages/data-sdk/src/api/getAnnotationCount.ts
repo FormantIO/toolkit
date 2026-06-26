@@ -9,12 +9,16 @@ export async function getAnnotationCount(query: IEventQuery, tagKey: string) {
   });
 
   const validAnnotations = annotations.filter(
-    (_) => !!_.tags && Object.keys(_.tags!).includes(tagKey)
+    (annotation) =>
+      !!annotation.tags && Object.keys(annotation.tags).includes(tagKey)
   );
   const annotationCounter = validAnnotations.reduce<{
     [key: string]: number;
   }>((prev, current) => {
-    const value = current.tags![tagKey];
+    const value = current.tags?.[tagKey];
+    if (value === undefined) {
+      return prev;
+    }
     if (value in prev) {
       prev[value] += 1;
       return prev;
