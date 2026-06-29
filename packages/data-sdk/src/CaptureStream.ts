@@ -1,9 +1,10 @@
 import { DataSdk } from "./DataSdk";
+import { ITags } from "./model/ITags";
 
 export interface CaptureSession {
   deviceId: string;
   streamName: string;
-  tags: {};
+  tags: ITags;
   expiration: string;
   organizationId: string;
   userId: string;
@@ -17,7 +18,7 @@ export class CaptureStream {
   token: string | undefined;
   constructor(public captureSession: CaptureSession) {}
 
-  async ingestJSON(value: {}) {
+  async ingestJSON(value: Record<string, unknown>) {
     if (!this.token) {
       const result = await fetch(
         `${DataSdk.adminApi}/capture-sessions/${this.captureSession.code}/authenticate`,

@@ -29,9 +29,7 @@ export const aggregateFunctions = [
 
 export type AggregateFunctions = (typeof aggregateFunctions)[number];
 
-export type AggregateFunction = {
-  [key in AggregateFunctions]: any;
-};
+export type AggregateFunction = IAggregateFunctions;
 
 export function getVariance(a: INumericAggregate) {
   if (a.count < 2) {

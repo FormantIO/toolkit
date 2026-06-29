@@ -3,7 +3,7 @@ import { deserializeHash, serializeHash } from "./serializeHash";
 
 describe("serializeHash()", () => {
   describe("encoding", () => {
-    it.each<[string, any, string]>([
+    it.each<[string, unknown, string]>([
       ["a string", "test string", "eJxTKkktLlEoLinKzEtXAgAhFQS8"],
       ["an array", [1, 2, 3, 4], "eJyLNtQx0jHWMYkFAAoVAgc="],
       [
@@ -19,7 +19,7 @@ describe("serializeHash()", () => {
   });
 
   describe("decoding", () => {
-    it.each<[string, string, any]>([
+    it.each<[string, string, unknown]>([
       ["a string", "eJxTKkktLlEoLinKzEtXAgAhFQS8", "test string"],
       ["an array", "eJyLNtQx0jHWMYkFAAoVAgc=", [1, 2, 3, 4]],
       [

@@ -21,7 +21,7 @@ export type DataSourceState =
 export const NoData = Symbol("no_data");
 export const LoadingData = Symbol("loading_data");
 export const FailedData = Symbol("failed_data");
-export type DataStatus = Symbol;
+export type DataStatus = symbol;
 
 export type RtcStreamType =
   | "ping"

@@ -1,3 +1,3 @@
 import { ITriggeredEvent } from "./ITriggeredEvent";
 
-export interface IDatapointEvent extends ITriggeredEvent<"datapoint-event"> {}
+export type IDatapointEvent = ITriggeredEvent<"datapoint-event">;

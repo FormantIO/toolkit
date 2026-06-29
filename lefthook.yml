@@ -1,3 +1,4 @@
+# https://lefthook.dev/configuration/
 pre-commit:
   commands:
     prettier-data-sdk:
@@ -5,3 +6,13 @@ pre-commit:
       glob: "packages/data-sdk/src/**/*.{ts,tsx,js,jsx,json,md,yml,yaml}"
       run: npx prettier --write {staged_files}
       stage_fixed: true
+
+pre-push:
+  parallel: true
+  commands:
+    prettier:
+      root: packages/data-sdk/
+      run: npm run lint:prettier
+    eslint:
+      root: packages/data-sdk/
+      run: npm run lint:eslint

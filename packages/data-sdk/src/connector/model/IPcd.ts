@@ -1,5 +1,3 @@
-// @ts-ignore-next-line
-
 export type Field = "x" | "y" | "z" | "rgb" | "rgba" | "intensity";
 export type Type = "i" | "u" | "f";
 export type Data = "ascii" | "binary" | "binary_compressed";

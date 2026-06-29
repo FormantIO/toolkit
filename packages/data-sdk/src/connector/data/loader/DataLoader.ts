@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error Vite worker import has no TypeScript module declaration
 import DataLoaderWorker from "./data-loader.worker?worker&inline";
 
 import { PromiseLruCache } from "../../common/PromiseLruCache";
@@ -12,8 +12,7 @@ interface IJsonMap {
   [member: string]: JsonPrimitive | IJsonArray | IJsonMap;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface IJsonArray extends Array<JsonPrimitive | IJsonArray | IJsonMap> {}
+type IJsonArray = Array<JsonPrimitive | IJsonArray | IJsonMap>;
 
 export type Json = IJsonMap | IJsonArray | JsonPrimitive;
 
@@ -21,6 +20,14 @@ export interface IDataLoaderResult {
   json: Json;
   preview: string;
   length: number;
+}
+
+interface IDataLoaderWorkerMessage {
+  url?: string;
+  error?: string;
+  json?: Json;
+  preview?: string;
+  length?: number;
 }
 
 export class DataLoader {
@@ -47,7 +54,7 @@ export class DataLoader {
       return;
     }
 
-    DataLoader.instance.workers?.forEach((_) => _.terminate());
+    DataLoader.instance.workers?.forEach((worker) => worker.terminate());
     DataLoader.instance.workers = undefined;
     DataLoader.instance.cache.clear();
     DataLoader.instance = null;
@@ -89,10 +96,11 @@ export class DataLoader {
 
   private nextWorker() {
     if (!this.workers) {
-      this.workers = range(0, workerCount).map((_) => {
+      this.workers = range(0, workerCount).map(() => {
         const worker = new DataLoaderWorker();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        worker.onmessage = ({ data }: any) => {
+        worker.onmessage = ({
+          data,
+        }: MessageEvent<IDataLoaderWorkerMessage>) => {
           const { url } = data;
           if (!url) {
             return;
@@ -111,9 +119,9 @@ export class DataLoader {
             return;
           }
           resolve({
-            json: data.json,
-            preview: data.preview,
-            length: data.length,
+            json: data.json as Json,
+            preview: data.preview as string,
+            length: data.length as number,
           });
         };
         return worker;

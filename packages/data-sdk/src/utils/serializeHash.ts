@@ -4,14 +4,14 @@ import { fromByteArray, toByteArray } from "base64-js";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-export function serializeHash(value: any): string {
+export function serializeHash(value: unknown): string {
   const jsonValue = JSON.stringify(value);
   const encodedValue = encoder.encode(jsonValue);
   const compressedValue = deflate(encodedValue);
   return fromByteArray(compressedValue);
 }
 
-export function deserializeHash(value: string): any {
+export function deserializeHash(value: string): unknown {
   const a = toByteArray(value);
   const b = inflate(a);
   const c = decoder.decode(b);

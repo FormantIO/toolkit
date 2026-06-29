@@ -4,7 +4,7 @@ import { ITags } from "./ITags";
 import { StreamType } from "./StreamType";
 import { Uuid } from "./Uuid";
 
-export interface IStreamCurrentValue<T extends StreamType = any> {
+export interface IStreamCurrentValue<T extends StreamType = StreamType> {
   deviceId: Uuid;
   streamName: string;
   streamType: StreamType;

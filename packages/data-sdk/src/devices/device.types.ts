@@ -26,6 +26,13 @@ export interface ConfigurationDocument {
       rtcStreamType: RtcStreamType;
       topicName: string;
       topicType: string;
+      plannedTopic?: string;
+      planValidTopic?: string;
+      endEffectorTopic?: string;
+      endEffectorLinkName?: string;
+      baseReferenceFrame?: string;
+      localFrame?: string;
+      encodeVideo?: boolean;
     }[];
   };
   adapters?: IAdapterConfiguration[];

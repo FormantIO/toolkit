@@ -45,4 +45,6 @@ try {
   if (typeof window !== "undefined") {
     App.listenForConnectionEvents();
   }
-} catch (_) {}
+} catch {
+  // Ignore init errors in non-browser or malformed URL environments.
+}

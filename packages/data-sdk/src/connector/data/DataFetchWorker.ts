@@ -1,7 +1,7 @@
 import { duration } from "../common/duration";
 import { StoreCache } from "./StoreCache";
 
-const cache = new StoreCache<string, any>({
+const cache = new StoreCache<string, unknown>({
   capacity: 1000,
   timeout: 1 * duration.minute,
 });

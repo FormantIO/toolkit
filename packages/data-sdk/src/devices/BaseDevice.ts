@@ -18,6 +18,7 @@ import { ICustomDataChannelCreator } from "./ICustomDataChannelCreator";
 import {
   ConfigurationDocument,
   RealtimeListener,
+  RealtimeMessage,
   RealtimeAudioStream,
   RealtimeVideoStream,
   RealtimeDataStream,
@@ -53,7 +54,7 @@ export abstract class BaseDevice
   ): Promise<TelemetryResult[]>;
   abstract queryEvents(query: IEventQuery): Promise<IEvent[]>;
 
-  protected handleMessage = (peerId: string, message: any) => {
+  protected handleMessage = (peerId: string, message: RealtimeMessage) => {
     this.realtimeListeners.forEach((_) => _(peerId, message));
   };
 
@@ -103,10 +104,10 @@ export abstract class BaseDevice
   }
 
   async getRealtimeManipulators(): Promise<Manipulator[]> {
-    const document = (await this.getConfiguration()) as any;
+    const document = (await this.getConfiguration()) as ConfigurationDocument;
     const manipulators = [];
 
-    for (const _ of document.teleop.rosStreams ?? []) {
+    for (const _ of document.teleop?.rosStreams ?? []) {
       if (_.topicType == "sensor_msgs/JointState") {
         manipulators.push(
           new Manipulator(this, {
@@ -131,7 +132,7 @@ export abstract class BaseDevice
   }
 
   async getRealtimeVideoStreams(): Promise<RealtimeVideoStream[]> {
-    const document = (await this.getConfiguration()) as any;
+    const document = (await this.getConfiguration()) as ConfigurationDocument;
     const streams: { name: string }[] = [];
 
     for (const _ of document.teleop?.hardwareStreams ?? []) {

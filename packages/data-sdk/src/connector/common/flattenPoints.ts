@@ -12,7 +12,7 @@ export interface IFlattenedPoint {
   streamName: string;
   streamType: StreamType;
   timestamp: Timestamp;
-  value: any;
+  value: unknown;
 }
 
 export function flattenPoints(streamData: IStreamData): IFlattenedPoint[] {
