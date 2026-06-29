@@ -1,4 +1,3 @@
-// @ts-expect-error Vite worker import has no TypeScript module declaration
 import DataLoaderWorker from "./data-loader.worker?worker&inline";
 
 import { PromiseLruCache } from "../../common/PromiseLruCache";
