@@ -259,31 +259,32 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@formant/data-sdk@^0.0.97":
-  version "0.0.97"
-  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.97.tgz#7101e453c76403638117b4cc24447fc7ab5c2983"
-  integrity sha512-IbIGgRF/1kv81DrWaCKCKQ7TArFgza5gwN9r9CESBWG2AatNvha4lqBiVOW+rYzV5YYIzzFD9eNQhhxkTDbs+w==
+"@formant/data-sdk@^0.0.110":
+  version "0.0.110"
+  resolved "https://registry.yarnpkg.com/@formant/data-sdk/-/data-sdk-0.0.110.tgz#ee763b3f6bad713665918bd6335791bd5a5fa85e"
+  integrity sha512-Gt89ZgP3EzrsaipHrOOZ6qAOzX6pig3aun+mwWvkJyKLKV26JUrokM3u+4cX3kphrJkV5zNQ7L1BZHKXqJLPUA==
   dependencies:
-    "@formant/realtime-sdk" "0.0.13"
+    "@formant/realtime-sdk" "^0.0.18"
     "@types/google-protobuf" "^3.15.5"
     typedoc "^0.22.13"
 
-"@formant/realtime-sdk@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.13.tgz#c3b35b8c9e374c000370434624fd8721f05c7ea5"
-  integrity sha512-ZCrqT6DO46SRvPHnEElBkFg6fytHI42yr8yAqE0HCE+tOl96tMRgb2531mxhsK01DnhBvvChOMj9F1H8ivxEfw==
+"@formant/realtime-sdk@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@formant/realtime-sdk/-/realtime-sdk-0.0.18.tgz#a6ca3ba5916ad21dc737f0775cb6bd54bd6e2f45"
+  integrity sha512-G5sz9IZ02Q6Bdw0gXr0gRTie3A92UYmcXUeWX+kOa2vqWy96BdrAEoSu8IVCEIIJjyFZu04j1anYnelCIGS7Xg==
   dependencies:
-    google-protobuf "3.17.3"
-    grpc-web "1.2.1"
+    env-var "^7.3.0"
+    google-protobuf "^3.17.3"
+    grpc-web "^1.2.1"
 
-"@formant/ui-sdk@0.0.26":
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.26.tgz#420768ced7343e5dcc51e820e43b57753e72ea17"
-  integrity sha512-KZSxgaVN+g6PEgARzt4p1Kz4IqiEmoGt1Zq0wsT/1NartdaqKnoXQgv/9Tmcxw2ZDYAiUqQaojFfXhfzz6EOLw==
+"@formant/ui-sdk@0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@formant/ui-sdk/-/ui-sdk-0.0.30.tgz#d4c751cf43c8fc46c646360fc8cfe6977670f065"
+  integrity sha512-i/yb51af6e4vvwGVV+lkQ2L00cDZs7pYixvXeqM95JbkAzGyVE0iNRERE9QgVYQjM0DJ7U6zA4kitLDpAbCkmw==
   dependencies:
     "@emotion/react" "^11.9.0"
     "@emotion/styled" "^11.8.1"
-    "@formant/data-sdk" "^0.0.97"
+    "@formant/data-sdk" "^0.0.110"
     "@mui/material" "^5.6.1"
     "@mui/utils" "^5.6.1"
     "@types/lodash" "^4.14.182"
@@ -1045,6 +1046,11 @@ emoji-regex@^9.2.2:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
+env-var@^7.3.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/env-var/-/env-var-7.5.0.tgz#5f0c2d999d2997eaf7cf7f1437b3f857b865bf48"
+  integrity sha512-mKZOzLRN0ETzau2W2QXefbFjo5EF4yWq28OyKb9ICdeNhHJlOE/pHHnz4hdYJ9cNZXcJHo5xN4OT4pzuSHSNvA==
+
 error-ex@^1.3.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/error-ex/-/error-ex-1.3.2.tgz#b4ac40648107fdcdcfae242f428bea8a14d4f1bf"
@@ -1649,15 +1655,15 @@ globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
-google-protobuf@3.17.3:
-  version "3.17.3"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.17.3.tgz#f87595073545a77946c8f0b67c302c5f7646d700"
-  integrity sha512-OVPzcSWIAJ+d5yiHyeaLrdufQtrvaBrF4JQg+z8ynTkbO3uFcujqXszTumqg1cGsAsjkWnI+M5B1xZ19yR4Wyg==
+google-protobuf@^3.17.3:
+  version "3.21.4"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.21.4.tgz#2f933e8b6e5e9f8edde66b7be0024b68f77da6c9"
+  integrity sha512-MnG7N936zcKTco4Jd2PX2U96Kf9PxygAPKBug+74LHzmHXmceN16MmRcdgZv+DGef/S9YvQAfRsNCn4cjf9yyQ==
 
-grpc-web@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.2.1.tgz#860051d705bf5baa7b81fcbd14030060bf16b7b9"
-  integrity sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw==
+grpc-web@^1.2.1:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/grpc-web/-/grpc-web-1.5.0.tgz#154e4007ab59a94bf7726b87ef6c5bd8815ecf6e"
+  integrity sha512-y1tS3BBIoiVSzKTDF3Hm7E8hV2n7YY7pO0Uo7depfWJqKzWE+SKr0jvHNIJsJJYILQlpYShpi/DRJJMbosgDMQ==
 
 hamt_plus@1.0.2:
   version "1.0.2"
@@ -1899,9 +1905,9 @@ isexe@^2.0.0:
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
 js-yaml@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
-  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.3.0.tgz#d1900572a7f7cf0b5f540c83673e60bad3436592"
+  integrity sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==
   dependencies:
     argparse "^2.0.1"
 
