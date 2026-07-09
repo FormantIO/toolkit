@@ -29,7 +29,6 @@ import {
   DataResult,
 } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-// @ts-expect-error Vite worker import has no TypeScript module declaration
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 
 export class LiveUniverseData

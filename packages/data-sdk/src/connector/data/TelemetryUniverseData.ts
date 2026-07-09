@@ -27,7 +27,6 @@ import { IUniversePath } from "../model/IUniversePath";
 import { IUniversePointCloud } from "../model/IUniversePointCloud";
 import { BasicUniverseDataConnector } from "./BaseUniverseDataConnector";
 import { IPcd } from "./pcd";
-// @ts-expect-error Vite worker import has no TypeScript module declaration
 import PCDLoaderWorker from "./PcdLoaderWorker?worker&inline";
 import { StoreCache } from "./StoreCache";
 
