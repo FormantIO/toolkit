@@ -1,0 +1,61 @@
+{
+    "title": "Button Toggle Adapter Configuration",
+    "description": "Configuration for button toggle adapter.",
+    "type": "object",
+    "properties": {
+        "ros-buttons": {
+            "type": "array",
+            "title": "ROS Buttons",
+            "description": "Buttons that listen to ros topics to toggle",
+            "items": {
+                "title": "ROS Button",
+                "description": "button that is toggled based on a ros topic",
+                "type": "object",
+                "properties": {
+                    "input_topic": {
+                        "type": "string",
+                        "title": "Input Topic",
+                        "description": "Topic to listening for incoming booleans on"
+                    },
+                    "output_topic": {
+                        "type": "string",
+                        "title": "Output Topic",
+                        "description": "Topic to publish the toggled boolean on"
+                    }
+                }
+            }
+        },
+        "api-buttons": {
+            "type": "array",
+            "title": "API Buttons",
+            "description": "API Buttons",
+            "items": {
+                "title": "API Button",
+                "description": "API Button",
+                "type": "object",
+                "properties": {
+                    "api_button_name": {
+                        "type": "string",
+                        "title": "API Button Name",
+                        "description": "Name of button to be used in API"
+                    },
+                    "output_topic": {
+                        "type": "string",
+                        "title": "Output Topic",
+                        "description": "Topic to publish the toggled boolean on"
+                    }
+                }
+            }
+        },
+        "default-button-state": {
+            "type": "boolean",
+            "title": "Default Button State",
+            "description": "Default (initial) state that the button is in"
+        },
+        "publish-on-subscription": {
+            "type": "boolean",
+            "title": "Publish on Subscription",
+            "description": "If true, the button toggle information is published everytime a new subscriber is added to the output topic"
+        }
+    }
+}
