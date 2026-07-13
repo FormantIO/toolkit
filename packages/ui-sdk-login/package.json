@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "typescript": "^4.3.2",
-    "vite": "^2.5.4"
+    "vite": "^6.4.3"
   },
   "types": "./dist/types/main.d.ts"
 }
