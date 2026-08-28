@@ -30,10 +30,7 @@ export async function eventsCounter(
           dateFunctions.end(activePointInTimeLine),
           range - dateOffset - 1
         );
-        const date = formatTimeFrameText(
-          startDate.toLocaleDateString(),
-          endDate.toLocaleDateString()
-        );
+        const date = formatTimeFrameText(startDate, endDate);
         const events = await queryEvents({
           ...query,
           eventTypes,
