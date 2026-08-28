@@ -60,8 +60,13 @@ export class QueryStore {
     const q: IQuery = {
       ...filter,
       start: startOfMinute(start).toISOString(),
+      // For latestOnly, `end` was the raw millisecond `now`, so the cache key
+      // changed on every call and the latest-value cache never hit (a fresh
+      // network query per render). Bucket it to a 5s window so repeated
+      // latest-value reads within that window share a cache entry — matching
+      // the connector-side queryStore, which already rounds latestOnly ends.
       end: latestOnly
-        ? end.toISOString()
+        ? new Date(Math.ceil(end.getTime() / 5000) * 5000).toISOString()
         : addMinutes(roundToNearestMinutes(end), 1).toISOString(),
       latestOnly,
     };

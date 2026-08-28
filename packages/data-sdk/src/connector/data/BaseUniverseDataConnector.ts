@@ -455,10 +455,15 @@ export class BasicUniverseDataConnector {
 
   async fetchImage(url: string): Promise<HTMLImageElement> {
     const image = new Image();
-    image.src = url;
+    // crossOrigin must be set BEFORE src, or the browser may issue the request
+    // without CORS and the resulting image is tainted / fails to decode.
     image.setAttribute("crossOrigin", "");
-    await new Promise((resolve) => {
-      image.onload = resolve;
+    await new Promise<void>((resolve, reject) => {
+      // Without an onerror handler a 404 / decode failure leaves the promise
+      // pending forever, hanging every caller awaiting this image.
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+      image.src = url;
     });
     return image;
   }
