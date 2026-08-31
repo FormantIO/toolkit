@@ -1,1 +1,1 @@
-formant>=1.76.*
+formant>=1.111.*
