@@ -133,15 +133,96 @@ export const aggregateByDateFunctions: Record<
   },
 };
 
-export const formatTimeFrameText = (start: string, end: string) =>
-  // FIXME this doesn't work for *a lot* locales, other than en-US
-  // en-GB: 'dd/mm/YYYY'
-  // ja-jp: 'YYYY/mm/dd'
-  // bg-BG: 'dd.mm.YYYY'
-  start.split("/")[0] +
-  "/" +
-  start.split("/")[1] +
-  "–" +
-  end.split("/")[0] +
-  "/" +
-  end.split("/")[1];
+export type TimeFrameBoundary = Date | number | string;
+
+type LocalizedDateField = "year" | "month" | "day";
+
+const dayAndMonthOptions: Intl.DateTimeFormatOptions = {
+  month: "numeric",
+  day: "numeric",
+};
+
+// Day, month and year are all distinct here so that the locale's field order
+// can be read back off the formatted parts without any of them being ambiguous.
+const fieldOrderProbe = new Date(Date.UTC(2020, 10, 25, 12));
+
+const getDateFieldOrder = (locales?: string | string[]) =>
+  new Intl.DateTimeFormat(locales)
+    .formatToParts(fieldOrderProbe)
+    .reduce<LocalizedDateField[]>((fields, part) => {
+      if (
+        part.type === "year" ||
+        part.type === "month" ||
+        part.type === "day"
+      ) {
+        fields.push(part.type);
+      }
+      return fields;
+    }, []);
+
+const toAsciiDigits = (value: string, locales?: string | string[]) => {
+  const numberFormat = new Intl.NumberFormat(locales, { useGrouping: false });
+  const asciiByLocalizedDigit = new Map<string, string>();
+  for (let digit = 0; digit <= 9; digit += 1) {
+    asciiByLocalizedDigit.set(numberFormat.format(digit), String(digit));
+  }
+  return Array.from(value)
+    .map((character) => asciiByLocalizedDigit.get(character) ?? character)
+    .join("");
+};
+
+const parseLocalizedDate = (
+  value: string,
+  locales?: string | string[]
+): Date | undefined => {
+  const fieldOrder = getDateFieldOrder(locales);
+  const numbers = toAsciiDigits(value, locales).match(/\d+/g);
+  if (!numbers || numbers.length < fieldOrder.length) {
+    return undefined;
+  }
+
+  const fields: Partial<Record<LocalizedDateField, number>> = {};
+  fieldOrder.forEach((field, index) => {
+    fields[field] = Number(numbers[index]);
+  });
+
+  const { year, month, day } = fields;
+  if (year === undefined || month === undefined || day === undefined) {
+    return undefined;
+  }
+
+  // A date that rolled over (13th month, 30th of February) means the string
+  // never matched the locale, so it is rejected instead of silently shifted.
+  const parsed = new Date(year, month - 1, day);
+  return parsed.getMonth() === month - 1 && parsed.getDate() === day
+    ? parsed
+    : undefined;
+};
+
+const toDate = (
+  boundary: TimeFrameBoundary,
+  locales?: string | string[]
+): Date | undefined => {
+  if (typeof boundary === "string") {
+    return parseLocalizedDate(boundary, locales);
+  }
+  const date = boundary instanceof Date ? boundary : new Date(boundary);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
+const formatDayAndMonth = (
+  boundary: TimeFrameBoundary,
+  locales?: string | string[]
+) => {
+  const date = toDate(boundary, locales);
+  if (date === undefined) {
+    return typeof boundary === "string" ? boundary : "";
+  }
+  return new Intl.DateTimeFormat(locales, dayAndMonthOptions).format(date);
+};
+
+export const formatTimeFrameText = (
+  start: TimeFrameBoundary,
+  end: TimeFrameBoundary,
+  locales?: string | string[]
+) => `${formatDayAndMonth(start, locales)}–${formatDayAndMonth(end, locales)}`;
